@@ -1,0 +1,176 @@
+@import '../../assets/styles/colors';
+@import '../../assets/styles/generics';
+@import '../../assets/styles/mixins';
+
+.main-view {
+    $header-height: 60px;
+    $header-secondary-height: 60px;
+    $footer-height: 60px;
+
+    height: 100%;
+    width: 100%;
+
+    &-header {
+        display: block;
+        position: relative;
+        padding: 0 5%;
+        height: $header-height;
+
+        background-color: $faded-black-1;
+
+        &-inputs {
+            @include vertical-align();
+            margin-right: 3%;
+            display: inline-block;
+            float: none;
+            vertical-align: text-top;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            @media (max-width: 320px) {
+                margin-right: 2%;
+            }
+
+            .cc_help-tooltip {
+                margin-left: 4px;
+            }
+
+            &:hover {
+                z-index: 3;
+            }
+        }
+
+        &.main {
+            z-index: 4;
+        }
+
+        &.secondary {
+            z-index: 3;
+            background-color: $faded-black-2;
+        }
+
+        &.invisible {
+            background-color: transparent;
+        }
+
+        h3 {
+            text-align: center;
+            line-height: $header-secondary-height;
+        }
+
+        .btn {
+            @include vertical-align();
+            margin-left: 10px;
+            margin-right: 10px;
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            padding-left: 2%;
+            padding-right: 2%;
+        }
+    }
+
+    &-footer {
+        display: block;
+        position: relative;
+        clear: both;
+        width: 100%;
+        height: $footer-height;
+
+        background-color: $blue-5;
+        text-align: center;
+
+        .logo {
+            @include vertical-align();
+            margin: 0 auto;
+        }
+
+        .copyright {
+            @include vertical-align();
+            position: absolute;
+            display: inline-block;
+            right: 3%;
+
+            color: white;
+            font-size: 12px;
+            font-weight: 100;
+
+            a {
+                color: white;
+                font-weight: 300;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+
+    &-form,
+    &-output {
+        display: block;
+        position: relative;
+        float: left;
+        height: calc(100% - 60px);
+        width: 50%;
+
+        @media all and (max-width: 700px) {
+            width: 100%;
+        }
+    }
+
+    &-form {
+        background: $blue-1;
+
+        &-info {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+
+            color: $faded-white-2;
+            font-size: 14px;
+            font-weight: 300;
+            text-align: center;
+        }
+    }
+
+    &-output {
+        word-wrap: break-word;
+        background: $blue-2;
+
+        &-text {
+            top: 0;
+        }
+
+        &.mason .cc_textarea-field {
+            font: normal normal 64px/1 'Masonic', serif;
+        }
+    }
+
+    &-fillers {
+        display: inline-block;
+    }
+
+    .cc_textarea {
+        height: calc(100% - 120px);
+    }
+
+    .cc_help-tooltip {
+        &.select-tooltip {
+            margin-top: 12px;
+        }
+    }
+}

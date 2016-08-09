@@ -1,0 +1,38 @@
+[
+    {
+        "id": "default",
+        "enabled": true,
+        "label": "Default",
+        "text": "Ciphers & Codes"
+    },
+    {
+        "id": "abc",
+        "enabled": true,
+        "label": "Alphabet",
+        "text": "ABCDEFGHIJKLMNOPQRSTUVWXYZ\r\nabcdefghijklmnopqrstuvwxyz\r\n0123456789\r\n, . ; : ' \" ` ~ ! @ # $ % ^ & * ( )- _ = + [ ]{ } \\ / | < >"
+    },
+    {
+        "id": "lorem",
+        "enabled": true,
+        "label": "Lorem Ipsum",
+        "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem."
+    },
+    {
+        "id": "pangram",
+        "enabled": false,
+        "label": "Pangrams",
+        "text": "Every good cow, fox, squirrel, and zebra likes to jump over happy dogs.\r\nWoven silk pyjamas exchanged for blue quartz.\r\nThe quick onyx goblin jumps over the lazy dwarf.\r\nBrawny gods just flocked up to quiz and vex him."
+    },
+    {
+        "id": "pangram2",
+        "enabled": true,
+        "label": "Pangram",
+        "text": "When zombies arrive, quickly fax judge Pat."
+    },
+    {
+        "id": "none",
+        "enabled": true,
+        "label": "Custom",
+        "text": ""
+    }
+]

@@ -1,0 +1,27 @@
+@mixin sprite( $spriteVals ) {
+    $spriteUrl1x: nth( $spriteVals, 3 );
+    $spriteUrl2x: nth( $spriteVals, 6 );
+
+    width: nth( $spriteVals, 1 );
+    height: nth( $spriteVals, 2 );
+    background-repeat: no-repeat;
+    background-image: url( $spriteUrl1x  );
+    background-position: nth( $spriteVals, 4 ) nth( $spriteVals, 5 );
+    @media only screen and ( -webkit-min-device-pixel-ratio: 2 ), only screen and ( min-device-pixel-ratio: 2 ) {
+        background-image: url( $spriteUrl2x );
+        background-size: $bgiSizeW $bgiSizeH;
+    }
+}
+
+$spritesPath: 'assets/images/sprites';
+$spritesURL: $spritesPath + '.png';
+$spritesx2URL: $spritesPath + '@2x.png';
+$bgiSizeW: 188px;
+$bgiSizeH: 100px;
+$logo-teal-large: 147px 40px $spritesURL -10px -10px $spritesx2URL;
+$logo-teal: 58.99999999999999px 16px $spritesURL -10px -71px $spritesx2URL;
+$share-white: 16px 14px $spritesURL -152px -72px $spritesx2URL;
+$copy-white: 16px 16px $spritesURL -122px -71px $spritesx2URL;
+$close-white: 17px 16px $spritesURL -88px -72px $spritesx2URL;
+$arrow-up-white: 10px 6px $spritesURL -168px -17px $spritesx2URL;
+$arrow-down-white: 10px 6px $spritesURL -168px -37px $spritesx2URL;
