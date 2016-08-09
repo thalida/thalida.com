@@ -13,11 +13,11 @@
     box-shadow: 0px 0px 15px 0px rgba(black, 0.50);
 
     &.white {
-        color: white;
+        color: $font-color-light;
     }
 
     &.black {
-        color: black;
+        color: $font-color-dark;
     }
 
     &-salutation,
