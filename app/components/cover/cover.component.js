@@ -17,6 +17,10 @@ module.exports = {
             ctrl.greeting = {};
             ctrl.funFact = {};
 
+            ctrl.sanitize = function( str ){
+                return utils.sanitize( str );
+            };
+
             ctrl.getDiffRandValue = function( origArr, origCurrVal ){
                 var arr = angular.copy( origArr );
                 var currVal = angular.copy( origCurrVal );

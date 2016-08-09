@@ -1,12 +1,17 @@
 <div class="t_cover" ng-class="[$ctrl.fontColor]">
-    <h2 class="t_cover-salutation">
-        {{$ctrl.time.data.salutation}},
+    <h2
+        class="t_cover-salutation"
+        ng-bind-html="$ctrl.sanitize($ctrl.time.data.salutation)">
     </h2>
-    <h1 class="t_cover-greeting">
+    <h1
+        class="t_cover-greeting"
+        ng-bind-html="$ctrl.sanitize($ctrl.greeting.text)">
         {{$ctrl.greeting.text}}
     </h1>
     <h2 class="t_cover-intro">
-        I'm Thalida. Frontend Engineer. {{$ctrl.funFact.text}}.
+        I'm Thalida.
+        Frontend Engineer.
+        <span ng-bind-html="$ctrl.sanitize($ctrl.funFact.text)"></span>.
     </h2>
     <p class="t_cover-note">
         note: in no order of importance
