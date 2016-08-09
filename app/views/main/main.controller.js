@@ -2,14 +2,24 @@
 
 var $requires = [
 	'$scope',
-	'$sce'
+	'$sce',
+    'utils',
+    'fancyTime'
 ];
 
-var MainController = function($scope, $sce) {
+var MainController = function($scope, $sce, utils, fancyTime) {
 	var main = this;
 
-	main.init = function(){
+    main.render = false;
 
+	main.init = function(){
+        main.currFancyTime = null;
+
+        fancyTime.run(function( newFancyTime ){
+            main.currFancyTime = angular.copy(newFancyTime);
+        });
+
+        main.render = true;
 	}
 
 

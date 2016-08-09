@@ -44,6 +44,9 @@
     "angular-tooltips": "^1.1.4",
     "angular-touch": "^1.5.0",
     "angular-ui-router": "^0.2.18",
-    "ngstorage": "^0.3.10"
+    "ngstorage": "^0.3.10",
+    "jquery": "^2.1.4",
+    "jquery-color": "git+https://github.com/jquery/jquery-color#b41ab1b73fabf1cab08e8b08cb5db4c44b65270b",
+    "moment": "^2.10.6"
   }
 }

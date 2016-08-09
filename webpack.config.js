@@ -7,7 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require("copy-webpack-plugin");
 
-var isProduction = process.env.NODE_ENV === 'production'
+var isProduction = process.env.NODE_ENV === 'production';
 
 var APP = __dirname + '/app';
 var DIST = __dirname + '/dist';
@@ -17,12 +17,14 @@ var common = {
     entry: {
         app: './',
         vendors: [
+            'jquery',
             'angular',
             'angular-animate',
             'angular-resource',
             'angular-sanitize',
             'angular-touch',
             'angular-ui-router',
+            'moment',
             'ngstorage'
         ]
     },
@@ -35,8 +37,16 @@ var common = {
     module: {
         loaders: [
             {
+                test: require.resolve('jquery'),
+                loader: "expose?$!expose?jQuery"
+            },
+            {
                 test: require.resolve('angular'),
                 loader: "expose?angular"
+            },
+            {
+                test: require.resolve('moment'),
+                loader: "expose?moment"
             },
             {
                 test: /\.scss$/,
