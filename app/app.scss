@@ -97,4 +97,9 @@ p {
     @media all and (min-width: 1024px) {
         font-size: 1.6rem;
     }
+
+    &.no-margins {
+        margin: 0;
+        padding: 0;
+    }
 }

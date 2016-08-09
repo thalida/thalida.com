@@ -17,7 +17,7 @@ var service = function( $interval, TIME_GROUPS ){
 
 		this.interval = null;
 		// this.waitTime = 5 * 1000;
-		this.waitTime = 2 * 60 * 1000;
+		this.waitTime = 1 * 1 * 1000;
 		this.tickCallbacks = [];
 	};
 

@@ -14,6 +14,10 @@ module.exports = {
             var ctrl = this;
             var $cover = $element.find('.t_cover');
 
+            ctrl.isFirstUpdate = true;
+            ctrl.updateWhen = 20;
+            ctrl.numUpdates = 0;
+
             ctrl.greeting = {};
             ctrl.funFact = {};
 
@@ -69,12 +73,21 @@ module.exports = {
             ctrl.updateCover = function(){
                 console.log('$ctrl.time ' , ctrl.time);
 
-                ctrl.setGreeting();
-                ctrl.setFunFact();
+                if( ctrl.isFirstUpdate || ctrl.updateWhen === ctrl.numUpdates ){
+                    ctrl.setGreeting();
+                    ctrl.setFunFact();
+
+                    ctrl.numUpdates = 0;
+                }
+
                 ctrl.setBackground();
                 ctrl.setFontColor();
+
+                ctrl.isFirstUpdate = false;
+                ctrl.numUpdates += 1;
             };
 
+            ctrl.$onInit = ctrl.updateCover;
             ctrl.$onChanges = ctrl.updateCover;
         }
     ]

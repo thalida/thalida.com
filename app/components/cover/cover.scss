@@ -1,6 +1,7 @@
 @import '../../assets/styles/colors';
 @import '../../assets/styles/generics';
 @import '../../assets/styles/sprites';
+@import '../../assets/styles/animations';
 
 .t_cover {
     display: block;
@@ -12,6 +13,10 @@
     overflow: auto;
 
     box-shadow: 0px 0px 15px 0px rgba(black, 0.50);
+
+    background-size: 400% 400%;
+    -webkit-animation: gradient $animationTiming 30s infinite;
+    animation: gradient $animationTiming 30s infinite;
 
     @media all and (min-width: 768px) {
         height: 100%;

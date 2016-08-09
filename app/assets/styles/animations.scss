@@ -1,0 +1,16 @@
+@import "./mixins.scss";
+
+$animationTiming: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+$animationSpeed: 2s;
+
+@include keyframes( gradient ) {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
