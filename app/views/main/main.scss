@@ -5,4 +5,19 @@
 .main-view {
     height: 100%;
     width: 100%;
+
+    .panel.main-view-content {
+        float: right;
+
+        p {
+            color: $black-2;
+        }
+    }
+
+    &-section {
+        margin-bottom: 50px;
+        h4 {
+            margin-top: 18px;
+        }
+    }
 }

@@ -5,10 +5,12 @@ var $requires = [
 	'$sce',
     'utils',
     'fancyTime',
-    'visits'
+    'visits',
+    'PROJECTS',
+    'ABOUT'
 ];
 
-var MainController = function($scope, $sce, utils, fancyTime, visits) {
+var MainController = function($scope, $sce, utils, fancyTime, visits, PROJECTS, ABOUT) {
 	var main = this;
 
     main.render = false;
@@ -16,6 +18,8 @@ var MainController = function($scope, $sce, utils, fancyTime, visits) {
 	main.init = function(){
         visits.increment();
 
+        main.about = ABOUT;
+        main.projectsList = PROJECTS;
         main.currFancyTime = null;
 
         fancyTime.run(function( newFancyTime ){
@@ -24,6 +28,8 @@ var MainController = function($scope, $sce, utils, fancyTime, visits) {
 
         main.render = true;
 	}
+
+    main.sanitize = utils.sanitize;
 
 
 	main.init();

@@ -56,15 +56,14 @@ h1 {
     font-family: 'Merriweather', serif;
     font-size: 5.0rem;
     font-weight: 300;
-    line-height: 1.0;
-    letter-spacing: 0px;
+    line-height: 1.2;
 
     @media all and (min-width: 768px) {
         font-size: 6.0rem;
     }
 
     @media all and (min-width: 1024px) {
-        font-size: 8.0rem;
+        font-size: 7.0rem;
     }
 }
 
@@ -86,6 +85,27 @@ h2 {
     }
 }
 
+h4 {
+    margin: 0;
+    padding: 0;
+
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 300;
+
+    a {
+        color: $blue-1;
+        text-decoration: none;
+
+        -webkit-transition: color 500ms;
+        transition: color 500ms;
+
+        &:hover {
+            color: $black-1;
+        }
+    }
+}
+
 p {
     font-size: 1.2rem;
     font-weight: 100;
@@ -98,8 +118,13 @@ p {
         font-size: 1.6rem;
     }
 
-    &.no-margins {
+    &.no-buffer {
         margin: 0;
         padding: 0;
+    }
+
+    &.no-buffer-top {
+        margin-top: 0;
+        padding-top: 0;
     }
 }

@@ -1,2 +1,11 @@
-$font-color-light: white;
-$font-color-dark: black;
+$black-1: black;
+$black-2: rgba($black-1, 0.8);
+
+$white-1: white;
+
+$blue-1: #0073FF;
+
+$teal-1: #5FE6CA;
+
+$font-color-light: $white-1;
+$font-color-dark: $black-1;
