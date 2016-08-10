@@ -16,7 +16,7 @@ module.exports = {
             var $cover = $element.find('.t_cover');
 
             ctrl.isFirstUpdate = true;
-            ctrl.updateWhen = 20;
+            ctrl.updateWhen = 40;
             ctrl.numUpdates = 0;
 
             ctrl.greeting = {};
