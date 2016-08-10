@@ -1,14 +1,13 @@
 <div class="t_cover" ng-class="[$ctrl.fontColor]">
     <h2
         class="t_cover-salutation"
-        ng-bind-html="$ctrl.sanitize($ctrl.time.data.salutation)">
+        ng-bind-html="$ctrl.sanitize($ctrl.salutation)">
     </h2>
     <h1
         class="t_cover-greeting"
         ng-bind-html="$ctrl.sanitize($ctrl.greeting.text)">
         {{$ctrl.greeting.text}}
     </h1>
-    <p class="no-margins">{{$ctrl.numUpdates}} /{{$ctrl.updateWhen}}</p>
     <h2 class="t_cover-intro">
         I'm Thalida.
         Frontend Engineer.

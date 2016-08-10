@@ -3,14 +3,15 @@
 module.exports = {
     templateUrl: 'components/cover/cover.html',
     bindings: {
-        time: '<',
+        time: '<'
     },
     controller: [
         '$scope',
         '$element',
         'FUN_FACTS',
         'utils',
-        function($scope, $element, FUN_FACTS, utils){
+        'visits',
+        function($scope, $element, FUN_FACTS, utils, visits){
             var ctrl = this;
             var $cover = $element.find('.t_cover');
 
@@ -38,6 +39,13 @@ module.exports = {
                 newVal.index = arr.indexOf( newVal.text );
 
                 return newVal;
+            };
+
+            ctrl.setSalutation = function(){
+                var sayings  = visits.getGroup().sayings || [ctrl.time.data.salutation];
+
+                ctrl.salutation = utils.getRandom(sayings);
+                return ctrl.salutation;
             };
 
             ctrl.setGreeting = function(){
@@ -71,8 +79,6 @@ module.exports = {
             };
 
             ctrl.updateCover = function(){
-                console.log('$ctrl.time ' , ctrl.time);
-
                 if( ctrl.isFirstUpdate || ctrl.updateWhen === ctrl.numUpdates ){
                     ctrl.setGreeting();
                     ctrl.setFunFact();
@@ -87,7 +93,11 @@ module.exports = {
                 ctrl.numUpdates += 1;
             };
 
-            ctrl.$onInit = ctrl.updateCover;
+            ctrl.$onInit = function(){
+                ctrl.setSalutation();
+                ctrl.updateCover();
+            };
+
             ctrl.$onChanges = ctrl.updateCover;
         }
     ]

@@ -4,15 +4,18 @@ var $requires = [
 	'$scope',
 	'$sce',
     'utils',
-    'fancyTime'
+    'fancyTime',
+    'visits'
 ];
 
-var MainController = function($scope, $sce, utils, fancyTime) {
+var MainController = function($scope, $sce, utils, fancyTime, visits) {
 	var main = this;
 
     main.render = false;
 
 	main.init = function(){
+        visits.increment();
+
         main.currFancyTime = null;
 
         fancyTime.run(function( newFancyTime ){

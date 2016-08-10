@@ -1,6 +1,7 @@
 var appConsts = {
     TIME_GROUPS: require('./constants/timeGroups.json'),
-    FUN_FACTS: require('./constants/funFacts.json')
+    FUN_FACTS: require('./constants/funFacts.json'),
+    VISIT_GROUPS: require('./constants/visitGroups.json')
 };
 
 for(var key in appConsts) {
