@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="2000px" height="800px" viewBox="0 0 2000 800" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>Pattern - Large</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="3.14669556" y="7.46069873e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+        <rect id="path-3" x="3.14669556" y="5.5067062e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-3"></use>
+        </mask>
+        <rect id="path-5" x="21.0578817" y="1.06226139e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+        <rect id="path-7" x="21.0578817" y="1.03739239e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-8" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-7"></use>
+        </mask>
+        <rect id="path-9" x="7.9448073" y="4.60330187e-13" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-10" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-9"></use>
+        </mask>
+        <rect id="path-11" x="7.9448073" y="4.2962459e-13" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-12" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-11"></use>
+        </mask>
+        <rect id="path-13" x="21.0578817" y="1.06226139e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-14" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-13"></use>
+        </mask>
+        <rect id="path-15" x="21.0578817" y="1.03739239e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-16" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-15"></use>
+        </mask>
+        <rect id="path-17" x="4.9448073" y="1.17239551e-13" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-18" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-17"></use>
+        </mask>
+        <rect id="path-19" x="4.9448073" y="8.65339546e-14" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-20" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-19"></use>
+        </mask>
+        <rect id="path-21" x="3.14669556" y="7.46069873e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-22" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-21"></use>
+        </mask>
+        <rect id="path-23" x="3.14669556" y="5.5067062e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-24" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-23"></use>
+        </mask>
+        <rect id="path-25" x="21.0578817" y="1.06226139e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-26" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-25"></use>
+        </mask>
+        <rect id="path-27" x="21.0578817" y="1.03739239e-12" width="4.85951117" height="45.8568157" rx="2.42975559"></rect>
+        <mask id="mask-28" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="4.85951117" height="45.8568157" fill="white">
+            <use xlink:href="#path-27"></use>
+        </mask>
+        <rect id="path-29" x="5.22269571" y="4.50306459e-13" width="1.20523747" height="11.373233" rx="0.602618736"></rect>
+        <mask id="mask-30" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.20523747" height="11.373233" fill="white">
+            <use xlink:href="#path-29"></use>
+        </mask>
+        <rect id="path-31" x="5.22269571" y="4.58300065e-13" width="1.20523747" height="11.373233" rx="0.602618736"></rect>
+        <mask id="mask-32" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.20523747" height="11.373233" fill="white">
+            <use xlink:href="#path-31"></use>
+        </mask>
+        <rect id="path-33" x="4.9448073" y="1.17239551e-13" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-34" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-33"></use>
+        </mask>
+        <rect id="path-35" x="4.9448073" y="8.65339546e-14" width="1.14110938" height="15.3829824" rx="0.570554689"></rect>
+        <mask id="mask-36" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="1.14110938" height="15.3829824" fill="white">
+            <use xlink:href="#path-35"></use>
+        </mask>
+        <rect id="path-37" x="3.14669556" y="7.46069873e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-38" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-37"></use>
+        </mask>
+        <rect id="path-39" x="3.14669556" y="5.5067062e-14" width="0.726160513" height="9.78917063" rx="0.363080256"></rect>
+        <mask id="mask-40" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="0.726160513" height="9.78917063" fill="white">
+            <use xlink:href="#path-39"></use>
+        </mask>
+    </defs>
+    <g id="site" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Pattern---Large" stroke="#FFFFFF">
+            <g id="Group-3" transform="translate(28.000000, -17.000000)">
+                <g id="background" transform="translate(28.000000, 123.000000)">
+                    <g id="Group" opacity="0.639225746" transform="translate(1476.768110, 339.073466) rotate(-510.000000) translate(-1476.768110, -339.073466) translate(1473.268110, 334.073466)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-2)" fill="#FFFFFF" xlink:href="#path-1"></use>
+                        <use id="Rectangle-6" mask="url(#mask-4)" transform="translate(3.509776, 4.894585) rotate(-270.000000) translate(-3.509776, -4.894585) " xlink:href="#path-3"></use>
+                    </g>
+                    <g id="Group" opacity="0.102495336" transform="translate(1726.392072, 412.738565) rotate(-510.000000) translate(-1726.392072, -412.738565) translate(1702.892072, 389.738565)" stroke-width="2" fill="#FFFFFF">
+                        <use id="Rectangle-6" mask="url(#mask-6)" opacity="0.665403451" xlink:href="#path-5"></use>
+                        <use id="Rectangle-6" mask="url(#mask-8)" transform="translate(23.487637, 22.928408) rotate(-270.000000) translate(-23.487637, -22.928408) " xlink:href="#path-7"></use>
+                    </g>
+                    <g id="Group" opacity="0.252506996" transform="translate(1848.584965, 12.056770) rotate(-510.000000) translate(-1848.584965, -12.056770) translate(1840.084965, 4.056770)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-10)" fill="#FFFFFF" xlink:href="#path-9"></use>
+                        <use id="Rectangle-6" mask="url(#mask-12)" fill="#D8D8D8" transform="translate(8.515362, 7.691491) rotate(-270.000000) translate(-8.515362, -7.691491) " xlink:href="#path-11"></use>
+                    </g>
+                    <circle id="Oval" stroke-width="3" opacity="0.102203825" transform="translate(1679.704148, 614.491557) rotate(-225.000000) translate(-1679.704148, -614.491557) " cx="1679.70415" cy="614.491557" r="8"></circle>
+                    <g id="Group" opacity="0.102495336" transform="translate(428.243165, 237.788198) rotate(-615.000000) translate(-428.243165, -237.788198) translate(404.743165, 214.788198)" stroke-width="2" fill="#FFFFFF">
+                        <use id="Rectangle-6" mask="url(#mask-14)" opacity="0.665403451" xlink:href="#path-13"></use>
+                        <use id="Rectangle-6" mask="url(#mask-16)" transform="translate(23.487637, 22.928408) rotate(-270.000000) translate(-23.487637, -22.928408) " xlink:href="#path-15"></use>
+                    </g>
+                    <g id="Group" opacity="0.252506996" transform="translate(9.726413, 223.499980) rotate(-615.000000) translate(-9.726413, -223.499980) translate(4.226413, 215.642837)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-18)" fill="#FFFFFF" xlink:href="#path-17"></use>
+                        <use id="Rectangle-6" mask="url(#mask-20)" transform="translate(5.515362, 7.691491) rotate(-270.000000) translate(-5.515362, -7.691491) " xlink:href="#path-19"></use>
+                    </g>
+                    <g id="Group" opacity="0.639225746" transform="translate(421.695579, 497.972360) rotate(-615.000000) translate(-421.695579, -497.972360) translate(418.195579, 492.972360)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-22)" fill="#FFFFFF" xlink:href="#path-21"></use>
+                        <use id="Rectangle-6" mask="url(#mask-24)" transform="translate(3.509776, 4.894585) rotate(-270.000000) translate(-3.509776, -4.894585) " xlink:href="#path-23"></use>
+                    </g>
+                    <circle id="Oval" stroke-width="3" opacity="0.102203825" transform="translate(635.205315, 230.667752) rotate(-330.000000) translate(-635.205315, -230.667752) " cx="635.205315" cy="230.667752" r="8"></circle>
+                    <g id="Group" opacity="0.102495336" transform="translate(986.325744, 265.647562) rotate(-285.000000) translate(-986.325744, -265.647562) translate(962.825744, 242.647562)" stroke-width="2" fill="#FFFFFF">
+                        <use id="Rectangle-6" mask="url(#mask-26)" opacity="0.665403451" xlink:href="#path-25"></use>
+                        <use id="Rectangle-6" mask="url(#mask-28)" transform="translate(23.487637, 22.928408) rotate(-270.000000) translate(-23.487637, -22.928408) " xlink:href="#path-27"></use>
+                    </g>
+                    <g id="Group" opacity="0.517432369" transform="translate(1213.979658, 113.517844) rotate(-285.000000) translate(-1213.979658, -113.517844) translate(1207.979658, 107.517844)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-30)" fill="#FFFFFF" xlink:href="#path-29"></use>
+                        <use id="Rectangle-6" mask="url(#mask-32)" transform="translate(5.825314, 5.686616) rotate(-270.000000) translate(-5.825314, -5.686616) " xlink:href="#path-31"></use>
+                    </g>
+                    <g id="Group" opacity="0.252506996" transform="translate(616.735496, 462.531978) rotate(-285.000000) translate(-616.735496, -462.531978) translate(611.235496, 454.674836)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-34)" fill="#FFFFFF" xlink:href="#path-33"></use>
+                        <use id="Rectangle-6" mask="url(#mask-36)" transform="translate(5.515362, 7.691491) rotate(-270.000000) translate(-5.515362, -7.691491) " xlink:href="#path-35"></use>
+                    </g>
+                    <g id="Group" opacity="0.639225746" transform="translate(1110.747449, 494.247449) rotate(-285.000000) translate(-1110.747449, -494.247449) translate(1107.247449, 489.247449)" stroke-width="2">
+                        <use id="Rectangle-6" mask="url(#mask-38)" fill="#FFFFFF" xlink:href="#path-37"></use>
+                        <use id="Rectangle-6" mask="url(#mask-40)" transform="translate(3.509776, 4.894585) rotate(-270.000000) translate(-3.509776, -4.894585) " xlink:href="#path-39"></use>
+                    </g>
+                    <circle id="Oval" stroke-width="3" opacity="0.177122201" cx="1332.5" cy="300.5" r="1.5"></circle>
+                    <circle id="Oval" stroke-width="3" opacity="0.177122201" cx="1152.5" cy="430.5" r="1.5"></circle>
+                    <path d="M955,136 C956.656854,136 958,134.656854 958,133 C958,131.343146 956.656854,130 955,130 C953.343146,130 952,131.343146 952,133 C952,134.656854 953.343146,136 955,136 Z" id="Oval" stroke-width="3" fill="#FFFFFF" opacity="0.22318097"></path>
+                    <path d="M1123,63 C1124.65685,63 1126,61.6568542 1126,60 C1126,58.3431458 1124.65685,57 1123,57 C1121.34315,57 1120,58.3431458 1120,60 C1120,61.6568542 1121.34315,63 1123,63 Z" id="Oval" stroke-width="3" fill="#FFFFFF"></path>
+                    <circle id="Oval" stroke-width="3" opacity="0.102203825" cx="1549" cy="172" r="8"></circle>
+                    <circle id="Oval" stroke-width="3" opacity="0.102203825" cx="1162" cy="156" r="8"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
