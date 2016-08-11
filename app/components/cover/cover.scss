@@ -49,11 +49,35 @@
     }
 
     &-intro {
-        margin-top: 64px;
+        margin-top: 5%;
     }
 
     &-note {
         margin: 0;
         padding: 0;
+    }
+
+    &-social {
+        display: block;
+        position: absolute;
+        bottom: 2%;
+        left: 0;
+        width: 100%;
+        height: 25px;
+
+        text-align: center;
+
+        a {
+            display: inline-block;
+
+            &:hover {
+                opacity: 0.5;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            margin: 0 15px;
+        }
     }
 }

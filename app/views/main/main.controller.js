@@ -33,6 +33,7 @@ var MainController = function($scope, $sce, utils, fancyTime, visits, PROJECTS, 
     main.sanitize = utils.sanitize;
 
     main.scrollTop = function(){
+        $('body').scrollTop(0);
         $('.main-view-content').scrollTop(0);
     }
 

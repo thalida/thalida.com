@@ -39,6 +39,15 @@ body {
     @media screen and (device-aspect-ratio: 40/71) {
         height: 500px;
     }
+
+
+    @media all and (min-width: 768px) {
+        overflow: hidden;
+    }
+
+    @media all and (min-width: 1024px) {
+        overflow: hidden;
+    }
 }
 
 .app {
@@ -97,8 +106,8 @@ a {
     color: $blue-1;
     text-decoration: none;
 
-    -webkit-transition: color 500ms;
-    transition: color 500ms;
+    -webkit-transition: all 500ms;
+    transition: all 500ms;
 
     &:hover {
         color: $black-1;
@@ -130,5 +139,30 @@ p {
     &.no-buffer-top {
         margin-top: 0;
         padding-top: 0;
+    }
+}
+
+.icon {
+    display: block;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+
+    &-github-white {
+        width: 20px;
+        height: 19.5px;
+        background-image: url('/assets/images/github-white.svg');
+    }
+
+    &-dribbble-white {
+        width: 20px;
+        height: 20px;
+        background-image: url('/assets/images/dribbble-white.svg');
+    }
+
+    &-twitter-white {
+        width: 25px;
+        height: 20px;
+        background-image: url('/assets/images/twitter-white.svg');
     }
 }
