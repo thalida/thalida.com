@@ -1,24 +1,19 @@
 {
-    "bio": [
-        "I’m a Frontend Engineer based in New York. I collect identities like candy, I’m a queer Trinidadian  cisgender  woman of color. I’ve been active in the engineering world for 6 odd years. I work with a great group of engineers at Kinnek (we’re hiring!) during the day, and in the wee hours of the night I hack away at one of my many side projects.",
-        "I was lucky enough to have a supportive mother, who got me thalida.com for my 16<sup>th</sup> birthday. It was one of the best gifts I’ve ever received, and is the reason I've become the developer I am today.",
-        "I’m generally full of questions, and bubble tea."
-    ],
     "work": [
         {
             "company": "Kinnek",
             "title": "Frontend Engineer",
-            "start": "2015"
+            "start": "Nov 2015"
         },
         {
             "company": "OkCupid/DateHookup",
             "title": "Mobile Developer",
-            "start": "2014"
+            "start": "Jan 2014"
         },
         {
             "company": "Webs",
             "title": "Frontend Intern",
-            "start": "2013"
+            "start": "Jan 2013"
         }
     ],
     "extras": [
