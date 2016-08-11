@@ -52,8 +52,17 @@
     }
 
     &-note {
+        display: inline-block;
         margin: 0;
-        padding: 0;
+        padding: 5px;
+
+        .t_cover.white & {
+            background-color: rgba($black-1, 0.08);
+        }
+
+        .t_cover.black & {
+            background-color: rgba($white-1, 0.08);
+        }
     }
 
     &-social {

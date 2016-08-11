@@ -178,3 +178,18 @@ p {
         background-image: url('/assets/images/twitter-white.svg');
     }
 }
+
+.emoji {
+    display: inline-block;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    vertical-align: middle;
+
+    &-laughing-with-tears {
+        margin-top: 2px;
+        width: 18px;
+        height: 18px;
+        background-image: url('/assets/images/emoji-laughing_with_tears.svg');
+    }
+}
