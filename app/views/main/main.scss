@@ -10,8 +10,14 @@
         float: right;
         padding: 0;
 
-        p {
+        p:not(.small) {
             color: $gray-1;
+        }
+
+        p.small {
+            color: rgba($font-color-dark, 0.3);
+            text-align: right;
+            padding: 5px;
         }
     }
 
