@@ -18,6 +18,7 @@ var MainController = function($scope, $sce, utils, fancyTime, visits, PROJECTS, 
 	main.init = function(){
         visits.increment();
 
+        main.year = moment().format('Y');
         main.about = ABOUT;
         main.projectsList = PROJECTS;
         main.currFancyTime = null;
@@ -30,6 +31,10 @@ var MainController = function($scope, $sce, utils, fancyTime, visits, PROJECTS, 
 	}
 
     main.sanitize = utils.sanitize;
+
+    main.scrollTop = function(){
+        $('.main-view-content').scrollTop(0);
+    }
 
 
 	main.init();

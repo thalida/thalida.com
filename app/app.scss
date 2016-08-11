@@ -1,7 +1,6 @@
 @import './assets/styles/generics';
 @import './assets/styles/mixins';
 @import './assets/styles/colors';
-@import './assets/styles/sprites';
 
 html {
     box-sizing: border-box;
@@ -85,24 +84,24 @@ h2 {
     }
 }
 
-h4 {
+h3 {
     margin: 0;
     padding: 0;
 
     display: block;
     font-size: 1.8rem;
     font-weight: 300;
+}
 
-    a {
-        color: $blue-1;
-        text-decoration: none;
+a {
+    color: $blue-1;
+    text-decoration: none;
 
-        -webkit-transition: color 500ms;
-        transition: color 500ms;
+    -webkit-transition: color 500ms;
+    transition: color 500ms;
 
-        &:hover {
-            color: $black-1;
-        }
+    &:hover {
+        color: $black-1;
     }
 }
 

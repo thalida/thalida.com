@@ -3,14 +3,33 @@
         "I’m a Frontend Engineer based in New York. I collect identities like candy, I’m a queer Trinidadian  cisgender  woman of color. I’ve been active in the engineering world for 6 odd years. I work with a great group of engineers at Kinnek (we’re hiring!) during the day, and in the wee hours of the night I hack away at one of my many side projects.",
         "I’m generally full of questions, and bubble tea."
     ],
+    "work": [
+        {
+            "company": "Kinnek",
+            "title": "Frontend Engineer",
+            "start": "2015"
+        },
+        {
+            "company": "OkCupid/DateHookup",
+            "title": "Mobile Developer",
+            "start": "2014"
+        },
+        {
+            "company": "Webs",
+            "title": "Frontend Intern",
+            "start": "2013"
+        }
+    ],
     "extras": [
         {
             "title": "WOCinTechChat Photoshoots",
-            "link": "#"
+            "link": "https://www.flickr.com/photos/wocintechchat/albums",
+            "description": "I particated in two of the WOCInTechChat Photoshoots. The photos are stock photos, that can be used under a creative commons license with attribution."
         },
         {
-            "title": "Medium",
-            "link": "#"
+            "title": "The Journey Towards Staying",
+            "link": "https://medium.com/@thalidanoel/the-journey-towards-staying-af25c4d78da5#.abu2ga2eq",
+            "description": "One of the most consequential issues affecting young people is also the most ignored."
         }
     ]
 }

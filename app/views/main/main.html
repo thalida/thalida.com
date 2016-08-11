@@ -1,8 +1,10 @@
 <div class="main-view" ng-if="main.render">
     <t:cover time="main.currFancyTime"></t:cover>
     <div class="panel main-view-content">
+        <div class="main-view-section graphic pattern"></div>
+
         <div class="main-view-section">
-            <h3>Introudction</h3>
+            <h2>Introudction</h2>
             <div class="main-view-section-data">
                 <p
                     ng-repeat="section in main.about.bio"
@@ -11,16 +13,15 @@
             </div>
         </div>
 
+        <div class="main-view-section graphic coding"></div>
+
         <div class="main-view-section">
-            <h3>Projects</h3>
+            <h2>Projects</h2>
             <div class="main-view-section-data">
                 <div ng-repeat="project in main.projectsList">
-                    <h4>
-                        <a
-                            ng-href="{{project.link}}"
-                            ng-bind-html="main.sanitize(project.title)">
-                        </a>
-                    </h4>
+                    <a ng-href="{{project.link}}">
+                        <h3 ng-bind-html="main.sanitize(project.title)"></h3>
+                    </a>
                     <p
                         class="no-buffer"
                         ng-bind-html="main.sanitize(project.description)">
@@ -29,16 +30,36 @@
             </div>
         </div>
 
+        <div class="main-view-section graphic standing"></div>
+
         <div class="main-view-section">
-            <h3>In the Wild</h3>
+            <h2>In the Wild</h2>
             <div class="main-view-section-data">
-                <h4 ng-repeat="extra in main.about.extras">
-                    <a
-                        ng-href="{{extra.link}}"
-                        ng-bind-html="main.sanitize(extra.title)">
+                <div ng-repeat="extra in main.about.extras">
+                    <a ng-href="{{extra.link}}" target="_blank">
+                        <h3 ng-bind-html="main.sanitize(extra.title)"></h3>
                     </a>
-                </h4>
+                    <p class="no-buffer">{{extra.description}}</p>
+                </div>
             </div>
+        </div>
+
+        <div class="main-view-section secondary">
+            <h2>Work</h2>
+            <div class="main-view-section-data">
+                <div ng-repeat="job in main.about.work">
+                    <h3>{{ job.company }} <span class="float-right">{{ job.start }}</span></h3>
+                    <p class="no-buffer">{{job.title}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-view-footer">
+            <h4 class="main-view-footer-copy float-left">Made/{{main.year}}</h4>
+            <h4 class="main-view-footer-logo">&lt;3</h4>
+            <h4 class="main-view-footer-top clickable float-right">
+                <a ng-click="main.scrollTop()">top</a>
+            </h4>
         </div>
     </div>
 </div>
