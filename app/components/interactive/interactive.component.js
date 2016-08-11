@@ -9,6 +9,7 @@ module.exports = {
         'utils',
         function($scope, $element, $timeout, utils){
             var ctrl = this;
+            var mouseleaveTimeout = null;
             var $interactive = $element.find('.t_interactive');
             var $interactiveBack = $interactive.find('.t_interactive-background');
             var $interactiveFore = $interactive.find('.t_interactive-foreground');
@@ -16,7 +17,7 @@ module.exports = {
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
-                    {$el: $interactiveBack, shiftBy: 20},
+                    {$el: $interactiveBack, shiftBy: 12},
                     {$el: $interactiveFore, shiftBy: 8},
                     {$el: $interactiveShapes, shiftBy: 4}
                 ];
@@ -50,16 +51,26 @@ module.exports = {
             }
 
             ctrl.onMouseenter = function(){
+                if( mouseleaveTimeout || mouseleaveTimeout !== null){
+                    $timeout.cancel( mouseleaveTimeout );
+                    mouseleaveTimeout = null;
+                }
+
                 $interactive.removeClass('leaving');
             }
 
             ctrl.onMouseleave = function(){
-                $timeout(function(){
+                if( mouseleaveTimeout || mouseleaveTimeout !== null){
+                    $timeout.cancel( mouseleaveTimeout );
+                    mouseleaveTimeout = null;
+                }
+
+                mouseleaveTimeout = $timeout(function(){
                     $interactive.addClass('leaving');
                     ctrl.layers.forEach(function( layer ){
                         ctrl.setBackgroundPosition(layer.$el, { x: 0, y: 0}, 1);
                     });
-                }, 1000);
+                }, 500);
             }
 
             ctrl.setBackgroundPosition = function( $el, coords, shiftBy ){
