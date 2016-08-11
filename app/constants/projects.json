@@ -2,26 +2,34 @@
     {
         "title": "ShapeConnector",
         "description": "A puzzle game where the goal is to get from one shape to another in a specified amount of moves.",
-        "link": "http://shapeconnector.com"
+        "link": "http://shapeconnector.com",
+        "github": "https://github.com/thalida/ShapeConnector",
+        "dribbble": "https://dribbble.com/thalida/projects/307956-ShapeConnector"
     },
     {
         "title": "CiphersCodes",
         "description": "ciphers.codes is a ciphers translator which will encode + decode a given piece of text.",
-        "link": "http://ciphers.codes"
+        "link": "http://ciphers.codes",
+        "github": "https://github.com/thalida/ShapeConnector",
+        "dribbble": "https://dribbble.com/thalida/projects/307949-EncodeDecode"
     },
     {
         "title": "FancyCard",
         "description": "Various demos of my personal website (thalida.com) developed in various frameworks and methods. A new demo will be added as the front-end development landscape changes, and will showcase the new techniques that have become part of the modern standard.",
-        "link": "https://github.com/thalida/FancyCard"
+        "link": "https://github.com/thalida/FancyCard",
+        "github": "https://github.com/thalida/FancyCard",
+        "dribbble": "https://dribbble.com/shots/2303709-Personal-Website"
     },
     {
         "title": "WordBird",
         "description": "A chrome plugin which will replace any words you choose with another one.",
-        "link": "https://github.com/thalida/WordBird"
+        "link": "https://github.com/thalida/WordBird",
+        "github": "https://github.com/thalida/WordBird"
     },
     {
         "title": "WelcomeBot",
         "description": "A slack bot which will greet new members to a channel with a basic introduction and a way to find out more information.",
-        "link": "https://github.com/thalida/WelcomeBot"
+        "link": "https://github.com/thalida/WelcomeBot",
+        "github": "https://github.com/thalida/WelcomeBot"
     }
 ]

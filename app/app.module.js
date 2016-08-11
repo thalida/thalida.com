@@ -14,9 +14,10 @@ angular.module('app', [
 .config( require('./app.route.js') )
 .config(['tooltipsConfProvider', function ( tooltipsConfProvider ){
     tooltipsConfProvider.configure({
-        'smart' : true,
+        'smart' : false,
         'size'  : 'small',
-        'speed' : 'medium'
+        'speed' : 'medium',
+        'side'  : 'bottom'
     });
 }])
 .run(function(){

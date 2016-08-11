@@ -154,10 +154,22 @@ p {
         background-image: url('/assets/images/github-white.svg');
     }
 
+    &-github-blue {
+        width: 16px;
+        height: 15.61px;
+        background-image: url('/assets/images/github-blue.svg');
+    }
+
     &-dribbble-white {
         width: 20px;
         height: 20px;
         background-image: url('/assets/images/dribbble-white.svg');
+    }
+
+    &-dribbble-blue {
+        width: 16px;
+        height: 16px;
+        background-image: url('/assets/images/dribbble-blue.svg');
     }
 
     &-twitter-white {

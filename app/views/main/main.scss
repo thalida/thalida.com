@@ -25,7 +25,27 @@
         padding: 50px;
 
         h3 {
-            margin-top: 20px;
+            margin-top: 30px;
+        }
+
+
+        &.projects {
+            h3 {
+                margin-top: 0;
+            }
+
+            .project-icon {
+                margin-left: 20px;
+                display: inline-block;
+
+                &:hover {
+                    opacity: 0.5;
+                }
+            }
+
+            .project {
+                margin-top: 30px;
+            }
         }
 
         &.secondary {

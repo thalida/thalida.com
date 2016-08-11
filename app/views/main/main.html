@@ -43,13 +43,31 @@
         <div class="main-view-section graphic coding"></div>
         <p class="small no-buffer">#WOCinTech Chat stock photo | Look, ma my hands!</p>
 
-        <div class="main-view-section">
+        <div class="main-view-section projects">
             <h2>Projects</h2>
             <div class="main-view-section-data">
-                <div ng-repeat="project in main.projectsList">
-                    <a ng-href="{{project.link}}">
-                        <h3 ng-bind-html="main.sanitize(project.title)"></h3>
-                    </a>
+                <div class="project" ng-repeat="project in main.projectsList">
+                    <div class="clearfix">
+                        <a class="float-left" ng-href="{{project.link}}">
+                            <h3 ng-bind-html="main.sanitize(project.title)"></h3>
+                        </a>
+                        <div class="float-right">
+                            <a
+                                class="project-icon"
+                                ng-if="project.github"
+                                ng-href="{{project.github}}"
+                                target="_blank">
+                                <span class="icon icon-github-blue"></span>
+                            </a>
+                            <a
+                                class="project-icon"
+                                ng-if="project.dribbble"
+                                ng-href="{{project.dribbble}}"
+                                target="_blank">
+                                <span class="icon icon-dribbble-blue"></span>
+                            </a>
+                        </div>
+                    </div>
                     <p
                         class="no-buffer"
                         ng-bind-html="main.sanitize(project.description)">
