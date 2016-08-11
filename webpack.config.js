@@ -80,7 +80,7 @@ var common = {
         new HtmlWebpackPlugin({
             template: APP + '/index.html',
             inject: true,
-            // favicon: APP + '/favicon.ico'
+            favicon: APP + '/favicon.ico'
         })
     ]
 };
