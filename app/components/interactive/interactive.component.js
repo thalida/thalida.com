@@ -17,8 +17,8 @@ module.exports = {
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
-                    {$el: $interactiveBack, shiftBy: {x: 2, y: 20}},
-                    {$el: $interactiveFore, shiftBy: {x: 2.5, y: 20}},
+                    {$el: $interactiveBack, shiftBy: {x: 8, y: 20}},
+                    {$el: $interactiveFore, shiftBy: {x: 6, y: 20}},
                     {$el: $interactiveShapes, shiftBy: {x: 4, y: 20}}
                 ];
             }
