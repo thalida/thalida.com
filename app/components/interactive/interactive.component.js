@@ -17,9 +17,9 @@ module.exports = {
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
-                    {$el: $interactiveBack, shiftBy: -0.4},
-                    {$el: $interactiveFore, shiftBy: -0.1},
-                    {$el: $interactiveShapes, shiftBy: 0.8}
+                    {$el: $interactiveBack, shiftBy: {x: 2, y: 20}},
+                    {$el: $interactiveFore, shiftBy: {x: 2.5, y: 20}},
+                    {$el: $interactiveShapes, shiftBy: {x: 4, y: 20}}
                 ];
             }
 
@@ -60,9 +60,10 @@ module.exports = {
                     }
 
                     ctrl.layers.forEach(function( layer ){
+                        var left = layer.left || 0;
                         var bgPos = {
-                            x: (coords.x - mid.x - (mid.x / 0.8)) * layer.shiftBy,
-                            y: (coords.y - mid.y - (mid.y / 2)) * layer.shiftBy
+                            x: (coords.x - (dimensions.width * 1.5)) / layer.shiftBy.x,
+                            y: (coords.y - (dimensions.height * 1.5)) / layer.shiftBy.y
                         };
 
                         ctrl.setBackgroundPosition( layer.$el, bgPos.x + 'px ' + bgPos.y + 'px');
