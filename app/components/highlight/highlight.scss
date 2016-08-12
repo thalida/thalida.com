@@ -7,7 +7,7 @@
 
     display: inline-block;
     position: relative;
-    margin: 0px 3px;
+    margin: 0px 1px;
 
     font-weight: 700;
 
@@ -20,7 +20,7 @@
         position: absolute;
         width: 90%;
         height: 8px;
-        top: 14px;
+        top: 55%;
         left: 10%;
         z-index: -1;
 
@@ -42,7 +42,7 @@
     &:hover {
         &:after {
             position: absolute;
-            top: 10px;
+            top: 40%;
             left: 0;
             width: 100%;
 
