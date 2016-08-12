@@ -12,23 +12,29 @@
     float: left;
     min-height: 400px;
 
-    padding-top: 10px;
-    padding-bottom: 0px;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 15%;
+    padding-right: 15%;
 
     background-size: 400% 400%;
     -webkit-animation: gradient $animationTiming 30s infinite;
     animation: gradient $animationTiming 30s infinite;
 
+    @media all and (max-width: 768px) {
+        display: block;
+    }
+
     @media all and (min-width: 768px) {
-        padding-left: 50px;
-        padding-right: 50px;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 
     @media all and (min-width: 1024px) {
-        padding-left: 100px;
-        padding-right: 100px;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    @media all and (max-height: 650px) and (min-width: 1024px) {
+        display: block;
     }
 
     &.white {
@@ -44,17 +50,16 @@
         opacity: 0.5;
     }
 
-    &-greeting {
-    }
-
     &-intro {
         margin-top: 15%;
     }
 
     &-note {
         display: inline-block;
-        margin: 0;
+        margin: 10px 0 0 0;
         padding: 5px;
+
+        font-size: 1.4rem;
 
         .t_cover.white & {
             background-color: rgba($black-1, 0.08);
@@ -67,13 +72,19 @@
 
     &-social {
         display: block;
-        position: absolute;
-        bottom: 2%;
-        left: 0;
+        position: relative;
+        margin-top: 15%;
         width: 100%;
         height: 25px;
 
         text-align: center;
+
+        @media all and (min-height: 700px) and (min-width: 769px) {
+            position: absolute;
+            margin-top: 0;
+            bottom: 5%;
+            left: 0;
+        }
 
         a {
             display: inline-block;
