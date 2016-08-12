@@ -22,12 +22,16 @@
     }
 
     &-section {
-        padding: 10% 15%;
+        padding: 10%;
+
+        @media all and (min-width: 768px) {
+            padding-left: 15%;
+            padding-right: 15%;
+        }
 
         h3 {
             margin-top: 30px;
         }
-
 
         &.projects {
             h3 {
@@ -85,16 +89,6 @@
                 background-image: url('/assets/images/woctechchat-me-standing-2.png');
             }
         }
-
-        // @media all and (min-width: 768px) {
-        //     padding-left: 80px;
-        //     padding-right: 80px;
-        // }
-
-        // @media all and (min-width: 1024px) {
-        //     padding-left: 100px;
-        //     padding-right: 100px;
-        // }
     }
 
 
