@@ -64,6 +64,3 @@ angular.module('app', [
 
 // Constants
 require('./app.constants.js');
-
-// Views
-require('./views/main');

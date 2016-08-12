@@ -27,6 +27,7 @@ body {
     font: normal normal 16px/1.5 'Signika', 'Helvetica', 'Arial', sans-serif;
     font-size: 1.6rem;
 
+    // Fix for using 100vh on iPhones
     // https://gist.github.com/pburtchaell/e702f441ba9b3f76f587
     @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
         height: 1024px;
@@ -40,7 +41,7 @@ body {
         height: 500px;
     }
 
-
+    // Disable body overflow on the two columns view
     @media all and (min-width: 768px) {
         overflow: hidden;
     }

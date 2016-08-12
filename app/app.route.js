@@ -8,7 +8,7 @@ var $requires = [
 
 var route = function( $stateProvider, $urlRouterProvider, $locationProvider ){
     $urlRouterProvider.otherwise('/');
-    $locationProvider.html5Mode( false );
+    $locationProvider.html5Mode( true );
 
     $urlRouterProvider.rule(function($injector, $location){
         var path = $location.path();

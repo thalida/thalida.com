@@ -37,7 +37,6 @@ var MainController = function($scope, $sce, utils, fancyTime, visits, PROJECTS, 
         $('.main-view-content').scrollTop(0);
     }
 
-
 	main.init();
 }
 

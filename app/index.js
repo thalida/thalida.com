@@ -8,6 +8,7 @@ require('jquery-color/jquery.color');
 require('angular-tooltips/lib/angular-tooltips.scss');
 require('./app.scss');
 
+// Assets
 require('./assets/images');
 
 // App
