@@ -20,6 +20,7 @@
         left: 0;
 
         background-size: cover;
+        background-position: 50%;
         background-repeat: no-repeat;
 
         -webkit-transition: all 100ms;
@@ -41,6 +42,7 @@
 
     &-shapes {
         background-image: url('/assets/images/geometric-pattern-shapes.svg');
+        background-size: 200%;
     }
 
 }
