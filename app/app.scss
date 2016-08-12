@@ -182,14 +182,19 @@ p {
 .emoji {
     display: inline-block;
     position: relative;
+    width: 18px;
+    height: 18px;
+
     background-repeat: no-repeat;
     background-position: 0 0;
     vertical-align: middle;
 
     &-laughing-with-tears {
         margin-top: 2px;
-        width: 18px;
-        height: 18px;
         background-image: url('/assets/images/emoji-laughing_with_tears.svg');
+    }
+
+    &-information-desk-person {
+        background-image: url('/assets/images/emoji-information_desk_person.svg');
     }
 }

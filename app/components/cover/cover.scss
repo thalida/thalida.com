@@ -45,8 +45,7 @@
         color: $font-color-dark;
     }
 
-    &-salutation,
-    &-note {
+    &-salutation {
         opacity: 0.5;
     }
 
@@ -63,10 +62,12 @@
 
         .t_cover.white & {
             background-color: rgba($black-1, 0.08);
+            color: rgba($font-color-light, 0.5);
         }
 
         .t_cover.black & {
             background-color: rgba($white-1, 0.08);
+            color: rgba($font-color-dark, 0.5);
         }
     }
 
