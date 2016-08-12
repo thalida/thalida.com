@@ -32,10 +32,11 @@
         "salutation": "Good Morning",
         "sayings": [
             "How are you doing?",
-            "Good Dreams?",
             "Have a wonderful day!",
             "Have a wicked day!",
-            "How&rsquo;d ya sleep?"
+            "Have a great day!",
+            "How&rsquo;d ya sleep?",
+            "What&rsquos for breakfast?"
         ]
     },
     {
@@ -44,7 +45,7 @@
         "color": "#FFD874",
         "salutation": "Good Afternoon",
         "sayings": [
-            "NOM NOM Time",
+            "It&rsquo;s NOM NOM Time",
             "How&rsquo;s the day going?",
             "It&rsquo;s Food o&rsquo;Clock!",
             "Lunch time?",

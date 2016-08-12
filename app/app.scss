@@ -126,8 +126,17 @@ p {
         font-size: 1.8rem;
     }
 
+    &.normal {
+        color: $gray-1;
+    }
+
     &.small {
         color: $gray-1;
+        font-size: 1.1rem;
+    }
+
+    &.caption {
+        color: rgba($font-color-dark, 0.3);
         font-size: 1.1rem;
     }
 
