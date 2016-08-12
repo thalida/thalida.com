@@ -23,8 +23,8 @@
         background-position: 50%;
         background-repeat: no-repeat;
 
-        -webkit-transition: all 100ms;
-        transition: all 100ms;
+        -webkit-transition: all 0ms;
+        transition: all 0ms;
 
         .t_interactive.leaving & {
             -webkit-transition: all 800ms;
