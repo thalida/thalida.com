@@ -6,14 +6,21 @@ module.exports = {
         '$scope',
         '$element',
         '$timeout',
+        '$interval',
         'utils',
-        function($scope, $element, $timeout, utils){
+        function($scope, $element, $timeout, $interval, utils){
             var ctrl = this;
             var mouseleaveTimeout = null;
             var $interactive = $element.find('.t_interactive');
             var $interactiveBack = $interactive.find('.t_interactive-background');
             var $interactiveFore = $interactive.find('.t_interactive-foreground');
             var $interactiveShapes = $interactive.find('.t_interactive-shapes');
+            var animateInterval = null;
+            var animateCoords = {x: 0, y:0};
+            var shiftAmount = {
+                base: 1
+            };
+            var shiftMax = 800;
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
@@ -21,19 +28,47 @@ module.exports = {
                     {$el: $interactiveFore, shiftBy: {x: 6, y: 20}},
                     {$el: $interactiveShapes, shiftBy: {x: 4, y: 20}}
                 ];
+
+                ctrl.startAnimation();
             }
 
-            ctrl.onMouseover = function( e ){
-                var offset = $interactive.offset();
+            ctrl.startAnimation = function(){
+                ctrl.stopAnimation();
 
+                shiftAmount.x = shiftAmount.x || shiftAmount.base;
+                shiftAmount.y = shiftAmount.y || shiftAmount.base;
+
+                animateInterval = $interval(function(){
+                    if( animateCoords.x + shiftAmount.x >= shiftMax ){
+                        shiftAmount.x *= -1;
+                    } else if( animateCoords.x + shiftAmount.x < 0 ){
+                        shiftAmount.x = shiftAmount.base;
+                    }
+
+                    if( animateCoords.y + shiftAmount.y >= shiftMax ){
+                        shiftAmount.y *= -1;
+                    } else if( animateCoords.y + shiftAmount.y < 0 ){
+                        shiftAmount.y = shiftAmount.base;
+                    }
+
+                    animateCoords.x += shiftAmount.x;
+                    animateCoords.y += shiftAmount.y;
+
+                    ctrl.animate( animateCoords );
+                }, 10);
+            }
+
+            ctrl.stopAnimation = function(){
+                if( animateInterval !== null ){
+                    $interval.cancel( animateInterval );
+                    animateInterval = null;
+                }
+            }
+
+            ctrl.animate = function( coords ){
                 var dimensions = {
                     height: $interactive.outerHeight(true),
                     width: $interactive.outerWidth(true)
-                }
-
-                var coords = {
-                    x: e.pageX - offset.left,
-                    y: e.pageY - offset.top
                 }
 
                 var mid = {
@@ -52,12 +87,25 @@ module.exports = {
                 });
             }
 
+            ctrl.onMouseover = function( e ){
+                var offset = $interactive.offset();
+
+                var coords = {
+                    x: e.pageX - offset.left,
+                    y: e.pageY - offset.top
+                }
+
+                ctrl.stopAnimation();
+                ctrl.animate( coords );
+            }
+
             ctrl.onMouseenter = function(){
                 if( mouseleaveTimeout || mouseleaveTimeout !== null){
                     $timeout.cancel( mouseleaveTimeout );
                     mouseleaveTimeout = null;
                 }
 
+                ctrl.stopAnimation();
                 $interactive.removeClass('leaving');
             }
 
@@ -72,6 +120,7 @@ module.exports = {
                     ctrl.layers.forEach(function( layer ){
                         ctrl.setBackgroundPosition(layer.$el, '50%');
                     });
+                    ctrl.startAnimation();
                 }, 300);
             }
 
