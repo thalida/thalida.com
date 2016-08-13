@@ -4,6 +4,9 @@
 
 .t_highlight {
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+
     display: inline-block;
     position: relative;
     margin: 0px 1px;

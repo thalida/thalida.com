@@ -53,7 +53,6 @@ module.exports = {
                     animateCoords.x += shiftAmount.x;
                     animateCoords.y += shiftAmount.y;
 
-                    console.log('animateCoords', animateCoords);
                     ctrl.animate( animateCoords );
                 }, 10);
             }
