@@ -11,11 +11,12 @@ module.exports = {
         function($scope, $element, $timeout, $interval, utils){
             var ctrl = this;
             var mouseleaveTimeout = null;
+            var animateInterval = null;
+
             var $interactive = $element.find('.t_interactive');
             var $interactiveBack = $interactive.find('.t_interactive-background');
             var $interactiveFore = $interactive.find('.t_interactive-foreground');
             var $interactiveShapes = $interactive.find('.t_interactive-shapes');
-            var animateInterval = null;
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
@@ -94,7 +95,6 @@ module.exports = {
                     y: e.pageY - offset.top
                 }
 
-                ctrl.stopAnimation();
                 ctrl.animate( coords );
             }
 
@@ -119,6 +119,7 @@ module.exports = {
                     ctrl.layers.forEach(function( layer ){
                         ctrl.setBackgroundPosition(layer.$el, '50%');
                     });
+                    $interactive.removeClass('leaving');
                     ctrl.startAnimation();
                 }, 100);
             }
