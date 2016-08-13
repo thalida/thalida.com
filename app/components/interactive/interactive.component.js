@@ -42,32 +42,13 @@ module.exports = {
                 }
 
                 ctrl.layers.forEach(function( layer ){
-                    var offset = $interactive.offset();
+                    var left = layer.left || 0;
+                    var bgPos = {
+                        x: (coords.x - (dimensions.width * 1.5)) / layer.shiftBy.x,
+                        y: (coords.y - (dimensions.height * 1.5)) / layer.shiftBy.y
+                    };
 
-                    var dimensions = {
-                        height: $interactive.outerHeight(true),
-                        width: $interactive.outerWidth(true)
-                    }
-
-                    var coords = {
-                        x: e.pageX - offset.left,
-                        y: e.pageY - offset.top
-                    }
-
-                    var mid = {
-                        x: dimensions.width / 2,
-                        y: dimensions.height / 2
-                    }
-
-                    ctrl.layers.forEach(function( layer ){
-                        var left = layer.left || 0;
-                        var bgPos = {
-                            x: (coords.x - (dimensions.width * 1.5)) / layer.shiftBy.x,
-                            y: (coords.y - (dimensions.height * 1.5)) / layer.shiftBy.y
-                        };
-
-                        ctrl.setBackgroundPosition( layer.$el, bgPos.x + 'px ' + bgPos.y + 'px');
-                    });
+                    ctrl.setBackgroundPosition( layer.$el, bgPos.x + 'px ' + bgPos.y + 'px');
                 });
             }
 
