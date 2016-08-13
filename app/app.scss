@@ -15,6 +15,14 @@ html {
     outline: none;
 }
 
+*::selection {
+  background: $teal-1;
+}
+
+*::-moz-selection {
+  background: $teal-1;
+}
+
 body {
     display: block;
     position: relative;
