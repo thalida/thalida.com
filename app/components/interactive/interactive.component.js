@@ -16,11 +16,6 @@ module.exports = {
             var $interactiveFore = $interactive.find('.t_interactive-foreground');
             var $interactiveShapes = $interactive.find('.t_interactive-shapes');
             var animateInterval = null;
-            var animateCoords = {x: 0, y:0};
-            var shiftAmount = {
-                base: 1
-            };
-            var shiftMax = 800;
 
             ctrl.$onInit = function(){
                 ctrl.layers = [
@@ -35,8 +30,12 @@ module.exports = {
             ctrl.startAnimation = function(){
                 ctrl.stopAnimation();
 
-                shiftAmount.x = shiftAmount.x || shiftAmount.base;
-                shiftAmount.y = shiftAmount.y || shiftAmount.base;
+                var animateCoords = {x: 0, y: 0};
+                var shiftAmount = { base: 1 };
+                var shiftMax = 800;
+
+                shiftAmount.x = shiftAmount.base;
+                shiftAmount.y = shiftAmount.base;
 
                 animateInterval = $interval(function(){
                     if( animateCoords.x + shiftAmount.x >= shiftMax ){
@@ -54,6 +53,7 @@ module.exports = {
                     animateCoords.x += shiftAmount.x;
                     animateCoords.y += shiftAmount.y;
 
+                    console.log('animateCoords', animateCoords);
                     ctrl.animate( animateCoords );
                 }, 10);
             }
@@ -121,7 +121,7 @@ module.exports = {
                         ctrl.setBackgroundPosition(layer.$el, '50%');
                     });
                     ctrl.startAnimation();
-                }, 300);
+                }, 100);
             }
 
             ctrl.setBackgroundPosition = function( $el, pos ){
