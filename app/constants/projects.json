@@ -1,5 +1,10 @@
 [
     {
+        "title": "blerDCon",
+        "description": "BlerDCon will be the first nerd convention to ever be truly universal. We’re structured to cater to minority nerds in all genres. To ensure that the inclusive experience we offer has something for you.",
+        "link": "http://blerdcon.com"
+    },
+    {
         "title": "ShapeConnector",
         "description": "A puzzle game where the goal is to get from one shape to another in a specified amount of moves.",
         "link": "http://shapeconnector.com",
