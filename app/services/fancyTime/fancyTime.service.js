@@ -16,8 +16,9 @@ var service = function( $interval, TIME_GROUPS ){
 		this.totalGroups = this.groups.length;
 
 		this.interval = null;
+		this.waitTime = 30 * 1000;
 		// this.waitTime = 5 * 1000;
-		this.waitTime = 1 * 1 * 1000;
+		// this.waitTime = 1 * 1 * 1000;
 		this.tickCallbacks = [];
 	};
 
@@ -121,6 +122,7 @@ var service = function( $interval, TIME_GROUPS ){
 		closestPeriod = (timeSinceRangeBegin < numHrsInRange - 1) ? range.groups[0] : range.groups[1];
 
 		return {
+			time: range.time,
 			range: range.groups,
 			data: closestPeriod,
 			color: transitionColor,

@@ -5,15 +5,14 @@
 .t_cover {
     @extend .panel;
 
-    display: flex;
-    align-items: center;
+    display: block;
+    //align-items: center;
 
     float: left;
     min-height: 400px;
 
     padding-left: 10%;
     padding-right: 10%;
-
 
     background-size: 400% 400%;
     -webkit-animation: gradient $animationTiming 30s infinite;
@@ -45,12 +44,24 @@
         color: $font-color-dark;
     }
 
+    &-content {
+        display: block;
+        position: relative;
+    }
+
     &-salutation {
         opacity: 0.5;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
+    }
+
+    &-greeting {
+        margin-top: 5%;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     &-intro {
-        margin-top: 15%;
+        margin-top: 5%;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
     }
 
     &-note {
@@ -74,7 +85,7 @@
     &-social {
         display: block;
         position: relative;
-        margin-top: 15%;
+        margin-top: 30%;
         width: 100%;
         height: 25px;
 
@@ -98,6 +109,144 @@
         .icon {
             display: inline-block;
             margin: 0 15px;
+        }
+    }
+
+
+    &-scene {
+        $day-in-hrs: 24;
+        $day-in-min: $day-in-hrs * 60;
+        $day-in-sec: $day-in-min * 60;
+
+        $earth-width: 597px;
+        $earth-height: 608px;
+
+        $sun-width: 242px;
+        $sun-height: 229px;
+
+        $moon-width: 51px;
+        $moon-height: 52px;
+
+        @extend .panel;
+
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        min-height: 400px;
+        height: 100%;
+        overflow: hidden;
+
+        @media all and (min-width: 768px) {
+            position: fixed;
+        }
+
+        &-stars {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+
+            &:before {
+                content: "";
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                top: -50%;
+                left: -50%;
+                z-index: -1;
+
+                background-image: url('/assets/images/scene/stars.png');
+                background-position: center center;
+
+                -webkit-animation: rotate linear ($day-in-sec * 1s) infinite;
+                animation: rotate linear ($day-in-sec * 1s) infinite;
+            }
+        }
+
+        &-earth {
+            display: block;
+            position: absolute;
+            height: $earth-height;
+            width: 100%;
+            bottom: -($earth-height / 2);
+            left: 0;
+
+            text-align: center;
+
+            &-img {
+                display: inline-block;
+                height: 100%;
+                width: 100%;
+                background-image: url('/assets/images/scene/earth.png');
+                background-position: center;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+
+            img {
+                display: inline-block;
+                position: relative;
+            }
+        }
+
+        &-sun_moon {
+            display: block;
+            position: absolute;
+            width: $earth-width;
+            height: $earth-height;
+            bottom: -($earth-height / 2);
+            left: calc((100% - 597px) / 2);
+
+            .sun {
+                position: absolute;
+                display: block;
+                bottom: -1 * ($sun-height + ($sun-height / 4));
+                left: (($earth-width / 2) - ($sun-width / 2));
+            }
+
+            .moon {
+                position: absolute;
+                display: block;
+                top: -1 * ($moon-height + ($moon-height / 4));
+                left: (($earth-width / 2) - ($moon-width / 2));
+            }
+        }
+
+        &-extras {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            .red-planet,
+            .large-astroid,
+            .astroid-cluster {
+                display: block;
+                position: absolute;
+            }
+
+            .red-planet {
+                top: 30px;
+                left: 30px;
+            }
+
+            .large-astroid {
+                bottom: 20%;
+                right: 30px;
+                opacity: 0.3;
+            }
+
+            .astroid-cluster {
+                top: 40%;
+                left: 30px;
+                opacity: 0.5;
+            }
         }
     }
 }
