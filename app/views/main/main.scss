@@ -101,6 +101,18 @@
         text-align: center;
         text-transform: uppercase;
 
+        &-section {
+            display: inline-block;
+            vertical-align: middle;
+            width: 49%;
+        }
+
+
+        .copyright-section {
+            text-align: left;
+            line-height: 1.5;
+        }
+
         .twitter-section {
             display: inline-block;
             padding: 0;
@@ -119,7 +131,6 @@
 
         .small {
             color: $font-color-dark;
-            line-height: 30px;
             opacity: 0.5;
         }
     }
