@@ -17,8 +17,6 @@ var service = function( $interval, TIME_GROUPS ){
 
 		this.interval = null;
 		this.waitTime = 30 * 1000;
-		// this.waitTime = 5 * 1000;
-		// this.waitTime = 1 * 1 * 1000;
 		this.tickCallbacks = [];
 	};
 
@@ -130,7 +128,7 @@ var service = function( $interval, TIME_GROUPS ){
 		};
 	};
 
-	FancyTime.prototype.run = function( callback, speed ) {
+	FancyTime.prototype.startTick = function( callback, speed ) {
 		if( typeof this.interval !== 'undefined' && this.interval !== null ){
 			$interval.cancel( this.interval );
 			this.interval = null;
@@ -142,7 +140,7 @@ var service = function( $interval, TIME_GROUPS ){
 		this.interval = $interval(this.onTick.bind(this), speed || this.waitTime);
 	};
 
-	FancyTime.prototype.stop = function(first_argument) {
+	FancyTime.prototype.stopTick = function() {
 		this.tickCallbacks = [];
 
 		if( typeof this.interval !== 'undefined' && this.interval !== null ){
