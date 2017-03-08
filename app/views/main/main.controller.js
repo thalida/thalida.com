@@ -4,6 +4,7 @@ var $requires = [
 	'$scope',
 	'$sce',
 	'$q',
+	'$http',
     'utils',
     'fancyTime',
 	'fancyWeather',
@@ -13,7 +14,7 @@ var $requires = [
 ];
 
 
-var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, visits, PROJECTS, ABOUT) {
+var MainController = function($scope, $sce, $q, $http, utils, fancyTime, fancyWeather, visits, PROJECTS, ABOUT) {
 	var main = this;
 
     main.render = false;
@@ -26,6 +27,7 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 		main.totalVisits = visits.getTotal();
         main.year = moment().format('Y');
 		main.geolocation = {
+			cached: false,
 			statusType: null,
 			statusText: null,
 			hasData: false,
@@ -36,7 +38,6 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 	    main.sanitize = utils.sanitize;
 
 		main.initFancyTime()
-			.then(main.fetchGeolocationPermissions)
 			.then(main.getLocation)
 			.then(main.initFancyWeather)
 			.finally(function () {
@@ -50,54 +51,23 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 		main.render = true;
 	}
 
-	main.fetchGeolocationPermissions = function () {
-		var query = navigator.permissions.query({name:'geolocation'});
-
-		query.then(function (res) {
-			main.geolocation.permissions = res;
-		});
-
-		return $q.when(query);
-	};
-
 	main.getLocation = function () {
-		var deferred = $q.defer();
+		main.geolocation.statusType = "loading-location";
 
-		if (main.isInit && main.geolocation.permissions.state !== 'granted') {
-			main.geolocation.statusType = main.geolocation.permissions.state + '-location';
-			deferred.reject();
-			return deferred.promise;
-		}
+		var locationApi = 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAdqHKcbHf0sWy0iyiKtXOuDEW-TLCNE6k';
+		var locationQuery = $http.post($sce.trustAsResourceUrl(locationApi));
 
-		if (!navigator.geolocation){
-			main.geolocation.statusType = 'error';
-			main.geolocation.statusText = 'Geolocation is not supported by your browser.';
-			return;
-		}
-
-		function success(position) {
-			$scope.$apply(function () {
-				main.geolocation.data = position;
+		return locationQuery
+			.then(function (res) {
+				main.geolocation.data = res.data.location;
 				main.geolocation.hasData = true;
 				main.geolocation.statusType = 'success-location';
 				fancyWeather.setLocation(main.geolocation.data);
-				deferred.resolve();
-			});
-		}
-
-		function error(res) {
-			$scope.$apply(function () {
-				main.geolocation.statusType = 'error';
+			})
+			.catch(function (err) {
+				main.geolocation.statusType = 'error-location';
 				main.geolocation.statusText = 'Unable to retrieve your location';
-				deferred.reject(res);
 			});
-		}
-
-		main.geolocation.statusType = "loading-location";
-
-		navigator.geolocation.watchPosition(success, error);
-
-		return deferred.promise;
 	};
 
 	main.initFancyTime = function () {
@@ -134,10 +104,7 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 	main.actions = {
 		refresh: function () {
 			fancyTime.onTick();
-
-			if (main.hasFancyWeather) {				
-				fancyWeather.onTick();
-			}
+			fancyWeather.onTick();
 		},
 		getWeather: function () {
 			main.getLocation()

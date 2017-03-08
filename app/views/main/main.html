@@ -6,10 +6,7 @@
     </t:cover>
     <div class="panel main-view-content">
         <div class="main-view-section live-data">
-            <h2>
-                Live-ish Weather &amp; Time
-                <a class="float-right" href ng-click="main.actions.refresh()">Refresh</a>
-            </h2>
+            <h2>Live-ish Weather &amp; Time</h2>
             <span class="micro">Last Updated: {{main.lastUpdated}}</span>
             <div class="main-view-section-data">
                 <p class="normal">
@@ -42,12 +39,14 @@
                         text="Weather:">
                     </t:highlight></span>
 
-                    <span ng-show="main.geolocation.permissions.state === 'granted'">
+                    <span ng-show="main.currFancyWeather.summary">
                         {{main.currFancyWeather.summary}}
                     </span>
 
-                    <span class="bold" ng-switch on="main.geolocation.statusType">
-                        <span ng-switch-when="error">{{main.geolocation.statusText}}</span>
+                    <span class="bold"
+                         ng-hide="main.currFancyWeather.summary.length > 0"
+                         ng-switch on="main.geolocation.statusType">
+                        <span ng-switch-when="error-location">{{main.geolocation.statusText}}</span>
                         <span ng-switch-when="success-location">{{main.geolocation.statusText}}</span>
                         <span ng-switch-when="denied-location">You&rsquo;ve <t:highlight
                             tooltip="Go to your browser settings to enable location permissions for thalida.com"

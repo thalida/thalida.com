@@ -28,8 +28,8 @@ var service = function( $q, $http, $sce, $interval ){
 		var self = this;
 		var deferred = $q.defer();
 
-		var latitude  = this.geolocation.coords.latitude;
-		var longitude = this.geolocation.coords.longitude;
+		var latitude  = this.geolocation.lat;
+		var longitude = this.geolocation.lng;
 		var apiUrl = [this.baseAPIUrl + latitude + ',' + longitude + '?exclude=minutely,hourly,daily,alerts,flags'].join('');
 		var trustedUrl = $sce.trustAsResourceUrl(apiUrl);
 
