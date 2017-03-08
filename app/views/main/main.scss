@@ -28,6 +28,39 @@
             margin-top: 30px;
         }
 
+        &.live-data {
+            display: block;
+            position: relative;
+
+            &:before {
+                content: "";
+                background-color: $yellow-1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+            }
+
+            .t_highlight:after {
+                background-color: $teal-1;
+            }
+
+            .t_highlight:hover:after {
+                background-color: $purple-2;
+            }
+
+            .small {
+                margin-right: 5px;
+            }
+
+            .color-code {
+                margin-right: 10px;
+            }
+        }
+
         &.projects {
             h3 {
                 margin-top: 0;

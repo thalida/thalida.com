@@ -1,7 +1,69 @@
 <div class="main-view" ng-if="main.render">
-    <t:cover fancy-time="main.currFancyTime"></t:cover>
+    <t:cover
+        ng-if="main.currFancyTime"
+        fancy-time="main.currFancyTime"
+        fancy-weather="main.currFancyWeather">
+    </t:cover>
     <div class="panel main-view-content">
-        <t:interactive></t:interactive>
+        <div class="main-view-section live-data">
+            <h2>
+                Live-ish Weather &amp; Time
+                <a class="float-right" href ng-click="main.refreshData()">Refresh</a>
+            </h2>
+            <span class="micro">Last Updated: {{main.lastUpdated}}</span>
+            <div class="main-view-section-data">
+                <p class="normal">
+                    <span class="small"><t:highlight
+                        tooltip="Total visits is fairly inaccurate since it's tracked using local storage, which means it's only for this browser and computer combo."
+                        text="Total Visits:">
+                    </t:highlight></span>
+                    {{main.totalVisits}}
+                </p>
+                <p class="normal">
+                    <span class="small"><t:highlight
+                        tooltip="I've chucked the day into various groups, and when you visit I determin what your current time group is."
+                        text="Time Group:">
+                    </t:highlight></span>
+                    {{main.currFancyTime.data.label}}
+                </p>
+                <p class="normal">
+                    <span class="small"><t:highlight
+                        tooltip="The colors used for the gradient animation on the scene, these colors are based on your current Time Group."
+                        text="Time Gradient:">
+                    </t:highlight></span>
+                    <span class="color-code" ng-repeat="item in main.currFancyTime.range track by $index">
+                        <span class="swatch" ng-style="{'background': item.color}"></span>
+                        {{item.color}}
+                    </span>
+                </p>
+                <p class="normal">
+                    <span class="small"><t:highlight
+                        tooltip="If you know, you wanna use my site as your defacto weather.com. It’s kinda cool, and I made some wicked low poly weather graphics."
+                        text="Weather:">
+                    </t:highlight></span>
+
+                    <span ng-show="main.geolocation.permissions.state === 'granted'">
+                        {{main.currFancyWeather.summary}}
+                    </span>
+
+                    <span class="bold" ng-switch on="main.geolocation.statusType">
+                        <span ng-switch-when="error">{{main.geolocation.statusText}}</span>
+                        <span ng-switch-when="success-location">{{main.geolocation.statusText}}</span>
+                        <span ng-switch-when="denied-location">You&rsquo;ve <t:highlight
+                            tooltip="Go to your browser settings to enable location permissions for thalida.com"
+                            text="denied">
+                        </t:highlight> location permissions.
+                        Your location will be used to get the current weather conditions for your area.</span>
+                        <span ng-switch-when="loading-location">Locating&hellip;</span>
+                        <span ng-switch-when="loading-weather">Getting weather&hellip;</span>
+                        <span ng-switch-when="prompt-location">
+                            <a href ng-click="main.actions.getWeather()">Enable Location Data</a> <br />
+                            Your location will be used to get the current weather conditions for your area.
+                        </span>
+                    </span>
+                </p>
+            </div>
+        </div>
 
         <div class="main-view-section">
             <h2>Introduction</h2>
