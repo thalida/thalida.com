@@ -1,9 +1,9 @@
 @import '../../assets/styles/colors';
-@import '../../assets/styles/generics';
+@import '../../assets/styles/mixins';
 @import '../../assets/styles/animations';
 
 .t_cover {
-    @extend .panel;
+    @extend %panel;
 
     display: block;
     float: left;
@@ -115,7 +115,7 @@
         $moon-width: 51px;
         $moon-height: 52px;
 
-        @extend .panel;
+        @extend %panel;
         @extend %disable-selection;
 
         display: block;

@@ -1,3 +1,32 @@
+%disable-selection {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+%panel {
+    display: block;
+    position: relative;
+    height: auto;
+    width: 100%;
+    padding: 50px;
+    overflow: auto;
+
+    @media all and (min-width: 768px) {
+        height: 100%;
+        width: 50%;
+    }
+
+    @media all and (min-width: 1024px) {
+        height: 100%;
+        width: 50%;
+    }
+}
+
 @mixin vendor-prefix($name, $argument) {
 	-webkit-#{$name}: #{$argument};
 	-ms-#{$name}: #{$argument};

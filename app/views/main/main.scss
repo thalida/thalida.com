@@ -1,12 +1,13 @@
 @import '../../assets/styles/colors';
-@import '../../assets/styles/generics';
 @import '../../assets/styles/mixins';
 
 .main-view {
     height: 100%;
     width: 100%;
 
-    &-content.panel {
+    &-content {
+        @extend %panel;
+
         float: right;
         padding: 0;
 
