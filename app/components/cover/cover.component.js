@@ -62,8 +62,6 @@ module.exports = {
                 return ctrl.funFact;
             };
 
-            ctrl.rotationTimeout = null;
-
             ctrl.setRotation = function () {
                 var secIncrements = 360 / (24 * 60 * 60);
 
@@ -103,7 +101,8 @@ module.exports = {
             };
 
             ctrl.setFontColor = function(){
-                ctrl.fontColor = ctrl.fancyTime.color.contrastColor();
+                // ctrl.fontColor = ctrl.fancyTime.color.contrastColor();
+                ctrl.fontColor = 'white';
             };
 
             ctrl.updateCover = function(){
