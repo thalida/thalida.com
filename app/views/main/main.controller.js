@@ -50,10 +50,6 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 		main.render = true;
 	}
 
-	main.refresh = function () {
-		fancyTime.onTick();
-	};
-
 	main.fetchGeolocationPermissions = function () {
 		var query = navigator.permissions.query({name:'geolocation'});
 
@@ -123,6 +119,7 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 	main.initFancyWeather = function () {
 		var deferred = $q.defer();
 		main.geolocation.statusType = "loading-weather";
+		main.hasFancyWeather = true;
 		fancyWeather.startTick(main.saveFancyWeather);
 		deferred.resolve();
 
@@ -135,6 +132,13 @@ var MainController = function($scope, $sce, $q, utils, fancyTime, fancyWeather, 
 	};
 
 	main.actions = {
+		refresh: function () {
+			fancyTime.onTick();
+
+			if (main.hasFancyWeather) {				
+				fancyWeather.onTick();
+			}
+		},
 		getWeather: function () {
 			main.getLocation()
 				.then(main.initFancyWeather)
