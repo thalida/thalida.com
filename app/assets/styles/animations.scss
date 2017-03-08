@@ -23,3 +23,28 @@ $animationSpeed: 2s;
         transform: rotate(360deg);
     }
 }
+
+@include keyframes( droplets ) {
+    0% {
+        margin-left: -200px;
+        margin-top: 0px;
+        opacity: 1;
+    }
+    100% {
+        margin-left: -120px;
+        margin-top: 100px;
+        opacity: 0;
+    }
+}
+
+@include keyframes( clouds ) {
+    0%,
+    100% {
+        margin-left: -250px;
+        padding-top: 0px;
+    }
+    50% {
+        margin-left: -230px;
+        padding-top: 10px;
+    }
+}

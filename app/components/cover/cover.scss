@@ -164,12 +164,29 @@
                     margin-top: -80px;
                 }
 
+                &.light-clouds,
+                &.heavy-clouds {
+                    -webkit-animation: clouds linear 60s infinite;
+                    animation: clouds linear 60s infinite;
+                }
+
                 &.rain {
                     margin-left: -200px;
                 }
 
                 &.snow {
                     margin-left: -200px;
+                }
+
+                &.rain,
+                &.snow {
+                    -webkit-animation: droplets ease-out 3s infinite;
+                    animation: droplets ease-out 3s infinite;
+                }
+
+                &.lightning {
+                    margin-left: -205px;
+                    margin-top: -5px;
                 }
             }
 
@@ -204,6 +221,8 @@
 
             .t_cover.cloudy &,
             .t_cover.fog &,
+            .t_cover.rain &,
+            .t_cover.snow &,
             .t_cover.thunderstorm & {
                 .weather-icon.heavy-clouds {
                     display: inline-block;
