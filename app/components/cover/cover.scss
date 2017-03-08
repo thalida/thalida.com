@@ -45,7 +45,7 @@
 
     &-greeting {
         margin-top: 5%;
-        text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
 
     &-intro {
@@ -290,8 +290,13 @@
         &-sun_moon {
             display: block;
             position: absolute;
-            width: $earth-width;
-            height: $earth-height;
+
+            width: 100%;
+            max-width: $earth-width;
+
+            height: 100%;
+            max-height: $earth-height;
+
             bottom: -($earth-height / 2);
             left: calc((100% - 597px) / 2);
 

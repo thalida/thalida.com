@@ -26,6 +26,7 @@
 
         h3 {
             margin-top: 30px;
+            line-height: 1.5;
         }
 
         &.live-data {
@@ -106,11 +107,15 @@
 
             .job-date {
                 display: block;
-                padding-bottom: 5px;
+                padding-top: 3px;
+
+                @media all and (min-width: 400px) and (max-width: 767px) {
+                    float: right;
+                }
 
                 @media all and (min-width: 1024px) {
                     float: right;
-                    padding-bottom: 0;
+                    padding-top: 0;
                 }
             }
         }
@@ -119,7 +124,6 @@
             padding-top: 3%;
             padding-bottom: 3%;
 
-            // background-color: $gray-2;
             color: white;
             font-size: 2.2rem;
             text-align: center;
