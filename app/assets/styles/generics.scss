@@ -19,6 +19,12 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .clickable {
     cursor: pointer;
     @extend %disable-selection;
@@ -115,7 +121,8 @@ a {
     }
 }
 
-p {
+p,
+span {
     font-size: 1.4rem;
     font-weight: 100;
 
@@ -131,9 +138,14 @@ p {
         color: $gray-1;
     }
 
-    &.small {
+    &.small,
+    &.micro {
         color: $gray-1;
         font-size: 1.1rem;
+    }
+
+    &.micro {
+        font-weight: 100;
     }
 
     &.caption {
@@ -149,23 +161,5 @@ p {
     &.no-buffer-top {
         margin-top: 0;
         padding-top: 0;
-    }
-}
-
-span {
-    &.small {
-        color: $gray-1;
-        font-size: 1.6rem;
-        font-weight: 100;
-
-        .t_highlight {
-            font-weight: 100;
-        }
-    }
-
-    &.micro {
-        color: $gray-1;
-        font-size: 1.1rem;
-        font-weight: 100;
     }
 }
