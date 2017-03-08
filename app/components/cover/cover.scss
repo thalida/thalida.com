@@ -6,12 +6,11 @@
     @extend .panel;
 
     display: block;
-    //align-items: center;
 
     float: left;
     min-height: 400px;
 
-    padding: 5% 10%;
+    padding: 0 !important;
 
     background-size: 400% 400%;
     -webkit-animation: gradient $animationTiming 120s infinite;
@@ -19,16 +18,6 @@
 
     @media all and (max-width: 768px) {
         display: block;
-    }
-
-    @media all and (min-width: 768px) {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-
-    @media all and (min-width: 1024px) {
-        padding-left: 5%;
-        padding-right: 5%;
     }
 
     @media all and (max-height: 650px) and (min-width: 1024px) {
@@ -46,6 +35,7 @@
     &-content {
         display: block;
         position: relative;
+        padding: 10%;
     }
 
     &-salutation {
@@ -84,7 +74,7 @@
     &-social {
         display: block;
         position: relative;
-        margin-top: 40%;
+        margin: 10% 0;
         width: 100%;
         height: 25px;
 
@@ -93,6 +83,7 @@
         @media all and (min-height: 600px) and (min-width: 769px) {
             position: absolute;
             margin-top: 0;
+            margin-bottom: 0;
             bottom: 5%;
             left: 0;
         }
@@ -125,6 +116,7 @@
         $moon-height: 52px;
 
         @extend .panel;
+        @extend %disable-selection;
 
         display: block;
         position: absolute;
