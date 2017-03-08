@@ -1,7 +1,80 @@
 <div class="main-view" ng-if="main.render">
-    <t:cover time="main.currFancyTime"></t:cover>
-    <div class="panel main-view-content">
-        <t:interactive></t:interactive>
+    <t:cover
+        ng-if="main.currFancyTime"
+        fancy-time="main.currFancyTime"
+        fancy-weather="main.currFancyWeather">
+    </t:cover>
+    <div class="main-view-content">
+        <div class="main-view-section live-data">
+            <h2>Live-ish Weather &amp; Time</h2>
+            <span class="micro">Last Updated: {{main.lastUpdated}}</span>
+            <div class="main-view-section-data">
+                <p class="normal">
+                    <span class="small">
+                        <t:highlight
+                            text="Total Visits:"
+                            tooltip="Total visits is fairly inaccurate since it's tracked using local storage, which means it's only for this browser and computer combo."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
+                    {{main.totalVisits}}
+                </p>
+                <p class="normal">
+                    <span class="small">
+                        <t:highlight
+                            text="Time Group:"
+                            tooltip="I split the day into chuncks, and based on your current time I determine your Time Group."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
+                    {{main.currFancyTime.data.label}}
+                </p>
+                <p class="normal">
+                    <span class="small">
+                        <t:highlight
+                            text="Time Gradient:"
+                            tooltip="The colors used for the gradient animation on the scene, these colors are based on your current Time Group."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
+                    <span class="color-code" ng-repeat="item in main.currFancyTime.range track by $index">
+                        <span class="swatch" ng-style="{'background': item.color}"></span>
+                        {{item.color}}
+                    </span>
+                </p>
+                <p class="normal">
+                    <span class="small">
+                        <t:highlight
+                            text="Weather:"
+                            tooltip="If you know, you wanna use my site as your defacto weather.com. It’s kinda cool, and I made some wicked low poly weather graphics."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
+
+                    <span ng-show="main.currFancyWeather.summary">
+                        {{main.currFancyWeather.summary}}
+                    </span>
+
+                    <span class="bold"
+                         ng-hide="main.currFancyWeather.summary.length > 0"
+                         ng-switch on="main.geolocation.statusType">
+                        <span ng-switch-when="error-location">{{main.geolocation.statusText}}</span>
+                        <span ng-switch-when="success-location">{{main.geolocation.statusText}}</span>
+                        <span ng-switch-when="denied-location">You&rsquo;ve <t:highlight
+                            tooltip="Go to your browser settings to enable location permissions for thalida.com"
+                            text="denied">
+                        </t:highlight> location permissions.
+                        Your location will be used to get the current weather conditions for your area.</span>
+                        <span ng-switch-when="loading-location">Locating&hellip;</span>
+                        <span ng-switch-when="loading-weather">Getting weather&hellip;</span>
+                        <span ng-switch-when="prompt-location">
+                            <a href ng-click="main.actions.getWeather()">Enable Location Data</a> <br />
+                            Your location will be used to get the current weather conditions for your area.
+                        </span>
+                    </span>
+                </p>
+            </div>
+        </div>
 
         <div class="main-view-section">
             <h2>Introduction</h2>
@@ -53,10 +126,10 @@
             <div class="main-view-section-data">
                 <div class="project" ng-repeat="project in main.projectsList">
                     <div class="clearfix">
-                        <a class="float-left" ng-href="{{project.link}}" target="_blank">
-                            <h3 ng-bind-html="main.sanitize(project.title)"></h3>
+                        <a class="project-title float-left" ng-href="{{project.link}}" target="_blank">
+                            <h3 class="ellipsis" ng-bind-html="main.sanitize(project.title)"></h3>
                         </a>
-                        <div class="float-right">
+                        <div class="project-icons float-right">
                             <a
                                 class="project-icon"
                                 ng-if="project.github"
@@ -97,25 +170,30 @@
         </div>
 
         <div class="main-view-section work">
-            <h2>Recent Work</h2>
+            <h2>Work History</h2>
             <div class="main-view-section-data">
                 <div ng-repeat="job in main.about.work">
-                    <h3>{{ job.company }} <span class="float-right">{{ job.start }}</span></h3>
+                    <h3>{{ job.company }} <span class="job-date">{{ job.start }}</span></h3>
                     <p class="normal no-buffer">{{job.title}}</p>
                 </div>
             </div>
         </div>
 
         <div class="main-view-footer clearfix">
-            <p class="float-left no-buffer small">
-                &copy; {{main.year}} |
-                Emoji by <a href="http://emojione.com/" target="_blank">EmojiOne</a>
-            </p>
-            <h4 class="twitter-section float-right">
-                <a href="https://twitter.com/thalidanoel" target="_blank">
-                    <span class="emoji emoji-raised-hands"></span> @thalidanoel
-                </a>
-            </h4>
+            <div class="main-view-footer-section">
+                <p class="copyright-section float-left no-buffer small">
+                    &copy; {{main.year}}<br />
+                    Emoji by <a href="http://emojione.com/" target="_blank">EmojiOne</a><br />
+                    Powered by <a href="https://darksky.net/poweredby/" target="_blank">Dark Sky</a>
+                </p>
+            </div>
+            <div class="main-view-footer-section">
+                <h4 class="twitter-section float-right">
+                    <a href="https://twitter.com/thalidanoel" target="_blank">
+                        <span class="emoji emoji-raised-hands"></span> @thalidanoel
+                    </a>
+                </h4>
+            </div>
         </div>
     </div>
 </div>

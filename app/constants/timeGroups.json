@@ -1,6 +1,7 @@
 [
     {
         "name": "nightowl",
+        "label": "Night Owl",
         "beginAt": 0,
         "color": "#323C64",
         "salutation": "Greetings",
@@ -14,6 +15,7 @@
     },
     {
         "name": "earlybird",
+        "label": "Eary Bird",
         "beginAt": 4,
         "color": "#8B98CE",
         "salutation": "Good Morning",
@@ -27,6 +29,7 @@
     },
     {
         "name": "morning",
+        "label": "Morning",
         "beginAt": 8,
         "color": "#56D8FF",
         "salutation": "Good Morning",
@@ -41,6 +44,7 @@
     },
     {
         "name": "afternoon",
+        "label": "Afternoon",
         "beginAt": 12,
         "color": "#FFD874",
         "salutation": "Good Afternoon",
@@ -54,6 +58,7 @@
     },
     {
         "name": "midafternoon",
+        "label": "Mid-Afternoon",
         "beginAt": 15,
         "color": "#FFB774",
         "salutation": "Good Afternoon",
@@ -67,6 +72,7 @@
     },
     {
         "name": "evening",
+        "label": "Evening",
         "beginAt": 18,
         "color": "#FF8774",
         "salutation": "Good Evening",
@@ -81,6 +87,7 @@
     },
     {
         "name": "night",
+        "label": "Night",
         "beginAt": 21,
         "color": "#284BD7",
         "salutation": "Good Night",

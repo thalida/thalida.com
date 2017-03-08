@@ -3,20 +3,24 @@
 module.exports = {
     templateUrl: 'components/cover/cover.html',
     bindings: {
-        time: '<'
+        fancyTime: '<',
+        fancyWeather: '<',
     },
     controller: [
         '$scope',
         '$element',
+        '$timeout',
         'FUN_FACTS',
         'utils',
         'visits',
-        function($scope, $element, FUN_FACTS, utils, visits){
+        function($scope, $element, $timeout, FUN_FACTS, utils, visits){
             var ctrl = this;
             var $cover = $element.find('.t_cover');
+            var $scene = $cover.find('.t_cover-scene')
+            var $sceneSunMoon = $scene.find('.t_cover-scene-sun_moon');
 
             ctrl.isFirstUpdate = true;
-            ctrl.updateWhen = 40;
+            ctrl.updateWhen = 2;
             ctrl.numUpdates = 0;
 
             ctrl.greeting = {};
@@ -42,14 +46,14 @@ module.exports = {
             };
 
             ctrl.setSalutation = function(){
-                var sayings  = visits.getGroup().sayings || [ctrl.time.data.salutation];
+                var sayings  = visits.getGroup().sayings || [ctrl.fancyTime.data.salutation];
 
                 ctrl.salutation = utils.getRandom(sayings);
                 return ctrl.salutation;
             };
 
             ctrl.setGreeting = function(){
-                ctrl.greeting = ctrl.getDiffRandValue(ctrl.time.data.sayings, ctrl.greeting);
+                ctrl.greeting = ctrl.getDiffRandValue(ctrl.fancyTime.data.sayings, ctrl.greeting);
                 return ctrl.greeting;
             };
 
@@ -58,13 +62,35 @@ module.exports = {
                 return ctrl.funFact;
             };
 
+            ctrl.setRotation = function () {
+                var secIncrements = 360 / (24 * 60 * 60);
+
+                var now = ctrl.fancyTime.time.now;
+                var midnight = now.clone().startOf('day');
+
+                var totalSecElapsed = now.clone().diff(midnight.clone(), 'seconds');
+
+                var startRotation = secIncrements * totalSecElapsed;
+
+                ctrl.setRotationStyles(startRotation);
+            };
+
+            ctrl.setRotationStyles = function (deg) {
+                var styles = {
+                    '-ms-transform': 'rotate(' + deg + 'deg)',
+                    '-webkit-transform': 'rotate(' + deg + 'deg)',
+                    'transform': 'rotate(' + deg + 'deg)',
+                };
+
+                $sceneSunMoon.css(styles);
+            };
+
             ctrl.setBackground = function(){
                 var degrees = '135deg';
-                var startColor = ctrl.time.color.secondaryColors().left.toHexString();
-                var endColor = ctrl.time.hexColor;
+                var startColor = ctrl.fancyTime.color.secondaryColors().left.toHexString();
+                var endColor = ctrl.fancyTime.hexColor;
                 var gradient = '('+ degrees +','+ startColor +','+ endColor +')';
 
-                // $cover.css( 'background', ctrl.time.hexColor );
                 $cover.css({
                     'background-color': endColor,
                     'background-image': '-webkit-linear-gradient' + gradient,
@@ -75,7 +101,8 @@ module.exports = {
             };
 
             ctrl.setFontColor = function(){
-                ctrl.fontColor = ctrl.time.color.contrastColor();
+                // ctrl.fontColor = ctrl.fancyTime.color.contrastColor();
+                ctrl.fontColor = 'white';
             };
 
             ctrl.updateCover = function(){
@@ -86,6 +113,7 @@ module.exports = {
                     ctrl.numUpdates = 0;
                 }
 
+                ctrl.setRotation();
                 ctrl.setBackground();
                 ctrl.setFontColor();
 
