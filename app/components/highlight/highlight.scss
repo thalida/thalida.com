@@ -16,6 +16,10 @@
     -webkit-transition: all 500ms;
     transition: all 500ms;
 
+    // Hack force css to repaint when page shifts
+    // Fixes bug where :after wasn't moving with the content
+    transform: translateZ(0);
+
     &:after {
         content: "";
         display: block;
