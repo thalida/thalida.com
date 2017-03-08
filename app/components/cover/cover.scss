@@ -259,6 +259,14 @@
                 -webkit-animation: rotate linear 120s infinite;
                 animation: rotate linear 120s infinite;
             }
+
+            &.intense {
+                opacity: 0.7;
+                &:before {
+                    -webkit-animation: rotate linear 600s infinite;
+                    animation: rotate linear 600s infinite;
+                }
+            }
         }
 
         &-earth {
