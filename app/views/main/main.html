@@ -10,34 +10,46 @@
             <span class="micro">Last Updated: {{main.lastUpdated}}</span>
             <div class="main-view-section-data">
                 <p class="normal">
-                    <span class="small"><t:highlight
-                        tooltip="Total visits is fairly inaccurate since it's tracked using local storage, which means it's only for this browser and computer combo."
-                        text="Total Visits:">
-                    </t:highlight></span>
+                    <span class="small">
+                        <t:highlight
+                            text="Total Visits:"
+                            tooltip="Total visits is fairly inaccurate since it's tracked using local storage, which means it's only for this browser and computer combo."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
                     {{main.totalVisits}}
                 </p>
                 <p class="normal">
-                    <span class="small"><t:highlight
-                        tooltip="I've chucked the day into various groups, and when you visit I determin what your current time group is."
-                        text="Time Group:">
-                    </t:highlight></span>
+                    <span class="small">
+                        <t:highlight
+                            text="Time Group:"
+                            tooltip="I split the day into chuncks, and based on your current time I determine your Time Group."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
                     {{main.currFancyTime.data.label}}
                 </p>
                 <p class="normal">
-                    <span class="small"><t:highlight
-                        tooltip="The colors used for the gradient animation on the scene, these colors are based on your current Time Group."
-                        text="Time Gradient:">
-                    </t:highlight></span>
+                    <span class="small">
+                        <t:highlight
+                            text="Time Gradient:"
+                            tooltip="The colors used for the gradient animation on the scene, these colors are based on your current Time Group."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
                     <span class="color-code" ng-repeat="item in main.currFancyTime.range track by $index">
                         <span class="swatch" ng-style="{'background': item.color}"></span>
                         {{item.color}}
                     </span>
                 </p>
                 <p class="normal">
-                    <span class="small"><t:highlight
-                        tooltip="If you know, you wanna use my site as your defacto weather.com. It’s kinda cool, and I made some wicked low poly weather graphics."
-                        text="Weather:">
-                    </t:highlight></span>
+                    <span class="small">
+                        <t:highlight
+                            text="Weather:"
+                            tooltip="If you know, you wanna use my site as your defacto weather.com. It’s kinda cool, and I made some wicked low poly weather graphics."
+                            tooltip-side="right">
+                        </t:highlight>
+                    </span>
 
                     <span ng-show="main.currFancyWeather.summary">
                         {{main.currFancyWeather.summary}}
