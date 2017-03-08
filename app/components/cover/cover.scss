@@ -15,8 +15,8 @@
     padding-right: 10%;
 
     background-size: 400% 400%;
-    -webkit-animation: gradient $animationTiming 30s infinite;
-    animation: gradient $animationTiming 30s infinite;
+    -webkit-animation: gradient $animationTiming 120s infinite;
+    animation: gradient $animationTiming 120s infinite;
 
     @media all and (max-width: 768px) {
         display: block;
@@ -115,8 +115,6 @@
 
     &-scene {
         $day-in-hrs: 24;
-        $day-in-min: $day-in-hrs * 60;
-        $day-in-sec: $day-in-min * 60;
 
         $earth-width: 597px;
         $earth-height: 608px;
@@ -141,6 +139,92 @@
             position: fixed;
         }
 
+        &-weather {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+
+            .weather-icon {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 50%;
+
+                &.light-clouds {
+                    margin-left: -250px;
+                    margin-top: -60px;
+                }
+
+                &.heavy-clouds {
+                    margin-left: -250px;
+                    margin-top: -80px;
+                }
+
+                &.rain {
+                    margin-left: -200px;
+                }
+
+                &.snow {
+                    margin-left: -200px;
+                }
+            }
+
+            .t_cover.clear-day &,
+            .t_cover.clear-night &,
+            .t_cover.wind & {
+                .weather-icon {
+                    display: none;
+                }
+            }
+
+            .t_cover.rain &,
+            .t_cover.sleet & {
+                .weather-icon.rain {
+                    display: inline-block;
+                }
+            }
+
+            .t_cover.snow &,
+            .t_cover.sleet & {
+                .weather-icon.snow {
+                    display: inline-block;
+                }
+            }
+
+            .t_cover.partly-cloudy-day &,
+            .t_cover.partly-cloudy-night & {
+                .weather-icon.light-clouds {
+                    display: inline-block;
+                }
+            }
+
+            .t_cover.cloudy &,
+            .t_cover.fog &,
+            .t_cover.thunderstorm & {
+                .weather-icon.heavy-clouds {
+                    display: inline-block;
+                }
+            }
+
+            .t_cover.fog & {
+                .weather-icon.heavy-clouds {
+                    opacity: 0.5;
+                    margin-top: 30px;
+                    margin-left: -150px;
+                }
+            }
+
+            .t_cover.thunderstorm & {
+                .weather-icon.lightning {
+                    display: inline-block;
+                }
+            }
+        }
+
         &-stars {
             display: block;
             position: absolute;
@@ -153,17 +237,17 @@
             &:before {
                 content: "";
                 position: absolute;
-                width: 200%;
-                height: 200%;
-                top: -50%;
-                left: -50%;
+                width: 300%;
+                height: 300%;
+                top: -100%;
+                left: -100%;
                 z-index: -1;
 
                 background-image: url('/assets/images/scene/stars.png');
                 background-position: center center;
 
-                -webkit-animation: rotate linear ($day-in-sec * 1s) infinite;
-                animation: rotate linear ($day-in-sec * 1s) infinite;
+                -webkit-animation: rotate linear 120s infinite;
+                animation: rotate linear 120s infinite;
             }
         }
 
@@ -211,7 +295,7 @@
             .moon {
                 position: absolute;
                 display: block;
-                top: -1 * ($moon-height + ($moon-height / 4));
+                top: -1 * ($moon-height * 2);
                 left: (($earth-width / 2) - ($moon-width / 2));
             }
         }

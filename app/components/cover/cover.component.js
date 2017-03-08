@@ -3,7 +3,8 @@
 module.exports = {
     templateUrl: 'components/cover/cover.html',
     bindings: {
-        fancyTime: '<'
+        fancyTime: '<',
+        fancyWeather: '<',
     },
     controller: [
         '$scope',

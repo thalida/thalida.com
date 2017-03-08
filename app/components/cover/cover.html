@@ -1,4 +1,4 @@
-<div class="t_cover" ng-class="[$ctrl.fontColor]">
+<div class="t_cover" ng-class="[$ctrl.fontColor, $ctrl.fancyWeather.icon]">
     <div class="t_cover-scene">
         <div class="t_cover-scene-stars"></div>
         <div class="t_cover-scene-extras">
@@ -11,10 +11,15 @@
             <img class="moon" src="/assets/images/scene/moon.png" width="51" height="52" />
         </div>
         <div class="t_cover-scene-earth">
+            <div class="t_cover-scene-weather">
+                <img class="weather-icon rain" src="/assets/images/scene/weather/rain.png" />
+                <img class="weather-icon snow" src="/assets/images/scene/weather/snow.png" />
+                <img class="weather-icon light-clouds" src="/assets/images/scene/weather/light-clouds.png" />
+                <img class="weather-icon heavy-clouds" src="/assets/images/scene/weather/really-cloudy.png" />
+                <img class="weather-icon lightning" src="/assets/images/scene/weather/lightning.png" />
+            </div>
             <div class="t_cover-scene-earth-img"></div>
-            <!-- <img src="/assets/images/scene/earth.png" width="597" height="608" /> -->
         </div>
-        <div class="t_cover-scene-weather"></div>
     </div>
 
     <div class="t_cover-content">
