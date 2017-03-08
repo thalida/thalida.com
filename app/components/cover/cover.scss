@@ -6,15 +6,15 @@
     @extend .panel;
 
     display: block;
-
     float: left;
     min-height: 400px;
-
     padding: 0 !important;
 
     background-size: 400% 400%;
     -webkit-animation: gradient $animationTiming 120s infinite;
     animation: gradient $animationTiming 120s infinite;
+
+    box-shadow: 0 0 10px rgba(0, 0, 0, .50);
 
     @media all and (max-width: 768px) {
         display: block;
