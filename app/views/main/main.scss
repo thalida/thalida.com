@@ -73,34 +73,30 @@
             }
 
             .project-title {
-                width: 50%;
+                width: calc(100% - 80px);
                 line-height: 1;
             }
 
             .project-icons {
-                width: 50%;
+                max-width: 60px;
                 overflow: hidden;
                 text-align: right;
-            }
 
-            .project-icon {
-                margin-left: 20px;
-                display: inline-block;
+                .project-icon {
+                    margin-top: 4px;
+                    margin-left: 20px;
+                    display: inline-block;
 
-                &:hover {
-                    opacity: 0.5;
+                    &:hover {
+                        opacity: 0.5;
+                    }
+
+                    &:first-child {
+                        margin-left: 0;
+                    }
                 }
             }
 
-            @media all and (min-width: 1024px) {
-                .project-title {
-                    width: 70%;
-                }
-
-                .project-icons {
-                    width: auto;
-                }
-            }
         }
 
         &.work {

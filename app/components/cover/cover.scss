@@ -61,13 +61,13 @@
         font-size: 1.4rem;
 
         .t_cover.white & {
-            background-color: rgba($black-1, 0.08);
-            color: rgba($font-color-light, 0.5);
+            background-color: rgba($black-1, 0.2);
+            color: rgba($font-color-light, 0.8);
         }
 
         .t_cover.black & {
-            background-color: rgba($white-1, 0.08);
-            color: rgba($font-color-dark, 0.5);
+            background-color: rgba($white-1, 0.2);
+            color: rgba($font-color-dark, 0.8);
         }
     }
 

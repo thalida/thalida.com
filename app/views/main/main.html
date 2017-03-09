@@ -6,7 +6,13 @@
     </t:cover>
     <div class="main-view-content">
         <div class="main-view-section live-data">
-            <h2>Live-ish Weather &amp; Time</h2>
+            <h2>
+                <t:highlight
+                    text="Live-ish"
+                    tooltip="The scene displayed to the right (or above) is based on your the current time and weather conditions for your area."
+                    tooltip-side="right">
+                </t:highlight> Scene
+            </h2>
             <span class="micro">Last Updated: {{main.lastUpdated}}</span>
             <div class="main-view-section-data">
                 <p class="normal">
@@ -52,7 +58,7 @@
                     </span>
 
                     <span ng-show="main.currFancyWeather.summary">
-                        {{main.currFancyWeather.summary}}
+                        {{main.currFancyWeather.temperature}}° and {{main.currFancyWeather.summary}}
                     </span>
 
                     <span class="bold"
