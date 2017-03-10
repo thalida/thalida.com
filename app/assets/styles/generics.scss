@@ -34,6 +34,22 @@
     font-weight: 700;
 }
 
+.visible-mobile {
+    display: initial;
+
+    @media all and (min-width: 768px) {
+        display: none;
+    }
+}
+
+.hidden-mobile {
+    display: none;
+
+    @media all and (min-width: 768px) {
+        display: initial;
+    }
+}
+
 
 h1 {
     margin: 0;
