@@ -8,9 +8,11 @@
         "sayings": [
             "Woah a Nightowl!",
             "Working late?",
-            "Can&rsquo;t sleep?",
+            "Can’t sleep?",
             "Whatcha watching lately?",
-            "Burning the night oil?"
+            "Burning the night oil?",
+            "Night shift?",
+            "Bored?"
         ]
     },
     {
@@ -36,10 +38,9 @@
         "sayings": [
             "How are you doing?",
             "Have a wonderful day!",
-            "Have a wicked day!",
             "Have a great day!",
-            "How&rsquo;d ya sleep?",
-            "What&rsquo;s for breakfast?"
+            "How’d ya sleep?",
+            "What’s for breakfast?"
         ]
     },
     {
@@ -49,11 +50,11 @@
         "color": "#FFD874",
         "salutation": "Good Afternoon",
         "sayings": [
-            "It&rsquo;s NOM NOM Time",
-            "How&rsquo;s the day going?",
-            "It&rsquo;s Food o&rsquo;Clock!",
+            "It’s NOM NOM Time",
+            "How’s the day going?",
+            "It’s Food o’Clock!",
             "Lunch time?",
-            "What&rsquo;s up!?"
+            "What’s up!?"
         ]
     },
     {
@@ -67,7 +68,7 @@
             "Have a wonderful day!",
             "Hulu &amp; Hang?",
             "Have a wicked day!",
-            "How&rsquo;s the day going?"
+            "How’s the day going?"
         ]
     },
     {
@@ -77,12 +78,12 @@
         "color": "#FF8774",
         "salutation": "Good Evening",
         "sayings": [
-            "How&rsquo;s your day been?",
+            "How’s your day been?",
             "Dinner plans?",
             "Netfix &amp; Pizza?",
             "Winding down for the night?",
             "Excited for tomorrow?",
-            "How&rsquo;s it going?"
+            "How’s it going?"
         ]
     },
     {
@@ -96,7 +97,7 @@
             "Plans Tonight?",
             "Netfix &amp; Chinese?",
             "Have a great night!",
-            "Hope it&rsquo;s a good one!"
+            "Hope it’s a good one!"
         ]
     }
 ]

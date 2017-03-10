@@ -1,16 +1,19 @@
 [
     {
+        "hidden": false,
         "title": "IsTrumpStillF*ingPresident?",
         "description": "Answers the question. Attempts to provide some joy.",
         "link": "https://istrumpstillfuckingpresident.co",
         "github": "https://github.com/thalida/istrumpstillfuckingpresident"
     },
     {
+        "hidden": false,
         "title": "blerDCon",
         "description": "BlerDCon will be the first nerd convention to ever be truly universal. We’re structured to cater to minority nerds in all genres. To ensure that the inclusive experience we offer has something for you.",
         "link": "http://blerdcon.com"
     },
     {
+        "hidden": false,
         "title": "ShapeConnector",
         "description": "A puzzle game where the goal is to get from one shape to another in a specified amount of moves.",
         "link": "http://shapeconnector.com",
@@ -18,6 +21,7 @@
         "dribbble": "https://dribbble.com/thalida/projects/307956-ShapeConnector"
     },
     {
+        "hidden": false,
         "title": "CiphersCodes",
         "description": "ciphers.codes is a ciphers translator which will encode + decode a given piece of text.",
         "link": "http://ciphers.codes",
@@ -25,6 +29,7 @@
         "dribbble": "https://dribbble.com/thalida/projects/307949-EncodeDecode"
     },
     {
+        "hidden": true,
         "title": "FancyCard",
         "description": "Various demos of my personal website (thalida.com) developed in various frameworks and methods. A new demo will be added as the front-end development landscape changes, and will showcase the new techniques that have become part of the modern standard.",
         "link": "https://github.com/thalida/FancyCard",
@@ -32,12 +37,14 @@
         "dribbble": "https://dribbble.com/shots/2303709-Personal-Website"
     },
     {
+        "hidden": false,
         "title": "WordBird",
         "description": "A chrome plugin which will replace any words you choose with another one.",
         "link": "https://github.com/thalida/WordBird",
         "github": "https://github.com/thalida/WordBird"
     },
     {
+        "hidden": false,
         "title": "WelcomeBot",
         "description": "A slack bot which will greet new members to a channel with a basic introduction and a way to find out more information.",
         "link": "https://github.com/thalida/WelcomeBot",
