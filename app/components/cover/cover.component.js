@@ -15,10 +15,13 @@ module.exports = {
         'visits',
         function($scope, $element, $timeout, FUN_FACTS, utils, visits){
             var ctrl = this;
+
+            // Selector Helpers
             var $cover = $element.find('.t_cover');
             var $scene = $cover.find('.t_cover-scene')
             var $sceneSunMoon = $scene.find('.t_cover-scene-sun_moon');
 
+            // Some of the updates run on a delay
             ctrl.isFirstUpdate = true;
             ctrl.updateWhen = 2;
             ctrl.numUpdates = 0;
@@ -26,10 +29,12 @@ module.exports = {
             ctrl.greeting = {};
             ctrl.funFact = {};
 
+            // Sanitize Helper: Used in the templates
             ctrl.sanitize = function( str ){
                 return utils.sanitize( str );
             };
 
+            // getDiffRandValue: Get a different random value from an array
             ctrl.getDiffRandValue = function( origArr, origCurrVal ){
                 var arr = angular.copy( origArr );
                 var currVal = angular.copy( origCurrVal );
@@ -70,12 +75,8 @@ module.exports = {
 
                 var totalSecElapsed = now.clone().diff(midnight.clone(), 'seconds');
 
-                var startRotation = secIncrements * totalSecElapsed;
+                var deg = secIncrements * totalSecElapsed;
 
-                ctrl.setRotationStyles(startRotation);
-            };
-
-            ctrl.setRotationStyles = function (deg) {
                 var styles = {
                     '-ms-transform': 'rotate(' + deg + 'deg)',
                     '-webkit-transform': 'rotate(' + deg + 'deg)',
@@ -106,6 +107,8 @@ module.exports = {
             };
 
             ctrl.updateCover = function(){
+                // Update the greeting and fun fact on first load and after that
+                // on a slight delay compared to the other updates
                 if( ctrl.isFirstUpdate || ctrl.updateWhen === ctrl.numUpdates ){
                     ctrl.setGreeting();
                     ctrl.setFunFact();

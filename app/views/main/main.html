@@ -130,7 +130,9 @@
         <div class="main-view-section projects">
             <h2>Projects</h2>
             <div class="main-view-section-data">
-                <div class="project" ng-repeat="project in main.projectsList">
+                <div class="project"
+                     ng-repeat="project in main.projectsList track by $index"
+                     ng-if="project.hidden !== true">
                     <div class="clearfix">
                         <a class="project-title float-left" ng-href="{{project.link}}" target="_blank">
                             <h3 class="ellipsis" ng-bind-html="main.sanitize(project.title)"></h3>
@@ -157,6 +159,26 @@
                         ng-bind-html="main.sanitize(project.description)">
                     </p>
                 </div>
+            </div>
+        </div>
+
+        <div class="main-view-section live-data">
+            <h2>Featured Project: Live-ish Scene</h2>
+            <div class="main-view-section-data">
+                <p class="normal">
+                    The Live-ish Scene <span>on the left</span> <span>at the top</span> automatically updates throughout the day.
+                    This project was a very fun experiment for myself, and is something that I find myself coming back to and making
+                    little tweaks and improvements on every few months.
+                </p>
+                <p class="normal">
+                    There's a lot going on in the scene, and my intial description was 6 paragraphs, so to mention just two things:
+                    the sun &amp; moon rotate around like the hands of a clock, and this project is called "live-ish" because I ask
+                    for weather data about twice an hour and time data every minute.
+                </p>
+                <p class="normal">
+                    Basically, everything is dynamic and changes based on time, weather, number of visits, if mercury is in retrograde.
+                    Well, not the last part. But, you get the idea. Stuff moves. Text Changes. Cool stuff. Oh, and I made the graphics.
+                </p>
             </div>
         </div>
 

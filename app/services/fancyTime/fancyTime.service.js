@@ -16,8 +16,8 @@ var service = function( $interval, TIME_GROUPS ){
 		this.totalGroups = this.groups.length;
 
 		this.interval = null;
-		this.waitTime = 30 * 1000;
-		this.tickCallbacks = [];
+		this.waitTime = 1 * 60 * 1000;
+		this.updateCallback = [];
 	};
 
 	//======================================================================
@@ -117,7 +117,8 @@ var service = function( $interval, TIME_GROUPS ){
 
 		// Get the time in the range that the current time is closest to
 		// closestPeriod = (timeSinceRangeBegin < numHrsInRange / 2) ? range.groups[0] : range.groups[1];
-		closestPeriod = (timeSinceRangeBegin < numHrsInRange - 1) ? range.groups[0] : range.groups[1];
+		// closestPeriod = (timeSinceRangeBegin < numHrsInRange - 1) ? range.groups[0] : range.groups[1];
+		closestPeriod = (timeSinceRangeBegin < numHrsInRange) ? range.groups[0] : range.groups[1];
 
 		return {
 			time: range.time,
@@ -128,35 +129,54 @@ var service = function( $interval, TIME_GROUPS ){
 		};
 	};
 
-	FancyTime.prototype.startTick = function( callback, speed ) {
-		if( typeof this.interval !== 'undefined' && this.interval !== null ){
-			$interval.cancel( this.interval );
-			this.interval = null;
-		}
 
-		this.tickCallbacks.push( callback );
-		this.onTick();
-
-		this.interval = $interval(this.onTick.bind(this), speed || this.waitTime);
-	};
-
-	FancyTime.prototype.stopTick = function() {
-		this.tickCallbacks = [];
-
-		if( typeof this.interval !== 'undefined' && this.interval !== null ){
-			$interval.cancel( this.interval );
-			this.interval = null;
-		}
-	};
-
-	FancyTime.prototype.onTick = function() {
+	//======================================================================
+	//
+	//	@update
+	//		When called updates the fancyTime serivce with new data and calls
+	// 		the on update callback functions
+	//-----------------------------------------------------------------------
+	FancyTime.prototype.update = function() {
 		var currFancyTime = this.get();
 
-		this.tickCallbacks.forEach(function( cb ){
+		this.updateCallback.forEach(function( cb ){
 			if( typeof cb === 'function' ){
 				cb( currFancyTime );
 			}
 		});
+	};
+
+
+	//======================================================================
+	//
+	//	@start
+	//		Start an interval to update the FancyTime every X ms
+	//-----------------------------------------------------------------------
+	FancyTime.prototype.start = function( callback, speed ) {
+		if( typeof this.interval !== 'undefined' && this.interval !== null ){
+			$interval.cancel( this.interval );
+			this.interval = null;
+		}
+
+		this.updateCallback.push( callback );
+		this.update();
+
+		this.interval = $interval(this.update.bind(this), speed || this.waitTime);
+	};
+
+
+	//======================================================================
+	//
+	//	@stop
+	//		When called clears the array of callbacks and stops the interval
+	//-----------------------------------------------------------------------
+	FancyTime.prototype.stop = function() {
+		this.updateCallback = [];
+
+		if( typeof this.interval !== 'undefined' && this.interval !== null ){
+			$interval.cancel( this.interval );
+			this.interval = null;
+		}
 	};
 
 	return new FancyTime();
