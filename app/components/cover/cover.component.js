@@ -10,10 +10,11 @@ module.exports = {
         '$scope',
         '$element',
         '$timeout',
+        'ABOUT',
         'FUN_FACTS',
         'utils',
         'visits',
-        function($scope, $element, $timeout, FUN_FACTS, utils, visits){
+        function($scope, $element, $timeout, ABOUT, FUN_FACTS, utils, visits){
             var ctrl = this;
 
             // Selector Helpers
@@ -127,6 +128,7 @@ module.exports = {
             ctrl.$onInit = function(){
                 ctrl.setSalutation();
                 ctrl.updateCover();
+                ctrl.currentJob = ABOUT.work[0];
             };
 
             ctrl.$onChanges = ctrl.updateCover;

@@ -1,24 +1,54 @@
 {
     "work": [
         {
+            "company": "Etsy",
+            "title": "Senior Software Engineer",
+            "start": "May 2017 - Now",
+            "location": {
+                "city": "New York City",
+                "state": "New York",
+                "country": "United States"
+            }
+        },
+        {
             "company": "Kinnek",
             "title": "Senior Frontend Engineer",
-            "start": "Nov 2015 - Now"
+            "start": "Nov 2015 - May 2017",
+            "location": {
+                "city": "New York City",
+                "state": "New York",
+                "country": "United States"
+            }
         },
         {
             "company": "OkCupid/DateHookup",
             "title": "Frontend Developer",
-            "start": "Jan 2014 - Nov 2015"
+            "start": "Jan 2014 - Nov 2015",
+            "location": {
+                "city": "New York City",
+                "state": "New York",
+                "country": "United States"
+            }
         },
         {
             "company": "Webs",
             "title": "Frontend Intern",
-            "start": "Jan 2013 - Jan 2014"
+            "start": "Jan 2013 - Jan 2014",
+            "location": {
+                "city": "Silverspring",
+                "state": "Maryland",
+                "country": "United States"
+            }
         },
         {
             "company": "NASA Goddard",
             "title": "Software Engineering Intern",
-            "start": "Mar 2010 - Jan 2013"
+            "start": "Mar 2010 - Jan 2013",
+            "location": {
+                "city": "Greenbelt",
+                "state": "Maryland",
+                "country": "United States"
+            }
         }
     ],
     "extras": [

@@ -37,6 +37,7 @@ var MainController = function($scope, $sce, $q, $http, utils, fancyTime, fancyWe
 
 		// Get constants with ME information
 		main.about = ABOUT;
+		main.currentJob = main.about.work[0];
 		main.projectsList = PROJECTS;
 
 		// For le copyright
