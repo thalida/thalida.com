@@ -53,6 +53,11 @@
     ],
     "extras": [
         {
+            "title": "Responsive Web Design Podcast",
+            "link": "https://responsivewebdesign.com/podcast/thalida-noel/",
+            "description": "This week the spotlight is on Thalida Noel, whose path to becoming a front-end engineer includes robotics, NASA, OkCupid, and now Etsy."
+        },
+        {
             "title": "WOCinTech Chat Photoshoots",
             "link": "https://www.flickr.com/photos/wocintechchat/albums",
             "description": "I particated in two of the WOCInTechChat Photoshoots. The photos are stock photos, that can be used under a creative commons license with attribution."
