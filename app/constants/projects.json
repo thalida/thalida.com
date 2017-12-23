@@ -1,13 +1,27 @@
 [
     {
         "hidden": false,
+        "title": "bit.ly roulette",
+        "description": "random bit.ly url",
+        "link": "https://thalida.github.io/bitly-roulette/",
+        "github": "https://github.com/thalida/bitly-roulette"
+    },
+    {
+        "hidden": false,
+        "title": "Timezone",
+        "description": "Convert any datetime from one timezone to another",
+        "link": "https://thalida.github.io/Timezone/",
+        "github": "https://github.com/thalida/Timezone"
+    },
+    {
+        "hidden": true,
         "title": "IsTrumpStillF*ingPresident?",
         "description": "Answers the question. Attempts to provide some joy.",
         "link": "https://istrumpstillfuckingpresident.co",
         "github": "https://github.com/thalida/istrumpstillfuckingpresident"
     },
     {
-        "hidden": false,
+        "hidden": true,
         "title": "blerDCon",
         "description": "BlerDCon will be the first nerd convention to ever be truly universal. We’re structured to cater to minority nerds in all genres. To ensure that the inclusive experience we offer has something for you.",
         "link": "http://blerdcon.com"
