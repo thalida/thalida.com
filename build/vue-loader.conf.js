@@ -7,10 +7,10 @@ const sourceMapEnabled = isProduction
   : config.dev.cssSourceMap
 
 module.exports = {
-  loaders: utils.cssLoaders({
-    sourceMap: sourceMapEnabled,
-    extract: isProduction
-  }),
+  loaders: {
+    scss: 'vue-style-loader!css-loader!sass-loader', // <style lang="scss">
+    sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax' // <style lang="sass">
+  },
   cssSourceMap: sourceMapEnabled,
   cacheBusting: config.dev.cacheBusting,
   transformToRequire: {
