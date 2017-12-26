@@ -1,0 +1,92 @@
+@import './assets/styles/_variables';
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+
+  color: $color-dark;
+  font-family: 'Roboto Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.app-left {
+  height: 98%;
+}
+
+.app-left,
+.app-right {
+  display: block;
+  position: relative;
+}
+
+@media (min-width: $media-lg) {
+  .app-left,
+  .app-right {
+    display: block;
+    position: fixed;
+    width: 50%;
+    top: 0;
+    height: 100%;
+  }
+  
+  .app-left {
+    left: 0;
+    overflow: hidden;
+  }
+
+  .app-right {
+    right: 0;
+    overflow: auto;
+  }
+}
+
+a {
+  color: $color-link;
+  font-weight: 700;
+  text-decoration: none;
+  opacity: 1;
+
+  &:not(.fade-hover):hover {
+    text-decoration: underline;
+  }
+
+  &.fade-hover:hover {
+    opacity: 0.6;
+  }
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
