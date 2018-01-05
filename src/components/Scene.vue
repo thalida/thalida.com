@@ -1,38 +1,28 @@
-<template>
-  <div class="scene-wrapper">
-    <div class="shape-clock">
-      <Shapes shape="hexagon" />
-      <Shapes shape="circle" />
-      <Shapes shape="triangle" />
-      <Shapes shape="diamond" />
-      <Shapes shape="hexagon" />
-      <Shapes shape="rectangle" />
-      <Shapes shape="pentagon" />
-      <Shapes shape="octagon" />
-    </div>
-    <div class="scene-copy">
-      <h1 class="greeting">Oh hi! How&rsquo;d ya sleep?</h1>
-      <p class="weather">It’s currently 51° and mostly cloudly</p>
-      <p class="byline">I’m Thalida btw, a {{currentWork.title}} and {{randomFact}}.</p>
-    </div>
-  </div>
-</template>
-
 <script>
 import helpers from '../helpers/random';
-import Shapes from './Shapes';
+
+import Space from './Space';
+
 import workJson from '../data/work.json';
 import funFactsJson from '../data/funFacts.json';
 
 export default {
   name: 'Scene',
   components: {
-    Shapes,
+    Space,
   },
   data() {
     return {
       currentWork: workJson[0],
       randomFact: this.getRandomFact(),
+      message: 'Oh hi! How’d ya sleep?',
+      salutation: 'Welcome back!',
+      weather: {
+        icon: 'wind',
+      },
+      time: {
+
+      },
     };
   },
   methods: {
@@ -43,118 +33,80 @@ export default {
 };
 </script>
 
+<template>
+  <div class="scene-wrapper">
+    <Space 
+      v-bind:weather="weather"
+      v-bind:time="time" />
+    <div class="scene-content byline">
+      <span class="space-text">{{salutation}} I’m Thalida.</span> <br />
+      <p class="space-text">{{currentWork.title}} and {{randomFact}}.</p>
+    </div>
+    <h1 class="scene-content message space-text">{{message}}</h1>
+    <p class="scene-content weather space-text">It’s currently 51°F and Mostly Cloudy.</p>
+  </div>
+</template>
+
 <style scoped lang="scss">
 @import '../assets/styles/_variables';
 
 .scene-wrapper {
   display: flex;
   align-items: center;
+  flex-direction: column;
   position: relative;
-  height: 100%;
-  overflow: hidden;
-  background-color: $bg-color;
-}
-
-.scene-copy {
-  display: block;
-  position: relative;
-  margin: 0 64px;
-
-  .greeting,
-  .weather,
-  .byline {
-    padding: 0;
-    margin: 0;
-    color: $color-light;
-  }
-
-  .greeting {
-    padding: 0;
-    margin: 0;
-    font-family: 'Bungee', cursive;
-    font-size: 36px;
-    color: $color-light;
-    text-shadow: 0 0 6px $bg-color;
-  }
-
-  .weather {
-    margin-top: 4px;
-
-    font-family: 'Signika', sans-serif;
-    font-size: 16px;
-    text-shadow: 0 0 6px #1C1F40;
-  }
-
-  .byline {
-    margin-top: 24px;
-
-    font-size: 14px;
-    letter-spacing: -0.5px;
-    line-height: 22px;
-    text-shadow: 0 0 6px #1C1F40;
-  }
-}
-
-// rotate(316deg) skew(2deg) scale(1.1)
-.shape-clock {
-  display: block;
-  position: absolute;
-  top: 0; 
-  left: 0;
   height: 100%;
   width: 100%;
   overflow: hidden;
+}
 
-  .shape {
-    display: block;
-    position: absolute;
+.space-text {
+  margin: 0;
+  padding: 4px 4px;
 
-    &:nth-child(1) {
-      top: $shape-height / 2;
-      left: calc(50% - #{$shape-width / 2});
-    }
-    
-    &:nth-child(2) {
-      top: calc(15% - #{$shape-height / 2});
-      right: calc(15% - #{$shape-width / 2});
-    }
+  color: $color-light;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  text-align: center;
 
-    &:nth-child(3) {
-      right: -1 * ($shape-height / 4);
-      top: calc(55% - #{$shape-height / 2});
-    }
-    
-    &:nth-child(4) {
-      bottom: calc(1% - #{$shape-height / 2});
-      right: calc(18% - #{$shape-width / 2});
-    }
-    
-    &:nth-child(5) {
-      bottom: $shape-height / 2;
-      left: calc(50% - #{$shape-width / 2});
-    }
-    
-    &:nth-child(6) {
-      bottom: $shape-height / 4;
-      left: -1 * ($shape-width / 3);
-    }
+  background-color: rgba($bg-color, 0.2);
+  border-radius: 30px;
 
-    &:nth-child(7) {
-      left: -1 * ($shape-height / 2);
-      top: calc(50% - #{$shape-height / 2});
-    } 
-    
-    &:nth-child(8) {
-      top: calc(20% - #{$shape-height / 2});
-      left: $shape-width / 2;
-    } 
+  @media (min-width: $media-md) {
+    padding: 8px 16px;
+  }
+}
+
+.scene-content {
+  text-align: center;
+  z-index: 1;
+
+  &.byline {
+    margin: 32px 0 15vh;
   }
 
-  @media (max-width: $media-sm) {
-    top: -10%;
-    left: -10%;
-    width: 120%;
-    height: 120%;
+  &.message {
+    font-size: 24px;
+  }
+
+  &.byline,
+  &.weather {
+    font-size: 16px;
+  }
+
+  @media (min-width: $media-md) {
+    &.byline {
+      margin-top: 64px;
+    }
+
+    &.message {
+      font-size: 32px;
+    }
+
+    &.byline,
+    &.weather {
+      font-size: 18px;
+    }
   }
 }
 </style>

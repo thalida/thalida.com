@@ -5,11 +5,25 @@ $media-lg: 900px;
 $media-xl: 1200px;
 $media-tv: 1680px;
 
-$color-dark: #1C1F40;
+$color-dark: #1E1D32;
 $color-light: #FFFFFF;
 $color-link: $color-dark;
+$bg-color: #1E1D32;
 
-$bg-color: #1C1F40;
+$space-stars-color: #FFFFFF;
+$space-sun-color: #FFD080;
+$space-moon-color: #B9B9B9;
+$space-earth-water-color: #ACE3FF;
+$space-earth-land-color: #C5FFD2;
+$space-earth-shadow-color: #000000;
 
+$weather-rain-color: #7CD3FF;
+$weather-snow-color: #FFFFFF;
+$weather-sleet-color: lighten($weather-rain-color, 12%);
+$weather-cloud-color: #FFFFFF;
+
+
+
+// OLD
 $shape-width: 80px;
 $shape-height: 80px;

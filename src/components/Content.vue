@@ -29,6 +29,7 @@ export default {
         bubbleTea: [
           'https://www.youtube.com/watch?v=xebewT6lh2k',
           'https://www.youtube.com/watch?v=Ct6BUPvE2sM',
+          'https://www.youtube.com/watch?v=LsoLEjrDogU',
         ],
       },
     };
@@ -36,6 +37,11 @@ export default {
     data.queerLink = helpers.getRandomFromArray(data.links.queer);
     data.cisgenderLink = helpers.getRandomFromArray(data.links.cisgender);
     data.bubbleTeaLink = helpers.getRandomFromArray(data.links.bubbleTea);
+    data.landscapePhoto = helpers.getRandomFromArray([
+      'landscape-2',
+      'landscape-3',
+      'landscape-5',
+    ]);
 
     return data;
   },
@@ -60,6 +66,12 @@ export default {
 
 <template>
   <div class="content-wrapper">
+    <p class="caption">
+        Me "coding", a 
+        <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
+    </p>
+    <section class="photo coding-photo"></section>
+
     <section class="bg-accent-light">
       <h1>Projects</h1>
       <div 
@@ -97,7 +109,7 @@ export default {
     </section>
 
     <section class="featured-project" v-if="featuredProject">
-      <h1>Featured Project</h1>
+      <h1>Featured Project: <a :href="featuredProject.link" target="_blank">{{featuredProject.title}}</a></h1>
       <p v-for="paragraph in featuredProject.longDescription">{{paragraph}}</p>
     </section>
     
@@ -106,10 +118,6 @@ export default {
         Me "reading", a 
         <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
     </p>
-    <!-- 
-    <section class="photo etsy-photo"></section>
-    <p class="caption">Me // First day at Etsy</p>
-    -->
 
     <section class="about">
       <h1>About</h1>
@@ -134,11 +142,11 @@ export default {
       </p>
     </section>
 
-    <section class="photo coding-photo"></section>
+    <!-- <section class="photo coding-photo"></section>
     <p class="caption">
         Me "coding", a 
         <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
-    </p>
+    </p> -->
 
     <section class="work">
       <h1>Work History</h1>
@@ -164,6 +172,12 @@ export default {
         <p>{{extra.description}}</p>
       </div>
     </section>
+
+
+    <p class="caption">
+      Photo taken during trip to Zion National Park 
+    </p>
+    <section class="photo" :class="landscapePhoto"></section>
 
     <footer class="footer clearfix bg-accent">
       <div class="footer-section text-left">
@@ -257,6 +271,31 @@ export default {
 
     &.coding-photo {
       background-image: url(../assets/images/coding-photo.jpg);
+      background-position: center center;
+    }
+
+    &.landscape-1 {
+      background-image: url(../assets/images/landscapes/landscape-1.jpg);
+      background-position: center center;
+    }
+
+    &.landscape-2 {
+      background-image: url(../assets/images/landscapes/landscape-2.jpg);
+      background-position: center center;
+    }
+
+    &.landscape-3 {
+      background-image: url(../assets/images/landscapes/landscape-3.jpg);
+      background-position: center center;
+    }
+
+    &.landscape-4 {
+      background-image: url(../assets/images/landscapes/landscape-4.jpg);
+      background-position: center center;
+    }
+
+    &.landscape-5 {
+      background-image: url(../assets/images/landscapes/landscape-5.jpg);
       background-position: center center;
     }
   }

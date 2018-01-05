@@ -8,6 +8,18 @@
     },
     {
         "hidden": false,
+        "featured": true,
+        "title": "Tic-Tac-Toe Cubed",
+        "description": "A 9x9 Tic-Tac-Toe Game",
+        "link": "http://thalida.github.io/TicTacToeCubed/",
+        "github": "https://github.com/thalida/TicTacToeCubed",
+        "longDescription": [
+            "The Live-ish Scene on the left automatically updates throughout the day. This project was a very fun experiment for myself, and is something that I find myself coming back to and making little tweaks and improvements on every few months.",
+            "Basically, everything is dynamic and changes based on time, weather, number of visits, if mercury is in retrograde. Well, not the last part. But, you get the idea. Stuff moves. Text Changes. Cool stuff. Oh, and I made the graphics."
+        ]
+    },
+    {
+        "hidden": false,
         "title": "Timezone",
         "description": "Convert any datetime from one timezone to another",
         "link": "https://thalida.github.io/Timezone/",
@@ -68,7 +80,6 @@
     },
     {
         "hidden": true,
-        "featured": true,
         "title": "Live-ish Scene",
         "longDescription": [
             "The Live-ish Scene on the left automatically updates throughout the day. This project was a very fun experiment for myself, and is something that I find myself coming back to and making little tweaks and improvements on every few months.",
