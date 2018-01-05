@@ -39,7 +39,7 @@ export default {
       v-bind:weather="weather"
       v-bind:time="time" />
     <div class="scene-content byline">
-      <span class="space-text">{{salutation}} I’m Thalida.</span> <br />
+      <span class="space-text">{{salutation}} I’m Thalida.</span><br />
       <p class="space-text">{{currentWork.title}} and {{randomFact}}.</p>
     </div>
     <h1 class="scene-content message space-text">{{message}}</h1>
@@ -61,7 +61,8 @@ export default {
 }
 
 .space-text {
-  margin: 0;
+  display: inline-block;
+  margin: 0 0 8px;
   padding: 4px 4px;
 
   color: $color-light;
@@ -78,6 +79,7 @@ export default {
 }
 
 .scene-content {
+  display: block;
   text-align: center;
   z-index: 1;
 

@@ -67,10 +67,13 @@ export default {
 <template>
   <div class="content-wrapper">
     <p class="caption">
-        Me "coding", a 
-        <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
+        A <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
+        of me coding.
     </p>
-    <section class="photo coding-photo"></section>
+    <section 
+      class="photo coding-photo"
+      title="A photo of Thalida coding (a WOCinTech Chat stock photo)">
+    </section>
 
     <section class="bg-accent-light">
       <h1>Projects</h1>
@@ -79,7 +82,12 @@ export default {
         v-for="project in projects" 
         v-if="!project.hidden">
         <h2>
-          <a :href="project.link" target="_blank">{{project.title}}</a>
+          <a 
+            :href="project.link" 
+            target="_blank"
+            :title="'Link to view my '+project.title+' project'">
+            {{project.title}}
+          </a>
         </h2>
         <p>{{project.description}}</p>
         <p class="project-links">
@@ -87,21 +95,24 @@ export default {
             v-if="!project.hideLinkIcon"
             class="fade-hover"
             :href="project.link"
-            target="_blank">
+            target="_blank"
+            :title="'Link to view my '+project.title+' project'">
             <Icons icon="link" />
           </a>
           <a 
             v-if="project.github"  
             class="fade-hover"
             :href="project.github"
-            target="_blank">
+            target="_blank"
+            :title="'Github repo link for '+project.title+' project'">
             <Icons icon="code" />
           </a>
           <a 
             v-if="project.dribbble"  
             class="fade-hover"
             :href="project.dribbble"
-            target="_blank">
+            target="_blank"
+            :title="'Dribbble link for '+project.title+' project'">
             <Icons icon="dribbble" />
           </a>
         </p>
@@ -109,14 +120,25 @@ export default {
     </section>
 
     <section class="featured-project" v-if="featuredProject">
-      <h1>Featured Project: <a :href="featuredProject.link" target="_blank">{{featuredProject.title}}</a></h1>
+      <h1>
+        Featured Project: 
+        <a 
+          :href="featuredProject.link" 
+          target="_blank"
+          :title="'Link to view my featured project: '+featuredProject.title">
+          {{featuredProject.title}}
+        </a>
+      </h1>
       <p v-for="paragraph in featuredProject.longDescription">{{paragraph}}</p>
     </section>
     
-    <section class="photo reading-photo"></section>
+    <section 
+      class="photo reading-photo"
+      title="A photo of Thalida reading a Python book (a WOCinTech Chat stock photo)">
+    </section>
     <p class="caption">
-        Me "reading", a 
-        <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
+      A <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
+      of me reading a Python book.
     </p>
 
     <section class="about">
@@ -141,12 +163,6 @@ export default {
         I’m generally full of questions, and <a :href="bubbleTeaLink" v-on:click="onBubbleTeaClick()" target="_blank">bubble tea</a>.
       </p>
     </section>
-
-    <!-- <section class="photo coding-photo"></section>
-    <p class="caption">
-        Me "coding", a 
-        <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
-    </p> -->
 
     <section class="work">
       <h1>Work History</h1>
@@ -173,11 +189,14 @@ export default {
       </div>
     </section>
 
-
     <p class="caption">
-      Photo taken during trip to Zion National Park 
+      Photo taken in 2016 during a trip to Utah (Zion National Park/Bryce Canyon)
     </p>
-    <section class="photo" :class="landscapePhoto"></section>
+    <section 
+      class="photo" 
+      :class="landscapePhoto" 
+      title="Photo taken by Thalida of canyons in Utah during the day.">
+    </section>
 
     <footer class="footer clearfix bg-accent">
       <div class="footer-section text-left">
