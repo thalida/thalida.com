@@ -25,35 +25,33 @@ export default {
   },
   methods: {
     generateStars() {
-      const numStars = 20;
-      const starsPerQuad = Math.floor(numStars / 4);
-      const spaceSize = { start: -20, mid: 50, end: 120 };
+      // divine a 2x2 grid, if matrixSize = 5 it would be a 5x5 grid
+      const matrixSize = 3;
+      const totalSections = matrixSize ** 2;
+      const numStarsPerSection = 3;
+      const sectionSize = 100 / matrixSize;
       const stars = [];
 
-      for (let i = 0; i < numStars; i += 1) {
-        const quad = Math.floor(i / starsPerQuad);
-        const newStar = {
-          // TODO: investigate random in js using weights
-          size: helpers.getRandomFromArray(['small', 'small', 'small', 'medium', 'large']),
-          x: null,
-          y: null,
+      for (let sectionIdx = 0; sectionIdx < totalSections; sectionIdx += 1) {
+        const sectionStartPos = {
+          x: sectionSize * (sectionIdx % matrixSize),
+          y: sectionSize * Math.floor(sectionIdx / matrixSize),
+        };
+        const sectionEndPos = {
+          x: sectionStartPos.x + sectionSize,
+          y: sectionStartPos.y + sectionSize,
         };
 
-        const isEven = quad % 2 === 0;
+        for (let starIdx = 0; starIdx < numStarsPerSection; starIdx += 1) {
+          const newStar = {
+            // TODO: investigate random in js using weights
+            size: helpers.getRandomFromArray(['small', 'small', 'small', 'medium', 'large']),
+            x: helpers.getRandomInt(sectionStartPos.x, sectionEndPos.x),
+            y: helpers.getRandomInt(sectionStartPos.y, sectionEndPos.y),
+          };
 
-        if (isEven) {
-          newStar.x = helpers.getRandomInt(spaceSize.start, spaceSize.mid);
-        } else {
-          newStar.x = helpers.getRandomInt(spaceSize.mid, spaceSize.end);
+          stars.push(newStar);
         }
-
-        if (quad === 0 || quad === 1) {
-          newStar.y = helpers.getRandomInt(spaceSize.start, spaceSize.mid);
-        } else if (quad === 2 || quad === 3) {
-          newStar.y = helpers.getRandomInt(spaceSize.mid, spaceSize.end);
-        }
-
-        stars.push(newStar);
       }
 
       return stars;
