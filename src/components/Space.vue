@@ -1,11 +1,13 @@
 <script>
 import helpers from '../helpers/random';
+import Weather from './Weather';
 import SpaceShape from './SpaceShape';
 
 export default {
   name: 'Space',
   props: ['weather', 'time'],
   components: {
+    Weather,
     SpaceShape,
   },
   data() {
@@ -305,11 +307,9 @@ export default {
         v-bind:css="moon.css" />
     </div>
 
-    <div class="weather" v-if="weather" :class="weather.icon">
-      <SpaceShape v-if="isWeatherPrecipitation" type="weather-cloudy" />
-      <SpaceShape v-if="weather.icon === 'wind'" type="weather-partly-cloudy" />
-      <SpaceShape v-bind:type="weatherIcon" />
-    </div>
+    <Weather
+      v-bind:weather="weather" 
+    />
   </div>
 </template>
 

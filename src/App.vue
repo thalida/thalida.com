@@ -1,5 +1,6 @@
 <script>
 import moment from 'moment';
+import axios from 'axios';
 import LiveScene from './components/LiveScene';
 import Content from './components/Content';
 import timeGroupsJson from './data/timeGroups.json';
@@ -17,19 +18,43 @@ export default {
       visitGroups: visitGroupsJson,
 
       maxTicks: 100,
-      tick: 0,
-      updateInterval: 60 * 1000,
+      timeTick: 0,
+      updateTimeInterval: 60 * 1000,
+
+      // Time
       now: moment(),
+
+      // Visits
       numVisits: this.$localStorage.get('numVisits'),
       lastVisit: this.$localStorage.get('lastVisit'),
-      weather: null,
+
+      geolocation: null,
+
+      // Weather
+      weather: {
+        apiKey: 'b851e4f5ae645303993f491357d17eb7',
+        baseAPIUrl: 'https://api.darksky.net/forecast',
+        currently: null,
+        tick: 0,
+        // updateInterval: 30 * 60 * 1000,
+        updateInterval: 30 * 1 * 1000,
+      },
     };
   },
   mounted() {
-    setInterval(this.updateTick, this.updateInterval);
-    this.updateNumVisits();
+    // Get location for weather
+    this.getGeoLocation();
+
+    // Create interval for updating time data
+    setInterval(this.updateTimeTick, this.updateTimeInterval);
+
+    // Lets store this new visit to localStorage
+    this.updateVisits();
   },
   computed: {
+    weatherTick() {
+      return this.weather.tick;
+    },
     totalTimeGroups() {
       return this.timeGroups.length;
     },
@@ -51,19 +76,29 @@ export default {
     },
   },
   watch: {
-    tick() {
+    timeTick() {
       this.now = moment();
+    },
+    weatherTick() {
+      this.getCurrentWeather();
     },
   },
   methods: {
-    updateTick() {
-      if (this.tick >= this.maxTicks) {
-        this.tick = 0;
+    updateTimeTick() {
+      if (this.timeTick >= this.maxTicks) {
+        this.timeTick = 0;
       } else {
-        this.tick += 1;
+        this.timeTick += 1;
       }
     },
-    updateNumVisits() {
+    updateWeatherTick() {
+      if (this.weather.tick >= this.maxTicks) {
+        this.weather.tick = 0;
+      } else {
+        this.weather.tick += 1;
+      }
+    },
+    updateVisits() {
       const timeSinceLastVisit = {
         seconds: this.now.diff(this.lastVisit, 'seconds'),
         minutes: this.now.diff(this.lastVisit, 'minutes'),
@@ -76,6 +111,26 @@ export default {
         this.$localStorage.set('numVisits', this.numVisits + 1);
         this.$localStorage.set('lastVisit', moment().format('x'));
       }
+    },
+    getGeoLocation() {
+      axios
+        .post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAdqHKcbHf0sWy0iyiKtXOuDEW-TLCNE6k')
+        .then((res) => {
+          this.geolocation = res.data.location;
+          this.updateWeatherTick();
+          setInterval(this.updateWeatherTick, this.weather.updateInterval);
+        });
+    },
+    getCurrentWeather() {
+      const lat  = this.geolocation.lat;
+      const lng = this.geolocation.lng;
+      const apiUrl = `${this.weather.baseAPIUrl}/${this.weather.apiKey}/${lat},${lng}?exclude=minutely,hourly,daily,alerts,flags`;
+
+      axios
+        .get(apiUrl)
+        .then((res) => {
+          this.weather.currently = res.data.currently;
+        });
     },
     getTimeRange(time) {
       const groups = [];
@@ -167,15 +222,6 @@ export default {
         },
       };
     },
-    formatColor(color) {
-      const isArray = Array.isArray(color);
-      const colorArr = (isArray) ? color : [color.r, color.g, color.b];
-
-      return {
-        asString: `rgb(${colorArr.join(',')})`,
-        asArray: colorArr,
-      };
-    },
     getVisitGroup(numVisits) {
       let foundGroup;
 
@@ -193,6 +239,15 @@ export default {
         group: foundGroup,
       };
     },
+    formatColor(color) {
+      const isArray = Array.isArray(color);
+      const colorArr = (isArray) ? color : [color.r, color.g, color.b];
+
+      return {
+        asString: `rgb(${colorArr.join(',')})`,
+        asArray: colorArr,
+      };
+    },
   },
 };
 </script>
@@ -203,14 +258,14 @@ export default {
       <LiveScene 
         v-bind:time="time"
         v-bind:visit="visit"
-        v-bind:weather="weather"
+        v-bind:weather="weather.currently"
       />
     </div>
     <div class="app-right">
       <Content
         v-bind:time="time"
         v-bind:visit="visit"
-        v-bind:weather="weather"
+        v-bind:weather="weather.currently"
       />
     </div>
   </div>
