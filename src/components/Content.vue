@@ -7,6 +7,7 @@ import extrasJson from '../data/extras.json';
 
 export default {
   name: 'Content',
+  props: ['time', 'visit', 'weather'],
   components: {
     Icons,
   },
@@ -49,6 +50,19 @@ export default {
     featuredProject() {
       return this.projects.find(obj => obj.featured === true);
     },
+    landscapePhotoTitle() {
+      let title = '';
+      if (
+        this.landscapePhoto === 'landscape-2'
+        || this.landscapePhoto === 'landscape-3'
+      ) {
+        title = 'Photo I took of the hoodoos at Bryce Canyon in Utah.';
+      } else if (this.landscapePhoto === 'landscape-5') {
+        title = 'Photo I took of a valley with a river running through it, surrounded by mountains at Zion National Park.';
+      }
+
+      return title;
+    },
   },
   methods: {
     onQueerClick() {
@@ -72,7 +86,7 @@ export default {
     </p>
     <section 
       class="photo coding-photo"
-      title="A photo of Thalida coding (a WOCinTech Chat stock photo)">
+      title="Me pretending to code on a laptop for a WOCinTech Chat stock photo.">
     </section>
 
     <section>
@@ -85,7 +99,7 @@ export default {
           <a 
             :href="project.link" 
             target="_blank"
-            :title="'Link to view my '+project.title+' project'">
+            :title="'Link to my '+project.title+' project'">
             {{project.title}}
           </a>
         </h2>
@@ -96,7 +110,7 @@ export default {
             class="fade-hover"
             :href="project.link"
             target="_blank"
-            :title="'Link to view my '+project.title+' project'">
+            :title="'Link to my '+project.title+' project'">
             <Icons icon="link" />
           </a>
           <a 
@@ -125,7 +139,7 @@ export default {
         <a 
           :href="featuredProject.link" 
           target="_blank"
-          :title="'Link to view my featured project: '+featuredProject.title">
+          :title="'Link to my featured project: '+featuredProject.title">
           {{featuredProject.title}}
         </a>
       </h1>
@@ -134,7 +148,7 @@ export default {
     
     <section 
       class="photo reading-photo"
-      title="A photo of Thalida reading a Python book (a WOCinTech Chat stock photo)">
+      title="Me sitting, pretending to read a Python book for a WOCinTech Chat stock photo.">
     </section>
     <p class="caption">
       A <a href="https://www.flickr.com/photos/wocintechchat/albums" target="_blank">#WOCinTech Chat stock photo</a>
@@ -195,7 +209,7 @@ export default {
     <section 
       class="photo" 
       :class="landscapePhoto" 
-      title="Photo taken by Thalida of canyons in Utah during the day.">
+      :title="landscapePhotoTitle">
     </section>
 
     <footer class="footer clearfix bg-accent">

@@ -1,9 +1,12 @@
-@import './assets/styles/_variables';
+@import './assets/styles/variables';
+@import './assets/styles/animations';
 
 html,
 body,
 #app {
   height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
@@ -27,8 +30,6 @@ body {
 
   color: $color-dark;
   font-family: 'Roboto Mono', monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .app-left {
@@ -128,7 +129,7 @@ p,
   font-weight: 300;
   text-align: center;
 
-  background-color: rgba($bg-color, 0.2);
+  background-color: rgba($bg-color, 0.5);
   border-radius: 30px;
 
   @media (min-width: $media-md) {
@@ -152,3 +153,4 @@ p,
     font-size: 18px;
   }
 }
+

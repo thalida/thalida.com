@@ -10,25 +10,148 @@ export default {
   },
   data() {
     return {
-      stars: this.generateStars(),
+      moon: {
+        css: null,
+      },
+      earth: {
+        config: {
+          gradientDegrees: '135deg',
+        },
+      },
+      earthMoonGroup: {
+        css: null,
+      },
+      sun: {
+        css: null,
+      },
+      stars: {
+        collection: null,
+        css: this.getStarCss(),
+        config: {
+          default: {
+            matrixSize: 3,
+            numStarsPerSection: 5,
+            starDiameters: [
+              ...new Array(3).fill('small'),
+              ...new Array(1).fill('medium'),
+              ...new Array(1).fill('large'),
+            ],
+          },
+          xs: {
+            matrixSize: 2,
+            numStarsPerSection: 3,
+            starDiameters: [
+              ...new Array(4).fill('small'),
+              ...new Array(2).fill('medium'),
+            ],
+          },
+          sm: {
+            matrixSize: 3,
+            numStarsPerSection: 3,
+            starDiameters: [
+              ...new Array(3).fill('small'),
+              ...new Array(2).fill('medium'),
+            ],
+          },
+        },
+      },
+      windowDimensions: null,
+      currentBreakpoint: {},
+      breakpoints: [
+        { key: 'xs', size: 0 },
+        { key: 'sm', size: 480 },
+        { key: 'md', size: 640 },
+        { key: 'lg', size: 900 },
+        { key: 'xl', size: 1200 },
+        { key: 'tv', size: 1680 },
+      ],
     };
   },
+  mounted() {
+    this.handleWindowResize();
+    window.addEventListener('resize', this.handleWindowResize);
+  },
   computed: {
+    earthCss() {
+      if (!this.time) {
+        return '';
+      }
+
+      const startColor = this.time.color.gradient.start.asString;
+      const endColor = this.time.color.gradient.end.asString;
+      const gradient = `(${this.earth.config.gradientDegrees}, ${startColor}, ${endColor})`;
+
+      return {
+        ozone: {
+          backgroundColor: endColor,
+          backgroundImage: `linear-gradient${gradient}`,
+        },
+      };
+    },
+    earthClasses() {
+      return {
+        ozone: ['animation-gradient'],
+        land: ['animation-earth-rotate'],
+      };
+    },
     isWeatherPrecipitation() {
+      if (!this.weather) {
+        return false;
+      }
+
       return this.weather.icon === 'rain'
             || this.weather.icon === 'snow'
             || this.weather.icon === 'sleet';
     },
     weatherIcon() {
+      if (!this.weather) {
+        return '';
+      }
+
       return `weather-${this.weather.icon}`;
+    },
+    timeofDayDegree() {
+      return this.calcTimeofDayDegree(this.time);
+    },
+  },
+  watch: {
+    currentBreakpoint() {
+      this.stars.collection = this.getStarsCollection(this.currentBreakpoint);
+      this.earthMoonGroup.css = this.getEarthMoonGroupCss(this.currentBreakpoint);
+      this.sun.css = this.getSunCss(this.currentBreakpoint);
+      this.moon.css = this.getMoonCss(this.currentBreakpoint);
     },
   },
   methods: {
-    generateStars() {
-      // divine a 2x2 grid, if matrixSize = 5 it would be a 5x5 grid
-      const matrixSize = 3;
+    handleWindowResize() {
+      this.windowDimensions = {
+        width: document.documentElement.clientWidth,
+        height: document.documentElement.clientHeight,
+      };
+
+      this.currentBreakpoint = {
+        width: this.getBreakpoint(this.windowDimensions.width),
+        height: this.getBreakpoint(this.windowDimensions.height),
+      };
+    },
+    getBreakpoint(size) {
+      return this.breakpoints.find((bp, index) => {
+        const nextBp = this.breakpoints[index + 1] || { size: size + 1 };
+        return size >= bp.size && size < nextBp.size;
+      });
+    },
+    getStarsCollection(bp) {
+      const defaults = this.stars.config.default;
+      let bpConfig = {};
+
+      if (bp && bp.width) {
+        bpConfig = this.stars.config[bp.width.key];
+      }
+
+      return this.generateStars(Object.assign({}, defaults, bpConfig));
+    },
+    generateStars({ matrixSize, numStarsPerSection, starDiameters }) {
       const totalSections = matrixSize ** 2;
-      const numStarsPerSection = 3;
       const sectionSize = 100 / matrixSize;
       const stars = [];
 
@@ -45,7 +168,7 @@ export default {
         for (let starIdx = 0; starIdx < numStarsPerSection; starIdx += 1) {
           const newStar = {
             // TODO: investigate random in js using weights
-            size: helpers.getRandomFromArray(['small', 'small', 'small', 'medium', 'large']),
+            size: helpers.getRandomFromArray(starDiameters),
             x: helpers.getRandomInt(sectionStartPos.x, sectionEndPos.x),
             y: helpers.getRandomInt(sectionStartPos.y, sectionEndPos.y),
           };
@@ -56,15 +179,78 @@ export default {
 
       return stars;
     },
+    calcTimeofDayDegree(time) {
+      const secIncrements = 360 / (24 * 60 * 60);
+      const midnight = time.now.clone().startOf('day');
+      const totalSecElapsed = time.now.clone().diff(midnight.clone(), 'seconds');
+      const deg = Math.floor(secIncrements * totalSecElapsed);
+
+      return deg;
+    },
+    calcYearDegree() {
+      const secIncrements = 360 / (365 * 24 * 60 * 60);
+      const jan = this.time.now.clone().startOf('year');
+      const totalSecElapsed = this.time.now.clone().diff(jan.clone(), 'seconds');
+      const deg = Math.floor(secIncrements * totalSecElapsed);
+
+      return deg;
+    },
+    getStarCss() {
+      const deg = this.timeofDayDegree;
+      return {
+        transform: `rotate(${deg}deg)`,
+      };
+    },
+    getSunCss(bp) {
+      const deg = this.timeofDayDegree;
+      let scale = 1;
+
+      if (bp.width.key === 'xs') {
+        scale = 0.6;
+      } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
+        scale = 0.9;
+      }
+
+      return {
+        transform: `rotate(${deg}deg) scale(${scale})`,
+      };
+    },
+    getMoonCss() {
+      const deg = 130 + this.timeofDayDegree;
+      const translateX = 150;
+
+      return {
+        transform: `rotate(${deg}deg) translateX(${translateX}px)`,
+      };
+    },
+    getEarthMoonGroupCss(bp) {
+      const deg = -90 + this.calcYearDegree();
+      let scale = 1;
+      let translateX = 120;
+
+      if (bp.width.key === 'xs') {
+        scale = 0.6;
+        translateX = 70;
+      } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
+        scale = 0.9;
+        translateX = 90;
+      }
+
+      return {
+        transform: `rotate(${deg}deg) translateX(${translateX}%) scale(${scale})`,
+      };
+    },
   },
 };
 </script>
 
 <template>
   <div class="space-wrapper">
-    <div class="stars">
+    <div 
+      class="stars animation-space-rotate"
+      v-bind:style="stars.css">
       <SpaceShape 
-        v-for="(star, index) in stars"
+        v-for="(star, index) in stars.collection"
         :key="index"
         type="star"
         v-bind:size="star.size"
@@ -72,11 +258,28 @@ export default {
           'top': star.x + '%',
           'left': star.y + '%',
         }" />
-      <SpaceShape type="sun" />
+
+      <SpaceShape 
+        type="sun"
+        v-bind:style="sun.css"
+      />
     </div>
-    <SpaceShape type="earth" />
-    <SpaceShape type="moon" />
-    <div class="weather" :class="weather.icon">
+
+    <div 
+      class="earth-moon-group"
+      v-bind:style="earthMoonGroup.css">
+      <SpaceShape 
+        type="earth" 
+        v-bind:css="earthCss"
+        v-bind:classes="earthClasses"
+      />
+      <SpaceShape
+        type="moon"
+        class="animation-moon-rotate"
+        v-bind:css="moon.css" />
+    </div>
+
+    <div class="weather" v-if="weather" :class="weather.icon">
       <SpaceShape v-if="isWeatherPrecipitation" type="weather-cloudy" />
       <SpaceShape v-if="weather.icon === 'wind'" type="weather-partly-cloudy" />
       <SpaceShape v-bind:type="weatherIcon" />
@@ -85,7 +288,8 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../assets/styles/_variables';
+@import '../assets/styles/variables';
+@import '../assets/styles/animations';
 
 .space-wrapper {
   display: flex;
@@ -118,10 +322,16 @@ export default {
     }
   }
 
-  .earth {
+  .moon {
     position: absolute;
-    top: 50px;
-    right: 50px;
+    top: calc(50% - (24px / 2));
+    left: calc(50% - (24px / 2));
+  }
+  
+  .earth-moon-group {
+    position: absolute;
+    top: calc(50% - (192px / 2));
+    left: calc(50% - (192px / 2));
   }
 
   .weather {
@@ -148,28 +358,6 @@ export default {
     .weather-wind {
       top: 0px;
       left: 4px;
-    }
-  }
-
-  .moon {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-  }
-
-  @media (max-width: $media-sm) {
-    .stars .sun,
-    .earth,
-    .moon {
-      transform: scale(0.6);
-    }
-  }
-
-  @media (min-width: $media-sm + 1px) and (max-width: $media-md) {
-    .stars .sun,
-    .earth,
-    .moon {
-      transform: scale(0.9);
     }
   }
 }

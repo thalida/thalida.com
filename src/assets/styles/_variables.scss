@@ -23,7 +23,9 @@ $weather-snow-color: #FFFFFF;
 $weather-sleet-color: lighten($weather-rain-color, 12%);
 $weather-cloud-color: #FFFFFF;
 
-
-// OLD
-$shape-width: 80px;
-$shape-height: 80px;
+$total-seconds-in-day: (24 * 60 * 60);
+$star-animation-speed: 10 * 60s;
+$earth-translate-animation-speed: 30s;
+$moon-translate-animation-speed: 30s;
+$gradient-animation-timing: cubic-bezier(0.445, 0.050, 0.550, 0.950);
+$gradient-animation-speed: 20s;

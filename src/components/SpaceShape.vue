@@ -1,7 +1,7 @@
 <script>
 export default {
   name: 'SpaceShape',
-  props: ['type', 'size'],
+  props: ['type', 'size', 'css', 'classes'],
 };
 </script>
 
@@ -11,14 +11,18 @@ export default {
   </div>
   <div v-else-if="type === 'earth'" :class="[type, size]">
     <div class="earth-planet">
-      <div class="planet-land-container">
+      <div class="planet-land-container" :class="classes.land" >
         <div class="planet-land land-1"></div>
         <div class="planet-land land-2"></div>
         <div class="planet-land land-3"></div>
       </div>
       <div class="earth-planet-shadow"></div>
     </div>
-    <div class="earth-ozone"></div>
+    <div 
+      class="earth-ozone" 
+      :class="classes.ozone" 
+      v-bind:style="css.ozone">
+    </div>
     <div class="earth-weather"></div>
   </div>
   <div 
@@ -31,7 +35,7 @@ export default {
          v-if="type !== 'weather-partly-cloudy'">
     </div>
   </div>
-  <div v-else :class="[type, size]"></div>
+  <div v-else :class="[type, size]" v-bind:style="css"></div>
 </template>
 
 <style lang="scss">
@@ -203,7 +207,7 @@ export default {
       width: 32%;
       height: 32%;
       margin-top: 18%;
-      margin-left: 16%;
+      margin-left: 20%;
     }
 
     &.land-3 {
