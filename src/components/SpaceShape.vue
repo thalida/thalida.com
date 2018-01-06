@@ -16,7 +16,10 @@ export default {
         <div class="planet-land land-2"></div>
         <div class="planet-land land-3"></div>
       </div>
-      <div class="earth-planet-shadow"></div>
+      <div 
+        class="earth-planet-shadow" 
+        v-bind:style="css.shadow">
+      </div>
     </div>
     <div 
       class="earth-ozone" 
@@ -164,7 +167,7 @@ export default {
     height: 100%;
     border-radius: 50%;
     background-color: white;
-    opacity: 0.2;
+    opacity: 0.3;
   }
 
   .earth-planet {
@@ -184,7 +187,8 @@ export default {
     top: 0;
     left: 0;
     border-radius: 50%;
-    box-shadow: inset -4px 5px 0 0 rgba($space-earth-shadow-color, 0.15);
+    box-shadow: inset 0px 0 0 0 rgba(0, 0, 0, 0.10);
+    transition: box-shadow 2s;
   }
 
   .planet-land-container {

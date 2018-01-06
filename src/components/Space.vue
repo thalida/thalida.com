@@ -14,6 +14,7 @@ export default {
         css: null,
       },
       earth: {
+        el: null,
         config: {
           gradientDegrees: '135deg',
         },
@@ -68,10 +69,18 @@ export default {
     };
   },
   mounted() {
+    this.earth.el = document.getElementsByClassName('earth-planet')[0];
     this.handleWindowResize();
     window.addEventListener('resize', this.handleWindowResize);
   },
   computed: {
+    earthShadowSize() {
+      if (!this.earth.el) {
+        return 0;
+      }
+
+      return this.getEarthShadowSize(this.time);
+    },
     earthCss() {
       if (!this.time) {
         return '';
@@ -80,11 +89,15 @@ export default {
       const startColor = this.time.color.gradient.start.asString;
       const endColor = this.time.color.gradient.end.asString;
       const gradient = `(${this.earth.config.gradientDegrees}, ${startColor}, ${endColor})`;
+      const shadowSize = this.earthShadowSize;
 
       return {
         ozone: {
           backgroundColor: endColor,
           backgroundImage: `linear-gradient${gradient}`,
+        },
+        shadow: {
+          boxShadow: `inset -${shadowSize}px 0 0 0 rgba(0, 0, 0, 0.10)`,
         },
       };
     },
@@ -240,6 +253,19 @@ export default {
         transform: `rotate(${deg}deg) translateX(${translateX}%) scale(${scale})`,
       };
     },
+    getEarthShadowSize(time) {
+      const earthRect = this.earth.el.getBoundingClientRect();
+      const maxShadowSize = earthRect.width;
+
+      const shadowIncrements = maxShadowSize / (24 * 60 * 60);
+      const midnight = time.now.clone().startOf('day');
+      const totalSecElapsed = time.now.clone().diff(midnight.clone(), 'seconds');
+      const shadow = Math.floor(shadowIncrements * totalSecElapsed);
+
+      // console.log(maxShadowSize, shadow, maxShadowSize - shadow);
+
+      return shadow;
+    },
   },
 };
 </script>
@@ -320,6 +346,10 @@ export default {
     .sun {
       position: relative;
     }
+  }
+
+  .earth {
+    transform: rotate(0deg);
   }
 
   .moon {

@@ -198,7 +198,7 @@ export default {
 </script>
 
 <template>
-  <div id="app" v-if="time && visit">
+  <div id="app">
     <div class="app-left">
       <LiveScene 
         v-bind:time="time"
