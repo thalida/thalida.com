@@ -7,7 +7,7 @@ import workJson from '../data/work.json';
 import funFactsJson from '../data/funFacts.json';
 
 export default {
-  name: 'Scene',
+  name: 'LiveScene',
   components: {
     Space,
   },

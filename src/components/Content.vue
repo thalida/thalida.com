@@ -75,7 +75,7 @@ export default {
       title="A photo of Thalida coding (a WOCinTech Chat stock photo)">
     </section>
 
-    <section class="bg-accent-light">
+    <section>
       <h1>Projects</h1>
       <div 
         class="project" 
@@ -119,7 +119,7 @@ export default {
       </div>
     </section>
 
-    <section class="featured-project" v-if="featuredProject">
+    <section class="featured-project bg-accent-light" v-if="featuredProject">
       <h1>
         Featured Project: 
         <a 
@@ -258,11 +258,11 @@ export default {
   }
 
   .bg-accent {
-    background-color: #95FFE7;
+    background-color: $featured-section-bg-color;
   }
   
   .bg-accent-light {
-    background-color: rgba(149,255,232,0.1);
+    background-color: rgba($featured-section-bg-color, 0.2);
   }
 
   .photo {

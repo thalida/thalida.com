@@ -1,11 +1,11 @@
 <script>
-import Scene from './components/Scene';
+import LiveScene from './components/LiveScene';
 import Content from './components/Content';
 
 export default {
   name: 'app',
   components: {
-    Scene,
+    LiveScene,
     Content,
   },
 };
@@ -14,7 +14,7 @@ export default {
 <template>
   <div id="app">
     <div class="app-left">
-      <Scene />
+      <LiveScene />
     </div>
     <div class="app-right">
       <Content />
