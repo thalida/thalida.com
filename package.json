@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "moment": "^2.20.1",
     "vue": "^2.5.2"
   },
   "devDependencies": {
