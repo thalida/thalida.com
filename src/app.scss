@@ -90,3 +90,65 @@ a {
   display: table;
   clear: both;
 }
+
+h1,
+.h1 {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(0,0,0,0.80);
+    padding: 0;
+    margin: 0;
+}
+
+h2,
+.h2 {
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 0;
+  margin: 0;
+}
+
+p,
+.p1 {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 0;
+  margin: 0;
+}
+
+.space-p {
+  display: inline-block;
+  margin: 0;
+  padding: 4px;
+
+  color: $color-light;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  text-align: center;
+
+  background-color: rgba($bg-color, 0.2);
+  border-radius: 30px;
+
+  @media (min-width: $media-md) {
+    padding: 8px 16px;
+    margin: 0 0 8px;
+  }
+}
+
+.space-p1 {
+  font-size: 24px;
+
+  @media (min-width: $media-sm) {
+    font-size: 32px;
+  }
+}
+
+.space-p2 {
+  font-size: 16px;
+
+  @media (min-width: $media-sm) {
+    font-size: 18px;
+  }
+}

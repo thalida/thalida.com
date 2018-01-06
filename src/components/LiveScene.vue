@@ -38,12 +38,14 @@ export default {
     <Space 
       v-bind:weather="weather"
       v-bind:time="time" />
-    <div class="scene-content byline">
-      <span class="space-text">{{salutation}} I’m Thalida.</span><br />
-      <p class="space-text">{{currentWork.title}} and {{randomFact}}.</p>
+    <div class="scene-content byline-content">
+      <span class="space-p space-p2">{{salutation}} I’m Thalida.</span><br />
+      <p class="space-p space-p2">{{currentWork.title}} and {{randomFact}}.</p>
     </div>
-    <h1 class="scene-content message space-text">{{message}}</h1>
-    <p class="scene-content weather space-text">It’s currently 51°F and Mostly Cloudy.</p>
+    <div class="scene-content greeting-content">
+      <p class="space-p space-p1">{{message}}</p><br />
+      <p class="space-p space-p2">It’s currently 51°F and Mostly Cloudy.</p>
+    </div>
   </div>
 </template>
 
@@ -54,61 +56,26 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: space-between;
   position: relative;
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
 
-.space-text {
-  display: inline-block;
-  margin: 0 0 8px;
-  padding: 4px 4px;
-
-  color: $color-light;
-  font-family: 'Josefin Sans', sans-serif;
-  font-weight: 300;
-  text-align: center;
-
-  background-color: rgba($bg-color, 0.2);
-  border-radius: 30px;
-
-  @media (min-width: $media-md) {
-    padding: 8px 16px;
-  }
-}
-
 .scene-content {
   display: block;
+  flex: 0 1 auto;
+  margin: 4% 0;
   text-align: center;
   z-index: 1;
 
-  &.byline {
-    margin: 32px 0 15vh;
+  &.greeting-content {
+    order: -1;
   }
 
-  &.message {
-    font-size: 24px;
-  }
-
-  &.byline,
-  &.weather {
-    font-size: 16px;
-  }
-
-  @media (min-width: $media-md) {
-    &.byline {
-      margin-top: 64px;
-    }
-
-    &.message {
-      font-size: 32px;
-    }
-
-    &.byline,
-    &.weather {
-      font-size: 18px;
-    }
+  @media (min-height: $media-sm) {
+    margin: 8% 0;
   }
 }
 </style>

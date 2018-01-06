@@ -219,31 +219,6 @@ export default {
 
   $padding-base: 32px;
 
-  h1 {
-      font-size: 18px;
-      font-weight: 300;
-      color: rgba(0,0,0,0.80);
-      padding: 0;
-      margin: 0;
-  }
-
-  h2 {
-    font-weight: 900;
-    font-size: 14px;
-    line-height: 22px;
-    padding: 0;
-    margin: 0;
-  }
-
-  p,
-  .p1 {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 22px;
-    padding: 0;
-    margin: 0;
-  }
-
   section {
     margin: 0;
     padding: $padding-base;
