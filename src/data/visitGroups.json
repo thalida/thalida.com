@@ -2,7 +2,12 @@
     {
         "name": "first",
         "minVisits": 1,
-        "sayings": null
+        "sayings": [
+            "Hey first timer!",
+            "Ohh, first visit!",
+            "Welcome,",
+            "Greetings,"
+        ]
     },
     {
         "name": "second",
@@ -12,15 +17,16 @@
             "Damn Daniel back at it again!",
             "Back again?",
             "Came back for seconds?",
-            "Hey again!"
+            "Hey again!",
+            "Oh, you’re back!"
         ]
     },
     {
         "name": "many",
         "minVisits": 3,
         "sayings": [
-            "Ah, a serial visitor&hellip;",
-            "How sweet, you&rsquo;re back!",
+            "Ah, a serial visitor…",
+            "How sweet, you’re back!",
             "Nice to have you back!",
             "Welcome back,",
             "Oh, how wonderful, you're back!"
