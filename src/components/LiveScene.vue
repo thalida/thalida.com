@@ -23,6 +23,17 @@ export default {
     visitSalutation() {
       return helpers.getRandomFromArray(this.visit.group.sayings);
     },
+    degreesUnit() {
+      let unit = '';
+
+      if (this.weather.unit === 'us') {
+        unit = 'F';
+      } else {
+        unit = 'C';
+      }
+
+      return unit;
+    },
   },
   watch: {
     time() {
@@ -44,7 +55,9 @@ export default {
       v-bind:time="time" />
     <div class="scene-content greeting-content">
       <p class="space-p space-p1">{{timeMessage}}</p><br />
-      <p class="space-p space-p2">It’s currently 51°F and Mostly Cloudy.</p>
+      <p class="space-p space-p2" v-if="weather">
+        It’s currently {{weather.temperature}}°{{degreesUnit}} and {{weather.summary}}.
+      </p>
     </div>
     <div class="scene-content byline-content">
       <span class="space-p space-p2">{{visitSalutation}} I’m Thalida.</span><br />

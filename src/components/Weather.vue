@@ -10,6 +10,24 @@ export default {
   data() {
     return {};
   },
+  computed: {
+    isWeatherPrecipitation() {
+      if (!this.weather) {
+        return false;
+      }
+
+      return this.weather.icon === 'rain'
+            || this.weather.icon === 'snow'
+            || this.weather.icon === 'sleet';
+    },
+    weatherIcon() {
+      if (!this.weather) {
+        return '';
+      }
+
+      return `weather-${this.weather.icon}`;
+    },
+  },
 };
 </script>
 

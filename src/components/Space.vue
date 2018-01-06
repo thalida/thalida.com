@@ -109,22 +109,6 @@ export default {
         land: ['animation-earth-rotate'],
       };
     },
-    isWeatherPrecipitation() {
-      if (!this.weather) {
-        return false;
-      }
-
-      return this.weather.icon === 'rain'
-            || this.weather.icon === 'snow'
-            || this.weather.icon === 'sleet';
-    },
-    weatherIcon() {
-      if (!this.weather) {
-        return '';
-      }
-
-      return `weather-${this.weather.icon}`;
-    },
     timeofDayDegree() {
       return this.calcTimeofDayDegree(this.time);
     },

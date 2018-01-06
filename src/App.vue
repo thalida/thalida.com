@@ -1,6 +1,7 @@
 <script>
 import moment from 'moment';
 import axios from 'axios';
+import jsonp from 'jsonp';
 import LiveScene from './components/LiveScene';
 import Content from './components/Content';
 import timeGroupsJson from './data/timeGroups.json';
@@ -122,15 +123,20 @@ export default {
         });
     },
     getCurrentWeather() {
-      const lat  = this.geolocation.lat;
+      const lat = this.geolocation.lat;
       const lng = this.geolocation.lng;
-      const apiUrl = `${this.weather.baseAPIUrl}/${this.weather.apiKey}/${lat},${lng}?exclude=minutely,hourly,daily,alerts,flags`;
+      const apiUrl = `${this.weather.baseAPIUrl}/${this.weather.apiKey}/${lat},${lng}?exclude=minutely,hourly,daily,alerts`;
 
-      axios
-        .get(apiUrl)
-        .then((res) => {
-          this.weather.currently = res.data.currently;
-        });
+      jsonp(apiUrl, null, (err, data) => {
+        if (err) {
+          return;
+        }
+
+        this.weather.currently = {
+          ...data.currently,
+          unit: data.flags.units,
+        };
+      });
     },
     getTimeRange(time) {
       const groups = [];
