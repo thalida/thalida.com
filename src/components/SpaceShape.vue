@@ -187,7 +187,7 @@ export default {
     top: 0;
     left: 0;
     border-radius: 50%;
-    box-shadow: inset 0px 0 0 0 rgba(0, 0, 0, 0.10);
+    box-shadow: inset 0px 0 0 0 rgba(0, 0, 0, 0.15);
     transition: box-shadow 2s;
   }
 

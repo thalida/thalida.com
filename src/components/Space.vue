@@ -1,13 +1,11 @@
 <script>
 import helpers from '../helpers/random';
-import Weather from './Weather';
 import SpaceShape from './SpaceShape';
 
 export default {
   name: 'Space',
   props: ['weather', 'time'],
   components: {
-    Weather,
     SpaceShape,
   },
   data() {
@@ -99,7 +97,7 @@ export default {
           backgroundImage: `linear-gradient${gradient}`,
         },
         shadow: {
-          boxShadow: `inset -${shadowSize}px 0 0 0 rgba(0, 0, 0, 0.10)`,
+          boxShadow: `inset -${shadowSize}px 0 0 0 rgba(0, 0, 0, 0.15)`,
         },
       };
     },
@@ -108,6 +106,22 @@ export default {
         ozone: ['animation-gradient'],
         land: ['animation-earth-rotate'],
       };
+    },
+    isWeatherPrecipitation() {
+      if (!this.weather) {
+        return false;
+      }
+
+      return this.weather.icon === 'rain'
+            || this.weather.icon === 'snow'
+            || this.weather.icon === 'sleet';
+    },
+    weatherIcon() {
+      if (!this.weather) {
+        return '';
+      }
+
+      return `weather-${this.weather.icon}`;
     },
     timeofDayDegree() {
       return this.calcTimeofDayDegree(this.time);
@@ -215,7 +229,7 @@ export default {
       };
     },
     getMoonCss() {
-      const deg = 130 + this.timeofDayDegree;
+      const deg = this.timeofDayDegree;
       const translateX = 150;
 
       return {
@@ -232,7 +246,7 @@ export default {
         translateX = 70;
       } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
         scale = 0.9;
-        translateX = 90;
+        translateX = 120;
       }
 
       return {
@@ -240,17 +254,29 @@ export default {
       };
     },
     getEarthShadowSize(time) {
+      const numSecondsInHour = 60 * 60;
       const earthRect = this.earth.el.getBoundingClientRect();
-      const maxShadowSize = earthRect.width;
+      const shadowIncrements = earthRect.width / (12 * numSecondsInHour);
 
-      const shadowIncrements = maxShadowSize / (24 * 60 * 60);
+      const currHour = parseInt(time.now.format('k'), 10);
       const midnight = time.now.clone().startOf('day');
-      const totalSecElapsed = time.now.clone().diff(midnight.clone(), 'seconds');
-      const shadow = Math.floor(shadowIncrements * totalSecElapsed);
+      const noon = midnight.clone().hours(12);
 
-      // console.log(maxShadowSize, shadow, maxShadowSize - shadow);
+      let prevTwelve;
+      let nextTwelve;
+      if (currHour < 12) {
+        prevTwelve = midnight;
+        nextTwelve = noon;
+      } else {
+        prevTwelve = noon;
+        nextTwelve = midnight;
+      }
 
-      return shadow;
+      const totalSecSinceTwelve = time.now.clone().diff(prevTwelve.clone(), 'seconds');
+      const nextTwelveAsSeconds = nextTwelve.hour() * numSecondsInHour;
+      const timeSinceTwelve = Math.abs(nextTwelveAsSeconds - totalSecSinceTwelve);
+
+      return Math.ceil(shadowIncrements * timeSinceTwelve);
     },
   },
 };
@@ -291,9 +317,11 @@ export default {
         v-bind:css="moon.css" />
     </div>
 
-    <Weather
-      v-bind:weather="weather" 
-    />
+    <div class="weather" v-if="weather" :class="weather.icon">
+      <SpaceShape v-if="isWeatherPrecipitation" type="weather-cloudy" />
+      <SpaceShape v-if="weather.icon === 'wind'" type="weather-partly-cloudy" />
+      <SpaceShape v-bind:type="weatherIcon" />
+    </div>
   </div>
 </template>
 
