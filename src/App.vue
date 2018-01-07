@@ -20,7 +20,7 @@ export default {
 
       maxTicks: 100,
       timeTick: 0,
-      updateTimeInterval: 60 * 1000,
+      updateTimeInterval: 5 * 60 * 1000,
 
       // Time
       now: moment(),
@@ -37,8 +37,7 @@ export default {
         baseAPIUrl: 'https://api.darksky.net/forecast',
         currently: null,
         tick: 0,
-        // updateInterval: 30 * 60 * 1000,
-        updateInterval: 30 * 1 * 1000,
+        updateInterval: 30 * 60 * 1000,
       },
     };
   },
