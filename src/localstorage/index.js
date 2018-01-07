@@ -5,7 +5,7 @@ import moment from 'moment';
 Vue.use(VueLocalStorage);
 
 export default {
-  numVisits: {
+  totalVisits: {
     type: Number,
     default: 1,
   },
