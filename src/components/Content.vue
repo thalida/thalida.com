@@ -230,7 +230,7 @@ export default {
       :title="landscapePhotoTitle">
     </section>
 
-    <footer class="footer clearfix bg-accent">
+    <footer class="footer clearfix">
       <div class="footer-section text-left">
         <span class="footer-credit">
           Powered by <a href="https://darksky.net/poweredby/" target="_blank">DarkSky</a>
