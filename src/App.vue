@@ -15,6 +15,7 @@ export default {
   },
   data() {
     return {
+      spaceOnly: window.location.search.indexOf('space-only') >= 0,
       location: {
         async: true,
       },
@@ -369,7 +370,7 @@ export default {
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" :class="{'space-only': spaceOnly}">
     <div class="app-left">
       <LiveScene 
         v-bind:time="currentTime"
@@ -377,7 +378,7 @@ export default {
         v-bind:weather="currentWeather"
       />
     </div>
-    <div class="app-right">
+    <div class="app-right" v-if="!spaceOnly">
       <Content
         v-bind:time="currentTime"
         v-bind:visit="currentVisit"
