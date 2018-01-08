@@ -31,6 +31,18 @@
     }
 }
 
+@include keyframes( sun ) {
+    0% {
+        transform: rotate(0deg) scale(0.8);
+    }
+    50% {
+        transform: rotate(180deg) scale(1);
+    }
+    100% {
+        transform: rotate(360deg) scale(0.8);
+    }
+}
+
 @include keyframes( droplets ) {
     0% {
         transform: translateY(0px);
@@ -81,19 +93,8 @@
     }
 }
 
-.animation-space-rotate {
-  animation: rotate linear $star-animation-speed infinite;
-}
-
 .animation-earth-rotate {
   animation: translate linear $earth-translate-animation-speed infinite;
-}
-
-.animation-moon-rotate {
-    &:before,
-    &:after {
-        animation: translate linear $moon-translate-animation-speed infinite;
-    }
 }
 
 .animation-gradient {

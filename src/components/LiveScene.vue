@@ -73,19 +73,11 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   position: relative;
   height: 100%;
   width: 100%;
   overflow: hidden;
-
-  @media (min-height: $media-md) and (max-height: $media-lg - 1px) {
-    justify-content: space-around;
-  }
-
-  @media (min-height: $media-lg) {
-    justify-content: space-between;
-  }
 }
 
 .scene-content {

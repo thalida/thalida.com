@@ -24,19 +24,16 @@ export default {
       earthMoonGroup: {
         css: null,
       },
-      sun: {
-        css: null,
-      },
       stars: {
         collection: null,
         css: this.getStarCss(),
         config: {
           default: {
             matrixSize: 3,
-            numStarsPerSection: 5,
+            numStarsPerSection: 3,
             starDiameters: [
-              ...new Array(3).fill('small'),
-              ...new Array(1).fill('medium'),
+              ...new Array(6).fill('small'),
+              ...new Array(3).fill('medium'),
               ...new Array(1).fill('large'),
             ],
           },
@@ -117,7 +114,6 @@ export default {
     currentBreakpoint() {
       this.stars.collection = this.getStarsCollection(this.currentBreakpoint);
       this.earthMoonGroup.css = this.getEarthMoonGroupCss(this.currentBreakpoint);
-      this.sun.css = this.getSunCss(this.currentBreakpoint);
       this.moon.css = this.getMoonCss(this.currentBreakpoint);
     },
   },
@@ -200,23 +196,9 @@ export default {
         transform: `rotate(${deg}deg)`,
       };
     },
-    getSunCss(bp) {
-      const deg = this.timeofDayDegree;
-      let scale = 1;
-
-      if (bp.width.key === 'xs') {
-        scale = 0.6;
-      } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
-        scale = 0.9;
-      }
-
-      return {
-        transform: `rotate(${deg}deg) scale(${scale})`,
-      };
-    },
     getMoonCss() {
       const deg = (180 + this.timeofDayDegree) % 360;
-      const translateY = -150;
+      const translateY = -130;
 
       return {
         transform: `rotate(${deg}deg) translateY(${translateY}px)`,
@@ -229,7 +211,7 @@ export default {
 
       if (bp.width.key === 'xs') {
         scale = 0.6;
-        translateY = -70;
+        translateY = -90;
       } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
         scale = 0.9;
       }
@@ -270,7 +252,7 @@ export default {
 <template>
   <div class="space-wrapper">
     <div 
-      class="stars animation-space-rotate"
+      class="stars"
       v-bind:style="stars.css">
       <SpaceShape 
         v-for="(star, index) in stars.collection"
@@ -284,7 +266,6 @@ export default {
 
       <SpaceShape 
         type="sun"
-        v-bind:style="sun.css"
       />
     </div>
 
@@ -306,7 +287,6 @@ export default {
 
       <SpaceShape
         type="moon"
-        class="animation-moon-rotate"
         v-bind:css="moon.css" />
     </div>
   </div>
@@ -337,6 +317,8 @@ export default {
 
     width: 100%;
     height: 100%;
+
+    animation: rotate linear $star-animation-speed infinite;
     
     .star {
       position: absolute;
@@ -344,6 +326,7 @@ export default {
 
     .sun {
       position: relative;
+      animation: sun linear $sun-animation-speed infinite;
     }
   }
 
@@ -355,6 +338,11 @@ export default {
     position: absolute;
     top: calc(50% - (24px / 2));
     left: calc(50% - (24px / 2));
+
+    &:before,
+    &:after {
+        animation: translate linear $moon-translate-animation-speed infinite;
+    }
   }
   
   .earth-moon-group {
