@@ -1,12 +1,14 @@
 <script>
 import helpers from '../helpers/random';
 import SpaceShape from './SpaceShape';
+import Weather from './Weather';
 
 export default {
   name: 'Space',
   props: ['weather', 'time'],
   components: {
     SpaceShape,
+    Weather,
   },
   data() {
     return {
@@ -97,7 +99,7 @@ export default {
           backgroundImage: `linear-gradient${gradient}`,
         },
         shadow: {
-          boxShadow: `inset -${shadowSize}px 0 0 0 rgba(0, 0, 0, 0.15)`,
+          boxShadow: `inset 0 ${shadowSize}px 0 0 rgba(0, 0, 0, 0.15)`,
         },
       };
     },
@@ -106,22 +108,6 @@ export default {
         ozone: ['animation-gradient'],
         land: ['animation-earth-rotate'],
       };
-    },
-    isWeatherPrecipitation() {
-      if (!this.weather) {
-        return false;
-      }
-
-      return this.weather.icon === 'rain'
-            || this.weather.icon === 'snow'
-            || this.weather.icon === 'sleet';
-    },
-    weatherIcon() {
-      if (!this.weather) {
-        return '';
-      }
-
-      return `weather-${this.weather.icon}`;
     },
     timeofDayDegree() {
       return this.calcTimeofDayDegree(this.time);
@@ -229,28 +215,27 @@ export default {
       };
     },
     getMoonCss() {
-      const deg = this.timeofDayDegree;
-      const translateX = 150;
+      const deg = (180 + this.timeofDayDegree) % 360;
+      const translateY = -150;
 
       return {
-        transform: `rotate(${deg}deg) translateX(${translateX}px)`,
+        transform: `rotate(${deg}deg) translateY(${translateY}px)`,
       };
     },
     getEarthMoonGroupCss(bp) {
-      const deg = -90 + this.calcYearDegree();
+      const deg = this.calcYearDegree();
       let scale = 1;
-      let translateX = 120;
+      let translateY = -120;
 
       if (bp.width.key === 'xs') {
         scale = 0.6;
-        translateX = 70;
+        translateY = -70;
       } else if (bp.width.key === 'sm' || bp.width.key === 'md') {
         scale = 0.9;
-        translateX = 120;
       }
 
       return {
-        transform: `rotate(${deg}deg) translateX(${translateX}%) scale(${scale})`,
+        transform: `rotate(${deg}deg) translateY(${translateY}%) scale(${scale})`,
       };
     },
     getEarthShadowSize(time) {
@@ -311,16 +296,18 @@ export default {
         v-bind:css="earthCss"
         v-bind:classes="earthClasses"
       />
+
+      <Weather 
+        v-if="weather" 
+        v-bind:weather="weather"
+        v-bind:time="time"
+        v-bind:calc-year-degree="calcYearDegree"
+      />
+
       <SpaceShape
         type="moon"
         class="animation-moon-rotate"
         v-bind:css="moon.css" />
-    </div>
-
-    <div class="weather" v-if="weather" :class="weather.icon">
-      <SpaceShape v-if="isWeatherPrecipitation" type="weather-cloudy" />
-      <SpaceShape v-if="weather.icon === 'wind'" type="weather-partly-cloudy" />
-      <SpaceShape v-bind:type="weatherIcon" />
     </div>
   </div>
 </template>
@@ -374,33 +361,6 @@ export default {
     position: absolute;
     top: calc(50% - (192px / 2));
     left: calc(50% - (192px / 2));
-  }
-
-  .weather {
-    position: absolute;
-    top: 70px;
-    right: 130px;
-
-    &.partly-cloudy,
-    &.wind {
-      top: 80px;
-      right: 160px;
-    }
-
-    .weather-snow,
-    .weather-rain,
-    .weather-sleet {
-      margin-top: 8px;
-    }
-
-    .weather-fog {
-      margin-top: 30px;
-    }
-
-    .weather-wind {
-      top: 0px;
-      left: 4px;
-    }
   }
 }
 </style>

@@ -26,7 +26,6 @@ export default {
       :class="classes.ozone" 
       v-bind:style="css.ozone">
     </div>
-    <div class="earth-weather"></div>
   </div>
   <div 
     v-else-if="type === 'weather-cloudy' 
@@ -188,7 +187,6 @@ export default {
     left: 0;
     border-radius: 50%;
     box-shadow: inset 0px 0 0 0 rgba(0, 0, 0, 0.15);
-    transition: box-shadow 2s;
   }
 
   .planet-land-container {

@@ -258,8 +258,12 @@ export default {
           return;
         }
 
+        const currently = data.currently;
+        currently.icon = currently.icon.replace('-night', '');
+        currently.icon = currently.icon.replace('-day', '');
+
         this.currentWeather = {
-          ...data.currently,
+          ...currently,
           unit: data.flags.units,
         };
       });
