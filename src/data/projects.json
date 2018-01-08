@@ -85,6 +85,7 @@
         "hidden": true,
         "featured": true,
         "title": "Space Scene",
+        "link": "/",
         "longDescription": [
             "The Space Scene on the left..."
         ]

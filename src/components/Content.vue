@@ -47,6 +47,21 @@ export default {
     return data;
   },
   computed: {
+    accentSectionClasses() {
+      const color = (this.time.color.textColor === 'white') ? 'light' : 'dark';
+      return [
+        `text-${color}`,
+      ];
+    },
+    accentSectionStyles() {
+      if (!this.time) {
+        return null;
+      }
+
+      return {
+        backgroundColor: this.time.color.asString,
+      };
+    },
     featuredProject() {
       return this.projects.find(obj => obj.featured === true);
     },
@@ -133,7 +148,10 @@ export default {
       </div>
     </section>
 
-    <section class="featured-project bg-accent-light" v-if="featuredProject">
+    <section 
+      v-if="featuredProject"
+      class="featured-project bg-accent-light"
+    >
       <h1>
         Featured Project: 
         <a 

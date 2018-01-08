@@ -341,12 +341,28 @@ export default {
     //  ------------------------------------------------------------------------
     formatColor(color) {
       const isArray = Array.isArray(color);
-      const colorArr = (isArray) ? color : [color.r, color.g, color.b];
+      const colorArr = (!isArray) ? [color.r, color.g, color.b] : color;
+      const colorObj = (isArray) ? { r: color[0], g: color[1], b: color[2] } : color;
 
       return {
         asString: `rgb(${colorArr.join(',')})`,
         asArray: colorArr,
+        asObject: colorObj,
+        textColor: this.getTextColor(colorObj),
       };
+    },
+
+    //  getTextColor()
+    //    https://stackoverflow.com/a/1855903
+    //    Given an rgb color object get the best text color (light/dark) to show
+    //  ------------------------------------------------------------------------
+    getTextColor(color) {
+      // Counting the perceptive luminance - human eye favors green color..
+      const r = 0.299 * color.r;
+      const g = 0.587 * color.g;
+      const b = 0.114 * color.b;
+      const a = 1 - ((r + g + b) / 255);
+      return (a < 0.4) ? 'black' : 'white';
     },
   },
 };
