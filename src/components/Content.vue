@@ -161,7 +161,7 @@ export default {
           {{featuredProject.title}}
         </a>
       </h1>
-      <p v-for="paragraph in featuredProject.longDescription">{{paragraph}}</p>
+      <p v-for="paragraph in featuredProject.longDescription" v-html="paragraph"></p>
     </section>
     
     <section 

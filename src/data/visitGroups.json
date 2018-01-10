@@ -5,8 +5,8 @@
         "sayings": [
             "Hey first timer!",
             "Ohh, first visit!",
-            "Welcome,",
-            "Greetings,"
+            "Welcome welcome welcome to...",
+            "First Vist! ~*~Magic~*~"
         ]
     },
     {
@@ -14,11 +14,11 @@
         "minVisits": 2,
         "sayings": [
             "Welcome back,",
-            "Damn Daniel back at it again!",
             "Back again?",
             "Came back for seconds?",
             "Hey again!",
-            "Oh, you’re back!"
+            "Oh, you’re back!",
+            "Glad to have you back,"
         ]
     },
     {
@@ -28,7 +28,6 @@
             "Ah, a serial visitor…",
             "How sweet, you’re back!",
             "Nice to have you back!",
-            "Welcome back,",
             "Oh, how wonderful, you're back!"
         ]
     }

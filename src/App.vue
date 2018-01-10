@@ -4,6 +4,7 @@ import axios from 'axios';
 import jsonp from 'jsonp';
 import LiveScene from './components/LiveScene';
 import Content from './components/Content';
+import * as STORAGE_KEYS from './localstorage/localstorageKeys';
 import timeGroupsJson from './data/timeGroups.json';
 import visitGroupsJson from './data/visitGroups.json';
 
@@ -31,8 +32,8 @@ export default {
 
       visit: {
         groups: visitGroupsJson,
-        total: this.$localStorage.get('totalVisits'),
-        lastTime: this.$localStorage.get('lastVisit'),
+        total: this.$localStorage.get(STORAGE_KEYS.TOTAL_VISITS),
+        lastTime: this.$localStorage.get(STORAGE_KEYS.LAST_VISIT),
       },
 
       weather: {
@@ -289,8 +290,8 @@ export default {
         (isFirstVist && timeSinceLastVisit.seconds > 5)
         || (!isFirstVist && timeSinceLastVisit.minutes > 2)
       ) {
-        this.$localStorage.set('totalVisits', this.visit.total + 1);
-        this.$localStorage.set('lastVisit', this.time.now.format('x'));
+        this.$localStorage.set(STORAGE_KEYS.TOTAL_VISITS, this.visit.total + 1);
+        this.$localStorage.set(STORAGE_KEYS.LAST_VISIT, this.time.now.format('x'));
       }
     },
 
