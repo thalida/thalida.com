@@ -1,0 +1,131 @@
+[
+    {
+        "name": "nightowl",
+        "label": "Night Owl",
+        "startHour": 0,
+        "color": { 
+            "r": 50,
+            "g": 60,
+            "b": 100 
+        },
+        "salutation": "Greetings",
+        "sayings": [
+            "Woah a Nightowl!",
+            "Working late?",
+            "Can’t sleep?",
+            "Whatcha watching lately?",
+            "Burning the night oil?",
+            "Night shift?",
+            "Bored?"
+        ]
+    },
+    {
+        "name": "earlybird",
+        "label": "Eary Bird",
+        "startHour": 4,
+        "color": { 
+            "r": 139,
+            "g": 152,
+            "b": 206 
+        },
+        "salutation": "Good Morning",
+        "sayings": [
+            "OMG, it's the elusive EarlyBird!",
+            "Oh hey, Early Riser!",
+            "Good Dreams?",
+            "Have a great day!",
+            "Getting a headstart on the day?"
+        ]
+    },
+    {
+        "name": "morning",
+        "label": "Morning",
+        "startHour": 8,
+        "color": { 
+            "r": 86,
+            "g": 216,
+            "b": 255 
+        },
+        "salutation": "Good Morning",
+        "sayings": [
+            "How are you doing?",
+            "Have a wonderful day!",
+            "Have a great day!",
+            "How’d ya sleep?",
+            "What’s for breakfast?"
+        ]
+    },
+    {
+        "name": "afternoon",
+        "label": "Afternoon",
+        "startHour": 12,
+        "color": { 
+            "r": 255,
+            "g": 216,
+            "b": 116 
+        },
+        "salutation": "Good Afternoon",
+        "sayings": [
+            "It’s NOM NOM Time",
+            "How’s the day going?",
+            "It’s Food o’Clock!",
+            "Lunch time?",
+            "What’s up!?"
+        ]
+    },
+    {
+        "name": "midafternoon",
+        "label": "Mid-Afternoon",
+        "startHour": 15,
+        "color": { 
+            "r": 255,
+            "g": 183,
+            "b": 116 
+        },
+        "salutation": "Good Afternoon",
+        "sayings": [
+            "How are you doing?",
+            "Have a wonderful day!",
+            "Hulu & Hang?",
+            "Have a wicked day!",
+            "How’s the day going?"
+        ]
+    },
+    {
+        "name": "evening",
+        "label": "Evening",
+        "startHour": 18,
+        "color": { 
+            "r": 255,
+            "g": 135,
+            "b": 116 
+        },
+        "salutation": "Good Evening",
+        "sayings": [
+            "How’s your day been?",
+            "Dinner plans?",
+            "Netfix & Pizza?",
+            "Winding down for the night?",
+            "Excited for tomorrow?",
+            "How’s it going?"
+        ]
+    },
+    {
+        "name": "night",
+        "label": "Night",
+        "startHour": 21,
+        "color": { 
+            "r": 40,
+            "g": 75,
+            "b": 215 
+        },
+        "salutation": "Good Night",
+        "sayings": [
+            "Sweet Dreams",
+            "Plans Tonight?",
+            "Netfix & Chinese?",
+            "Have a great night!",
+            "Hope it’s a good one!"
+        ]
+    }
+]

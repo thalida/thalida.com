@@ -1,0 +1,96 @@
+[
+    {
+        "hidden": false,
+        "title": "bit.ly roulette",
+        "description": "random bit.ly url",
+        "link": "https://thalida.github.io/bitly-roulette/",
+        "github": "https://github.com/thalida/bitly-roulette"
+    },
+    {
+        "hidden": false,
+        "title": "Tic-Tac-Toe Cubed",
+        "description": "A 9x9 Tic-Tac-Toe Game",
+        "link": "http://thalida.github.io/TicTacToeCubed/",
+        "github": "https://github.com/thalida/TicTacToeCubed"
+    },
+    {
+        "hidden": false,
+        "title": "Timezone",
+        "description": "Convert any datetime from one timezone to another",
+        "link": "https://thalida.github.io/Timezone/",
+        "github": "https://github.com/thalida/Timezone"
+    },
+    {
+        "hidden": true,
+        "title": "IsTrumpStillF*ingPresident?",
+        "description": "Answers the question. Attempts to provide some joy.",
+        "link": "https://istrumpstillfuckingpresident.co",
+        "github": "https://github.com/thalida/istrumpstillfuckingpresident"
+    },
+    {
+        "hidden": true,
+        "title": "blerDCon",
+        "description": "BlerDCon will be the first nerd convention to ever be truly universal. We’re structured to cater to minority nerds in all genres. To ensure that the inclusive experience we offer has something for you.",
+        "link": "http://blerdcon.com"
+    },
+    {
+        "hidden": false,
+        "title": "ShapeConnector",
+        "description": "A puzzle game where the goal is to get from one shape to another in a specified amount of moves.",
+        "link": "http://shapeconnector.com",
+        "github": "https://github.com/thalida/ShapeConnector",
+        "dribbble": "https://dribbble.com/thalida/projects/307956-ShapeConnector"
+    },
+    {
+        "hidden": false,
+        "title": "CiphersCodes",
+        "description": "ciphers.codes is a ciphers translator which will encode + decode a given piece of text.",
+        "link": "http://ciphers.codes",
+        "github": "https://github.com/thalida/CiphersCodes",
+        "dribbble": "https://dribbble.com/thalida/projects/307949-EncodeDecode"
+    },
+    {
+        "hidden": true,
+        "title": "FancyCard",
+        "description": "Various demos of my personal website (thalida.com) developed in various frameworks and methods. A new demo will be added as the front-end development landscape changes, and will showcase the new techniques that have become part of the modern standard.",
+        "link": "https://github.com/thalida/FancyCard",
+        "github": "https://github.com/thalida/FancyCard",
+        "dribbble": "https://dribbble.com/shots/2303709-Personal-Website"
+    },
+    {
+        "hidden": false,
+        "title": "WordBird",
+        "description": "A chrome plugin which will replace any words you choose with another one.",
+        "link": "https://github.com/thalida/WordBird",
+        "github": "https://github.com/thalida/WordBird",
+        "hideLinkIcon": true
+    },
+    {
+        "hidden": false,
+        "title": "WelcomeBot",
+        "description": "A slack bot which will greet new members to a channel with a basic introduction and a way to find out more information.",
+        "link": "https://github.com/thalida/WelcomeBot",
+        "github": "https://github.com/thalida/WelcomeBot",
+        "hideLinkIcon": true
+    },
+    {
+        "hidden": true,
+        "title": "Live-ish Scene",
+        "longDescription": [
+            "The Live-ish Scene on the left automatically updates throughout the day. This project was a very fun experiment for myself, and is something that I find myself coming back to and making little tweaks and improvements on every few months.",
+            "Basically, everything is dynamic and changes based on time, weather, number of visits, if mercury is in retrograde. Well, not the last part. But, you get the idea. Stuff moves. Text Changes. Cool stuff. Oh, and I made the graphics."
+        ]
+    },
+    {
+        "hidden": true,
+        "featured": true,
+        "title": "Space Scene",
+        "link": "/?space-only",
+        "longDescription": [
+            "This site was created for the <a href='https://twitter.com/jensimmons/status/943323088405581824' target='_blank'>#newwwyear</a> challange. I knew I wanted to recreate it in vue, with a new theme.",
+            "After a few back and forth interations, I came up with this. You can check out <a href='http://2017.thalida.com' target='_blank'>my old site</a> to compare the two.",
+            "The main content of my site didn't change much in style or content. The largest set of updates, outside of the under the hood change from angular to vue, were the updates to the space scene. ",
+            "This Space Scene similar to the one on the previous iteration of this site, uses the current time, weather, and how often you've visited to create a scene that's unique for you."
+        ]
+    }
+]

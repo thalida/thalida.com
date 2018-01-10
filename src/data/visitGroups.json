@@ -1,0 +1,34 @@
+[
+    {
+        "name": "first",
+        "minVisits": 1,
+        "sayings": [
+            "Hey first timer!",
+            "Ohh, first visit!",
+            "Welcome welcome welcome to...",
+            "First Vist! ~*~Magic~*~"
+        ]
+    },
+    {
+        "name": "second",
+        "minVisits": 2,
+        "sayings": [
+            "Welcome back,",
+            "Back again?",
+            "Came back for seconds?",
+            "Hey again!",
+            "Oh, you’re back!",
+            "Glad to have you back,"
+        ]
+    },
+    {
+        "name": "many",
+        "minVisits": 3,
+        "sayings": [
+            "Ah, a serial visitor…",
+            "How sweet, you’re back!",
+            "Nice to have you back!",
+            "Oh, how wonderful, you're back!"
+        ]
+    }
+]
