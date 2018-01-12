@@ -30,16 +30,16 @@ export default {
         config: {
           default: {
             matrixSize: 3,
-            numStarsPerSection: 3,
+            numStarsPerSection: 6,
+            offset: 20,
             starDiameters: [
               ...new Array(6).fill('small'),
               ...new Array(3).fill('medium'),
-              ...new Array(1).fill('large'),
             ],
           },
           xs: {
-            matrixSize: 2,
-            numStarsPerSection: 3,
+            matrixSize: 3,
+            numStarsPerSection: 4,
             starDiameters: [
               ...new Array(4).fill('small'),
               ...new Array(2).fill('medium'),
@@ -47,10 +47,10 @@ export default {
           },
           sm: {
             matrixSize: 3,
-            numStarsPerSection: 3,
+            numStarsPerSection: 5,
             starDiameters: [
-              ...new Array(3).fill('small'),
-              ...new Array(2).fill('medium'),
+              ...new Array(5).fill('small'),
+              ...new Array(3).fill('medium'),
             ],
           },
         },
@@ -145,20 +145,37 @@ export default {
 
       return this.generateStars(Object.assign({}, defaults, bpConfig));
     },
-    generateStars({ matrixSize, numStarsPerSection, starDiameters }) {
+    generateStars({ matrixSize, offset, numStarsPerSection, starDiameters }) {
       const totalSections = matrixSize ** 2;
       const sectionSize = 100 / matrixSize;
       const stars = [];
 
       for (let sectionIdx = 0; sectionIdx < totalSections; sectionIdx += 1) {
         const sectionStartPos = {
-          x: sectionSize * (sectionIdx % matrixSize),
-          y: sectionSize * Math.floor(sectionIdx / matrixSize),
+          x: (sectionSize * (sectionIdx % matrixSize)),
+          y: (sectionSize * Math.floor(sectionIdx / matrixSize)),
         };
         const sectionEndPos = {
-          x: sectionStartPos.x + sectionSize,
-          y: sectionStartPos.y + sectionSize,
+          x: (sectionStartPos.x + sectionSize),
+          y: (sectionStartPos.y + sectionSize),
         };
+
+        if (offset) {
+          if (sectionStartPos.x === 0) {
+            sectionStartPos.x -= offset;
+          }
+
+          if (sectionStartPos.y === 0) {
+            sectionStartPos.y -= offset;
+          }
+          if (sectionEndPos.x === 100) {
+            sectionEndPos.x += offset;
+          }
+
+          if (sectionEndPos.y === 100) {
+            sectionEndPos.y += offset;
+          }
+        }
 
         for (let starIdx = 0; starIdx < numStarsPerSection; starIdx += 1) {
           const newStar = {

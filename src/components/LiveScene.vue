@@ -6,7 +6,7 @@ import funFactsJson from '../data/funFacts.json';
 
 export default {
   name: 'LiveScene',
-  props: ['time', 'visit', 'weather'],
+  props: ['flavor', 'time', 'visit', 'weather'],
   components: {
     Space,
   },

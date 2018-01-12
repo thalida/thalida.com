@@ -7,6 +7,7 @@ import Content from './components/Content';
 import * as STORAGE_KEYS from './localstorage/localstorageKeys';
 import timeGroupsJson from './data/timeGroups.json';
 import visitGroupsJson from './data/visitGroups.json';
+import flavorsJson from './data/flavors.json';
 
 export default {
   name: 'app',
@@ -16,7 +17,8 @@ export default {
   },
   data() {
     return {
-      spaceOnly: window.location.search.indexOf('space-only') >= 0,
+      flavor: this.getFlavor(flavorsJson),
+
       location: {
         async: true,
       },
@@ -366,21 +368,34 @@ export default {
       const a = 1 - ((r + g + b) / 255);
       return (a < 0.4) ? 'black' : 'white';
     },
+
+    getFlavor(flavors) {
+      const host = window.location.host;
+      const flavor = flavors.find(obj => obj.host === host);
+
+      if (flavor) {
+        flavor.class = `flavor-${flavor.name}`;
+      }
+
+      return flavor || {};
+    },
   },
 };
 </script>
 
 <template>
-  <div id="app" :class="{'space-only': spaceOnly}">
+  <div id="app" :class="flavor.class">
     <div class="app-left">
       <LiveScene 
+        v-bind:flavor="flavor"
         v-bind:time="currentTime"
         v-bind:visit="currentVisit"
         v-bind:weather="currentWeather"
       />
     </div>
-    <div class="app-right" v-if="!spaceOnly">
+    <div class="app-right" v-if="flavor.name !== 'space'">
       <Content
+        v-bind:flavor="flavor"
         v-bind:time="currentTime"
         v-bind:visit="currentVisit"
         v-bind:weather="currentWeather"

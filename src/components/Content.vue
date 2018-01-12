@@ -7,7 +7,7 @@ import extrasJson from '../data/extras.json';
 
 export default {
   name: 'Content',
-  props: ['time', 'visit', 'weather'],
+  props: ['flavor', 'time', 'visit', 'weather'],
   components: {
     Icons,
   },
