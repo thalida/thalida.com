@@ -8,7 +8,7 @@ import json
 import logging
 
 logger = logging.getLogger(__name__)
-app = Flask(__name__, template_folder="views")
+app = Flask(__name__)
 posts = Markdown_Posts()
 
 NEWYORK = [40.7081, -73.9571]
@@ -26,7 +26,7 @@ def index():
         currently = get_forecast(request)['currently']
         update_weather_cookie = True
 
-    response = make_response(render_template('home/home.html', posts_meta=posts.get_all_meta(), weather=currently))
+    response = make_response(render_template('home.html', posts_meta=posts.get_all_meta(), weather=currently))
 
     if update_weather_cookie:
         response.set_cookie(format_cookie_key(WEATHER_COOKIE_KEY), json.dumps(currently), max_age=60*15) # keep for 15min
@@ -42,7 +42,7 @@ def post(page):
         if not post['meta'].get('is_visible'):
             raise FileNotFoundError 
 
-        response = make_response(render_template('post/post.html', post=post))
+        response = make_response(render_template('post.html', post=post))
         
         increment_visits_cookie(request, response)
         return response
