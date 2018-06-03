@@ -1,52 +1,20 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+{% extends "base/base.html" %}
+{% block title %}
+    {{ meta.title }}
+{% endblock %}
 
-    <meta name="theme-color" content="#5953FF">
-    <meta name="msapplication-navbutton-color" content="#5953FF">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <meta name="robots" content="index,follow">
-    <meta name="google-site-verification" content="0OkeijNEttEmmStPI6gx_dlXEig-zE752lzp0BHMfyo" />
-
-    <title>thalida</title>
-    <meta name="description" content="Thalida's personal website, which includes links to her most recent projects, events, and activites.">
-    <link rel="shortcut icon" href="/favicon.ico?v=8">
-
-    <!-- Twitter Card data -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="thalida.com">
-    <meta name="twitter:description" content="The personal website of Thalida Noel. Software Engineer. Harry Potter Fangirl.">
-    <meta name="twitter:creator" content="@thalidanoel">
-    <meta name="twitter:image:src" content="http://thalida.com/assets/images/geometric-pattern-small.png">
-
-    <!-- Open Graph data -->
-    <meta property="og:title" content="thalida.com" />
-    <meta property="og:type" content="personal" />
-    <meta property="og:url" content="http://thalida.com/" />
-    <meta property="og:image" content="http://thalida.com/assets/images/geometric-pattern-small.png" />
-    <meta property="og:description" content="The personal website of Thalida Noel. Software Engineer. Harry Potter Fangirl." />
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Roboto+Mono:300,400,700" rel="stylesheet">
-    
-    <!-- Global Styles -->
-    <link href="/static/styles/shared.css" rel="stylesheet">
-    <link href="/static/styles/codehilite.css" rel="stylesheet">
-    
-    <!-- Local Styles -->
+{% block styles %}
+    <!-- <link href="/static/styles/markdown-themes/modest.css" rel="stylesheet"> -->
+    <link href="/static/styles/markdown-themes/markdown3.css" rel="stylesheet">
+    <link href="/static/styles/highlight-themes/default.css" rel="stylesheet">
+    <!-- <link href="/static/styles/highlight-themes/manni.css" rel="stylesheet"> -->
     <link href="post.css" rel="stylesheet">
-  </head>
-  <body>
-    <div id="app">
-        {{ meta | safe }}
-        {{ content | safe }}
-    </div>
-  </body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block body %}
+    {{ meta | safe }}
+    {{ content | safe }}
+{% endblock %}

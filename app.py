@@ -1,43 +1,29 @@
-import os
-
+import logging
 from flask import Flask, render_template, Markup, redirect, url_for, abort
-import markdown
+from markdown_posts import Markdown_Posts
 
+logger = logging.getLogger(__name__)
 app = Flask(__name__, template_folder="views")
-
-POSTS_DIRS = 'posts'
-MARKDOWN_EXTENSIONS = [
-    'markdown.extensions.attr_list',
-    'markdown.extensions.fenced_code',
-    'markdown.extensions.smart_strong',
-    'markdown.extensions.meta',
-    'markdown.extensions.nl2br',
-    'markdown.extensions.sane_lists',
-    'markdown.extensions.smarty',
-    'markdown.extensions.tables',
-    'markdown.extensions.codehilite',
-]
+md_posts = Markdown_Posts()
 
 @app.route('/')
 def index():
-    html = "<div>hi</div>"
-    return render_template('home/home.html', content=html)
+    posts = md_posts.fetch_all_meta()
+    return render_template('home/home.html', posts=posts)
 
 @app.route('/x/<path:page>')
 def post(page):
-    file_path = '{dir}/{file}.md'.format(dir=POSTS_DIRS, file=page)
-
     try:
-        with open(file_path, 'r') as f:
-            file_contents = f.read()
-            md = markdown.Markdown(extensions=MARKDOWN_EXTENSIONS)
-            
-            content = md.reset().convert(file_contents)
-            meta = md.Meta
-            return render_template('post/post.html', content=content, meta=meta)
+        content, meta = md_posts.fetch_by_name(page)
+
+        if not meta.get('is_visible'):
+            raise FileNotFoundError 
+
+        return render_template('post/post.html', content=content, meta=meta)
     except FileNotFoundError:
         abort(404)
     except Exception:
+        logger.exception('500 Error Fetch Post')
         abort(500)
 
 @app.errorhandler(404)

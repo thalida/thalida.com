@@ -1,10 +1,7 @@
-Title:   My Document
-Summary: A brief description of my document.
-Authors: Waylan Limberg
-         John Doe
-Date:    October 2, 2007
-blank-value:
-base_url: http://example.com
+Title:      Hello World
+Summary:    Summary of Hello World
+Date:       3 June 2018
+base_url:   http://thalida.com
 
 # this is markdown
 **bold** stuff!

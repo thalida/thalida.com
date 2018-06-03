@@ -1,7 +1,9 @@
-Title:      Page Title
-Summary:    Summary of this page
+Title:      Template
+Summary:    Summary of Template
 Date:       3 June 2018
 base_url:   http://thalida.com
+tags:       one
+tags:       two
 
 
 source https://markdown-it.github.io/
