@@ -1,6 +1,7 @@
 import logging
-from flask import Flask, render_template, Markup, redirect, url_for, abort
+from flask import Flask, request, render_template, redirect, url_for, abort
 from markdown_posts import Markdown_Posts
+from weather import Weather
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__, template_folder="views")
@@ -8,8 +9,9 @@ md_posts = Markdown_Posts()
 
 @app.route('/')
 def index():
+    forecast = Weather(request).get_forecast()
     posts = md_posts.fetch_all_meta()
-    return render_template('home/home.html', posts=posts)
+    return render_template('home/home.html', posts=posts, weather=forecast['currently'])
 
 @app.route('/x/<path:page>')
 def post(page):
@@ -33,4 +35,4 @@ def not_found(exc):
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
