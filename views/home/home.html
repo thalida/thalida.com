@@ -4,15 +4,18 @@
 {% endblock %}
 
 {% block styles %}
-    <link href="home.css" rel="stylesheet">
+<link href="home.css" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
+<script>
+window.app_weather = {{ weather | tojson }};
+window.app_posts = {{ posts_meta | tojson }};
+</script>
 {% endblock %}
 
 {% block body %}
-    index
     {{ weather }}
     <br /><br /><br /><br /><br />
-    {{ posts | safe }}
+    {{ posts_meta | safe }}
 {% endblock %}

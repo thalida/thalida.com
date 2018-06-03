@@ -5,23 +5,23 @@ from weather import Weather
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__, template_folder="views")
-md_posts = Markdown_Posts()
+posts = Markdown_Posts()
 
 @app.route('/')
 def index():
     forecast = Weather(request).get_forecast()
-    posts = md_posts.fetch_all_meta()
-    return render_template('home/home.html', posts=posts, weather=forecast['currently'])
+    posts_meta = posts.get_all_meta()
+    return render_template('home/home.html', posts_meta=posts_meta, weather=forecast['currently'])
 
 @app.route('/x/<path:page>')
 def post(page):
     try:
-        content, meta = md_posts.fetch_by_name(page)
+        post = posts.find_by_name(page)
 
-        if not meta.get('is_visible'):
+        if not post['meta'].get('is_visible'):
             raise FileNotFoundError 
 
-        return render_template('post/post.html', content=content, meta=meta)
+        return render_template('post/post.html', post=post)
     except FileNotFoundError:
         abort(404)
     except Exception:

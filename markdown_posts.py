@@ -41,23 +41,26 @@ class Markdown_Posts:
 
         return formatted_meta
 
-    def fetch_by_name(self, filename):
+    def find_by_name(self, filename):
         file_path = self.format_path(filename)
-        return self.fetch_by_path(file_path)
+        return self.find_by_path(file_path)
 
-    def fetch_by_path(self, file_path):
+    def find_by_path(self, file_path):
         with open(file_path, 'r') as f:
             file_contents = f.read()
             html = self.markdown.reset().convert(file_contents)
             meta = self.format_meta(self.markdown.Meta)
-            return html, meta
+            return {
+                'html': html,
+                'meta': meta,
+            }
 
-    def fetch_all_meta(self):
+    def get_all_meta(self):
         posts = []
         post_paths = glob.glob("posts/*.md")
         for (file_path) in post_paths:
-            post_html, post_meta = self.fetch_by_path(file_path)
-            if post_meta.get('is_visible'):
-                posts.append(post_meta)
+            post = self.find_by_path(file_path)
+            if post['meta'].get('is_visible'):
+                posts.append(post['meta'])
 
         return posts
