@@ -1,17 +1,38 @@
-import logging
-from flask import Flask, request, render_template, redirect, url_for, abort
+
+from darksky import forecast
+from flask import Flask, request, make_response, render_template, redirect, url_for, abort
 from markdown_posts import Markdown_Posts
-from weather import Weather
+from secrets import Secrets
+import geocoder
+import json
+import logging
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__, template_folder="views")
 posts = Markdown_Posts()
 
+NEWYORK = [40.7081, -73.9571]
+COOKIE_NAMESPACE = 'TIA'
+WEATHER_COOKIE_KEY = 'weather'
+VISITS_COOKIE_KEY = 'visits'
+
 @app.route('/')
 def index():
-    forecast = Weather(request).get_forecast()
-    posts_meta = posts.get_all_meta()
-    return render_template('home/home.html', posts_meta=posts_meta, weather=forecast['currently'])
+    weather_cookie = request.cookies.get(format_cookie_key(WEATHER_COOKIE_KEY))
+    if weather_cookie:
+        currently = json.loads(weather_cookie)
+        update_weather_cookie = False;
+    else:
+        currently = get_forecast(request)['currently']
+        update_weather_cookie = True
+
+    response = make_response(render_template('home/home.html', posts_meta=posts.get_all_meta(), weather=currently))
+
+    if update_weather_cookie:
+        response.set_cookie(format_cookie_key(WEATHER_COOKIE_KEY), json.dumps(currently), max_age=60*15) # keep for 15min
+    
+    increment_visits_cookie(request, response)
+    return response
 
 @app.route('/x/<path:page>')
 def post(page):
@@ -21,7 +42,10 @@ def post(page):
         if not post['meta'].get('is_visible'):
             raise FileNotFoundError 
 
-        return render_template('post/post.html', post=post)
+        response = make_response(render_template('post/post.html', post=post))
+        
+        increment_visits_cookie(request, response)
+        return response
     except FileNotFoundError:
         abort(404)
     except Exception:
@@ -31,6 +55,22 @@ def post(page):
 @app.errorhandler(404)
 def not_found(exc):
     return redirect(url_for('index'))
+
+
+def get_forecast(request):
+    ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    geo = geocoder.ip(ip)
+    lat, lon = geo.latlng if len(geo.latlng) == 2 else NEWYORK
+    return forecast(Secrets.FORECAST_KEY, lat, lon)
+
+def format_cookie_key(name):
+    return '{namespace}-{name}'.format(namespace=COOKIE_NAMESPACE, name=name)
+
+def increment_visits_cookie(req, res):
+    visits_cookie = req.cookies.get(format_cookie_key(VISITS_COOKIE_KEY))
+    visits = int(visits_cookie) + 1 if visits_cookie else 1
+    res.set_cookie(format_cookie_key(VISITS_COOKIE_KEY), str(visits), max_age=60*24*60*60) # save for 60 days
+
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
