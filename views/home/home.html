@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base href="/">
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="format-detection" content="telephone=no">
@@ -19,8 +17,6 @@
 
     <title>thalida</title>
     <meta name="description" content="Thalida's personal website, which includes links to her most recent projects, events, and activites.">
-
-    <link rel="author" href="https://plus.google.com/u/0/+ThalidaNoel">
     <link rel="shortcut icon" href="/favicon.ico?v=8">
 
     <!-- Twitter Card data -->
@@ -39,9 +35,16 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Roboto+Mono:300,400,700" rel="stylesheet">
+    
+    <!-- Global Styles -->
+    <link href="/static/styles/shared.css" rel="stylesheet">
+    
+    <!-- Local Styles -->
+    <link href="home.css" rel="stylesheet">
   </head>
   <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <div id="app">
+        {{ content | safe }}
+    </div>
   </body>
 </html>
