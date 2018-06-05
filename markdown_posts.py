@@ -24,19 +24,34 @@ class MarkdownPosts:
     }
 
     def __init__(self):
-        self.force_url_decorator = True
         self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
+        self.posts = self.load_posts()
 
-    def is_valid_path(self, filepath): 
-        return filepath.startswith(self.POSTS_DIR) and filepath.endswith(self.POSTS_EXT)
+    def load_posts(self):
+        posts = {
+            'all': {},
+            'visible': {},
+            'visible_meta': {},
+        }
+        search_path = '{dir}**/*{ext}'.format(dir=self.POSTS_DIR, ext=self.POSTS_EXT)
+        for file_path in glob.iglob(search_path, recursive=True):
+            post = self.fetch_post(file_path)
+            posts['all'][file_path] = post
+            if post['meta']['is_visible']:
+                posts['visible'][file_path] = post
+                posts['visible_meta'][file_path] = post['meta']
 
-    def format_path(self, filepath):
-        # The file is already formatted correctly
-        if filepath.startswith(self.POSTS_DIR) and filepath.endswith(self.POSTS_EXT):
-            return filepath
+        return posts
 
-        # Yass let's format this path!
-        return '{posts_dir}{filepath}{ext}'.format(posts_dir=self.POSTS_DIR, filepath=filepath, ext=self.POSTS_EXT)
+    def fetch_post(self, path):
+        with open(path, 'r') as f:
+            file_contents = f.read()
+            html = self.markdown.reset().convert(file_contents)
+            meta = self.format_meta(self.markdown.Meta, path)
+            return {
+                'html': html,
+                'meta': meta,
+            }
 
     def format_meta(self, meta, path):
         formatted_meta = dict()
@@ -47,26 +62,26 @@ class MarkdownPosts:
         for key in ('is_hidden', 'is_draft'):
             formatted_meta[key] = formatted_meta.get(key, '').lower() in ('true', 'yes')
 
-        formatted_meta['is_visible'] = not formatted_meta.get('is_hidden') and not formatted_meta.get('is_draft')
-        formatted_meta['url'] = path.replace(self.POSTS_DIR, self.POSTS_URL_DECORATOR)
+        formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
+        formatted_meta['url'] = self.convert_path_to_url(path)
 
         return formatted_meta
 
+    def convert_url_to_path(self, url):
+        relative_path = url.replace(self.POSTS_URL_DECORATOR, '', 1)
+        return '{posts_dir}{filepath}{ext}'.format(posts_dir=self.POSTS_DIR, filepath=relative_path, ext=self.POSTS_EXT)
+
+    def convert_path_to_url(self, path): 
+        url = path.replace(self.POSTS_DIR, self.POSTS_URL_DECORATOR, 1)
+        url = url.rsplit(self.POSTS_EXT, 1)[0]
+        return url
+
+    def get_post_by_url(self, url):
+        path = self.convert_url_to_path(url)
+        return self.get_post_by_path(path)
+
     def get_post_by_path(self, path):
-        with open(self.format_path(path), 'r') as f:
-            file_contents = f.read()
-            html = self.markdown.reset().convert(file_contents)
-            meta = self.format_meta(self.markdown.Meta, path)
-            return {
-                'html': html,
-                'meta': meta,
-            }
+        return self.posts['visible'][path]
 
-    def get_all_post_meta(self):
-        posts = []
-        for file_path in glob.iglob('posts/**/*.md', recursive=True):
-            post = self.get_post_by_path(file_path)
-            if post['meta'].get('is_visible'):
-                posts.append(post['meta'])
-
-        return posts
+    def get_visible_meta(self):
+        return list(self.posts['visible_meta'].values())

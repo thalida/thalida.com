@@ -33,7 +33,7 @@ def index():
             update_weather_cookie = True
 
         # Get meta data for all posts
-        posts_meta = posts.get_all_post_meta()
+        posts_meta = posts.get_visible_meta()
 
         response = make_response(render_template('home.html', posts_meta=posts_meta, weather=currently))
 
@@ -42,7 +42,7 @@ def index():
         
         increment_visits_cookie(request, response)
         return response
-    except FileNotFoundError:
+    except KeyError:
         abort(404)
     except Exception:
         logger.exception('500 Error Fetching Index')
@@ -50,18 +50,13 @@ def index():
 
 @app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
 def post(path):
-    print(path)
+    print(request.path)
     try:
-        post = posts.get_post_by_path(path)
-
-        if not post['meta'].get('is_visible'):
-            raise FileNotFoundError 
-
+        post = posts.get_post_by_url(request.path)
         response = make_response(render_template('post.html', post=post))
-        
         increment_visits_cookie(request, response)
         return response
-    except FileNotFoundError:
+    except KeyError:
         abort(404)
     except Exception:
         logger.exception('500 Error Fetching Post')
