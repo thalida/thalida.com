@@ -1,7 +1,6 @@
 Title:      Template
 Summary:    Summary of Template
 Date:       3 June 2018
-base_url:   http://thalida.com
 tags:       one
 tags:       two
 

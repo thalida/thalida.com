@@ -1,15 +1,19 @@
-
-from darksky import forecast
-from flask import Flask, request, make_response, render_template, redirect, url_for, abort
-from markdown_posts import Markdown_Posts
-from secrets import Secrets
-import geocoder
-import json
+# Builtins
 import logging
+import json
+
+# Third Party
+from flask import Flask, request, make_response, render_template, redirect, url_for, abort
+from darksky import forecast
+import geocoder
+
+# Locals
+import secrets
+from markdown_posts import MarkdownPosts
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-posts = Markdown_Posts()
+posts = MarkdownPosts()
 
 NEWYORK = [40.7081, -73.9571]
 COOKIE_NAMESPACE = 'TIA'
@@ -18,26 +22,37 @@ VISITS_COOKIE_KEY = 'visits'
 
 @app.route('/')
 def index():
-    weather_cookie = request.cookies.get(format_cookie_key(WEATHER_COOKIE_KEY))
-    if weather_cookie:
-        currently = json.loads(weather_cookie)
-        update_weather_cookie = False;
-    else:
-        currently = get_forecast(request)['currently']
-        update_weather_cookie = True
-
-    response = make_response(render_template('home.html', posts_meta=posts.get_all_meta(), weather=currently))
-
-    if update_weather_cookie:
-        response.set_cookie(format_cookie_key(WEATHER_COOKIE_KEY), json.dumps(currently), max_age=60*15) # keep for 15min
-    
-    increment_visits_cookie(request, response)
-    return response
-
-@app.route('/x/<path:page>')
-def post(page):
     try:
-        post = posts.find_by_name(page)
+        # Get current weather for location based on IP
+        weather_cookie = request.cookies.get(format_cookie_key(WEATHER_COOKIE_KEY))
+        if weather_cookie:
+            currently = json.loads(weather_cookie)
+            update_weather_cookie = False;
+        else:
+            currently = get_forecast(request)['currently']
+            update_weather_cookie = True
+
+        # Get meta data for all posts
+        posts_meta = posts.get_all_post_meta()
+
+        response = make_response(render_template('home.html', posts_meta=posts_meta, weather=currently))
+
+        if update_weather_cookie:
+            response.set_cookie(format_cookie_key(WEATHER_COOKIE_KEY), json.dumps(currently), max_age=60*15) # keep for 15min
+        
+        increment_visits_cookie(request, response)
+        return response
+    except FileNotFoundError:
+        abort(404)
+    except Exception:
+        logger.exception('500 Error Fetching Index')
+        abort(500)
+
+@app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
+def post(path):
+    print(path)
+    try:
+        post = posts.get_post_by_path(path)
 
         if not post['meta'].get('is_visible'):
             raise FileNotFoundError 
@@ -49,19 +64,18 @@ def post(page):
     except FileNotFoundError:
         abort(404)
     except Exception:
-        logger.exception('500 Error Fetch Post')
+        logger.exception('500 Error Fetching Post')
         abort(500)
 
 @app.errorhandler(404)
 def not_found(exc):
     return redirect(url_for('index'))
 
-
 def get_forecast(request):
     ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     geo = geocoder.ip(ip)
     lat, lon = geo.latlng if len(geo.latlng) == 2 else NEWYORK
-    return forecast(Secrets.FORECAST_KEY, lat, lon)
+    return forecast(secrets.FORECAST_KEY, lat, lon)
 
 def format_cookie_key(name):
     return '{namespace}-{name}'.format(namespace=COOKIE_NAMESPACE, name=name)

@@ -1,7 +1,6 @@
 Title:      Hidden
 Summary:    Summary of Hidden
 Date:       3 June 2018
-base_url:   http://thalida.com
 is_hidden:     true
 
 ## foo bar bat cat 
