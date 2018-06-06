@@ -1,6 +1,6 @@
 Title:      Hello World
 Summary:    Summary of Hello World
-Date:       3 June 2018
+Date:       2018-06-03
 
 # this is markdown
 **bold** stuff!

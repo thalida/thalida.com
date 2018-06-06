@@ -1,6 +1,5 @@
 Title:      Template
 Summary:    Summary of Template
-Date:       3 June 2018
 tags:       one
 tags:       two
 
