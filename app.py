@@ -29,7 +29,7 @@ COOKIE_KEYS = {
 def index():
     try:
         currently, from_cookie = get_current_weather(request)
-        posts_meta = posts.get_visible_meta_by_date()
+        posts_meta = posts.visible_meta_by_date
         response = make_response(render_template('home.html', posts_meta=posts_meta, weather=currently))
         update_cookies(request, response, visit=True, weather=currently if not from_cookie else None)
         return response
