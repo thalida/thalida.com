@@ -8,8 +8,9 @@ python_version = "3.6"
 
 [packages]
 flask = "*"
-darksky = "*"
 dateparser = "*"
 geocoder = "*"
+darkskylib = "*"
+markdown = "*"
 
 [dev-packages]
