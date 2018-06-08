@@ -1,7 +1,6 @@
 Title:        Template
 Summary:      Summary of Template
-is_external:  True
-external_url: http://etsy.com
+type:         game
 tags:         one
 tags:         two
 

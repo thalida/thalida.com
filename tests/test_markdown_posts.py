@@ -12,6 +12,7 @@ class TestMarkdownPosts(unittest.TestCase):
                 'file': 'posts/file1.md',
                 'html': 'a',
                 'meta': {
+                    'path': 'posts/file1.md',
                     'url': '/x/file1',
                     'title': 'a',
                     'date': '2018-01-01T00:00:00',
@@ -25,6 +26,7 @@ class TestMarkdownPosts(unittest.TestCase):
                 'file': 'posts/file2.md',
                 'html': 'a',
                 'meta': {
+                    'path': 'posts/file2.md',
                     'url': '/x/file2',
                     'title': 'a',
                     'date': '2018-01-02T00:00:00',
@@ -37,6 +39,7 @@ class TestMarkdownPosts(unittest.TestCase):
                 'file': 'posts/file3.md',
                 'html': 'b',
                 'meta': {
+                    'path': 'posts/file3.md',
                     'url': '/x/file3',
                     'title': 'b',
                     'date': '2018-01-02T00:00:00',
@@ -49,6 +52,7 @@ class TestMarkdownPosts(unittest.TestCase):
                 'file': 'posts/nested/nested1.md',
                 'html': 'c',
                 'meta': {
+                    'path': 'posts/nested/nested1.md',
                     'url': '/x/nested/nested1',
                     'title': 'c',
                     'date': '2018-01-05T00:00:00',
@@ -61,6 +65,7 @@ class TestMarkdownPosts(unittest.TestCase):
                 'file': 'posts/nested/nested2.md',
                 'html': 'd',
                 'meta': {
+                    'path': 'posts/nested/nested2.md',
                     'url': '/x/nested/nested2',
                     'title': 'd',
                     'date': '2007-09-16T00:00:00',

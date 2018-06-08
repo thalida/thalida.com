@@ -31,11 +31,11 @@ def index():
         currently, from_cookie = get_current_weather(request)
         posts_meta = posts.visible_meta_by_date
         work_history = [
-            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_date('May 2017'), None]},
-            {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_date('November 2015'), format_date('May 2017')]},
-            {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_date('January 2014'), format_date('November 2015')]},
-            {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_date('January 2013'), format_date('January 2014')]},
-            {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_date('March 2010'), format_date('January 2013')]},
+            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None]},
+            {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_datetime('November 2015'), format_datetime('May 2017')]},
+            {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_datetime('January 2014'), format_datetime('November 2015')]},
+            {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_datetime('January 2013'), format_datetime('January 2014')]},
+            {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_datetime('March 2010'), format_datetime('January 2013')]},
         ]
         response = make_response(render_template(
             'home.html', 
@@ -55,7 +55,8 @@ def index():
 def post(path):
     try:
         post = posts.get_post_by_url(request.path)
-        response = make_response(render_template('post.html', post=post))
+        prev_post, next_post = posts.get_prev_next(post['path'])
+        response = make_response(render_template('post.html', post=post, prev_post=prev_post, next_post=next_post))
         update_cookies(request, response, visit=True)
         return response
     except KeyError:
@@ -68,8 +69,16 @@ def post(path):
 def not_found(exc):
     return redirect(url_for('index'))
 
-def format_date(date):
-    return dateparser.parse(date).isoformat()
+def format_datetime(value, format='iso'):
+    if not isinstance(value, str):
+        return value
+
+    date = dateparser.parse(value)
+    if format is 'iso':
+        return date.isoformat()
+    else:
+        return date.strftime(format)
+
 
 def get_current_weather(request):
     # Get current weather for location based on IP
@@ -108,6 +117,8 @@ def update_cookies(req, res, visit=True, weather=None):
         
         res.set_cookie(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), str(now.isoformat()), max_age=120*24*60*60) # save for 120 days
 
+
+app.jinja_env.filters['datetime'] = format_datetime
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True

@@ -16,18 +16,51 @@ window.app_posts = {{ posts_meta | tojson }};
 
 {% block body %}
     {{ weather }}
-    <br /><br /><br /><br /><br />
-    {{ posts_meta | safe }}
+
+    {% if posts_meta %}
+    <ol id="posts">
+    {% for post in posts_meta %}
+        <li class="post">
+            {% if post.external_url %}
+            <a href="{{ post.external_url | safe }}" target="_blank">
+            {% else %}
+            <a href="{{ post.url | safe }}">
+            {% endif %}
+                <h2 class="post-title">
+                    {{ post.title }}
+
+                    {% if post.external_url %}
+                    <span class="icon-external">[external icon]</span>
+                    {% endif %}
+
+                    {% if post.type %}
+                    <span class="icon-{{ post.type }}">[{{ post.type }} icon]</span>
+                    {% endif %}
+                </h2>
+                <p class="post-summary">{{ post.summary | safe }}</p>
+                {% if post.date %}
+                <span class="post-date">{{ post.date | datetime('%d %B %Y') }}</span>
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+    </ol>
+    {% endif %}
 
     {% if work_history %}
     <ul id="work">
     {% for job in work_history %}
-        <li class="work-job">
-            <span class="work-job-company">{{job.company}}</span>
-            <span class="work-job-title">{{job.title}}</span>
-            <span class="work-job-dates">
-                {{job.dates[0]}} {% if job.dates[1] %}- {{job.dates[1]}}{% endif %}
-            </span>
+        {% set start, end = job.dates %}
+        <li class="job">
+            <h2 class="job-company">{{ job.company }}</h2>
+            <p class="job-title">{{ job.title }}</p>
+            <p class="job-dates">
+                <span class="job-dates-start">{{ start | datetime('%b %Y') }}</span>
+                - 
+                <span class="job-dates-end">
+                    {{ end | datetime('%b %Y') | default('Now',true) }}
+                </span>
+            </p>
         </li>
     {% endfor %}
     </ul>

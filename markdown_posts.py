@@ -41,12 +41,36 @@ class MarkdownPosts:
     def visible_meta_by_date(self):
         return self.posts_collection['visible_meta_by_date']
 
+    @property
+    def visible_post_order(self):
+        return self.posts_collection['visible_post_order']
+
+    @property
+    def total_visible_posts(self):
+        return len(self.posts_collection['visible_meta'])
+    
+
     def get_post_by_url(self, url):
         path = self._convert_url_to_path(url)
         return self.get_post_by_path(path)
 
     def get_post_by_path(self, path):
         return self.posts_collection['visible'][path]
+
+    def get_prev_next(self, path):
+        index = self.visible_post_order.index(path)
+        
+        prev_index = index - 1 if index - 1 >= 0 else self.total_visible_posts - 1
+        next_index = index + 1 if index + 1 < self.total_visible_posts else 0
+
+        prev_post_path = self.visible_post_order[prev_index]
+        next_post_path = self.visible_post_order[next_index]
+
+        prev_post = self.get_post_by_path(prev_post_path)
+        next_post = self.get_post_by_path(next_post_path)
+
+        return (prev_post, next_post)
+
 
     def _load_posts(self):
         posts_collection = {
@@ -65,6 +89,7 @@ class MarkdownPosts:
                 posts_collection['visible_meta'].append(post['meta'])
 
         posts_collection['visible_meta_by_date'] = sorted(posts_collection['visible_meta'], key=lambda x: (x['date'], x['title']), reverse=True)
+        posts_collection['visible_post_order'] = [meta['path'] for meta in posts_collection['visible_meta_by_date']]
 
         self.posts_collection = posts_collection
 
@@ -80,6 +105,7 @@ class MarkdownPosts:
             html = self.markdown.reset().convert(file_contents)
             meta = self._format_meta(self.markdown.Meta, path)
             return {
+                'path': path,
                 'html': html,
                 'meta': meta
             }
@@ -100,6 +126,7 @@ class MarkdownPosts:
         for key in defaults:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
 
+        formatted_meta['path'] = path
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['url'] = self._convert_path_to_url(path)
         formatted_meta['date'] = dateparser.parse(formatted_meta.get('date')).isoformat()
