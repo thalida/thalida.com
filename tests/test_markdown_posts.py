@@ -110,8 +110,10 @@ class TestMarkdownPosts(unittest.TestCase):
 
     def test_format_meta(self):
         unformatted_meta = { file: {k.title(): [str(v)] for k,v in post['meta'].items() if k is not 'is_visible'} for file,post in self.expected_posts.items()}
+        
         unformatted_meta['posts/nested/nested2.md'].pop('Date')
-        unformatted_meta['posts/nested/nested2.md'].pop('Is_Draft')
+        unformatted_meta['posts/file1.md'].pop('Is_Hidden')
+        unformatted_meta['posts/file2.md'].pop('Is_Draft')
 
         markdown = MarkdownPosts(run_load=False)
 

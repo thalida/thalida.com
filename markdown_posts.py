@@ -89,15 +89,13 @@ class MarkdownPosts:
 
         defaults = {
             'date': '2007-09-16',
-            'is_hidden': True,
+            'is_hidden': False,
             'is_draft': False,
         }
 
         for k, v in meta.items():
             key = k.lower()
             formatted_meta[k.lower()] = self._parse_str(v[0]) if len(v) <= 1 else v
-            # if len(v) == 1:
-            #     formatted_meta[key] = self._str_to_bool(v[0])
 
         for key in defaults:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
@@ -122,7 +120,6 @@ class MarkdownPosts:
         falsey = ('false', 'no')
 
         ls = s.lower()
-
         if ls in truthy:
             return True
         elif ls in falsey:
