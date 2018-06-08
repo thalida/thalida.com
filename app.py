@@ -13,6 +13,9 @@ import geocoder
 import secrets
 from markdown_posts import MarkdownPosts
 
+css_version = 1
+js_version = 1
+
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 posts = MarkdownPosts()
@@ -39,6 +42,8 @@ def index():
         ]
         response = make_response(render_template(
             'home.html', 
+            css_version=str(css_version),
+            js_version=str(js_version),
             posts_meta=posts_meta, 
             weather=currently, 
             work_history=work_history
@@ -56,7 +61,14 @@ def post(path):
     try:
         post = posts.get_post_by_url(request.path)
         prev_post, next_post = posts.get_prev_next(post['path'])
-        response = make_response(render_template('post.html', post=post, prev_post=prev_post, next_post=next_post))
+        response = make_response(render_template(
+            'post.html', 
+            css_version=str(css_version),
+            js_version=str(js_version),
+            post=post, 
+            prev_post=prev_post, 
+            next_post=next_post
+        ))
         update_cookies(request, response, visit=True)
         return response
     except KeyError:

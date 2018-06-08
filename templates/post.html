@@ -4,15 +4,9 @@
 {% endblock %}
 
 {% block styles %}
-<link href="{{url_for('static', filename='css/markdown-themes/markdown3.css')}}" rel="stylesheet">
-<link href="{{url_for('static', filename='css/highlight-themes/default.css')}}" rel="stylesheet">
-<link href="{{url_for('static', filename='css/post.css')}}" rel="stylesheet">
-{% endblock %}
-
-{% block scripts %}
-<script>
-window.app_post_meta = {{ post.meta | tojson }};
-</script>
+<link href="{{url_for('static', filename='css/markdown-themes/markdown3.css', v=css_version)}}" rel="stylesheet">
+<link href="{{url_for('static', filename='css/highlight-themes/default.css', v=css_version)}}" rel="stylesheet">
+<link href="{{url_for('static', filename='css/post.css', v=css_version)}}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
