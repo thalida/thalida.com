@@ -89,18 +89,18 @@ class MarkdownPosts:
 
         defaults = {
             'date': '2007-09-16',
-            'is_hidden': '',
-            'is_draft': '',
+            'is_hidden': True,
+            'is_draft': False,
         }
 
         for k, v in meta.items():
-            formatted_meta[k.lower()] = v[0] if len(v) <= 1 else v
+            key = k.lower()
+            formatted_meta[k.lower()] = self._parse_str(v[0]) if len(v) <= 1 else v
+            # if len(v) == 1:
+            #     formatted_meta[key] = self._str_to_bool(v[0])
 
         for key in defaults:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
-
-        for key in ('is_hidden', 'is_draft'):
-            formatted_meta[key] = formatted_meta.get(key).lower() in ('true', 'yes')
 
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['url'] = self._convert_path_to_url(path)
@@ -116,3 +116,17 @@ class MarkdownPosts:
         url = path.replace(self.POSTS_DIR, self.POSTS_URL_DECORATOR, 1)
         url = url.rsplit(self.POSTS_EXT, 1)[0]
         return url
+
+    def _parse_str(self, s):
+        truthy = ('true', 'yes')
+        falsey = ('false', 'no')
+
+        ls = s.lower()
+
+        if ls in truthy:
+            return True
+        elif ls in falsey:
+            return False
+        else:
+            return s
+

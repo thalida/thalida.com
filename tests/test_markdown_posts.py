@@ -18,6 +18,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'is_draft': False,
                     'is_hidden': False,
                     'is_visible': True,
+                    'random_boolean': True,
                 },
             },
             {
@@ -91,24 +92,24 @@ class TestMarkdownPosts(unittest.TestCase):
         expected_total_posts = len(self.expected_posts.keys())
         expected_total_visible_posts = len(expected_visible_posts.keys())
 
-        assert markdown._fetch_post_filepaths.call_count == 1
-        assert markdown._fetch_post.call_count == expected_total_posts
+        self.assertEqual(markdown._fetch_post_filepaths.call_count, 1)
+        self.assertEqual(markdown._fetch_post.call_count, expected_total_posts)
 
-        assert len(actual_posts['all'].keys()) == expected_total_posts
-        assert len(actual_posts['visible'].keys()) == expected_total_visible_posts
-        assert len(actual_posts['visible_meta']) == expected_total_visible_posts
-        assert len(actual_posts['visible_meta_by_date']) == expected_total_visible_posts
+        self.assertEqual(len(actual_posts['all'].keys()), expected_total_posts)
+        self.assertEqual(len(actual_posts['visible'].keys()), expected_total_visible_posts)
+        self.assertEqual(len(actual_posts['visible_meta']), expected_total_visible_posts)
+        self.assertEqual(len(actual_posts['visible_meta_by_date']), expected_total_visible_posts)
 
-        assert actual_posts['all'].keys() == self.expected_posts.keys()
-        assert actual_posts['visible'].keys() == expected_visible_posts.keys()
-        assert actual_posts['visible_meta'] == expected_visible_meta
-        assert actual_posts['visible_meta_by_date'] == expected_visible_meta_by_date
+        self.assertEqual(actual_posts['all'].keys(), self.expected_posts.keys())
+        self.assertEqual(actual_posts['visible'].keys(), expected_visible_posts.keys())
+        self.assertEqual(actual_posts['visible_meta'], expected_visible_meta)
+        self.assertEqual(actual_posts['visible_meta_by_date'], expected_visible_meta_by_date)
 
-        assert markdown.visible_meta == expected_visible_meta
-        assert markdown.visible_meta_by_date == expected_visible_meta_by_date
+        self.assertEqual(markdown.visible_meta, expected_visible_meta)
+        self.assertEqual(markdown.visible_meta_by_date, expected_visible_meta_by_date)
 
     def test_format_meta(self):
-        unformatted_meta = { file: {k.title(): str(v) for k,v in post['meta'].items() if k is not 'is_visible'} for file,post in self.expected_posts.items()}
+        unformatted_meta = { file: {k.title(): [str(v)] for k,v in post['meta'].items() if k is not 'is_visible'} for file,post in self.expected_posts.items()}
         unformatted_meta['posts/nested/nested2.md'].pop('Date')
         unformatted_meta['posts/nested/nested2.md'].pop('Is_Draft')
 
@@ -117,7 +118,7 @@ class TestMarkdownPosts(unittest.TestCase):
         for path, post in self.expected_posts.items():
             expected = post['meta']
             actual = markdown._format_meta(unformatted_meta[path], path)
-            assert actual == expected
+            self.assertEqual(actual, expected)
 
     def test_convert_url_to_path(self):
         markdown = MarkdownPosts(run_load=False)
@@ -125,8 +126,7 @@ class TestMarkdownPosts(unittest.TestCase):
         for path, post in self.expected_posts.items():
             actual = markdown._convert_url_to_path(post['meta']['url'])
             expected = path
-
-            assert actual == expected
+            self.assertEqual(actual, expected)
 
     def test_convert_path_to_url(self):
         markdown = MarkdownPosts(run_load=False)
@@ -134,8 +134,7 @@ class TestMarkdownPosts(unittest.TestCase):
         for path, post in self.expected_posts.items():
             actual = markdown._convert_path_to_url(path)
             expected = post['meta']['url']
-
-            assert actual == expected
+            self.assertEqual(actual, expected)
 
 if __name__ == '__main__':
     unittest.main()

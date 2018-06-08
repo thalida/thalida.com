@@ -1,7 +1,9 @@
-Title:      Template
-Summary:    Summary of Template
-tags:       one
-tags:       two
+Title:        Template
+Summary:      Summary of Template
+is_external:  True
+external_url: http://etsy.com
+tags:         one
+tags:         two
 
 
 source https://markdown-it.github.io/
