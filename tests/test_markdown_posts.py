@@ -68,6 +68,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'path': 'posts/nested/nested2.md',
                     'url': '/x/nested/nested2',
                     'title': 'd',
+                    'is_default_date': True,
                     'date': '2007-09-16T00:00:00',
                     'is_draft': False,
                     'is_hidden': True,

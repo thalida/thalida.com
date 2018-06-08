@@ -38,7 +38,7 @@ window.app_posts = {{ posts_meta | tojson }};
                     {% endif %}
                 </h2>
                 <p class="post-summary">{{ post.summary | safe }}</p>
-                {% if post.date %}
+                {% if post.date and not post.is_default_date %}
                 <span class="post-date">{{ post.date | datetime('%d %B %Y') }}</span>
                 {% endif %}
             </a>

@@ -129,6 +129,10 @@ class MarkdownPosts:
         formatted_meta['path'] = path
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['url'] = self._convert_path_to_url(path)
+
+        if formatted_meta.get('date') is defaults['date']:
+            formatted_meta['is_default_date'] = True
+
         formatted_meta['date'] = dateparser.parse(formatted_meta.get('date')).isoformat()
 
         return formatted_meta
