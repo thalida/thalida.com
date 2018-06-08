@@ -18,4 +18,18 @@ window.app_posts = {{ posts_meta | tojson }};
     {{ weather }}
     <br /><br /><br /><br /><br />
     {{ posts_meta | safe }}
+
+    {% if work_history %}
+    <ul id="work">
+    {% for job in work_history %}
+        <li class="work-job">
+            <span class="work-job-company">{{job.company}}</span>
+            <span class="work-job-title">{{job.title}}</span>
+            <span class="work-job-dates">
+                {{job.dates[0]}} {% if job.dates[1] %}- {{job.dates[1]}}{% endif %}
+            </span>
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
 {% endblock %}

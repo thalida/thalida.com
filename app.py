@@ -30,7 +30,19 @@ def index():
     try:
         currently, from_cookie = get_current_weather(request)
         posts_meta = posts.visible_meta_by_date
-        response = make_response(render_template('home.html', posts_meta=posts_meta, weather=currently))
+        work_history = [
+            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_date('May 2017'), None]},
+            {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_date('November 2015'), format_date('May 2017')]},
+            {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_date('January 2014'), format_date('November 2015')]},
+            {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_date('January 2013'), format_date('January 2014')]},
+            {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_date('March 2010'), format_date('January 2013')]},
+        ]
+        response = make_response(render_template(
+            'home.html', 
+            posts_meta=posts_meta, 
+            weather=currently, 
+            work_history=work_history
+        ))
         update_cookies(request, response, visit=True, weather=currently if not from_cookie else None)
         return response
     except KeyError:
@@ -56,6 +68,8 @@ def post(path):
 def not_found(exc):
     return redirect(url_for('index'))
 
+def format_date(date):
+    return dateparser.parse(date).isoformat()
 
 def get_current_weather(request):
     # Get current weather for location based on IP
