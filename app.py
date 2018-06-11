@@ -15,6 +15,7 @@ from markdown_posts import MarkdownPosts
 
 css_version = 1
 js_version = 1
+current_year = datetime.now().strftime('%Y')
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -31,22 +32,32 @@ COOKIE_KEYS = {
 @app.route('/')
 def index():
     try:
+        greeting = get_greeting(request)
         currently, from_cookie = get_current_weather(request)
         posts_meta = posts.visible_meta_by_date
         work_history = [
-            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None]},
+            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None], 'is_hiring': True},
             {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_datetime('November 2015'), format_datetime('May 2017')]},
             {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_datetime('January 2014'), format_datetime('November 2015')]},
             {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_datetime('January 2013'), format_datetime('January 2014')]},
             {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_datetime('March 2010'), format_datetime('January 2013')]},
         ]
+        current_job = work_history[0]
+        years_since_first_job = calc_years_between(work_history[-1]['dates'][0], datetime.now().isoformat())
+
         response = make_response(render_template(
             'home.html', 
+
             css_version=str(css_version),
             js_version=str(js_version),
+            current_year=current_year,
+
+            greeting=greeting,
             posts_meta=posts_meta, 
             weather=currently, 
-            work_history=work_history
+            work_history=work_history,
+            current_job=current_job,
+            years_since_first_job=years_since_first_job,
         ))
         update_cookies(request, response, visit=True, weather=currently if not from_cookie else None)
         return response
@@ -59,15 +70,18 @@ def index():
 @app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
 def post(path):
     try:
+        next_posts = []
         post = posts.get_post_by_url(request.path)
-        prev_post, next_post = posts.get_prev_next(post['path'])
+        next_posts = posts.get_next_post_meta(post['path'], amount=3)
         response = make_response(render_template(
             'post.html', 
+
             css_version=str(css_version),
             js_version=str(js_version),
-            post=post, 
-            prev_post=prev_post, 
-            next_post=next_post
+            current_year=current_year,
+
+            post=post,
+            next_posts=next_posts
         ))
         update_cookies(request, response, visit=True)
         return response
@@ -91,6 +105,13 @@ def format_datetime(value, format='iso'):
     else:
         return date.strftime(format)
 
+def calc_years_between(start_iso, end_iso):
+    start_year = dateparser.parse(start_iso).strftime('%Y')
+    end_year = dateparser.parse(end_iso).strftime('%Y')
+    return int(end_year) - int(start_year)
+
+def get_greeting(request):
+    return "Greetings"
 
 def get_current_weather(request):
     # Get current weather for location based on IP

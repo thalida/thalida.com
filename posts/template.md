@@ -1,8 +1,7 @@
 Title:        Template
 Summary:      Summary of Template
-type:         game
-tags:         one
-tags:         two
+Category:     game
+Is_Featured:  yes
 
 
 source https://markdown-it.github.io/

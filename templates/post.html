@@ -10,11 +10,9 @@
 {% endblock %}
 
 {% block body %}
-    prev {{ prev_post.path | safe }} <br /> 
-    curr {{ post.path | safe }} <br /> 
-    next {{ next_post.path | safe }}
-    <br /><br /><br /><br /><br /><br /><br />
     {{ post.meta | safe }}
     <br /><br /><br /><br /><br /><br /><br />
     {{ post.html | safe }}
+    <br /><br /><br /><br /><br /><br /><br />
+    next {{ next_posts | safe }}
 {% endblock %}

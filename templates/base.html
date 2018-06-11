@@ -43,9 +43,22 @@
     {% block styles %}{% endblock %}
   </head>
   <body>
-    <div id="app">
+    <header>
+        <a href="/">thalida</a>
+    </header>
+    
+    <div id="content">
         {% block body %}{% endblock %}
     </div>
+
+    <footer>
+        <div>
+            <a href="http://twitter.com/thalidanoel">i made this</a> - {{ current_year }}
+        </div>
+        <div>
+            Powered by <a href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
+        </div>
+    </footer>
     
     {% block scripts %}{% endblock %}
   </body>

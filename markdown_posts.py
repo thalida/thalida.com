@@ -34,10 +34,6 @@ class MarkdownPosts:
             self._load_posts()
 
     @property
-    def visible_meta(self):
-        return self.posts_collection['visible_meta']
-
-    @property
     def visible_meta_by_date(self):
         return self.posts_collection['visible_meta_by_date']
 
@@ -47,7 +43,7 @@ class MarkdownPosts:
 
     @property
     def total_visible_posts(self):
-        return len(self.posts_collection['visible_meta'])
+        return len(self.posts_collection['visible'].keys())
     
 
     def get_post_by_url(self, url):
@@ -57,26 +53,26 @@ class MarkdownPosts:
     def get_post_by_path(self, path):
         return self.posts_collection['visible'][path]
 
-    def get_prev_next(self, path):
-        index = self.visible_post_order.index(path)
-        
-        prev_index = index - 1 if index - 1 >= 0 else self.total_visible_posts - 1
-        next_index = index + 1 if index + 1 < self.total_visible_posts else 0
+    def get_next_post_meta(self, path, amount=1):
+        last_index = self.visible_post_order.index(path)
+        posts = []
+        total_posts = 0
 
-        prev_post_path = self.visible_post_order[prev_index]
-        next_post_path = self.visible_post_order[next_index]
+        while total_posts < amount:
+            index = last_index + 1 if last_index + 1 < self.total_visible_posts else 0   
+            post_path = self.visible_post_order[index]
+            posts.append(self.get_post_by_path(post_path)['meta'])
 
-        prev_post = self.get_post_by_path(prev_post_path)
-        next_post = self.get_post_by_path(next_post_path)
+            last_index = index
+            total_posts += 1
 
-        return (prev_post, next_post)
+        return posts
 
 
     def _load_posts(self):
         posts_collection = {
             'all': {},
             'visible': {},
-            'visible_meta': [],
             'visible_meta_by_date': [],
         }
 
@@ -86,10 +82,11 @@ class MarkdownPosts:
 
             if post['meta']['is_visible']:
                 posts_collection['visible'][filepath] = post
-                posts_collection['visible_meta'].append(post['meta'])
 
-        posts_collection['visible_meta_by_date'] = sorted(posts_collection['visible_meta'], key=lambda x: (x['date'], x['title']), reverse=True)
+        posts_by_date = sorted(posts_collection['visible'].values(), key=lambda x: (x['meta']['date'], x['meta']['title']), reverse=True)
+        posts_collection['visible_meta_by_date'] = [post['meta'] for post in posts_by_date]
         posts_collection['visible_post_order'] = [meta['path'] for meta in posts_collection['visible_meta_by_date']]
+
 
         self.posts_collection = posts_collection
 
@@ -127,8 +124,10 @@ class MarkdownPosts:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
 
         formatted_meta['path'] = path
-        formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['url'] = self._convert_path_to_url(path)
+       
+        formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
+        formatted_meta['is_external'] = 'external_url' in formatted_meta
 
         if formatted_meta.get('date') is defaults['date']:
             formatted_meta['is_default_date'] = True

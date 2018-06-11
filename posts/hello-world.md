@@ -1,7 +1,7 @@
 Title:      Hello World
 Summary:    Summary of Hello World
 Date:       2018-06-03
-type:       journal
+Category:   journal
 
 # this is markdown
 **bold** stuff!

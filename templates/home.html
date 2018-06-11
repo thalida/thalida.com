@@ -15,26 +15,57 @@ window.app_weather = {{ weather | tojson }};
 {% endblock %}
 
 {% block body %}
-    {{ weather }}
+    <div id="window">
+        {{ weather }}
+    </div>
+
+
+    <div id="about">
+        <div id="about-title">
+            <h1>Everyday Thoughts <br />& Strange Ideas</h1>
+        </div>
+        <div id="about-content">
+            <p>
+                {{ greeting }}, my name’s Thalida, I’m a queer Trinidadian-American cisgender woman of color.
+            </p>
+            <p>
+                I was lucky enough to have a supportive mother, who got me thalida.com for my 16th birthday. It was one of the best gifts I’ve ever received, and is the reason I've become the software engineer I am today.
+            </p>
+            <p>
+                By day I’m a {{ current_job.title }} at {{ current_job.company }}{% if current_job.is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ years_since_first_job }} years.
+            </p>
+            <p>
+                In the wee hours of the night I build robots with my partner, work on one of my many side projects, or catch up on Netflix shows.
+            </p>
+            <p>
+                I’ve started to pull back  from using social media, so if you wanna keep in touch, let’s do it like it’s not {{ current_year }}: 
+                <a href="#">subscribe to my newsletter!</a>
+            </p>
+            <p>
+                (I’m generally full of questions and bubble tea.)
+            </p>
+        </div>
+    </div>
+
 
     {% if posts_meta %}
     <ol id="posts">
     {% for post in posts_meta %}
         <li class="post">
-            {% if post.external_url %}
-            <a href="{{ post.external_url | safe }}" target="_blank">
+            {% if post.is_external %}
+            <a href="{{ post.external_url | safe }}" target="_blank" rel="external">
             {% else %}
             <a href="{{ post.url | safe }}">
             {% endif %}
                 <h2 class="post-title">
                     {{ post.title }}
 
-                    {% if post.external_url %}
+                    {% if post.is_external %}
                     <span class="icon-external">[external icon]</span>
                     {% endif %}
 
-                    {% if post.type %}
-                    <span class="icon-{{ post.type }}">[{{ post.type }} icon]</span>
+                    {% if post.category %}
+                    <span class="icon-{{ post.category }}">[{{ post.category }} icon]</span>
                     {% endif %}
                 </h2>
                 <p class="post-summary">{{ post.summary | safe }}</p>
@@ -46,6 +77,7 @@ window.app_weather = {{ weather | tojson }};
     {% endfor %}
     </ol>
     {% endif %}
+
 
     {% if work_history %}
     <ul id="work">
