@@ -3,5 +3,5 @@ Summary:    Summary of Hello World
 Date:       2018-06-03
 Category:   journal
 
-# this is markdown
+## this is markdown
 **bold** stuff!

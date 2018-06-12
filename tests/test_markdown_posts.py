@@ -18,6 +18,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'date': '2018-01-01T00:00:00',
                     'is_draft': False,
                     'is_hidden': False,
+                    'is_external': False,
                     'is_visible': True,
                     'random_boolean': True,
                 },
@@ -32,6 +33,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'date': '2018-01-02T00:00:00',
                     'is_draft': False,
                     'is_hidden': False,
+                    'is_external': False,
                     'is_visible': True,
                 },
             },
@@ -43,8 +45,10 @@ class TestMarkdownPosts(unittest.TestCase):
                     'url': '/x/file3',
                     'title': 'b',
                     'date': '2018-01-02T00:00:00',
+                    'external_url': 'http://cats.com',
                     'is_draft': False,
                     'is_hidden': False,
+                    'is_external': True,
                     'is_visible': True,
                 },
             },
@@ -58,6 +62,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'date': '2018-01-05T00:00:00',
                     'is_draft': True,
                     'is_hidden': False,
+                    'is_external': False,
                     'is_visible': False,
                 },
             },
@@ -72,6 +77,7 @@ class TestMarkdownPosts(unittest.TestCase):
                     'date': '2007-09-16T00:00:00',
                     'is_draft': False,
                     'is_hidden': True,
+                    'is_external': False,
                     'is_visible': False,
                 },
             },
@@ -103,19 +109,17 @@ class TestMarkdownPosts(unittest.TestCase):
 
         self.assertEqual(len(actual_posts['all'].keys()), expected_total_posts)
         self.assertEqual(len(actual_posts['visible'].keys()), expected_total_visible_posts)
-        self.assertEqual(len(actual_posts['visible_meta']), expected_total_visible_posts)
         self.assertEqual(len(actual_posts['visible_meta_by_date']), expected_total_visible_posts)
 
         self.assertEqual(actual_posts['all'].keys(), self.expected_posts.keys())
         self.assertEqual(actual_posts['visible'].keys(), expected_visible_posts.keys())
-        self.assertEqual(actual_posts['visible_meta'], expected_visible_meta)
         self.assertEqual(actual_posts['visible_meta_by_date'], expected_visible_meta_by_date)
 
-        self.assertEqual(markdown.visible_meta, expected_visible_meta)
         self.assertEqual(markdown.visible_meta_by_date, expected_visible_meta_by_date)
 
     def test_format_meta(self):
-        unformatted_meta = { file: {k.title(): [str(v)] for k,v in post['meta'].items() if k is not 'is_visible'} for file,post in self.expected_posts.items()}
+        ignore_keys = ['is_visible', 'is_external']
+        unformatted_meta = { file: {k.title(): [str(v)] for k,v in post['meta'].items() if k not in ignore_keys} for file,post in self.expected_posts.items()}
         
         unformatted_meta['posts/nested/nested2.md'].pop('Date')
         unformatted_meta['posts/file1.md'].pop('Is_Hidden')

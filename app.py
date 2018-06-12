@@ -32,32 +32,33 @@ COOKIE_KEYS = {
 @app.route('/')
 def index():
     try:
-        greeting = get_greeting(request)
         currently, from_cookie = get_current_weather(request)
+        greeting = get_greeting(request)
         posts_meta = posts.visible_meta_by_date
-        work_history = [
-            {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None], 'is_hiring': True},
-            {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_datetime('November 2015'), format_datetime('May 2017')]},
-            {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_datetime('January 2014'), format_datetime('November 2015')]},
-            {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_datetime('January 2013'), format_datetime('January 2014')]},
-            {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_datetime('March 2010'), format_datetime('January 2013')]},
-        ]
-        current_job = work_history[0]
-        years_since_first_job = calc_years_between(work_history[-1]['dates'][0], datetime.now().isoformat())
+        work = {
+            'history': [
+                {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None], 'is_hiring': True},
+                {'company': 'Kinnek', 'title': 'Senior Frontend Engineer', 'dates': [format_datetime('November 2015'), format_datetime('May 2017')]},
+                {'company': 'OkCupid', 'title': 'Frontend Engineer', 'dates': [format_datetime('January 2014'), format_datetime('November 2015')]},
+                {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_datetime('January 2013'), format_datetime('January 2014')]},
+                {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_datetime('March 2010'), format_datetime('January 2013')]},
+            ],
+            'current': {},
+            'years_since_start': 0,
+        }
+        work['current'] = work['history'][0]
+        work['years_since_start'] = calc_years_between(work['history'][-1]['dates'][0], datetime.now().isoformat())
 
         response = make_response(render_template(
             'home.html', 
-
             css_version=str(css_version),
             js_version=str(js_version),
             current_year=current_year,
 
-            greeting=greeting,
-            posts_meta=posts_meta, 
             weather=currently, 
-            work_history=work_history,
-            current_job=current_job,
-            years_since_first_job=years_since_first_job,
+            greeting=greeting,
+            posts=posts_meta, 
+            work=work,
         ))
         update_cookies(request, response, visit=True, weather=currently if not from_cookie else None)
         return response
@@ -70,18 +71,20 @@ def index():
 @app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
 def post(path):
     try:
-        next_posts = []
         post = posts.get_post_by_url(request.path)
+
+        if post['meta']['is_external']:
+            return redirect(post['meta']['external_url'])
+
         next_posts = posts.get_next_post_meta(post['path'], amount=3)
         response = make_response(render_template(
             'post.html', 
-
             css_version=str(css_version),
             js_version=str(js_version),
             current_year=current_year,
 
             post=post,
-            next_posts=next_posts
+            posts=next_posts
         ))
         update_cookies(request, response, visit=True)
         return response

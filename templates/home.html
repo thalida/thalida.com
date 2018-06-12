@@ -32,7 +32,7 @@ window.app_weather = {{ weather | tojson }};
                 I was lucky enough to have a supportive mother, who got me thalida.com for my 16th birthday. It was one of the best gifts I’ve ever received, and is the reason I've become the software engineer I am today.
             </p>
             <p>
-                By day I’m a {{ current_job.title }} at {{ current_job.company }}{% if current_job.is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ years_since_first_job }} years.
+                By day I’m a {{ work.current.title }} at {{ work.current.company }}{% if work.current.is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ work.years_since_start }} years.
             </p>
             <p>
                 In the wee hours of the night I build robots with my partner, work on one of my many side projects, or catch up on Netflix shows.
@@ -46,42 +46,16 @@ window.app_weather = {{ weather | tojson }};
             </p>
         </div>
     </div>
+    
 
-
-    {% if posts_meta %}
-    <ol id="posts">
-    {% for post in posts_meta %}
-        <li class="post">
-            {% if post.is_external %}
-            <a href="{{ post.external_url | safe }}" target="_blank" rel="external">
-            {% else %}
-            <a href="{{ post.url | safe }}">
-            {% endif %}
-                <h2 class="post-title">
-                    {{ post.title }}
-
-                    {% if post.is_external %}
-                    <span class="icon-external">[external icon]</span>
-                    {% endif %}
-
-                    {% if post.category %}
-                    <span class="icon-{{ post.category }}">[{{ post.category }} icon]</span>
-                    {% endif %}
-                </h2>
-                <p class="post-summary">{{ post.summary | safe }}</p>
-                {% if post.date and not post.is_default_date %}
-                <span class="post-date">{{ post.date | datetime('%d %B %Y') }}</span>
-                {% endif %}
-            </a>
-        </li>
-    {% endfor %}
-    </ol>
+    {% if posts %}
+        {% include "modules/posts_list.html" %}
     {% endif %}
 
 
-    {% if work_history %}
+    {% if work.history %}
     <ul id="work">
-    {% for job in work_history %}
+    {% for job in work.history %}
         {% set start, end = job.dates %}
         <li class="job">
             <h2 class="job-company">{{ job.company }}</h2>

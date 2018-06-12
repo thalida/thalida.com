@@ -10,9 +10,25 @@
 {% endblock %}
 
 {% block body %}
-    {{ post.meta | safe }}
-    <br /><br /><br /><br /><br /><br /><br />
-    {{ post.html | safe }}
-    <br /><br /><br /><br /><br /><br /><br />
-    next {{ next_posts | safe }}
+    <div id="post_header">
+        <h1>{{ post.meta.title }}</h1>
+        <hr />
+        {% if post.meta.date and not post.meta.is_default_date %}
+            <span>Posted on <span>{{ post.meta.date | datetime('%d %B %Y') }}</span></span>
+        {% endif %}
+        {% if post.meta.category %}
+            <span>Category <span>{{ post.meta.category }}</span></span>
+        {% endif %}
+    </div>
+    
+    <div id="post_content">
+        {{ post.html | safe }}
+    </div>
+
+    <div id="post_footer">
+        {% if posts %}
+            <h2>Next Up</h2>
+            {% include "modules/posts_list.html" %}
+        {% endif %}
+    </div>
 {% endblock %}
