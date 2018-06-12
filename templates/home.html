@@ -15,8 +15,14 @@ window.app_weather = {{ weather | tojson }};
 {% endblock %}
 
 {% block body %}
-    <div id="window">
-        {{ weather }}
+    <div id="scene">
+        <div id="scene-window">
+            {{ weather.icon }}
+            {{ time_group.label }}
+        </div>
+        <div id="scene-label">
+            {{ weather.temperature }} °{% if weather.units == 'us' %}F{% else %}C{% endif %} and {{ weather.summary }}
+        </div>
     </div>
 
 
@@ -26,13 +32,13 @@ window.app_weather = {{ weather | tojson }};
         </div>
         <div id="about-content">
             <p>
-                {{ greeting }}, my name’s Thalida, I’m a queer Trinidadian-American cisgender woman of color.
+                {{ time_group.greeting }}, my name’s Thalida, I’m a queer Trinidadian-American cisgender woman of color.
             </p>
             <p>
                 I was lucky enough to have a supportive mother, who got me thalida.com for my 16th birthday. It was one of the best gifts I’ve ever received, and is the reason I've become the software engineer I am today.
             </p>
             <p>
-                By day I’m a {{ work.current.title }} at {{ work.current.company }}{% if work.current.is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ work.years_since_start }} years.
+                By day I’m a {{ work.history[0].title }} at {{ work.history[0].company }}{% if work.history[0].is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ work.years_since_start }} years.
             </p>
             <p>
                 In the wee hours of the night I build robots with my partner, work on one of my many side projects, or catch up on Netflix shows.

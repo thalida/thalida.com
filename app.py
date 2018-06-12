@@ -13,15 +13,10 @@ import geocoder
 import secrets
 from markdown_posts import MarkdownPosts
 
-css_version = 1
-js_version = 1
-current_year = datetime.now().strftime('%Y')
-
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 posts = MarkdownPosts()
 
-NEWYORK = [40.7081, -73.9571]
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
     'WEATHER': 'weather',
@@ -29,11 +24,21 @@ COOKIE_KEYS = {
     'NUM_VISITS': 'total_visits',
 }
 
+now = datetime.now()
+cookie_update_date = dateparser.parse('2019-06-11T00:00:00')
+
+global_tpl_vars = {
+    'css_version': str(1),
+    'js_version': str(1),
+    'image_version': str(1),
+    'current_year': now.strftime('%Y'),
+}
+
 @app.route('/')
 def index():
     try:
-        currently, from_cookie = get_current_weather(request)
-        greeting = get_greeting(request)
+        weather = get_current_weather(request)
+        time_group = get_time_group(request)
         posts_meta = posts.visible_meta_by_date
         work = {
             'history': [
@@ -43,24 +48,20 @@ def index():
                 {'company': 'Webs', 'title': 'Frontend Engineer Intern', 'dates': [format_datetime('January 2013'), format_datetime('January 2014')]},
                 {'company': 'NASA Goddard/Space Operations Institute', 'title': 'Software Engineer Intern', 'dates': [format_datetime('March 2010'), format_datetime('January 2013')]},
             ],
-            'current': {},
             'years_since_start': 0,
         }
-        work['current'] = work['history'][0]
-        work['years_since_start'] = calc_years_between(work['history'][-1]['dates'][0], datetime.now().isoformat())
+        first_job_startdate = dateparser.parse(work['history'][-1]['dates'][0])
+        work['years_since_start'] = int(now.strftime('%Y')) - int(first_job_startdate.strftime('%Y'))
 
         response = make_response(render_template(
             'home.html', 
-            css_version=str(css_version),
-            js_version=str(js_version),
-            current_year=current_year,
-
-            weather=currently, 
-            greeting=greeting,
+            **global_tpl_vars,
+            weather=weather['current'], 
+            time_group=time_group,
             posts=posts_meta, 
             work=work,
         ))
-        update_cookies(request, response, visit=True, weather=currently if not from_cookie else None)
+        update_cookies(request, response, visit=True, weather=weather)
         return response
     except KeyError:
         abort(404)
@@ -79,10 +80,7 @@ def post(path):
         next_posts = posts.get_next_post_meta(post['path'], amount=3)
         response = make_response(render_template(
             'post.html', 
-            css_version=str(css_version),
-            js_version=str(js_version),
-            current_year=current_year,
-
+            **global_tpl_vars,
             post=post,
             posts=next_posts
         ))
@@ -98,6 +96,34 @@ def post(path):
 def not_found(exc):
     return redirect(url_for('index'))
 
+def get_time_group(request):
+    return {'greeting': "Hello", 'label': 'late-night'}
+
+def get_current_weather(request):
+    last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
+    last_visit_as_datetime = dateparser.parse(last_visit)
+    force_update = (last_visit_as_datetime - cookie_update_date).total_seconds() < 0
+
+    # Get current weather for location based on IP
+    weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+    if weather_cookie and not force_update:
+        current_weather = json.loads(weather_cookie)
+        from_cookie = True;
+    else:
+        newyork_latlng = [40.7081, -73.9571]
+        ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+        geo = geocoder.ip(ip)
+        lat, lng = geo.latlng if len(geo.latlng) == 2 else newyork_latlng
+        geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
+        current_weather = geo_forecast['currently']
+        current_weather['units'] = geo_forecast['flags']['units']
+        from_cookie = False
+
+    return {'current': current_weather, 'from_cookie': from_cookie}
+
+
+
+
 def format_datetime(value, format='iso'):
     if not isinstance(value, str):
         return value
@@ -108,50 +134,31 @@ def format_datetime(value, format='iso'):
     else:
         return date.strftime(format)
 
-def calc_years_between(start_iso, end_iso):
-    start_year = dateparser.parse(start_iso).strftime('%Y')
-    end_year = dateparser.parse(end_iso).strftime('%Y')
-    return int(end_year) - int(start_year)
-
-def get_greeting(request):
-    return "Greetings"
-
-def get_current_weather(request):
-    # Get current weather for location based on IP
-    weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
-    if weather_cookie:
-        current_weather = json.loads(weather_cookie)
-        from_cookie = True;
-    else:
-        ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-        geo = geocoder.ip(ip)
-        lat, lon = geo.latlng if len(geo.latlng) == 2 else NEWYORK
-        geo_forecast = forecast(secrets.FORECAST_KEY, lat, lon)
-        current_weather = geo_forecast['currently']
-        from_cookie = False
-
-    return current_weather, from_cookie
-
 def format_cookie_key(name):
     return '{namespace}-{name}'.format(namespace=COOKIE_NAMESPACE, name=name)
 
-def update_cookies(req, res, visit=True, weather=None):
-    if weather is not None:
-        res.set_cookie(format_cookie_key(COOKIE_KEYS['WEATHER']), json.dumps(weather), max_age=60*15) # keep for 15min
+def update_cookies(request, response, visit=True, weather=None):
+    last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
+    last_visit_as_datetime = dateparser.parse(last_visit)
+    
+    # check if a force update of cookies is required
+    force_update = (last_visit_as_datetime - cookie_update_date).total_seconds() < 0
+    print('force_update',force_update)
 
-    if visit:
-        now = datetime.now()
-        last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
-        last_visit_as_datetime = dateparser.parse(last_visit)
-        time_since_last_visit = (now - last_visit_as_datetime).total_seconds()
-        num_visits = int(req.cookies.get(format_cookie_key(COOKIE_KEYS['NUM_VISITS']), 0))
+    if weather is not None and (force_update or weather['from_cookie'] is False):
+        response.set_cookie(format_cookie_key(COOKIE_KEYS['WEATHER']), json.dumps(weather['current']), max_age=60*15) # keep for 15min
+
+    if force_update or visit:
+        # Update cookie with this visit timestamp
+        response.set_cookie(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), str(now.isoformat()), max_age=120*24*60*60) # save for 120 days
 
         # Only increment visits if there's been at least 1min from the last visit
+        # or if this is the first visit
+        time_since_last_visit = (now - last_visit_as_datetime).total_seconds()
+        num_visits = int(request.cookies.get(format_cookie_key(COOKIE_KEYS['NUM_VISITS']), 0))
         if time_since_last_visit > 60 or num_visits == 0:
             num_visits = num_visits + 1
-            res.set_cookie(format_cookie_key(COOKIE_KEYS['NUM_VISITS']), str(num_visits), max_age=60*24*60*60) # save for 60 days
-        
-        res.set_cookie(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), str(now.isoformat()), max_age=120*24*60*60) # save for 120 days
+            response.set_cookie(format_cookie_key(COOKIE_KEYS['NUM_VISITS']), str(num_visits), max_age=60*24*60*60) # save for 60 days
 
 
 app.jinja_env.filters['datetime'] = format_datetime

@@ -17,7 +17,7 @@
 
     <title>thalida - {% block title %}{% endblock %}</title>
     <meta name="description" content="Thalida's personal website, which includes links to her most recent projects, events, and activites.">
-    <!-- <link rel="shortcut icon" href="/favicon.ico?v=8"> -->
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico', v=image_version)}}">
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image">
