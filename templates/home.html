@@ -32,23 +32,38 @@ window.app_weather = {{ weather | tojson }};
         </div>
         <div id="about-content">
             <p>
-                {{ time_group.greeting }}, my name’s Thalida, I’m a queer Trinidadian-American cisgender woman of color.
+                {{ time_group.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
+                software engineer based in New York. For my 16th birthday I was lucky 
+                enough to be gifted this domain. It was one of the best presents 
+                I’ve ever received, being able to learn and grow on here is the 
+                main reason I’ve become the engineer I am today.
             </p>
             <p>
-                I was lucky enough to have a supportive mother, who got me thalida.com for my 16th birthday. It was one of the best gifts I’ve ever received, and is the reason I've become the software engineer I am today.
+                I’ve come a long way since 16 year old me, I’m now a {{ work.history[0].title }} at {{ work.history[0].company }}{% if work.history[0].is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %}, 
+                and I’ve been active in the industry for over {{ work.years_since_start }} years. 
             </p>
             <p>
-                By day I’m a {{ work.history[0].title }} at {{ work.history[0].company }}{% if work.history[0].is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %} in New York, and I’ve been active in the engineering world for over {{ work.years_since_start }} years.
+                Outside of work I build robots with my partner, work on one of 
+                my (way too many) side projects, play MarioKart, and discuss 
+                identitites, intersectionality, and inclusivity (especially in 
+                regards to tech). 
             </p>
             <p>
-                In the wee hours of the night I build robots with my partner, work on one of my many side projects, or catch up on Netflix shows.
+                If you want to discuss being queer, black, femme, or 
+                first-generation in tech, you’ve found the right girl! 
             </p>
             <p>
-                I’ve started to pull back  from using social media, so if you wanna keep in touch, let’s do it like it’s not {{ current_year }}: 
-                <a href="#">subscribe to my newsletter!</a>
+                But (there’s <em>always</em> a but), I’ve started to distance 
+                myself from social media, while it has beneficial moments it’s 
+                also become thourougly overwhelming… so if you want to keep in 
+                touch or talk, let’s do it like it’s not {{ current_year }}: 
+                <ol>
+                    <li><a href="#">subscribe to my newsletter!</a></li>
+                    <li>Send me an <a href="#">email</a></li>
+                </ol>
             </p>
             <p>
-                (I’m generally full of questions and bubble tea.)
+                (Fun Fact: I’m generally full of questions and bubble tea.)
             </p>
         </div>
     </div>
