@@ -1,2 +1,2 @@
-Title:   My Custom Default
+Title:   Journal
 Summary: This is a description

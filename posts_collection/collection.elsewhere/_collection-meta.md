@@ -1,1 +1,2 @@
 Title:   Elsewhere
+Icon:    external

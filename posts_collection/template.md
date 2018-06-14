@@ -1,7 +1,6 @@
 Title:        Template
 Summary:      Summary of Template
-Category:     game
-Collection:   collection_a
+Icon:     game
 Is_Featured:  yes
 
 

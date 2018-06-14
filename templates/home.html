@@ -72,30 +72,35 @@ window.app_weather = {{ weather | tojson }};
 
     {% for collection_key in collections_order %}
     {% set collection = globals.all_collections[collection_key] %}
-        <h2>{{ collection.meta.title }}</h2>
+        <h2>
+            {{ collection.meta.title }}
+
+            {% if collection.meta.icon %}
+            <span class="icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
+            {% endif %}
+        </h2>
+        <p>
+            {{ collection.meta.summary }}
+        </p>
         <ol id="posts">
         {% for post_key in collection.posts_in_order %}
-        {% set post = globals.all_posts_meta[post_key] %}
+        {% set post_meta = globals.all_posts_meta[post_key] %}
             <li class="post">
-                {% if post.is_external %}
-                <a href="{{ post.external_url | safe }}" target="_blank" rel="external">
+                {% if post_meta.is_external %}
+                <a href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
                 {% else %}
-                <a href="{{ post.url | safe }}">
+                <a href="{{ post_meta.url | safe }}">
                 {% endif %}
                     <h3 class="post-title">
-                        {{ post.title }}
+                        {{ post_meta.title }}
 
-                        {% if post.is_external %}
-                        <span class="icon-external">[external icon]</span>
-                        {% endif %}
-
-                        {% if post.category %}
-                        <span class="icon-{{ post.category }}">[{{ post.category }} icon]</span>
+                        {% if post_meta.icon %}
+                        <span class="icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
                         {% endif %}
                     </h3>
-                    <p class="post-summary">{{ post.summary | safe }}</p>
-                    {% if post.date and not post.is_default_date %}
-                    <span class="post-date">{{ post.date | datetime('%d %B %Y') }}</span>
+                    <p class="post-summary">{{ post_meta.summary | safe }}</p>
+                    {% if post_meta.date and not post_meta.is_default_date %}
+                    <span class="post-date">{{ post_meta.date | datetime('%d %B %Y') }}</span>
                     {% endif %}
                 </a>
                 <hr />
@@ -104,6 +109,7 @@ window.app_weather = {{ weather | tojson }};
         </ol>
     {% endfor %}
 
+    <h1>Career</h1>
 
     {% if work.history %}
     <ul id="work">
