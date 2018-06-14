@@ -8,11 +8,12 @@ from pprint import pprint
 import markdown
 import dateparser
 
-class MarkdownCollections:
+class PostCollection:
     POSTS_URL_DECORATOR = '/x/'
-    POSTS_DIR = 'posts/'
+    POSTS_DIR = 'posts_collection/'
     POSTS_EXT = '.md'
     COLLECTION_PREFIX = '/collection.'
+    DEFAULT_COLLECTION_KEY = 'default'
 
     MARKDOWN_EXTENSIONS = [
         'markdown.extensions.attr_list',
@@ -38,11 +39,10 @@ class MarkdownCollections:
         self.posts_html = {}
         self.url_to_path = {}
         self.collections = {}
-        self.default_collection = {'key': 'default', 'meta': {'title': 'Journal'}}
-        self.collections_order = ['whats-on-my', 'default', 'elsewhere']
+        self.collections_order = ['whats-on-my', self.DEFAULT_COLLECTION_KEY, 'elsewhere']
 
         if run_load:
-            self._load_posts()
+            self._load()
 
     def get_post_by_url(self, url):
         return self.get_post_by_path(self.url_to_path[url])
@@ -65,14 +65,14 @@ class MarkdownCollections:
 
         return next_posts
 
-    def _load_posts(self):
+    def _load(self):
         for filepath in self._fetch_post_filepaths():
             post = self._fetch_post(filepath)
             path = post['meta']['path']
             collection = post['meta']['collection']
 
             if collection not in self.collections:
-                self.collections[collection] = {'posts': [], 'posts_in_order': []}
+                self.collections[collection] = {'meta': {}, 'posts': [], 'posts_in_order': []}
 
             if post['meta']['is_collection_meta']:
                 self.collections[collection]['meta'] = post['meta']
@@ -87,9 +87,6 @@ class MarkdownCollections:
             collection_post_meta = [self.posts_meta[post] for post in collection['posts']]
             posts_by_date = sorted(collection_post_meta, key=lambda x: (x['date'], x['title']), reverse=True)
             collection['posts_in_order'] = [post['path'] for post in posts_by_date]
-
-            if 'meta' not in collection:
-                collection['meta'] = self.default_collection['meta']
 
     def _fetch_post_filepaths(self):
         search_path = '{dir}**/*{ext}'.format(dir=self.POSTS_DIR, ext=self.POSTS_EXT)
@@ -112,7 +109,6 @@ class MarkdownCollections:
             'date': '2007-09-16',
             'is_hidden': False,
             'is_draft': False,
-            'collection': self.default_collection['key'],
             'is_collection_meta': False,
             'is_post_meta': False,
         }
@@ -125,9 +121,9 @@ class MarkdownCollections:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
 
         formatted_meta['path'] = path
-        formatted_meta['collection'] = self._get_collection_from_path(path, defaults['collection'])
+        formatted_meta['collection'] = self._get_collection_from_path(path)
 
-        if path.find('_index.md') > 0:
+        if path.find('_collection-meta.md') > 0:
             formatted_meta['is_collection_meta'] = True
             return formatted_meta
 
@@ -149,9 +145,9 @@ class MarkdownCollections:
         url = url.rsplit(self.POSTS_EXT, 1)[0]
         return url
 
-    def _get_collection_from_path(self, path, default_collection):
+    def _get_collection_from_path(self, path):
         if path.find(self.COLLECTION_PREFIX) == -1:
-            return default_collection
+            return self.DEFAULT_COLLECTION_KEY
 
         parts = path.split(self.COLLECTION_PREFIX, 1)
         collection_key = parts[1].split('/', 1)[0]

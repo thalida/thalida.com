@@ -4,14 +4,14 @@
 {% endblock %}
 
 {% block styles %}
-<link href="{{url_for('static', filename='css/home.css', v=css_version)}}" rel="stylesheet">
+<link href="{{url_for('static', filename='css/home.css', v=globals.css_version)}}" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
 <script>
 window.app_weather = {{ weather | tojson }};
 </script>
-<script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=js_version)}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.js_version)}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -56,7 +56,7 @@ window.app_weather = {{ weather | tojson }};
                 But (there’s <em>always</em> a but), I’ve started to distance 
                 myself from social media, while it has beneficial moments it’s 
                 also become thourougly overwhelming… so if you want to keep in 
-                touch or talk, let’s do it like it’s not {{ current_year }}: 
+                touch or talk, let’s do it like it’s not {{ globals.datetime.current_year }}: 
                 <ol>
                     <li><a href="#">subscribe to my newsletter!</a></li>
                     <li>Send me an <a href="#">email</a></li>
@@ -70,12 +70,12 @@ window.app_weather = {{ weather | tojson }};
 
     <h1>Collections</h1>
 
-    {% for collection_key in newstuff.collections_order %}
-    {% set collection = newstuff.collections[collection_key] %}
+    {% for collection_key in collections_order %}
+    {% set collection = globals.all_collections[collection_key] %}
         <h2>{{ collection.meta.title }}</h2>
         <ol id="posts">
         {% for post_key in collection.posts_in_order %}
-        {% set post = newstuff.posts_meta[post_key] %}
+        {% set post = globals.all_posts_meta[post_key] %}
             <li class="post">
                 {% if post.is_external %}
                 <a href="{{ post.external_url | safe }}" target="_blank" rel="external">
@@ -103,16 +103,6 @@ window.app_weather = {{ weather | tojson }};
         {% endfor %}
         </ol>
     {% endfor %}
-
-    <!-- {{ newstuff.collections_order | safe }}
-    {{ newstuff.collections | safe }}
-    {{ newstuff.posts_meta | safe }} -->
-    
-    <h1>Original</h1>
-
-    {% if posts %}
-        {% include "modules/posts_list.html" %}
-    {% endif %}
 
 
     {% if work.history %}

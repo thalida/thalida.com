@@ -12,15 +12,11 @@ import geocoder
 
 # Locals
 import secrets
-from markdown_posts import MarkdownPosts
-from markdown_collections import MarkdownCollections
+from posts_collection import PostCollection
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-posts = MarkdownPosts()
-
-new_posts = MarkdownCollections()
-pprint(new_posts)
+my_posts = PostCollection()
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
@@ -33,10 +29,17 @@ now = datetime.now()
 cookie_update_date = dateparser.parse('2019-06-11T00:00:00')
 
 global_tpl_vars = {
-    'css_version': str(1),
-    'js_version': str(1),
-    'image_version': str(1),
-    'current_year': now.strftime('%Y'),
+    'globals': {
+        'css_version': str(1),
+        'js_version': str(1),
+        'image_version': str(1),
+        'datetime': {
+            'now': now,
+            'current_year': now.strftime('%Y'),
+        },
+        'all_collections': my_posts.collections,
+        'all_posts_meta': my_posts.posts_meta,
+    }
 }
 
 @app.route('/')
@@ -44,7 +47,7 @@ def index():
     try:
         weather = get_current_weather(request)
         time_group = get_time_group(request)
-        posts_meta = posts.visible_meta_by_date
+        collections_order = my_posts.collections_order
         work = {
             'history': [
                 {'company': 'Etsy', 'title': 'Senior Software Engineer', 'dates': [format_datetime('May 2017'), None], 'is_hiring': True},
@@ -63,14 +66,8 @@ def index():
             **global_tpl_vars,
             weather=weather['current'], 
             time_group=time_group,
-            posts=posts_meta, 
+            collections_order=collections_order, 
             work=work,
-
-            newstuff={
-                'collections': new_posts.collections,
-                'posts_meta': new_posts.posts_meta,
-                'collections_order': new_posts.collections_order,
-            }
         ))
         update_cookies(request, response, visit=True, weather=weather)
         return response
@@ -80,23 +77,21 @@ def index():
         logger.exception('500 Error Fetching Index')
         abort(500)
 
-@app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
+@app.route('{posts_path}<path:path>'.format(posts_path=my_posts.POSTS_URL_DECORATOR))
 def post(path):
     try:
-        post = new_posts.get_post_by_url(request.path)
-        collection = new_posts.collections[post['meta']['collection']]
+        post = my_posts.get_post_by_url(request.path)
 
         if post['meta']['is_external']:
             return redirect(post['meta']['external_url'])
 
-        next_posts = new_posts.get_next_posts(post, amount=3)
+        next_posts = my_posts.get_next_posts(post, amount=3)
+
         response = make_response(render_template(
             'post.html', 
             **global_tpl_vars,
             post=post,
-            posts_meta=new_posts.posts_meta,
             next_posts=next_posts,
-            collection=collection
         ))
         update_cookies(request, response, visit=True)
         return response
@@ -134,7 +129,6 @@ def get_current_weather(request):
         from_cookie = False
 
     return {'current': current_weather, 'from_cookie': from_cookie}
-
 
 
 
