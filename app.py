@@ -2,6 +2,7 @@
 import logging
 import json
 from datetime import datetime
+from pprint import pprint
 
 # Third Party
 from flask import Flask, request, make_response, render_template, redirect, url_for, abort
@@ -12,10 +13,14 @@ import geocoder
 # Locals
 import secrets
 from markdown_posts import MarkdownPosts
+from markdown_collections import MarkdownCollections
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 posts = MarkdownPosts()
+
+new_posts = MarkdownCollections()
+pprint(new_posts)
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
@@ -60,6 +65,12 @@ def index():
             time_group=time_group,
             posts=posts_meta, 
             work=work,
+
+            newstuff={
+                'collections': new_posts.collections,
+                'posts_meta': new_posts.posts_meta,
+                'collections_order': new_posts.collections_order,
+            }
         ))
         update_cookies(request, response, visit=True, weather=weather)
         return response
@@ -72,17 +83,20 @@ def index():
 @app.route('{posts_path}<path:path>'.format(posts_path=posts.POSTS_URL_DECORATOR))
 def post(path):
     try:
-        post = posts.get_post_by_url(request.path)
+        post = new_posts.get_post_by_url(request.path)
+        collection = new_posts.collections[post['meta']['collection']]
 
         if post['meta']['is_external']:
             return redirect(post['meta']['external_url'])
 
-        next_posts = posts.get_next_post_meta(post['path'], amount=3)
+        next_posts = new_posts.get_next_posts(post, amount=3)
         response = make_response(render_template(
             'post.html', 
             **global_tpl_vars,
             post=post,
-            posts=next_posts
+            posts_meta=new_posts.posts_meta,
+            next_posts=next_posts,
+            collection=collection
         ))
         update_cookies(request, response, visit=True)
         return response
