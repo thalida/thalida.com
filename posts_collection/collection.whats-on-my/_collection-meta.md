@@ -1,2 +1,2 @@
 Title:   What's On My ____
-Summary: This is a description
+Summary: Continuously updated list of what’s on my desks, devices, and shelves.

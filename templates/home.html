@@ -15,118 +15,123 @@ window.app_weather = {{ weather | tojson }};
 {% endblock %}
 
 {% block body %}
-    <div id="scene">
-        <div id="scene-window">
+<div class="home">
+    <!-- <div class="scene">
+        <div class="scene__window">
             {{ weather.icon }}
             {{ time_group.label }}
         </div>
-        <div id="scene-label">
+        <div class="scene__label">
             {{ weather.temperature }} °{% if weather.units == 'us' %}F{% else %}C{% endif %} and {{ weather.summary }}
         </div>
-    </div>
+    </div> -->
 
 
-    <div id="about">
-        <div id="about-title">
-            <h1>Everyday Thoughts <br />& Strange Ideas</h1>
-        </div>
-        <div id="about-content">
-            <p>
+    <div class="about">
+        <h1 class="about__header header--primary">
+            Everyday Thoughts 
+            <br /><span class="about__leaves">&</span> 
+            Strange Ideas.
+        </h1>
+        <div class="about__content">
+            <p class="about__text text--primary">
                 {{ time_group.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
                 software engineer based in New York. For my 16th birthday I was lucky 
                 enough to be gifted this domain. It was one of the best presents 
                 I’ve ever received, being able to learn and grow on here is the 
                 main reason I’ve become the engineer I am today.
             </p>
-            <p>
-                I’ve come a long way since 16 year old me, I’m now a {{ work.history[0].title }} at {{ work.history[0].company }}{% if work.history[0].is_hiring %} <a href="https://etsy.com/careers" target="_blank">(we’re hiring)</a>{% endif %}, 
+            <p class="about__text text--primary">
+                I’ve come a long way since 16 year old me, I’m now a 
+                {{ work.history[0].title }} at {{ work.history[0].company }}
+                {% if work.history[0].is_hiring %} (<a class="link--primary" href="https://etsy.com/careers" target="_blank">we’re hiring</a>){% endif %}, 
                 and I’ve been active in the industry for over {{ work.years_since_start }} years. 
             </p>
-            <p>
+            <p class="about__text text--primary">
                 Outside of work I build robots with my partner, work on one of 
                 my (way too many) side projects, play MarioKart, and discuss 
                 identitites, intersectionality, and inclusivity (especially in 
                 regards to tech). 
             </p>
-            <p>
+            <p class="about__text text--primary">
                 If you want to discuss being queer, black, femme, or 
                 first-generation in tech, you’ve found the right girl! 
             </p>
-            <p>
+            <p class="about__text text--primary">
                 But (there’s <em>always</em> a but), I’ve started to distance 
                 myself from social media, while it has beneficial moments it’s 
                 also become thourougly overwhelming… so if you want to keep in 
                 touch or talk, let’s do it like it’s not {{ globals.datetime.current_year }}: 
-                <ol>
-                    <li><a href="#">subscribe to my newsletter!</a></li>
-                    <li>Send me an <a href="#">email</a></li>
-                </ol>
             </p>
-            <p>
+            <ol class="about__text text--primary">
+                <li><a class="link--primary" href="#">subscribe to my newsletter!</a></li>
+                <li>Send me an <a class="link--primary" href="#">email</a></li>
+            </ol>
+            <p class="about__text text--primary">
                 (Fun Fact: I’m generally full of questions and bubble tea.)
             </p>
         </div>
     </div>
 
-    <h1>Collections</h1>
-
     {% for collection_key in collections_order %}
     {% set collection = globals.all_collections[collection_key] %}
-        <h2>
-            {{ collection.meta.title }}
+        <div class="collection">
+            <h2 class="collection__header header--secondary">
+                {{ collection.meta.title }}
 
-            {% if collection.meta.icon %}
-            <span class="icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
-            {% endif %}
-        </h2>
-        <p>
-            {{ collection.meta.summary }}
-        </p>
-        <ol id="posts">
-        {% for post_key in collection.posts_in_order %}
-        {% set post_meta = globals.all_posts_meta[post_key] %}
-            <li class="post">
-                {% if post_meta.is_external %}
-                <a href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
-                {% else %}
-                <a href="{{ post_meta.url | safe }}">
+                {% if collection.meta.icon %}
+                <span class="collection__icon icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
                 {% endif %}
-                    <h3 class="post-title">
+            </h2>
+            <p class="collection__summary text--primary">
+                {{ collection.meta.summary }}
+            </p>
+            <div class="collection__posts">
+            {% for post_key in collection.posts_in_order %}
+            {% set post_meta = globals.all_posts_meta[post_key] %}
+                {% if post_meta.is_external %}
+                <a class="post post--external" href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
+                {% else %}
+                <a class="post" href="{{ post_meta.url | safe }}">
+                {% endif %}
+                    <h3 class="post__header">
                         {{ post_meta.title }}
-
                         {% if post_meta.icon %}
-                        <span class="icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
+                        <span class="post__icon icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
                         {% endif %}
                     </h3>
-                    <p class="post-summary">{{ post_meta.summary | safe }}</p>
+                    <p class="post__summary">{{ post_meta.summary | safe }}</p>
                     {% if post_meta.date and not post_meta.is_default_date %}
-                    <span class="post-date">{{ post_meta.date | datetime('%d %B %Y') }}</span>
+                    <span class="post__details">{{ post_meta.date | datetime('%d %B %Y') }}</span>
                     {% endif %}
                 </a>
-                <hr />
+            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+
+    <!-- <div class="jobs">
+        <h1 class="jobs__title">Career</h1>
+
+        {% if work.history %}
+        <ul calss="jobs__content">
+        {% for job in work.history %}
+            {% set start, end = job.dates %}
+            <li class="job">
+                <h2 class="job__company">{{ job.company }}</h2>
+                <p class="job__title">{{ job.title }}</p>
+                <p class="job__dates">
+                    <span class="job__dates--start">{{ start | datetime('%b %Y') }}</span>
+                    - 
+                    <span class="job__dates--end">
+                        {{ end | datetime('%b %Y') | default('Now',true) }}
+                    </span>
+                </p>
             </li>
         {% endfor %}
-        </ol>
-    {% endfor %}
-
-    <h1>Career</h1>
-
-    {% if work.history %}
-    <ul id="work">
-    {% for job in work.history %}
-        {% set start, end = job.dates %}
-        <li class="job">
-            <h2 class="job-company">{{ job.company }}</h2>
-            <p class="job-title">{{ job.title }}</p>
-            <p class="job-dates">
-                <span class="job-dates-start">{{ start | datetime('%b %Y') }}</span>
-                - 
-                <span class="job-dates-end">
-                    {{ end | datetime('%b %Y') | default('Now',true) }}
-                </span>
-            </p>
-        </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
+        </ul>
+        {% endif %}
+    </div> -->
+</div>
 {% endblock %}

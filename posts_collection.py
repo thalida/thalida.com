@@ -34,12 +34,13 @@ class PostCollection:
 
     def __init__(self, run_load=True):
         self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
-        
+
         self.posts_meta = {}
         self.posts_html = {}
         self.url_to_path = {}
         self.collections = {}
-        self.collections_order = ['whats-on-my', self.DEFAULT_COLLECTION_KEY, 'elsewhere']
+        self.collections_order = []
+        # self.collections_order = ['whats-on-my', self.DEFAULT_COLLECTION_KEY, 'elsewhere']
 
         if run_load:
             self._load()
@@ -55,7 +56,8 @@ class PostCollection:
 
     def get_next_posts(self, curr_post, amount=1):
         collection_posts = self.collections[curr_post['meta']['collection']]['posts_in_order']
-        start_index = collection_posts.index(curr_post['meta']['path']) + 1
+        curr_post_index = collection_posts.index(curr_post['meta']['path'])
+        start_index = curr_post_index + 1
         end_index = start_index + amount
         next_posts = collection_posts[start_index:end_index]
 
@@ -66,13 +68,17 @@ class PostCollection:
         return next_posts
 
     def _load(self):
-        for filepath in self._fetch_post_filepaths():
+        filepaths = self._fetch_post_filepaths()
+        self.collections_order = [None] * len(filepaths)
+
+        for filepath in filepaths:
             post = self._fetch_post(filepath)
             path = post['meta']['path']
             collection = post['meta']['collection']
 
             if collection not in self.collections:
                 self.collections[collection] = {'meta': {}, 'posts': [], 'posts_in_order': []}
+                self.collections_order.append(collection)
 
             if post['meta']['is_collection_meta']:
                 self.collections[collection]['meta'] = post['meta']
@@ -87,6 +93,8 @@ class PostCollection:
             collection_post_meta = [self.posts_meta[post] for post in collection['posts']]
             posts_by_date = sorted(collection_post_meta, key=lambda x: (x['date'], x['title']), reverse=True)
             collection['posts_in_order'] = [post['path'] for post in posts_by_date]
+
+        self.collections_order = [c for c in self.collections_order if c is not None]
 
     def _fetch_post_filepaths(self):
         search_path = '{dir}**/*{ext}'.format(dir=self.POSTS_DIR, ext=self.POSTS_EXT)

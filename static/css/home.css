@@ -1,0 +1,67 @@
+.home {}
+
+
+.scene {}
+    .scene__window {}
+    .scene__label {}
+
+
+.about {
+    margin-top: 10.0rem;
+}
+    .about__header {
+        margin-bottom: 5.0rem;
+    }
+    .about__leaves {
+        display: inline-block;
+    }
+    .about__leaves:after {
+        content: "";
+        display: block;
+        position: absolute;
+        text-indent: -9999px;
+
+        height: 2.0em;
+        width: 2.0em;
+        margin-top: -0.5em;
+        margin-left: 0.4em;
+
+        background: url(/static/images/home/about__leaves.svg);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    .about__content {
+      -webkit-columns: 2 30rem;
+         -moz-columns: 2 30rem;
+              columns: 2 30rem;
+      -webkit-column-gap: 2.5rem;
+         -moz-column-gap: 2.5rem;
+              column-gap: 2.5rem;
+    }
+    .about__text{
+        margin: 0 0 1.0rem;
+    }
+
+.collection {
+    margin: 5.0rem 0;
+}
+    .collection__header {
+        line-height: 1em;
+    }
+    .collection__icon {}
+    .collection__summary {
+        padding: 0;
+        margin: 0.5em 0 0;
+    }
+    .collection__posts {
+        margin: 1.0rem 0 0;
+    }
+
+
+.post {}
+    .post__header {}
+    .post__icon {}
+    .post__summary {}
+    .post__details {}
+
+    .post--external {}

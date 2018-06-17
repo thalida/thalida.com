@@ -1,2 +1,1 @@
-Title:   Journal
-Summary: This is a description
+Title:   Everything Else
