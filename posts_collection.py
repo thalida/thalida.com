@@ -40,7 +40,6 @@ class PostCollection:
         self.url_to_path = {}
         self.collections = {}
         self.collections_order = []
-        # self.collections_order = ['whats-on-my', self.DEFAULT_COLLECTION_KEY, 'elsewhere']
 
         if run_load:
             self._load()
@@ -68,39 +67,53 @@ class PostCollection:
         return next_posts
 
     def _load(self):
-        filepaths = self._fetch_post_filepaths()
-        self.collections_order = [None] * len(filepaths)
+        filepaths = self._get_filepaths()
 
         for filepath in filepaths:
-            post = self._fetch_post(filepath)
-            path = post['meta']['path']
-            collection = post['meta']['collection']
+            file = self._load_file(filepath)
+
+            path = file['meta']['path']
+            collection = file['meta']['collection']
 
             if collection not in self.collections:
-                self.collections[collection] = {'meta': {}, 'posts': [], 'posts_in_order': []}
-                self.collections_order.append(collection)
+                self.collections[collection] = {
+                    'key': collection, 
+                    'meta': {}, 
+                    'posts': [], 
+                    'posts_in_order': []
+                }
 
-            if post['meta']['is_collection_meta']:
-                self.collections[collection]['meta'] = post['meta']
+            if file['meta']['is_collection_meta']:
+                self.collections[collection]['meta'] = file['meta']
 
-            if post['meta']['is_post_meta'] and post['meta']['is_visible']:
-                self.posts_meta[path] = post['meta']
-                self.posts_html[path] = post['html']
+            if file['meta']['is_post_meta'] and file['meta']['is_visible']:
+                self.posts_meta[path] = file['meta']
+                self.posts_html[path] = file['html']
                 self.collections[collection]['posts'].append(path)
-                self.url_to_path[post['meta']['url']] = path
+                self.url_to_path[file['meta']['url']] = path
 
-        for key, collection in self.collections.items():
-            collection_post_meta = [self.posts_meta[post] for post in collection['posts']]
-            posts_by_date = sorted(collection_post_meta, key=lambda x: (x['date'], x['title']), reverse=True)
-            collection['posts_in_order'] = [post['path'] for post in posts_by_date]
+        collection_items = self.collections.items()
+        collections_in_order = [None] * len(collection_items)
+        skipped_collections = []
+        for key, collection in collection_items:
+            collection['posts_in_order'] = self._sort_posts(collection['posts'])
+            
+            if collection['meta'].get('index') is not None:
+                index = int(collection['meta'].get('index'))
+                collection_in_order = self._upsert(collections_in_order, index, key)
+            else:
+                skipped_collections.append(key)
 
-        self.collections_order = [c for c in self.collections_order if c is not None]
+        for collection in skipped_collections:
+            collection_in_order = self._upsert(collections_in_order, None, collection)
 
-    def _fetch_post_filepaths(self):
+        self.collections_order = [c for c in collections_in_order if c is not None]
+
+    def _get_filepaths(self):
         search_path = '{dir}**/*{ext}'.format(dir=self.POSTS_DIR, ext=self.POSTS_EXT)
         return glob.glob(search_path, recursive=True)
 
-    def _fetch_post(self, path):
+    def _load_file(self, path):
         with open(path, 'r') as f:
             file_contents = f.read()
             html = self.markdown.reset().convert(file_contents)
@@ -109,6 +122,11 @@ class PostCollection:
                 'html': html,
                 'meta': meta
             }
+
+    def _sort_posts(self, post_keys):
+        posts_meta = [self.posts_meta[post_key] for post_key in post_keys]
+        posts_by_date = sorted(posts_meta, key=lambda x: (x['date'], x['title']), reverse=True)
+        return [post['path'] for post in posts_by_date]
 
     def _format_meta(self, meta, path):
         formatted_meta = dict()
@@ -121,15 +139,29 @@ class PostCollection:
             'is_post_meta': False,
         }
 
+        types = {
+            'date': 'date',
+            'date_updated': 'date',
+            'date_posted': 'date',
+            'is_hidden': 'boolean',
+            'is_draft': 'boolean',
+        }
+
+        formatted_meta = {k.lower(): v for k, v in meta.items()}
+        # formatted_meta = {k: formatted_meta.get(k, defaults[k]) for k in defaults}
+        # formatted_meta = {k: self._cast(formatted_meta.get(k), v) for k, v in types.items()}
+
         for k, v in meta.items():
             key = k.lower()
             formatted_meta[k.lower()] = self._parse_str(v[0]) if len(v) <= 1 else v
 
         for key in defaults:
             formatted_meta[key] = formatted_meta.get(key, defaults[key])
+        
+        print(formatted_meta)
 
         formatted_meta['path'] = path
-        formatted_meta['collection'] = self._get_collection_from_path(path)
+        formatted_meta['collection'] = self._parse_collection_from_path(path)
 
         if path.find('_collection-meta.md') > 0:
             formatted_meta['is_collection_meta'] = True
@@ -153,7 +185,7 @@ class PostCollection:
         url = url.rsplit(self.POSTS_EXT, 1)[0]
         return url
 
-    def _get_collection_from_path(self, path):
+    def _parse_collection_from_path(self, path):
         if path.find(self.COLLECTION_PREFIX) == -1:
             return self.DEFAULT_COLLECTION_KEY
 
@@ -172,4 +204,16 @@ class PostCollection:
             return False
         else:
             return s
+
+    def _cast(self, item, type):
+        print(item, type)
+
+    def _upsert(self, arr, idx, val):
+        idx = arr.index(None) if idx is None else idx
+
+        if arr[idx] is None:
+            arr[idx] = val
+        else:
+            arr.insert(idx, val)
+        return arr
 
