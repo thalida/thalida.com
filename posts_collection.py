@@ -41,16 +41,36 @@ class PostCollection:
         self.collections = {}
         self.collections_order = []
 
+        self.META_DEFAULTS = {
+            'index':  (PostCollection._cast_to_int, None), 
+            'title': (PostCollection._cast_to_string, 'Untitled'), 
+            'date': (PostCollection._cast_to_date, '2007-09-16'), 
+            'date_updated': (PostCollection._cast_to_date, None), 
+            'date_posted': (PostCollection._cast_to_date, None), 
+            'tags': (PostCollection._cast_to_list, []), 
+            'is_hidden': (PostCollection._cast_to_bool, False), 
+            'is_draft': (PostCollection._cast_to_bool, False), 
+            'is_collection_meta': (PostCollection._cast_to_bool, False), 
+            'is_post_meta': (PostCollection._cast_to_bool, False),
+        }
+
+        self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, '')
+
         if run_load:
             self._load()
 
     def get_post_by_url(self, url):
-        return self.get_post_by_path(self.url_to_path[url])
+        post = self.get_post_by_path(self.url_to_path[url])
+        return post
 
     def get_post_by_path(self, path):
+        post_html = self.posts_html[path]
+        post_meta = self.posts_meta[path]
+        collection_meta = self.collections[post_meta['collection']]['meta']
         return {
-            'html': self.posts_html[path],
-            'meta': self.posts_meta[path],
+            'html': post_html,
+            'meta': post_meta,
+            'collection_meta': collection_meta
         }
 
     def get_next_posts(self, curr_post, amount=1):
@@ -86,26 +106,28 @@ class PostCollection:
             if file['meta']['is_collection_meta']:
                 self.collections[collection]['meta'] = file['meta']
 
-            if file['meta']['is_post_meta'] and file['meta']['is_visible']:
+            if file['meta']['is_post_meta']:
                 self.posts_meta[path] = file['meta']
                 self.posts_html[path] = file['html']
+
                 self.collections[collection]['posts'].append(path)
                 self.url_to_path[file['meta']['url']] = path
 
         collection_items = self.collections.items()
         collections_in_order = [None] * len(collection_items)
         skipped_collections = []
-        for key, collection in collection_items:
-            collection['posts_in_order'] = self._sort_posts(collection['posts'])
-            
-            if collection['meta'].get('index') is not None:
-                index = int(collection['meta'].get('index'))
-                collection_in_order = self._upsert(collections_in_order, index, key)
-            else:
-                skipped_collections.append(key)
 
-        for collection in skipped_collections:
-            collection_in_order = self._upsert(collections_in_order, None, collection)
+        for collection_key, collection in collection_items:
+            collection['posts_in_order'] = self._sort_posts(collection['posts'])
+            index = collection['meta']['index']
+
+            if index is not None and index < len(collections_in_order):
+                collections_in_order = self._upsert(collections_in_order, collection_key, index=index)
+            else:
+                skipped_collections.append(collection_key)
+
+        for collection_key in skipped_collections:
+            collections_in_order = self._upsert(collections_in_order, collection_key)
 
         self.collections_order = [c for c in collections_in_order if c is not None]
 
@@ -129,54 +151,20 @@ class PostCollection:
         return [post['path'] for post in posts_by_date]
 
     def _format_meta(self, meta, path):
-        formatted_meta = dict()
+        all_meta_keys = list(set([k.lower() for k in meta.keys()] + list(self.META_DEFAULTS.keys())))
 
-        defaults = {
-            'date': '2007-09-16',
-            'is_hidden': False,
-            'is_draft': False,
-            'is_collection_meta': False,
-            'is_post_meta': False,
-        }
-
-        types = {
-            'date': 'date',
-            'date_updated': 'date',
-            'date_posted': 'date',
-            'is_hidden': 'boolean',
-            'is_draft': 'boolean',
-        }
-
-        formatted_meta = {k.lower(): v for k, v in meta.items()}
-        # formatted_meta = {k: formatted_meta.get(k, defaults[k]) for k in defaults}
-        # formatted_meta = {k: self._cast(formatted_meta.get(k), v) for k, v in types.items()}
-
-        for k, v in meta.items():
-            key = k.lower()
-            formatted_meta[k.lower()] = self._parse_str(v[0]) if len(v) <= 1 else v
-
-        for key in defaults:
-            formatted_meta[key] = formatted_meta.get(key, defaults[key])
-        
-        print(formatted_meta)
-
+        formatted_meta = {k.lower(): self._cast(k, meta.get(k)) for k in all_meta_keys}
         formatted_meta['path'] = path
         formatted_meta['collection'] = self._parse_collection_from_path(path)
+        formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
+        formatted_meta['is_default_date'] = formatted_meta.get('date') is self.META_DEFAULTS['date'][1]
 
         if path.find('_collection-meta.md') > 0:
             formatted_meta['is_collection_meta'] = True
-            return formatted_meta
-
-        formatted_meta['is_post_meta'] = True
-        formatted_meta['url'] = self._convert_path_to_url(path)
-        formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
-        formatted_meta['is_external'] = 'external_url' in formatted_meta
-
-        if formatted_meta.get('date') is defaults['date']:
-            formatted_meta['is_default_date'] = True
-
-        formatted_meta['date'] = dateparser.parse(formatted_meta.get('date')).isoformat()
-
+        else:
+            formatted_meta['is_post_meta'] = True
+            formatted_meta['url'] = self._convert_path_to_url(path)
+            formatted_meta['is_external'] = 'external_url' in formatted_meta
         return formatted_meta
 
     def _convert_path_to_url(self, path): 
@@ -192,28 +180,53 @@ class PostCollection:
         parts = path.split(self.COLLECTION_PREFIX, 1)
         collection_key = parts[1].split('/', 1)[0]
         return collection_key
+                
+    def _upsert(self, arr, val, index=None):
+        index = arr.index(None) if index is None else index
 
-    def _parse_str(self, s):
-        truthy = ('true', 'yes')
-        falsey = ('false', 'no')
-
-        ls = s.lower()
-        if ls in truthy:
-            return True
-        elif ls in falsey:
-            return False
+        if arr[index] is None:
+            arr[index] = val
         else:
-            return s
+            arr.insert(index, val)
 
-    def _cast(self, item, type):
-        print(item, type)
-
-    def _upsert(self, arr, idx, val):
-        idx = arr.index(None) if idx is None else idx
-
-        if arr[idx] is None:
-            arr[idx] = val
-        else:
-            arr.insert(idx, val)
         return arr
+
+    def _cast(self, key, value):
+        (return_type, default_value) = self.META_DEFAULTS.get(key, self.META_FALLBACK_DEFAULT)
+
+        if value is None:
+            value = default_value
+            return value
+
+        return return_type(value)
+
+    @staticmethod
+    def _cast_to_int(value):
+        if value is None:
+            return value
+        return int(PostCollection._cast_to_string(value))
+
+    @staticmethod
+    def _cast_to_list(value):
+        return value if isinstance(value, list) else [value]
+
+    @staticmethod
+    def _cast_to_string(value):
+        if isinstance(value, list):
+            value = " ".join(value)
+        return str(value)
+
+    @staticmethod
+    def _cast_to_bool(value):
+        if isinstance(value, bool):
+            return value
+
+        truthy = ['true', 'yes', '1']
+        value = PostCollection._cast_to_string(value).lower()
+        return value in truthy
+
+    @staticmethod
+    def _cast_to_date(value):
+        value = PostCollection._cast_to_string(value).lower()
+        return dateparser.parse(value).isoformat()
 

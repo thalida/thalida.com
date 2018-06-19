@@ -82,6 +82,9 @@ def post(path):
     try:
         post = my_posts.get_post_by_url(request.path)
 
+        if not post['collection_meta']['is_visible'] or not post['meta']['is_visible']:
+            raise PostHiddenError
+
         if post['meta']['is_external']:
             return redirect(post['meta']['external_url'])
 
@@ -95,6 +98,8 @@ def post(path):
         ))
         update_cookies(request, response, visit=True)
         return response
+    except PostHiddenError:
+        abort(404)
     except KeyError:
         abort(404)
     except Exception:
