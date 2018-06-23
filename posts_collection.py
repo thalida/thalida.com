@@ -43,8 +43,8 @@ class PostCollection:
 
         self.META_DEFAULTS = {
             'index':  (PostCollection._cast_to_int, None), 
-            'title': (PostCollection._cast_to_string, 'Untitled'), 
-            'date': (PostCollection._cast_to_date, '2007-09-16'), 
+            'title': (PostCollection._cast_to_string, "Untitled"), 
+            'date': (PostCollection._cast_to_date, "2007-09-16"), 
             'date_updated': (PostCollection._cast_to_date, None), 
             'date_posted': (PostCollection._cast_to_date, None), 
             'tags': (PostCollection._cast_to_list, []), 
@@ -54,7 +54,7 @@ class PostCollection:
             'is_post_meta': (PostCollection._cast_to_bool, False),
         }
 
-        self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, '')
+        self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, "")
 
         if run_load:
             self._load()
@@ -165,6 +165,9 @@ class PostCollection:
             formatted_meta['is_post_meta'] = True
             formatted_meta['url'] = self._convert_path_to_url(path)
             formatted_meta['is_external'] = 'external_url' in formatted_meta
+        
+        # print(formatted_meta)
+        # print('============')
         return formatted_meta
 
     def _convert_path_to_url(self, path): 
