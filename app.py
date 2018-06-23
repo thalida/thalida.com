@@ -14,9 +14,6 @@ import geocoder
 import secrets
 from posts_collection import PostCollection
 
-logger = logging.getLogger(__name__)
-app = Flask(__name__)
-my_posts = PostCollection()
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
@@ -25,8 +22,13 @@ COOKIE_KEYS = {
     'NUM_VISITS': 'total_visits',
 }
 
+
+logger = logging.getLogger(__name__)
+app = Flask(__name__)
+my_posts = PostCollection()
+
 now = datetime.now()
-cookie_update_date = dateparser.parse('2019-06-11T00:00:00')
+cookie_update_date = dateparser.parse('2017-06-24T00:00:00')
 
 global_tpl_vars = {
     'globals': {
@@ -83,7 +85,7 @@ def post(path):
         post = my_posts.get_post_by_url(request.path)
 
         if not post['collection_meta']['is_visible'] or not post['meta']['is_visible']:
-            raise PostHiddenError
+            raise ValueError('Attempted to access a hidden collection or post')
 
         if post['meta']['is_external']:
             return redirect(post['meta']['external_url'])
@@ -98,9 +100,7 @@ def post(path):
         ))
         update_cookies(request, response, visit=True)
         return response
-    except PostHiddenError:
-        abort(404)
-    except KeyError:
+    except (ValueError, KeyError):
         abort(404)
     except Exception:
         logger.exception('500 Error Fetching Post')
@@ -113,10 +113,15 @@ def not_found(exc):
 def get_time_group(request):
     return {'greeting': "Hello", 'label': 'late-night'}
 
-def get_current_weather(request):
+def get_force_update(request):
     last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
     last_visit_as_datetime = dateparser.parse(last_visit)
-    force_update = (last_visit_as_datetime - cookie_update_date).total_seconds() < 0
+    force_update = (cookie_update_date - last_visit_as_datetime).total_seconds() > 0
+
+    return force_update
+
+def get_current_weather(request):
+    force_update = get_force_update(request)
 
     # Get current weather for location based on IP
     weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
@@ -135,8 +140,6 @@ def get_current_weather(request):
 
     return {'current': current_weather, 'from_cookie': from_cookie}
 
-
-
 def format_datetime(value, format='iso'):
     if not isinstance(value, str):
         return value
@@ -151,18 +154,17 @@ def format_cookie_key(name):
     return '{namespace}-{name}'.format(namespace=COOKIE_NAMESPACE, name=name)
 
 def update_cookies(request, response, visit=True, weather=None):
-    last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
-    last_visit_as_datetime = dateparser.parse(last_visit)
-    
     # check if a force update of cookies is required
-    force_update = (last_visit_as_datetime - cookie_update_date).total_seconds() < 0
-    print('force_update',force_update)
+    force_update = get_force_update(request)
 
     if weather is not None and (force_update or weather['from_cookie'] is False):
         response.set_cookie(format_cookie_key(COOKIE_KEYS['WEATHER']), json.dumps(weather['current']), max_age=60*15) # keep for 15min
 
     if force_update or visit:
-        # Update cookie with this visit timestamp
+        last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
+        last_visit_as_datetime = dateparser.parse(last_visit)
+
+        # Update last visit cookie with current datetime
         response.set_cookie(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), str(now.isoformat()), max_age=120*24*60*60) # save for 120 days
 
         # Only increment visits if there's been at least 1min from the last visit
