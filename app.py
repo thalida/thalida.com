@@ -55,7 +55,7 @@ def index():
             'home.html', 
             **get_globals(),
             weather=weather['current'], 
-            time_group=time_group,
+            dynamic_time_data=dynamic_time_data,
             collections_order=collections_order, 
             work=work,
         ))
@@ -99,14 +99,14 @@ def post(path):
             return redirect(post['meta']['external_url'])
 
         # Get a set of next posts to read after this one
-        next_posts = my_posts.get_next_posts(post, amount=3)
+        next_posts_paths = my_posts.get_next_posts_paths(post['meta']['path'], amount=3)
 
         # Build the repsonse object for a post
         response = make_response(render_template(
             'post.html', 
             **get_globals(),
             post=post,
-            next_posts=next_posts,
+            next_posts=next_posts_paths,
         ))
 
         set_cookies(request, response)
@@ -295,11 +295,14 @@ def format_datetime(str, format='iso'):
         [string] -- The newly formatted datetime string
     """
 
-    date = dateparser.parse(str)
-    if format is 'iso':
-        return date.isoformat()
-    else:
-        return date.strftime(format)
+    try:
+        date = dateparser.parse(str)
+        if format is 'iso':
+            return date.isoformat()
+        else:
+            return date.strftime(format)
+    except TypeError:
+        return str
 
 def format_cookie_key(name):
     """Format a Name into the Cookie Format

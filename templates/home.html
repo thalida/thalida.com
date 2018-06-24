@@ -19,7 +19,7 @@ window.app_weather = {{ weather | tojson }};
     <!-- <div class="scene">
         <div class="scene__window">
             {{ weather.icon }}
-            {{ time_group.label }}
+            {{ dynamic_time_data.label }}
         </div>
         <div class="scene__label">
             {{ weather.temperature }} °{% if weather.units == 'us' %}F{% else %}C{% endif %} and {{ weather.summary }}
@@ -35,7 +35,7 @@ window.app_weather = {{ weather | tojson }};
         </h1>
         <div class="about__content">
             <p class="about__text text--primary">
-                {{ time_group.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
+                {{ dynamic_time_data.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
                 software engineer based in New York. For my 16th birthday I was lucky 
                 enough to be gifted this domain. It was one of the best presents 
                 I’ve ever received, being able to learn and grow on here is the 
