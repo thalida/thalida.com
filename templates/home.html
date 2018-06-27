@@ -80,9 +80,11 @@ window.app_weather = {{ weather | tojson }};
                 <h2 class="collection__header header--secondary">
                     {{ collection.meta.title }}
 
-                    {% if collection.meta.icon %}
-                    <span class="collection__icon icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
-                    {% endif %}
+                    <span class="icons">
+                        {% for icon in collection.meta.icons %}
+                            <span class="collection__icon icon--{{icon}}">[{{icon}} icon]</span>
+                        {% endfor %}
+                    </span>
                 </h2>
                 <p class="collection__summary text--primary">
                     {{ collection.meta.summary }}

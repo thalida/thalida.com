@@ -3,6 +3,7 @@ import os
 import glob
 from datetime import datetime
 from pprint import pprint
+from collections import OrderedDict
 
 # Third Party
 import markdown
@@ -89,7 +90,9 @@ class PostCollection:
             'date': (PostCollection._cast_to_date, "2007-09-16"), 
             'date_updated': (PostCollection._cast_to_date, None), 
             'date_posted': (PostCollection._cast_to_date, None), 
-            'tags': (PostCollection._cast_to_list, []), 
+            'icon': (PostCollection._cast_to_string, None),
+            'icons': (PostCollection._cast_to_list, list()),
+            'tags': (PostCollection._cast_to_list, list()), 
             'is_hidden': (PostCollection._cast_to_bool, False), 
             'is_draft': (PostCollection._cast_to_bool, False), 
             'is_collection_meta': (PostCollection._cast_to_bool, False), 
@@ -287,15 +290,11 @@ class PostCollection:
 
         # Sort posts by date and title and return the paths in order
         sorted_posts = sorted(posts_meta, key=self._sort_by, reverse=True)
-        # pprint(sorted_posts)
         return [post['path'] for post in sorted_posts]
 
     def _sort_by(self, post_meta):
         date_updated = post_meta.get('date_updated')
         date_updated = date_updated if date_updated is not None else '-1'
-
-        print((date_updated, post_meta['date'], post_meta['title']))
-
         return (date_updated, post_meta['date'], post_meta['title'])
 
     def _format_meta(self, meta, path):
@@ -321,25 +320,33 @@ class PostCollection:
 
         # Create a new dict with the meta keys lowercased and the values cast to the correct format
         formatted_meta = {k.lower(): self._cast_meta(k, meta.get(k)) for k in all_meta_keys}
-       
+        
         # Add some additonal keys to the meta data
         formatted_meta['path'] = path
         formatted_meta['collection'] = self._parse_collection_from_path(path)
+        formatted_meta['url'] = self._convert_path_to_url(path)
+        formatted_meta['is_external'] = 'external_url' in formatted_meta
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['is_default_date'] = formatted_meta.get('date') is self.META_DEFAULTS['date'][1]
 
         if formatted_meta.get('date_posted') and formatted_meta['is_default_date']:
             formatted_meta['date'] = formatted_meta.get('date_posted')
+        
+        if formatted_meta.get('icon'):
+            formatted_meta['icons'].append(formatted_meta['icon'])
+
+        if formatted_meta.get('is_external'):
+            formatted_meta['icons'].append('external')
+
+        formatted_meta['icons'] = list(OrderedDict.fromkeys(formatted_meta['icons']))
 
         if path.find('_collection-meta.md') > 0:
             formatted_meta['is_collection_meta'] = True
         else:
             formatted_meta['is_post_meta'] = True
-            formatted_meta['url'] = self._convert_path_to_url(path)
-            formatted_meta['is_external'] = 'external_url' in formatted_meta
-        
+
         # print(formatted_meta)
-        # print('============')
+        # print('+++++++++')
         return formatted_meta
 
     def _convert_path_to_url(self, path): 
@@ -434,9 +441,13 @@ class PostCollection:
         # Get the default type and value for a given meta key
         (default_type, default_value) = self.META_DEFAULTS.get(key, self.META_FALLBACK_DEFAULT)
 
+        # Let's make a copy of the list so we're passing around a new reference
+        if default_type is PostCollection._cast_to_list and isinstance(default_value, list):
+            default_value = default_value.copy()
+
         # Markdown meta data returns all meta values as a list of 1, so lets get
         # the first (and only) value if we're not expecting a list
-        if default_type is not 'list' and value is not None:
+        if default_type is not PostCollection._cast_to_list and value is not None:
             value = value[0]
 
         return default_value if value is None else default_type(value)

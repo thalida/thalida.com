@@ -15,14 +15,19 @@
             <h3 class="post-card__header header--tertiary">
                 {{ post_meta.title }}
                 
-                {% if post_meta.icon %}
-                <span class="post-card__icon icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
-                {% endif %}
+                <span class="icons">
+                    {% for icon in post_meta.icons %}
+                        <span class="post-card__icon icon-{{icon}}">[{{icon}} icon]</span>
+                    {% endfor %}
+                </span>
             </h3>
             <p class="post-card__summary text--primary">{{ post_meta.summary | safe }}</p>
             
+
             <span class="post-card__details text--micro">
-                {% if post_meta.date_updated %}
+                {% if post_meta.is_external %}
+                    Links to <span class="link--micro">{{ post_meta.external_url }}</span>
+                {% elif post_meta.date_updated %}
                     Updated on {{ post_meta.date_updated | datetime('post') }}
                 {% elif post_meta.date and not post_meta.is_default_date %}
                     Posted on {{ post_meta.date | datetime('post') }}

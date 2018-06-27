@@ -1,6 +1,7 @@
 Title:        Template2
 Summary:      Summary of Template2
-Icon:         game
+Icons:        game
+Icons:        foo
 
 
 source https://markdown-it.github.io/

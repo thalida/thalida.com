@@ -1,6 +1,6 @@
 Title:        ZZ Template2
 Summary:      Summary of ZZ Template2
-Icon:         game
+Icons:         game
 Is_Featured:  yes
 
 
