@@ -41,3 +41,39 @@
     .about__text{
         margin: 0 0 1.0rem;
     }
+
+.jobs {}
+    .jobs__header {}
+    .jobs__content {
+        display: grid;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(auto-fill, 100%);
+        
+        margin: 2.0rem 0 0;
+        padding: 0;
+
+        list-style-type: none;
+    }
+    @media (min-width: 40.0em) {
+        .jobs__content {
+            grid-gap: 3.2rem;
+            grid-template-columns: repeat(auto-fill, minmax(20.0rem, 1fr));
+        }
+    }
+
+.job {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    
+    min-height: 8.0rem;
+    max-height: 12.0rem;
+    padding: 0 0 16px 0;
+
+    text-align: center;
+}
+    .job__company {}
+    .job__title {
+        margin: 0;
+    }
+    .job__duration {}

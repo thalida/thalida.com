@@ -95,27 +95,22 @@ window.app_weather = {{ weather | tojson }};
     {% endfor %}
 
 
-    <!-- <div class="jobs">
-        <h1 class="jobs__title">Career</h1>
-
+    <div class="jobs">
+        <h1 class="jobs__header header--primary">Career</h1>
         {% if work.history %}
-        <ul calss="jobs__content">
+        <ul class="jobs__content">
         {% for job in work.history %}
             {% set start, end = job.dates %}
             <li class="job">
-                <h2 class="job__company">{{ job.company }}</h2>
-                <p class="job__title">{{ job.title }}</p>
-                <p class="job__dates">
-                    <span class="job__dates--start">{{ start | datetime('%b %Y') }}</span>
-                    - 
-                    <span class="job__dates--end">
-                        {{ end | datetime('%b %Y') | default('Now',true) }}
-                    </span>
+                <h3 class="job__company header--tertiary">{{ job.company }}</h3>
+                <p class="job__title text--primary">{{ job.title }}</p>
+                <p class="job__duration text--micro">
+                    {{ start | datetime('%b %Y') }} - {{ end | datetime('%b %Y') | default('Now',true) }}
                 </p>
             </li>
         {% endfor %}
         </ul>
         {% endif %}
-    </div> -->
+    </div>
 </div>
 {% endblock %}
