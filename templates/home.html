@@ -86,27 +86,9 @@ window.app_weather = {{ weather | tojson }};
             <p class="collection__summary text--primary">
                 {{ collection.meta.summary }}
             </p>
-            <div class="collection__posts">
-            {% for post_key in collection.posts_in_order %}
-            {% set post_meta = globals.all_posts_meta[post_key] %}
-                {% if post_meta.is_external %}
-                <a class="post post--external" href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
-                {% else %}
-                <a class="post" href="{{ post_meta.url | safe }}">
-                {% endif %}
-                    <h3 class="post__header">
-                        {{ post_meta.title }}
-                        {% if post_meta.icon %}
-                        <span class="post__icon icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
-                        {% endif %}
-                    </h3>
-                    <p class="post__summary">{{ post_meta.summary | safe }}</p>
-                    {% if post_meta.date and not post_meta.is_default_date %}
-                    <span class="post__details">{{ post_meta.date | datetime('%d %B %Y') }}</span>
-                    {% endif %}
-                </a>
-            {% endfor %}
-            </div>
+            
+            {% set posts = collection.posts_in_order %}
+            {% include "_partials/collection_posts_list.html" %}
         </div>
     {% endfor %}
 

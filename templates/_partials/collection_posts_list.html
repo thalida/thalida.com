@@ -1,0 +1,27 @@
+<div class="collection__posts">
+{% for post_key in posts %}
+{% set post_meta = globals.all_posts_meta[post_key] %}
+    {% if post_meta.is_external %}
+    <a class="post-card post-card--external" href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
+    {% else %}
+    <a class="post-card" href="{{ post_meta.url | safe }}">
+    {% endif %}
+        <h3 class="post-card__header header--tertiary">
+            {{ post_meta.title }}
+            
+            {% if post_meta.icon %}
+            <span class="post-card__icon icon-{{ post_meta.icon }}">[{{ post_meta.icon }} icon]</span>
+            {% endif %}
+        </h3>
+        <p class="post-card__summary text--primary">{{ post_meta.summary | safe }}</p>
+        
+        <span class="post-card__details text--micro">
+            {% if post_meta.update_date %}
+                Updated on <span class="text--bold">{{ post_meta.update_date | datetime('%d %B %Y') }}</span>
+            {% elif post_meta.date and not post_meta.is_default_date %}
+                Posted on <span class="text--bold">{{ post_meta.date | datetime('%d %B %Y') }}</span>
+            {% endif %}
+        </span>
+    </a>
+{% endfor %}
+</div>
