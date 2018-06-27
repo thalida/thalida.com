@@ -2,11 +2,16 @@
 {% for post_key in posts %}
     {% set post_meta = globals.all_posts_meta[post_key] %}
     {% if not post_meta.is_hidden %}
-        {% if post_meta.is_external %}
-        <a class="post-card post-card--external" href="{{ post_meta.external_url | safe }}" target="_blank" rel="external">
-        {% else %}
-        <a class="post-card" href="{{ post_meta.url | safe }}">
-        {% endif %}
+        <a 
+            class="post-card{% if post_meta.is_external%} post-card--external{% endif %}{% if post_meta.is_featured%} post-card--featured{% endif %}" 
+            {% if post_meta.is_external %}
+                href="{{ post_meta.external_url | safe }}" 
+                target="_blank" 
+                rel="external"
+            {% else %}
+                href="{{ post_meta.url | safe }}"
+            {% endif %}
+        >
             <h3 class="post-card__header header--tertiary">
                 {{ post_meta.title }}
                 

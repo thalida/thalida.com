@@ -1,7 +1,6 @@
 Title:        Template2
 Summary:      Summary of Template2
 Icon:         game
-Is_Featured:  yes
 
 
 source https://markdown-it.github.io/
