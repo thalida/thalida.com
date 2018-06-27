@@ -43,20 +43,22 @@
     {% block styles %}{% endblock %}
   </head>
   <body>
-    <header class="header">
-        <a class="header__link" href="/">thalida</a>
-    </header>
-    
-    {% block body %}{% endblock %}
+    <div class="site-wrapper">
+        <header class="header">
+            <a class="header__link" href="/">thalida</a>
+        </header>
+        
+        {% block body %}{% endblock %}
 
-    <footer class="footer">
-        <div class="footer__copyright text--micro">
-            <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - {{ globals.datetime.current_year }}
-        </div>
-        <div class="footer__credits text--micro">
-            Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
-        </div>
-    </footer>
+        <footer class="footer">
+            <div class="footer__copyright text--micro">
+                <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - {{ globals.datetime.current_year }}
+            </div>
+            <div class="footer__credits text--micro">
+                Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
+            </div>
+        </footer>
+    </div>
     
     {% block scripts %}{% endblock %}
   </body>

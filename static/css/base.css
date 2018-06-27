@@ -27,6 +27,14 @@ a {
     font: normal 300 6.4em 'Merriweather', serif;
     line-height: 1.2em;
     text-align: center;
+
+     -ms-word-break: break-all;
+     word-break: break-all;
+     /* Non standard for WebKit */
+     word-break: break-word;
+    -webkit-hyphens: auto;
+       -moz-hyphens: auto;
+            hyphens: auto;
 }
 
 .header--secondary {
@@ -109,6 +117,16 @@ a {
 
 .word-break--keep-all {
     word-break: keep-all;
+}
+
+.site-wrapper {
+    margin: 0 auto;
+    width: 85%;
+}
+@media (min-width: 40.0em) {
+    .site-wrapper {
+        width: 70%;
+    }
 }
 
 .header {

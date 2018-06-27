@@ -31,9 +31,9 @@
         background-repeat: no-repeat;
     }
     .about__content {
-      -webkit-columns: 2 30rem;
-         -moz-columns: 2 30rem;
-              columns: 2 30rem;
+      -webkit-columns: 2 20rem;
+         -moz-columns: 2 20rem;
+              columns: 2 20rem;
       -webkit-column-gap: 2.5rem;
          -moz-column-gap: 2.5rem;
               column-gap: 2.5rem;
@@ -42,7 +42,10 @@
         margin: 0 0 1.0rem;
     }
 
-.jobs {}
+.jobs {
+    margin: 14.0rem 0 7.0rem;
+    opacity: 0.6;
+}
     .jobs__header {}
     .jobs__content {
         display: grid;
@@ -70,6 +73,7 @@
     max-height: 12.0rem;
     padding: 0 0 16px 0;
 
+    border-bottom: 1px solid #E5E6E7;
     text-align: center;
 }
     .job__company {}
