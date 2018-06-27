@@ -49,7 +49,7 @@
     .jobs__header {}
     .jobs__content {
         display: grid;
-        grid-gap: 1rem;
+        grid-gap: 0rem;
         grid-template-columns: repeat(auto-fill, 100%);
         
         margin: 2.0rem 0 0;
@@ -59,7 +59,7 @@
     }
     @media (min-width: 40.0em) {
         .jobs__content {
-            grid-gap: 3.2rem;
+            grid-gap: 2.0rem;
             grid-template-columns: repeat(auto-fill, minmax(20.0rem, 1fr));
         }
     }
@@ -71,7 +71,7 @@
     
     min-height: 8.0rem;
     max-height: 12.0rem;
-    padding: 0 0 16px 0;
+    padding: 1.4em;
 
     border-bottom: 1px solid #E5E6E7;
     text-align: center;

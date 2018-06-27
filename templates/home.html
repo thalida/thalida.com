@@ -73,11 +73,13 @@ window.app_weather = {{ weather | tojson }};
         </div>
     </div>
 
+    <div class="collections">
+    <h1 class="collections__header header--primary header--responsive">Collections</h1>
     {% for collection_key in collections_order %}
         {% set collection = globals.all_collections[collection_key] %}
         {% if not collection.meta.is_hidden %}
             <div class="collection">
-                <h2 class="collection__header header--secondary">
+                <h2 class="collection__header header--secondary header--responsive">
                     {{ collection.meta.title }}
 
                     <span class="icons">
@@ -95,10 +97,10 @@ window.app_weather = {{ weather | tojson }};
             </div>
         {% endif %}
     {% endfor %}
-
+    </div>
 
     <div class="jobs">
-        <h1 class="jobs__header header--primary">Career</h1>
+        <h1 class="jobs__header header--primary header--responsive">Career</h1>
         {% if work.history %}
         <ul class="jobs__content">
         {% for job in work.history %}
