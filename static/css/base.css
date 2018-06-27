@@ -1,5 +1,14 @@
 * { box-sizing: border-box; }
 
+/*html {
+  font-size: 100%;
+}*/
+/*@media (max-width: 70.0em) {
+    html {
+        font-size: 50%;
+    }
+}*/
+
 body {
     border: 0;
     padding: 0;
@@ -27,9 +36,29 @@ a {
     line-height: 2em;
 }
 
+.header--tertiary {
+    margin: 0;
+    padding: 0;
+    font: normal 700 1.8em 'Merriweather', serif;
+    line-height: 2em;
+}
+
 .text--primary {
     font-size: 1.6em;
     line-height: 1.5em;
+}
+
+.text--micro {
+    font-size: 1.2em;
+    line-height: 1.1em;
+}
+
+.text--bold {
+    font-weight: 700;
+}
+
+.text--italic {
+    font-style: italic;
 }
 
 .link--primary {
@@ -68,10 +97,69 @@ a {
 
 .word-break--keep-all {
     word-break: keep-all;
-}*/
+}
 
-/*#site-header,
-#site-content {
-    width: 80%;
-    margin: 0 auto;
-}*/
+
+.collection {
+    margin: 7.0rem 0;
+}
+    .collection__header {
+        line-height: 1em;
+    }
+    .collection__icon {}
+    .collection__summary {
+        padding: 0;
+        margin: 0.5em 0 0;
+    }
+    .collection__posts {
+        display: grid;
+        margin: 2.0rem 0 0;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(auto-fill, 100%);
+    }
+    @media (min-width: 40.0em) {
+        .collection__posts {
+            grid-gap: 3.2rem;
+            grid-template-columns: repeat(auto-fill, minmax(20.0rem, 1fr));
+        }
+    }
+
+
+.post-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    
+    min-height: 8.0rem;
+    max-height: 12.0rem;
+    padding: 0 0 16px 0;
+
+    border-bottom: 1px solid #E5E6E7;
+    color: #1C2233;
+    text-decoration: none;
+
+    -webkit-transition: border-bottom-color 500ms;
+    transition:border-bottom-color 500ms;
+}
+    .post-card__header {}
+    .post-card__icon {}
+    .post-card__summary {
+        padding: 0;
+        margin: 0;
+    }
+    .post-card__details {
+        margin-top: auto;
+        padding-top: 2.0em;
+    }
+    .post-card--external {}
+    .post-card--featured {
+        border-bottom-color: #FFB233;
+    }
+    .post-card:hover {
+        border-bottom-color: #1EFF7A;
+    }
+    /*@media (max-width: 320px) {
+        .post-card {
+            width: 100%;
+        }
+    }*/

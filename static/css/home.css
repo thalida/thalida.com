@@ -10,7 +10,7 @@
     margin-top: 10.0rem;
 }
     .about__header {
-        margin-bottom: 5.0rem;
+        margin-bottom: 7.0rem;
     }
     .about__leaves {
         display: inline-block;
@@ -41,27 +41,3 @@
     .about__text{
         margin: 0 0 1.0rem;
     }
-
-.collection {
-    margin: 5.0rem 0;
-}
-    .collection__header {
-        line-height: 1em;
-    }
-    .collection__icon {}
-    .collection__summary {
-        padding: 0;
-        margin: 0.5em 0 0;
-    }
-    .collection__posts {
-        margin: 1.0rem 0 0;
-    }
-
-
-.post {}
-    .post__header {}
-    .post__icon {}
-    .post__summary {}
-    .post__details {}
-
-    .post--external {}
