@@ -299,6 +299,8 @@ def format_datetime(str, format='iso'):
         date = dateparser.parse(str)
         if format is 'iso':
             return date.isoformat()
+        elif format is 'post':
+            return date.strftime('%d %B %Y')
         else:
             return date.strftime(format)
     except TypeError:

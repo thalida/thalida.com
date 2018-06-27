@@ -1,5 +1,5 @@
-Title:        Template
-Summary:      Summary of Template
+Title:        ZZ Template2
+Summary:      Summary of ZZ Template2
 Icon:         game
 Is_Featured:  yes
 

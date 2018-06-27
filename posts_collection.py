@@ -286,8 +286,17 @@ class PostCollection:
         posts_meta = [self.posts_meta[path] for path in post_paths]
 
         # Sort posts by date and title and return the paths in order
-        posts_by_date = sorted(posts_meta, key=lambda x: (x['date'], x['title']), reverse=True)
-        return [post['path'] for post in posts_by_date]
+        sorted_posts = sorted(posts_meta, key=self._sort_by, reverse=True)
+        # pprint(sorted_posts)
+        return [post['path'] for post in sorted_posts]
+
+    def _sort_by(self, post_meta):
+        date_updated = post_meta.get('date_updated')
+        date_updated = date_updated if date_updated is not None else '-1'
+
+        print((date_updated, post_meta['date'], post_meta['title']))
+
+        return (date_updated, post_meta['date'], post_meta['title'])
 
     def _format_meta(self, meta, path):
         """Formats File Metadata
@@ -318,6 +327,9 @@ class PostCollection:
         formatted_meta['collection'] = self._parse_collection_from_path(path)
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['is_default_date'] = formatted_meta.get('date') is self.META_DEFAULTS['date'][1]
+
+        if formatted_meta.get('date_posted') and formatted_meta['is_default_date']:
+            formatted_meta['date'] = formatted_meta.get('date_posted')
 
         if path.find('_collection-meta.md') > 0:
             formatted_meta['is_collection_meta'] = True

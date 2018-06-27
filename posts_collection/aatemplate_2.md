@@ -1,5 +1,5 @@
-Title:        Template
-Summary:      Summary of Template
+Title:        AA Template2
+Summary:      Summary of AA Template2
 Icon:         game
 Is_Featured:  yes
 

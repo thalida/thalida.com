@@ -74,22 +74,24 @@ window.app_weather = {{ weather | tojson }};
     </div>
 
     {% for collection_key in collections_order %}
-    {% set collection = globals.all_collections[collection_key] %}
-        <div class="collection">
-            <h2 class="collection__header header--secondary">
-                {{ collection.meta.title }}
+        {% set collection = globals.all_collections[collection_key] %}
+        {% if not collection.meta.is_hidden %}
+            <div class="collection">
+                <h2 class="collection__header header--secondary">
+                    {{ collection.meta.title }}
 
-                {% if collection.meta.icon %}
-                <span class="collection__icon icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
-                {% endif %}
-            </h2>
-            <p class="collection__summary text--primary">
-                {{ collection.meta.summary }}
-            </p>
-            
-            {% set posts = collection.posts_in_order %}
-            {% include "_partials/collection_posts_list.html" %}
-        </div>
+                    {% if collection.meta.icon %}
+                    <span class="collection__icon icon-{{ collection.meta.icon }}">[{{ collection.meta.icon }} icon]</span>
+                    {% endif %}
+                </h2>
+                <p class="collection__summary text--primary">
+                    {{ collection.meta.summary }}
+                </p>
+                
+                {% set posts = collection.posts_in_order %}
+                {% include "_partials/collection_posts_list.html" %}
+            </div>
+        {% endif %}
     {% endfor %}
 
 
