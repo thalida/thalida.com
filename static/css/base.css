@@ -111,6 +111,35 @@ a {
     word-break: keep-all;
 }
 
+.header {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 2.0rem 0 10.0rem;
+
+    text-align: center;
+}
+    .header__link {
+        margin: 0;
+        padding: 0;
+        
+        color: #1C2233;
+        font: normal 700 1.8em 'Merriweather', serif;
+        line-height: 2em;
+        text-decoration: none;
+    }
+    .header__link:before,
+    .header__link:after {
+        content: "";
+        display: inline-block;
+        width: 2.4em;
+        height: 0.3em;
+        margin: 0 0.3em;
+        border-radius: 0.3em;
+        vertical-align: middle;
+        background-color: #E5E6E7;
+    }
+
 .footer {
     display: grid;
     grid-gap: 1rem;
