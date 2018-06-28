@@ -196,7 +196,7 @@ def get_work():
             'dates': [format_datetime('January 2013'), format_datetime('January 2014')]
         },
         {
-            'company': 'NASA Goddard/Space Operations Institute',
+            'company': 'NASA&nbsp;Goddard&nbsp;/ Space&nbsp;Operations&nbsp;Institute',
             'title': 'Software Engineer Intern',
             'dates': [format_datetime('March 2010'), format_datetime('January 2013')]
         },

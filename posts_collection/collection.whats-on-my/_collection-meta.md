@@ -1,3 +1,3 @@
-Title:   What's On My ____
+Title:   What's On My&hellip;
 Summary: Continuously updated list of what’s on my desks, devices, and shelves.
 Visual_Index: 0

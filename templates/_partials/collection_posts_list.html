@@ -1,39 +1,42 @@
-<div class="collection__posts">
+<ol class="card-grid posts">
 {% for post_key in posts %}
     {% set post_meta = globals.all_posts_meta[post_key] %}
     {% if not post_meta.is_hidden %}
-        <a 
-            class="post-card{% if post_meta.is_external%} post-card--external{% endif %}{% if post_meta.is_featured%} post-card--featured{% endif %}" 
-            {% if post_meta.is_external %}
-                href="{{ post_meta.external_url | safe }}" 
-                target="_blank" 
-                rel="external"
-            {% else %}
-                href="{{ post_meta.url | safe }}"
-            {% endif %}
-        >
-            <h3 class="post-card__header header--tertiary">
-                {{ post_meta.title }}
-                
-                <span class="icons">
-                    {% for icon in post_meta.icons %}
-                        <span class="post-card__icon icon-{{icon}}">[{{icon}} icon]</span>
-                    {% endfor %}
-                </span>
-            </h3>
-            <p class="post-card__summary text--primary">{{ post_meta.summary | safe }}</p>
-            
-
-            <span class="post-card__details text--micro">
+        <li>
+            <a 
+                class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured%} post--featured{% endif %}"
                 {% if post_meta.is_external %}
-                    Links to <span class="link--micro">{{ post_meta.external_url }}</span>
-                {% elif post_meta.date_updated %}
-                    Updated on {{ post_meta.date_updated | datetime('post') }}
-                {% elif post_meta.date and not post_meta.is_default_date %}
-                    Posted on {{ post_meta.date | datetime('post') }}
+                    href="{{ post_meta.external_url | safe }}" 
+                    target="_blank" 
+                    rel="external"
+                {% else %}
+                    href="{{ post_meta.url | safe }}"
                 {% endif %}
-            </span>
-        </a>
+            >
+                {% if post_meta.is_featured %}
+                    <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
+                {% endif %}
+                <h3 class="card__header header--tertiary">
+                    {{ post_meta.title }}
+                    
+                    <span class="card__icons">
+                        {% for icon in post_meta.icons %}
+                            <span class="icon icon--{{icon}}">[{{icon}} icon]</span>
+                        {% endfor %}
+                    </span>
+                </h3>
+                <p class="card__summary text--primary">{{ post_meta.summary | safe }}</p>
+                <small class="card__details text--micro">
+                    {% if post_meta.is_external %}
+                        Links to <span class="link--micro">{{ post_meta.external_url }}</span>
+                    {% elif post_meta.date_updated %}
+                        Updated on {{ post_meta.date_updated | datetime('post') }}
+                    {% elif post_meta.date and not post_meta.is_default_date %}
+                        Posted on {{ post_meta.date | datetime('post') }}
+                    {% endif %}
+                </small>
+            </a>
+        </li>
     {% endif %}
 {% endfor %}
-</div>
+</ol>

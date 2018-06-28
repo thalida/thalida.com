@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -51,12 +51,12 @@
         {% block body %}{% endblock %}
 
         <footer class="footer">
-            <div class="footer__copyright text--micro">
-                <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - {{ globals.datetime.current_year }}
-            </div>
-            <div class="footer__credits text--micro">
-                Window Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
-            </div>
+            <small class="footer__copyright text--micro">
+                <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - <time>{{ globals.datetime.current_year }}</time>
+            </small>
+            <small class="footer__credits text--micro">
+                Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
+            </small>
         </footer>
     </div>
     

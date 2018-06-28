@@ -15,7 +15,7 @@ window.app_weather = {{ weather | tojson }};
 {% endblock %}
 
 {% block body %}
-<div class="home">
+<main class="home">
     <!-- <div class="scene">
         <div class="scene__window">
             {{ weather.icon }}
@@ -27,94 +27,94 @@ window.app_weather = {{ weather | tojson }};
     </div> -->
 
 
-    <div class="about">
-        <h1 class="about__header header--primary">
+    <section class="about-section">
+        <h1 class="about-section__header header--primary">
             Everyday Thoughts 
-            <br /><span class="about__leaves">&</span> 
+            <br /><span class="about-section__leaves">&</span> 
             Strange Ideas.
         </h1>
-        <div class="about__content">
-            <p class="about__text text--primary">
+        <div class="about-section__content">
+            <p class="about-section__text text--primary">
                 {{ dynamic_time_data.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
                 software engineer based in New York. For my 16th birthday I was lucky 
                 enough to be gifted this domain. It was one of the best presents 
                 I’ve ever received, being able to learn and grow on here is the 
                 main reason I’ve become the engineer I am today.
             </p>
-            <p class="about__text text--primary">
+            <p class="about-section__text text--primary">
                 I’ve come a long way since 16 year old me, I’m now a 
                 {{ work.history[0].title }} at {{ work.history[0].company }}
                 {% if work.history[0].is_hiring %} (<a class="link--primary" href="https://etsy.com/careers" target="_blank">we’re hiring</a>){% endif %}, 
                 and I’ve been active in the industry for over {{ work.years_since_start }} years. 
             </p>
-            <p class="about__text text--primary">
+            <p class="about-section__text text--primary">
                 Outside of work I build robots with my partner, work on one of 
                 my (way too many) side projects, play MarioKart, and discuss 
                 identitites, intersectionality, and inclusivity (especially in 
                 regards to tech). 
             </p>
-            <p class="about__text text--primary">
+            <p class="about-section__text text--primary">
                 If you want to discuss being queer, black, femme, or 
                 first-generation in tech, you’ve found the right girl! 
             </p>
-            <p class="about__text text--primary">
+            <p class="about-section__text text--primary">
                 But (there’s <em>always</em> a but), I’ve started to distance 
                 myself from social media, while it has beneficial moments it’s 
                 also become thourougly overwhelming… so if you want to keep in 
                 touch or talk, let’s do it like it’s not {{ globals.datetime.current_year }}: 
             </p>
-            <ol class="about__text text--primary">
+            <ol class="about-section__text text--primary">
                 <li><a class="link--primary" href="#">subscribe to my newsletter!</a></li>
                 <li>Send me an <a class="link--primary" href="#">email</a></li>
             </ol>
-            <p class="about__text text--primary">
+            <p class="about-section__text text--primary">
                 (Fun Fact: I’m generally full of questions and bubble tea.)
             </p>
         </div>
-    </div>
+    </section>
 
-    <div class="collections">
-    <h1 class="collections__header header--primary header--responsive">Collections</h1>
-    {% for collection_key in collections_order %}
-        {% set collection = globals.all_collections[collection_key] %}
-        {% if not collection.meta.is_hidden %}
-            <div class="collection">
-                <h2 class="collection__header header--secondary header--responsive">
-                    {{ collection.meta.title }}
+    <section class="collections-section">
+        <h1 class="collections-section__header header--primary">Collections</h1>
+        {% for collection_key in collections_order %}
+            {% set collection = globals.all_collections[collection_key] %}
+            {% if not collection.meta.is_hidden %}
+                <section class="collection">
+                    <h2 class="collection__header header--secondary">
+                        {{ collection.meta.title | safe }}
 
-                    <span class="icons">
-                        {% for icon in collection.meta.icons %}
-                            <span class="collection__icon icon--{{icon}}">[{{icon}} icon]</span>
-                        {% endfor %}
-                    </span>
-                </h2>
-                <p class="collection__summary text--primary">
-                    {{ collection.meta.summary }}
-                </p>
-                
-                {% set posts = collection.posts_in_order %}
-                {% include "_partials/collection_posts_list.html" %}
-            </div>
-        {% endif %}
-    {% endfor %}
-    </div>
+                        <span class="icons">
+                            {% for icon in collection.meta.icons %}
+                                <span class="collection__icon icon--{{icon}}">[{{icon}} icon]</span>
+                            {% endfor %}
+                        </span>
+                    </h2>
+                    <p class="collection__summary text--primary">
+                        {{ collection.meta.summary }}
+                    </p>
+                    
+                    {% set posts = collection.posts_in_order %}
+                    {% include "_partials/collection_posts_list.html" %}
+                </section>
+            {% endif %}
+        {% endfor %}
+    </section>
 
-    <div class="jobs">
-        <h1 class="jobs__header header--primary header--responsive">Career</h1>
+    <section class="jobs-section">
+        <h1 class="jobs-section__header header--primary">Career</h1>
         {% if work.history %}
-        <ul class="jobs__content">
+        <ul class="card-grid jobs-section__content">
         {% for job in work.history %}
             {% set start, end = job.dates %}
-            <li class="job">
-                <h3 class="job__company header--tertiary">{{ job.company }}</h3>
-                <p class="job__title text--primary">{{ job.title }}</p>
-                <p class="job__duration text--micro">
-                    {{ start | datetime('%b %Y') }} - {{ end | datetime('%b %Y') | default('Now',true) }}
-                </p>
+            <li class="card job">
+                <h3 class="card__header header--tertiary">{{ job.company | safe }}</h3>
+                <p class="card__summary text--primary">{{ job.title | safe }}</p>
+                <small class="card__details text--micro">
+                    <span>{{ start | datetime('%b %Y') }}</span> - <span>{{ end | datetime('%b %Y') | default('Now',true) }}</span>
+                </small>
             </li>
         {% endfor %}
         </ul>
         {% endif %}
-    </div>
-</div>
+    </section>
+</main>
 {% endblock %}

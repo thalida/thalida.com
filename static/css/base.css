@@ -11,6 +11,11 @@
  * 
  ******************************************************************************/
 
+
+
+/*******************************************************************************
+ * GLOBAL ELEMENT SYTLES
+ ******************************************************************************/
 * { box-sizing: border-box; }
 
 html {
@@ -18,7 +23,7 @@ html {
 }
 @media (max-width: 70.0em) {
     html {
-        font-size: 80%;
+        font-size: 110%;
     }
 }
 
@@ -35,6 +40,16 @@ a {
     text-decoration: none;
 }
 
+
+
+/*******************************************************************************
+ * UTILITY STYLES
+ ******************************************************************************/
+
+/* Headers
+ ******************************************************************************/
+
+/* H1 ------------------------------------------------------------------------*/
 .header--primary {
     margin: 0;
     padding: 0;
@@ -50,12 +65,18 @@ a {
        -moz-hyphens: auto;
             hyphens: auto;
 }
-@media (max-width: 60.0em) {
-    .header--primary.header--responsive {
+@media (max-width: 20.0em) {
+    .header--primary {
+        font-size: 4.5em;
+    }
+}
+@media (min-width: 20.01em) and (max-width: 60.0em) {
+    .header--primary {
         font-size: 5.0em;
     }
 }
 
+/* H2 ------------------------------------------------------------------------*/
 .header--secondary {
     margin: 0;
     padding: 0;
@@ -63,11 +84,12 @@ a {
     line-height: 2em;
 }
 @media (max-width: 60.0em) {
-    .header--secondary.header--responsive {
+    .header--secondary {
         font-size: 3.0em;
     }
 }
 
+/* H3 ------------------------------------------------------------------------*/
 .header--tertiary {
     margin: 0;
     padding: 0;
@@ -75,6 +97,8 @@ a {
     line-height: 2em;
 }
 
+/* Body Text
+ ******************************************************************************/
 .text--primary {
     font-size: 1.6em;
     line-height: 1.5em;
@@ -93,6 +117,8 @@ a {
     font-style: italic;
 }
 
+/* Links
+ ******************************************************************************/
 .link--primary {
     display: inline-block;
     color: #4A84FF;
@@ -129,6 +155,8 @@ a {
         color: #1EFF7A;
     }
 
+/* Alignment
+ ******************************************************************************/
 .text-align--left {
     text-align: left;
 }
@@ -139,20 +167,37 @@ a {
     text-align: right;
 }
 
+/* Word Breaks
+ ******************************************************************************/
 .word-break--keep-all {
     word-break: keep-all;
 }
 
+
+
+/*******************************************************************************
+ * SITE GENRALS
+ ******************************************************************************/
+
+/* Site Wrapper
+ ******************************************************************************/
 .site-wrapper {
     margin: 0 auto;
-    width: 85%;
+    width: 90%;
 }
-@media (min-width: 40.0em) {
+@media (min-width: 30.0em) {
+    .site-wrapper {
+        width: 80%;
+    }
+}
+@media (min-width: 70.0em) {
     .site-wrapper {
         width: 70%;
     }
 }
 
+/* Header
+ ******************************************************************************/
 .header {
     display: block;
     position: relative;
@@ -182,10 +227,12 @@ a {
         background-color: #E5E6E7;
     }
 
+/* Footer
+ ******************************************************************************/
 .footer {
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr;
 
     margin: 10.0rem 0 2.0rem;
 }
@@ -198,69 +245,84 @@ a {
         text-align: right;
     }
 
-.collections { margin-top: 14.0rem }
-    .collections__header {}
 
-.collection {
-    margin: 7.0rem 0;
+
+/*******************************************************************************
+ * CARDS
+ ******************************************************************************/
+
+/* Card Grid
+ ******************************************************************************/
+.card-grid {
+    display: grid;
+    grid-gap: 0rem;
+    grid-template-columns: repeat(auto-fill, 100%);
+
+    margin: 2.0rem 0 0;
+    padding: 0;
+    
+    list-style-type: none;
 }
-    .collection__header {
-        line-height: 1em;
-        padding-left: 1.4rem;
+@media (min-width: 51.8em) {
+    .card-grid {
+        grid-gap: 1.5em;
+        grid-template-columns: repeat(auto-fill, minmax(18.0rem, 1fr));
     }
-    .collection__icon {}
-    .collection__summary {
-        padding: 0 0 0 1.4rem;
-        margin: 0.5em 0 0;
-    }
-    .collection__posts {
-        display: grid;
-        grid-gap: 0rem;
-        grid-template-columns: repeat(auto-fill, 100%);
+}
 
-        margin: 2.0rem 0 0;
-    }
-    @media (min-width: 40.0em) {
-        .collection__posts {
-            grid-gap: 2.0rem;
-            grid-template-columns: repeat(auto-fill, minmax(20.0rem, 1fr));
-        }
-    }
-
-.post-card {
+/* Card
+ ******************************************************************************/
+.card {
     display: flex;
     flex-direction: column;
     position: relative;
     
+    height: 100%;
     min-height: 8.0rem;
     max-height: 12.0rem;
     padding: 1.4rem;
 
+    color: #1C2233;
+    border-bottom: 1px solid #E5E6E7;
+    text-decoration: none;
+}
+    .card__pre-header {
+        padding-bottom: 0.4em;
+    }
+    .card__header {
+        line-height: 1.6em;
+    }
+    .card__icons {}
+    .card__summary {
+        padding: 0;
+        margin: 0;
+    }
+    .card__details {
+        margin-top: auto;
+        padding-top: 2.0em;
+    }
+
+/* Card (Post Type) ----------------------------------------------------------*/
+.card.post {
     border-top-left-radius: 0.3rem;
     border-top-right-radius: 0.3rem;
-    border-bottom: 1px solid #E5E6E7;
-    color: #1C2233;
-    text-decoration: none;
+    
+    text-align: center;
 
     -webkit-transition: border-bottom-color 1200ms, background-color 300ms;
     transition: border-bottom-color 1200ms, background-color 300ms;
 }
-    .post-card__header {}
-    .post-card__icon {}
-    .post-card__summary {
-        padding: 0;
-        margin: 0;
+    .card.post:hover {
+        background-color: rgba(30, 255, 122, 0.05);
+        border-bottom-color: rgba(30, 255, 122, 1);
     }
-    .post-card__details {
-        margin-top: auto;
-        padding-top: 2.0em;
-    }
-    .post-card--external {}
-    .post-card--featured {
+    .card.post--external {}
+    .card.post--featured {
         background-color: rgba(255, 187, 51, 0.05);;
         border-bottom-color: rgba(255, 187, 51, 1);
     }
-    .post-card:hover {
-        background-color: rgba(30, 255, 122, 0.05);
-        border-bottom-color: rgba(30, 255, 122, 1);
+    @media (min-width: 51.8em) {
+        .card.post {
+            text-align: left;
+        }
     }

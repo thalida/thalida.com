@@ -6,16 +6,16 @@
     .scene__label {}
 
 
-.about {
-    margin-top: 10.0rem;
+.about-section {
+    margin: 14.0rem 0 7.0rem;
 }
-    .about__header {
+    .about-section__header {
         margin-bottom: 7.0rem;
     }
-    .about__leaves {
+    .about-section__leaves {
         display: inline-block;
     }
-    .about__leaves:after {
+    .about-section__leaves:after {
         content: "";
         display: block;
         position: absolute;
@@ -30,7 +30,7 @@
         background-size: contain;
         background-repeat: no-repeat;
     }
-    .about__content {
+    .about-section__content {
       -webkit-columns: 2 20rem;
          -moz-columns: 2 20rem;
               columns: 2 20rem;
@@ -38,46 +38,39 @@
          -moz-column-gap: 2.5rem;
               column-gap: 2.5rem;
     }
-    .about__text{
+    .about-section__text{
         margin: 0 0 1.0rem;
     }
 
-.jobs {
-    margin: 14.0rem 0 7.0rem;
-    opacity: 0.6;
-}
-    .jobs__header {}
-    .jobs__content {
-        display: grid;
-        grid-gap: 0rem;
-        grid-template-columns: repeat(auto-fill, 100%);
-        
-        margin: 2.0rem 0 0;
-        padding: 0;
 
-        list-style-type: none;
+.collections-section { 
+    margin: 14.0rem 0 7.0rem; 
+}
+.collection {
+    margin: 7.0rem 0;
+}
+    .collection__header {
+        text-align: center;
+        line-height: 1em;
     }
-    @media (min-width: 40.0em) {
-        .jobs__content {
-            grid-gap: 2.0rem;
-            grid-template-columns: repeat(auto-fill, minmax(20.0rem, 1fr));
+    .collection__icon {}
+    .collection__summary {
+        margin: 0.5em 0 0;
+        text-align: center;
+    }
+    @media (min-width: 51.8em) {
+        .collection__header,
+        .collection__summary {
+            /*padding: 0 0 0 1.4rem;*/
+            text-align: left
         }
     }
 
-.job {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    
-    min-height: 8.0rem;
-    max-height: 12.0rem;
-    padding: 1.4em;
 
-    border-bottom: 1px solid #E5E6E7;
+.jobs-section {
+    margin: 14.0rem 0 7.0rem;
+    opacity: 0.6;
+}
+.card.job {
     text-align: center;
 }
-    .job__company {}
-    .job__title {
-        margin: 0;
-    }
-    .job__duration {}
