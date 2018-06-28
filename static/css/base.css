@@ -254,6 +254,13 @@ a {
 /* Card Grid
  ******************************************************************************/
 .card-grid {
+    -webkit-columns: 1 100%;
+    -moz-columns: 1 100%;
+    columns: 1 100%;
+    -webkit-column-gap: 0em;
+    -moz-column-gap: 0em;
+    column-gap: 0em;
+
     display: grid;
     grid-gap: 0rem;
     grid-template-columns: repeat(auto-fill, 100%);
@@ -265,6 +272,14 @@ a {
 }
 @media (min-width: 51.8em) {
     .card-grid {
+        -webkit-columns: 3 18.0rem;
+        -moz-columns: 3 18.0rem;
+        columns: 3 18.0rem;
+
+        -webkit-column-gap: 1.5rem;
+        -moz-column-gap: 1.5rem;
+        column-gap: 1.5rem;
+
         grid-gap: 1.5em;
         grid-template-columns: repeat(auto-fill, minmax(18.0rem, 1fr));
     }
@@ -272,34 +287,50 @@ a {
 
 /* Card
  ******************************************************************************/
+.card-wrapper { 
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
 .card {
+    display: block;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-direction: column;
     flex-direction: column;
     position: relative;
+
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
     
-    height: 100%;
-    min-height: 8.0rem;
-    max-height: 12.0rem;
+    height: 12.0rem;
     padding: 1.4rem;
 
     color: #1C2233;
     border-bottom: 1px solid #E5E6E7;
+    text-align: center;
     text-decoration: none;
 }
     .card__pre-header {
         padding-bottom: 0.4em;
     }
     .card__header {
+        width: 100%;
         line-height: 1.6em;
     }
     .card__icons {}
     .card__summary {
         padding: 0;
-        margin: 0;
+        margin: 0.2em 0 1.0em;
+        width: 100%;
     }
     .card__details {
-        margin-top: auto;
-        padding-top: 2.0em;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        opacity: 0.8;
     }
 
 /* Card (Post Type) ----------------------------------------------------------*/
@@ -323,6 +354,8 @@ a {
     }
     @media (min-width: 51.8em) {
         .card.post {
+            -webkit-align-items: flex-start;
+            align-items: flex-start;
             text-align: left;
         }
     }

@@ -105,12 +105,14 @@ window.app_weather = {{ weather | tojson }};
         <ul class="card-grid jobs-section__content">
         {% for job in work.history %}
             {% set start, end = job.dates %}
-            <li class="card job">
-                <h3 class="card__header header--tertiary">{{ job.company | safe }}</h3>
-                <p class="card__summary text--primary">{{ job.title | safe }}</p>
-                <small class="card__details text--micro">
-                    <span>{{ start | datetime('%b %Y') }}</span> - <span>{{ end | datetime('%b %Y') | default('Now',true) }}</span>
-                </small>
+            <li class="card-wrapper">
+                <div class="card job">
+                    <h3 class="card__header job__header header--tertiary">{{ job.company | safe }}</h3>
+                    <p class="card__summary job__summary text--primary">{{ job.title | safe }}</p>
+                    <small class="card__details job__details text--micro">
+                        <span>{{ start | datetime('%b %Y') }}</span> - <span>{{ end | datetime('%b %Y') | default('Now',true) }}</span>
+                    </small>
+                </div>
             </li>
         {% endfor %}
         </ul>

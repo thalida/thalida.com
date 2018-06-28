@@ -61,7 +61,6 @@
     @media (min-width: 51.8em) {
         .collection__header,
         .collection__summary {
-            /*padding: 0 0 0 1.4rem;*/
             text-align: left
         }
     }
@@ -72,5 +71,5 @@
     opacity: 0.6;
 }
 .card.job {
-    text-align: center;
+    height: 10.0rem;
 }

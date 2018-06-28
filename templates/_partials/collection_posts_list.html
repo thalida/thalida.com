@@ -2,7 +2,7 @@
 {% for post_key in posts %}
     {% set post_meta = globals.all_posts_meta[post_key] %}
     {% if not post_meta.is_hidden %}
-        <li>
+        <li class="card-wrapper">
             <a 
                 class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured%} post--featured{% endif %}"
                 {% if post_meta.is_external %}
