@@ -8,6 +8,7 @@
  * 
  * White - #FFFFFF
  * Light Gray - #E5E6E7
+ * Medium Gray - #CFCFCF
  * 
  ******************************************************************************/
 
@@ -56,14 +57,6 @@ a {
     font: normal 300 6.4em 'Merriweather', serif;
     line-height: 1.2em;
     text-align: center;
-
-     -ms-word-break: break-all;
-     word-break: break-all;
-     /* Non standard for WebKit */
-     word-break: break-word;
-    -webkit-hyphens: auto;
-       -moz-hyphens: auto;
-            hyphens: auto;
 }
 @media (max-width: 20.0em) {
     .header--primary {
@@ -230,17 +223,22 @@ a {
 /* Footer
  ******************************************************************************/
 .footer {
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: 1fr 1fr;
-
+    position: relative;
+    display: block;
     margin: 10.0rem 0 2.0rem;
 }
+    .footer::after { 
+      content: "";
+      display: block; 
+      clear: both;
+    }
     .footer__copyright {
+        float: left;
         position: relative;
         text-align: left;
     }
     .footer__credits {
+        float: right;
         position: relative;
         text-align: right;
     }
@@ -294,22 +292,31 @@ a {
 }
 .card {
     display: block;
-    display: -webkit-flex;
+    
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    
     position: relative;
 
-    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
-    -webkit-justify-content: center;
+
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     
     height: 12.0rem;
     padding: 1.4rem;
 
     color: #1C2233;
-    border-bottom: 1px solid #E5E6E7;
+    border-bottom: 1px solid #CFCFCF;
     text-align: center;
     text-decoration: none;
 }
@@ -340,8 +347,8 @@ a {
     
     text-align: center;
 
-    -webkit-transition: border-bottom-color 1200ms, background-color 300ms;
-    transition: border-bottom-color 1200ms, background-color 300ms;
+    -webkit-transition: border-bottom-color 300ms, background-color 1200ms;
+    transition: border-bottom-color 300ms, background-color 1200ms;
 }
     .card.post:hover {
         background-color: rgba(30, 255, 122, 0.05);
@@ -354,7 +361,8 @@ a {
     }
     @media (min-width: 51.8em) {
         .card.post {
-            -webkit-align-items: flex-start;
+            -webkit-box-align: start;
+            -ms-flex-align: start;
             align-items: flex-start;
             text-align: left;
         }

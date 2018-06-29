@@ -151,7 +151,7 @@ def get_globals():
     """
     return {
         'globals': {
-            'css_version': str(1),
+            'css_version': str(3),
             'js_version': str(1),
             'image_version': str(1),
             'datetime': {

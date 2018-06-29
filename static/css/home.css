@@ -30,16 +30,23 @@
         background-size: contain;
         background-repeat: no-repeat;
     }
-    .about-section__content {
-      -webkit-columns: 2 20rem;
-         -moz-columns: 2 20rem;
-              columns: 2 20rem;
-      -webkit-column-gap: 2.5rem;
-         -moz-column-gap: 2.5rem;
-              column-gap: 2.5rem;
+    @media (min-width: 51.8em) {
+        .about-section__content {
+          -webkit-columns: 2 20rem;
+             -moz-columns: 2 20rem;
+                  columns: 2 20rem;
+          -webkit-column-gap: 2.5rem;
+             -moz-column-gap: 2.5rem;
+                  column-gap: 2.5rem;
+        }
     }
-    .about-section__text{
+    .about-section__text {
         margin: 0 0 1.0rem;
+    }
+    .about-section__list {
+        -webkit-column-break-inside: avoid;
+          page-break-inside: avoid;
+               break-inside: avoid;
     }
 
 
