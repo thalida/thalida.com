@@ -13,6 +13,7 @@ import geocoder
 # Locals
 import secrets
 from posts_collection import PostCollection
+from window import Window
 
 
 COOKIE_NAMESPACE = 'TIA'
@@ -26,6 +27,9 @@ COOKIE_KEYS = {
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 my_posts = PostCollection()
+my_window = Window()
+
+pprint(my_window.getData())
 
 now = datetime.now()
 cookie_update_date = dateparser.parse('2017-06-24T00:00:00')
@@ -218,7 +222,10 @@ def get_dynamic_time_data(request):
     Arguments:
         request -- A Flosk Request
     """
-    return {'greeting': "Hello", 'label': 'late-night'}
+    return {
+        'greeting': "Hello", 
+        'label': 'late-night'
+    }
 
 def get_force_update(request):
     """Get If We Should Force an Update

@@ -16,7 +16,7 @@ window.app_weather = {{ weather | tojson }};
 
 {% block body %}
 <main class="home">
-    <!-- <div class="scene">
+    <div class="scene">
         <div class="scene__window">
             {{ weather.icon }}
             {{ dynamic_time_data.label }}
@@ -24,7 +24,7 @@ window.app_weather = {{ weather | tojson }};
         <div class="scene__label">
             {{ weather.temperature }} °{% if weather.units == 'us' %}F{% else %}C{% endif %} and {{ weather.summary }}
         </div>
-    </div> -->
+    </div>
 
 
     <section class="about-section">
