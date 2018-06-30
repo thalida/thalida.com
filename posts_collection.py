@@ -93,8 +93,13 @@ class PostCollection:
             'icon': (PostCollection._cast_to_string, None),
             'icons': (PostCollection._cast_to_list, list()),
             'tags': (PostCollection._cast_to_list, list()), 
+            'hidden': (PostCollection._cast_to_bool, False), 
             'is_hidden': (PostCollection._cast_to_bool, False), 
+            'draft': (PostCollection._cast_to_bool, False), 
             'is_draft': (PostCollection._cast_to_bool, False), 
+            'featured': (PostCollection._cast_to_bool, False),
+            'is_featured': (PostCollection._cast_to_bool, False),
+
             'is_collection_meta': (PostCollection._cast_to_bool, False), 
             'is_post_meta': (PostCollection._cast_to_bool, False),
         }
@@ -320,6 +325,21 @@ class PostCollection:
 
         # Create a new dict with the meta keys lowercased and the values cast to the correct format
         formatted_meta = {k.lower(): self._cast_meta(k, meta.get(k)) for k in all_meta_keys}
+
+        if formatted_meta.get('is_featured'):
+            formatted_meta['featured'] = formatted_meta.get('is_featured')
+        elif formatted_meta.get('featured'):
+            formatted_meta['is_featured'] = formatted_meta.get('featured')
+
+        if formatted_meta.get('is_hidden'):
+            formatted_meta['hidden'] = formatted_meta.get('is_hidden')
+        elif formatted_meta.get('hidden'):
+            formatted_meta['is_hidden'] = formatted_meta.get('hidden')
+
+        if formatted_meta.get('is_draft'):
+            formatted_meta['draft'] = formatted_meta.get('is_draft')
+        elif formatted_meta.get('draft'):
+            formatted_meta['is_draft'] = formatted_meta.get('draft')
         
         # Add some additonal keys to the meta data
         formatted_meta['path'] = path
