@@ -5,6 +5,8 @@ import re
 from datetime import datetime
 from pprint import pprint
 from collections import OrderedDict
+from operator import itemgetter
+from functools import cmp_to_key
 
 # Third Party
 import markdown
@@ -280,6 +282,47 @@ class PostCollection:
                 'meta': meta
             }
 
+
+    def _cmp(self, a, b):
+        try:
+            return (a > b) - (a < b)
+        except TypeError:
+            print("CMP Error:", a, b)
+            return -1
+
+
+    def _multikeysort(self, items, columns, functions={}, getter=itemgetter):
+        """Sort a list of dictionary objects or objects by multiple keys bidirectionally.
+        From: https://gist.github.com/malero/418204/3afe18d1adfe5762dcad3c83b13a702291f0913a
+
+        Keyword Arguments:
+        items -- A list of dictionary objects or objects
+        columns -- A list of column names to sort by. Use -column to sort in descending order
+        functions -- A Dictionary of Column Name -> Functions to normalize or process each column value
+        getter -- Default "getter" if column function does not exist
+        """
+        comparers = []
+        for col in columns:
+            column = col[1:] if col.startswith('-') else col
+            if column not in functions:
+                functions[column] = getter(column)
+            comparers.append((functions[column], 1 if column == col else -1))
+
+        def comparer(left, right):
+            for func, polarity in comparers:
+                result = self._cmp(func(left), func(right))
+                if result:
+                    return polarity * result
+            else:
+                return 0
+        return sorted(items, key=cmp_to_key(comparer))
+
+    def _get_sort_date(self, meta):
+        return meta['date_updated'] + ' Z' if meta.get('date_updated') is not None else meta['date_posted'] + ' A'
+
+    def _get_sort_title(self, meta):
+        return meta['title'].lower()
+
     def _sort_posts(self, post_paths):
         """Sorts Posts
         
@@ -291,14 +334,15 @@ class PostCollection:
         # Get a list of the meta data for the given posts
         posts_meta = [self.posts_meta[path] for path in post_paths]
 
+        sort_fns = {
+            'sort_date': self._get_sort_date,
+            'sort_title': self._get_sort_title
+        }
+
         # Sort posts by date and title and return the paths in order
-        sorted_posts = sorted(posts_meta, key=self._sort_by, reverse=True)
+        sorted_posts = self._multikeysort(posts_meta, ['-sort_date', 'sort_title'], functions=sort_fns)
         return [post['path'] for post in sorted_posts]
 
-    def _sort_by(self, post_meta):
-        date_updated = post_meta.get('date_updated')
-        date_updated = date_updated if date_updated is not None else '-1'
-        return (date_updated, post_meta['date_posted'], post_meta['title'])
 
     def _format_meta(self, meta, path):
         """Formats File Metadata
