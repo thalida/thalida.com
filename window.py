@@ -142,24 +142,24 @@ class Window:
         self.now = datetime.now()
         self.total_time_groups = len(self.TIME_GROUPS);
         self.time = self._getTime(self.now)
-        pprint(self.time)
+        # pprint(self.time)
     
     def getData(self):
-        print(self._getTimeRange())
-
+        pass
+        # print(self._get_time_range())
 
     def _format_color(self, color):
-        is_arr = isinstance(color, 'list')
+        is_arr = isinstance(color, list)
         color_arr = color if is_arr else [color['r'], color['g'], color['b']]
         color_dict = color if not is_arr else {'r': color[0], 'g': color[1], 'b': color[2]}
 
         return {
-            as_str: 'rgb({color})'.format(color=','.join(color_arr))
-            as_arr: color_arr,
-            as_dict: color_dict,
+            'as_str': f"rgb({color_dict['r']}, {color_dict['g']}, {color_dict['b']})",
+            'as_arr': color_arr,
+            'as_dict': color_dict,
         }
 
-    def _getTimeRange(self, time):
+    def _get_time_range(self, time):
         range = []
 
         # Current hour + minutes in military time
@@ -173,14 +173,14 @@ class Window:
             next_group = self.TIME_GROUPS[next_idx]
 
             if (hour >= curr_group['start_hour'] and (hour < next_group['start_hour'] or next_group['start_hour'] == 0)):
-                range = ['start': curr_group, 'end': next_group]
+                range = {'start': curr_group, 'end': next_group}
                 break
 
         return (time, range)
 
     def _getTime(self, now):
         # Get the start + end colors - as well as the time used
-        (time_24, time_range) = self._getTimeRange(now)
+        (time_24, time_range) = self._get_time_range(now)
 
         end_range_time = 24 if time_range['end']['start_hour'] == 0 else time_range['end']['start_hour']
         num_hrs_in_range = abs(end_range_time - time_range['start']['start_hour'])
@@ -204,29 +204,33 @@ class Window:
         distance['minute'] = interval['minute'] * time_24['minute']
         distance['total'] = distance['hour'] + distance['minute']
 
+        blended_color = {}
         for part in color_parts:
             start_color = time_range['start']['color'][part]
             end_color = time_range['end']['color'][part]
             blended_color[part] = round(end_color + ((start_color - end_color) * distance['total']))
 
-        blended_color = self._formatColor(blended_color)
+        blended_color = self._format_color(blended_color)
 
         if is_closer_to_start:
             closest_group = time_range['start'] 
             gradient: {
-                'start': self._formatColor(closest_group['color']),
+                'start': self._format_color(closest_group['color']),
                 'end': blended_color,
             }
         else:
             closest_group = time_range['end']
             gradient: {
                 'start': blended_color,
-                'end': self._formatColor(closest_group['color']),
+                'end': self._format_color(closest_group['color']),
             }
 
         return {
             'now': self.now,
             'group': closest_group,
-            'color': {...blended_color, gradient}
+            'color': {
+                **blended_color, 
+                'gradient': gradient,
+            },
         }
 

@@ -29,7 +29,7 @@ app = Flask(__name__)
 my_posts = PostCollection()
 my_window = Window()
 
-pprint(my_window.getData())
+# pprint(my_window.getData())
 
 now = datetime.now()
 cookie_update_date = dateparser.parse('2017-06-24T00:00:00')
