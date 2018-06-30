@@ -1,7 +1,6 @@
-Title:          What's on my mac
+Title:          What's on my desk
 Summary:        Summary of this what's on
 Date:           2018-06-03
-Icon:           laptop
 
-# What's on my mac
+# What's on my desk
 **bold** stuff!
