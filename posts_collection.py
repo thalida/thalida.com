@@ -81,25 +81,19 @@ class PostCollection:
 
         # Setup default types & values for post/collection meta data
         self.META_DEFAULTS = {
-            'visual_index':  (PostCollection._cast_to_int, None), 
-            'title': (PostCollection._cast_to_string, "Untitled"), 
-            'date': (PostCollection._cast_to_date, "2007-09-16"), 
-            'date_updated': (PostCollection._cast_to_date, None), 
-            'date_posted': (PostCollection._cast_to_date, None), 
-            'icon': (PostCollection._cast_to_string, None),
-            'icons': (PostCollection._cast_to_list, list()),
-            'tags': (PostCollection._cast_to_list, list()), 
-            'hidden': (PostCollection._cast_to_bool, False), 
-            'is_hidden': (PostCollection._cast_to_bool, False), 
-            'draft': (PostCollection._cast_to_bool, False), 
-            'is_draft': (PostCollection._cast_to_bool, False), 
-            'featured': (PostCollection._cast_to_bool, False),
-            'is_featured': (PostCollection._cast_to_bool, False),
-
-            'is_collection_meta': (PostCollection._cast_to_bool, False), 
-            'is_post_meta': (PostCollection._cast_to_bool, False),
+            'visual_index':  (PostCollection._cast_to_int, None, ['index']), 
+            'title': (PostCollection._cast_to_string, "Untitled", []), 
+            'date_posted': (PostCollection._cast_to_date, PostCollection._cast_to_date("2007-09-16"), ['date']), 
+            'date_updated': (PostCollection._cast_to_date, None, []), 
+            'icons': (PostCollection._cast_to_list, [], ['icon']),
+            'tags': (PostCollection._cast_to_list, [], ['tag']), 
+            'is_hidden': (PostCollection._cast_to_bool, False, ['hidden']), 
+            'is_draft': (PostCollection._cast_to_bool, False, ['draft']), 
+            'is_featured': (PostCollection._cast_to_bool, False, ['featured']),
+            'is_collection_meta': (PostCollection._cast_to_bool, False, []), 
+            'is_post_meta': (PostCollection._cast_to_bool, False, []),
         }
-        self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, "")
+        self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, "", [])
 
         # Get an instance of the markdown function
         self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
@@ -304,7 +298,7 @@ class PostCollection:
     def _sort_by(self, post_meta):
         date_updated = post_meta.get('date_updated')
         date_updated = date_updated if date_updated is not None else '-1'
-        return (date_updated, post_meta['date'], post_meta['title'])
+        return (date_updated, post_meta['date_posted'], post_meta['title'])
 
     def _format_meta(self, meta, path):
         """Formats File Metadata
@@ -327,36 +321,37 @@ class PostCollection:
         # Combine the keys in the meta data with a list of defautl keys
         all_meta_keys = list(set(list(meta.keys()) + list(self.META_DEFAULTS.keys())))
 
-        # Create a new dict with the meta keys lowercased and the values cast to the correct format
-        formatted_meta = {k.lower(): self._cast_meta(k, meta.get(k)) for k in all_meta_keys}
+        formatted_meta = {}
+        for key in all_meta_keys:
+            key = key.lower()
+            (cast_fn, default_value, alias_keys) = self.META_DEFAULTS.get(key, self.META_FALLBACK_DEFAULT)
 
-        if formatted_meta.get('is_featured'):
-            formatted_meta['featured'] = formatted_meta.get('is_featured')
-        elif formatted_meta.get('featured'):
-            formatted_meta['is_featured'] = formatted_meta.get('featured')
+            meta_value = default_value           
+            alias_keys = alias_keys + [key]
+            
+            for alias in alias_keys:
+                if meta.get(alias) is not None:
+                    meta_value = meta.get(alias)
+                    break
 
-        if formatted_meta.get('is_hidden'):
-            formatted_meta['hidden'] = formatted_meta.get('is_hidden')
-        elif formatted_meta.get('hidden'):
-            formatted_meta['is_hidden'] = formatted_meta.get('hidden')
+            if isinstance(meta_value, list):
+                # Let's make a copy of the list so we're passing around a new reference
+                if cast_fn is PostCollection._cast_to_list:
+                    meta_value = meta_value.copy()
+                
+                # Markdown meta data returns all meta values as a list of 1, so lets get
+                # the first (and only) value if we're not expecting a list
+                else:
+                    meta_value = meta_value[0]
 
-        if formatted_meta.get('is_draft'):
-            formatted_meta['draft'] = formatted_meta.get('is_draft')
-        elif formatted_meta.get('draft'):
-            formatted_meta['is_draft'] = formatted_meta.get('draft')
+            formatted_meta[key] = cast_fn(meta_value) if meta_value is not None else meta_value
         
         # Add some additonal keys to the meta data
         formatted_meta['path'] = path
         formatted_meta['collection'] = self._get_collection_key(path)
         formatted_meta['is_external'] = 'external_url' in formatted_meta
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
-        formatted_meta['is_default_date'] = formatted_meta.get('date') is self.META_DEFAULTS['date'][1]
-
-        if formatted_meta.get('date_posted') and formatted_meta['is_default_date']:
-            formatted_meta['date'] = formatted_meta.get('date_posted')
-        
-        if formatted_meta.get('icon'):
-            formatted_meta['icons'].append(formatted_meta['icon'])
+        formatted_meta['is_default_date'] = formatted_meta.get('date_posted') == self.META_DEFAULTS['date_posted'][1]
 
         if formatted_meta.get('is_external'):
             formatted_meta['icons'].append('external')
@@ -384,7 +379,6 @@ class PostCollection:
         Returns:
             [str] -- A relative url for a post
         """
-        print(path, self.url_pattern)
         m = re.search(self.url_pattern, path)
         return f'{self.POSTS_URL_DECORATOR}{m.group(1)}'
 
