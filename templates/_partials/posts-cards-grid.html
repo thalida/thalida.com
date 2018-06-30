@@ -17,12 +17,12 @@
                     <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
                 {% endif %}
                 <h3 class="card__header header--tertiary">
-                    <span class="card__header__text">{{ post_meta.title }}</span>
+                    <span class="card__header__text">{{ post_meta.title | truncate(50, False, '...', 10) }}</span>
                     {% for icon in post_meta.icons %}
                         <span class="icon icon--small icon--{{icon | lower}}"></span>
                     {% endfor %}
                 </h3>
-                <p class="card__summary text--primary">{{ post_meta.summary | safe }}</p>
+                <p class="card__summary text--primary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
                 <small class="card__details text--micro">
                     {% if post_meta.is_external %}
                         Links to <span class="link--micro">{{ post_meta.external_url }}</span>

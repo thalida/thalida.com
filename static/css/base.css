@@ -401,6 +401,7 @@ a {
         display: inline-block;
         position: relative;
         vertical-align: middle;
+        max-width: 90%;
     }
     .card__summary {
         padding: 0;

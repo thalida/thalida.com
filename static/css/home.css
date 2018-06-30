@@ -60,6 +60,11 @@
         text-align: center;
         line-height: 1em;
     }
+    .collection__header-link {
+        display: block;
+        position: relative;
+        color: #1C2233;
+    }
     .collection__header__text {
         display: inline-block;
         position: relative;

@@ -78,13 +78,15 @@ window.app_weather = {{ weather | tojson }};
         {% for collection_key in collections_order %}
             {% set collection = globals.all_collections[collection_key] %}
             {% if not collection.meta.is_hidden %}
-                <section class="collection">
-                    <h2 class="collection__header header--secondary">
-                        <span class="collection__header__text">{{ collection.meta.title | safe }}</span>
-                        {% for icon in collection.meta.icons %}
-                            <span class="icon icon--small icon--{{icon}}"></span>
-                        {% endfor %}
-                    </h2>
+                <section id="collection-{{ collection_key }}" class="collection">
+                    <a class="collection__header-link" href="#collection-{{ collection_key }}">
+                        <h2 class="collection__header header--secondary">
+                            <span class="collection__header__text">{{ collection.meta.title | safe }}</span>
+                            {% for icon in collection.meta.icons %}
+                                <span class="icon icon--small icon--{{icon}}"></span>
+                            {% endfor %}
+                        </h2>
+                    </a> 
                     <p class="collection__summary text--primary">
                         {{ collection.meta.summary }}
                     </p>
