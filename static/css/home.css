@@ -60,7 +60,11 @@
         text-align: center;
         line-height: 1em;
     }
-    .collection__icon {}
+    .collection__header__text {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+    }
     .collection__summary {
         margin: 0.5em 0 0;
         text-align: center;

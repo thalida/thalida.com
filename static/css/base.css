@@ -246,6 +246,76 @@ a {
 
 
 /*******************************************************************************
+ * ICONS
+ ******************************************************************************/
+.icon {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    text-indent: -9999px;
+    
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+    .icon--small {
+        width: 16px;
+        height: 16px;
+    }
+
+    .icon--android,
+    .icon--google-phone {
+        background-image: url(/static/images/icons/google-phone.svg);
+    }
+    .icon--external,
+    .icon--outgoing-link {
+        background-image: url(/static/images/icons/outgoing-link.svg);
+    }
+    .icon--book-cabinet,
+    .icon--shelf {
+        background-image: url(/static/images/icons/book-cabinet.svg);
+    }
+    .icon--camera {
+        background-image: url(/static/images/icons/camera.svg);
+    }
+    .icon--clock,
+    .icon--wall-clock {
+        background-image: url(/static/images/icons/wall-clock.svg);
+    }
+    .icon--desk,
+    .icon--work-desk {
+        background-image: url(/static/images/icons/work-desk.svg);
+    }
+    .icon--document-page {
+        background-image: url(/static/images/icons/document-page.svg);
+    }
+    .icon--doodle,
+    .icon--journal {
+        background-image: url(/static/images/icons/doodle.svg);
+    }
+    .icon--forward-time {
+        background-image: url(/static/images/icons/forward-time.svg);
+    }
+    .icon--front-page {
+        background-image: url(/static/images/icons/front-page.svg);
+    }
+    .icon--game,
+    .icon--gameboy {
+        background-image: url(/static/images/icons/gameboy.svg);
+    }
+    .icon--iphone {
+        background-image: url(/static/images/icons/iphone.svg);
+    }
+    .icon--laptop {
+        background-image: url(/static/images/icons/laptop.svg);
+    }
+    .icon--photo,
+    .icon--polaroid-stack {
+        background-image: url(/static/images/icons/polaroid-stack.svg);
+    }
+
+
+/*******************************************************************************
  * CARDS
  ******************************************************************************/
 
@@ -292,7 +362,7 @@ a {
 }
 .card {
     display: block;
-    
+
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -327,7 +397,11 @@ a {
         width: 100%;
         line-height: 1.6em;
     }
-    .card__icons {}
+    .card__header__text {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+    }
     .card__summary {
         padding: 0;
         margin: 0.2em 0 1.0em;

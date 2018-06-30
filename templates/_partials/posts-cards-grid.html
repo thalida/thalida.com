@@ -17,13 +17,10 @@
                     <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
                 {% endif %}
                 <h3 class="card__header header--tertiary">
-                    {{ post_meta.title }}
-                    
-                    <span class="card__icons">
-                        {% for icon in post_meta.icons %}
-                            <span class="icon icon--{{icon}}">[{{icon}} icon]</span>
-                        {% endfor %}
-                    </span>
+                    <span class="card__header__text">{{ post_meta.title }}</span>
+                    {% for icon in post_meta.icons %}
+                        <span class="icon icon--small icon--{{icon | lower}}"></span>
+                    {% endfor %}
                 </h3>
                 <p class="card__summary text--primary">{{ post_meta.summary | safe }}</p>
                 <small class="card__details text--micro">
