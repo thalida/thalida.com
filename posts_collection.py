@@ -1,6 +1,7 @@
 # Builtins
 import os
 import glob
+import re
 from datetime import datetime
 from pprint import pprint
 from collections import OrderedDict
@@ -63,12 +64,10 @@ class PostCollection:
     META_DEFAULTS = {}
     META_FALLBACK_DEFAULT = ()
 
-    markdown = {}
-    posts_meta = {}
-    posts_html = {}
-    post_url_to_path = {}
-    collections = {}
-    collections_order = []
+    re_posts_dir = POSTS_DIR.replace('/', '\/')
+    re_collection = COLLECTION_PREFIX[1:-1]
+    url_pattern = re.compile(f'{re_posts_dir}(?:{re_collection}\.)?([\w\/\-]+)\{POSTS_EXT}')
+    collection_pattern = re.compile(f'{re_collection}\.([^\/]+)')
 
     def __init__(self, run_load=True):
         """Class Init
@@ -79,9 +78,6 @@ class PostCollection:
         Keyword Arguments:
             run_load {bool} -- Should init run the load function to get data? (default: {True})
         """
-
-        # Get an instance of the markdown function
-        self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
 
         # Setup default types & values for post/collection meta data
         self.META_DEFAULTS = {
@@ -104,6 +100,14 @@ class PostCollection:
             'is_post_meta': (PostCollection._cast_to_bool, False),
         }
         self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, "")
+
+        # Get an instance of the markdown function
+        self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
+        self.posts_meta = {}
+        self.posts_html = {}
+        self.post_url_to_path = {}
+        self.collections = {}
+        self.collections_order = []
 
         if run_load:
             self._load()
@@ -343,8 +347,7 @@ class PostCollection:
         
         # Add some additonal keys to the meta data
         formatted_meta['path'] = path
-        formatted_meta['collection'] = self._parse_collection_from_path(path)
-        formatted_meta['url'] = self._convert_path_to_url(path)
+        formatted_meta['collection'] = self._get_collection_key(path)
         formatted_meta['is_external'] = 'external_url' in formatted_meta
         formatted_meta['is_visible'] = not formatted_meta['is_hidden'] and not formatted_meta['is_draft']
         formatted_meta['is_default_date'] = formatted_meta.get('date') is self.META_DEFAULTS['date'][1]
@@ -364,13 +367,14 @@ class PostCollection:
             formatted_meta['is_collection_meta'] = True
         else:
             formatted_meta['is_post_meta'] = True
+            formatted_meta['url'] = self._get_post_url(path)
 
         # print(formatted_meta)
         # print('+++++++++')
         return formatted_meta
 
-    def _convert_path_to_url(self, path): 
-        """Converts a Post Path to it's URL
+    def _get_post_url(self, path):
+        """Gets the post url from it's path
         
         Given a path convert it to the url used on site
         
@@ -380,13 +384,12 @@ class PostCollection:
         Returns:
             [str] -- A relative url for a post
         """
-        url = path.replace(self.POSTS_DIR, self.POSTS_URL_DECORATOR, 1)
-        url = url.replace(self.COLLECTION_PREFIX, '/', 1)
-        url = url.rsplit(self.POSTS_EXT, 1)[0]
-        return url
+        print(path, self.url_pattern)
+        m = re.search(self.url_pattern, path)
+        return f'{self.POSTS_URL_DECORATOR}{m.group(1)}'
 
-    def _parse_collection_from_path(self, path):
-        """Get the Collection Name from a Path
+    def _get_collection_key(self, path):
+        """Get the Collection Key (Name) from a Path
         
         Given a path get the collection name from it, if no collection name
         found then return the default collection
@@ -397,15 +400,14 @@ class PostCollection:
         Returns:
             [str] -- A collection name
         """
+        m = re.search(self.collection_pattern, path)
 
-        # If no collection found return the default collection
-        if path.find(self.COLLECTION_PREFIX) == -1:
-            return self.DEFAULT_COLLECTION_KEY
+        try:
+            group = m.group(1)
+        except AttributeError:
+            group = self.DEFAULT_COLLECTION_KEY
 
-        # Get the collection key from the path
-        parts = path.split(self.COLLECTION_PREFIX, 1)
-        collection_key = parts[1].split('/', 1)[0]
-        return collection_key
+        return group
                 
     def _upsert(self, arr, val, index=None, empty_value=None):
         """Update or Insert a Value into An Array
