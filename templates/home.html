@@ -34,7 +34,7 @@
 
 {% block body %}
 <main class="home">
-    <div class="window">
+    <div id=window" class="window">
         {% set weather_icon = 'rain' %}
         {% set weather_icon = 'snow' %}
         {% set weather_icon = 'sleet' %}
@@ -46,7 +46,7 @@
         {% set weather_icon = 'partly-cloudy-day' %}
         {% set weather_icon = 'partly-cloudy-night' %}
         {% set weather_icon = window.weather.current.icon %}
-        <div class="window__scene">
+        <div id="window__scene" class="window__scene">
             <div class="window__scene__outside">
                 <div class="window__scene__sky"></div>
                 <div class="window__scene__skyline"></div>
@@ -81,16 +81,16 @@
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">
-                    <div class="window__scene__leaf window__scene__leaf--1"></div>
-                    <div class="window__scene__leaf window__scene__leaf--2"></div>
+                    <div class="js-show-on-init window__scene__leaf window__scene__leaf--1"></div>
+                    <div class="js-show-on-init window__scene__leaf window__scene__leaf--2"></div>
                     <img class="window__scene__plant__image" src="{{url_for('static', filename='images/window/plant.svg')}}" alt="A slowly dying plant with falling leaves" />
                 </div>
                 <div class="window__scene__google-home">
                     <div class="google-home__colors">
-                        <span class="google-home__color google-home__color--circle google-home__color--green"></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--purple"></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--pink"></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--blue"></span>
+                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--green"></span>
+                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--purple"></span>
+                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--pink"></span>
+                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--blue"></span>
                     </div>
                     <img class="window__scene__google-home__image" src="{{url_for('static', filename='images/window/google-home.svg')}}" alt="An illustrated google home" />
                 </div>
