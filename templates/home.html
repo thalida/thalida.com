@@ -5,24 +5,106 @@
 
 {% block styles %}
 <link href="{{url_for('static', filename='css/home.css', v=globals.css_version)}}" rel="stylesheet">
+
+<style type="text/css"> 
+    {% set sky_color = window.time.color.as_str %}
+    {% set sky_gradient = window.time.color.gradient %}
+    .window__scene__sky--gradient--vertical {
+        background: -webkit-gradient(linear, left top, left bottom, from({{sky_gradient.end.as_str}}), to({{sky_gradient.start.as_str}}));
+        background: -webkit-linear-gradient(top, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+        background: -o-linear-gradient(top, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+        background: linear-gradient(to bottom, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+    }
+    .window__scene__sky--gradient--diagonal {
+        background: -webkit-gradient(linear, left top, right bottom, from({{sky_gradient.end.as_str}}), to({{sky_gradient.start.as_str}}));
+        background: -webkit-linear-gradient(top left, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+        background: -o-linear-gradient(top left, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+        background: linear-gradient(to bottom right, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
+    }
+    .window__scene__sky,
+    .window__scene__sky--color {
+        background-color: {{ sky_color }};
+    }
+</style>
 {% endblock %}
 
 {% block scripts %}
-<script>
-window.app_weather = {{ weather | tojson }};
-</script>
 <script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.js_version)}}"></script>
 {% endblock %}
 
 {% block body %}
 <main class="home">
-    <div class="scene">
-        <div class="scene__window">
-            {{ weather.icon }}
-            {{ dynamic_time_data.label }}
+    <div class="window">
+        {% set weather_icon = 'rain' %}
+        {% set weather_icon = 'snow' %}
+        {% set weather_icon = 'sleet' %}
+        {% set weather_icon = 'hail' %}
+        {% set weather_icon = 'wind' %}
+        {% set weather_icon = 'tornado' %}
+        {% set weather_icon = 'fog' %}
+        {% set weather_icon = 'cloudy' %}
+        {% set weather_icon = 'partly-cloudy-day' %}
+        {% set weather_icon = 'partly-cloudy-night' %}
+        {% set weather_icon = window.weather.current.icon %}
+        <div class="window__scene">
+            <div class="window__scene__outside">
+                <div class="window__scene__sky"></div>
+                <div class="window__scene__skyline"></div>
+                <div class="window__scene__weather">
+                    <span class="weather weather--{{weather_icon}}">
+                        {% if weather_icon == 'rain' or weather_icon == 'snow' or weather_icon == 'sleet' or weather_icon == 'hail' %}
+                            {% for number in range(50) %}
+                                <span class="weather__droplet weather__droplet--{{number+1}}"></span>
+                            {% endfor %}
+                        {% elif weather_icon == 'wind' or weather_icon == 'tornado' %}
+                            <span class="weather__leaf weather__leaf--1"></span>
+                            <span class="weather__leaf weather__leaf--2"></span>
+                            <span class="weather__leaf weather__leaf--3"></span>
+                        {% elif weather_icon == 'fog' %}
+                            <span class="weather__fog weather__fog--1"></span>
+                            <span class="weather__fog weather__fog--2"></span>
+                            <span class="weather__fog weather__fog--3"></span>
+                            <span class="weather__fog weather__fog--4"></span>
+                        {% elif weather_icon == 'cloudy' or weather_icon == 'thunderstorm' %}
+                            <span class="weather__cloud weather__cloud--1"></span>
+                            <span class="weather__cloud weather__cloud--2"></span>
+                            <span class="weather__cloud weather__cloud--3"></span>
+                        {% elif weather_icon == 'partly-cloudy-day' or weather_icon == 'partly-cloudy-night' %}
+                            <span class="weather__cloud weather__cloud--3"></span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="window__scene__frame">
+                    <img class="window__scene__frame__image" src="{{url_for('static', filename='images/window/frame-only.svg')}}" alt="Illustrated window showing a city skyline in the {{ window.time.group.label}} and the current weather of {{ window.weather.current.summary }}" />
+                </div>
+            </div>
+            <div class="window__scene__inside">
+                <div class="window__scene__sill"></div>
+                <div class="window__scene__plant">
+                    <img class="window__scene__plant__image" src="{{url_for('static', filename='images/window/plant.svg')}}" alt="A slowly dying plant with falling leaves" />
+                </div>
+                <div class="window__scene__google-home">
+                    <div class="google-home__colors">
+                        <span class="google-home__color google-home__color--circle google-home__color--green"></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--purple"></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--pink"></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--blue"></span>
+                    </div>
+                    <img class="window__scene__google-home__image" src="{{url_for('static', filename='images/window/google-home.svg')}}" alt="An illustrated activated google home" />
+                </div>
+            </div>
+
         </div>
-        <div class="scene__label">
-            {{ weather.temperature }} °{% if weather.units == 'us' %}F{% else %}C{% endif %} and {{ weather.summary }}
+        <div class="window__label">
+            <p class="window__label__text">
+                {{ window.weather.current.temperature }} °{% if window.weather.current.units == 'us' %}F{% else %}C{% endif %} and {{ window.weather.current.summary }}
+            </p>
+            <div class="google-home__colors">
+                <span class="google-home__color google-home__color--line google-home__color--blue"></span>
+                <span class="google-home__color google-home__color--line google-home__color--purple"></span>
+                <span class="google-home__color google-home__color--line google-home__color--green"></span>
+                <span class="google-home__color google-home__color--line google-home__color--pink"></span>
+            </div>
         </div>
     </div>
 
@@ -35,7 +117,7 @@ window.app_weather = {{ weather | tojson }};
         </h1>
         <div class="about-section__content">
             <p class="about-section__text text--primary">
-                {{ dynamic_time_data.greeting }}, my name’s Thalida, I’m a Trinidadian-American 
+                {{ window.time.group.salutation }}, my name’s Thalida, I’m a Trinidadian-American 
                 software engineer based in New York. For my 16th birthday I was lucky 
                 enough to be gifted this domain. It was one of the best presents 
                 I’ve ever received, being able to learn and grow on here is the 

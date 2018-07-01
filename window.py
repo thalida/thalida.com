@@ -1,15 +1,21 @@
 # Builtins
 from datetime import datetime
 from pprint import pprint
+import json
 
 # Third Party
-import dateparser
+from darksky import forecast
+import geocoder
+
+# Locals
+import secrets
+
 
 class Window:
     TIME_GROUPS = [
         {
-            "name": "nightowl",
-            "label": "Night Owl",
+            "name": "late_night",
+            "label": "Late Night",
             "start_hour": 0,
             "color": { 
                 "r": 50,
@@ -28,15 +34,15 @@ class Window:
             ]
         },
         {
-            "name": "earlybird",
-            "label": "Eary Bird",
+            "name": "early_morning",
+            "label": "Eary Morning",
             "start_hour": 4,
             "color": { 
                 "r": 139,
                 "g": 152,
                 "b": 206 
             },
-            "salutation": "Good Morning",
+            "salutation": "Oh hey, Early Riser",
             "sayings": [
                 "OMG, it's the elusive EarlyBird!",
                 "Oh hey, Early Riser!",
@@ -54,7 +60,7 @@ class Window:
                 "g": 216,
                 "b": 255 
             },
-            "salutation": "Good Morning",
+            "salutation": "Good morning",
             "sayings": [
                 "How are you doing?",
                 "Have a wonderful day!",
@@ -72,7 +78,7 @@ class Window:
                 "g": 216,
                 "b": 116 
             },
-            "salutation": "Good Afternoon",
+            "salutation": "Good afternoon",
             "sayings": [
                 "It’s NOM NOM Time",
                 "How’s the day going?",
@@ -90,7 +96,7 @@ class Window:
                 "g": 183,
                 "b": 116 
             },
-            "salutation": "Good Afternoon",
+            "salutation": "Good afternoon",
             "sayings": [
                 "How are you doing?",
                 "Have a wonderful day!",
@@ -108,7 +114,7 @@ class Window:
                 "g": 135,
                 "b": 116 
             },
-            "salutation": "Good Evening",
+            "salutation": "Good evening",
             "sayings": [
                 "How’s your day been?",
                 "Dinner plans?",
@@ -127,7 +133,7 @@ class Window:
                 "g": 75,
                 "b": 215 
             },
-            "salutation": "Good Night",
+            "salutation": "Good night",
             "sayings": [
                 "Sweet Dreams",
                 "Plans Tonight?",
@@ -139,14 +145,49 @@ class Window:
     ]
 
     def __init__(self):
-        self.now = datetime.now()
         self.total_time_groups = len(self.TIME_GROUPS);
-        self.time = self._getTime(self.now)
-        # pprint(self.time)
     
-    def getData(self):
-        pass
-        # print(self._get_time_range())
+    def get_state(self, request, force_update, weather_cookie):
+        return {
+            'time': self._get_time(datetime.now()),
+            'weather': self._get_weather(request, force_update, weather_cookie)
+        }
+
+    def _get_weather(self, request, force_update, weather_cookie):
+        """Get Current Weather Based on IP Address
+        
+        Based on the current ip location, getthe current weather (or use NY if location 
+        is not available.) Save that data to a cookie to reduce # of api calls.
+        
+        Arguments:
+            request -- A Flast Request
+            force_update {bool} -- Should we force update the weather data
+            weather_cookie -- Stored weather data
+        """
+
+        # Get current weather for location based on IP
+        if weather_cookie and not force_update:
+            from_cookie = True;
+            current_weather = json.loads(weather_cookie)
+        else:
+            from_cookie = False
+
+            # fallback latitute/longitude data
+            newyork_latlng = [40.7081, -73.9571]
+
+            # Get the visitors IP and lat/lng for that IP
+            ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            geo = geocoder.ip(ip)
+            lat, lng = geo.latlng if len(geo.latlng) == 2 else newyork_latlng
+
+            # Use Darksky to get the current forcast for that lat/lng
+            geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
+
+            # Get and format the current weather
+            current_weather = geo_forecast['currently']
+            current_weather['units'] = geo_forecast['flags']['units'] # F or C
+
+        return {'current': current_weather, 'from_cookie': from_cookie}
 
     def _format_color(self, color):
         is_arr = isinstance(color, list)
@@ -178,7 +219,7 @@ class Window:
 
         return (time, range)
 
-    def _getTime(self, now):
+    def _get_time(self, now):
         # Get the start + end colors - as well as the time used
         (time_24, time_range) = self._get_time_range(now)
 
@@ -214,19 +255,19 @@ class Window:
 
         if is_closer_to_start:
             closest_group = time_range['start'] 
-            gradient: {
+            gradient = {
                 'start': self._format_color(closest_group['color']),
                 'end': blended_color,
             }
         else:
             closest_group = time_range['end']
-            gradient: {
+            gradient = {
                 'start': blended_color,
                 'end': self._format_color(closest_group['color']),
             }
 
         return {
-            'now': self.now,
+            'now': now,
             'group': closest_group,
             'color': {
                 **blended_color, 

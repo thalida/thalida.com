@@ -6,12 +6,9 @@ from pprint import pprint
 
 # Third Party
 from flask import Flask, request, make_response, render_template, redirect, url_for, abort
-from darksky import forecast
 import dateparser
-import geocoder
 
 # Locals
-import secrets
 from posts_collection import PostCollection
 from window import Window
 
@@ -49,22 +46,23 @@ def index():
     """
 
     try:
+        force_update = get_force_update(request)
+        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        
         # Gather the data needed to render the page
-        weather = get_current_weather(request)
-        dynamic_time_data = get_dynamic_time_data(request)
+        window = my_window.get_state(request, force_update, weather_cookie)
         work = get_work()
         collections_order = my_posts.collections_order
 
         response = make_response(render_template(
             'home.html', 
             **get_globals(),
-            weather=weather['current'], 
-            dynamic_time_data=dynamic_time_data,
+            window=window, 
             collections_order=collections_order, 
             work=work,
         ))
 
-        set_cookies(request, response, weather=weather)
+        set_cookies(request, response, weather=window['weather'])
         
         return response
     except Exception:
@@ -214,19 +212,6 @@ def get_work():
         'years_since_start': years_since_start,
     }
 
-def get_dynamic_time_data(request):
-    """Dynamic Information Based on Current Time
-    
-    Get current greetings, activies, colors, etc based on the current time
-    
-    Arguments:
-        request -- A Flosk Request
-    """
-    return {
-        'greeting': "Hello", 
-        'label': 'late-night'
-    }
-
 def get_force_update(request):
     """Get If We Should Force an Update
     
@@ -244,42 +229,6 @@ def get_force_update(request):
     force_update = (cookie_update_date - last_visit_as_datetime).total_seconds() > 0
 
     return force_update
-
-def get_current_weather(request):
-    """Get Current Weather Based on IP Address
-    
-    Based on the current ip location, getthe current weather (or use NY if location 
-    is not available.) Save that data to a cookie to reduce # of api calls.
-    
-    Arguments:
-        request -- A Flast Request
-    """
-    force_update = get_force_update(request)
-
-    # Get current weather for location based on IP
-    weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
-    if weather_cookie and not force_update:
-        from_cookie = True;
-        current_weather = json.loads(weather_cookie)
-    else:
-        from_cookie = False
-
-        # fallback latitute/longitude data
-        newyork_latlng = [40.7081, -73.9571]
-
-        # Get the visitors IP and lat/lng for that IP
-        ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-        geo = geocoder.ip(ip)
-        lat, lng = geo.latlng if len(geo.latlng) == 2 else newyork_latlng
-
-        # Use Darksky to get the current forcast for that lat/lng
-        geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
-
-        # Get and format the current weather
-        current_weather = geo_forecast['currently']
-        current_weather['units'] = geo_forecast['flags']['units'] # F or C
-
-    return {'current': current_weather, 'from_cookie': from_cookie}
 
 
 """=============================================================================
