@@ -57,10 +57,8 @@
             display: inline-block;
             margin: 0;
             padding: 0.5em 2.0em;
-
             background-color: #F2F2F2;
             border-radius: 36px;
-
             font: normal 300 1.4em 'Merriweather', serif;
             line-height: 1.5em;
             text-align: center;
@@ -110,15 +108,17 @@
         position: absolute;
         top: 0;
         left: 0;
-
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center center;
-        
-        animation-duration: 2s;
-        animation-fill-mode: forwards;
-        animation-iteration-count: 1;
-        animation-timing-function: ease-in;
+        -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+        -webkit-animation-fill-mode: forwards;
+                animation-fill-mode: forwards;
+        -webkit-animation-iteration-count: 1;
+                animation-iteration-count: 1;
+        -webkit-animation-timing-function: ease-in;
+                animation-timing-function: ease-in;
     }
         .window__scene__leaf--1 {
             top: 2.3rem;
@@ -128,8 +128,11 @@
             height: 12px;
             background-image: url(/static/images/window/leaf-1.svg);
 
-            animation-name: animation-leaf-falling--1;
-            animation-delay: 300ms;
+            -webkit-animation-name: animation-leaf-falling--1;
+
+                    animation-name: animation-leaf-falling--1;
+            -webkit-animation-delay: 300ms;
+                    animation-delay: 300ms;
         }
         .window__scene__leaf--2 {
             top: 3.9rem;
@@ -139,8 +142,19 @@
             height: 8px;
             background-image: url(/static/images/window/leaf-2.svg);
 
-            animation-name: animation-leaf-falling--2;
-            animation-delay: 3s;
+            -webkit-animation-name: animation-leaf-falling--2;
+
+                    animation-name: animation-leaf-falling--2;
+            -webkit-animation-delay: 3s;
+                    animation-delay: 3s;
+        }
+
+        @-webkit-keyframes animation-leaf-falling--1 {
+            50%,
+            100% {
+                top: calc(100% - 12px);
+                left: -0.5rem;
+            }
         }
 
         @keyframes animation-leaf-falling--1 {
@@ -148,6 +162,14 @@
             100% {
                 top: calc(100% - 12px);
                 left: -0.5rem;
+            }
+        } 
+ 
+        @-webkit-keyframes animation-leaf-falling--2 {
+            50%,
+            100% {
+                top: calc(100% - 8px);
+                left: 0rem;
             }
         } 
  
@@ -172,23 +194,48 @@
             top: 0rem;
             left: 2rem;
             opacity: 0;
-
-            animation-duration: 2s;
-            animation-iteration-count: infinite;
-            animation-timing-function: ease-out;
-            animation-direction: alternate;
+            -webkit-animation-duration: 2s;
+                    animation-duration: 2s;
+            -webkit-animation-iteration-count: infinite;
+                    animation-iteration-count: infinite;
+            -webkit-animation-timing-function: ease-out;
+                    animation-timing-function: ease-out;
+            -webkit-animation-direction: alternate;
+                    animation-direction: alternate;
         }
         .window__scene__google-home .google-home__color--circle.google-home__color--purple {
-            animation-name: animation-google-home--purple;
+            -webkit-animation-name: animation-google-home--purple;
+                    animation-name: animation-google-home--purple;
         } 
         .window__scene__google-home .google-home__color--circle.google-home__color--green {
-            animation-name: animation-google-home--green;
+            -webkit-animation-name: animation-google-home--green;
+                    animation-name: animation-google-home--green;
         } 
         .window__scene__google-home .google-home__color--circle.google-home__color--pink {
-            animation-name: animation-google-home--pink;
+            -webkit-animation-name: animation-google-home--pink;
+                    animation-name: animation-google-home--pink;
         } 
         .window__scene__google-home .google-home__color--circle.google-home__color--blue {
-            animation-name: animation-google-home--blue;
+            -webkit-animation-name: animation-google-home--blue;
+                    animation-name: animation-google-home--blue;
+        } 
+
+        @-webkit-keyframes animation-google-home--purple {
+            0% {
+                top: 0rem;
+                left: 2rem;
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+                top: -0.5rem; 
+                left: 2rem;
+            }
+            100% {
+                opacity: 1;
+                top: 0rem;
+                left: 1.3rem;
+            }
         } 
 
         @keyframes animation-google-home--purple {
@@ -206,6 +253,24 @@
                 opacity: 1;
                 top: 0rem;
                 left: 1.3rem;
+            }
+        } 
+
+        @-webkit-keyframes animation-google-home--green {
+            0% {
+                top: 0rem;
+                left: 2rem;
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+                top: 0rem;
+                left: 2.5rem; 
+            }
+            100% {
+                opacity: 1;
+                top: -0.5rem;
+                left: 2rem;
             }
         } 
 
@@ -227,6 +292,24 @@
             }
         }
 
+        @-webkit-keyframes animation-google-home--pink {
+            0% {
+                top: 0rem;
+                left: 2rem;
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+                top: 0.5rem; 
+                left: 2rem;
+            }
+            100% {
+                opacity: 1;
+                top: 0;
+                left: 2.5rem;
+            }
+        }
+
         @keyframes animation-google-home--pink {
             0% {
                 top: 0rem;
@@ -242,6 +325,24 @@
                 opacity: 1;
                 top: 0;
                 left: 2.5rem;
+            }
+        }
+
+        @-webkit-keyframes animation-google-home--blue {
+            0% {
+                top: 0rem;
+                left: 2rem;
+                opacity: 0;
+            }
+            25% {
+                opacity: 1;
+                top: 0rem;
+                left: 1.3rem;
+            }
+            100% {
+                opacity: 1;
+                top: 0.5rem; 
+                left: 2rem;
             }
         }
 
@@ -328,7 +429,6 @@
     .weather__leaf {
         display: block;
         position: relative;
-
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center center;
@@ -386,7 +486,6 @@
     .weather__cloud {
         display: block;
         position: relative;
-
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center center;
@@ -436,11 +535,14 @@
         position: relative;
         height: 150%;
         width: 150%;
-
-        animation-name: animation-droplet;
-        animation-duration: 30s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
+        -webkit-animation-name: animation-droplet;
+                animation-name: animation-droplet;
+        -webkit-animation-duration: 30s;
+                animation-duration: 30s;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+                animation-timing-function: linear;
     }
         .weather--snow .weather__droplet,
         .weather--hail .weather__droplet {
@@ -453,7 +555,9 @@
             width: 0.2rem;
             height: 0.4rem;
             border-radius: 4px;
-            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+                -ms-transform: rotate(-45deg);
+                    transform: rotate(-45deg);
         }
         .weather--rain .weather__droplet {
             background-color: #28AFFF;
@@ -470,15 +574,20 @@
 
     .weather--wind,
     .weather--tornado {
-        animation-name: animation-wind;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
+        -webkit-animation-name: animation-wind;
+                animation-name: animation-wind;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
     }
         .weather--wind {
-            animation-duration: 2000ms;
+            -webkit-animation-duration: 2000ms;
+                    animation-duration: 2000ms;
         }
         .weather--tornado {
-            animation-duration: 1000ms;
+            -webkit-animation-duration: 1000ms;
+                    animation-duration: 1000ms;
         }
         .weather--wind .weather__leaf--1,
         .weather--tornado .weather__leaf--1 {
@@ -493,12 +602,16 @@
     .weather--fog {
         position: absolute;
         bottom: 10%;
-
-        animation-duration: 30s;
-        animation-name: animation-fog;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-        animation-direction: alternate;
+        -webkit-animation-duration: 30s;
+                animation-duration: 30s;
+        -webkit-animation-name: animation-fog;
+                animation-name: animation-fog;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+                animation-direction: alternate;
     }
 
     .weather--cloudy {
@@ -508,12 +621,16 @@
         left: 0%;
         height: 100%;
         width: 100%;
-
-        animation-duration: 2s;
-        animation-name: animation-cloudy;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-        animation-direction: alternate;
+        -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+        -webkit-animation-name: animation-cloudy;
+                animation-name: animation-cloudy;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+                animation-direction: alternate;
     }
         .weather--cloudy .weather__cloud--1 {
             position: absolute;
@@ -530,7 +647,7 @@
             top: 35%;
             left: 0%;
         }
-        
+
     .weather--partly-cloudy-day,
     .weather--partly-cloudy-night {
         display: block;
@@ -539,12 +656,16 @@
         left: 0%;
         height: 100%;
         width: 100%;
-
-        animation-duration: 2s;
-        animation-name: animation-cloudy;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-        animation-direction: alternate;
+        -webkit-animation-duration: 2s;
+                animation-duration: 2s;
+        -webkit-animation-name: animation-cloudy;
+                animation-name: animation-cloudy;
+        -webkit-animation-iteration-count: infinite;
+                animation-iteration-count: infinite;
+        -webkit-animation-timing-function: ease-in-out;
+                animation-timing-function: ease-in-out;
+        -webkit-animation-direction: alternate;
+                animation-direction: alternate;
     }
         .weather--partly-cloudy-day .weather__cloud--3,
         .weather--partly-cloudy-night .weather__cloud--3 {
@@ -553,12 +674,38 @@
             left: 50%;
         }
 
+    @-webkit-keyframes animation-droplet {
+        0% {
+            margin: -250% 0 0 -25%;
+        }
+        100% {
+            margin: 0 0 0 5%;
+        }
+    }
+
     @keyframes animation-droplet {
         0% {
             margin: -250% 0 0 -25%;
         }
         100% {
             margin: 0 0 0 5%;
+        }
+    }
+
+    @-webkit-keyframes animation-wind {
+        0% {
+            margin-top: 25%;
+            margin-left: -30%;
+        }
+        30% {
+            margin-top: 40%;
+        }
+        50% {
+            margin-top: 30%;
+        }
+        100% {
+            margin-top: 100%;
+            margin-left: 100%;
         }
     }
 
@@ -579,6 +726,20 @@
         }
     }
 
+    @-webkit-keyframes animation-fog {
+        0% {
+            bottom: 10%;
+            left: 0%;
+        }
+        50% {
+            bottom: 9%;
+        }
+        100% {
+            bottom: 10%;
+            left: 5%;
+        }
+    }
+
     @keyframes animation-fog {
         0% {
             bottom: 10%;
@@ -590,6 +751,15 @@
         100% {
             bottom: 10%;
             left: 5%;
+        }
+    }
+
+    @-webkit-keyframes animation-cloudy {
+        0% {
+            top: 0%;
+        }
+        100% {
+            top: 2%;
         }
     }
 
@@ -617,12 +787,10 @@
         display: block;
         position: absolute;
         text-indent: -9999px;
-
         height: 2.0em;
         width: 2.0em;
         margin-top: -0.5em;
         margin-left: 0.4em;
-
         background-image: url(/static/images/home/about__leaves.svg);
         background-size: contain;
         background-repeat: no-repeat;
@@ -630,10 +798,8 @@
     @media (min-width: 51.8em) {
         .about-section__content {
           -webkit-columns: 2 20rem;
-             -moz-columns: 2 20rem;
                   columns: 2 20rem;
           -webkit-column-gap: 2.5rem;
-             -moz-column-gap: 2.5rem;
                   column-gap: 2.5rem;
         }
     }
