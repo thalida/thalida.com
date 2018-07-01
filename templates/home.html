@@ -75,12 +75,14 @@
                     </span>
                 </div>
                 <div class="window__scene__frame">
-                    <img class="window__scene__frame__image" src="{{url_for('static', filename='images/window/frame-only.svg')}}" alt="Illustrated window showing a city skyline in the {{ window.time.group.label}} and the current weather of {{ window.weather.current.summary }}" />
+                    <img class="window__scene__frame__image" src="{{url_for('static', filename='images/window/frame-only.svg')}}" alt="Illustrated window showing a city skyline in the {{ window.time.group.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
                 </div>
             </div>
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">
+                    <div class="window__scene__leaf window__scene__leaf--1"></div>
+                    <div class="window__scene__leaf window__scene__leaf--2"></div>
                     <img class="window__scene__plant__image" src="{{url_for('static', filename='images/window/plant.svg')}}" alt="A slowly dying plant with falling leaves" />
                 </div>
                 <div class="window__scene__google-home">
@@ -90,14 +92,14 @@
                         <span class="google-home__color google-home__color--circle google-home__color--pink"></span>
                         <span class="google-home__color google-home__color--circle google-home__color--blue"></span>
                     </div>
-                    <img class="window__scene__google-home__image" src="{{url_for('static', filename='images/window/google-home.svg')}}" alt="An illustrated activated google home" />
+                    <img class="window__scene__google-home__image" src="{{url_for('static', filename='images/window/google-home.svg')}}" alt="An illustrated google home" />
                 </div>
             </div>
 
         </div>
         <div class="window__label">
             <p class="window__label__text">
-                {{ window.weather.current.temperature }} °{% if window.weather.current.units == 'us' %}F{% else %}C{% endif %} and {{ window.weather.current.summary }}
+                It’s currently {{ window.weather.current.temperature | round | int }}°{% if window.weather.current.units == 'us' %}F{% else %}C{% endif %} and {{ window.weather.current.summary | lower }}
             </p>
             <div class="google-home__colors">
                 <span class="google-home__color google-home__color--line google-home__color--blue"></span>

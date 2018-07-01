@@ -105,6 +105,59 @@
     .window__scene__plant {
         left: 36px;
     }
+    .window__scene__leaf {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        
+        animation-duration: 2s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+        animation-timing-function: ease-in;
+    }
+        .window__scene__leaf--1 {
+            top: 2.3rem;
+            left: 0.4rem;
+
+            width: 8px;
+            height: 12px;
+            background-image: url(/static/images/window/leaf-1.svg);
+
+            animation-name: animation-leaf-falling--1;
+            animation-delay: 300ms;
+        }
+        .window__scene__leaf--2 {
+            top: 3.9rem;
+            left: 0.3rem;
+
+            width: 11px;
+            height: 8px;
+            background-image: url(/static/images/window/leaf-2.svg);
+
+            animation-name: animation-leaf-falling--2;
+            animation-delay: 3s;
+        }
+
+        @keyframes animation-leaf-falling--1 {
+            50%,
+            100% {
+                top: calc(100% - 12px);
+                left: -0.5rem;
+            }
+        } 
+
+        @keyframes animation-leaf-falling--2 {
+            50%,
+            100% {
+                top: calc(100% - 8px);
+                left: 0rem;
+            }
+        } 
     .window__scene__google-home {
         right: 30px;
     }
@@ -119,9 +172,9 @@
             opacity: 0;
 
             animation-duration: 2s;
+            /*animation-iteration-count: 2;*/
             animation-iteration-count: infinite;
             animation-timing-function: ease-out;
-            /*animation-timing-function: linear;*/
             animation-direction: alternate;
         }
         .window__scene__google-home .google-home__color--circle.google-home__color--purple {
@@ -140,6 +193,7 @@
             25% {
                 opacity: 1;
                 top: -0.5rem; 
+                left: 2rem;
             }
 
             100% {
@@ -151,6 +205,7 @@
         @keyframes animation-google-home--green {
             25% {
                 opacity: 1;
+                top: 0;
                 left: 2.5rem; 
             }
 
@@ -164,6 +219,7 @@
             25% {
                 opacity: 1;
                 top: 0.5rem; 
+                left: 2rem;
             }
 
             100% {
@@ -175,6 +231,7 @@
         @keyframes animation-google-home--blue {
             25% {
                 opacity: 1;
+                top: 0;
                 left: 1.3rem;
             }
 
