@@ -324,10 +324,6 @@
 .weather {
     display: block;
 }
-    .weather__droplet {
-        display: inline-block;
-        background-color: red;
-    }
 
     .weather__leaf {
         display: block;
@@ -411,49 +407,100 @@
             background-image: url(/static/images/window/weather/cloud-3.svg);
         }
 
+    .weather__droplet-group {
+        display: inline-block;
+        width: 32%;
+        height: 15rem;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    .weather__droplet {
+        display: inline-block;
+        margin-bottom: 50%;
+        margin-left: 25%;
+    }
+        .weather__droplet:nth-child(2n) {
+            margin-bottom: 20%;
+        }
+        .weather__droplet:nth-child(3n) {
+            margin-bottom: 15%;
+            margin-left: 20%;
+        }
+
+    .weather--rain,
+    .weather--sleet,
     .weather--snow,
     .weather--hail {
-        border-radius: 50%;
-    }
-    .weather--rain .weather__droplet,
-    .weather--sleet .weather__droplet {
-        width: 2px;
-        height: 8px;
-        border-radius: 4px;
-    }
-    .weather--wind .weather__leaf--1,
-    .weather--tornado .weather__leaf--1 {
-        margin-left: 48px;
-    }
-    .weather--wind .weather__leaf--2,
-    .weather--tornado .weather__leaf--2 {}
-    .weather--wind .weather__leaf--3,
-    .weather--tornado .weather__leaf--3 {
-        margin-top: 16px;
-        margin-left: 48px;
-    }
-    .weather--wind {
-        animation-duration: 2000ms;
-        animation-name: animation-wind;
+        display: block;
+        position: relative;
+        height: 150%;
+        width: 150%;
+
+        animation-name: animation-droplet;
+        animation-duration: 30s;
         animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
+        animation-timing-function: linear;
     }
+        .weather--snow .weather__droplet,
+        .weather--hail .weather__droplet {
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 50%;
+        }
+        .weather--rain .weather__droplet,
+        .weather--sleet .weather__droplet {
+            width: 0.2rem;
+            height: 0.4rem;
+            border-radius: 4px;
+            transform: rotate(-45deg);
+        }
+        .weather--rain .weather__droplet {
+            background-color: #28AFFF;
+        }
+        .weather--sleet .weather__droplet {
+            background-color: #A7AEB9;
+        }
+        .weather--snow .weather__droplet {
+            background-color: #FFFFFF;
+        }
+        .weather--hail .weather__droplet {
+            background-color: #D5F5FF;
+        }
+
+    .weather--wind,
     .weather--tornado {
-        animation-duration: 1000ms;
         animation-name: animation-wind;
         animation-iteration-count: infinite;
         animation-timing-function: ease-in-out;
     }
+        .weather--wind {
+            animation-duration: 2000ms;
+        }
+        .weather--tornado {
+            animation-duration: 1000ms;
+        }
+        .weather--wind .weather__leaf--1,
+        .weather--tornado .weather__leaf--1 {
+            margin-left: 48px;
+        }
+        .weather--wind .weather__leaf--3,
+        .weather--tornado .weather__leaf--3 {
+            margin-top: 16px;
+            margin-left: 48px;
+        }
+
     .weather--fog {
         position: absolute;
         bottom: 10%;
 
-        animation-duration: 6s;
+        animation-duration: 30s;
         animation-name: animation-fog;
         animation-iteration-count: infinite;
         animation-timing-function: ease-in-out;
         animation-direction: alternate;
     }
+
     .weather--cloudy {
         display: block;
         position: absolute;
@@ -468,21 +515,22 @@
         animation-timing-function: ease-in-out;
         animation-direction: alternate;
     }
-    .weather--cloudy .weather__cloud--1 {
-        position: absolute;
-        top: 20%;
-        left: 40%;
-    }
-    .weather--cloudy .weather__cloud--2 {
-        position: absolute;
-        top: 30%;
-        right: 10%;
-    }
-    .weather--cloudy .weather__cloud--3 {
-        position: absolute;
-        top: 35%;
-        left: 0%;
-    }
+        .weather--cloudy .weather__cloud--1 {
+            position: absolute;
+            top: 20%;
+            left: 40%;
+        }
+        .weather--cloudy .weather__cloud--2 {
+            position: absolute;
+            top: 30%;
+            right: 10%;
+        }
+        .weather--cloudy .weather__cloud--3 {
+            position: absolute;
+            top: 35%;
+            left: 0%;
+        }
+        
     .weather--partly-cloudy-day,
     .weather--partly-cloudy-night {
         display: block;
@@ -498,11 +546,20 @@
         animation-timing-function: ease-in-out;
         animation-direction: alternate;
     }
-    .weather--partly-cloudy-day .weather__cloud--3,
-    .weather--partly-cloudy-night .weather__cloud--3 {
-        position: absolute;
-        top: 35%;
-        left: 50%;
+        .weather--partly-cloudy-day .weather__cloud--3,
+        .weather--partly-cloudy-night .weather__cloud--3 {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+        }
+
+    @keyframes animation-droplet {
+        0% {
+            margin: -250% 0 0 -25%;
+        }
+        100% {
+            margin: 0 0 0 5%;
+        }
     }
 
     @keyframes animation-wind {

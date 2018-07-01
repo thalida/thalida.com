@@ -35,26 +35,20 @@
 {% block body %}
 <main class="home">
     <div id=window" class="window">
-        {% set weather_icon = 'rain' %}
-        {% set weather_icon = 'snow' %}
-        {% set weather_icon = 'sleet' %}
-        {% set weather_icon = 'hail' %}
-        {% set weather_icon = 'wind' %}
-        {% set weather_icon = 'tornado' %}
-        {% set weather_icon = 'fog' %}
-        {% set weather_icon = 'cloudy' %}
-        {% set weather_icon = 'partly-cloudy-day' %}
-        {% set weather_icon = 'partly-cloudy-night' %}
         {% set weather_icon = window.weather.current.icon %}
         <div id="window__scene" class="window__scene">
             <div class="window__scene__outside">
                 <div class="window__scene__sky"></div>
                 <div class="window__scene__skyline"></div>
                 <div class="window__scene__weather">
-                    <span class="weather weather--{{weather_icon}}">
+                    <div class="weather weather--{{weather_icon}}">
                         {% if weather_icon == 'rain' or weather_icon == 'snow' or weather_icon == 'sleet' or weather_icon == 'hail' %}
-                            {% for number in range(50) %}
-                                <span class="weather__droplet weather__droplet--{{number+1}}"></span>
+                            {% for group in range(9) %}
+                                <div class="weather__droplet-group weather__droplet-group--{{group+1}}">
+                                    {% for droplet in range(9) %}
+                                        <span class="weather__droplet weather__droplet--{{droplet+1}}"></span>
+                                    {% endfor %}
+                                </div>
                             {% endfor %}
                         {% elif weather_icon == 'wind' or weather_icon == 'tornado' %}
                             <span class="weather__leaf weather__leaf--1"></span>
@@ -72,10 +66,13 @@
                         {% elif weather_icon == 'partly-cloudy-day' or weather_icon == 'partly-cloudy-night' %}
                             <span class="weather__cloud weather__cloud--3"></span>
                         {% endif %}
-                    </span>
+                    </div>
                 </div>
                 <div class="window__scene__frame">
-                    <img class="window__scene__frame__image" src="{{url_for('static', filename='images/window/frame-only.svg')}}" alt="Illustrated window showing a city skyline in the {{ window.time.group.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
+                    <img 
+                        class="window__scene__frame__image" 
+                        src="{{url_for('static', filename='images/window/frame-only.svg')}}" 
+                        alt="An illustrated window showing a city skyline in the {{ window.time.group.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
                 </div>
             </div>
             <div class="window__scene__inside">
@@ -83,7 +80,10 @@
                 <div class="window__scene__plant">
                     <div class="js-show-on-init window__scene__leaf window__scene__leaf--1"></div>
                     <div class="js-show-on-init window__scene__leaf window__scene__leaf--2"></div>
-                    <img class="window__scene__plant__image" src="{{url_for('static', filename='images/window/plant.svg')}}" alt="A slowly dying plant with falling leaves" />
+                    <img 
+                        class="window__scene__plant__image" 
+                        src="{{url_for('static', filename='images/window/plant.svg')}}" 
+                        alt="A slowly dying plant with falling leaves sitting on the window sill" />
                 </div>
                 <div class="window__scene__google-home">
                     <div class="google-home__colors">
@@ -92,7 +92,10 @@
                         <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--pink"></span>
                         <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--blue"></span>
                     </div>
-                    <img class="window__scene__google-home__image" src="{{url_for('static', filename='images/window/google-home.svg')}}" alt="An illustrated google home" />
+                    <img 
+                        class="window__scene__google-home__image" 
+                        src="{{url_for('static', filename='images/window/google-home.svg')}}" 
+                        alt="An illustration of an activated Google Home sitting on the window sill" />
                 </div>
             </div>
 

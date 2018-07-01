@@ -4,17 +4,19 @@ var css = {
     }
 }
 
+
+var $showOnInitEls;
+
 function preInit() {
-    var $elems = document.querySelectorAll(".js-show-on-init");
-    $elems.forEach(function($el) {
+    $showOnInitEls = document.querySelectorAll(".js-show-on-init");
+    $showOnInitEls.forEach(function($el) {
         css.display($el, 'none')
     });
 
 }
 
 function init () {
-    var $elems = document.querySelectorAll(".js-show-on-init");
-    $elems.forEach(function($el) {
+    $showOnInitEls.forEach(function($el) {
         css.display($el, 'block')
     });
 }

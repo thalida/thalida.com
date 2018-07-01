@@ -12,6 +12,8 @@ import dateparser
 from posts_collection import PostCollection
 from window import Window
 
+CSS_VERSION = 4;
+JS_VERSION = 4;
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
@@ -153,8 +155,8 @@ def get_globals():
     """
     return {
         'globals': {
-            'css_version': str(3),
-            'js_version': str(1),
+            'css_version': str(CSS_VERSION),
+            'js_version': str(JS_VERSION),
             'image_version': str(1),
             'datetime': {
                 'now': now,
