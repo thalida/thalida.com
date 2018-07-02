@@ -13,7 +13,7 @@ from posts_collection import PostCollection
 from window import Window
 
 CSS_VERSION = 4;
-JS_VERSION = 4;
+JS_VERSION = 4; 
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
@@ -337,4 +337,4 @@ app.jinja_env.filters['datetime'] = format_datetime
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
