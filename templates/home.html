@@ -66,9 +66,9 @@
                 <div class="window__scene__sky"></div>
                 <div class="window__scene__skyline"></div>
                 <div class="window__scene__weather">
-                    <div class="weather weather--{{weather_icon}}">
+                    <div class="weather weather--{{weather_icon}} clearfix">
                         {% if weather_icon == 'rain' or weather_icon == 'snow' or weather_icon == 'sleet' or weather_icon == 'hail' %}
-                            {% for group in range(9) %}
+                            {% for group in range(4) %}
                                 <div class="weather__droplet-group weather__droplet-group--{{group+1}}">
                                     {% for droplet in range(9) %}
                                         <span class="weather__droplet weather__droplet--{{droplet+1}}"></span>
