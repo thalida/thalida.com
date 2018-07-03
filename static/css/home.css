@@ -117,67 +117,91 @@
                 animation-fill-mode: forwards;
         -webkit-animation-iteration-count: 1;
                 animation-iteration-count: 1;
-        -webkit-animation-timing-function: ease-in;
-                animation-timing-function: ease-in;
+        -webkit-animation-timing-function: linear;
+                animation-timing-function: linear;
     }
         .window__scene__leaf--1 {
             top: 2.3rem;
             left: 0.4rem;
-
             width: 8px;
             height: 12px;
             background-image: url(/static/images/window/leaf-1.svg);
-
             -webkit-animation-name: animation-leaf-falling--1;
-
                     animation-name: animation-leaf-falling--1;
-            -webkit-animation-delay: 300ms;
-                    animation-delay: 300ms;
+            -webkit-animation-delay: .5s;
+                    animation-delay: .5s;
         }
         .window__scene__leaf--2 {
             top: 3.9rem;
             left: 0.3rem;
-
             width: 11px;
             height: 8px;
             background-image: url(/static/images/window/leaf-2.svg);
-
             -webkit-animation-name: animation-leaf-falling--2;
-
                     animation-name: animation-leaf-falling--2;
-            -webkit-animation-delay: 3s;
-                    animation-delay: 3s;
+            -webkit-animation-delay: 4s;
+                    animation-delay: 4s;
         }
 
         @-webkit-keyframes animation-leaf-falling--1 {
-            50%,
+            25% {
+                top: calc(40% - 12px);
+                -webkit-transform: rotate(180deg);
+                        transform: rotate(180deg);
+            }
             100% {
                 top: calc(100% - 12px);
                 left: -0.5rem;
+                -webkit-transform: rotate(360deg);
+                        transform: rotate(360deg);
             }
         }
 
         @keyframes animation-leaf-falling--1 {
-            50%,
+            25% {
+                top: calc(40% - 12px);
+                -webkit-transform: rotate(180deg);
+                        transform: rotate(180deg);
+            }
             100% {
                 top: calc(100% - 12px);
                 left: -0.5rem;
+                -webkit-transform: rotate(360deg);
+                        transform: rotate(360deg);
             }
-        } 
+        }
  
         @-webkit-keyframes animation-leaf-falling--2 {
-            50%,
+            50% {
+                -webkit-transform: rotate(0deg);
+                        transform: rotate(0deg);
+            }
+            60% {
+                -webkit-transform: rotate(-90deg);
+                        transform: rotate(-90deg);
+            }
             100% {
                 top: calc(100% - 8px);
                 left: 0rem;
+                -webkit-transform: rotate(-180deg);
+                        transform: rotate(-180deg);
             }
-        } 
+        }
  
         @keyframes animation-leaf-falling--2 {
-            50%,
+            50% {
+                -webkit-transform: rotate(0deg);
+                        transform: rotate(0deg);
+            }
+            60% {
+                -webkit-transform: rotate(-90deg);
+                        transform: rotate(-90deg);
+            }
             100% {
                 top: calc(100% - 8px);
                 left: 0rem;
+                -webkit-transform: rotate(-180deg);
+                        transform: rotate(-180deg);
             }
         } 
 
