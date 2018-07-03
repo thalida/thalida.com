@@ -6,6 +6,7 @@ import json
 # Third Party
 from darksky import forecast
 import geocoder
+import dateparser
 
 # Locals
 import secrets
@@ -145,13 +146,43 @@ class Window:
     ]
 
     def __init__(self):
-        self.total_time_groups = len(self.TIME_GROUPS);
+        self.total_time_groups = len(self.TIME_GROUPS)
     
     def get_state(self, request, force_update, weather_cookie):
         return {
             'time': self._get_time(datetime.now()),
             'weather': self._get_weather(request, force_update, weather_cookie)
         }
+
+    def get_range_over_day(self):
+        ranges = []
+
+        # for h in range(24):
+        #     print(h)
+        #     for m in [0, 15, 30, 45, 59]:
+        #         date = dateparser.parse(f'16 Sept 2018 {h}:{m}:00')
+        #         ranges.append(self._get_time(date))
+        
+        for h in range(24):
+            print(h)
+            for m in range(60):
+                date = dateparser.parse(f'16 Sept 2018 {h}:{m}:00')
+                ranges.append(self._get_time(date))
+
+        # for h in range(24):
+        #     print(h)
+        #     for m in range(60):
+        #         for s in [0, 15, 30, 45, 59]:
+        #             ranges.append(self._get_time(dateparser.parse(f'16 Sept 2018 {h}:{m}:{s}')))
+
+        # for h in range(24):
+        #     print(h)
+        #     for m in range(60):
+        #         for s in range(60):
+        #             date = dateparser.parse(f'16 Sept 2018 {h}:{m}:{s}')
+        #             ranges.append(self._get_time(date))
+        
+        return ranges
 
     def _get_weather(self, request, force_update, weather_cookie):
         """Get Current Weather Based on IP Address
@@ -249,7 +280,7 @@ class Window:
         for part in color_parts:
             start_color = time_range['start']['color'][part]
             end_color = time_range['end']['color'][part]
-            blended_color[part] = round(end_color + ((start_color - end_color) * distance['total']))
+            blended_color[part] = round(start_color + ((end_color - start_color) * distance['total']))
 
         blended_color = self._format_color(blended_color)
 

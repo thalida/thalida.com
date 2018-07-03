@@ -33,6 +33,10 @@ my_window = Window()
 now = datetime.now()
 cookie_update_date = dateparser.parse('2017-06-24T00:00:00')
 
+time_debugging = False
+
+if time_debugging:
+    range_24hr = my_window.get_range_over_day()
 
 @app.route('/')
 def index():
@@ -59,6 +63,8 @@ def index():
         response = make_response(render_template(
             'home.html', 
             **get_globals(),
+            time_debugging=time_debugging,
+            range_24hr=range_24hr if time_debugging else None,
             window=window, 
             collections_order=collections_order, 
             work=work,
@@ -334,6 +340,7 @@ def set_cookies(request, response, weather=None, visit=True):
 Main
 ============================================================================="""
 app.jinja_env.filters['datetime'] = format_datetime
+
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True

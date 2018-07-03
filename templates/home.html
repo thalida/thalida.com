@@ -32,7 +32,32 @@
 <script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.js_version)}}"></script>
 {% endblock %}
 
+{% block debug_output %}
+    {% if time_debugging %}
+        <style type="text/css">
+            .ribbon {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 300px;
+            }
+            .ribbon-part {
+                display: block;
+                position: relative;
+                float: left;
+                width: 1px;
+                height: 30px;
+            }
+        </style>
+        <div class="ribbon clearfix">
+            {% for range in range_24hr %}
+                <span class="ribbon-part" style="background-color: {{ range.color.as_str }}"></span>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock%}
 {% block body %}
+
 <main class="home">
     <div id=window" class="window">
         {% set weather_icon = window.weather.current.icon %}

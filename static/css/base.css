@@ -108,6 +108,11 @@ a {
     font-style: italic;
 }
 
+.clearfix:after {
+    content: "";
+    clear: both;
+}
+
 /* Links
  ******************************************************************************/
 .link--primary {
