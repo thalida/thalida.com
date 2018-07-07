@@ -67,9 +67,77 @@
             display: block;
             position: relative;
             width: 100%;
-            margin: 0.4em 0;
+            margin: 0.8em 0;
+            animation-duration: 4s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+            animation-timing-function: linear;
+            animation-name: animation-label-colors;
+            animation-delay: .5s;
         }
-        .window__label__color {}
+            .window__label__colors .google-home__color {
+                display: block;
+                position: absolute;
+                top: 0rem;
+                left: calc(50% - 0.3rem);
+                opacity: 0;
+                animation-delay: 500ms;
+                animation-duration: 800ms;
+                animation-fill-mode: forwards;
+                animation-iteration-count: 1;
+                animation-timing-function: ease-in-out;
+            }
+            .window__label__colors .google-home__color.google-home__color--blue {
+                animation-name: animation-label-color--blue;       
+            }
+            .window__label__colors .google-home__color.google-home__color--purple {
+                animation-name: animation-label-color--purple;       
+            }
+            .window__label__colors .google-home__color.google-home__color--green {
+                animation-name: animation-label-color--green;       
+            }
+            .window__label__colors .google-home__color.google-home__color--pink {
+                animation-name: animation-label-color--pink;       
+            }
+            @keyframes animation-label-color--blue {
+                75% {
+                    left: calc(50% - 1.8rem);
+                    width: 1.0rem;
+                }
+                100% {
+                    left: calc(50% - 1.5rem);
+                    opacity: 1;
+                }
+            }
+            @keyframes animation-label-color--purple {
+                75% {
+                    left: calc(50% - 0.7rem);
+                }
+                100% {
+                    left: calc(50% - 0.5rem);
+                    opacity: 1;
+                }
+            }
+            @keyframes animation-label-color--green {
+                75% {
+                    left: calc(50% + 0.7rem);
+                }
+                100% {
+                    left: calc(50% + 0.5rem);
+                    opacity: 1;
+                }
+            }
+            @keyframes animation-label-color--pink {
+                75% {
+                    left: calc(50% + 1.8rem);
+                    width: 1.0rem;
+                }
+                100% {
+                    left: calc(50% + 1.5rem);
+                    opacity: 1;
+                }
+            }
+
     .window__scene {
         display: block;
         position: relative;
