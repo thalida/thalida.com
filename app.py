@@ -25,6 +25,10 @@ COOKIE_KEYS = {
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+demo_posts = PostCollection(
+    posts_dir='./demo_posts_collection/',
+    url_decorator='/demo/x/'
+)
 my_posts = PostCollection()
 my_window = Window()
 
@@ -37,6 +41,7 @@ time_debugging = False
 
 if time_debugging:
     range_24hr = my_window.get_range_over_day()
+
 
 @app.route('/')
 def index():
@@ -62,7 +67,7 @@ def index():
 
         response = make_response(render_template(
             'home.html', 
-            **get_globals(),
+            **get_globals(my_posts),
             time_debugging=time_debugging,
             range_24hr=range_24hr if time_debugging else None,
             window=window, 
@@ -78,7 +83,7 @@ def index():
         abort(500)
 
 
-@app.route('{posts_path}<path:path>'.format(posts_path=my_posts.POSTS_URL_DECORATOR))
+@app.route('{posts_path}<path:path>'.format(posts_path=my_posts.url_decorator))
 def post(path):
     """View Post Route
     
@@ -114,7 +119,100 @@ def post(path):
         # Build the repsonse object for a post
         response = make_response(render_template(
             'post.html', 
-            **get_globals(),
+            **get_globals(my_posts),
+            post=post,
+            next_posts=next_posts_paths,
+        ))
+
+        set_cookies(request, response)
+
+        return response
+    except (ValueError, KeyError):
+        abort(404)
+    except Exception:
+        logger.exception('500 Error Fetching Post')
+        abort(500)
+
+
+
+
+@app.route('/demo')
+def demo_index():
+    """Demo Route
+    
+    Demo landing pae for thalida.com
+    
+    Decorators:
+        app.route
+    
+    Returns:
+        response -- A flask response including template + variables
+    """
+
+    try:
+        force_update = get_force_update(request)
+        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        
+        # Gather the data needed to render the page
+        window = my_window.get_state(request, force_update, weather_cookie)
+        work = get_work()
+        collections_order = demo_posts.collections_order
+
+        response = make_response(render_template(
+            'home.html', 
+            **get_globals(demo_posts),
+            time_debugging=time_debugging,
+            range_24hr=range_24hr if time_debugging else None,
+            window=window, 
+            collections_order=collections_order, 
+            work=work,
+        ))
+
+        set_cookies(request, response, weather=window['weather'])
+        
+        return response
+    except Exception:
+        logger.exception('500 Error Fetching Index')
+        abort(500)
+
+
+@app.route('{posts_path}<path:path>'.format(posts_path=demo_posts.url_decorator))
+def demo_post(path):
+    """Demo View Post Route
+    
+    Renders a post given a set of rules, otherwise throws a 404 and aborts
+    
+    Decorators:
+        app.route
+    
+    Arguments:
+        path {string} -- The given url path
+    
+    Returns:
+        response -- A flask response including template + variables
+    
+    Raises:
+        ValueError -- An attempt to access a post that doesn't exist, is hidden,
+                      or is part of a hidden collection
+    """
+    try:
+        post = demo_posts.get_post_by_url(request.path)
+
+        # Don't render a post that's hidden or is in a hidden collection
+        if not post['collection_meta']['is_visible'] or not post['meta']['is_visible']:
+            raise ValueError('Attempted to access a hidden collection or post')
+
+        # Return to an external url if the post defines one in it's meta
+        if post['meta']['is_external']:
+            return redirect(post['meta']['external_url'])
+
+        # Get a set of next posts to read after this one
+        next_posts_paths = demo_posts.get_next_posts_paths(post['meta']['path'], amount=3)
+
+        # Build the repsonse object for a post
+        response = make_response(render_template(
+            'post.html', 
+            **get_globals(demo_posts),
             post=post,
             next_posts=next_posts_paths,
         ))
@@ -151,7 +249,7 @@ def not_found(exc):
 Getters
 ============================================================================="""
 
-def get_globals():
+def get_globals(posts):
     """Global View Data
     
     Global data for all view templates
@@ -168,8 +266,8 @@ def get_globals():
                 'now': now,
                 'current_year': now.strftime('%Y'),
             },
-            'all_collections': my_posts.collections,
-            'all_posts_meta': my_posts.posts_meta,
+            'all_collections': posts.collections,
+            'all_posts_meta': posts.posts_meta,
         }
     }
 

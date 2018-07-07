@@ -19,12 +19,6 @@ class PostCollection:
     provides lookups for posts by url.
     
     Variables:
-        POSTS_URL_DECORATOR {str} -- URL path to prepend on all posts
-        POSTS_DIR {str} -- Server directory where posts are located
-        POSTS_EXT {str} -- File extension used on posts
-        COLLECTION_PREFIX {str} -- Prefix used on directories that should be considered collections 
-        DEFAULT_COLLECTION_KEY {str} -- Default collection for posts that don't have any
-        
         MARKDOWN_EXTENSIONS {list} -- Markdown Plugin Extensions
         MARKDOWN_EXTENSION_CONFIGS {dict} -- Configs for the Markdown Plugins
 
@@ -32,7 +26,13 @@ class PostCollection:
         META_FALLBACK_DEFAULT {tuple} -- Fallback type and value for all metadata
 
         markdown {dict} -- Markdown plugin instance
-       
+
+        url_decorator {str} -- URL path to prepend on all posts
+        posts_dir {str} -- Server directory where posts are located
+        posts_ext {str} -- File extension used on posts
+        collection_prefix {str} -- Prefix used on directories that should be considered collections 
+        default_collection_key {str} -- Default collection for posts that don't have any
+
         posts_meta {dict} -- All post meta data keyed by path
         posts_html {dict} -- All post html keyed by path
         post_url_to_path {dict} -- Map of posts urls to their corresponding paths
@@ -40,12 +40,6 @@ class PostCollection:
         collections {dict} -- All post collections keyed by collection name
         collections_order {list} -- List of post collections names in visual order
     """
-    POSTS_URL_DECORATOR = '/x/'
-    POSTS_DIR = 'posts_collection/'
-    POSTS_EXT = '.md'
-    COLLECTION_PREFIX = '/collection.'
-    DEFAULT_COLLECTION_KEY = 'default'
-
     MARKDOWN_EXTENSIONS = [
         'markdown.extensions.attr_list',
         'markdown.extensions.fenced_code',
@@ -66,12 +60,7 @@ class PostCollection:
     META_DEFAULTS = {}
     META_FALLBACK_DEFAULT = ()
 
-    re_posts_dir = POSTS_DIR.replace('/', '\/')
-    re_collection = COLLECTION_PREFIX[1:-1]
-    url_pattern = re.compile(f'{re_posts_dir}(?:{re_collection}\.)?([\w\/\-]+)\{POSTS_EXT}')
-    collection_pattern = re.compile(f'{re_collection}\.([^\/]+)')
-
-    def __init__(self, run_load=True):
+    def __init__(self, posts_dir='./posts_collection/', url_decorator='/x/', posts_ext='.md', collection_prefix='/collection.', default_collection_key='default', run_load=True):
         """Class Init
         
         Init/setup function for PostsCollection Class, loads in data by default
@@ -99,14 +88,34 @@ class PostCollection:
 
         # Get an instance of the markdown function
         self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
+        
+        # Set posts collection params
+        self.posts_dir = posts_dir
+        self.url_decorator = url_decorator
+        self.posts_ext = posts_ext
+        self.collection_prefix = collection_prefix
+        self.default_collection_key = default_collection_key
+
+        # Setup defaults
         self.posts_meta = {}
         self.posts_html = {}
         self.post_url_to_path = {}
         self.collections = {}
         self.collections_order = []
 
+        print('111')
+
+        # Setup regex patterns
+        re_posts_dir = self.posts_dir.replace('/', '\/')
+        re_collection = self.collection_prefix[1:-1]
+        self.url_pattern = re.compile(f'{re_posts_dir}(?:{re_collection}\.)?([\w\/\-]+)\{self.posts_ext}')
+        self.collection_pattern = re.compile(f'{re_collection}\.([^\/]+)')
+
+        print('222')
+
         if run_load:
             self._load()
+            print('333')
 
     def get_post_by_url(self, url):
         """Get Post Data by Post Url
@@ -262,7 +271,8 @@ class PostCollection:
         Returns:
             [list] -- List of all post/collection files
         """
-        search_path = '{dir}**/*{ext}'.format(dir=self.POSTS_DIR, ext=self.POSTS_EXT)
+        search_path = '{dir}**/*{ext}'.format(dir=self.posts_dir, ext=self.posts_ext)
+        print(search_path)
         return glob.glob(search_path, recursive=True)
 
     def _load_file(self, path):
@@ -424,7 +434,7 @@ class PostCollection:
             [str] -- A relative url for a post
         """
         m = re.search(self.url_pattern, path)
-        return f'{self.POSTS_URL_DECORATOR}{m.group(1)}'
+        return f'{self.url_decorator}{m.group(1)}'
 
     def _get_collection_key(self, path):
         """Get the Collection Key (Name) from a Path
@@ -443,7 +453,7 @@ class PostCollection:
         try:
             group = m.group(1)
         except AttributeError:
-            group = self.DEFAULT_COLLECTION_KEY
+            group = self.default_collection_key
 
         return group
                 
