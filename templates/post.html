@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-    <!-- {% set collection = globals.all_collections[post.meta.collection] %}
+    {% set collection = globals.all_collections[post.meta.collection] %}
     <div id="post_header">
         <h1>{{ post.meta.title }}</h1>
         <hr />
@@ -30,7 +30,7 @@
         <div class="collection">
             <h2 class="collection__header header--secondary">More in {{ collection.meta.title }}</h2>
             {% set posts = next_posts %}
-            {% include "_partials/collection_posts_list.html" %}
+            {% include "_partials/posts-grid.html" %}
         </div>
-    </div> -->
+    </div>
 {% endblock %}

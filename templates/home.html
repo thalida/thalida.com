@@ -127,9 +127,13 @@
         </div>
         <div class="window__label">
             <p class="window__label__text">
-                It’s currently {{ window.weather.current.temperature | round | int }}°{% if window.weather.current.units == 'us' %}F{% else %}C{% endif %} and {{ window.weather.current.summary | lower }}
+                {% set has_and = " and " in window.weather.current.summary %}
+                {% set use_f = window.weather.current.units == 'us' %}
+                It’s currently 
+                {{ window.weather.current.temperature | round | int }}°{% if use_f %}F{% else %}C{% endif %}{% if has_and%}, {% else %} and {% endif %}
+                {{ window.weather.current.summary | lower }}
             </p>
-            <div class="google-home__colors">
+            <div class="window__label__colors google-home__colors">
                 <span class="google-home__color google-home__color--line google-home__color--blue"></span>
                 <span class="google-home__color google-home__color--line google-home__color--purple"></span>
                 <span class="google-home__color google-home__color--line google-home__color--green"></span>
@@ -204,7 +208,7 @@
                     </p>
                     
                     {% set posts = collection.posts_in_order %}
-                    {% include "_partials/posts-cards-grid.html" %}
+                    {% include "_partials/posts-grid.html" %}
                 </section>
             {% endif %}
         {% endfor %}
