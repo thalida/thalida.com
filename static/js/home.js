@@ -21,21 +21,9 @@ function readyStateChange(cbs) {
 
 function apiGet(url, cbs) {
     var httpRequest = new XMLHttpRequest();
-    var reqCbs = {
-        onError: function () {},
-        onSuccess: function () {},
-    };
-    
-    if (typeof cbs.onError === 'function') {
-        reqCbs.onError = cbs.onError;
-    }
-    
-    if (typeof cbs.onSuccess === 'function') {
-        reqCbs.onSuccess = cbs.onSuccess;
-    }
 
     if (!httpRequest) {
-        reqCbs.onError()
+        cbs.onError()
         return false;
     }
 
@@ -43,13 +31,13 @@ function apiGet(url, cbs) {
         try {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
                 if (httpRequest.status === 200) {
-                    reqCbs.onSuccess(httpRequest.responseText);
+                    cbs.onSuccess(httpRequest.responseText);
                 } else {
-                   reqCbs.onError(httpRequest.status);
+                   cbs.onError(httpRequest.status);
                 }
             }
         } catch( e ) {
-            reqCbs.onError(e.name, e.message);
+            cbs.onError(e.name, e.message);
         }
     }
 
@@ -66,12 +54,16 @@ function replaceWindowChild(parentSelector, childSelector, html) {
     $myWindow.querySelector(parentSelector).replaceChild($newEl, $oldEl);
 }
 
-function updateWindow(waitMs) {
+function updateWindow(waitMs, attempts) {
+    var maxAttempts = 5;
+    var attempts = attempts || 0;
+    if (attempts >= maxAttempts) {
+        return;
+    }
+
     var successWaitMs = 30 * 60 * 1000
     var errorWaitMs = 60 * 1000
-
     var waitMs = waitMs || successWaitMs;
-
     setTimeout(function () {
         apiGet('/api/window-data', {
             onSuccess: function (res) {
@@ -81,8 +73,8 @@ function updateWindow(waitMs) {
                 updateWindow(successWaitMs);
             },
             onError: function (name, message) {
-                console.error(name, message);
-                updateWindow(errorWaitMs);
+                console.error('Error Fetching Window Data: ', name, message);
+                updateWindow(errorWaitMs, attempts += 1);
             }
         })
     }, waitMs);
