@@ -1,4 +1,5 @@
-var $showOnInitEls;
+var parser;
+var $showOnInitEls, $myWindow;
 var css = {
     display: function(el, display) {
         el.style.display = display;
@@ -53,6 +54,13 @@ function apiGet(url, cbs) {
     return httpRequest;
 }
 
+function replaceWindowChild(parentSelector, childSelector, html) {
+    var $newDOM = parser.parseFromString(html, "text/html");
+    var $newEl = $newDOM.querySelector(childSelector);
+    var $oldEl = document.querySelector(childSelector);
+    $myWindow.querySelector(parentSelector).replaceChild($newEl, $oldEl);
+}
+
 function beforeReady() {
     $showOnInitEls = document.querySelectorAll(".js-show-on-init");
     $showOnInitEls.forEach(function($el) {
@@ -61,20 +69,17 @@ function beforeReady() {
 }
 
 function updateWindow(waitMs) {
-    successWaitMs = 30 * 60 * 1000
-    errorWaitMs = 60 * 1000
-    
-    waitMs = waitMs || successWaitMs;
+    var successWaitMs = 30 * 60 * 1000
+    var errorWaitMs = 60 * 1000
+
+    var waitMs = waitMs || successWaitMs;
 
     setTimeout(function () {
-        apiGet('/api/window-outside', {
+        apiGet('/api/window-data', {
             onSuccess: function (res) {
                 res = JSON.parse(res)
-                $resHTML = parser.parseFromString(res.html, "text/html");
-                $newWindowOutside = $resHTML.getElementsByClassName("window__scene__outside")[0];
-                $oldWindowOutside = $windowScene.getElementsByClassName("window__scene__outside")[0];
-                $windowScene.replaceChild($newWindowOutside, $oldWindowOutside);
-                
+                replaceWindowChild('.window__scene', '.window__scene__outside', res.window_outside_html);
+                replaceWindowChild('.window__label', '.window__label__text', res.window_label_html);
                 updateWindow(successWaitMs);
             },
             onError: function (name, message) {
@@ -88,7 +93,7 @@ function updateWindow(waitMs) {
 beforeReady()
 ready(function () {
     parser = new DOMParser();
-    $windowScene = document.getElementById('window__scene');
+    $myWindow = document.getElementById('js-window');
     $showOnInitEls.forEach(function($el) {
         css.display($el, 'block')
     });

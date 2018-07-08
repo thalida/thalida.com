@@ -124,19 +124,20 @@ def post(path):
         abort(500)
 
 
-@app.route('/api/window-outside', methods=['GET'])
-def get_weather():
+@app.route('/api/window-data', methods=['GET'])
+def get_window_data():
     try:
         force_update = get_force_update(request)
         weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
         
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie)
-        template = render_template(
-            'api/window-outside.html', 
-            window=window,
-        )
-        response = make_response(jsonify({'html': template}))
+        window_outside_html = render_template('api/window-outside.html', window=window)
+        window_label_html = render_template('api/window-label-text.html', window=window)
+        response = make_response(jsonify({
+            'window_outside_html': window_outside_html,
+            'window_label_html': window_label_html,
+        }))
 
         set_cookies(request, response, weather=window['weather'])
         
