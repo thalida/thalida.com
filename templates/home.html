@@ -5,14 +5,6 @@
 
 {% block styles %}
 <link href="{{url_for('static', filename='css/home.css', v=globals.css_version)}}" rel="stylesheet">
-
-<style type="text/css"> 
-    {% set sky_color = window.color.as_str %}
-    .window__scene__sky,
-    .window__scene__sky--color {
-        background-color: {{ sky_color }};
-    }
-</style>
 {% endblock %}
 
 {% block scripts %}
@@ -21,47 +13,9 @@
 
 {% block body %}
 <main class="home">
-    <div id=window" class="window">
-        {% set weather_icon = window.weather.current.icon %}
+    <div class="window">
         <div id="window__scene" class="window__scene">
-            <div class="window__scene__outside">
-                <div class="window__scene__sky"></div>
-                <div class="window__scene__skyline"></div>
-                <div class="window__scene__weather">
-                    <div class="weather weather--{{weather_icon}} clearfix">
-                        {% if weather_icon == 'rain' or weather_icon == 'snow' or weather_icon == 'sleet' or weather_icon == 'hail' %}
-                            {% for group in range(4) %}
-                                <div class="weather__droplet-group weather__droplet-group--{{group+1}}">
-                                    {% for droplet in range(9) %}
-                                        <span class="weather__droplet weather__droplet--{{droplet+1}}"></span>
-                                    {% endfor %}
-                                </div>
-                            {% endfor %}
-                        {% elif weather_icon == 'wind' or weather_icon == 'tornado' %}
-                            <span class="weather__leaf weather__leaf--1"></span>
-                            <span class="weather__leaf weather__leaf--2"></span>
-                            <span class="weather__leaf weather__leaf--3"></span>
-                        {% elif weather_icon == 'fog' %}
-                            <span class="weather__fog weather__fog--1"></span>
-                            <span class="weather__fog weather__fog--2"></span>
-                            <span class="weather__fog weather__fog--3"></span>
-                            <span class="weather__fog weather__fog--4"></span>
-                        {% elif weather_icon == 'cloudy' or weather_icon == 'thunderstorm' %}
-                            <span class="weather__cloud weather__cloud--1"></span>
-                            <span class="weather__cloud weather__cloud--2"></span>
-                            <span class="weather__cloud weather__cloud--3"></span>
-                        {% elif weather_icon == 'partly-cloudy-day' or weather_icon == 'partly-cloudy-night' %}
-                            <span class="weather__cloud weather__cloud--3"></span>
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="window__scene__frame">
-                    <img 
-                        class="window__scene__frame__image" 
-                        src="{{url_for('static', filename='images/window/frame-only.svg')}}" 
-                        alt="An illustrated window showing a city skyline in the {{ window.saying.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
-                </div>
-            </div>
+            {% include "api/window-outside.html" %}
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">

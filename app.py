@@ -5,7 +5,7 @@ from datetime import datetime
 from pprint import pprint
 
 # Third Party
-from flask import Flask, request, make_response, render_template, redirect, url_for, abort
+from flask import Flask, request, make_response, render_template, jsonify, redirect, url_for, abort
 import dateparser
 
 # Locals
@@ -123,6 +123,27 @@ def post(path):
         logger.exception('500 Error Fetching Post')
         abort(500)
 
+
+@app.route('/api/window-outside', methods=['GET'])
+def get_weather():
+    try:
+        force_update = get_force_update(request)
+        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        
+        # Gather the data needed to render the page
+        window = my_window.get_state(request, force_update, weather_cookie)
+        template = render_template(
+            'api/window-outside.html', 
+            window=window,
+        )
+        response = make_response(jsonify({'html': template}))
+
+        set_cookies(request, response, weather=window['weather'])
+        
+        return response
+    except Exception:
+        logger.exception('500 Error Fetching Window Outside')
+        abort(500)
 
 
 @app.route('/colors')
