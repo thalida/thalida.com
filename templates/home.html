@@ -7,20 +7,7 @@
 <link href="{{url_for('static', filename='css/home.css', v=globals.css_version)}}" rel="stylesheet">
 
 <style type="text/css"> 
-    {% set sky_color = window.time.color.as_str %}
-    {% set sky_gradient = window.time.color.gradient %}
-    .window__scene__sky--gradient--vertical {
-        background: -webkit-gradient(linear, left top, left bottom, from({{sky_gradient.end.as_str}}), to({{sky_gradient.start.as_str}}));
-        background: -webkit-linear-gradient(top, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-        background: -o-linear-gradient(top, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-        background: linear-gradient(to bottom, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-    }
-    .window__scene__sky--gradient--diagonal {
-        background: -webkit-gradient(linear, left top, right bottom, from({{sky_gradient.end.as_str}}), to({{sky_gradient.start.as_str}}));
-        background: -webkit-linear-gradient(top left, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-        background: -o-linear-gradient(top left, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-        background: linear-gradient(to bottom right, {{sky_gradient.end.as_str}}, {{sky_gradient.start.as_str}});
-    }
+    {% set sky_color = window.color.as_str %}
     .window__scene__sky,
     .window__scene__sky--color {
         background-color: {{ sky_color }};
@@ -32,32 +19,7 @@
 <script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.js_version)}}"></script>
 {% endblock %}
 
-{% block debug_output %}
-    {% if time_debugging %}
-        <style type="text/css">
-            .ribbon {
-                display: block;
-                position: relative;
-                width: 100%;
-                height: 300px;
-            }
-            .ribbon-part {
-                display: block;
-                position: relative;
-                float: left;
-                width: 1px;
-                height: 30px;
-            }
-        </style>
-        <div class="ribbon clearfix">
-            {% for range in range_24hr %}
-                <span class="ribbon-part" style="background-color: {{ range.color.as_str }}"></span>
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock%}
 {% block body %}
-
 <main class="home">
     <div id=window" class="window">
         {% set weather_icon = window.weather.current.icon %}
@@ -97,7 +59,7 @@
                     <img 
                         class="window__scene__frame__image" 
                         src="{{url_for('static', filename='images/window/frame-only.svg')}}" 
-                        alt="An illustrated window showing a city skyline in the {{ window.time.group.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
+                        alt="An illustrated window showing a city skyline in the {{ window.saying.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
                 </div>
             </div>
             <div class="window__scene__inside">
@@ -151,7 +113,7 @@
         </h1>
         <div class="about-section__content">
             <p class="about-section__text text--primary">
-                {{ window.time.group.salutation }}, my name’s Thalida, I’m a Trinidadian-American 
+                {{ window.saying.salutation }}, my name’s Thalida, I’m a Trinidadian-American 
                 software engineer based in New York. For my 16th birthday I was lucky 
                 enough to be gifted this domain. It was one of the best presents 
                 I’ve ever received, being able to learn and grow on here is the 

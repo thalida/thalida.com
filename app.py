@@ -32,16 +32,8 @@ demo_posts = PostCollection(
 my_posts = PostCollection()
 my_window = Window()
 
-# pprint(my_window.getData())
-
 now = datetime.now()
-cookie_update_date = dateparser.parse('2017-06-24T00:00:00')
-
-time_debugging = False
-
-if time_debugging:
-    range_24hr = my_window.get_range_over_day()
-
+cookie_update_date = dateparser.parse('2019-06-24T00:00:00')
 
 @app.route('/')
 def index():
@@ -68,8 +60,6 @@ def index():
         response = make_response(render_template(
             'home.html', 
             **get_globals(my_posts),
-            time_debugging=time_debugging,
-            range_24hr=range_24hr if time_debugging else None,
             window=window, 
             collections_order=collections_order, 
             work=work,
@@ -134,6 +124,35 @@ def post(path):
         abort(500)
 
 
+
+@app.route('/colors')
+def colors():
+    """Colors Route
+    
+    Test page for colors over the day
+    
+    Decorators:
+        app.route
+    
+    Returns:
+        response -- A flask response including template + variables
+    """
+
+    try:
+        force_update = get_force_update(request)
+        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie)
+
+        response = make_response(render_template(
+            'colors.html', 
+            **get_globals(my_posts),
+            range_24hr=range_24hr
+        ))
+        
+        return response
+    except Exception:
+        logger.exception('500 Error Fetching Index')
+        abort(500)
 
 
 @app.route('/demo')

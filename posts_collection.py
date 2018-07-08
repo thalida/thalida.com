@@ -103,19 +103,14 @@ class PostCollection:
         self.collections = {}
         self.collections_order = []
 
-        print('111')
-
         # Setup regex patterns
         re_posts_dir = self.posts_dir.replace('/', '\/')
         re_collection = self.collection_prefix[1:-1]
         self.url_pattern = re.compile(f'{re_posts_dir}(?:{re_collection}\.)?([\w\/\-]+)\{self.posts_ext}')
         self.collection_pattern = re.compile(f'{re_collection}\.([^\/]+)')
 
-        print('222')
-
         if run_load:
             self._load()
-            print('333')
 
     def get_post_by_url(self, url):
         """Get Post Data by Post Url
@@ -272,7 +267,6 @@ class PostCollection:
             [list] -- List of all post/collection files
         """
         search_path = '{dir}**/*{ext}'.format(dir=self.posts_dir, ext=self.posts_ext)
-        print(search_path)
         return glob.glob(search_path, recursive=True)
 
     def _load_file(self, path):

@@ -1,6 +1,8 @@
 # Builtins
-from datetime import datetime
 from pprint import pprint
+import datetime
+import time
+import math
 import json
 
 # Third Party
@@ -13,174 +15,96 @@ import secrets
 
 
 class Window:
-    TIME_GROUPS = [
+    TIME_SAYINGS = [
         {
-            "name": "late_night",
             "label": "Late Night",
-            "start_hour": 0,
-            "color": { 
-                "r": 50,
-                "g": 60,
-                "b": 100 
-            },
             "salutation": "Greetings",
-            "sayings": [
-                "Woah a Nightowl!",
-                "Working late?",
-                "Can’t sleep?",
-                "Whatcha watching lately?",
-                "Burning the night oil?",
-                "Night shift?",
-                "Bored?"
-            ]
         },
         {
-            "name": "early_morning",
             "label": "Eary Morning",
-            "start_hour": 4,
-            "color": { 
-                "r": 139,
-                "g": 152,
-                "b": 206 
-            },
             "salutation": "Oh hey, Early Riser",
-            "sayings": [
-                "OMG, it's the elusive EarlyBird!",
-                "Oh hey, Early Riser!",
-                "Good Dreams?",
-                "Have a great day!",
-                "Getting a headstart on the day?"
-            ]
         },
         {
-            "name": "morning",
             "label": "Morning",
-            "start_hour": 8,
-            "color": { 
-                "r": 86,
-                "g": 216,
-                "b": 255 
-            },
             "salutation": "Good morning",
-            "sayings": [
-                "How are you doing?",
-                "Have a wonderful day!",
-                "Have a great day!",
-                "How’d ya sleep?",
-                "What’s for breakfast?"
-            ]
         },
         {
-            "name": "afternoon",
             "label": "Afternoon",
-            "start_hour": 12,
-            "color": { 
-                "r": 255,
-                "g": 216,
-                "b": 116 
-            },
             "salutation": "Good afternoon",
-            "sayings": [
-                "It’s NOM NOM Time",
-                "How’s the day going?",
-                "It’s Food o’Clock!",
-                "Lunch time?",
-                "What’s up!?"
-            ]
         },
         {
-            "name": "midafternoon",
             "label": "Mid-Afternoon",
-            "start_hour": 15,
-            "color": { 
-                "r": 255,
-                "g": 183,
-                "b": 116 
-            },
             "salutation": "Good afternoon",
-            "sayings": [
-                "How are you doing?",
-                "Have a wonderful day!",
-                "Hulu & Hang?",
-                "Have a wicked day!",
-                "How’s the day going?"
-            ]
         },
         {
-            "name": "evening",
             "label": "Evening",
-            "start_hour": 18,
-            "color": { 
-                "r": 255,
-                "g": 135,
-                "b": 116 
-            },
             "salutation": "Good evening",
-            "sayings": [
-                "How’s your day been?",
-                "Dinner plans?",
-                "Netfix & Pizza?",
-                "Winding down for the night?",
-                "Excited for tomorrow?",
-                "How’s it going?"
-            ]
         },
         {
-            "name": "night",
             "label": "Night",
-            "start_hour": 21,
-            "color": { 
-                "r": 40,
-                "g": 75,
-                "b": 215 
-            },
             "salutation": "Good night",
-            "sayings": [
-                "Sweet Dreams",
-                "Plans Tonight?",
-                "Netfix & Chinese?",
-                "Have a great night!",
-                "Hope it’s a good one!"
-            ]
         }
     ]
 
-    def __init__(self):
-        self.total_time_groups = len(self.TIME_GROUPS)
+    TIME_COLORS = [
+        { "r": 50, "g": 60, "b": 100 },
+        { "r": 139, "g": 152, "b": 206 },
+        { "r": 86, "g": 216, "b": 255 },
+        { "r": 255, "g": 216, "b": 116 },
+        { "r": 255, "g": 183, "b": 116 },
+        { "r": 255, "g": 135, "b": 116 },
+        { "r": 40, "g": 75, "b": 215 },
+    ]
+    SUNRISE_TIME_COLOR_INDEX = 1
+    SUNSET_TIME_COLOR_INDEX = 5
     
     def get_state(self, request, force_update, weather_cookie):
+        now = int(time.time())
+        weather = self._get_weather(request, force_update, weather_cookie)
+        color = self._get_color(now, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        saying = self._get_saying(now)
         return {
-            'time': self._get_time(datetime.now()),
-            'weather': self._get_weather(request, force_update, weather_cookie)
+            'weather': weather,
+            'color': color,
+            'saying': saying,
         }
 
-    def get_range_over_day(self):
+    def get_range_over_day(self, request, force_update, weather_cookie):
+        weather = self._get_weather(request, force_update, weather_cookie)
         ranges = []
-
-        # for h in range(24):
-        #     print(h)
-        #     for m in [0, 15, 30, 45, 59]:
-        #         date = dateparser.parse(f'16 Sept 2018 {h}:{m}:00')
-        #         ranges.append(self._get_time(date))
-        
+      
         for h in range(24):
             print(h)
-            for m in range(60):
-                date = dateparser.parse(f'16 Sept 2018 {h}:{m}:00')
-                ranges.append(self._get_time(date))
+            for m in [0, 15, 30, 45, 59]:
+                time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m)).timestamp()
+                color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+                saying = self._get_saying(time)
+                ranges.append({'color': color, 'saying': saying})
+        
+        # for h in range(24):
+        #     print(h)
+        #     for m in range(60):
+        #         time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m)).timestamp()
+        #         color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        #         saying = self._get_saying(time)
+        #         ranges.append({'color': color, 'saying': saying})
 
         # for h in range(24):
         #     print(h)
         #     for m in range(60):
-        #         for s in [0, 15, 30, 45, 59]:
-        #             ranges.append(self._get_time(dateparser.parse(f'16 Sept 2018 {h}:{m}:{s}')))
+        #         for s in [0, 10, 20, 30, 40, 50, 59]:
+        #             time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m, s)).timestamp()
+        #             color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        #             saying = self._get_saying(time)
+        #             ranges.append({'color': color, 'saying': saying})
 
         # for h in range(24):
         #     print(h)
         #     for m in range(60):
         #         for s in range(60):
-        #             date = dateparser.parse(f'16 Sept 2018 {h}:{m}:{s}')
-        #             ranges.append(self._get_time(date))
+        #             time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m, s)).timestamp()
+        #             timedata = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        #             ranges.append(timedata)
         
         return ranges
 
@@ -215,8 +139,11 @@ class Window:
             geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
 
             # Get and format the current weather
+            daily_weather = geo_forecast['daily']['data'][0]
             current_weather = geo_forecast['currently']
             current_weather['units'] = geo_forecast['flags']['units'] # F or C
+            current_weather['sunrise_time'] = daily_weather['sunriseTime']
+            current_weather['sunset_time'] = daily_weather['sunsetTime']
 
         return {'current': current_weather, 'from_cookie': from_cookie}
 
@@ -231,78 +158,81 @@ class Window:
             'as_dict': color_dict,
         }
 
-    def _get_time_range(self, time):
-        range = []
-
-        # Current hour + minutes in military time
-        hour = int(time.strftime('%H'))
-        minute = int(time.strftime('%M'))
-        time = {'hour': hour, 'minute': minute}
-
-        for i, group in enumerate(self.TIME_GROUPS):
-            next_idx = i + 1 if (i + 1 < self.total_time_groups) else 0
-            curr_group = group
-            next_group = self.TIME_GROUPS[next_idx]
-
-            if (hour >= curr_group['start_hour'] and (hour < next_group['start_hour'] or next_group['start_hour'] == 0)):
-                range = {'start': curr_group, 'end': next_group}
-                break
-
-        return (time, range)
-
-    def _get_time(self, now):
-        # Get the start + end colors - as well as the time used
-        (time_24, time_range) = self._get_time_range(now)
-
-        end_range_time = 24 if time_range['end']['start_hour'] == 0 else time_range['end']['start_hour']
-        num_hrs_in_range = abs(end_range_time - time_range['start']['start_hour'])
-        time_since_range_start = abs(time_24['hour'] - time_range['start']['start_hour'])
-        is_closer_to_start = time_since_range_start < (num_hrs_in_range - 1)
-
-        interval = {}
-        distance = {}
-        closest_group = {}
-        new_color = {}
-        gradient = {'start': None, 'end': None}
-        color_parts = ['r', 'g', 'b']
-
-        # Get the total # of hours b/w the two groups
-        # Split the transition distance (1) to pieces for each hour mark
-        interval['hour'] = 1 / num_hrs_in_range
-        # Split the hour interval into 60 pieces (1 for each minute)
-        interval['minute'] = interval['hour'] / 60
-        # Calculate the current hour + minute values using the intervals
-        distance['hour'] = interval['hour'] * time_since_range_start
-        distance['minute'] = interval['minute'] * time_24['minute']
-        distance['total'] = distance['hour'] + distance['minute']
-
+    def _get_blended_color(self, start_color, end_color, distance):
         blended_color = {}
-        for part in color_parts:
-            start_color = time_range['start']['color'][part]
-            end_color = time_range['end']['color'][part]
-            blended_color[part] = round(start_color + ((end_color - start_color) * distance['total']))
+        for part in ['r', 'g', 'b']:
+            start = start_color[part]
+            end = end_color[part]
+            blended_color[part] = round(start + ((end - start) * distance))
+        return blended_color
 
-        blended_color = self._format_color(blended_color)
+    def _get_saying(self, now):
+        midnight_today = int(datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()).timestamp())
+        tomorrow = int(datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.datetime.min.time()).timestamp())
 
-        if is_closer_to_start:
-            closest_group = time_range['start'] 
-            gradient = {
-                'start': self._format_color(closest_group['color']),
-                'end': blended_color,
-            }
+        percent_time_elapsed = (now - midnight_today) / (tomorrow - midnight_today)
+        num_sayings_options = len(self.TIME_SAYINGS)
+        sayings_section = math.ceil(100 / num_sayings_options) / 100
+
+        found_saying_index = None
+        for i in range(num_sayings_options):
+            end_saying_percent = sayings_section * (i + 1);
+            if percent_time_elapsed < end_saying_percent:
+                found_saying_index = i
+                break; 
+
+        return self.TIME_SAYINGS[found_saying_index]
+
+
+    def _get_color(self, now, sunrise, sunset):
+        if now < sunrise:
+            start_index = 0
+            end_index = self.SUNRISE_TIME_COLOR_INDEX
+            midnight_today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
+            start_time = int(midnight_today.timestamp())
+            end_time = sunrise - 1
+        elif now > sunset:
+            start_index = self.SUNSET_TIME_COLOR_INDEX
+            end_index = len(self.TIME_COLORS) - 1
+            tomorrow = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.datetime.min.time())
+            start_time = sunset + 1
+            end_time = int(tomorrow.timestamp())
         else:
-            closest_group = time_range['end']
-            gradient = {
-                'start': blended_color,
-                'end': self._format_color(closest_group['color']),
-            }
+            start_index = self.SUNRISE_TIME_COLOR_INDEX
+            end_index = self.SUNSET_TIME_COLOR_INDEX
+            start_time = sunrise
+            end_time = sunset
 
-        return {
-            'now': now,
-            'group': closest_group,
-            'color': {
-                **blended_color, 
-                'gradient': gradient,
-            },
-        }
+        percent_time_elapsed = (now - start_time) / (end_time - start_time)
+        num_colors_options = end_index - start_index + 1
+        color_section = math.ceil(100 / num_colors_options) / 100
+
+        found_start_color_index = 0
+        found_end_color_index = 0
+        found_start_color_percent = 0
+        found_end_color_percent = 0
+        for i in range(num_colors_options):
+            found_start_color_percent = color_section * i
+            found_end_color_percent = color_section * (i + 1);
+    
+            if percent_time_elapsed < found_end_color_percent:
+                found_start_color_index = start_index + i
+                if found_start_color_index < len(self.TIME_COLORS) - 1:
+                    if i < num_colors_options - 1:
+                        found_end_color_index = found_start_color_index + 1
+                    else:
+                        found_end_color_index = found_start_color_index
+                else:
+                    found_end_color_index = 0
+                break; 
+
+        color_start_time = start_time + ((end_time - start_time) * found_start_color_percent)
+        color_end_time = start_time + ((end_time - start_time) * found_end_color_percent)
+        start_color = self.TIME_COLORS[found_start_color_index]
+        end_color = self.TIME_COLORS[found_end_color_index]
+        mins_since_start = (now - color_start_time) / 60
+        mins_in_range = (color_end_time - color_start_time) / 60
+        distance = (mins_since_start / mins_in_range)
+        blended_color = self._get_blended_color(start_color, end_color, distance)
+        return self._format_color(blended_color)
 
