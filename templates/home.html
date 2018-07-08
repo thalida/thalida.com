@@ -13,14 +13,14 @@
 
 {% block body %}
 <main class="home">
-    <div id="js-window" class="window">
+    <div class="window" data-window>
         <div class="window__scene">
             {% include "api/window-outside.html" %}
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">
-                    <div class="js-show-on-init window__scene__leaf window__scene__leaf--1"></div>
-                    <div class="js-show-on-init window__scene__leaf window__scene__leaf--2"></div>
+                    <div class="window__scene__leaf window__scene__leaf--1" data-show-on-readystate-complete></div>
+                    <div class="window__scene__leaf window__scene__leaf--2" data-show-on-readystate-complete></div>
                     <img 
                         class="window__scene__plant__image" 
                         src="{{url_for('static', filename='images/window/plant.svg')}}" 
@@ -28,10 +28,10 @@
                 </div>
                 <div class="window__scene__google-home">
                     <div class="google-home__colors">
-                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--green"></span>
-                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--purple"></span>
-                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--pink"></span>
-                        <span class="js-show-on-init google-home__color google-home__color--circle google-home__color--blue"></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--green" data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--purple" data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--pink" data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--blue" data-show-on-readystate-complete></span>
                     </div>
                     <img 
                         class="window__scene__google-home__image" 
@@ -44,10 +44,10 @@
         <div class="window__label">
             {% include "api/window-label-text.html" %}
             <div class="window__label__colors google-home__colors">
-                <span class="google-home__color google-home__color--line google-home__color--blue"></span>
-                <span class="google-home__color google-home__color--line google-home__color--purple"></span>
-                <span class="google-home__color google-home__color--line google-home__color--green"></span>
-                <span class="google-home__color google-home__color--line google-home__color--pink"></span>
+                <span class="google-home__color google-home__color--line google-home__color--blue" data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--purple" data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--green" data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--pink" data-show-on-readystate-complete></span>
             </div>
         </div>
     </div>

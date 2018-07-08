@@ -12,8 +12,8 @@ import dateparser
 from posts_collection import PostCollection
 from window import Window
 
-CSS_VERSION = 6;
-JS_VERSION = 5; 
+CSS_VERSION = 7;
+JS_VERSION = 7; 
 
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {

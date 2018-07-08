@@ -1,16 +1,21 @@
-var parser;
-var $showOnInitEls, $myWindow;
+var parser = new DOMParser();
+var $showOnReadyCompleteEls, $myWindow;
 var css = {
     display: function(el, display) {
         el.style.display = display;
     }
 }
 
-function ready(cb) {
-    if (document.readyState !='loading') {
-        cb()
-    } else if (document.addEventListener) {
-        document.addEventListener('DOMContentLoaded', cb);
+function readyStateChange(cbs) {
+    document.onreadystatechange = function () {
+        switch(document.readyState) {
+            case "interactive":
+                cbs.onInteractive();
+                break;
+            case "complete":
+                cbs.onComplete();
+                break;
+        }
     }
 }
 
@@ -61,13 +66,6 @@ function replaceWindowChild(parentSelector, childSelector, html) {
     $myWindow.querySelector(parentSelector).replaceChild($newEl, $oldEl);
 }
 
-function beforeReady() {
-    $showOnInitEls = document.querySelectorAll(".js-show-on-init");
-    $showOnInitEls.forEach(function($el) {
-        css.display($el, 'none')
-    });
-}
-
 function updateWindow(waitMs) {
     var successWaitMs = 30 * 60 * 1000
     var errorWaitMs = 60 * 1000
@@ -90,13 +88,20 @@ function updateWindow(waitMs) {
     }, waitMs);
 }
 
-beforeReady()
-ready(function () {
-    parser = new DOMParser();
-    $myWindow = document.getElementById('js-window');
-    $showOnInitEls.forEach(function($el) {
-        css.display($el, 'block')
-    });
+readyStateChange({
+    onInteractive: function () {
+        $showOnReadyCompleteEls = document.querySelectorAll('[data-show-on-readystate-complete]');
+        $showOnReadyCompleteEls.forEach(function($el) {
+            css.display($el, 'none')
+        });
 
-    updateWindow();
-})
+        $myWindow = document.querySelectorAll('[data-window]')[0];
+    },
+    onComplete: function () {
+        $showOnReadyCompleteEls.forEach(function($el) {
+            css.display($el, 'block')
+        });
+        
+        updateWindow();
+    },
+});
