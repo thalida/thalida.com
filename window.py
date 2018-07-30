@@ -57,7 +57,7 @@ class Window:
     ]
     SUNRISE_TIME_COLOR_INDEX = 1
     SUNSET_TIME_COLOR_INDEX = 5
-    
+
     def get_state(self, request, force_update, weather_cookie):
         now = int(time.time())
         weather = self._get_weather(request, force_update, weather_cookie)
@@ -72,7 +72,7 @@ class Window:
     def get_range_over_day(self, request, force_update, weather_cookie):
         weather = self._get_weather(request, force_update, weather_cookie)
         ranges = []
-      
+
         for h in range(24):
             print(h)
             for m in [0, 15, 30, 45, 59]:
@@ -80,7 +80,7 @@ class Window:
                 color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
                 saying = self._get_saying(time)
                 ranges.append({'color': color, 'saying': saying})
-        
+
         # for h in range(24):
         #     print(h)
         #     for m in range(60):
@@ -105,15 +105,15 @@ class Window:
         #             time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m, s)).timestamp()
         #             timedata = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
         #             ranges.append(timedata)
-        
+
         return ranges
 
     def _get_weather(self, request, force_update, weather_cookie):
         """Get Current Weather Based on IP Address
-        
-        Based on the current ip location, getthe current weather (or use NY if location 
+
+        Based on the current ip location, getthe current weather (or use NY if location
         is not available.) Save that data to a cookie to reduce # of api calls.
-        
+
         Arguments:
             request -- A Flast Request
             force_update {bool} -- Should we force update the weather data
@@ -179,7 +179,7 @@ class Window:
             end_saying_percent = sayings_section * (i + 1);
             if percent_time_elapsed < end_saying_percent:
                 found_saying_index = i
-                break; 
+                break;
 
         return self.TIME_SAYINGS[found_saying_index]
 
@@ -214,7 +214,7 @@ class Window:
         for i in range(num_colors_options):
             found_start_color_percent = color_section * i
             found_end_color_percent = color_section * (i + 1);
-    
+
             if percent_time_elapsed < found_end_color_percent:
                 found_start_color_index = start_index + i
                 if found_start_color_index < len(self.TIME_COLORS) - 1:
@@ -224,7 +224,7 @@ class Window:
                         found_end_color_index = found_start_color_index
                 else:
                     found_end_color_index = 0
-                break; 
+                break;
 
         color_start_time = start_time + ((end_time - start_time) * found_start_color_percent)
         color_end_time = start_time + ((end_time - start_time) * found_end_color_percent)
@@ -235,4 +235,3 @@ class Window:
         distance = (mins_since_start / mins_in_range)
         blended_color = self._get_blended_color(start_color, end_color, distance)
         return self._format_color(blended_color)
-
