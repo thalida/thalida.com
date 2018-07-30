@@ -1,5 +1,6 @@
 var parser = new DOMParser();
 var $showOnReadyCompleteEls, $myWindow;
+var isFirstLoad = true;
 var css = {
     display: function(el, display) {
         el.style.display = display;
@@ -19,7 +20,15 @@ function readyStateChange(cbs) {
     }
 }
 
-function apiGet(url, cbs) {
+function makeQueryString(params) {
+    var queryString = Object.keys(params).map(function(key) {
+        return key + '=' + params[key]
+    }).join('&');
+
+    return queryString;
+}
+
+function apiGet(url, params, cbs) {
     var httpRequest = new XMLHttpRequest();
 
     if (!httpRequest) {
@@ -39,6 +48,11 @@ function apiGet(url, cbs) {
         } catch( e ) {
             cbs.onError(e.name, e.message);
         }
+    }
+
+    if (params) {
+        var queryStr = makeQueryString(params);
+        url += ((/\?/).test(url) ? "&" : "?") + queryStr;
     }
 
     httpRequest.open('GET', url + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime(), true);
@@ -63,20 +77,29 @@ function updateWindow(waitMs, attempts) {
 
     var successWaitMs = 30 * 60 * 1000
     var errorWaitMs = 60 * 1000
-    var waitMs = waitMs || successWaitMs;
+    var waitMs = (isFirstLoad) ? 1 : waitMs || successWaitMs;
+
     setTimeout(function () {
-        apiGet('/api/window-data', {
-            onSuccess: function (res) {
-                res = JSON.parse(res)
-                replaceWindowChild('.window__scene', '.window__scene__outside', res.window_outside_html);
-                replaceWindowChild('.window__label', '.window__label__text', res.window_label_html);
-                updateWindow(successWaitMs);
+        var now = new Date();
+        apiGet(
+            '/api/window-data',
+            {
+                'timestamp': now.toISOString(),
+                'timezone_offset': now.getTimezoneOffset(),
             },
-            onError: function (name, message) {
-                console.error('Error Fetching Window Data: ', name, message);
-                updateWindow(errorWaitMs, attempts += 1);
+            {
+                onSuccess: function (res) {
+                    res = JSON.parse(res)
+                    replaceWindowChild('.window__scene', '.window__scene__outside', res.window_outside_html);
+                    replaceWindowChild('.window__label', '.window__label__text', res.window_label_html);
+                    updateWindow(successWaitMs);
+                },
+                onError: function (name, message) {
+                    console.error('Error Fetching Window Data: ', name, message);
+                    updateWindow(errorWaitMs, attempts += 1);
+                }
             }
-        })
+        );
     }, waitMs);
 }
 
@@ -93,7 +116,8 @@ readyStateChange({
         $showOnReadyCompleteEls.forEach(function($el) {
             css.display($el, 'block')
         });
-        
+
         updateWindow();
+        isFirstLoad = false;
     },
 });

@@ -1,6 +1,7 @@
 # Builtins
 import logging
 import json
+import os
 from datetime import datetime
 from pprint import pprint
 
@@ -11,6 +12,8 @@ import dateparser
 # Locals
 from posts_collection import PostCollection
 from window import Window
+
+os.environ['TZ'] = 'UTC'  # !!!!!
 
 CSS_VERSION = 7;
 JS_VERSION = 7;
@@ -127,11 +130,12 @@ def post(path):
 @app.route('/api/window-data', methods=['GET'])
 def get_window_data():
     try:
+        timestamp = request.args.get('timestamp')
         force_update = get_force_update(request)
         weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
 
         # Gather the data needed to render the page
-        window = my_window.get_state(request, force_update, weather_cookie)
+        window = my_window.get_state(request, force_update, weather_cookie, timestamp)
         window_outside_html = render_template('api/window-outside.html', window=window)
         window_label_html = render_template('api/window-label-text.html', window=window)
         response = make_response(jsonify({
@@ -161,9 +165,10 @@ def colors():
     """
 
     try:
+        timestamp = request.args.get('timestamp')
         force_update = get_force_update(request)
         weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
-        range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie)
+        range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie, timestamp)
 
         response = make_response(render_template(
             'colors.html',

@@ -13,7 +13,6 @@ import dateparser
 # Locals
 import secrets
 
-
 class Window:
     TIME_SAYINGS = [
         {
@@ -58,10 +57,13 @@ class Window:
     SUNRISE_TIME_COLOR_INDEX = 1
     SUNSET_TIME_COLOR_INDEX = 5
 
-    def get_state(self, request, force_update, weather_cookie):
-        now = int(time.time())
+    def get_state(self, request, force_update, weather_cookie, timestamp=None):
         weather = self._get_weather(request, force_update, weather_cookie)
-        color = self._get_color(now, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        if timestamp is not None:
+            now = dateparser.parse(timestamp, settings={'TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
+        else:
+            now = datetime.datetime.now()
+        color = self._get_color(now, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
         saying = self._get_saying(now)
         return {
             'weather': weather,
@@ -69,32 +71,37 @@ class Window:
             'saying': saying,
         }
 
-    def get_range_over_day(self, request, force_update, weather_cookie):
+    def get_range_over_day(self, request, force_update, weather_cookie, timestamp=None):
         weather = self._get_weather(request, force_update, weather_cookie)
         ranges = []
+        if timestamp is not None:
+            dt = dateparser.parse(timestamp, settings={'TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
+            today = datetime.date(dt.year, dt.month, dt.day)
+        else:
+            today = datetime.date.today()
+
+        # for h in range(24):
+        #     print(h)
+        #     for m in [0, 15, 30, 45, 59]:
+        #         time = datetime.datetime.combine(today, datetime.time(h, m))
+        #         color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
+        #         saying = self._get_saying(time)
+        #         ranges.append({'color': color, 'saying': saying})
 
         for h in range(24):
             print(h)
-            for m in [0, 15, 30, 45, 59]:
-                time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m)).timestamp()
-                color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+            for m in range(60):
+                time = datetime.datetime.combine(today, datetime.time(h, m))
+                color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
                 saying = self._get_saying(time)
                 ranges.append({'color': color, 'saying': saying})
 
         # for h in range(24):
         #     print(h)
         #     for m in range(60):
-        #         time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m)).timestamp()
-        #         color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
-        #         saying = self._get_saying(time)
-        #         ranges.append({'color': color, 'saying': saying})
-
-        # for h in range(24):
-        #     print(h)
-        #     for m in range(60):
         #         for s in [0, 10, 20, 30, 40, 50, 59]:
         #             time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m, s)).timestamp()
-        #             color = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        #             color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
         #             saying = self._get_saying(time)
         #             ranges.append({'color': color, 'saying': saying})
 
@@ -103,7 +110,7 @@ class Window:
         #     for m in range(60):
         #         for s in range(60):
         #             time = datetime.datetime.combine(datetime.date.today(), datetime.time(h, m, s)).timestamp()
-        #             timedata = self._get_color(time, weather['current']['sunrise_time'], weather['current']['sunset_time'])
+        #             timedata = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
         #             ranges.append(timedata)
 
         return ranges
@@ -130,12 +137,12 @@ class Window:
             # fallback latitute/longitude data
             newyork_latlng = [40.7081, -73.9571]
             tt_latlng = [10.65, -61.5167]
-            default_laglng = tt_latlng
+            default_latlng = tt_latlng
 
             # Get the visitors IP and lat/lng for that IP
             ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
             geo = geocoder.ip(ip)
-            lat, lng = geo.latlng if len(geo.latlng) == 2 else default_laglng
+            lat, lng = geo.latlng if len(geo.latlng) == 2 else default_latlng
 
             # Use Darksky to get the current forcast for that lat/lng
             geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
@@ -143,9 +150,10 @@ class Window:
             # Get and format the current weather
             daily_weather = geo_forecast['daily']['data'][0]
             current_weather = geo_forecast['currently']
+            current_weather['timezone'] = geo_forecast['timezone']
             current_weather['units'] = geo_forecast['flags']['units'] # F or C
-            current_weather['sunrise_time'] = daily_weather['sunriseTime']
-            current_weather['sunset_time'] = daily_weather['sunsetTime']
+            current_weather['sunriseTime'] = daily_weather['sunriseTime']
+            current_weather['sunsetTime'] = daily_weather['sunsetTime']
             current_weather['debug'] = {
                 'newyork_latlng': newyork_latlng,
                 'lat_lng': {'lat': lat, 'lng': lng},
@@ -175,10 +183,11 @@ class Window:
         return blended_color
 
     def _get_saying(self, now):
+        now_epoch = now.timestamp()
         midnight_today = int(datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()).timestamp())
         tomorrow = int(datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.datetime.min.time()).timestamp())
 
-        percent_time_elapsed = (now - midnight_today) / (tomorrow - midnight_today)
+        percent_time_elapsed = (now_epoch - midnight_today) / (tomorrow - midnight_today)
         num_sayings_options = len(self.TIME_SAYINGS)
         sayings_section = math.ceil(100 / num_sayings_options) / 100
 
@@ -193,16 +202,17 @@ class Window:
 
 
     def _get_color(self, now, sunrise, sunset):
-        if now < sunrise:
+        now_epoch = now.timestamp()
+        if now_epoch < sunrise:
             start_index = 0
             end_index = self.SUNRISE_TIME_COLOR_INDEX
-            midnight_today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
+            midnight_today = datetime.datetime.combine(now.today(), now.min.time())
             start_time = int(midnight_today.timestamp())
             end_time = sunrise - 1
-        elif now > sunset:
+        elif now_epoch > sunset:
             start_index = self.SUNSET_TIME_COLOR_INDEX
             end_index = len(self.TIME_COLORS) - 1
-            tomorrow = datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.datetime.min.time())
+            tomorrow = datetime.datetime.combine(now.today() + datetime.timedelta(days=1), now.min.time())
             start_time = sunset + 1
             end_time = int(tomorrow.timestamp())
         else:
@@ -211,7 +221,7 @@ class Window:
             start_time = sunrise
             end_time = sunset
 
-        percent_time_elapsed = (now - start_time) / (end_time - start_time)
+        percent_time_elapsed = (now_epoch - start_time) / (end_time - start_time)
         num_colors_options = end_index - start_index + 1
         color_section = math.ceil(100 / num_colors_options) / 100
 
@@ -238,7 +248,7 @@ class Window:
         color_end_time = start_time + ((end_time - start_time) * found_end_color_percent)
         start_color = self.TIME_COLORS[found_start_color_index]
         end_color = self.TIME_COLORS[found_end_color_index]
-        mins_since_start = (now - color_start_time) / 60
+        mins_since_start = (now_epoch - color_start_time) / 60
         mins_in_range = (color_end_time - color_start_time) / 60
         distance = (mins_since_start / mins_in_range)
         blended_color = self._get_blended_color(start_color, end_color, distance)
