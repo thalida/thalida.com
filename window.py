@@ -129,11 +129,13 @@ class Window:
 
             # fallback latitute/longitude data
             newyork_latlng = [40.7081, -73.9571]
+            tt_latlng = [10.65, -61.5167]
+            default_laglng = tt_latlng
 
             # Get the visitors IP and lat/lng for that IP
             ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
             geo = geocoder.ip(ip)
-            lat, lng = geo.latlng if len(geo.latlng) == 2 else newyork_latlng
+            lat, lng = geo.latlng if len(geo.latlng) == 2 else default_laglng
 
             # Use Darksky to get the current forcast for that lat/lng
             geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
