@@ -85,7 +85,6 @@ function updateWindow(waitMs, attempts) {
             '/api/window-data',
             {
                 'timestamp': now.toISOString(),
-                'timezone_offset': now.getTimezoneOffset(),
             },
             {
                 onSuccess: function (res) {

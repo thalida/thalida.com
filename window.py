@@ -1,6 +1,7 @@
 # Builtins
 from pprint import pprint
 import datetime
+from pytz import timezone
 import time
 import math
 import json
@@ -60,11 +61,11 @@ class Window:
     def get_state(self, request, force_update, weather_cookie, timestamp=None):
         weather = self._get_weather(request, force_update, weather_cookie)
         if timestamp is not None:
-            now = dateparser.parse(timestamp, settings={'TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
+            now = dateparser.parse(timestamp, settings={'TO_TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
         else:
             now = datetime.datetime.now()
-        color = self._get_color(now, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
-        saying = self._get_saying(now)
+        color = self._get_color(now, weather['current']['sunriseTime'], weather['current']['sunsetTime'], weather['current']['timezone'])
+        saying = self._get_saying(now, weather['current']['timezone'])
         return {
             'weather': weather,
             'color': color,
@@ -75,25 +76,28 @@ class Window:
         weather = self._get_weather(request, force_update, weather_cookie)
         ranges = []
         if timestamp is not None:
-            dt = dateparser.parse(timestamp, settings={'TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
+            dt = dateparser.parse(timestamp, settings={'TO_TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
             today = datetime.date(dt.year, dt.month, dt.day)
         else:
             today = datetime.date.today()
 
         # for h in range(24):
-        #     print(h)
+        #     # print(h)
         #     for m in [0, 15, 30, 45, 59]:
         #         time = datetime.datetime.combine(today, datetime.time(h, m))
-        #         color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
-        #         saying = self._get_saying(time)
+        #         time = timezone(weather['current']['timezone']).localize(time)
+        #         # print(time, time.timestamp())
+        #         color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'], weather['current']['timezone'])
+        #         saying = self._get_saying(time, weather['current']['timezone'])
         #         ranges.append({'color': color, 'saying': saying})
 
         for h in range(24):
             print(h)
             for m in range(60):
                 time = datetime.datetime.combine(today, datetime.time(h, m))
-                color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'])
-                saying = self._get_saying(time)
+                time = timezone(weather['current']['timezone']).localize(time)
+                color = self._get_color(time, weather['current']['sunriseTime'], weather['current']['sunsetTime'], weather['current']['timezone'])
+                saying = self._get_saying(time, weather['current']['timezone'])
                 ranges.append({'color': color, 'saying': saying})
 
         # for h in range(24):
@@ -182,10 +186,16 @@ class Window:
             blended_color[part] = round(start + ((end - start) * distance))
         return blended_color
 
-    def _get_saying(self, now):
+    def _get_saying(self, now, tz):
         now_epoch = now.timestamp()
-        midnight_today = int(datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time()).timestamp())
-        tomorrow = int(datetime.datetime.combine(datetime.date.today() + datetime.timedelta(days=1), datetime.datetime.min.time()).timestamp())
+
+        midnight_today = datetime.datetime.combine(now.today(), now.min.time())
+        midnight_today = timezone(tz).localize(midnight_today)
+        midnight_today = int(midnight_today.timestamp())
+
+        tomorrow = datetime.datetime.combine(now.today() + datetime.timedelta(days=1), now.min.time())
+        tomorrow = timezone(tz).localize(tomorrow)
+        tomorrow = int(tomorrow.timestamp())
 
         percent_time_elapsed = (now_epoch - midnight_today) / (tomorrow - midnight_today)
         num_sayings_options = len(self.TIME_SAYINGS)
@@ -201,18 +211,20 @@ class Window:
         return self.TIME_SAYINGS[found_saying_index]
 
 
-    def _get_color(self, now, sunrise, sunset):
+    def _get_color(self, now, sunrise, sunset, tz):
         now_epoch = now.timestamp()
         if now_epoch < sunrise:
             start_index = 0
             end_index = self.SUNRISE_TIME_COLOR_INDEX
             midnight_today = datetime.datetime.combine(now.today(), now.min.time())
+            midnight_today = timezone(tz).localize(midnight_today)
             start_time = int(midnight_today.timestamp())
             end_time = sunrise - 1
         elif now_epoch > sunset:
             start_index = self.SUNSET_TIME_COLOR_INDEX
             end_index = len(self.TIME_COLORS) - 1
             tomorrow = datetime.datetime.combine(now.today() + datetime.timedelta(days=1), now.min.time())
+            tomorrow = timezone(tz).localize(tomorrow)
             start_time = sunset + 1
             end_time = int(tomorrow.timestamp())
         else:

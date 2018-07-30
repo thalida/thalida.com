@@ -4,12 +4,12 @@
  * Darkest Blue - #1C2233
  * Blue - #4A84FF
  * Green - #1EFF7A, rgb(30, 255, 122)
- * Yellow - #FFB233, rgba(255, 187, 51, 1.)
+ * Yellow - #FFB233, rgb(255, 187, 51)
  * 
  * White - #FFFFFF
  * Light Gray - #E5E6E7
  * Medium Gray - #CFCFCF
- * 
+ *
  ******************************************************************************/
 
 
@@ -227,9 +227,9 @@ a {
     display: block;
     margin: 10.0rem 0 2.0rem;
 }
-    .footer::after { 
+    .footer::after {
       content: "";
-      display: block; 
+      display: block;
       clear: both;
     }
     .footer__copyright {
@@ -253,7 +253,7 @@ a {
     position: relative;
     vertical-align: middle;
     text-indent: -9999px;
-    
+
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -346,7 +346,7 @@ a {
 
 /* Card
  ******************************************************************************/
-.card-wrapper { 
+.card-wrapper {
     display: inline-block;
     position: relative;
     width: 100%;
