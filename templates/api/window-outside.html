@@ -31,9 +31,13 @@
         </div>
     </div>
     <div class="window__scene__frame">
-        <img 
-            class="window__scene__frame__image" 
-            src="{{url_for('static', filename='images/window/frame-only.svg')}}" 
+        <img
+            class="window__scene__frame__image"
+            src="{{url_for('static', filename='images/window/frame-only.svg')}}"
             alt="An illustrated window showing a city skyline in the {{ window.saying.label | lower }} and the current weather of {{ window.weather.current.summary | lower }}" />
     </div>
+    <script type="text/javascript">
+        var windowData = {{ window | tojson | safe }};
+        var windowDebug = {{ window.weather.current.debug | tojson | safe }};
+    </script>
 </div>
