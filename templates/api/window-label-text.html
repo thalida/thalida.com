@@ -1,7 +1,6 @@
 <p class="window__label__text">
     {% set has_and = " and " in window.weather.current.summary %}
     {% set use_f = window.weather.current.units == 'us' %}
-    It’s currently 
     {{ window.weather.current.temperature | round | int }}°{% if use_f %}F{% else %}C{% endif %}{% if has_and%}, {% else %} and {% endif %}
     {{ window.weather.current.summary | lower }}
 </p>

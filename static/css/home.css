@@ -39,7 +39,7 @@
 .window {
     display: block;
     position: relative;
-    margin: 0 auto;
+    margin: 7.0rem auto;
     max-width: 385px;
     min-width: 256px;
     width: 100%;
@@ -88,16 +88,16 @@
                 animation-timing-function: ease-in-out;
             }
             .window__label__colors .google-home__color.google-home__color--blue {
-                animation-name: animation-label-color--blue;       
+                animation-name: animation-label-color--blue;
             }
             .window__label__colors .google-home__color.google-home__color--purple {
-                animation-name: animation-label-color--purple;       
+                animation-name: animation-label-color--purple;
             }
             .window__label__colors .google-home__color.google-home__color--green {
-                animation-name: animation-label-color--green;       
+                animation-name: animation-label-color--green;
             }
             .window__label__colors .google-home__color.google-home__color--pink {
-                animation-name: animation-label-color--pink;       
+                animation-name: animation-label-color--pink;
             }
             @keyframes animation-label-color--blue {
                 75% {
@@ -238,7 +238,7 @@
                         transform: rotate(360deg);
             }
         }
- 
+
         @-webkit-keyframes animation-leaf-falling--2 {
             50% {
                 -webkit-transform: rotate(0deg);
@@ -255,7 +255,7 @@
                         transform: rotate(-180deg);
             }
         }
- 
+
         @keyframes animation-leaf-falling--2 {
             50% {
                 -webkit-transform: rotate(0deg);
@@ -271,7 +271,7 @@
                 -webkit-transform: rotate(-180deg);
                         transform: rotate(-180deg);
             }
-        } 
+        }
 
     .window__scene__google-home {
         right: 30px;
@@ -298,19 +298,19 @@
         .window__scene__google-home .google-home__color--circle.google-home__color--purple {
             -webkit-animation-name: animation-google-home--purple;
                     animation-name: animation-google-home--purple;
-        } 
+        }
         .window__scene__google-home .google-home__color--circle.google-home__color--green {
             -webkit-animation-name: animation-google-home--green;
                     animation-name: animation-google-home--green;
-        } 
+        }
         .window__scene__google-home .google-home__color--circle.google-home__color--pink {
             -webkit-animation-name: animation-google-home--pink;
                     animation-name: animation-google-home--pink;
-        } 
+        }
         .window__scene__google-home .google-home__color--circle.google-home__color--blue {
             -webkit-animation-name: animation-google-home--blue;
                     animation-name: animation-google-home--blue;
-        } 
+        }
 
         @-webkit-keyframes animation-google-home--purple {
             0% {
@@ -320,7 +320,7 @@
             }
             25% {
                 opacity: 1;
-                top: -0.5rem; 
+                top: -0.5rem;
                 left: 2rem;
             }
             100% {
@@ -328,7 +328,7 @@
                 top: 0rem;
                 left: 1.3rem;
             }
-        } 
+        }
 
         @keyframes animation-google-home--purple {
             0% {
@@ -338,7 +338,7 @@
             }
             25% {
                 opacity: 1;
-                top: -0.5rem; 
+                top: -0.5rem;
                 left: 2rem;
             }
             100% {
@@ -346,7 +346,7 @@
                 top: 0rem;
                 left: 1.3rem;
             }
-        } 
+        }
 
         @-webkit-keyframes animation-google-home--green {
             0% {
@@ -357,14 +357,14 @@
             25% {
                 opacity: 1;
                 top: 0rem;
-                left: 2.5rem; 
+                left: 2.5rem;
             }
             100% {
                 opacity: 1;
                 top: -0.5rem;
                 left: 2rem;
             }
-        } 
+        }
 
         @keyframes animation-google-home--green {
             0% {
@@ -375,7 +375,7 @@
             25% {
                 opacity: 1;
                 top: 0rem;
-                left: 2.5rem; 
+                left: 2.5rem;
             }
             100% {
                 opacity: 1;
@@ -392,7 +392,7 @@
             }
             25% {
                 opacity: 1;
-                top: 0.5rem; 
+                top: 0.5rem;
                 left: 2rem;
             }
             100% {
@@ -410,7 +410,7 @@
             }
             25% {
                 opacity: 1;
-                top: 0.5rem; 
+                top: 0.5rem;
                 left: 2rem;
             }
             100% {
@@ -433,7 +433,7 @@
             }
             100% {
                 opacity: 1;
-                top: 0.5rem; 
+                top: 0.5rem;
                 left: 2rem;
             }
         }
@@ -451,7 +451,7 @@
             }
             100% {
                 opacity: 1;
-                top: 0.5rem; 
+                top: 0.5rem;
                 left: 2rem;
             }
         }
@@ -860,10 +860,10 @@
             top: 2%;
         }
     }
-    
+
 
 .about-section {
-    margin: 14.0rem 0 7.0rem;
+    margin: 7.0rem 0;
 }
     .about-section__header {
         margin-bottom: 7.0rem;
@@ -902,8 +902,8 @@
     }
 
 
-.collections-section { 
-    margin: 14.0rem 0 7.0rem; 
+.collections-section {
+    margin: 7.0rem auto;
 }
 .collection {
     margin: 7.0rem 0;
@@ -935,7 +935,7 @@
 
 
 .jobs-section {
-    margin: 14.0rem 0 7.0rem;
+    margin: 7.0rem auto;
     opacity: 0.6;
 }
 .card.job {

@@ -207,8 +207,6 @@ def demo_index():
         response = make_response(render_template(
             'home.html',
             **get_globals(demo_posts),
-            time_debugging=time_debugging,
-            range_24hr=range_24hr if time_debugging else None,
             window=window,
             collections_order=collections_order,
             work=work,
