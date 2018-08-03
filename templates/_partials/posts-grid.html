@@ -3,11 +3,11 @@
     {% set post_meta = globals.all_posts_meta[post_key] %}
     {% if not post_meta.is_hidden %}
         <li class="card-wrapper">
-            <a 
+            <a
                 class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured%} post--featured{% endif %}"
                 {% if post_meta.is_external %}
-                    href="{{ post_meta.external_url | safe }}" 
-                    target="_blank" 
+                    href="{{ post_meta.external_url | safe }}"
+                    target="_blank"
                     rel="external"
                 {% else %}
                     href="{{ post_meta.url | safe }}"
@@ -17,9 +17,12 @@
                     <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
                 {% endif %}
                 <h3 class="card__header header--tertiary">
+                    {% for icon in post_meta.icons.before %}
+                        <span class="card__header__icon icon icon--small icon--before icon--{{icon | lower}}"></span>
+                    {% endfor %}
                     <span class="card__header__text">{{ post_meta.title | truncate(50, False, '...', 10) }}</span>
-                    {% for icon in post_meta.icons %}
-                        <span class="icon icon--small icon--{{icon | lower}}"></span>
+                    {% for icon in post_meta.icons.after %}
+                        <span class="card__header__icon icon icon--xsmall icon--after icon--{{icon | lower}}"></span>
                     {% endfor %}
                 </h3>
                 <p class="card__summary text--primary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>

@@ -5,7 +5,7 @@
  * Blue - #4A84FF
  * Green - #1EFF7A, rgb(30, 255, 122)
  * Yellow - #FFB233, rgb(255, 187, 51)
- * 
+ *
  * White - #FFFFFF
  * Light Gray - #E5E6E7
  * Medium Gray - #CFCFCF
@@ -251,13 +251,16 @@ a {
 .icon {
     display: inline-block;
     position: relative;
-    vertical-align: middle;
     text-indent: -9999px;
 
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
 }
+    .icon--xsmall {
+        width: 12px;
+        height: 12px;
+    }
     .icon--small {
         width: 16px;
         height: 16px;
@@ -384,8 +387,11 @@ a {
     .card__header__text {
         display: inline-block;
         position: relative;
-        vertical-align: middle;
+        vertical-align: baseline;
         max-width: 90%;
+    }
+    .card__header__icon {
+      vertical-align: baseline;
     }
     .card__summary {
         padding: 0;
