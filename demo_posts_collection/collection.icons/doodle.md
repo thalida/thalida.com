@@ -1,5 +1,3 @@
-Title:  doodle
+Title:  doodle | journal
 Icons:   doodle
 Icons:   journal
-
-

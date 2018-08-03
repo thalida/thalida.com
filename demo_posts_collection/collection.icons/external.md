@@ -1,5 +1,3 @@
-Title:  External
+Title:  external | outgoing-link
 Icons:   external
 Icons:   outgoing-link
-
-

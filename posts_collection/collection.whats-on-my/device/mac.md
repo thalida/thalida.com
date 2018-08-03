@@ -1,6 +1,5 @@
-Title:          What's on my mac
-Summary:        Summary of this what's on
-Date:           2018-06-03
+Title:          What’s on my mac
+Summary:        Bear, Things, Dashlane, Flux, LiceCap, Sky Fonts
 Icon:           laptop
 
 # What's on my mac
