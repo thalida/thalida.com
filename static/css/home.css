@@ -76,24 +76,33 @@
                 top: 0rem;
                 left: calc(50% - 0.3rem);
                 opacity: 0;
-                animation-delay: 500ms;
-                animation-duration: 600ms;
-                animation-fill-mode: forwards;
-                animation-iteration-count: 1;
-                animation-timing-function: linear;
+                -webkit-animation-delay: 500ms;
+                        animation-delay: 500ms;
+                -webkit-animation-duration: 600ms;
+                        animation-duration: 600ms;
+                -webkit-animation-fill-mode: forwards;
+                        animation-fill-mode: forwards;
+                -webkit-animation-iteration-count: 1;
+                        animation-iteration-count: 1;
+                -webkit-animation-timing-function: linear;
+                        animation-timing-function: linear;
             }
-            .window__label__colors .google-home__color.google-home__color--blue {
-                animation-name: animation-label-color--blue;
-            }
-            .window__label__colors .google-home__color.google-home__color--purple {
-                animation-name: animation-label-color--purple;
-            }
-            .window__label__colors .google-home__color.google-home__color--green {
-                animation-name: animation-label-color--green;
-            }
-            .window__label__colors .google-home__color.google-home__color--pink {
-                animation-name: animation-label-color--pink;
-            }
+                .window__label__colors .google-home__color.google-home__color--blue {
+                    -webkit-animation-name: animation-label-color--blue;
+                            animation-name: animation-label-color--blue;
+                }
+                .window__label__colors .google-home__color.google-home__color--purple {
+                    -webkit-animation-name: animation-label-color--purple;
+                            animation-name: animation-label-color--purple;
+                }
+                .window__label__colors .google-home__color.google-home__color--green {
+                    -webkit-animation-name: animation-label-color--green;
+                            animation-name: animation-label-color--green;
+                }
+                .window__label__colors .google-home__color.google-home__color--pink {
+                    -webkit-animation-name: animation-label-color--pink;
+                            animation-name: animation-label-color--pink;
+                }
             @keyframes animation-label-color--blue {
                 50% {
                     left: calc((50% - 1.65rem) - 0.45rem);
@@ -291,6 +300,8 @@
             top: 0rem;
             left: 2rem;
             opacity: 0;
+            -webkit-animation-animation-delay: 500ms;
+                    animation-delay: 500ms;
             -webkit-animation-duration: 2s;
                     animation-duration: 2s;
             -webkit-animation-iteration-count: infinite;
