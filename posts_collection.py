@@ -76,6 +76,7 @@ class PostCollection:
             'title': (PostCollection._cast_to_string, "Untitled", []),
             'date_posted': (PostCollection._cast_to_date, PostCollection._cast_to_date("2007-09-16"), ['date']),
             'date_updated': (PostCollection._cast_to_date, None, []),
+            'image': (PostCollection._cast_to_string, "", []),
             'icons': (PostCollection._cast_to_list, [], ['icon']),
             'tags': (PostCollection._cast_to_list, [], ['tag']),
             'is_hidden': (PostCollection._cast_to_bool, False, ['hidden']),

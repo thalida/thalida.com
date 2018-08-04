@@ -1,5 +1,5 @@
 <p class="window__label__text">
     {% set use_f = window.weather.current.units == 'us' %}
     {{ window.weather.current.temperature | round | int }}°{% if use_f %}F{% else %}C{% endif %}
-    {{ window.weather.current.summary | lower }}
+    {{ window.weather.current.summary | title }}.
 </p>

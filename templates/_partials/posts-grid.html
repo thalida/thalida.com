@@ -13,6 +13,9 @@
                     href="{{ post_meta.url | safe }}"
                 {% endif %}
             >
+                {% if post_meta.image %}
+                    <div class="card__image" style="background-image:url({{ post_meta.image }})"></div>
+                {% endif %}
                 {% if post_meta.is_featured %}
                     <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
                 {% endif %}

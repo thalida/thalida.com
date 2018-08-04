@@ -169,7 +169,6 @@ def colors():
         force_update = get_force_update(request)
         weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
         range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie, timestamp)
-
         response = make_response(render_template(
             'colors.html',
             **get_globals(my_posts),

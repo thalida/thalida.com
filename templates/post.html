@@ -11,6 +11,7 @@
 
 {% block body %}
     {% set collection = globals.all_collections[post.meta.collection] %}
+    <img id="post_image" class="post_image" src="https://raw.githubusercontent.com/thalida/ShapeConnector/master/app/assets/images/gameplay.gif" />
     <div id="post_header">
         <h1>{{ post.meta.title }}</h1>
         <hr />
@@ -21,7 +22,7 @@
             <span>Category <span>{{ post.meta.category }}</span></span>
         {% endif %}
     </div>
-    
+
     <div id="post_content">
         {{ post.html | safe }}
     </div>
