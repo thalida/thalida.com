@@ -52,7 +52,7 @@ a {
 .header--primary {
     margin: 0;
     padding: 0;
-    font: normal 300 6.4em 'Merriweather', serif;
+    font: normal 400 6.4em 'Arbutus Slab', serif;
     line-height: 1.2em;
     text-align: center;
 }
@@ -71,7 +71,8 @@ a {
 .header--secondary {
     margin: 0;
     padding: 0;
-    font: normal 700 3.2em 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 3.2em;
     line-height: 2em;
 }
 @media (max-width: 60.0em) {
@@ -84,7 +85,8 @@ a {
 .header--tertiary {
     margin: 0;
     padding: 0;
-    font: normal 700 1.8em 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 1.8em;
     line-height: 2em;
 }
 
@@ -204,7 +206,7 @@ a {
         margin: 0;
         padding: 0;
         color: #1C2233;
-        font: normal 700 1.8em 'Merriweather', serif;
+        font: normal 400 1.8em 'Arbutus Slab', serif;
         line-height: 2em;
         text-decoration: none;
     }
@@ -396,7 +398,7 @@ a {
         line-height: 1.6em;
     }
     .card__header__text {
-        display: inline-block;
+        /* display: inline-block; */
         position: relative;
         vertical-align: baseline;
         max-width: 90%;

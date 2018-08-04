@@ -59,7 +59,8 @@
             padding: 0.5em 2.0em;
             background-color: #F2F2F2;
             border-radius: 36px;
-            font: normal 300 1.4em 'Merriweather', serif;
+            font-size: 1.4em;
+            font-weight: 300;
             line-height: 1.5em;
             text-align: center;
         }
