@@ -69,12 +69,6 @@
             position: relative;
             width: 100%;
             margin: 0.8em 0;
-            animation-duration: 4s;
-            animation-fill-mode: forwards;
-            animation-iteration-count: 1;
-            animation-timing-function: linear;
-            animation-name: animation-label-colors;
-            animation-delay: .5s;
         }
             .window__label__colors .google-home__color {
                 display: block;
@@ -83,10 +77,10 @@
                 left: calc(50% - 0.3rem);
                 opacity: 0;
                 animation-delay: 500ms;
-                animation-duration: 800ms;
+                animation-duration: 600ms;
                 animation-fill-mode: forwards;
                 animation-iteration-count: 1;
-                animation-timing-function: ease-in-out;
+                animation-timing-function: linear;
             }
             .window__label__colors .google-home__color.google-home__color--blue {
                 animation-name: animation-label-color--blue;
@@ -101,41 +95,51 @@
                 animation-name: animation-label-color--pink;
             }
             @keyframes animation-label-color--blue {
-                75% {
-                    left: calc(50% - 1.8rem);
-                    width: 1.0rem;
+                50% {
+                    left: calc((50% - 1.65rem) - 0.45rem);
+                    width: 1.2rem;
+                    opacity: 1;
                 }
                 100% {
-                    left: calc(50% - 1.5rem);
+                    left: calc(50% - 1.65rem);
                     opacity: 1;
+                    width: 0.6rem;
                 }
             }
             @keyframes animation-label-color--purple {
-                75% {
-                    left: calc(50% - 0.7rem);
+                50% {
+                    left: calc((50% - 0.75rem) - 0.15rem);
+                    width: 0.9rem;
+                    opacity: 1;
                 }
                 100% {
-                    left: calc(50% - 0.5rem);
+                    left: calc(50% - 0.75rem);
                     opacity: 1;
+                    width: 0.6rem;
                 }
             }
             @keyframes animation-label-color--green {
-                75% {
-                    left: calc(50% + 0.7rem);
+                50% {
+                    left: calc((50% + 0.15rem) + 0.15rem);
+                    width: 0.9rem;
+                    opacity: 1;
                 }
                 100% {
-                    left: calc(50% + 0.5rem);
+                    left: calc(50% + 0.15rem);
                     opacity: 1;
+                    width: 0.6rem;
                 }
             }
             @keyframes animation-label-color--pink {
-                75% {
-                    left: calc(50% + 1.8rem);
-                    width: 1.0rem;
+                50% {
+                    left: calc((50% + 1.05rem) + 0.45rem);
+                    width: 1.2rem;
+                    opacity: 1;
                 }
                 100% {
-                    left: calc(50% + 1.5rem);
+                    left: calc(50% + 1.05rem);
                     opacity: 1;
+                    width: 0.6rem;
                 }
             }
 

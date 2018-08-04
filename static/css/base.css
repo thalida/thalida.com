@@ -214,8 +214,8 @@ a {
     .header__link:after {
         content: "";
         display: inline-block;
-        width: 2.4em;
-        height: 0.3em;
+        width: 1.6em;
+        height: 0.25em;
         margin: 0 0.3em;
         border-radius: 0.3em;
         vertical-align: middle;
