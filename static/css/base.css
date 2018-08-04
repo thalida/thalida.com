@@ -5,6 +5,10 @@
  * Blue - #4A84FF
  * Green - #1EFF7A, rgb(30, 255, 122)
  * Yellow - #FFB233, rgb(255, 187, 51)
+ * Pink -  #FFDADA, rgb(255, 218, 218)
+ * Pastel-ish Blue - #98DBFF
+ * Purple - #CBA5FF
+ *
  *
  * White - #FFFFFF
  * Light Gray - #E5E6E7
@@ -433,8 +437,8 @@ a {
     }
     .card.post--external {}
     .card.post--featured {
-        background-color: rgba(255, 187, 51, 0.05);;
-        border-bottom-color: rgba(255, 187, 51, 1);
+        background-color: rgba(255, 218, 218, 0.15);
+        border-bottom-color: rgba(255, 218, 218, 1);
     }
     @media (min-width: 51.8em) {
         .card.post {
