@@ -1,3 +1,3 @@
-Title:  game | game-boy
+Title:  game | gameboy
 Icons:   game
-Icons:   game-boy
+Icons:   gameboy

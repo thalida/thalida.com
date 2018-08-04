@@ -406,7 +406,8 @@ class PostCollection:
             formatted_meta['icons'].append('external')
 
         all_icons = list(OrderedDict.fromkeys(formatted_meta['icons']))
-        after_icons = ['external']  # Icons that should come after the title
+        # Icons that should come after the title
+        after_icons = ['external', 'outgoing-link']
         formatted_meta['icons'] = {
             'all': all_icons,
             'before': [icon for icon in all_icons if icon not in after_icons],
