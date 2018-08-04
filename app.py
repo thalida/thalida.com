@@ -327,7 +327,7 @@ def get_work():
     work_history = [
         {
             'company': 'Etsy',
-            'title': 'Senior Software Engineer',
+            'title': 'Engineering Manager on Discovery',
             'dates': [format_datetime('May 2017'), None],
             'is_hiring': True
         },

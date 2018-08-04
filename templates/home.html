@@ -61,38 +61,42 @@
         </h1>
         <div class="about-section__content">
             <p class="about-section__text text--primary">
-                {{ window.saying.salutation }}, my name’s Thalida, I’m a Trinidadian-American
-                software engineer based in New York. For my 16th birthday I was lucky
-                enough to be gifted this domain. It was one of the best presents
-                I’ve ever received, being able to learn and grow on here is the
-                main reason I’ve become the engineer I am today.
+                {{ window.saying.salutation }}, my name’s Thalida, I’m a queer
+                first generation Trinidadian-American software engineer based in New York.
             </p>
             <p class="about-section__text text--primary">
-                I’ve come a long way since 16 year old me, I’m now a
+                Over 10 years ago for my 16th birthday I desperately wanted one thing...
+                a domain of my own. I was privileged enough to have a supportive
+                mother who gifted me thalida.com,
+                over the past years this site has allowed me to grow in amazing ways.
+            </p>
+            <p class="about-section__text text--primary">
+                I use this domain to practice and learn, experiment and
+                challenge myself as an engineer, designer, and writer. Which is all to say:
+                if it’s ever broken, janky, or weird, I’m probably in the
+                process of learning something new, and you’re coming along for
+                the ride with me 😂
+            </p>
+            <p class="about-section__text text--primary">
+                I’ve come a long way since 16 year old me, I’m now an
                 {{ work.history[0].title }} at {{ work.history[0].company }}
-                {% if work.history[0].is_hiring %} (<a class="link--primary" href="https://etsy.com/careers" target="_blank">we’re hiring</a>){% endif %},
-                and I’ve been active in the industry for over {{ work.years_since_start }} years.
+                {% if work.history[0].is_hiring %} (<a class="link--primary" href="https://etsy.com/careers" target="_blank">we’re hiring</a>){% endif %}.
             </p>
             <p class="about-section__text text--primary">
                 Outside of work I build robots with my partner, work on one of
                 my (way too many) side projects, play MarioKart, and discuss
-                identitites, intersectionality, and inclusivity (especially in
-                regards to tech).
+                identities, intersectionality, and inclusivity.
+                <!-- Want me to speak at an event? Check out this post! -->
             </p>
             <p class="about-section__text text--primary">
-                If you want to discuss being queer, black, femme, or
-                first-generation in tech, you’ve found the right girl!
+                I’m currently experimenting with other ways to keep in touch outside of the
+                silos of social media. If you want to connect or stay up to date with what I'm working on,
+                let’s do it like it’s not {{ globals.datetime.current_year }}:
             </p>
-            <p class="about-section__text text--primary">
-                But (there’s <em>always</em> a but), I’ve started to distance
-                myself from social media, while it has beneficial moments it’s
-                also become thourougly overwhelming… so if you want to keep in
-                touch or talk, let’s do it like it’s not {{ globals.datetime.current_year }}:
-            </p>
-            <ol class="about-section__text about-section__list text--primary">
+            <ul class="about-section__text about-section__list text--primary">
                 <li><a class="link--primary" href="#">subscribe to my newsletter!</a></li>
                 <li>Send me an <a class="link--primary" href="#">email</a></li>
-            </ol>
+            </ul>
             <p class="about-section__text text--primary">
                 (Fun Fact: I’m generally full of questions and bubble tea.)
             </p>
