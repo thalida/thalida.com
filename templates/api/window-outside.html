@@ -38,6 +38,6 @@
     </div>
     <script type="text/javascript">
         var windowData = {{ window | tojson | safe }};
-        var windowDebug = {{ window.weather.current.debug | tojson | safe }};
+        var windowDebug = {{ window.weather.current.debug | default({}) | tojson | safe }};
     </script>
 </div>
