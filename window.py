@@ -158,12 +158,6 @@ class Window:
             current_weather['units'] = geo_forecast['flags']['units'] # F or C
             current_weather['sunriseTime'] = daily_weather['sunriseTime']
             current_weather['sunsetTime'] = daily_weather['sunsetTime']
-            current_weather['debug'] = {
-                'newyork_latlng': newyork_latlng,
-                'lat_lng': {'lat': lat, 'lng': lng},
-                'ip': ip,
-                'geo': geo.latlng,
-            }
 
         return {'current': current_weather, 'from_cookie': from_cookie}
 

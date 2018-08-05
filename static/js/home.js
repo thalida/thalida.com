@@ -75,7 +75,7 @@ function updateWindow(waitMs, attempts) {
         return;
     }
 
-    var successWaitMs = 30 * 60 * 1000
+    var successWaitMs = 15 * 60 * 1000
     var errorWaitMs = 60 * 1000
     var waitMs = (isFirstLoad) ? 1 : waitMs || successWaitMs;
 

@@ -36,7 +36,7 @@ my_posts = PostCollection()
 my_window = Window()
 
 now = datetime.now()
-cookie_update_date = dateparser.parse('2019-06-24T00:00:00')
+cookie_update_date = dateparser.parse('2018-08-01T00:00:00')
 
 @app.route('/')
 def index():
@@ -141,6 +141,7 @@ def get_window_data():
         response = make_response(jsonify({
             'window_outside_html': window_outside_html,
             'window_label_html': window_label_html,
+            'data': window,
         }))
 
         set_cookies(request, response, weather=window['weather'], visit=False)
@@ -449,7 +450,7 @@ def set_cookies(request, response, weather=None, visit=True):
         response.set_cookie(
             format_cookie_key(COOKIE_KEYS['WEATHER']),
             json.dumps(weather['current']),
-            max_age=60*15  # keep for 15min - the weather will update every 15min
+            max_age=15*60  # keep for 15min - the weather will update every 15min
         )
 
     if force_update or visit:
