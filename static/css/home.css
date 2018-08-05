@@ -45,6 +45,11 @@
     width: 100%;
     overflow: hidden;
 }
+    @media (max-height: 45em) {
+        .window {
+            margin: 2.0rem auto;
+        }
+    }
     .window__label {
         display: block;
         position: relative;
