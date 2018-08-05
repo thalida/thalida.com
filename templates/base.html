@@ -45,7 +45,9 @@
     <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|PT+Serif:400,400i,700,700i" rel="stylesheet">
 
     <!-- Global Styles -->
-    <link href="{{url_for('static', filename='css/base.css', v=globals.css_version)}}" rel="stylesheet">
+    {% assets filters="cssmin", output="dist/base.min.css", "css/base.css" %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
 
     <!-- View Styles -->
     {% block styles %}{% endblock %}

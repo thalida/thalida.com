@@ -7,6 +7,7 @@ from pprint import pprint
 
 # Third Party
 from flask import Flask, request, make_response, render_template, jsonify, redirect, url_for, abort
+from flask_assets import Environment, Bundle
 import dateparser
 
 # Locals
@@ -15,9 +16,6 @@ from window import Window
 
 os.environ['TZ'] = 'UTC'  # !!!!!
 
-CSS_VERSION = 7;
-JS_VERSION = 7;
-
 COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
     'WEATHER': 'weather',
@@ -25,9 +23,10 @@ COOKIE_KEYS = {
     'NUM_VISITS': 'total_visits',
 }
 
-
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
+assets = Environment(app)
+
 demo_posts = PostCollection(
     posts_dir='./demo_posts_collection/',
     url_decorator='/demo/x/'
@@ -303,8 +302,6 @@ def get_globals(posts):
     """
     return {
         'globals': {
-            'css_version': str(CSS_VERSION),
-            'js_version': str(JS_VERSION),
             'image_version': str(1),
             'datetime': {
                 'now': now,

@@ -12,5 +12,7 @@ dateparser = "*"
 geocoder = "*"
 darkskylib = "*"
 markdown = "*"
+flask-assets = "*"
+cssmin = "*"
 
 [dev-packages]

@@ -4,11 +4,15 @@
 {% endblock %}
 
 {% block styles %}
-<link href="{{url_for('static', filename='css/home.css', v=globals.css_version)}}" rel="stylesheet">
+{% assets filters="cssmin", output="dist/home.min.css", "css/home.css" %}
+    <link href="{{ ASSET_URL }}" rel="stylesheet">
+{% endassets %}
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.js_version)}}"></script>
+{% assets filters="rjsmin", output="dist/home.min.js", "js/home.js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+{% endassets %}
 {% endblock %}
 
 {% block body %}
