@@ -143,9 +143,9 @@ a {
         left: 10%;
         opacity: 0.8;
         background: rgb(255, 187, 51);
-        -webkit-transition: opacity 150ms, top 150ms, left 150ms;
-        -o-transition: opacity 150ms, top 150ms, left 150ms;
-        transition: opacity 150ms, top 150ms, left 150ms;
+        -webkit-transition: opacity 150ms, top 300ms, left 300ms;
+        -o-transition: opacity 150ms, top 300ms, left 300ms;
+        transition: opacity 150ms, top 300ms, left 300ms;
     }
     .link--primary:hover:after,
     .link--primary:visited:hover:after {
@@ -154,7 +154,6 @@ a {
         opacity: 0.4;
         width: 100%;
         background: rgb(255, 187, 51);
-        /* background: rgb(207, 207, 207); */
     }
     .link--primary:visited:after {
         background: rgb(207, 207, 207);
@@ -163,14 +162,20 @@ a {
 
 .link--micro {
     display: inline-block;
-    color: rgb(255, 187, 51);
-    text-decoration: underline;
+    color: #1C2233;
+    border-bottom: 2px solid rgba(255, 187, 51);
+    text-decoration: none;
     -webkit-transition: color 300ms;
     -o-transition: color 300ms;
     transition: color 300ms;
 }
+    .link--micro:visited {
+        color: #1C2233;
+        border-bottom: 2px solid rgb(207, 207, 207);
+    }
     .link--micro:hover {
-        color: rgba(255, 187, 51, 0.6);
+        color: rgb(255, 187, 51);
+        border-bottom: 2px solid rgba(255, 187, 51, 0.5);
     }
 
 /* Alignment
