@@ -144,7 +144,7 @@ class Window:
             default_latlng = tt_latlng
 
             # Get the visitors IP and lat/lng for that IP
-            ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+            ip = request.headers.get('X-Forwarded-For', request.remote_addr)
             geo = geocoder.ip(ip)
             lat, lng = geo.latlng if len(geo.latlng) == 2 else default_latlng
 
@@ -158,10 +158,6 @@ class Window:
             current_weather['units'] = geo_forecast['flags']['units'] # F or C
             current_weather['sunriseTime'] = daily_weather['sunriseTime']
             current_weather['sunsetTime'] = daily_weather['sunsetTime']
-            current_weather['debug'] = {
-                'ip': ip,
-                'latlng': {'lat': lat, 'lng': lng}
-            }
 
         return {'current': current_weather, 'from_cookie': from_cookie}
 
