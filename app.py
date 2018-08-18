@@ -36,7 +36,7 @@ my_posts = PostCollection()
 my_window = Window()
 
 server_start_time = time.time()
-cookie_update_date = dateparser.parse('2018-08-01T00:00:00')
+server_start_datetime = datetime.now()
 
 @app.route('/')
 def index():
@@ -377,7 +377,7 @@ def get_force_update(request):
     now = datetime.now()
     last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
     last_visit_as_datetime = dateparser.parse(last_visit)
-    force_update = (cookie_update_date - last_visit_as_datetime).total_seconds() > 0
+    force_update = (server_start_datetime - last_visit_as_datetime).total_seconds() > 0
 
     return force_update
 
