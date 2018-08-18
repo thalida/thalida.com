@@ -28,7 +28,7 @@
                         <span class="card__header__icon icon icon--xsmall icon--after icon--{{icon | lower}}"></span>
                     {% endfor %}
                 </h3>
-                <p class="card__summary text--primary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
+                <p class="card__summary text--secondary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
                 <small class="card__details text--micro">
                     {% if post_meta.is_external %}
                         Links to <span class="link--micro">{{ post_meta.external_url }}</span>

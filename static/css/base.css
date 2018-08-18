@@ -6,13 +6,13 @@
  * Green - #1EFF7A, rgb(30, 255, 122)
  * Yellow - #FFB233, rgb(255, 187, 51)
  * Pink -  #FFDADA, rgb(255, 218, 218)
- * Pastel-ish Blue - #98DBFF
+ * Pastel-ish Blue - #98DBFF, rgb(152, 219, 255)
  * Purple - #CBA5FF
  *
  *
  * White - #FFFFFF
  * Light Gray - #E5E6E7
- * Medium Gray - #CFCFCF
+ * Medium Gray - #CFCFCF, rgb(207, 207, 207)
  *
  ******************************************************************************/
 
@@ -90,7 +90,7 @@ a {
     margin: 0;
     padding: 0;
     font-weight: 700;
-    font-size: 1.8em;
+    font-size: 1.6em;
     line-height: 2em;
 }
 
@@ -98,6 +98,11 @@ a {
  ******************************************************************************/
 .text--primary {
     font-size: 1.6em;
+    line-height: 1.5em;
+}
+
+.text--secondary {
+    font-size: 1.3em;
     line-height: 1.5em;
 }
 
@@ -123,36 +128,49 @@ a {
  ******************************************************************************/
 .link--primary {
     display: inline-block;
-    color: #4A84FF;
+    position: relative;
+    color: #1C2233;
 }
     .link--primary:after {
         content: "";
         display: block;
-        height: 1px;
+        position: absolute;
+        z-index: -1;
+        height: 10px;
+        border-radius: 3px;
+        width: 95%;
+        top: 60%;
+        left: 10%;
+        opacity: 0.8;
+        background: rgb(255, 187, 51);
+        -webkit-transition: opacity 150ms, top 150ms, left 150ms;
+        -o-transition: opacity 150ms, top 150ms, left 150ms;
+        transition: opacity 150ms, top 150ms, left 150ms;
+    }
+    .link--primary:hover:after,
+    .link--primary:visited:hover:after {
+        top: 30%;
+        left: 0%;
+        opacity: 0.4;
         width: 100%;
-        margin-top: -0.2em;
-        background-color: #4A84FF;
-        -webkit-transition: opacity 50ms, margin-top 150ms;
-        -o-transition: opacity 50ms, margin-top 150ms;
-        transition: opacity 50ms, margin-top 150ms;
+        background: rgb(255, 187, 51);
+        /* background: rgb(207, 207, 207); */
     }
-    .link--primary:hover:after {
-        content: "";
-        margin-top: -0.6em;
-        background-color: #1C2233;
-        opacity: 0.5;
+    .link--primary:visited:after {
+        background: rgb(207, 207, 207);
     }
+
 
 .link--micro {
     display: inline-block;
-    color: #4A84FF;
+    color: rgb(255, 187, 51);
     text-decoration: underline;
     -webkit-transition: color 300ms;
     -o-transition: color 300ms;
     transition: color 300ms;
 }
     .link--micro:hover {
-        color: #1EFF7A;
+        color: rgba(255, 187, 51, 0.6);
     }
 
 /* Alignment
@@ -376,10 +394,9 @@ a {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    min-height: 12.0rem;
-    padding: 1.4rem;
+    min-height: 10.0rem;
+    padding: 1.0rem;
     color: #1C2233;
-    border-bottom: 1px solid #CFCFCF;
     text-align: center;
     text-decoration: none;
 }
@@ -424,6 +441,7 @@ a {
 
 /* Card (Post Type) ----------------------------------------------------------*/
 .card.post {
+    background-color: #FFFFFF;
     border-top-left-radius: 0.3rem;
     border-top-right-radius: 0.3rem;
     text-align: center;
@@ -431,15 +449,36 @@ a {
     -o-transition: border-bottom-color 300ms, background-color 1200ms;
     transition: border-bottom-color 300ms, background-color 1200ms;
 }
-    .card.post:hover {
-        background-color: rgba(30, 255, 122, 0.05);
-        border-bottom-color: rgba(30, 255, 122, 1);
+    .card.post:after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: rgb(255, 187, 51);
     }
-    .card.post--external {}
     .card.post--featured {
         background-color: rgba(255, 218, 218, 0.15);
-        border-bottom-color: rgba(255, 218, 218, 1);
     }
+        .card.post--featured:after {
+            background: rgba(255, 218, 218, 1);
+        }
+    .card.post:visited {
+        background-color: #FFFFFF;
+    }
+        .card.post:visited:after {
+            background: rgb(207, 207, 207);
+        }
+    .card.post:visited:hover,
+    .card.post:hover {
+        background-color: rgba(255, 187, 51, 0.2);
+    }
+        .card.post:visited:hover:after,
+        .card.post:hover:after {
+            background: rgb(255, 187, 51);
+        }
     @media (min-width: 51.8em) {
         .card.post {
             -webkit-box-align: start;
