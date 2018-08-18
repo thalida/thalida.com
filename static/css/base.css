@@ -11,6 +11,7 @@
  *
  *
  * White - #FFFFFF
+ * XLight Gray - #F9F9F9, rgb(249, 249, 249)
  * Light Gray - #E5E6E7
  * Medium Gray - #CFCFCF, rgb(207, 207, 207)
  *
@@ -35,6 +36,7 @@ html {
 body {
     border: 0;
     padding: 0;
+    margin: 0;
     background-color: #FFFFFF;
     color: #1C2233;
     font: normal normal 62.5% 'PT Serif', serif;
@@ -102,7 +104,7 @@ a {
 }
 
 .text--secondary {
-    font-size: 1.3em;
+    font-size: 1.4em;
     line-height: 1.5em;
 }
 
@@ -142,7 +144,7 @@ a {
         top: 60%;
         left: 10%;
         opacity: 0.8;
-        background: rgb(255, 187, 51);
+        background: rgb(30, 255, 122);
         -webkit-transition: opacity 150ms, top 300ms, left 300ms;
         -o-transition: opacity 150ms, top 300ms, left 300ms;
         transition: opacity 150ms, top 300ms, left 300ms;
@@ -153,29 +155,28 @@ a {
         left: 0%;
         opacity: 0.4;
         width: 100%;
-        background: rgb(255, 187, 51);
+        background: rgb(30, 255, 122);
     }
     .link--primary:visited:after {
-        background: rgb(207, 207, 207);
+        background: #E5E6E7;
     }
 
 
-.link--micro {
+.link--secondary {
     display: inline-block;
     color: #1C2233;
-    border-bottom: 2px solid rgba(255, 187, 51);
+    border-bottom: 2px solid rgb(30, 255, 122);
     text-decoration: none;
-    -webkit-transition: color 300ms;
-    -o-transition: color 300ms;
-    transition: color 300ms;
+    -webkit-transition: border-bottom 300ms;
+    -o-transition: border-bottom 300ms;
+    transition: border-bottom 300ms;
 }
-    .link--micro:visited {
+    .link--secondary:visited {
         color: #1C2233;
-        border-bottom: 2px solid rgb(207, 207, 207);
+        border-bottom: 2px solid #E5E6E7;
     }
-    .link--micro:hover {
-        color: rgb(255, 187, 51);
-        border-bottom: 2px solid rgba(255, 187, 51, 0.5);
+    .link--secondary:hover {
+        border-bottom: 4px solid rgba(30, 255, 122);
     }
 
 /* Alignment
@@ -206,14 +207,15 @@ a {
  ******************************************************************************/
 .site-wrapper {
     margin: 0 auto;
-    width: 90%;
+    padding: 0.25rem;
+    width: 100%;
 }
-@media (min-width: 30.0em) {
+@media (min-width: 60em) {
     .site-wrapper {
-        width: 80%;
+        width: 90%;
     }
 }
-@media (min-width: 70.0em) {
+@media (min-width: 80em) {
     .site-wrapper {
         width: 70%;
     }
@@ -347,33 +349,57 @@ a {
 
 
 /*******************************************************************************
+ * COLLECTIONS
+ ******************************************************************************/
+.collections-section {
+    margin: 7.0rem auto;
+}
+.collection {
+    margin: 7.0rem 0;
+}
+    .collection__header {
+        display: block;
+        position: relative;
+        margin: 0 auto;
+        width: 90%;
+        color: #1C2233;
+    }
+    .collection__header__contents {
+        text-align: center;
+        line-height: 1em;
+    }
+    .collection__header__title {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+    }
+    .collection__summary {
+        width: 90%;
+        margin: 0.5em auto 0;
+        text-align: center;
+    }
+
+
+/*******************************************************************************
  * CARDS
  ******************************************************************************/
 
 /* Card Grid
  ******************************************************************************/
 .card-grid {
-    -webkit-columns: 1 100%;
-    columns: 1 100%;
-    -webkit-column-gap: 0em;
-    column-gap: 0em;
-    display: -ms-grid;
-    display: grid;
-    grid-gap: 0rem;
-    grid-template-columns: repeat(auto-fill, 100%);
-    margin: 2.0rem 0 0;
+    margin: 3rem 0 0 0;
     padding: 0;
     list-style-type: none;
-}
-@media (min-width: 51.8em) {
-    .card-grid {
-        -webkit-columns: 3 18.0rem;
-        columns: 3 18.0rem;
-        -webkit-column-gap: 1.5rem;
-        column-gap: 1.5rem;
-        grid-gap: 1.5em;
-        grid-template-columns: repeat(auto-fill, minmax(18.0rem, 1fr));
-    }
+
+    -webkit-columns: 3 18.0rem;
+    columns: 3 18.0rem;
+    -webkit-column-gap: 0;
+    column-gap: 0;
+
+    display: -ms-grid;
+    display: grid;
+    grid-gap: 0;
+    grid-template-columns: repeat(auto-fill, minmax(18.0rem, 1fr));
 }
 
 /* Card
@@ -399,8 +425,9 @@ a {
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
-    min-height: 10.0rem;
+    min-height: 11.0rem;
     padding: 1.0rem;
+    margin: 0.25rem;
     color: #1C2233;
     text-align: center;
     text-decoration: none;
@@ -424,7 +451,6 @@ a {
         line-height: 1.6em;
     }
     .card__header__text {
-        /* display: inline-block; */
         position: relative;
         vertical-align: baseline;
         max-width: 90%;
@@ -446,45 +472,28 @@ a {
 
 /* Card (Post Type) ----------------------------------------------------------*/
 .card.post {
-    background-color: #FFFFFF;
-    border-top-left-radius: 0.3rem;
-    border-top-right-radius: 0.3rem;
     text-align: center;
-    -webkit-transition: border-bottom-color 300ms, background-color 1200ms;
-    -o-transition: border-bottom-color 300ms, background-color 1200ms;
-    transition: border-bottom-color 300ms, background-color 1200ms;
+    border: 1px solid #FFFFFF;
+    background-color: #FFFFFF;
+    -webkit-transition: border 300ms, background-color 300ms, box-shadow 300ms;
+    -o-transition: border 300ms, background-color 300ms, box-shadow 300ms;
+    transition: border 300ms, background-color 300ms, box-shadow 300ms;
 }
-    .card.post:after {
-        content: "";
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background: rgb(255, 187, 51);
-    }
-    .card.post--featured {
-        background-color: rgba(255, 218, 218, 0.15);
-    }
-        .card.post--featured:after {
-            background: rgba(255, 218, 218, 1);
-        }
     .card.post:visited {
-        background-color: #FFFFFF;
+        border: 1px solid rgb(249, 249, 249);
+        background-color: rgb(249, 249, 249);
     }
-        .card.post:visited:after {
-            background: rgb(207, 207, 207);
-        }
+    .card.post.post--featured {
+        border: 1px solid rgb(30, 255, 122);
+        background-color: rgb(30, 255, 122, 0.5);
+    }
     .card.post:visited:hover,
     .card.post:hover {
-        background-color: rgba(255, 187, 51, 0.2);
+        z-index: 3;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     }
-        .card.post:visited:hover:after,
-        .card.post:hover:after {
-            background: rgb(255, 187, 51);
-        }
-    @media (min-width: 51.8em) {
+    @media (min-width: 40.15em) {
         .card.post {
             -webkit-box-align: start;
             -ms-flex-align: start;

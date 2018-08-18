@@ -885,7 +885,8 @@
 
 
 .about-section {
-    margin: 7.0rem 0;
+    margin: 7.0rem auto;
+    width: 90%;
 }
     .about-section__header {
         margin-bottom: 7.0rem;
@@ -922,39 +923,6 @@
           page-break-inside: avoid;
                break-inside: avoid;
     }
-
-
-.collections-section {
-    margin: 7.0rem auto;
-}
-.collection {
-    margin: 7.0rem 0;
-}
-    .collection__header {
-        text-align: center;
-        line-height: 1em;
-    }
-    .collection__header-link {
-        display: block;
-        position: relative;
-        color: #1C2233;
-    }
-    .collection__header__text {
-        display: inline-block;
-        position: relative;
-        vertical-align: middle;
-    }
-    .collection__summary {
-        margin: 0.5em 0 0;
-        text-align: center;
-    }
-    @media (min-width: 51.8em) {
-        .collection__header,
-        .collection__summary {
-            text-align: left
-        }
-    }
-
 
 .jobs-section {
     margin: 7.0rem auto;
