@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "site/base.html" %}
 {% block title %}
     {{ post.meta.title }}
 {% endblock %}
@@ -31,7 +31,7 @@
         <div class="collection">
             <h2 class="collection__header header--secondary">More in {{ collection.meta.title }}</h2>
             {% set posts = next_posts %}
-            {% include "_partials/posts-grid.html" %}
+            {% include "site/_partials/posts-grid.html" %}
         </div>
     </div>
 {% endblock %}

@@ -495,11 +495,6 @@ a {
         opacity: 0.5;
         background-color: #FFFFFF;
     }
-
-    .card.post.post--featured .card__header:before {
-        background-color: rgb(255, 241, 216);
-    }
-
     .card.post:visited .card__header:before {
         background-color: #1C2233;
     }

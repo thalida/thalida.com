@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "site/base.html" %}
 {% block title %}
     Home
 {% endblock %}
@@ -17,7 +17,7 @@
 <main class="home">
     <div class="window" data-window>
         <div class="window__scene">
-            {% include "_partials/window-outside.html" %}
+            {% include "site/_partials/window-outside.html" %}
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">
@@ -44,7 +44,7 @@
 
         </div>
         <div class="window__label">
-            {% include "_partials/window-label-text.html" %}
+            {% include "site/_partials/window-label-text.html" %}
             <div class="window__label__colors google-home__colors">
                 <span class="google-home__color google-home__color--line google-home__color--blue" data-show-on-readystate-complete></span>
                 <span class="google-home__color google-home__color--line google-home__color--purple" data-show-on-readystate-complete></span>
@@ -126,7 +126,7 @@
                     </p>
 
                     {% set posts = collection.posts_in_order %}
-                    {% include "_partials/posts-grid.html" %}
+                    {% include "site/_partials/posts-grid.html" %}
                 </section>
             {% endif %}
         {% endfor %}

@@ -33,10 +33,12 @@ app = Flask(__name__)
 assets = Environment(app)
 
 demo_posts = PostCollection(
-    posts_dir='./demo_posts_collection/',
+    posts_dir='./templates/demo_posts_collection/',
     url_decorator='/demo/x/'
 )
-my_posts = PostCollection()
+my_posts = PostCollection(
+    posts_dir='./templates/posts_collection/'
+)
 my_window = Window()
 
 @app.route('/')
@@ -62,7 +64,7 @@ def index():
         collections_order = my_posts.collections_order
 
         response = make_response(render_template(
-            'home.html',
+            'site/home.html',
             **get_globals(my_posts),
             window=window,
             collections_order=collections_order,
@@ -112,7 +114,7 @@ def post(path):
 
         # Build the repsonse object for a post
         response = make_response(render_template(
-            'post.html',
+            'site/post.html',
             **get_globals(my_posts),
             post=post,
             next_posts=next_posts_paths,
@@ -137,8 +139,8 @@ def get_window_data():
 
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie, timestamp)
-        window_outside_html = render_template('_partials/window-outside.html', window=window)
-        window_label_html = render_template('_partials/window-label-text.html', window=window)
+        window_outside_html = render_template('site/_partials/window-outside.html', window=window)
+        window_label_html = render_template('site/_partials/window-label-text.html', window=window)
         response = make_response(jsonify({
             'window_outside_html': window_outside_html,
             'window_label_html': window_label_html,
@@ -172,7 +174,7 @@ def colors():
         weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
         range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie, timestamp)
         response = make_response(render_template(
-            'colors.html',
+            'site/colors.html',
             **get_globals(my_posts),
             range_24hr=range_24hr
         ))
@@ -206,7 +208,7 @@ def demo_index():
         collections_order = demo_posts.collections_order
 
         response = make_response(render_template(
-            'home.html',
+            'site/home.html',
             **get_globals(demo_posts),
             window=window,
             collections_order=collections_order,
@@ -256,7 +258,7 @@ def demo_post(path):
 
         # Build the repsonse object for a post
         response = make_response(render_template(
-            'post.html',
+            'site/post.html',
             **get_globals(demo_posts),
             post=post,
             next_posts=next_posts_paths,
