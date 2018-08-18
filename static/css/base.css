@@ -144,7 +144,7 @@ a {
         top: 60%;
         left: 10%;
         opacity: 0.8;
-        background: rgb(30, 255, 122);
+        background: rgb(255, 187, 51);
         -webkit-transition: opacity 150ms, top 300ms, left 300ms;
         -o-transition: opacity 150ms, top 300ms, left 300ms;
         transition: opacity 150ms, top 300ms, left 300ms;
@@ -155,7 +155,7 @@ a {
         left: 0%;
         opacity: 0.4;
         width: 100%;
-        background: rgb(30, 255, 122);
+        background: rgb(255, 187, 51);
     }
     .link--primary:visited:after {
         background: #E5E6E7;
@@ -165,7 +165,7 @@ a {
 .link--secondary {
     display: inline-block;
     color: #1C2233;
-    border-bottom: 2px solid rgb(30, 255, 122);
+    border-bottom: 2px solid rgb(255, 187, 51);
     text-decoration: none;
     -webkit-transition: border-bottom 300ms;
     -o-transition: border-bottom 300ms;
@@ -176,7 +176,7 @@ a {
         border-bottom: 2px solid #E5E6E7;
     }
     .link--secondary:hover {
-        border-bottom: 4px solid rgba(30, 255, 122);
+        border-bottom: 4px solid rgb(255, 187, 51);
     }
 
 /* Alignment
@@ -256,7 +256,7 @@ a {
 .footer {
     position: relative;
     display: block;
-    margin: 10.0rem 0 2.0rem;
+    margin: 10.0rem 2.0rem 2.0rem;
 }
     .footer::after {
       content: "";
@@ -273,7 +273,11 @@ a {
         position: relative;
         text-align: right;
     }
-
+    @media (min-width: 60em) {
+        .footer {
+            margin: 10.0rem 0 2.0rem;
+        }
+    }
 
 
 /*******************************************************************************
@@ -422,9 +426,9 @@ a {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: start;
     min-height: 11.0rem;
     padding: 1.0rem;
     margin: 0.25rem;
@@ -447,6 +451,8 @@ a {
       background-position: center;
     }
     .card__header {
+        display: block;
+        position: relative;
         width: 100%;
         line-height: 1.6em;
     }
@@ -473,24 +479,36 @@ a {
 /* Card (Post Type) ----------------------------------------------------------*/
 .card.post {
     text-align: center;
-    border: 1px solid #FFFFFF;
     background-color: #FFFFFF;
     -webkit-transition: border 300ms, background-color 300ms, box-shadow 300ms;
     -o-transition: border 300ms, background-color 300ms, box-shadow 300ms;
     transition: border 300ms, background-color 300ms, box-shadow 300ms;
 }
-    .card.post:visited {
-        border: 1px solid rgb(249, 249, 249);
-        background-color: rgb(249, 249, 249);
+    .card.post .card__header:before {
+        content: "";
+        display: block;
+        position: absolute;
+        height: 1px;
+        width: 100%;
+        top: 50%;
+        left: 0;
+        opacity: 0.5;
+        background-color: #FFFFFF;
+    }
+
+    .card.post.post--featured .card__header:before {
+        background-color: rgb(255, 241, 216);
+    }
+
+    .card.post:visited .card__header:before {
+        background-color: #1C2233;
     }
     .card.post.post--featured {
-        border: 1px solid rgb(30, 255, 122);
-        background-color: rgb(30, 255, 122, 0.5);
+        border: 1px solid rgb(255, 187, 51);
     }
     .card.post:visited:hover,
     .card.post:hover {
         z-index: 3;
-        border: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
     }
     @media (min-width: 40.15em) {

@@ -31,7 +31,7 @@
                 <p class="card__summary text--secondary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
                 <small class="card__details text--micro">
                     {% if post_meta.is_external %}
-                        Links to <span class="link--secondary">{{ post_meta.external_url }}</span>
+                        <span class="">{{ post_meta.external_url }}</span>
                     {% elif post_meta.date_updated %}
                         Updated on {{ post_meta.date_updated | datetime('post') }}
                     {% elif post_meta.date_posted and not post_meta.is_default_date %}
