@@ -25,6 +25,9 @@ COOKIE_KEYS = {
     'NUM_VISITS': 'total_visits',
 }
 
+SERVER_START_TIME = time.time()
+SERVER_START_DATETIME = datetime.now()
+
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
 assets = Environment(app)
@@ -35,9 +38,6 @@ demo_posts = PostCollection(
 )
 my_posts = PostCollection()
 my_window = Window()
-
-server_start_time = time.time()
-server_start_datetime = datetime.now()
 
 @app.route('/')
 def index():
@@ -309,7 +309,7 @@ def get_globals(posts):
             'datetime': {
                 'now': now,
                 'current_year': now.strftime('%Y'),
-                'server_start': server_start_time,
+                'server_start': SERVER_START_TIME,
             },
             'all_collections': posts.collections,
             'all_posts_meta': posts.posts_meta,
@@ -378,7 +378,7 @@ def get_force_update(request):
     now = datetime.now()
     last_restart = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_RESTART']), now.isoformat())
     last_restart_as_datetime = dateparser.parse(last_restart)
-    force_update = (server_start_datetime - last_restart_as_datetime).total_seconds() > 0
+    force_update = (SERVER_START_DATETIME - last_restart_as_datetime).total_seconds() > 0
 
     return force_update
 
@@ -455,7 +455,7 @@ def _set_last_restart_cookie(request, response):
     # Update last restart cookie with current value
     response.set_cookie(
         format_cookie_key(COOKIE_KEYS['LAST_RESTART']),
-        str(server_start_datetime.isoformat()),
+        str(SERVER_START_DATETIME.isoformat()),
         max_age=120*24*60*60 # save for 120 days
     )
 
