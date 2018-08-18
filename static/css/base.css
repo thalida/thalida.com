@@ -209,6 +209,7 @@ a {
     margin: 0 auto;
     padding: 0.25rem;
     width: 100%;
+    min-width: 385px;
 }
 @media (min-width: 60em) {
     .site-wrapper {
@@ -405,6 +406,12 @@ a {
     grid-gap: 0;
     grid-template-columns: repeat(auto-fill, minmax(18.0rem, 1fr));
 }
+@media (max-width: 18.0rem) {
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, 100%);
+    }
+}
+
 
 /* Card
  ******************************************************************************/
@@ -475,6 +482,13 @@ a {
         width: 100%;
         opacity: 0.8;
     }
+        .card__details--url {
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
 
 /* Card (Post Type) ----------------------------------------------------------*/
 .card.post {
