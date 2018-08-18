@@ -21,6 +21,7 @@ COOKIE_NAMESPACE = 'TIA'
 COOKIE_KEYS = {
     'WEATHER': 'weather',
     'LAST_VISIT': 'visit_timestamp',
+    'LAST_RESTART': 'server_restart_timestamp',
     'NUM_VISITS': 'total_visits',
 }
 
@@ -375,9 +376,9 @@ def get_force_update(request):
         [bool] -- Boolean on if we should force a site/cookie update
     """
     now = datetime.now()
-    last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
-    last_visit_as_datetime = dateparser.parse(last_visit)
-    force_update = (server_start_datetime - last_visit_as_datetime).total_seconds() > 0
+    last_restart = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_RESTART']), now.isoformat())
+    last_restart_as_datetime = dateparser.parse(last_restart)
+    force_update = (server_start_datetime - last_restart_as_datetime).total_seconds() > 0
 
     return force_update
 
@@ -438,14 +439,27 @@ def set_cookies(request, response, weather=None, visit=True):
         response -- A Flast Response
 
     Keyword Arguments:
-        weather {dict} -- Current weater data dictionary (default: {None})
+        weather {dict} -- Current weather data dictionary (default: {None})
         visit {bool} -- Does this call to set cookies count as a site visit? (default: {True})
     """
 
     # check if a force update of cookies is required
     force_update = get_force_update(request)
-    now = datetime.now()
 
+    # Update cookies
+    _set_last_restart_cookie(request, response)
+    _set_weather_cookie(request, response, force_update, weather)
+    _set_visit_cookie(request, response, force_update, visit)
+
+def _set_last_restart_cookie(request, response):
+    # Update last restart cookie with current value
+    response.set_cookie(
+        format_cookie_key(COOKIE_KEYS['LAST_RESTART']),
+        str(server_start_datetime.isoformat()),
+        max_age=120*24*60*60 # save for 120 days
+    )
+
+def _set_weather_cookie(request, response, force_update, weather):
     # Set the weather cookie if we have weather data and we're forced to or the
     # weather wasn't fetched from a cookie already
     if weather is not None and (force_update or weather['from_cookie'] is False):
@@ -455,7 +469,9 @@ def set_cookies(request, response, weather=None, visit=True):
             max_age=15*60  # keep for 15min - the weather will update every 15min
         )
 
+def _set_visit_cookie(request, response, force_update, visit):
     if force_update or visit:
+        now = datetime.now()
         # Get the time the guest last visited
         last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
         last_visit_as_datetime = dateparser.parse(last_visit)
@@ -478,7 +494,6 @@ def set_cookies(request, response, weather=None, visit=True):
             str(now.isoformat()),
             max_age=120*24*60*60 # save for 120 days
         )
-
 
 """=============================================================================
 Main
