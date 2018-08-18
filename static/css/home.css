@@ -80,6 +80,7 @@
                 position: absolute;
                 top: 0rem;
                 left: calc(50% - 0.3rem);
+                margin: 0;
                 opacity: 0;
                 -webkit-animation-delay: 500ms;
                         animation-delay: 500ms;

@@ -1,75 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
 
-    <meta name="robots" content="index,follow">
-    <meta name="google-site-verification" content="0OkeijNEttEmmStPI6gx_dlXEig-zE752lzp0BHMfyo" />
+        <meta name="robots" content="index,follow">
+        <meta name="google-site-verification" content="0OkeijNEttEmmStPI6gx_dlXEig-zE752lzp0BHMfyo" />
 
-    <title>thalida - {% block title %}{% endblock %}</title>
-    <meta name="description" content="Thalida's homebase on the world wide web.">
+        <title>thalida - {% block title %}{% endblock %}</title>
+        <meta name="description" content="Thalida's homebase on the world wide web.">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{url_for('static', filename='images/apple-touch-icon.png', v='QEML9vbBp2')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static', filename='images/favicon-32x32.png', v='QEML9vbBp2')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='images/favicon-16x16.png', v='QEML9vbBp2')}}">
-    <link rel="mask-icon" href="{{url_for('static', filename='images/safari-pinned-tab.svg', v='QEML9vbBp2')}}" color="#5bbad5">
-    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico', v='QEML9vbBp2')}}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{url_for('static', filename='images/apple-touch-icon.png', v='QEML9vbBp2')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static', filename='images/favicon-32x32.png', v='QEML9vbBp2')}}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='images/favicon-16x16.png', v='QEML9vbBp2')}}">
+        <link rel="mask-icon" href="{{url_for('static', filename='images/safari-pinned-tab.svg', v='QEML9vbBp2')}}" color="#5bbad5">
+        <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.ico', v='QEML9vbBp2')}}">
 
-    <meta name="apple-mobile-web-app-title" content="thalida">
-    <meta name="application-name" content="thalida">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="msapplication-navbutton-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+        <meta name="apple-mobile-web-app-title" content="thalida">
+        <meta name="application-name" content="thalida">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="theme-color" content="#ffffff">
+        <meta name="msapplication-navbutton-color" content="#ffffff">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
 
-    <!-- Twitter Card data -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="thalida.com">
-    <meta name="twitter:description" content="Thalida's homebase on the world wide web.">
-    <meta name="twitter:creator" content="@thalidanoel">
+        <!-- Twitter Card data -->
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="thalida.com">
+        <meta name="twitter:description" content="Thalida's homebase on the world wide web.">
+        <meta name="twitter:creator" content="@thalidanoel">
 
-    <!-- Open Graph data -->
-    <meta property="og:title" content="thalida.com" />
-    <meta property="og:type" content="personal" />
-    <meta property="og:url" content="http://thalida.com/" />
-    <meta property="og:description" content="Thalida's homebase on the world wide web." />
+        <!-- Open Graph data -->
+        <meta property="og:title" content="thalida.com" />
+        <meta property="og:type" content="personal" />
+        <meta property="og:url" content="http://thalida.com/" />
+        <meta property="og:description" content="Thalida's homebase on the world wide web." />
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|PT+Serif:400,400i,700,700i" rel="stylesheet">
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|PT+Serif:400,400i,700,700i" rel="stylesheet">
 
-    <!-- Global Styles -->
-    {% assets filters="cssmin", output="dist/base.min.css", "css/base.css" %}
-        <link href="{{ ASSET_URL }}" rel="stylesheet">
-    {% endassets %}
+        <!-- Global Styles -->
+        <link href="{{url_for('static', filename='css/base.css')}}" rel="stylesheet">
 
-    <!-- View Styles -->
-    {% block styles %}{% endblock %}
-  </head>
-  <body>
-    {% block debug_output %}{% endblock %}
+        <!-- View Styles -->
+        {% block styles %}{% endblock %}
+    </head>
+    <body>
+        {% block debug_output %}{% endblock %}
 
-    <div class="site-wrapper">
-        <header class="header">
-            <a class="header__link" href="/">thalida</a>
-        </header>
+        <div class="site-wrapper">
+            <header class="header">
+                <a class="header__link" href="/">thalida</a>
+            </header>
 
-        {% block body %}{% endblock %}
+            {% block body %}{% endblock %}
 
-        <footer class="footer">
-            <small class="footer__copyright text--micro">
-                <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - <time>{{ globals.datetime.current_year }}</time>
-            </small>
-            <small class="footer__credits text--micro">
-                Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
-            </small>
-        </footer>
-    </div>
+            <footer class="footer">
+                <small class="footer__copyright text--micro">
+                    <a class="link--micro" href="http://twitter.com/thalidanoel">i made this</a> - <time>{{ globals.datetime.current_year }}</time>
+                </small>
+                <small class="footer__credits text--micro">
+                    Powered by <a class="link--micro" href="https://darksky.net/poweredby/" target="_blank">Darksky</a>
+                </small>
+            </footer>
+        </div>
 
-    {% block scripts %}{% endblock %}
-  </body>
+        {% block scripts %}{% endblock %}
+    </body>
 </html>

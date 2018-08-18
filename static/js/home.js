@@ -106,7 +106,7 @@ readyStateChange({
     onInteractive: function () {
         $showOnReadyCompleteEls = document.querySelectorAll('[data-show-on-readystate-complete]');
         $showOnReadyCompleteEls.forEach(function($el) {
-            css.display($el, 'none')
+          css.display($el, 'none')
         });
 
         $myWindow = document.querySelectorAll('[data-window]')[0];

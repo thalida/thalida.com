@@ -4,9 +4,7 @@
 {% endblock %}
 
 {% block styles %}
-{% assets filters="cssmin", output="dist/home.min.css", "css/home.css" %}
-    <link href="{{ ASSET_URL }}" rel="stylesheet">
-{% endassets %}
+<link href="{{url_for('static', filename='css/home.css')}}" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
