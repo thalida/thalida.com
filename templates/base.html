@@ -43,7 +43,7 @@
         <link href="https://fonts.googleapis.com/css?family=Arbutus+Slab|PT+Serif:400,400i,700,700i" rel="stylesheet">
 
         <!-- Global Styles -->
-        <link href="{{url_for('static', filename='css/base.css')}}" rel="stylesheet">
+        <link href="{{url_for('static', filename='css/base.css', v=globals.datetime.server_start)}}" rel="stylesheet">
 
         <!-- View Styles -->
         {% block styles %}{% endblock %}

@@ -2,6 +2,7 @@
 import logging
 import json
 import os
+import time
 from datetime import datetime
 from pprint import pprint
 
@@ -34,7 +35,7 @@ demo_posts = PostCollection(
 my_posts = PostCollection()
 my_window = Window()
 
-now = datetime.now()
+server_start_time = time.time()
 cookie_update_date = dateparser.parse('2018-08-01T00:00:00')
 
 @app.route('/')
@@ -135,8 +136,8 @@ def get_window_data():
 
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie, timestamp)
-        window_outside_html = render_template('api/window-outside.html', window=window)
-        window_label_html = render_template('api/window-label-text.html', window=window)
+        window_outside_html = render_template('_partials/window-outside.html', window=window)
+        window_label_html = render_template('_partials/window-label-text.html', window=window)
         response = make_response(jsonify({
             'window_outside_html': window_outside_html,
             'window_label_html': window_label_html,
@@ -300,12 +301,14 @@ def get_globals(posts):
     Returns:
         [dict] -- Dict of globally accessible data
     """
+    now = datetime.now()
     return {
         'globals': {
             'image_version': str(1),
             'datetime': {
                 'now': now,
                 'current_year': now.strftime('%Y'),
+                'server_start': server_start_time,
             },
             'all_collections': posts.collections,
             'all_posts_meta': posts.posts_meta,
@@ -321,7 +324,7 @@ def get_work():
     Returns:
         [dict] -- Work history and stats
     """
-
+    now = datetime.now()
     work_history = [
         {
             'company': 'Etsy',
@@ -371,6 +374,7 @@ def get_force_update(request):
     Returns:
         [bool] -- Boolean on if we should force a site/cookie update
     """
+    now = datetime.now()
     last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
     last_visit_as_datetime = dateparser.parse(last_visit)
     force_update = (cookie_update_date - last_visit_as_datetime).total_seconds() > 0
@@ -440,6 +444,7 @@ def set_cookies(request, response, weather=None, visit=True):
 
     # check if a force update of cookies is required
     force_update = get_force_update(request)
+    now = datetime.now()
 
     # Set the weather cookie if we have weather data and we're forced to or the
     # weather wasn't fetched from a cookie already
