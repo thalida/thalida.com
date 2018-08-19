@@ -11,9 +11,8 @@
  *
  *
  * White - #FFFFFF
- * XLight Gray - #F9F9F9, rgb(249, 249, 249)
  * Light Gray - #E5E6E7
- * Medium Gray - #CFCFCF, rgb(207, 207, 207)
+ * Dark Gray - #BBBDC2, rgb(187, 189, 194)
  *
  ******************************************************************************/
 
@@ -164,21 +163,44 @@ a {
 
 .link--secondary {
     display: inline-block;
+    position: relative;
+    font-size: 1em;
+    line-height: 1em;
     color: #1C2233;
-    border-bottom: 2px solid rgb(255, 187, 51);
     text-decoration: none;
-    -webkit-transition: border-bottom 300ms;
-    -o-transition: border-bottom 300ms;
-    transition: border-bottom 300ms;
-}
-    .link--secondary:visited {
-        color: #1C2233;
-        border-bottom: 2px solid #E5E6E7;
-    }
-    .link--secondary:hover {
-        border-bottom: 4px solid rgb(255, 187, 51);
-    }
+    text-shadow:
+         0.05em  0.05em     #fff,
+        -0.05em  0.05em     #fff,
+         0.05em -0.05em     #fff,
+        -0.05em -0.05em     #fff;
 
+    -webkit-transition: text-shadow 150ms;
+    -o-transition: text-shadow 150ms;
+    transition: text-shadow 150ms;
+}
+    .link--secondary:after {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+        height: .1em;
+        width: 100%;
+        bottom: -.1em;
+        background-color: #1C2233;
+        -webkit-transition: height 150ms, background-color 150ms;
+        -o-transition: height 150ms, background-color 150ms;
+        transition: height 150ms, background-color 150ms;
+    }
+    .link--secondary:hover,
+    .link--secondary:visited:hover {
+        text-shadow: none;
+    }
+    .link--secondary:hover:after,
+    .link--secondary:visited:hover:after {
+        height: 100%;
+        background-color: #1EFF7A;
+        background-color: #FFDADA;
+    }
 /* Alignment
  ******************************************************************************/
 .text-align--left {
@@ -370,22 +392,12 @@ a {
 }
 .collection {
     margin: 3.5rem 0;
+    text-align: center;
 }
-    .collection__header {
-        display: block;
-        position: relative;
-        margin: 0 auto;
-        width: 90%;
+    .collection__header__link {
         color: #1C2233;
-        opacity: 1;
-        -webkit-transition: opacity 150ms;
-        -o-transition: opacity 150ms;
-        transition: opacity 150ms;
     }
-        .collection__header:hover {
-            opacity: 0.7;
-        }
-    .collection__header__contents {
+    .collection__header__h {
         text-align: center;
         line-height: 1em;
     }
@@ -393,7 +405,6 @@ a {
         display: inline-block;
         position: relative;
         vertical-align: middle;
-        text-decoration: underline;
     }
     .collection__summary {
         width: 90%;
@@ -536,11 +547,10 @@ a {
         width: 100%;
         top: 50%;
         left: 0;
-        opacity: 0.3;
         background-color: #FFFFFF;
     }
     .card.post:visited .card__header:before {
-        background-color: #1C2233;
+        background-color: #BBBDC2;
     }
     .card.post.post--featured {
         border: 1px solid rgb(255, 187, 51);
@@ -548,7 +558,7 @@ a {
     .card.post:visited:hover,
     .card.post:hover {
         z-index: 3;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 16px #E5E6E7;
     }
     @media (min-width: 40.15em) {
         .card.post {

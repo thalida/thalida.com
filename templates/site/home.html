@@ -110,8 +110,8 @@
             {% set collection = globals.all_collections[collection_key] %}
             {% if not collection.meta.is_hidden %}
                 <section id="collection-{{ collection_key }}" class="collection">
-                    <a class="collection__header" href="#collection-{{ collection_key }}">
-                        <h2 class="collection__header__contents header--secondary">
+                    <h2 class="collection__header__h header--secondary">
+                        <a class="collection__header__link link--secondary" href="#collection-{{ collection_key }}">
                             {% for icon in collection.meta.icons.before %}
                                 <span class="icon icon--small icon--before icon--{{icon}}"></span>
                             {% endfor %}
@@ -119,8 +119,8 @@
                             {% for icon in collection.meta.icons.after %}
                                 <span class="icon icon--xsmall icon--after icon--{{icon}}"></span>
                             {% endfor %}
-                        </h2>
-                    </a>
+                        </a>
+                    </h2>
                     <p class="collection__summary text--primary">
                         {{ collection.meta.summary }}
                     </p>

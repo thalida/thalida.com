@@ -145,8 +145,8 @@ class Window:
 
             # Get the visitors IP and lat/lng for that IP
             ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-            geo = geocoder.ip(ip)
-            lat, lng = geo.latlng if len(geo.latlng) == 2 else default_latlng
+            geo = geocoder.ip(ip) if ip is not '127.0.0.1' else None
+            lat, lng = geo.latlng if geo and len(geo.latlng) == 2 else default_latlng
 
             # Use Darksky to get the current forcast for that lat/lng
             geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
@@ -158,6 +158,7 @@ class Window:
             current_weather['units'] = geo_forecast['flags']['units'] # F or C
             current_weather['sunriseTime'] = daily_weather['sunriseTime']
             current_weather['sunsetTime'] = daily_weather['sunsetTime']
+            current_weather['ip'] = ip
 
         return {'current': current_weather, 'from_cookie': from_cookie}
 
