@@ -316,6 +316,12 @@ a {
     .icon--camera {
         background-image: url(/static/images/icons/camera.svg);
     }
+    .icon--checkbox-checked-dark {
+        background-image: url(/static/images/icons/checkbox-checked-dark.svg);
+    }
+    .icon--checkbox-checked-green {
+        background-image: url(/static/images/icons/checkbox-checked-green.svg);
+    }
     .icon--clock,
     .icon--wall-clock {
         background-image: url(/static/images/icons/wall-clock.svg);
@@ -371,7 +377,14 @@ a {
         margin: 0 auto;
         width: 90%;
         color: #1C2233;
+        opacity: 1;
+        -webkit-transition: opacity 150ms;
+        -o-transition: opacity 150ms;
+        transition: opacity 150ms;
     }
+        .collection__header:hover {
+            opacity: 0.7;
+        }
     .collection__header__contents {
         text-align: center;
         line-height: 1em;
@@ -380,6 +393,7 @@ a {
         display: inline-block;
         position: relative;
         vertical-align: middle;
+        text-decoration: underline;
     }
     .collection__summary {
         width: 90%;
@@ -511,11 +525,11 @@ a {
         content: "";
         display: block;
         position: absolute;
-        height: 1px;
+        height: 3px;
         width: 100%;
         top: 50%;
         left: 0;
-        opacity: 0.5;
+        opacity: 0.3;
         background-color: #FFFFFF;
     }
     .card.post:visited .card__header:before {
