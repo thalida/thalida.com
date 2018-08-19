@@ -1,22 +1,46 @@
-Title:          What’s on my mac
+Title:          What’s on my&nbsp;mac
 Summary:        Bear, Things, Dashlane, Flux, LiceCap, Sky Fonts
 Icon:           laptop
 date_updated:   18-08-2018
 
 
-source https://markdown-it.github.io/
+source: https://markdown-it.github.io/
 
 ---
-__Advertisement :)__
 
-- __[pica](https://nodeca.github.io/pica/demo/)__ - high quality and fast image
-  resize in browser.
-- __[babelfish](https://github.com/nodeca/babelfish/)__ - developer friendly
-  i18n with plurals support and easy syntax.
+## Intrigued by the shower
+Cat ipsum dolor sit amet, ask to be pet then attack owners hand or do i like standing on litter cuz i sits when i have spaces, my cat buddies have no litter i live in luxury cat life put butt in owner's face. The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie. Take a big fluffing crap 💩 plop down in the middle where everybody walks love you, then bite you.
 
-You will like those projects!
+### Step 1:
+Flex claws on the human's belly and purr like a lawnmower friends are not food for sniff sniff yet hiding behind the couch until lured out by a feathery toy and sleep nap.
+
+#### Step 1.1
+ Chew iPad power cord. Lick arm hair refuse to come home when humans are going to bed;
+
+#### Step 1.2
+Chew iPad power cord. Lick arm hair refuse to come home when humans are going to bed;
+
+### Step 2:
+Refuse to leave cardboard box play time, but chase ball of string mark territory i just saw other cats inside the house and nobody ask me before using my litter box or lick master's hand at first then bite because im moody.
+
+### Step 3:
+i just saw other cats inside the house and nobody ask me before using my litter box or lick master's hand at first then bite because im moody.
+
+## Cat ipsum dolor sit amet
+he door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie. Take a big fluffing crap 💩 plop down in the middle where everybody walks love you, then bite you.
+
+### Goals
+#### World Wide
+i live in luxury cat life put butt in owner's face
+#### Here
+i live in luxury cat life put butt in owner's face
+##### Now
+Lets do it! i live in luxury cat life put butt in owner's face The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie.
+###### Future
+Lets do it! i live in luxury cat life put butt in owner's face The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie.
 
 ---
+# Headers
 ## h2 Heading
 ### h3 Heading
 #### h4 Heading
@@ -24,17 +48,15 @@ You will like those projects!
 ###### h6 Heading
 
 
-## More Stuff
-### Horizontal Rules
 
-___
-
----
-
-***
+## Links
+[Google](http://google.com)
+[Google with title](http://google.com "title text")
+http://example.com
 
 
-### Typographic replacements
+
+## Typographic replacements
 
 Enable typographer option to see result.
 
@@ -47,7 +69,8 @@ test.. test... test..... test?..... test!....
 "Smartypants, double quotes" and 'single quotes'
 
 
-### Emphasis
+
+## Emphasis
 
 **This is bold text**
 
@@ -71,13 +94,15 @@ H^2^0
 
 text^a\ superscript^
 
-### keys
-++ctrl+alt+"My Special Key"++
 
+
+## TODO: Keys
+++ctrl+alt+"My Special Key"++
 ++cmd+alt+"&Uuml;"++
 
-### Task List
 
+
+## Task List
 - [X] item 1
     * [X] item A
     * [ ] item B
@@ -89,15 +114,15 @@ text^a\ superscript^
 - [ ] item 2
 - [ ] item 3
 
-### Blockquotes
 
 
+## Blockquotes
 > Blockquotes can also be nested...
 >> ...by using additional greater-than signs right next to each other...
 > > > ...or with spaces between arrows.
 
 
-### Lists
+## Lists
 
 Unordered
 
@@ -123,11 +148,14 @@ Start numbering with offset:
 57. foo
 1. bar
 
-## Testing things
 
-### Code
+## TODO: Code
 
 Inline `code`
+
+Here is some code: `#!js function pad(v){return ('0'+v).split('').reverse().splice(0,2).reverse().join('')}`.
+
+The mock shebang will be treated like text here: ` #!js var test = 0; `.
 
 Indented code
 
@@ -155,7 +183,9 @@ console.log(foo(5));
 
 `#!php-inline $a = array("foo" => 0, "bar" => 1);`
 
-### Tables
+
+
+## Tables
 
 | Option | Description |
 | ------ | ----------- |
@@ -172,16 +202,16 @@ Right aligned columns
 | ext    | extension to be used for dest files. |
 
 
-### Links
 
-[link text](http://dev.nodeca.com)
+## Horizontal Rules
+___
 
-[link with title](http://nodeca.github.io/pica/demo/ "title text!")
+---
 
-Autoconverted link https://github.com/nodeca/pica (enable linkify to see)
+***
 
 
-### Images
+## Images
 
 ![Minion](https://octodex.github.com/images/minion.png)
 ![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")

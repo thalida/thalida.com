@@ -77,41 +77,39 @@
     margin: 0.5em 0;
     padding: 0;
     color: #1C2233;
-    line-height: 1.2em;
-    font-weight: 400;
-}
-.markdown-container h3,
-.markdown-container h4,
-.markdown-container h5,
-.markdown-container h6 {
+    line-height: 1.1em;
     font-weight: 700;
 }
 .markdown-container h1,
 .markdown-container h2 {
-    font-size: 3em;
+    font-size: 2em;
  }
-.markdown-container h3 { font-size: 2em; }
-.markdown-container h4 { font-size: 1.5em; }
-.markdown-container h5 { font-size: 1.3em; }
-.markdown-container h6 { font-size: 1.1em; }
+.markdown-container h3 { font-size: 1.5em; }
+.markdown-container h4 { font-size: 1.3em; }
+.markdown-container h5 { font-size: 1.1em; }
+.markdown-container h6 { font-size: 0.9em; }
 
 .markdown-container p {
     margin: 1em 0;
-    font-weight: 300;
+    line-height: 1.5em;
 }
 
 .markdown-container blockquote {
     color: #1C2233;
     margin: 0;
     padding-left: 1em;
-    border-left: 0.2em #FFB233 solid;
+    border-left: 4px #FFB233 solid;
     font-style: italic;
     font-size: 1.4rem;
+    font-weight: 300;
 }
 
-.markdown-container table { border-collapse: collapse; border-spacing: 0; }
+.markdown-container table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
 .markdown-container thead {
-    border-bottom: 2px solid #FFB233;
+    border-bottom: 4px solid #E5E6E7;
 }
 .markdown-container thead th {
     vertical-align: middle;
@@ -144,8 +142,6 @@
     width: 100%;
 }
 
-.markdown-container pre,
-.markdown-container code,
 .markdown-container kbd,
 .markdown-container samp {
     color: #000; font-family: monospace, monospace; _font-family: 'courier new', monospace; font-size: 0.98em;
@@ -190,16 +186,20 @@
 }
 .markdown-container li {
     margin: 1em 0;
-    font-weight: 300;
 }
 .markdown-container li p:last-child {
     margin:0
 }
 .markdown-container dd { margin: 0 0 0 2em; }
 
-
+.markdown-container img.emojione {
+    margin: 0;
+    display: inline;
+}
 .markdown-container img {
-    max-width: 300px;
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
     width: auto;
     border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle;
 }

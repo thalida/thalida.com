@@ -1,10 +1,11 @@
 .post {}
     .post_header {
+        width: 90%;
         margin: 7.0rem auto;
-        /* border-bottom: 2px solid #E5E6E7; */
     }
     .post_title {
         margin: 2rem auto;
+        line-height: 1em;
     }
     .post_summary {
         margin: 1rem auto;
@@ -20,8 +21,9 @@
         font-weight: 300;
         font-size: 1.2em;
     }
+
 .post_content {
-    width: 80%;
+    width: 90%;
     max-width: 800px;
     margin: 0 auto;
 }

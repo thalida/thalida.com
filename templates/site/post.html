@@ -1,11 +1,11 @@
 {% extends "site/base.html" %}
 {% block title %}
-    {{ post.meta.title }}
+    {{ post.meta.title | safe }}
 {% endblock %}
 
 {% block styles %}
 <link href="{{url_for('static', filename='css/markdown-themes/theme.css', v=globals.datetime.server_start)}}" rel="stylesheet">
-<!-- <link href="{{url_for('static', filename='css/highlight-themes/default.css', v=globals.datetime.server_start)}}" rel="stylesheet"> -->
+<link href="{{url_for('static', filename='css/highlight-themes/pastie-custom.css', v=globals.datetime.server_start)}}" rel="stylesheet">
 <link href="{{url_for('static', filename='css/post.css', v=globals.datetime.server_start)}}" rel="stylesheet">
 {% endblock %}
 

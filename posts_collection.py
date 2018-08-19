@@ -14,6 +14,7 @@ import pymdownx
 import mdx_outline
 import dateparser
 
+
 class PostCollection:
     """Posts Collection Class
 
@@ -68,9 +69,9 @@ class PostCollection:
         # 'markdown.extensions.codehilite': {
         #     {"name": "php-inline", "lang": "php", "options": {"startinline": True}}
         # },
-        # 'markdown.extensions.codehilite': {
-        #     'css_class': 'highlight'
-        # }
+        'pymdownx.highlight': {
+            'guess_lang': True
+        }
     }
 
     META_DEFAULTS = {}

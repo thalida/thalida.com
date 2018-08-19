@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ba56cb24286634320c8aaebb185fc7a984a648be9d6f96cb31b9bfd0e38baa24"
+            "sha256": "57fc2aec80fa14a6bd31462f798c1b34a6840d2327cc9754f03f3cce61006497"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -132,6 +132,14 @@
         },
         "mdx-outline": {
             "git": "git://github.com/aleray/mdx_outline.git"
+        },
+        "pygments": {
+            "hashes": [
+                "sha256:78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d",
+                "sha256:dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc"
+            ],
+            "index": "pypi",
+            "version": "==2.2.0"
         },
         "pymdown-extensions": {
             "hashes": [
