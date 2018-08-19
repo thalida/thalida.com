@@ -1,0 +1,37 @@
+.post {}
+    .post_header {
+        margin: 7.0rem auto;
+        /* border-bottom: 2px solid #E5E6E7; */
+    }
+    .post_title {
+        margin: 2rem auto;
+    }
+    .post_summary {
+        margin: 1rem auto;
+        text-align: center;
+        font-size: 2em;
+        font-weight: 300;
+        color: rgba(28, 34, 51, 0.6);
+    }
+    .post_details {
+        margin: 1rem auto;
+        width: 100%;
+        text-align: center;
+        font-weight: 300;
+        font-size: 1.2em;
+    }
+.post_content {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.post_footer {
+    margin: 7.0rem 0 0;
+    padding: 3.5rem 0 0;
+    border-top: 4px solid #1EFF7A;
+    text-align: center;
+}
+.collection__header {
+    text-align: center;
+}

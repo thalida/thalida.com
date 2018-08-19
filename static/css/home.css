@@ -882,7 +882,9 @@
         }
     }
 
-
+/*******************************************************************************
+* ABOUT SECTION
+******************************************************************************/
 .about-section {
     margin: 7.0rem auto;
     width: 90%;
@@ -923,6 +925,40 @@
                break-inside: avoid;
     }
 
+/*******************************************************************************
+ * COLLECTION OF POSTS SECTION
+ ******************************************************************************/
+.collections-section {
+    margin: 0 auto;
+    padding: 3.5rem 0;
+    border-top: 4px solid #1EFF7A;
+    border-bottom: 4px solid #1EFF7A;
+}
+.collection {
+    margin: 3.5rem 0;
+    text-align: center;
+}
+    .collection__header__link {
+        color: #1C2233;
+    }
+    .collection__header__h {
+        text-align: center;
+        line-height: 1em;
+    }
+    .collection__header__title {
+        display: inline-block;
+        position: relative;
+        vertical-align: middle;
+    }
+    .collection__summary {
+        width: 90%;
+        margin: 0.5em auto 0;
+        text-align: center;
+    }
+
+/*******************************************************************************
+* JOBS SECTION
+******************************************************************************/
 .jobs-section {
     margin: 7.0rem auto;
     opacity: 0.6;

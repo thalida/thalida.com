@@ -38,7 +38,7 @@ body {
     margin: 0;
     background-color: #FFFFFF;
     color: #1C2233;
-    font: normal normal 62.5% 'PT Serif', serif;
+    font: normal normal 62.5% 'Merriweather', serif;
 }
 
 a {
@@ -118,6 +118,10 @@ a {
 
 .text--italic {
     font-style: italic;
+}
+
+.text--middot {
+    padding: 0 5px;
 }
 
 .clearfix:after {
@@ -219,7 +223,11 @@ a {
     word-break: keep-all;
 }
 
-
+/* Spacers
+ ******************************************************************************/
+.spacer {
+    display: inline-block;
+}
 
 /*******************************************************************************
  * SITE GENRALS
@@ -378,38 +386,6 @@ a {
     .icon--photo,
     .icon--polaroid-stack {
         background-image: url(/static/images/icons/polaroid-stack.svg);
-    }
-
-
-/*******************************************************************************
- * COLLECTIONS
- ******************************************************************************/
-.collections-section {
-    margin: 0 auto;
-    padding: 3.5rem 0;
-    border-top: 4px solid #1EFF7A;
-    border-bottom: 4px solid #1EFF7A;
-}
-.collection {
-    margin: 3.5rem 0;
-    text-align: center;
-}
-    .collection__header__link {
-        color: #1C2233;
-    }
-    .collection__header__h {
-        text-align: center;
-        line-height: 1em;
-    }
-    .collection__header__title {
-        display: inline-block;
-        position: relative;
-        vertical-align: middle;
-    }
-    .collection__summary {
-        width: 90%;
-        margin: 0.5em auto 0;
-        text-align: center;
     }
 
 

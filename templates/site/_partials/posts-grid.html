@@ -23,7 +23,7 @@
                     {% for icon in post_meta.icons.before %}
                         <span class="card__header__icon icon icon--small icon--before icon--{{icon | lower}}"></span>
                     {% endfor %}
-                    <span class="card__header__text">{{ post_meta.title | truncate(50, False, '...', 10) }}</span>
+                    <span class="card__header__text">{{ post_meta.title | safe | truncate(50, False, '...', 10) }}</span>
                     {% for icon in post_meta.icons.after %}
                         <span class="card__header__icon icon icon--xsmall icon--after icon--{{icon | lower}}"></span>
                     {% endfor %}

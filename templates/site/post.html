@@ -4,34 +4,35 @@
 {% endblock %}
 
 {% block styles %}
-<!-- <link href="{{url_for('static', filename='css/markdown-themes/markdown3.css', v=globals.css_version)}}" rel="stylesheet"> -->
+<link href="{{url_for('static', filename='css/markdown-themes/theme.css', v=globals.css_version)}}" rel="stylesheet">
 <!-- <link href="{{url_for('static', filename='css/highlight-themes/default.css', v=globals.css_version)}}" rel="stylesheet"> -->
 <link href="{{url_for('static', filename='css/post.css', v=globals.css_version)}}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
+<div class="post">
     {% set collection = globals.all_collections[post.meta.collection] %}
-    <img id="post_image" class="post_image" src="https://raw.githubusercontent.com/thalida/ShapeConnector/master/app/assets/images/gameplay.gif" />
-    <div id="post_header">
-        <h1>{{ post.meta.title }}</h1>
-        <hr />
-        {% if post.meta.date and not post.meta.is_default_date %}
-            <span>Posted on <span>{{ post.meta.date | datetime('%d %B %Y') }}</span></span>
+    <div class="post_header">
+    <div class="post_details">
+        {% if post.meta.date_updated %}
+            <span class="xtext--bold">{{ post.meta.date_updated | datetime('post') }}</span><span class="text--middot">·</span>
+        {% elif post.meta.date_posted and not post.meta.is_default_date %}
+            <span class="xtext--bold">{{ post.meta.date_posted | datetime('post') }}</span><span class="text--middot">·</span>
         {% endif %}
-        {% if post.meta.category %}
-            <span>Category <span>{{ post.meta.category }}</span></span>
-        {% endif %}
+        <a class="link--secondary text--bold" href="/#collection-{{collection.key}}">#{{ collection.meta.title | safe }}</a>
+    </div>
+        <h1 class="post_title header--primary">{{ post.meta.title | safe }}</h1>
+        <p class="post_summary text--primary">{{ post.meta.summary | safe }}</p>
     </div>
 
-    <div id="post_content">
+    <div class="post_content markdown-container">
         {{ post.html | safe }}
     </div>
 
-    <div id="post_footer">
-        <div class="collection">
-            <h2 class="collection__header header--secondary">More in {{ collection.meta.title }}</h2>
-            {% set posts = next_posts %}
-            {% include "site/_partials/posts-grid.html" %}
-        </div>
+    <div class="post_footer collection">
+        <h2 class="collection__header header--secondary">More in {{ collection.meta.title | safe }}</h2>
+        {% set posts = next_posts %}
+        {% include "site/_partials/posts-grid.html" %}
     </div>
+</div>
 {% endblock %}

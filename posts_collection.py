@@ -10,6 +10,8 @@ from functools import cmp_to_key
 
 # Third Party
 import markdown
+import pymdownx
+import mdx_outline
 import dateparser
 
 class PostCollection:
@@ -41,20 +43,34 @@ class PostCollection:
         collections_order {list} -- List of post collections names in visual order
     """
     MARKDOWN_EXTENSIONS = [
-        'markdown.extensions.attr_list',
-        'markdown.extensions.fenced_code',
-        'markdown.extensions.smart_strong',
+        'outline',
+        'pymdownx.keys',
+        'pymdownx.mark',
+        'pymdownx.caret',
+        'pymdownx.tilde',
+        'pymdownx.emoji',
+        'pymdownx.tasklist',
+        'pymdownx.betterem',
+        'pymdownx.magiclink',
+        'pymdownx.escapeall',
+        'pymdownx.highlight',
+        'pymdownx.superfences',
+        'pymdownx.inlinehilite',
+        'pymdownx.smartsymbols',
         'markdown.extensions.meta',
         'markdown.extensions.nl2br',
-        'markdown.extensions.sane_lists',
-        'markdown.extensions.smarty',
         'markdown.extensions.tables',
-        'markdown.extensions.codehilite',
+        'markdown.extensions.smarty',
+        'markdown.extensions.attr_list',
+        'markdown.extensions.sane_lists',
     ]
     MARKDOWN_EXTENSION_CONFIGS = {
-        'markdown.extensions.codehilite': {
-            'css_class': 'highlight'
-        }
+        # 'markdown.extensions.codehilite': {
+        #     {"name": "php-inline", "lang": "php", "options": {"startinline": True}}
+        # },
+        # 'markdown.extensions.codehilite': {
+        #     'css_class': 'highlight'
+        # }
     }
 
     META_DEFAULTS = {}

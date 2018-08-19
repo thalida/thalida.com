@@ -14,5 +14,7 @@ darkskylib = "*"
 markdown = "*"
 flask-assets = "*"
 cssmin = "*"
+pymdown-extensions = "*"
+mdx_outline = {git = "git://github.com/aleray/mdx_outline.git"}
 
 [dev-packages]
