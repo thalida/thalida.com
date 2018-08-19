@@ -357,10 +357,13 @@ a {
  * COLLECTIONS
  ******************************************************************************/
 .collections-section {
-    margin: 7.0rem auto;
+    margin: 0 auto;
+    padding: 3.5rem 0;
+    border-top: 4px solid #E5E6E7;
+    border-bottom: 4px solid #E5E6E7;
 }
 .collection {
-    margin: 7.0rem 0;
+    margin: 3.5rem 0;
 }
     .collection__header {
         display: block;
@@ -489,6 +492,12 @@ a {
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+
+/* Card (Job Type) ----------------------------------------------------------*/
+.card.job {
+    min-height: 8rem;
+    height: 8rem;
+}
 
 /* Card (Post Type) ----------------------------------------------------------*/
 .card.post {
