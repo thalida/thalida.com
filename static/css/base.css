@@ -450,9 +450,9 @@ a {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: start;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     min-height: 11.0rem;
     padding: 1.0rem;
     margin: 0.25rem;
@@ -506,6 +506,13 @@ a {
             white-space: nowrap;
             text-overflow: ellipsis;
         }
+    @media (min-width: 40.15em) {
+        .card {
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: start;
+        }
+    }
 
 /* Card (Job Type) ----------------------------------------------------------*/
 .card.job {
