@@ -204,6 +204,7 @@ a {
         height: 100%;
         background-color: #1EFF7A;
         background-color: #FFDADA;
+        background-color: #FFF433;
     }
 /* Alignment
  ******************************************************************************/
@@ -511,6 +512,7 @@ a {
 .card.post {
     text-align: center;
     background-color: #FFFFFF;
+    border: 2px solid #FFFFFF;
     -webkit-transition: border 300ms, background-color 300ms, box-shadow 300ms;
     -o-transition: border 300ms, background-color 300ms, box-shadow 300ms;
     transition: border 300ms, background-color 300ms, box-shadow 300ms;
@@ -529,12 +531,11 @@ a {
         background-color: #BBBDC2;
     }
     .card.post.post--featured {
-        border: 1px solid rgb(255, 187, 51);
+        border: 2px solid rgb(255, 187, 51);
     }
     .card.post:visited:hover,
     .card.post:hover {
-        z-index: 3;
-        box-shadow: 0 0 16px #E5E6E7;
+        border: 2px solid #BBBDC2;
     }
     @media (min-width: 40.15em) {
         .card.post {
