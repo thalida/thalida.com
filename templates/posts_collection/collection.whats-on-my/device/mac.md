@@ -96,7 +96,7 @@ text^a\ superscript^
 
 
 
-## TODO: Keys
+## Keys
 ++ctrl+alt+"My Special Key"++
 ++cmd+alt+"&Uuml;"++
 
@@ -149,7 +149,7 @@ Start numbering with offset:
 1. bar
 
 
-## TODO: Code
+## Code
 
 Inline `code`
 
