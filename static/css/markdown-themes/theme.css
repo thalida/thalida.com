@@ -128,10 +128,10 @@
 .markdown-container td {
     vertical-align: top;
     padding: 0.5em;
-    border-left: 1px solid #E5E6E7;
+    border-right: 1px solid #E5E6E7;
 }
 .markdown-container td:first-child {
-    border-left: 0;
+    border-left: 1px solid #E5E6E7;
 }
 
 
@@ -220,10 +220,22 @@
     margin: 0;
     display: inline;
 }
-.markdown-container img {
+.markdown-container img.inline-img {
+    display: inline-block;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+.markdown-container img.block-img {
     display: block;
     margin: 0 auto;
     max-width: 100%;
     width: auto;
-    border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+.markdown-container img.screenshot-lgv20 {
+    width: 49%;
+    margin: 0 0.5%;
 }
