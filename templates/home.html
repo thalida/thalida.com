@@ -80,7 +80,7 @@
             <p class="about-section__text text--primary">
                 I’ve come a long way since 16 year old me, I’m now an
                 {{ work.history[0].title }} at {{ work.history[0].company }}
-                {% if work.history[0].is_hiring %} (<a class="link--secondary" href="https://etsy.com/careers" target="_blank">we’re hiring!</a>){% endif %}
+                {% if work.history[0].is_hiring %} <span class="white-space--nowrap">(<a class="link--secondary" href="https://etsy.com/careers" target="_blank">we’re hiring!</a>)</span>{% endif %}
             </p>
             <p class="about-section__text text--primary">
                 Outside of work I build robots with my partner, work on one of

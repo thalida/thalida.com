@@ -219,9 +219,12 @@ a {
 
 /* Word Breaks
  ******************************************************************************/
-.word-break--keep-all {
-    word-break: keep-all;
-}
+ .word-break--keep-all {
+     word-break: keep-all;
+ }
+ .white-space--nowrap {
+    white-space: nowrap;
+ }
 
 /* Spacers
  ******************************************************************************/
