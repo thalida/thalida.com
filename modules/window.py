@@ -60,12 +60,13 @@ class Window:
 
     def get_state(self, request, force_update, weather_cookie, timestamp=None):
         weather = self._get_weather(request, force_update, weather_cookie)
+        tz = pytz.timezone(weather['current']['timezone'])
+
         if timestamp is not None:
             now = dateparser.parse(timestamp, settings={'TO_TIMEZONE': weather['current']['timezone'], 'RETURN_AS_TIMEZONE_AWARE': True})
         else:
-            now = datetime.datetime.now()
+            now = self._localize_datetime(datetime.datetime.now(), tz)
 
-        tz = pytz.timezone(weather['current']['timezone'])
         now = datetime.time(now.hour, now.minute)
         color = self._get_color(now, weather['current']['sunriseTime'], weather['current']['sunsetTime'], tz)
         saying = self._get_saying(now)
@@ -176,8 +177,10 @@ class Window:
 
         return self.TIME_SAYINGS[found_saying_index]
 
-    def _localize_unix_timestamp(self, unix_ts, tz):
-        dt = datetime.datetime.utcfromtimestamp(unix_ts)
+    def _localize_datetime(self, dt, tz, is_unix=False):
+        if is_unix:
+            dt = datetime.datetime.utcfromtimestamp(dt)
+
         return dt.astimezone(tz)
 
     def _get_time_sum(self, time):
@@ -189,8 +192,8 @@ class Window:
 
     def _get_color(self, timeFull, sunrise, sunset, tz):
         now = self._get_time_sum(timeFull)
-        sunrise_time_sum = self._get_time_sum(self._localize_unix_timestamp(sunrise, tz))
-        sunset_time_sum = self._get_time_sum(self._localize_unix_timestamp(sunset, tz))
+        sunrise_time_sum = self._get_time_sum(self._localize_datetime(sunrise, tz, is_unix=True))
+        sunset_time_sum = self._get_time_sum(self._localize_datetime(sunset, tz, is_unix=True))
 
         if now < sunrise_time_sum:
             start_index = 0
