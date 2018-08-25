@@ -25,7 +25,6 @@ Dashlane is a free password manager that I use on my phone and laptop, it's comp
 
 ### [Trello](https://play.google.com/store/apps/details?id=com.trello)
 The only way my life would have any sembalance of organization
-[Google Play Store]
 
 ### [Mr. Binario](https://play.google.com/store/apps/details?id=com.Appsparagus.MrBinairo.app)
 My current favorite subway game, simple mechanics that creatly a beautifully challenging (at times) game
