@@ -39,7 +39,7 @@ body {
     margin: 0;
     background-color: #FFFFFF;
     color: #1C2233;
-    font: normal normal 62.5% 'Merriweather', serif;
+    font: normal normal 62.5% 'Lora', serif;
 }
 
 a {
@@ -92,25 +92,25 @@ a {
     margin: 0;
     padding: 0;
     font-weight: 700;
-    font-size: 1.6em;
+    font-size: 1.8em;
     line-height: 2em;
 }
 
 /* Body Text
  ******************************************************************************/
 .text--primary {
-    font-size: 1.6em;
-    line-height: 1.5em;
+    font-size: 1.8em;
+    line-height: 1.5;
 }
 
 .text--secondary {
-    font-size: 1.4em;
-    line-height: 1.5em;
+    font-size: 1.6em;
+    line-height: 1.5;
 }
 
 .text--micro {
-    font-size: 1.2em;
-    line-height: 1.2em;
+    font-size: 1.4em;
+    line-height: 1.4;
 }
 
 .text--bold {
@@ -466,7 +466,7 @@ a {
         display: block;
         position: relative;
         width: 100%;
-        line-height: 1.6em;
+        line-height: 1.4;
     }
     .card__header__text {
         position: relative;

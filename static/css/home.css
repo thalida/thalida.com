@@ -917,7 +917,7 @@
         }
     }
     .about-section__text {
-        margin: 0 0 1.0rem;
+        margin: 0 0 1.5rem;
     }
     .about-section__list {
         -webkit-column-break-inside: avoid;
