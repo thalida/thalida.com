@@ -12,7 +12,7 @@ import geocoder
 import dateparser
 
 # Locals
-import secrets
+from modules._secrets import FORECAST_KEY
 
 class Window:
     TIME_SAYINGS = [
@@ -128,7 +128,7 @@ class Window:
             lat, lng = geo.latlng if geo and len(geo.latlng) == 2 else default_latlng
 
             # Use Darksky to get the current forcast for that lat/lng
-            geo_forecast = forecast(secrets.FORECAST_KEY, lat, lng)
+            geo_forecast = forecast(FORECAST_KEY, lat, lng)
 
             # Get and format the current weather
             daily_weather = geo_forecast['daily']['data'][0]

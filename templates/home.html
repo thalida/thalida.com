@@ -1,4 +1,4 @@
-{% extends "site/base.html" %}
+{% extends "base.html" %}
 {% block title %}
     Home
 {% endblock %}
@@ -8,16 +8,14 @@
 {% endblock %}
 
 {% block scripts %}
-{% assets filters="rjsmin", output="dist/home.min.js", "js/home.js" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
+<script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.datetime.server_start)}}"></script>
 {% endblock %}
 
 {% block body %}
 <main class="home">
     <div class="window" data-window>
         <div class="window__scene">
-            {% include "site/_partials/window-outside.html" %}
+            {% include "_partials/window-outside.html" %}
             <div class="window__scene__inside">
                 <div class="window__scene__sill"></div>
                 <div class="window__scene__plant">
@@ -44,7 +42,7 @@
 
         </div>
         <div class="window__label">
-            {% include "site/_partials/window-label-text.html" %}
+            {% include "_partials/window-label-text.html" %}
             <div class="window__label__colors google-home__colors">
                 <span class="google-home__color google-home__color--line google-home__color--blue" data-show-on-readystate-complete></span>
                 <span class="google-home__color google-home__color--line google-home__color--purple" data-show-on-readystate-complete></span>
@@ -126,7 +124,7 @@
                     </p>
 
                     {% set posts = collection.posts_in_order %}
-                    {% include "site/_partials/posts-grid.html" %}
+                    {% include "_partials/posts-grid.html" %}
                 </section>
             {% endif %}
         {% endfor %}

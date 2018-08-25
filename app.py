@@ -1,43 +1,27 @@
-# Builtins
-import logging
-import json
+# !!!!!
 import os
-import time
-from datetime import datetime
-from pprint import pprint
+os.environ['TZ'] = 'UTC'
 
-# Third Party
+import logging
 from flask import Flask, request, make_response, render_template, jsonify, redirect, url_for, abort
-from flask_assets import Environment, Bundle
-import dateparser
+from pprint import pprint
+from datetime import datetime
 
-# Locals
-from posts_collection import PostCollection
-from window import Window
-
-os.environ['TZ'] = 'UTC'  # !!!!!
-
-COOKIE_NAMESPACE = 'TIA'
-COOKIE_KEYS = {
-    'WEATHER': 'weather',
-    'LAST_VISIT': 'visit_timestamp',
-    'LAST_RESTART': 'server_restart_timestamp',
-    'NUM_VISITS': 'total_visits',
-}
-
-SERVER_START_TIME = time.time()
-SERVER_START_DATETIME = datetime.now()
+import modules.utils as utils
+import modules.cookies as cookies
+from modules.work import work
+from modules.window import Window
+from modules.post_collection import PostCollection
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
-assets = Environment(app)
 
 demo_posts = PostCollection(
-    posts_dir='./templates/demo_posts_collection/',
+    posts_dir='./posts/demo/',
     url_decorator='/demo/x/'
 )
 my_posts = PostCollection(
-    posts_dir='./templates/posts_collection/'
+    posts_dir='./posts/collection/'
 )
 my_window = Window()
 
@@ -55,23 +39,22 @@ def index():
     """
 
     try:
-        force_update = get_force_update(request)
-        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        force_update = cookies.get_force_update(request)
+        weather_cookie = request.cookies.get(cookies.format_cookie_key(cookies.KEYS['WEATHER']))
 
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie)
-        work = get_work()
         collections_order = my_posts.collections_order
 
         response = make_response(render_template(
-            'site/home.html',
+            'home.html',
             **get_globals(my_posts),
             window=window,
             collections_order=collections_order,
             work=work,
         ))
 
-        set_cookies(request, response, weather=window['weather'])
+        cookies.set_cookies(request, response, weather=window['weather'])
 
         return response
     except Exception:
@@ -114,13 +97,13 @@ def post(path):
 
         # Build the repsonse object for a post
         response = make_response(render_template(
-            'site/post.html',
+            'post.html',
             **get_globals(my_posts),
             post=post,
             next_posts=next_posts_paths,
         ))
 
-        set_cookies(request, response)
+        cookies.set_cookies(request, response)
 
         return response
     except (ValueError, KeyError):
@@ -134,20 +117,20 @@ def post(path):
 def get_window_data():
     try:
         timestamp = request.args.get('timestamp')
-        force_update = get_force_update(request)
-        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        force_update = cookies.get_force_update(request)
+        weather_cookie = request.cookies.get(cookies.format_cookie_key(cookies.KEYS['WEATHER']))
 
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie, timestamp)
-        window_outside_html = render_template('site/_partials/window-outside.html', window=window)
-        window_label_html = render_template('site/_partials/window-label-text.html', window=window)
+        window_outside_html = render_template('_partials/window-outside.html', window=window)
+        window_label_html = render_template('_partials/window-label-text.html', window=window)
         response = make_response(jsonify({
             'window_outside_html': window_outside_html,
             'window_label_html': window_label_html,
             'data': window,
         }))
 
-        set_cookies(request, response, weather=window['weather'], visit=False)
+        cookies.set_cookies(request, response, weather=window['weather'], visit=False)
 
         return response
     except Exception:
@@ -170,11 +153,11 @@ def colors():
 
     try:
         timestamp = request.args.get('timestamp')
-        force_update = get_force_update(request)
-        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        force_update = cookies.get_force_update(request)
+        weather_cookie = request.cookies.get(cookies.format_cookie_key(cookies.KEYS['WEATHER']))
         range_24hr = my_window.get_range_over_day(request, force_update, weather_cookie, timestamp)
         response = make_response(render_template(
-            'site/colors.html',
+            'colors.html',
             **get_globals(my_posts),
             range_24hr=range_24hr
         ))
@@ -199,23 +182,22 @@ def demo_index():
     """
 
     try:
-        force_update = get_force_update(request)
-        weather_cookie = request.cookies.get(format_cookie_key(COOKIE_KEYS['WEATHER']))
+        force_update = cookies.get_force_update(request)
+        weather_cookie = request.cookies.get(cookies.format_cookie_key(cookies.KEYS['WEATHER']))
 
         # Gather the data needed to render the page
         window = my_window.get_state(request, force_update, weather_cookie)
-        work = get_work()
         collections_order = demo_posts.collections_order
 
         response = make_response(render_template(
-            'site/home.html',
+            'home.html',
             **get_globals(demo_posts),
             window=window,
             collections_order=collections_order,
             work=work,
         ))
 
-        set_cookies(request, response, weather=window['weather'])
+        cookies.set_cookies(request, response, weather=window['weather'])
 
         return response
     except Exception:
@@ -258,13 +240,13 @@ def demo_post(path):
 
         # Build the repsonse object for a post
         response = make_response(render_template(
-            'site/post.html',
+            'post.html',
             **get_globals(demo_posts),
             post=post,
             next_posts=next_posts_paths,
         ))
 
-        set_cookies(request, response)
+        cookies.set_cookies(request, response)
 
         return response
     except (ValueError, KeyError):
@@ -292,10 +274,6 @@ def not_found(exc):
     return redirect(url_for('index'))
 
 
-"""=============================================================================
-Getters
-============================================================================="""
-
 def get_globals(posts):
     """Global View Data
 
@@ -311,196 +289,17 @@ def get_globals(posts):
             'datetime': {
                 'now': now,
                 'current_year': now.strftime('%Y'),
-                'server_start': SERVER_START_TIME,
+                'server_start': cookies.SERVER_START_TIME,
             },
             'all_collections': posts.collections,
             'all_posts_meta': posts.posts_meta,
         }
     }
 
-def get_work():
-    """Work History
-
-    Work history (start and end dates, job title, and employer) as well as stats
-    about my employment history
-
-    Returns:
-        [dict] -- Work history and stats
-    """
-    now = datetime.now()
-    work_history = [
-        {
-            'company': 'Etsy',
-            'title': 'Engineering Manager on Discovery',
-            'dates': [format_datetime('May 2017'), None],
-            'is_hiring': True
-        },
-        {
-            'company': 'Kinnek',
-            'title': 'Senior Frontend Engineer',
-            'dates': [format_datetime('November 2015'), format_datetime('May 2017')]
-        },
-        {
-            'company': 'OkCupid',
-            'title': 'Frontend Engineer',
-            'dates': [format_datetime('January 2014'), format_datetime('November 2015')]
-        },
-        {
-            'company': 'Webs',
-            'title': 'Frontend Engineer Intern',
-            'dates': [format_datetime('January 2013'), format_datetime('January 2014')]
-        },
-        {
-            'company': 'NASA&nbsp;Goddard&nbsp;/ Space&nbsp;Operations&nbsp;Institute',
-            'title': 'Software Engineer Intern',
-            'dates': [format_datetime('March 2010'), format_datetime('January 2013')]
-        },
-    ]
-
-    first_job_startdate = dateparser.parse(work_history[-1]['dates'][0])
-    years_since_start = int(now.strftime('%Y')) - int(first_job_startdate.strftime('%Y'))
-
-    return {
-        'history': work_history,
-        'years_since_start': years_since_start,
-    }
-
-def get_force_update(request):
-    """Get If We Should Force an Update
-
-    Check when I last updated the cookies and if the visitor hasn't been to the
-    site since then force an update
-
-    Arguments:
-        request -- A Flast Request
-
-    Returns:
-        [bool] -- Boolean on if we should force a site/cookie update
-    """
-    now = datetime.now()
-    last_restart = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_RESTART']), now.isoformat())
-    last_restart_as_datetime = dateparser.parse(last_restart)
-    force_update = (SERVER_START_DATETIME - last_restart_as_datetime).total_seconds() > 0
-
-    return force_update
-
-
-"""=============================================================================
-Formatters
-============================================================================="""
-
-def format_datetime(str, format='iso'):
-    """Convert String into the Given Datetime Format
-
-    Given a string convert it into the provided format, if no format is given
-    lets use ISO!
-
-    Arguments:
-        str {string} -- A string representation of a date
-
-    Keyword Arguments:
-        format {str} -- Datetime format to convert the string into  (default: {'iso'})
-
-    Returns:
-        [string] -- The newly formatted datetime string
-    """
-
-    try:
-        date = dateparser.parse(str)
-        if format is 'iso':
-            return date.isoformat()
-        elif format is 'post':
-            return date.strftime('%d %B %Y')
-        else:
-            return date.strftime(format)
-    except TypeError:
-        return str
-
-def format_cookie_key(name):
-    """Format a Name into the Cookie Format
-
-    Add the proper namspacing to my cookies to differentiate them
-
-    Arguments:
-        name {string} -- Any string name for a cookie
-    """
-    return '{namespace}-{name}'.format(namespace=COOKIE_NAMESPACE, name=name)
-
-
-"""=============================================================================
-Setters
-============================================================================="""
-
-def set_cookies(request, response, weather=None, visit=True):
-    """Set/Update Cookie Values
-
-    Given the data provided update my site cookies with visitor data
-
-    Arguments:
-        request -- A Flask Request
-        response -- A Flast Response
-
-    Keyword Arguments:
-        weather {dict} -- Current weather data dictionary (default: {None})
-        visit {bool} -- Does this call to set cookies count as a site visit? (default: {True})
-    """
-
-    # check if a force update of cookies is required
-    force_update = get_force_update(request)
-
-    # Update cookies
-    _set_last_restart_cookie(request, response)
-    _set_weather_cookie(request, response, force_update, weather)
-    _set_visit_cookie(request, response, force_update, visit)
-
-def _set_last_restart_cookie(request, response):
-    # Update last restart cookie with current value
-    response.set_cookie(
-        format_cookie_key(COOKIE_KEYS['LAST_RESTART']),
-        str(SERVER_START_DATETIME.isoformat()),
-        max_age=120*24*60*60 # save for 120 days
-    )
-
-def _set_weather_cookie(request, response, force_update, weather):
-    # Set the weather cookie if we have weather data and we're forced to or the
-    # weather wasn't fetched from a cookie already
-    if weather is not None and (force_update or weather['from_cookie'] is False):
-        response.set_cookie(
-            format_cookie_key(COOKIE_KEYS['WEATHER']),
-            json.dumps(weather['current']),
-            max_age=15*60  # keep for 15min - the weather will update every 15min
-        )
-
-def _set_visit_cookie(request, response, force_update, visit):
-    if force_update or visit:
-        now = datetime.now()
-        # Get the time the guest last visited
-        last_visit = request.cookies.get(format_cookie_key(COOKIE_KEYS['LAST_VISIT']), now.isoformat())
-        last_visit_as_datetime = dateparser.parse(last_visit)
-
-        # Only increment visits if there's been at least 1min from the last visit
-        # or if this is the first visit
-        time_since_last_visit = (now - last_visit_as_datetime).total_seconds()
-        num_visits = int(request.cookies.get(format_cookie_key(COOKIE_KEYS['NUM_VISITS']), 0))
-        if time_since_last_visit > 60 or num_visits == 0:
-            num_visits = num_visits + 1
-            response.set_cookie(
-                format_cookie_key(COOKIE_KEYS['NUM_VISITS']),
-                str(num_visits),
-                max_age=60*24*60*60 # save for 60 days
-            )
-
-        # Update last visit cookie with current datetime
-        response.set_cookie(
-            format_cookie_key(COOKIE_KEYS['LAST_VISIT']),
-            str(now.isoformat()),
-            max_age=120*24*60*60 # save for 120 days
-        )
-
 """=============================================================================
 Main
 ============================================================================="""
-app.jinja_env.filters['datetime'] = format_datetime
+app.jinja_env.filters['datetime'] = utils.format_datetime
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
