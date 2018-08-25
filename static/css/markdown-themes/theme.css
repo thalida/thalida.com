@@ -150,17 +150,15 @@
 }
 .markdown-container .highlight,
 .markdown-container pre {
-    font-family: monospace, monospace;
-    _font-family: 'courier new', monospace;
+    font-family: 'Anonymous Pro', monospace;
     white-space: pre;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 .markdown-container .keys {
     color: #1C2233;
-    font-size: .9em;
-    font-family: monospace, monospace;
-    _font-family: 'courier new', monospace;
+    font-size: 0.9em;
+    font-family: 'Anonymous Pro', monospace;
 }
 .markdown-container .keys span {
     padding: 0 .4em;
