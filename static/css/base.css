@@ -5,6 +5,7 @@
  * Blue - #4A84FF
  * Green - #1EFF7A, rgb(30, 255, 122)
  * Yellow - #FFB233, rgb(255, 187, 51)
+ * Bright Yellow - #FFF433
  * Pink -  #FFDADA, rgb(255, 218, 218)
  * Pastel-ish Blue - #98DBFF, rgb(152, 219, 255)
  * Purple - #CBA5FF
@@ -202,8 +203,6 @@ a {
     .link--secondary:hover:after,
     .link--secondary:visited:hover:after {
         height: 100%;
-        background-color: #1EFF7A;
-        background-color: #FFDADA;
         background-color: #FFF433;
     }
 /* Alignment
@@ -444,6 +443,7 @@ a {
     min-height: 11.0rem;
     padding: 1.0rem;
     margin: 0.25rem;
+    border-radius: 0.3em;
     color: #1C2233;
     text-align: center;
     text-decoration: none;
