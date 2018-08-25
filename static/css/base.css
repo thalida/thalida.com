@@ -25,11 +25,11 @@
 * { -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 html {
-  font-size: 100%;
+  font-size: 110%;
 }
 @media (max-width: 70.0em) {
     html {
-        font-size: 110%;
+        font-size: 100%;
     }
 }
 
@@ -99,17 +99,17 @@ a {
 /* Body Text
  ******************************************************************************/
 .text--primary {
-    font-size: 1.8em;
-    line-height: 1.5;
-}
-
-.text--secondary {
     font-size: 1.6em;
     line-height: 1.5;
 }
 
-.text--micro {
+.text--secondary {
     font-size: 1.4em;
+    line-height: 1.5;
+}
+
+.text--micro {
+    font-size: 1.2em;
     line-height: 1.4;
 }
 

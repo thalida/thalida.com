@@ -17,7 +17,7 @@
  ******************************************************************************/
 
  .markdown-container {
-    font: normal normal 1.8em 'Lora', serif;
+    font: normal normal 1.6em 'Lora', serif;
  }
 
  .markdown-container a {
@@ -62,11 +62,13 @@
         background-color: #FFF433;
     }
 
-.markdown-container .section2 {
-    margin: 0 0 7.0rem;
-}
+.markdown-container .section2,
 .markdown-container .section3 {
-    margin: 0 0 3.5rem;
+    margin: 3.0rem 0;
+}
+.markdown-container .section2:first-child,
+.markdown-container .section3:first-child {
+    margin-top: 0;
 }
 
 .markdown-container h1,
@@ -91,7 +93,7 @@
 .markdown-container h6 { font-size: 0.9em; }
 
 .markdown-container p {
-    margin: 1.5rem 0;
+    margin: 0.5rem 0 1.5rem 0;
     line-height: 1.5;
 }
 
