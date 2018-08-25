@@ -683,30 +683,37 @@
         }
 
     .weather--wind,
-    .weather--tornado {
-        -webkit-animation-name: animation-wind;
-                animation-name: animation-wind;
-        -webkit-animation-iteration-count: infinite;
-                animation-iteration-count: infinite;
-        -webkit-animation-timing-function: ease-in-out;
-                animation-timing-function: ease-in-out;
-    }
-        .weather--wind {
-            -webkit-animation-duration: 2000ms;
-                    animation-duration: 2000ms;
-        }
-        .weather--tornado {
-            -webkit-animation-duration: 1000ms;
-                    animation-duration: 1000ms;
+    .weather--tornado {}
+        .weather--wind .weather__leaf,
+        .weather--tornado .weather__leaf {
+            -webkit-animation-name: animation-wind;
+                    animation-name: animation-wind;
+            -webkit-animation-iteration-count: infinite;
+                    animation-iteration-count: infinite;
+            -webkit-animation-timing-function: ease-in-out;
+                    animation-timing-function: ease-in-out;
+            -webkit-animation-fill-mode: none;
+                    animation-fill-mode: none;
         }
         .weather--wind .weather__leaf--1,
         .weather--tornado .weather__leaf--1 {
             margin-left: 48px;
+            -webkit-animation-duration: 2400ms;
+                    animation-duration: 2400ms;
+        }
+        .weather--wind .weather__leaf--2,
+        .weather--tornado .weather__leaf--2 {
+            margin-top: 16px;
+            margin-left: 48px;
+            -webkit-animation-duration: 2200ms;
+                    animation-duration: 2200ms;
         }
         .weather--wind .weather__leaf--3,
         .weather--tornado .weather__leaf--3 {
             margin-top: 16px;
             margin-left: 48px;
+            -webkit-animation-duration: 2000ms;
+                    animation-duration: 2000ms;
         }
 
     .weather--fog {
@@ -803,36 +810,36 @@
     }
 
     @-webkit-keyframes animation-wind {
-        0% {
-            margin-top: 25%;
-            margin-left: -30%;
+        /* 0% {
+            margin-top: -50%;
+            margin-left: -50%;
         }
         30% {
             margin-top: 40%;
         }
         50% {
-            margin-top: 30%;
+            margin-left: 130%;
         }
         100% {
-            margin-top: 100%;
-            margin-left: 100%;
-        }
+            margin-top: 150%;
+            margin-left: 150%;
+        } */
     }
 
     @keyframes animation-wind {
         0% {
-            margin-top: 25%;
-            margin-left: -30%;
+            margin-top: -50%;
+            margin-left: -50%;
         }
         30% {
-            margin-top: 40%;
+            margin-top: 20%;
         }
         50% {
-            margin-top: 30%;
+            margin-left: 70%;
         }
         100% {
-            margin-top: 100%;
-            margin-left: 100%;
+            margin-top: 150%;
+            margin-left: 150%;
         }
     }
 
