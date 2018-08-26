@@ -1,227 +1,49 @@
 Title:          What’s on my&nbsp;mac
-Summary:        Bear, Things, Dashlane, Flux, LiceCap, Sky Fonts
+Summary:        Atom, Sublime, iTerm, Numi, Trello, Bear
 Icon:           laptop
-date_updated:   18-08-2018
+date_updated:   26-08-2018 15:40
 
+<img alt="Desktop Screenshot" src="/static/images/posts/deskop-screenshot-26082018.png" class="img--block screenshot--mac">
 
-source: https://markdown-it.github.io/
+## [Atom](https://atom.io/)
+<img alt="Atom Editor" src="/static/images/posts/atom-26082018.png" class="img--block screenshot--mac">
+I find that Atom works best for smaller projects, so I tend to use it when working on a smaller side project. I'm currently using the [Atom Material](https://atom.io/themes/atom-material-ui) UI theme with [Lucario](https://atom.io/themes/lucario) syntax theme.
 
----
+**Website:** https://atom.io/
 
-## Intrigued by the shower
-Cat ipsum dolor sit amet, ask to be pet then attack owners hand or do i like standing on litter cuz i sits when i have spaces, my cat buddies have no https://markdown-it.github.io/ litter i live in luxury cat life put butt in owner's face. The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie. Take a big fluffing crap 💩 plop down in the middle where everybody walks love you, then bite you.
+## [Sublime Text](https://www.sublimetext.com/)
+<img alt="Sublime Text Editor" src="/static/images/posts/sublime-26082018.png" class="img--block screenshot--mac">
+Sublime is my go-to for largescale projects, like Etsy.com, where I need to be able to quickly open heavy files, and traverse a complex project.
 
-The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie. Take a big fluffing crap 💩 plop down in the middle where everybody walks love you, then bite you.
+**Website:** https://www.sublimetext.com/
 
-### Step 1:
-Flex claws on the human's belly and purr like a lawnmower friends are not food for sniff sniff yet hiding behind the couch until lured out by a feathery toy and sleep nap.
+## [iTerm](https://www.iterm2.com/) and [Zsh](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
+<img alt="iTerm Terminal" src="/static/images/posts/iterm-26082018.png" class="img--block screenshot--mac">
+I use iTerm instead of the default Mac terminal with zsh. I'm in love with the [Spaceship](https://denysdovhan.com/spaceship-prompt/) prompt I'm using, and there are so many more wonderful [plugins](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins) with oh-my-zsh!
 
-#### Step 1.1
- Chew iPad power cord. Lick arm hair refuse to come home when humans are going to bed;
+**iTerm Website:** https://www.iterm2.com/
+**Installing zsh:** https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
 
-#### Step 1.2
-Chew iPad power cord. Lick arm hair refuse to come home when humans are going to bed;
+## [Numi](https://numi.io/)
+<img alt="Numi" src="/static/images/posts/numi-26082018.png" class="img--block screenshot--mac">
+A new addition to my favs, Numi is a wonderful calculator app with support for some really cool things like currency conversion, pixel math, variables, and [so much more](https://numi.io/docs/)!
 
-### Step 2:
-Refuse to leave cardboard box play time, but chase ball of string mark territory i just saw other cats inside the house and nobody ask me before using my litter box or lick master's hand at first then bite because im moody.
+**Website:** https://numi.io/
 
-### Step 3:
-i just saw other cats inside the house and nobody ask me before using my litter box or lick master's hand at first then bite because im moody.
+## [Trello](https://trello.com/)
+<img alt="Trello" src="/static/images/posts/trello-26082018.png" class="img--block screenshot--mac">
+The cross-platform support of Trello is wonderful, and is what makes it my go to todo list app. I also have it installed on [my phone](/x/whats-on-my/device/android), and it's really helpful to be able to write to dos while out-and-about, and have them automatically sync.
 
-## Cat ipsum dolor sit amet
-he door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie. Take a big fluffing crap 💩 plop down in the middle where everybody walks love you, then bite you.
+**Website:** https://trello.com/
 
-### Goals
-#### World Wide
-i live in luxury cat life put butt in owner's face
-#### Here
-i live in luxury cat life put butt in owner's face
-##### Now
-Lets do it! i live in luxury cat life put butt in owner's face The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie.
-###### Future
-Lets do it! i live in luxury cat life put butt in owner's face The door is opening! how exciting oh, it's you, meh why must they do that i like big cats and i can not lie.
+## [Bear](http://www.bear-writer.com/)
+<img alt="Bear" src="/static/images/posts/bear-26082018.png" class="img--block screenshot--mac">
+Bear is acutally the inspiration for this website, I wanted a site built on Markdown so that I could write my posts anywhere, and have it look beautiful on my site. The only con with Bear is that there's currenlty no andorid support, it would be amazing to have a markdown-based note taking app that I can use on my macbook and phone.
 
----
-# Headers
-## h2 Heading
-### h3 Heading
-#### h4 Heading
-##### h5 Heading
-###### h6 Heading
+**Website:** http://www.bear-writer.com/
 
-
-
-## Links
-[Google](http://google.com)
-[Google with title](http://google.com "title text")
-http://example.com
-
-
-
-## Typographic replacements
-
-Enable typographer option to see result.
-
-(c) (r) (tm) +/- --> <-- <--> =/= 1/4 1st 2nd
-
-test.. test... test..... test?..... test!....
-
-!!!!!! ???? ,,  -- ---
-
-"Smartypants, double quotes" and 'single quotes'
-
-
-
-## Emphasis
-
-**This is bold text**
-
-__This is bold text__
-
-*This is italic text*
-
-_This is italic text_
-
-~~Strikethrough~~
-
-==Mark==
-
-CH~3~CH~2~OH
-
-:smile: :heart: :thumbsup:
-
-^^Insert me^^
-
-H^2^0
-
-text^a\ superscript^
-
-
-
-## Keys
-++ctrl+alt+"My Special Key"++
-++cmd+alt+"&Uuml;"++
-
-
-
-## Task List
-- [X] item 1
-    * [X] item A
-    * [ ] item B
-        more text
-        + [x] item a
-        + [ ] item b
-        + [x] item c
-    * [X] item C
-- [ ] item 2
-- [ ] item 3
-
-
-
-## Blockquotes
-> Blockquotes can also be nested...
->> ...by using additional greater-than signs right next to each other...
-> > > ...or with spaces between arrows.
-
-
-## Lists
-
-Unordered
-
-+ Create a list by starting a line with `+`, `-`, or `*`
-+ Sub-lists are made by indenting 2 spaces:
-  - Marker character change forces new list start:
-    * Ac tristique libero volutpat at
-    + Facilisis in pretium nisl aliquet
-    - Nulla volutpat aliquam velit
-+ Very easy!
-
-Ordered
-
-1. Lorem ipsum dolor sit amet
-2. Consectetur adipiscing elit
-3. Integer molestie lorem at massa
-
-1. You can use sequential numbers...
-1. ...or keep all the numbers as `1.`
-
-Start numbering with offset:
-
-57. foo
-1. bar
-
-
-## Code
-
-Inline `code`
-
-Here is some code: `#!js function pad(v){return ('0'+v).split('').reverse().splice(0,2).reverse().join('')}`.
-
-The mock shebang will be treated like text here: ` #!js var test = 0; `.
-
-Indented code
-
-    // Some comments
-    line 1 of code
-    line 2 of code
-    line 3 of code
-
-
-Block code "fences"
-
-```
-Sample text here...
-```
-
-Syntax highlighting
-
-```js
-var foo = function (bar) {
-  return bar++;
-};
-
-console.log(foo(5));
-```
-
-`#!php-inline $a = array("foo" => 0, "bar" => 1);`
-
-
-
-## Tables
-
-| Option | Description |
-| ------ | ----------- |
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
-
-Right aligned columns
-
-| Option | Description |
-| ------:| -----------:|
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
-
-
-
-## Horizontal Rules
-___
-
----
-
-***
-
-
-## Images
-
-![Minion](https://octodex.github.com/images/minion.png)
-![Stormtroopocat](https://octodex.github.com/images/stormtroopocat.jpg "The Stormtroopocat")
-
-Like links, Images also have a footnote style syntax
-
-![Alt text][id]
-
-With a reference later in the document defining the URL location:
-
-[id]: https://octodex.github.com/images/dojocat.jpg  "The Dojocat"
+## Honorable Mentions
+* [App Cleaner](https://itunes.apple.com/us/app/app-cleaner-uninstaller/id1013897218?mt=12): I come across lists like this a lot, and install a bunch of apps to play with that I then would like to uninstall. App Cleaner helps me make sure no bits-and-pieces of the apps are left behind.
+* [Flux](https://justgetflux.com/): I'm a nightowl when I have a project I'm working on, flux makes late-night coding not a horrible squiting-in-blue-light-glare-fest.
+* [Magnet](http://magnet.crowdcafe.com/): One of the best window managment systems for Mac
+* [Karabiner Elements](https://pqrs.org/osx/karabiner/): I use [a mechnical keyboard at home](/x/whats-on-my/desk), and karabiner helps me map and cusotmize my keyboard

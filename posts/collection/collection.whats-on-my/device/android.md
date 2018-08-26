@@ -4,7 +4,7 @@ Icon:           android
 date_updated:   26-08-2018 12:56
 
 ## Current Theme
-<img alt="Phone Home Screen" src="/static/images/posts/wom_android_homepage-25082018.png" class="inline-img screenshot-lgv20"><img alt="Phone Apps Screen" src="/static/images/posts/wom_android_apps-25082018.png" class="inline-img screenshot-lgv20">
+<img alt="Phone Home Screen" src="/static/images/posts/wom_android_homepage-25082018.png" class="img--inline screenshot--lgv20"><img alt="Phone Apps Screen" src="/static/images/posts/wom_android_apps-25082018.png" class="img--inline screenshot--lgv20">
 
 ### Ingredients
 Launcher: [Smart Launcher](https://play.google.com/store/apps/details?id=ginlemon.flowerfree)

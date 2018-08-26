@@ -220,13 +220,13 @@
     margin: 0;
     display: inline;
 }
-.markdown-container img.inline-img {
+.markdown-container img.img--inline {
     display: inline-block;
     border: 0;
     -ms-interpolation-mode: bicubic;
     vertical-align: middle;
 }
-.markdown-container img.block-img {
+.markdown-container img.img--block {
     display: block;
     margin: 0 auto;
     max-width: 100%;
@@ -235,7 +235,7 @@
     -ms-interpolation-mode: bicubic;
     vertical-align: middle;
 }
-.markdown-container img.screenshot-lgv20 {
+.markdown-container img.screenshot--lgv20 {
     width: 49%;
     margin: 0 0.5%;
 }
