@@ -9,38 +9,38 @@ date_updated:   26-08-2018 15:40
 <img alt="Atom Editor" src="/static/images/posts/atom-26082018.png" class="img--block screenshot--mac">
 I find that Atom works best for smaller projects, so I tend to use it when working on a smaller side project. I'm currently using the [Atom Material](https://atom.io/themes/atom-material-ui) UI theme with [Lucario](https://atom.io/themes/lucario) syntax theme.
 
-**Website:** https://atom.io/
+https://atom.io/
 
 ## [Sublime Text](https://www.sublimetext.com/)
 <img alt="Sublime Text Editor" src="/static/images/posts/sublime-26082018.png" class="img--block screenshot--mac">
 Sublime is my go-to for largescale projects, like Etsy.com, where I need to be able to quickly open heavy files, and traverse a complex project.
 
-**Website:** https://www.sublimetext.com/
+https://www.sublimetext.com/
 
 ## [iTerm](https://www.iterm2.com/) and [Zsh](https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH)
 <img alt="iTerm Terminal" src="/static/images/posts/iterm-26082018.png" class="img--block screenshot--mac">
 I use iTerm instead of the default Mac terminal with zsh. I'm in love with the [Spaceship](https://denysdovhan.com/spaceship-prompt/) prompt I'm using, and there are so many more wonderful [plugins](https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins) with oh-my-zsh!
 
-**iTerm Website:** https://www.iterm2.com/
-**Installing zsh:** https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
+https://www.iterm2.com/
+https://github.com/robbyrussell/oh-my-zsh/
 
 ## [Numi](https://numi.io/)
 <img alt="Numi" src="/static/images/posts/numi-26082018.png" class="img--block screenshot--mac">
 A new addition to my favs, Numi is a wonderful calculator app with support for some really cool things like currency conversion, pixel math, variables, and [so much more](https://numi.io/docs/)!
 
-**Website:** https://numi.io/
+https://numi.io/
 
 ## [Trello](https://trello.com/)
 <img alt="Trello" src="/static/images/posts/trello-26082018.png" class="img--block screenshot--mac">
 The cross-platform support of Trello is wonderful, and is what makes it my go to todo list app. I also have it installed on [my phone](/x/whats-on-my/device/android), and it's really helpful to be able to write to dos while out-and-about, and have them automatically sync.
 
-**Website:** https://trello.com/
+https://trello.com/
 
 ## [Bear](http://www.bear-writer.com/)
 <img alt="Bear" src="/static/images/posts/bear-26082018.png" class="img--block screenshot--mac">
 Bear is acutally the inspiration for this website, I wanted a site built on Markdown so that I could write my posts anywhere, and have it look beautiful on my site. The only con with Bear is that there's currenlty no andorid support, it would be amazing to have a markdown-based note taking app that I can use on my macbook and phone.
 
-**Website:** http://www.bear-writer.com/
+http://www.bear-writer.com/
 
 ## Honorable Mentions
 * [App Cleaner](https://itunes.apple.com/us/app/app-cleaner-uninstaller/id1013897218?mt=12): I come across lists like this a lot, and install a bunch of apps to play with that I then would like to uninstall. App Cleaner helps me make sure no bits-and-pieces of the apps are left behind.
