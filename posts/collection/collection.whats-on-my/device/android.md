@@ -13,14 +13,10 @@ Icon Packs: [TwoPixel](https://play.google.com/store/apps/details?id=com.mowmo.t
 
 Wallpaper: [Walli](https://play.google.com/store/apps/details?id=com.shanga.walli)
 
-Misc: [Rounded Corner](https://play.google.com/store/apps/details?id=com.thsoft.rounded.corner)
-
 ### Story
 My goal for this theme was to create something colorful and minimal. With that in mind I wanted to find a launcher with a customizable app drawer, and the ability to have different icons on the home and app screens. [Smart Launcher](https://play.google.com/store/apps/details?id=ginlemon.flowerfree) was a perfect fit, the app screen is a swipe away and supports automatically grouping apps by category, as well as creating custom categories like "Favorites".
 
 On the homescreen I'm using the [TwoPixel](https://play.google.com/store/apps/details?id=com.mowmo.twopixel) icon pack, 'cause the colors and style went so perfectly with the wallpaper I'd chosen. While in the app drawer the icon pack being used is [DarkMatter](https://play.google.com/store/apps/details?id=com.mowmo.darkmatter), I lean towards less-styalized icon packs in my app drawer so that any apps that don't have a custom icon don't look _so_ jarring against the themed apps.
-
-My everyday carry equivalent for my phone is the [Rounded Corner](https://play.google.com/store/apps/details?id=com.thsoft.rounded.corner) app, it's a simple update but looks pretty darn cute with any theme I have.
 
 
 ---
@@ -36,3 +32,8 @@ The only way my life would have any sembalance of organization
 
 ### [Mr. Binario](https://play.google.com/store/apps/details?id=com.Appsparagus.MrBinairo.app)
 My current favorite subway game, simple mechanics that creatly a beautifully challenging (at times) game
+
+## Honorable Mentions
+* [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2): My main app for 2FA
+* [Lyft](https://play.google.com/store/apps/details?id=me.lyft.android): If you're gonna rideshare, use Lyft
+* [Rounded Corner](https://play.google.com/store/apps/details?id=com.thsoft.rounded.corner): This my everyday carry equivalent for my phone, I've installed it on every andorid phone I've had, and it's a beautifully simple mod.
