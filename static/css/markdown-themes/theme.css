@@ -42,7 +42,7 @@
         display: block;
         position: absolute;
         z-index: -1;
-        height: .1em;
+        height: 2px;
         width: 100%;
         bottom: -.1em;
         background-color: #1C2233;
