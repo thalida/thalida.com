@@ -1,0 +1,57 @@
+<section id="content-social-links"></section>
+<section id="content-header" class="banner" style="background-color:<%= post.color %>">
+	<span class="post-icon"><img src="/public/content/images/icons/<%= post.icon %>" /></span>
+	<span class="post-title" style="color: <%= post.fontColor %>"><%= post.title %></span>
+	<span class="post-color" style="color: <%= post.fontColor %>"><%= post.color %></span>
+</section>
+<% if(post.type != 2){ %>
+<% if(post.website != '' || post.github != ''){ %>
+<section id="content-links">
+	<a href="<%= post.website %>" target="_blank" id="website-link" class="button <%= post.websiteClass %>"><%= post.websiteText %></a>
+	<a href="<%= post.github %>" target="_blank" id="github-link" class="button <%= post.githubClass %>"><%= post.githubText %></a>
+</section>
+<% } %>
+<section id="content-text">
+	<span id="quote"><p><%= post.subtitle %></p></span>
+	<span id="description"><p><%= post.text %></p></span>
+</section>
+<% } %>
+<% if(post.id == 14 || post.type == 2){ %>
+<section id="content-long-text"><%= post.text %></section>
+<% } %>
+<% if(post.type == 1){ %>
+<section id="content-images"><%= post.images %></section>
+<% }else if(post.type == 3){ %>
+<section id="content-experiment"></section>
+<% } %>
+<section id="content-list">
+	<h1 id="continue-reading">View More&hellip;</h1>
+	<% if(next !== false){ %>
+	<div id="content-<%= next.id %>" class="content-item content-next" style="background-color: <%= next.color %>">
+		<span class="item-icon"><img src="/public/content/images/icons/<%= next.icon %>" /></span>
+		<span class="item-title" style="color: <%= next.fontColor %>"><%= next.title %></span>
+		<span class="item-color" style="color: <%= next.fontColor %>"><%= next.color %></span>
+	</div>
+	<% }else{ %>
+	<div id="content-0" class="content-item content-next content-none">
+		<span class="item-icon"></span>
+		<span class="item-title">Start &raquo;</span>
+		<span class="item-color"></span>
+	</div>
+	<% } %>
+	
+	
+	<% if(prev !== false){ %>
+	<div id="content-<%= prev.id %>" class="content-item content-prev" style="background-color: <%= prev.color %>">
+		<span class="item-icon"><img src="/public/content/images/icons/<%= prev.icon %>" /></span>
+		<span class="item-title" style="color: <%= prev.fontColor %>"><%= prev.title %></span>
+		<span class="item-color" style="color: <%= prev.fontColor %>"><%= prev.color %></span>
+	</div>
+	<% }else{ %>
+	<div id="content-0" class="content-item content-prev content-none">
+		<span class="item-icon"></span>
+		<span class="item-title">&laquo; End</span>
+		<span class="item-color"></span>
+	</div>
+	<% } %>
+</section>
