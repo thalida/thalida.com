@@ -575,7 +575,7 @@ section#current-info #current-info-weather #current-weather-icon {
   }
 }
 .weather-icon {
-  background-image: url(images/weather-icons.png);
+  background-image: url(../assets/images/weather-icons.png);
   display: block;
   height: 60px;
   width: 60px;
@@ -765,7 +765,7 @@ section#content-list .content-item .item-color {
   text-transform: uppercase;
 }
 #content-header.about {
-  background: #ffa08a url(/public/content/images/large/about.header.jpg) center repeat;
+  background: #ffa08a url(/public/partials/content/images/large/about.header.jpg) center repeat;
 }
 #content-links {
   width: 50%;

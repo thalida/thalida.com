@@ -1,0 +1,49 @@
+<div id="liveData" ng-controller="LiveDataCtrl" ng-cloak>
+    <section id="welcome">
+        <span id="welcome-salutations">
+            <p>
+                <span>{{liveData.person.greeting}},</span>
+                <span>
+                    <input id="person-input-name" type="text" ng-model="personName" />
+                </span>
+            </p>
+        </span>
+        <span id="welcome-message">
+            <p>{{liveData.person.message | formatText:liveData.person}}</p>
+        </span>
+    </section>
+    <section id="current-info" class="banner">
+        <div id="current-info-time" class="current-info-item">
+            <ul id="clock">
+                <li id="hour-hand" class="clock-hand" ng-style="{transform: clock.rotH}"></li>
+                <li id="minute-hand" class="clock-hand" ng-style="{transform: clock.rotM}"></li>
+                <li id="second-hand" class="clock-hand" ng-style="{transform: clock.rotS}"></li>
+            </ul>
+            <span id="time-text" class="info-text">{{clock.time}}</span>
+        </div>
+        <div id="current-info-temp" class="current-info-item">
+            <span id="temp-text" class="info-text">{{temp}} &deg; F</span>
+        </div>
+        <div id="current-info-weather" class="current-info-item" ng-class="(weather.name.length>10) ? 'small-text' : ''">
+            <span id="current-weather-icon" class="weather-icon" ng-class="weatherIcon"></span>
+            <span id="weather-text" class="info-text">{{weather.name}}</span>
+        </div>
+        <div id="current-info-date" class="current-info-item">
+            <span id="date-text" class="info-text">{{date.day}} {{date.month}}.</span>
+        </div>
+    </section>
+</div>
+<span id="forecast-attribution">
+	<span class="default">Default Location: Washington, D.C.</span>
+	<a href="http://forecast.io/" target="_blank">Powered by Forecast</a>
+</span>
+<section ng-controller="HomeCtrl" id="content-list" ng-cloak>
+	<h1>Projects &amp; Articles</h1>
+	<div id="content-list-items">
+        <div id="content-{{project.id}}" class="content-item" ng-style="{'background-color': project.color}" ng-repeat="project in projects">
+            <span class="item-icon"><img ng-src="{{project.images | image:'icon'}}" /></span>
+            <span class="item-title" ng-style="{'color': fontColor(project.color)}">{{project.title}}</span>
+            <span class="item-color" ng-style="{'color': fontColor(project.color)}">{{project.color}}</span>
+        </div>
+    </div>
+</section>

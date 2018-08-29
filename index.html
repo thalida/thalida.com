@@ -9,7 +9,7 @@ SITE INFO
 ==========================================================================================
 CRAFTED WITH:
 	PHP/MYSQLI		:
-    REQUIRE.JS      :	
+    REQUIRE.JS      :
     JQUERY/JQUERYUI :
     JQUERYUIEXT		:
     UNDERSCORE		:
@@ -25,7 +25,7 @@ CONTACT:
 ==========================================================================================
 ----------------------------------------------------------------------------------------->
 <!DOCTYPE HTML>
-<html>
+<html lang="en" ng-app="App">
 <head>
 	<!--===== META INFO =====-->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -41,25 +41,55 @@ CONTACT:
 
 	<!--===== STYLESHEETS =====-->
 	<link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-	<link href="/public/assets/css/resets.css" type="text/css" rel="stylesheet">
-	<link href="/public/assets/css/styles.css" type="text/css" rel="stylesheet" media="screen" />
-	
+	<link href="/public/styles/resets.css" type="text/css" rel="stylesheet">
+	<link href="/public/styles/styles.css" type="text/css" rel="stylesheet" media="screen" />
+
 	<!--===== SCRIPTS =====-->
-	<script>
-		document.cookie='resolution='+Math.max(screen.width,screen.height)+'; path=/';
-		
-		function setBodyClass(){
+	<script> document.cookie='resolution='+Math.max(screen.width,screen.height)+'; path=/'; </script>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-resource.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js"></script>
+    <script type="text/javascript" src="public/assets/libs/underscore.js"></script>
+    <script type="text/javascript" src="public/assets/libs/jquery.color.js"></script>
+    <script type="text/javascript" src="public/assets/libs/forecast.io.js"></script>
+
+    <script src="public/app/app.js"></script>
+    <script src="public/app/filters.js"></script>
+    <script src="public/app/services.js"></script>
+    <script src="public/app/controllers.js"></script>
+
+    <script>
+        function setBodyClass(){
 			var _hours = (localStorage.lastHourly != null) ? new Date(parseInt(localStorage.lastHourly)).getHours() : new Date().getHours();
 			var _bodyClass = (_hours <= 5 || _hours >= 20) ? 'night-mode' : 'day-mode';
 			document.getElementsByTagName('body')[0].className += _bodyClass;
 		}
-	</script>
-	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-	<script data-main="/public/assets/js/app" src="/public/assets/js/require.js"></script>
+    </script>
 </head>
 <body onload="setBodyClass()">
+    <div id="wrapper" class="wrapper">
+        <header id="main-header" ng-controller="HeaderCtrl" ng-cloak>
+            <nav>
+                <ul>
+                    <li>
+                        <a class="header-link" id="header-name" href="/"><span class="bold">thalida</span>noel</a>
+                        <span class="content-title">
+                            <span class="v-divider">|</span>
+                            <span class="text"></span>
+                        </span>
+                    </li>
+                    <li><a href="mailto:hello@thalida.com?subject=Greetings,%20Thalida!" target="_blank">contact</a></li>
+                    <li><a class="header-link" href="#about">about</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div ng-view id="content"></div>
+        <footer id="main-footer" ng-controller="FooterCtrl" ng-cloak>
+            <span id="title">Copyright</span>
+            <span id="copyright">Made with love and chocolate (2013)</span>
+        </footer>
+    </div>
 </body>
 </html>
