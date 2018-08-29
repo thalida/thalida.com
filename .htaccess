@@ -1,0 +1,53 @@
+# For security reasons, Option all cannot be overridden.
+#Options All -Indexes
+# For security reasons, Option followsymlinks cannot be overridden.
+#Options +FollowSymlinks
+Options +SymLinksIfOwnerMatch
+
+AddType test/html .php
+<FilesMatch "\.php$">
+    Header set Cache-Control "no-transform"
+</FilesMatch>
+
+AddType font/ttf .ttf
+AddType font/otf .otf
+AddType application/x-woff .woff
+AddType image/svg+xml .svg
+AddType application/vnd.ms-fontobject .eot
+
+ExpiresActive On
+ExpiresByType font/ttf "access plus 10 years"
+ExpiresByType font/otf "access plus 10 years"
+ExpiresByType application/vnd.ms-fontobject "access plus 10 years"
+ExpiresByType application/x-woff "access plus 10 years"
+ExpiresByType image/svg+xml "access plus 10 years"
+
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf|eot|woff|otf|ttf|svg)$">
+Header set Expires "Wed, 1 Jan 2014 20:00:00 GMT"
+</FilesMatch>
+
+AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+AddOutputFilterByType DEFLATE font/ttf
+AddOutputFilterByType DEFLATE font/otf
+AddOutputFilterByType DEFLATE image/svg+xml
+AddOutputFilter DEFLATE css js
+
+#RewriteEngine ON
+#RewriteRule ^([a-z]+)([/]?)$ /index.php?page=$1 [L] #Main Page
+#RewriteRule ^([a-z]+)/(\d+)([/]?)$ /index.php?page=$1&id=$2 [L]
+
+# Adaptive-Images -----------------------------------------------------------------------------------
+
+  # Add any directories you wish to omit from the Adaptive-Images process on a new line, as follows:
+  # RewriteCond %{REQUEST_URI} !ignore-this-directory
+  # RewriteCond %{REQUEST_URI} !and-ignore-this-directory-too
+  RewriteCond %{REQUEST_URI} !assets
+
+  # don't apply the AI behaviour to images inside AI's cache folder:
+  RewriteCond %{REQUEST_URI} !ai-cache
+
+  # Send any GIF, JPG, or PNG request that IS NOT stored inside one of the above directories
+  # to adaptive-images.php so we can select appropriately sized versions
+  RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
+
+  # END Adaptive-Images -------------------------------------------------------------------------------

@@ -1,0 +1,15 @@
+<section ng-controller="HomeCtrl" id="home" class="content-list" ng-cloak>
+	<h1>Projects &amp; Articles</h1>
+	<div id="content-list-items">
+        <div id="content-{{project.id}}" 
+             class="content-item" 
+             ng-style="{'background-color': project.color}" 
+             ng-repeat="project in projects" 
+             ng-click="loadProject(project)">
+            <span class="item-icon"><img ng-src="{{project.images | image:'icon'}}" /></span>
+            <div class="item-title" ng-style="{'color': fontColor(project.color)}">
+                <p>{{project.title}}</p>
+            </div>
+        </div>
+    </div>
+</section>

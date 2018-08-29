@@ -1,0 +1,248 @@
+@color-green: #3dddaa;
+    
+.border-radius (@radius: 3px) {
+	border-radius: @radius;
+	-moz-border-radius: @radius;
+	-webkit-border-radius: @radius;
+}
+
+.box-shadow(@color) when (iscolor(@color)) {
+	-moz-box-shadow: 0 5px 0 @color;
+	-webkit-box-shadow: 0 5px 0 @color;
+	box-shadow: 0 5px 0 @color;
+}
+
+.col(@fullwidth:100,@width:90,@top:0,@bottom:0){
+	@margin: percentage(((@fullwidth - @width) / 2) / 100);
+	width: percentage(@width / 100);
+	margin: @top @margin @bottom @margin;
+}
+
+.clearfix() {
+    zoom: 1;
+    &:before { content: ''; display: block; }
+    &:after { content: ''; display: table; clear: both; }
+}
+
+html { 
+    font-size: 62.5%; 
+} 
+
+body{
+    background: url('/public/assets/images/scene/space.png') top center repeat;
+    font-size: 16px;
+    font-size: 1.6rem;
+    font-family: 'Lato', 'Helvetica', 'Arial', sans-serif;
+    color: #fff;
+}
+
+#overlay{
+    background: rgba(52, 72, 122, 0.5);
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#wrapper{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+#scene{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    
+    .message{
+        text-align: center;
+        display: block;
+        width: 100%;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        .greeting{
+            display: block;
+            font-family: 'Sacramento', cursive;
+            font-size: 70px;
+            font-size: 7.0rem;
+            color: #ff6666;
+            text-align: center;
+        }
+        .weather{
+            display: block;
+            padding: 20px 0 0 0;
+            color: #fff;
+            font-weight: 300;
+            font-size: 20px;
+            font-size: 2.0rem;
+        }
+    }
+    
+    #earth, #planet, #astroid, #astroidGroup{
+        position: absolute;
+        img{
+            max-width: 100%;
+        }
+    }
+    
+    #earth{
+        top: 40%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    #astroidGroup{
+        top: 25%;
+        left: 90%;
+    }
+    
+    #astroid{
+        top: 33%;
+        left: 50px;
+    }
+    
+    #planet{
+        top: 40px;
+        left: 25%;
+    }
+
+    #weatherIconContainer{
+        position: absolute;
+        top: 43%;
+        left: 20%;
+    }
+    .weather-icon{
+        background: url('/public/assets/images/scene/weather.png');
+        background-repeat: no-repeat;
+        display: block;
+        position: absolute;
+        
+        &.clear-day, &.clear-night{
+            width: 0;
+            height: 0;
+        }
+        &.rain{
+            background-position: -430px 0;
+            height: 50px;
+            width: 130px;
+            margin-top: 50px;
+            margin-left: 45px;
+        }
+        &.snow{
+            background-position: -570px 0;
+            height: 80px;
+            width: 130px;
+            margin-top: 55px;
+            margin-left: 50px;
+        }
+        &.cloudy, &.fog{
+            background-position: 0 0;
+            height: 100px;
+            width: 210px;
+        
+        }
+        &.partly-cloudy-day, &.partly-cloudy-night, &.wind{
+            background-position: -220px 0;
+            height: 80px;
+            width: 170px;
+        }
+    }
+}
+
+#content{
+    display: block;
+    position: relative;
+}
+
+.content-list{
+    overflow: auto;
+    
+	h1{
+        width: 100%;
+        padding: 5%;
+		font-size: 50px;
+		font-size: 5.0rem;
+		font-weight: 300;
+        text-align: center;
+	}
+    #content-list-items{
+        overflow: auto;
+    }
+	.content-item{
+		.border-radius();
+        .box-shadow(rgba(0,0,0,0.3));
+        display: block; 
+		cursor: pointer;
+		float: left;
+		height: 230px;
+		margin:  0 0 5% 5%;
+		position: relative;
+		text-align: center;
+		width: 42.5%;
+		&.content-none{
+			cursor: default;
+		}
+        &:hover{
+            .box-shadow(@color-green);
+        }
+		
+		.item-icon{
+			display: block;
+            position: absolute;
+            height: 30px;
+            width: 100%;
+            top: 30px;
+            text-align: center;
+            @media screen and (max-width: 400px) {
+                display: none;
+            }
+		}
+		.item-title{
+			color: #fefbf8;
+            display: table;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 0px 30px;
+            p{ 
+                display: table-cell; 
+                vertical-align: middle; 
+                text-align: center;
+                font-size:30px;
+                font-size:3.0rem;
+            }
+		}
+	}
+}
+@media screen and (max-width: 720px) {
+    .content-list .content-item{
+        height: 180px;
+    }
+    .content-list h1{
+        padding: 10%;
+    }
+}
+@media screen and (min-width: 401px) and (max-width: 565px) {
+    html{
+        font-size: 55%;
+    }
+}
+@media screen and (max-width: 400px) {
+    html{
+        font-size: 35%;
+    }
+    #scene .message .greeting{
+        font-size: 9.0rem;
+    }
+    #scene .message .weather{
+        font-size: 3.0rem;
+    }
+    .content-list .content-item{
+        height: 100px;
+    }
+}
