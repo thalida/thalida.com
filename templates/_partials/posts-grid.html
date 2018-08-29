@@ -1,0 +1,45 @@
+<ol class="card-grid posts">
+{% for post_key in posts %}
+    {% set post_meta = globals.all_posts_meta[post_key] %}
+    {% if not post_meta.is_hidden %}
+        <li class="card-wrapper">
+            <a
+                class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured%} post--featured{% endif %}"
+                {% if post_meta.is_external %}
+                    href="{{ post_meta.external_url | safe }}?t={{post_meta.date_updated or post_meta.date_posted | datetime('iso')}}"
+                    target="_blank"
+                    rel="external"
+                {% else %}
+                    href="{{ post_meta.url | safe }}?t={{post_meta.date_updated or post_meta.date_posted | datetime('iso')}}"
+                {% endif %}
+            >
+                {% if post_meta.image %}
+                    <div class="card__image" style="background-image:url({{ post_meta.image }})"></div>
+                {% endif %}
+                {% if post_meta.is_featured %}
+                    <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
+                {% endif %}
+                <h3 class="card__header header--tertiary">
+                    {% for icon in post_meta.icons.before %}
+                        <span class="card__header__icon icon icon--small icon--before icon--{{icon | lower}}"></span>
+                    {% endfor %}
+                    <span class="card__header__text">{{ post_meta.title | safe | truncate(50, False, '...', 10) }}</span>
+                    {% for icon in post_meta.icons.after %}
+                        <span class="card__header__icon icon icon--xsmall icon--after icon--{{icon | lower}}"></span>
+                    {% endfor %}
+                </h3>
+                <p class="card__summary text--secondary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
+                <small class="card__details text--micro">
+                    {% if post_meta.is_external %}
+                        <span class="card__details--url">{{ post_meta.external_url }}</span>
+                    {% elif post_meta.date_updated %}
+                        Updated on {{ post_meta.date_updated | datetime('post') }}
+                    {% elif post_meta.date_posted and not post_meta.is_default_date %}
+                        Posted on {{ post_meta.date_posted | datetime('post') }}
+                    {% endif %}
+                </small>
+            </a>
+        </li>
+    {% endif %}
+{% endfor %}
+</ol>

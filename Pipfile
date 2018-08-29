@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = "3.6"
+
+[packages]
+flask = "*"
+dateparser = "*"
+geocoder = "*"
+darkskylib = "*"
+markdown = "*"
+flask-assets = "*"
+cssmin = "*"
+pymdown-extensions = "*"
+mdx_outline = {git = "git://github.com/aleray/mdx_outline.git"}
+pygments = "*"
+
+[dev-packages]

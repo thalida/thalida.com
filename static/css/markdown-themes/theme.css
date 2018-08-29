@@ -1,0 +1,244 @@
+/*******************************************************************************
+ * COLORS
+ *******************************************************************************
+ * Darkest Blue - #1C2233, rgb(28, 34, 51)
+ * Blue - #4A84FF
+ * Green - #1EFF7A, rgb(30, 255, 122)
+ * Yellow - #FFB233, rgb(255, 187, 51)
+ * Pink -  #FFDADA, rgb(255, 218, 218)
+ * Pastel-ish Blue - #98DBFF, rgb(152, 219, 255)
+ * Purple - #CBA5FF
+ *
+ *
+ * White - #FFFFFF
+ * Light Gray - #E5E6E7
+ * Dark Gray - #BBBDC2, rgb(187, 189, 194)
+ *
+ ******************************************************************************/
+
+ .markdown-container {
+    font: normal normal 1.6em 'Lora', serif;
+ }
+
+ .markdown-container a {
+    display: inline-block;
+    position: relative;
+    font-size: 1em;
+    line-height: 1em;
+    color: #1C2233;
+    text-decoration: none;
+    text-shadow:
+      0.05em  0.05em     #fff,
+     -0.05em  0.05em     #fff,
+      0.05em -0.05em     #fff,
+     -0.05em -0.05em     #fff;
+
+    -webkit-transition: text-shadow 150ms;
+    -o-transition: text-shadow 150ms;
+    transition: text-shadow 150ms;
+}
+     .markdown-container a:after {
+        content: "";
+        display: block;
+        position: absolute;
+        z-index: -1;
+        height: 2px;
+        width: 100%;
+        bottom: -.1em;
+        background-color: #1C2233;
+        -webkit-transition: height 150ms, background-color 150ms;
+        -o-transition: height 150ms, background-color 150ms;
+        transition: height 150ms, background-color 150ms;
+    }
+     .markdown-container a:hover,
+     .markdown-container a:visited:hover {
+        text-shadow: none;
+    }
+     .markdown-container a:hover:after,
+     .markdown-container a:visited:hover:after {
+        height: 100%;
+        background-color: #1EFF7A;
+        background-color: #FFDADA;
+        background-color: #FFF433;
+    }
+
+.markdown-container .section2,
+.markdown-container .section3 {
+    margin: 3.0rem 0;
+}
+.markdown-container .section2:first-child,
+.markdown-container .section3:first-child {
+    margin-top: 0;
+}
+
+.markdown-container h1,
+.markdown-container h2,
+.markdown-container h3,
+.markdown-container h4,
+.markdown-container h5,
+.markdown-container h6 {
+    margin: 0.5em 0;
+    padding: 0;
+    color: #1C2233;
+    line-height: 1.1em;
+    font-weight: 700;
+}
+.markdown-container h1,
+.markdown-container h2 {
+    font-size: 2em;
+ }
+.markdown-container h3 { font-size: 1.5em; }
+.markdown-container h4 { font-size: 1.3em; }
+.markdown-container h5 { font-size: 1.1em; }
+.markdown-container h6 { font-size: 0.9em; }
+
+.markdown-container p {
+    margin: 0.5rem 0 1.5rem 0;
+    line-height: 1.5;
+}
+
+.markdown-container blockquote {
+    color: #1C2233;
+    margin: 0;
+    padding-left: 1em;
+    border-left: 4px #FFB233 solid;
+    font-style: italic;
+    font-size: 1.4rem;
+    font-weight: 300;
+}
+
+.markdown-container table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.markdown-container thead {
+    border-bottom: 4px solid #E5E6E7;
+}
+.markdown-container thead th {
+    vertical-align: middle;
+    text-align: left;
+    padding: 0.5em;
+}
+.markdown-container thead th[align=right] {
+    text-align: right;
+}
+.markdown-container tbody tr {
+    border-bottom: 1px solid #E5E6E7;
+}
+.markdown-container td {
+    vertical-align: top;
+    padding: 0.5em;
+    border-right: 1px solid #E5E6E7;
+}
+.markdown-container td:first-child {
+    border-left: 1px solid #E5E6E7;
+}
+
+
+.markdown-container hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 4px solid #E5E6E7;
+    margin: 3.5rem auto;
+    padding: 0;
+    width: 100%;
+}
+
+.markdown-container samp {
+    color: #1C2233;
+}
+.markdown-container .highlight,
+.markdown-container pre {
+    font-family: 'Anonymous Pro', monospace;
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.markdown-container .keys {
+    color: #1C2233;
+    font-size: 0.9em;
+    font-family: 'Anonymous Pro', monospace;
+}
+.markdown-container .keys span {
+    padding: 0 .4em;
+}
+.markdown-container kbd {
+    padding: .5em;
+    border: 1px solid #E5E6E7;
+    border-radius: 0.3rem;
+    background-color: #FFFFFF;
+    box-shadow: 0px 1px 0px 1px #E5E6E7;
+    word-break: break-word;
+}
+
+.markdown-container b,
+.markdown-container strong {
+    font-weight: bold;
+}
+
+.markdown-container dfn { font-style: italic; }
+
+.markdown-container ins {
+    background: #1EFF7A;
+    color: #1C2233;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+}
+
+.markdown-container mark {
+    background: #fff433;
+    color: #1C2233;
+    font-weight: bold;
+    padding: 0.25em 0.5em;
+}
+
+.markdown-container sub,
+.markdown-container sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+.markdown-container sup { top: -0.5em; }
+.markdown-container sub { bottom: -0.25em; }
+
+.markdown-container ul,
+.markdown-container ol {
+    margin: 1em 0; padding: 0 0 0 2em;
+}
+.markdown-container li {
+    margin: 1em 0;
+}
+.markdown-container li p:last-child {
+    margin:0
+}
+.markdown-container dd { margin: 0 0 0 2em; }
+
+.markdown-container img.emojione {
+    margin: 0;
+    display: inline;
+}
+.markdown-container img.img--inline {
+    display: inline-block;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+.markdown-container img.img--block {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    width: auto;
+    border: 0;
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle;
+}
+.markdown-container img.screenshot--lgv20 {
+    width: 49%;
+    margin: 0 0.5%;
+}
+.markdown-container img.img--book {
+    height: 400px;
+}

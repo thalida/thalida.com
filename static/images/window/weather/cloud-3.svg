@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="52px" height="35px" viewBox="0 0 52 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>partly cloudy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="thalida.com---Home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home:-Version-6" transform="translate(-624.000000, -366.000000)" fill="#FFFFFF">
+            <g id="window" transform="translate(528.000000, 248.000000)">
+                <g id="outside">
+                    <g transform="translate(75.000000, 12.000000)">
+                        <path d="M55.9888538,122.869511 C57.7935652,121.094818 60.2689284,120 63,120 C68.5228475,120 73,124.477153 73,130 L73,130.5 C73,136.29899 68.2989899,141 62.5,141 L56,141 L38.5,141 C28.8350169,141 21,133.164983 21,123.5 C21,113.835017 28.8350169,106 38.5,106 C47.9539266,106 55.6569372,113.496563 55.9888538,122.869511 Z" id="partly-cloudy"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

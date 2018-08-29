@@ -1,3 +1,14 @@
-FROM httpd:alpine
+from python:3.6
 
-COPY dist/ /usr/local/apache2/htdocs/
+MAINTAINER Thalida Noel "hello@thalida.com"
+
+WORKDIR /app/
+
+COPY Pipfile* /app/
+
+RUN pip install pipenv
+RUN pipenv install --system --deploy
+
+COPY . /app/
+
+CMD ["python", "app.py"]

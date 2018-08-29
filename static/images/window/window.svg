@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="384px" height="399px" viewBox="0 0 384 399" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="thalida.com---Home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home:-Version-6" transform="translate(-528.000000, -248.000000)">
+            <g id="window" transform="translate(528.000000, 248.000000)">
+                <g id="Group">
+                    <g>
+                        <path d="M64.5,0.5 L64.5,383.5 L319.5,383.5 L319.5,0.5 L64.5,0.5 Z M74.5,187.5 L74.5,11.5 L309.5,11.5 L309.5,187.5 L74.5,187.5 Z M74.5,197.5 L309.5,197.5 L309.5,373.5 L74.5,373.5 L74.5,197.5 Z" id="frame" stroke="#000000" fill="#F6F6F6"></path>
+                        <g id="sill" transform="translate(0.000000, 383.000000)">
+                            <rect id="Rectangle-2" stroke="#000000" fill="#F6F6F6" x="0.5" y="0.5" width="383" height="15"></rect>
+                            <rect id="Rectangle-3" fill="#E5E6E7" x="1" y="9" width="382" height="6"></rect>
+                        </g>
+                        <g id="lines" transform="translate(100.000000, 38.000000)" opacity="0.3" stroke="#91A0CC" stroke-linecap="square">
+                            <path d="M10.5,34.5 L78.5,88.5" id="Line"></path>
+                            <path d="M116.5,248.5 L184.5,302.5" id="Line"></path>
+                            <path d="M0.5,0.5 L133.5,108.5" id="Line"></path>
+                            <path d="M0.5,179.5 L133.5,287.5" id="Line"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
