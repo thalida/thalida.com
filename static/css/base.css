@@ -243,6 +243,7 @@ a {
     padding: 0.25rem;
     width: 100%;
     min-width: 385px;
+    max-width: 1270px;
 }
 @media (min-width: 60em) {
     .site-wrapper {

@@ -66,9 +66,6 @@ class PostCollection:
         'markdown.extensions.sane_lists',
     ]
     MARKDOWN_EXTENSION_CONFIGS = {
-        # 'markdown.extensions.codehilite': {
-        #     {"name": "php-inline", "lang": "php", "options": {"startinline": True}}
-        # },
         'pymdownx.highlight': {
             'guess_lang': True
         }
@@ -105,7 +102,11 @@ class PostCollection:
         self.META_FALLBACK_DEFAULT = (PostCollection._cast_to_string, "", [])
 
         # Get an instance of the markdown function
-        self.markdown = markdown.Markdown(extensions=self.MARKDOWN_EXTENSIONS, extension_configs=self.MARKDOWN_EXTENSION_CONFIGS)
+        self.markdown = markdown.Markdown(
+            extensions=self.MARKDOWN_EXTENSIONS,
+            extension_configs=self.MARKDOWN_EXTENSION_CONFIGS,
+            lazy_ol=False
+        )
 
         # Set posts collection params
         self.posts_dir = posts_dir

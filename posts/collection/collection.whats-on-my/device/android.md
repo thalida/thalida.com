@@ -4,7 +4,7 @@ Icon:           android
 date_updated:   26-08-2018 12:56
 
 ## Current Theme
-<img alt="Phone Home Screen" src="/static/images/posts/wom_android_homepage-25082018.png" class="img--inline screenshot--lgv20"><img alt="Phone Apps Screen" src="/static/images/posts/wom_android_apps-25082018.png" class="img--inline screenshot--lgv20">
+<img alt="Phone Home Screen" src="/static/images/posts/andorid/wom_android_homepage-25082018.png" class="img--inline screenshot--lgv20"><img alt="Phone Apps Screen" src="/static/images/posts/andorid/wom_android_apps-25082018.png" class="img--inline screenshot--lgv20">
 
 ### Ingredients
 Launcher: [Smart Launcher](https://play.google.com/store/apps/details?id=ginlemon.flowerfree)
@@ -22,7 +22,7 @@ On the homescreen I'm using the [TwoPixel](https://play.google.com/store/apps/de
 ---
 
 ## Top (Non-Standard) Apps
-_You probably already have my top standard dailies: Spotify, Google Inbox, and Slack_
+_You most likely already have my top standard dailies: Spotify, YouTube, and Slack_
 
 ### [Dashlane](https://play.google.com/store/apps/details?id=com.dashlane)
 Dashlane is a free password manager that I use on my phone and laptop, it's compatiable with just about everything, and has a chrome extension to quickly allow you to sign into sites without typing your password
@@ -36,4 +36,4 @@ My current favorite subway game, simple mechanics that creatly a beautifully cha
 ## Honorable Mentions
 * [Google Authenticator](https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2): My main app for 2FA
 * [Lyft](https://play.google.com/store/apps/details?id=me.lyft.android): If you're gonna rideshare, use Lyft
-* [Rounded Corner](https://play.google.com/store/apps/details?id=com.thsoft.rounded.corner): This my everyday carry equivalent for my phone, I've installed it on every andorid phone I've had, and it's a beautifully simple mod.
+* [Rounded Corner](https://play.google.com/store/apps/details?id=com.thsoft.rounded.corner): This my everyday carry equivalent for my phone, it's a beautifully simple mod that adds rounded corners to the edges of your screen (across all apps)

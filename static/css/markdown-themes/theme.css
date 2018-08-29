@@ -239,3 +239,6 @@
     width: 49%;
     margin: 0 0.5%;
 }
+.markdown-container img.img--book {
+    height: 400px;
+}

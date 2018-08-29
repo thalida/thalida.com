@@ -1,6 +1,7 @@
 .post {}
     .post_header {
         width: 90%;
+        max-width: 800px;
         margin: 7.0rem auto;
     }
     .post_title {
@@ -21,19 +22,18 @@
         font-weight: 300;
         font-size: 1.2em;
     }
+    .post_content {
+        width: 90%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-.post_content {
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.post_footer {
-    margin: 7.0rem 0 0;
-    padding: 3.5rem 0 0;
-    border-top: 4px solid #E5E6E7;
-    text-align: center;
-}
+    .post_footer {
+        margin: 7.0rem 0 0;
+        padding: 3.5rem 0 0;
+        border-top: 4px solid #E5E6E7;
+        text-align: center;
+    }
 .collection__header {
     text-align: center;
 }
