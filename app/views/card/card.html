@@ -1,0 +1,49 @@
+<card fancy-time="fancyTime">
+	<card:face face="front">
+		<div class="card-content">
+			<div class="greeting"
+				 ng-bind-html="utils.sanitize(greetingText)">
+			</div>
+		</div>
+		<div class="card-footer"
+			 ng-bind-html="utils.sanitize(footerText)">
+		</div>
+	</card:face>
+
+	<card:face face="back">
+		<div class="card-content">
+			<div class="photo">
+				<span class="img"
+					  ng-style="{'background-image': 'url(' + photo + ')'}">
+				</span>
+			</div>
+
+			<div class="details">
+				<span class="name">Thalida Noel</span>
+				<span class="title">Mobile Web Developer</span>
+				<span class="title">OkCupid</span>
+			</div>
+
+			<p class="bio">
+				I'm a young cisgender woman who is part of the LGBTQ community,
+				I like to pretend I'm a roboticist. In reality, I'm probably one of the best dancers you’ll see at 2am.
+			</p>
+
+			<div class="tags">
+				<span class="tag"
+					  ng-style="{
+					  	'background-color': '{{getTagColor(skill)}}'
+					  }"
+					  ng-class="'weight-' + skill.weight"
+					  ng-repeat="(key, skill) in ::skills">
+					  {{::skill.label}}
+				</span>
+			</div>
+		</div>
+		<div class="card-footer" ng-click="disableFlip($event)">
+			<a class="socialLink clickable" ng-repeat="(key, site) in social" ng-click="navigateTo($event, site)">
+				<img ng-src="{{site.logo}}" />
+			</a>
+		</div>
+	</card:face>
+</card>

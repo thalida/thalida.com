@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="25px" height="21px" viewBox="0 0 25 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="card" sketch:type="MSArtboardGroup" transform="translate(-203.000000, -546.000000)" fill="#000000">
+            <g id="card-back" sketch:type="MSLayerGroup" transform="translate(18.000000, 71.000000)">
+                <g id="nightowl" sketch:type="MSShapeGroup">
+                    <g id="social" transform="translate(80.000000, 472.000000)">
+                        <path d="M127.65625,6.1171875 L129.21875,3 L126.875,4.559375 L126.417187,4.7875 C125.485938,3.703125 124.121875,3 122.578125,3 C119.773438,3 117.5,4.878125 117.5,7.6765625 C117.5,8.05625 117.55,8.8140625 117.629688,9.1703125 L117.5,9.234375 C117.5,9.234375 107.34375,7.6765625 106.5625,3.7796875 C106.5625,3.7796875 104.21875,7.6765625 108.125,10.79375 C108.125,10.79375 106.5625,11.5734375 105.78125,10.79375 C105.78125,10.79375 105.78125,13.13125 109.6875,15.4703125 C109.6875,15.4703125 108.125,16.2484375 107.34375,15.4703125 C107.34375,15.4703125 110.46875,18.5859375 112.03125,18.5859375 C112.03125,18.5859375 112.03125,20.925 105,20.925 C105,20.925 113.889062,26.7671875 122.1875,20.1453125 C126.404687,16.7796875 127.432812,12.5125 127.489063,9.296875 C127.585938,8.9015625 127.65625,8.49375 127.65625,8.065625 L127.65625,7.6765625 L130,5.3375 L127.65625,6.1171875 L127.65625,6.1171875 Z" id="Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,10 @@
+<div class="card-container clickable"
+     ng-class="{
+     	'showBack': !isFrontShown,
+     	'stopAnimation': runAnimation == false
+     }"
+     ng-click="flipCard()"
+     ng-mouseenter="setAnimation( false )"
+     ng-mouseleave="setAnimation( true )">
+	<div class="card" ng-transclude></div>
+</div>
