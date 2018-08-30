@@ -1,21 +1,21 @@
 Title:          What’s on my desk
 Summary:        Dell Monitor, Pok3r Keyboard, NPKC Gradient Keycaps, Google Home, Gilded File Holder, Cermatic Trees Ring Dish, Apple Juice Jar
 Icon:           desk
-date_updated:   29-08-2018 15:11
+Date_Updated:   29-08-2018 22:22
 
-<img alt="Desk" src="/static/images/posts/desk/desk-29082018.jpg" class="img--block">
+<img alt="Birds eye view of my office desk" src="/static/images/posts/desk/desk-29082018.jpg" class="img--block">
 
 My overall look for my home office is one that's very clearly wood, white, copper, and pastel heavy. I wanted something that was clean and minimal, would work well when I'm coding, but would also work well when I'm writing, sketching, and crafting. Everything on my desk, with the exception of my monitor can tuck away at the edges giving me a lot of tablespace if I need it. _Everything_ serves a purpose and has a home.
 
 ---
 
 ## Tech
-<img alt="Desk tech" src="/static/images/posts/desk/desk-tech-29082018.jpg" class="img--block">
+<img alt="Closeup of the tech on my desk" src="/static/images/posts/desk/desk-tech-29082018.jpg" class="img--block">
 
 ### Monitor
-// image here
-// what I like
-// link to buy
+The [Dell UltraSharp 27" Monitor](https://www.dell.com/en-us/shop/dell-ultrasharp-27-infinityedge-monitor-u2717d/apd/210-ahgv/monitors-monitor-accessories) is pretty darn wonderful, I've been looking at monitors for a long time now, and never made the plunge until my partner suggested this one to me. I have more screen-realestate than I know how to deal with, and enough ports to plug in _all the things_.
+
+My desktop wallpaper is a photo from a trip a couple of years back to Zion National Park in Utah.
 
 ### Keyboard
 This year I finally ventured into the land of mechanical keyboards, and I gotta say I'm sad I waited so long. My current setup is a [Vortex Pok3r](https://mechanicalkeyboards.com/shop/index.php?l=product_list&c=165) 60% Keyboard with blue LEDs. I replaced the standard black case with a [walnut keyboard case](https://www.amazon.com/Wooden-Mechanical-Gaming-Keyboard-Compatible/dp/B06ZYMCJBR) (the wrist rest is included).
@@ -28,7 +28,7 @@ I have two speakers on my desk: a portable bluetooth speaker the [UE BOOM 2](htt
 ---
 
 ## Accessories
-<img alt="Desk accessories" src="/static/images/posts/desk/desk-accessories-29082018.jpg" class="img--block">
+<img alt="Close up of my desk accessories" src="/static/images/posts/desk/desk-accessories-29082018.jpg" class="img--block">
 
 ### The Everything Holder
 I'm using a [file holder](https://www.cb2.com/gilded-file-holder/s117718) from CB2 as my laptop, journals, _and_ letter holder. My journals for the past year and a half have been the ["Strange Ideas & Impure Thoughts"](https://www.mincingmockingbird.com/products/strange-ideas-impure-thoughts-journal) dot grid journals -- if you haven't guess it, these journals were the inspiration for my homepage header.
