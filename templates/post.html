@@ -39,7 +39,7 @@
     </div>
 
     {% set posts = next_posts %}
-    {% if posts|length > 1 %}
+    {% if posts|length >= 1 %}
     <div class="post_footer collection">
         <h2 class="collection__header header--secondary">More in {{ collection.meta.title | safe }}</h2>
         {% include "_partials/posts-grid.html" %}

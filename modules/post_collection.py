@@ -197,9 +197,12 @@ class PostCollection:
         next_posts = collection_posts[start_index:end_index]
 
         # If we don't have enough posts we've reached the end of the collection,
-        # loop back to the start and pull the reminder of post paths
+        # loop back to the start and pull the reminder of post paths.
         if len(next_posts) < amount:
-            reminder_index = amount - len(next_posts)
+            reminder_index = amount - len(next_posts) # number of missing posts
+            if reminder_index > curr_post_index:
+                reminder_index = curr_post_index
+
             next_posts.extend(collection_posts[0:reminder_index])
 
         return next_posts
@@ -373,7 +376,7 @@ class PostCollection:
 
         # Sort posts by date and title and return the paths in order
         sorted_posts = self._multikeysort(posts_meta, sort_cols, functions=sort_fns)
-        return [post['path'] for post in sorted_posts]
+        return [post['path'] for post in sorted_posts if not post['is_hidden']]
 
 
     def _format_meta(self, meta, path):
