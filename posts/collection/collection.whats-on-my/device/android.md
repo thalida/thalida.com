@@ -1,7 +1,7 @@
 Title:          What’s on my android
 Summary:        Smart Launcher, TwoPixel, DarkMatter, Walli, Rounded Corder, Dashlane, Trello, Mr. Binario
 Icon:           android
-date_updated:   26-08-2018 12:56
+Date_Updated:   29-08-2018 22:22
 
 ## Current Theme
 <img alt="Phone Home Screen" src="/static/images/posts/android/wom_android_homepage-25082018.png" class="img--inline screenshot--lgv20"><img alt="Phone Apps Screen" src="/static/images/posts/android/wom_android_apps-25082018.png" class="img--inline screenshot--lgv20">

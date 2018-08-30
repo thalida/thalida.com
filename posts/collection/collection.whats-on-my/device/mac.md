@@ -1,7 +1,7 @@
 Title:          What’s on my&nbsp;mac
 Summary:        Atom, Sublime, iTerm, Numi, Trello, Bear
 Icon:           laptop
-date_updated:   26-08-2018 15:40
+Date_Updated:   29-08-2018 22:22
 
 <img alt="Desktop Screenshot" src="/static/images/posts/mac/deskop-screenshot-26082018.png" class="img--block screenshot--mac">
 
