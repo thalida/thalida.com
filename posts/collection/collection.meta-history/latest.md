@@ -3,17 +3,7 @@ Summary:        Window: The site you're interacting with at this very moment.
 Subtext:        Present
 Date_Updated:   30-08-2018 10:08
 
-<img alt="Mac Desktop Screenshot" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
-
----
-
-## Built With
-  - Python 3:
-    * [Pipenv](https://pipenv.readthedocs.io/en/latest/)
-    * [Flask](http://flask.pocoo.org/docs/1.0/quickstart/)
-    * [Python Markdown](https://python-markdown.github.io/)
-  - [DarkSky](https://darksky.net/poweredby/)
-  - [Docker](https://www.docker.com/)
+<img alt="Screenshot of thalida.com: window version" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
 
 ---
 
@@ -54,8 +44,8 @@ Version 4 changed my list of posts into a grid, once again to provide more space
 
 _Note: As always the transition from static mockup to live site, resulted in changes to the design as I was able to interact and see it with real content._
 
-## Development
-### Server Side
+## How it Works
+### Posts Collection
 The most challening aspect of this site was creating the system to house my posts, the logic for the window is actually repurposed from other versions of my site.
 
 The posts collection system is built upon [Python Markdown](https://python-markdown.github.io/), there's an extension to add meta data, and this extension is a critical piece of how this version of thalida.com functions.
@@ -64,16 +54,22 @@ Each collection folder namespaced, for example the collection folder for this po
 ```md
 Title: Meta Timeline
 Summary: Explore the future, present, and past of thalida.com
-Visual_Index: 1
+Visual_Index: 1 // 0-indexed
 Sort_Posts_By: -path
 ```
 [View on github](https://github.com/thalida/thalida.com/tree/master/posts/collection/collection.meta-history)
 
-There's _a lot_ more supported meta keys available, in this case I wanted the Meta Timeline content to be the second collection shown `0-indexed`, and I wanted the posts in this collection to be sorted by path in reverse order.
+The meta data above says the Meta Timeline Collection to be the second one shown, and I wanted the posts in this collection to be sorted by their path in reverse order.
 
-There's a lot more magic✨ happening, and I'm hoping to split PostsCollection out into a seperate library with it's own writeup.
+There's a lot more magic✨ happening, and I'm hoping to split PostsCollection out into a seperate library with it's own soon.
 
-### Frontend
+### Window
+<img alt="Gif of the homepage window with clouds" src="/static/images/posts/meta-history/latest/cloudy.gif" class="img--inline img--50percent"><img alt="Gif of the homepage window with snow" src="/static/images/posts/meta-history/latest/snow.gif" class="img--inline img--50percent">
+The weather uses your current locations time and weather data in order to render a view of "outside". Even though the site is minimal elsewhere, I wanted to retain this live and dynamic to you aspect.
+
+The color of the sky is based on the current time of day for your location, I use the sunrise and sunset time more accurately depict the time of day. The weather data is fetched from [DarkSky](https://darksky.net/poweredby/)'s api, and I get your current location based on your IP address.
+
+### Frontend Styles
 The frontend for this version is a beautiful mess, I haven't worked without scss on a complex project in a long time, and I can 100% say I don't think I _ever_ want to do that again.
 
 Adding vendor prefixes manually, working without variables (css variables are coming though!), and not being able to use the scsss `&` all resulted in some very tedious styling.

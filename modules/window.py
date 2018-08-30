@@ -119,9 +119,14 @@ class Window:
             from_cookie = False
 
             # fallback latitute/longitude data
-            newyork_latlng = [40.7081, -73.9571]
-            tt_latlng = [10.65, -61.5167]
-            default_latlng = tt_latlng
+            test_latlngs = {
+                'newyork': [40.7081, -73.9571],
+                'hawaii': [19.8968, 155.5828],
+                'trinidad': [10.65, -61.5167],
+                'sweden': [60.1282, 18.6435],
+                'australia': [25.2744, 133.7751],
+            }
+            default_latlng = test_latlngs['australia']
 
             # Get the visitors IP and lat/lng for that IP
             ip = request.headers.get('X-Forwarded-For', request.remote_addr)
