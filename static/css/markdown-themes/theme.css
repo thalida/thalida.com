@@ -151,9 +151,9 @@
 .markdown-container .highlight,
 .markdown-container pre {
     font-family: 'Anonymous Pro', monospace;
-    white-space: pre;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    font-size: 0.9em;
+    padding: 0.1em 0.5em;
+    overflow: auto;
 }
 .markdown-container .keys {
     color: #1C2233;
@@ -235,7 +235,7 @@
     -ms-interpolation-mode: bicubic;
     vertical-align: middle;
 }
-.markdown-container img.screenshot--lgv20 {
+.markdown-container img.img--50percent {
     width: 49%;
     margin: 0 0.5%;
 }
