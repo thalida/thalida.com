@@ -30,14 +30,12 @@
                 </h3>
                 <p class="card__summary text--secondary">{{ post_meta.summary | safe | truncate(100, False, '...', 5)  }}</p>
                 <small class="card__details text--micro">
-                    {% if post_meta.is_external %}
+                    {% if post_meta.subtext %}
+                        {{ post_meta.subtext | safe }}
+                    {% elif post_meta.is_external %}
                         <span class="card__details--url">{{ post_meta.external_url }}</span>
                     {% elif post_meta.date_updated %}
-                        {% if post_meta.collection == 'meta-history' %}
-                            {{ post_meta.date_updated | datetime('%B %Y') }}
-                        {% else %}
-                            Updated on {{ post_meta.date_updated | datetime('post') }}
-                        {% endif %}
+                        Updated on {{ post_meta.date_updated | datetime('post') }}
                     {% elif post_meta.date_posted and not post_meta.is_default_date %}
                         Posted on {{ post_meta.date_posted | datetime('post') }}
                     {% endif %}

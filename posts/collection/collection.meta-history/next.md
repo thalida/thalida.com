@@ -1,6 +1,6 @@
 Title:          Next
-Summary:        Active development updates
-Visual_Index:   0
+Summary:        Active development branch of thalida.com, step into the future ✨
+Subtext:        Future
 
 // link to visit
 

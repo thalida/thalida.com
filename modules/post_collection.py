@@ -88,11 +88,14 @@ class PostCollection:
         self.META_DEFAULTS = {
             'visual_index':  (PostCollection._cast_to_int, None, ['index']),
             'title': (PostCollection._cast_to_string, "Untitled", []),
+            'summary': (PostCollection._cast_to_string, "", []),
+            'subtext': (PostCollection._cast_to_string, "", []),
             'date_posted': (PostCollection._cast_to_date, PostCollection._cast_to_date("2007-09-16"), ['date']),
             'date_updated': (PostCollection._cast_to_date, None, []),
             'image': (PostCollection._cast_to_string, "", []),
             'icons': (PostCollection._cast_to_list, [], ['icon']),
             'tags': (PostCollection._cast_to_list, [], ['tag']),
+            'sort_posts_by': (PostCollection._cast_to_list, [], []),
             'is_hidden': (PostCollection._cast_to_bool, False, ['hidden']),
             'is_draft': (PostCollection._cast_to_bool, False, ['draft']),
             'is_featured': (PostCollection._cast_to_bool, False, ['featured']),
@@ -256,7 +259,7 @@ class PostCollection:
         skipped_collections = []
 
         for collection_key, collection in collection_items:
-            collection['posts_in_order'] = self._sort_posts(collection['posts'])
+            collection['posts_in_order'] = self._sort_posts(collection['posts'], collection['meta']['sort_posts_by'])
 
             # Get the visual index for post and check that it's within the bounds
             # of the # of posts we have
@@ -349,7 +352,7 @@ class PostCollection:
     def _get_sort_title(self, meta):
         return meta['title'].lower()
 
-    def _sort_posts(self, post_paths):
+    def _sort_posts(self, post_paths, force_sort_by):
         """Sorts Posts
 
         Sorts pots by date and title
@@ -366,8 +369,10 @@ class PostCollection:
             'sort_title': self._get_sort_title
         }
 
+        sort_cols = force_sort_by + ['sort_visual_index', '-sort_date', 'sort_title']
+
         # Sort posts by date and title and return the paths in order
-        sorted_posts = self._multikeysort(posts_meta, ['sort_visual_index', '-sort_date', 'sort_title'], functions=sort_fns)
+        sorted_posts = self._multikeysort(posts_meta, sort_cols, functions=sort_fns)
         return [post['path'] for post in sorted_posts]
 
 
