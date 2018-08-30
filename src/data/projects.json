@@ -88,7 +88,7 @@
         "link": "/?space-only",
         "longDescription": [
             "This site was created for the <a href='https://twitter.com/jensimmons/status/943323088405581824' target='_blank'>#newwwyear</a> challange. I knew I wanted to recreate it in vue, with a new theme.",
-            "After a few back and forth interations, I came up with this. You can check out <a href='http://2017.thalida.com' target='_blank'>my old site</a> to compare the two.",
+            "After a few back and forth interations, I came up with this. You can check out <a href='http://2017-03--2017-12.thalida.com/' target='_blank'>my old site</a> to compare the two.",
             "The main content of my site didn't change much in style or content. The largest set of updates, outside of the under the hood change from angular to vue, were the updates to the space scene. ",
             "This Space Scene similar to the one on the previous iteration of this site, uses the current time, weather, and how often you've visited to create a scene that's unique for you."
         ]
