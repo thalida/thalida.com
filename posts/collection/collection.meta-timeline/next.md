@@ -22,7 +22,7 @@ http://next.thalida.com/ is where you can follow along with the development of t
 - [ ] Meta History
     * [x] Next
     * [x] Latest
-    * [ ] Jan 2018 - Aug 2018
+    * [x] Jan 2018 - Aug 2018
     * [ ] Dec 2017 - Jan 2018
     * [ ] Mar 2017 - Dec 2017
     * [ ] Aug 2016 - Mar 2017
