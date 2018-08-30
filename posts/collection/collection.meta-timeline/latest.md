@@ -5,9 +5,12 @@ Date_Updated:   30-08-2018 10:08
 
 <img alt="Screenshot of thalida.com: window version" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
 
+**Source:**
+https://github.com/thalida/thalida.com
+
 ---
 
-## Goals
+## Story
 I wanted to create a super minimal site, using no frontend frameworks, in order to force myself to improve my backend skills with Python and the Flask Framework.
 
 Also, I thought it'd  be interesting to see what it'd be like to create a site now without the benefits of scss and other compilers.
@@ -50,14 +53,14 @@ The most challening aspect of this site was creating the system to house my post
 
 The posts collection system is built upon [Python Markdown](https://python-markdown.github.io/), there's an extension to add meta data, and this extension is a critical piece of how this version of thalida.com functions.
 
-Each collection folder namespaced, for example the collection folder for this post is named: `collection.meta-history`. Inside the collection folder is a `_collection-meta.md` file with contents similar to this:
+Each collection folder namespaced, for example the collection folder for this post is named: `collection.meta-timeline`. Inside the collection folder is a `_collection-meta.md` file with contents similar to this:
 ```md
 Title: Meta Timeline
 Summary: Explore the future, present, and past of thalida.com
 Visual_Index: 1 // 0-indexed
 Sort_Posts_By: -path
 ```
-[View on github](https://github.com/thalida/thalida.com/tree/master/posts/collection/collection.meta-history)
+[View on github](https://github.com/thalida/thalida.com/tree/master/posts/collection/collection.meta-timeline)
 
 The meta data above says the Meta Timeline Collection to be the second one shown, and I wanted the posts in this collection to be sorted by their path in reverse order.
 
