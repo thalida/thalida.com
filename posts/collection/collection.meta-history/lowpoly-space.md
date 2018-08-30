@@ -1,0 +1,29 @@
+Title:          Lowpoly Space
+Summary:        Mar 2017 to Dec 2017
+Date_Updated:   12-2017
+
+// final screenshot of the site
+// link to visit
+
+## Goals
+// no frontend frameworks
+// challenge myself with python, flask, and docker
+
+## Concepts & Sketching
+// photos of sketch book
+// inspiration
+
+## Design
+// sketch videos
+// design process and versions
+// final version
+
+## Development
+// tools
+// challenges
+// iterations
+
+## Next Steps
+// code cleanup/readability
+// code review/learnings
+// auto deploy on push
