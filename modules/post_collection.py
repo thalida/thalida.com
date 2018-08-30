@@ -376,7 +376,11 @@ class PostCollection:
 
         # Sort posts by date and title and return the paths in order
         sorted_posts = self._multikeysort(posts_meta, sort_cols, functions=sort_fns)
+<<<<<<< HEAD
         return [post['path'] for post in sorted_posts if not post['is_hidden']]
+=======
+        return [post['path'] for post in sorted_posts]
+>>>>>>> master
 
 
     def _format_meta(self, meta, path):
