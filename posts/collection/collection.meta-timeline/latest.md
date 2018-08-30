@@ -72,6 +72,8 @@ The weather uses your current locations time and weather data in order to render
 
 The color of the sky is based on the current time of day for your location, I use the sunrise and sunset time more accurately depict the time of day. The weather data is fetched from [DarkSky](https://darksky.net/poweredby/)'s api, and I get your current location based on your IP address.
 
+I created all of the illustrations used in the window with [Sketch](https://www.sketchapp.com/).
+
 ### Frontend Styles
 The frontend for this version is a beautiful mess, I haven't worked without scss on a complex project in a long time, and I can 100% say I don't think I _ever_ want to do that again.
 
