@@ -340,6 +340,9 @@ class PostCollection:
                 return 0
         return sorted(items, key=cmp_to_key(comparer))
 
+    def _get_sort_visual_index(self, meta):
+        return meta['visual_index'] if meta['visual_index'] is not None else 999
+
     def _get_sort_date(self, meta):
         return meta['date_updated'] + ' Z' if meta.get('date_updated') is not None else meta['date_posted'] + ' A'
 
@@ -358,12 +361,13 @@ class PostCollection:
         posts_meta = [self.posts_meta[path] for path in post_paths]
 
         sort_fns = {
+            'sort_visual_index': self._get_sort_visual_index,
             'sort_date': self._get_sort_date,
             'sort_title': self._get_sort_title
         }
 
         # Sort posts by date and title and return the paths in order
-        sorted_posts = self._multikeysort(posts_meta, ['-sort_date', 'sort_title'], functions=sort_fns)
+        sorted_posts = self._multikeysort(posts_meta, ['sort_visual_index', '-sort_date', 'sort_title'], functions=sort_fns)
         return [post['path'] for post in sorted_posts]
 
 
