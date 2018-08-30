@@ -126,7 +126,7 @@ class Window:
                 'sweden': [60.1282, 18.6435],
                 'australia': [25.2744, 133.7751],
             }
-            default_latlng = test_latlngs['australia']
+            default_latlng = test_latlngs['newyork']
 
             # Get the visitors IP and lat/lng for that IP
             ip = request.headers.get('X-Forwarded-For', request.remote_addr)
@@ -144,6 +144,7 @@ class Window:
             current_weather['sunriseTime'] = daily_weather['sunriseTime']
             current_weather['sunsetTime'] = daily_weather['sunsetTime']
             current_weather['ip'] = ip
+            current_weather['lat_lng'] = [lat, lng]
 
         return {'current': current_weather, 'from_cookie': from_cookie}
 
