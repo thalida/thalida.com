@@ -1,7 +1,7 @@
 Title:          Latest
 Summary:        Window: The site you're interacting with at this very moment.
 Subtext:        Present
-Date_Updated:   30-08-2018 10:08
+Date_Updated:   30-08-2018 19:50
 
 <img alt="Screenshot of thalida.com: window version" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
 
