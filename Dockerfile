@@ -1,14 +1,4 @@
-from python:3.6
-
-MAINTAINER Thalida Noel "hello@thalida.com"
-
-WORKDIR /app/
-
-COPY Pipfile* /app/
-
-RUN pip install pipenv
-RUN pipenv install --system --deploy
-
-COPY . /app/
-
-CMD ["python", "app.py"]
+FROM php:5.6-apache
+RUN a2enmod rewrite
+COPY . /var/www/html
+RUN chmod -R 755 /var/www/html/

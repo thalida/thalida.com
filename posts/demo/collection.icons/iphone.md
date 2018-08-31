@@ -1,4 +1,0 @@
-Title:  iphone
-Icon:   iphone
-
-

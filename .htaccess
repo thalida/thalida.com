@@ -1,0 +1,15 @@
+# For security reasons, Option all cannot be overridden.
+#Options All -Indexes
+
+AddOutputFilter DEFLATE css js
+# ExpiresActive On
+# ExpiresByType application/x-javascript A2592000
+
+# <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf|woff)$">
+# Header set Expires "Tue, 1 Jan 2013 20:00:00 GMT"
+# </FilesMatch>
+
+RewriteEngine ON
+RewriteRule ^([a-z]+)([/]?)$ /index.php?page=$1 [L] #Main Page
+RewriteRule ^([a-z]+)/([a-zA-Z0-9\+]+)([/]?)$ /index.php?page=$1&filter=$2 [L]
+RewriteRule ^([a-z]+)/([a-zA-Z0-9\+]+)/([0-9]+)([/]?)$ /index.php?page=$1&filter=$2&num=$3 [L]
