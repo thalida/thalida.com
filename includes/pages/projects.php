@@ -21,20 +21,33 @@ if($filter == ''){
         </div>
     </div>
     <?
+    $gp_row = 8;
+	$gp_i = 1;
+	// was:
 	// $gp_query = "SELECT * FROM folio ORDER BY id DESC";
 	// $gp_result = mysql_query($gp_query);
 	// $gp_row = mysql_num_rows($gp_result);
 	// $gp_i = 0;
-	// while($gp_i < $gp_row){
-	// 	$gp_id = mysql_result($gp_result,$gp_i,"id");
-	// 	$gp_title = mysql_result($gp_result,$gp_i,"title");
-	// 	$gp_type = get_project_type(mysql_result($gp_result,$gp_i,"type"));
-	// 	$gp_medium = get_project_medium(mysql_result($gp_result,$gp_i,"medium"));
-	// 	$gp_status = get_project_status(mysql_result($gp_result,$gp_i,"status"));
-	// 	$gp_text = format_text(substr(remove_tags(mysql_result($gp_result,$gp_i,"text")), 0, 120)) . '...';
-	// 	$gp_tools = mysql_result($gp_result,$gp_i,"tools");
-	// 	$gp_date = format_date(mysql_result($gp_result,$gp_i,"date"));
-	//
+	while($gp_i < $gp_row){
+    	$gp_id = $gp_i;
+		$gp_title = "Lorem Ipsum";
+		$gp_type = get_project_type($gp_id % 3);
+		$gp_medium = get_project_medium($gp_id % 6);
+		$gp_status = get_project_status($gp_id % 3);
+		$gp_text = format_text(substr(remove_tags(" Icing sugar plum cake jujubes ice cream bear claw fruitcake macaroon marzipan. Marshmallow apple pie I love croissant I love I love soufflé. Lollipop candy pie croissant."), 0, 120)) . '...';
+		// $gp_tools = mysql_result($gp_result,$gp_i,"tools");
+		// $gp_date = format_date(mysql_result($gp_result,$gp_i,"date"));
+
+    	// 	was:
+    	// 	$gp_id = mysql_result($gp_result,$gp_i,"id");
+    	// 	$gp_title = mysql_result($gp_result,$gp_i,"title");
+    	// 	$gp_type = get_project_type(mysql_result($gp_result,$gp_i,"type"));
+    	// 	$gp_medium = get_project_medium(mysql_result($gp_result,$gp_i,"medium"));
+    	// 	$gp_status = get_project_status(mysql_result($gp_result,$gp_i,"status"));
+    	// 	$gp_text = format_text(substr(remove_tags(mysql_result($gp_result,$gp_i,"text")), 0, 120)) . '...';
+    	// 	$gp_tools = mysql_result($gp_result,$gp_i,"tools");
+    	// 	$gp_date = format_date(mysql_result($gp_result,$gp_i,"date"));
+    	//
     ?>
         <!--PROJECT LISTING-->
          <div class="row">
@@ -58,8 +71,8 @@ if($filter == ''){
         </div>
         <!--END PROJECT LISTING-->
         <?
-	// 	$gp_i ++;
-	// }
+		$gp_i += 1;
+	}
 	// if($gp_row == 0) redirect("/");
 
 } else if($filter == 'view' && $num != ''){
@@ -72,24 +85,44 @@ if($filter == ''){
  **************************************
  **************************************/
 
-	$vp_query = "SELECT * FROM folio WHERE id='$num'";
-	$vp_result = mysql_query($vp_query);
-	$vp_row = mysql_num_rows($vp_result);
+ // $vp_query = "SELECT * FROM folio WHERE id='$num'";
+ // $vp_result = mysql_query($vp_query);
+ // $vp_row = mysql_num_rows($vp_result);
+ //
+ // if($vp_row == 0) redirect("/projects");
 
-	if($vp_row == 0) redirect("/projects");
+     $vp_id = 7;
+     $vp_title = "HTML5 Interactive Dots";
+     $vp_type = get_project_type(1);
+     $vp_medium_num = 6;
+     $vp_medium = get_project_medium(6);
+     $vp_status = get_project_status(3);
+     $vp_text = format_long_text("Jelly pudding lemon drops. Pastry chocolate bar I love I love dessert danish pudding tootsie roll oat cake. Cotton candy candy jujubes pastry. Gummi bears pie brownie cheesecake sweet lemon drops I love cupcake. Cake gummi bears wafer brownie macaroon. Jelly beans powder soufflé marshmallow I love I love apple pie pudding. Gummies macaroon tootsie roll brownie soufflé. Candy canes I love caramels. Lollipop topping sweet roll. Cookie powder topping gingerbread muffin lemon drops sweet roll cupcake. Gummi bears pie candy canes chocolate biscuit candy canes jelly apple pie dessert. Croissant carrot cake bear claw cupcake jujubes sweet roll bear claw chocolate bar biscuit. Cake cake pastry. Pudding liquorice pudding candy canes topping.");
+     // $vp_tools = mysql_result($vp_result,0,"tools");
+     $vp_file = "background.js";
+     // $vp_date = format_date(mysql_result($vp_result,0,"date"));
+     // $vp_comment_query=mysql_query("SELECT * FROM comments WHERE post_id='$vp_id' && post_section='$page'");
+     $vp_comments_count = 10;
 
-	$vp_id = mysql_result($vp_result,0,"id");
-	$vp_title = mysql_result($vp_result,0,"title");
-	$vp_type = get_project_type(mysql_result($vp_result,0,"type"));
-	$vp_medium_num = mysql_result($vp_result,0,"medium");
-	$vp_medium = get_project_medium(mysql_result($vp_result,0,"medium"));
-	$vp_status = get_project_status(mysql_result($vp_result,0,"status"));
-	$vp_text = format_long_text(mysql_result($vp_result,0,"text"));
-	$vp_tools = mysql_result($vp_result,0,"tools");
-	$vp_file = mysql_result($vp_result,0,"file");
-	$vp_date = format_date(mysql_result($vp_result,0,"date"));
-	$vp_comment_query=mysql_query("SELECT * FROM comments WHERE post_id='$vp_id' && post_section='$page'");
-	$vp_comments_count=mysql_num_rows($vp_comment_query);
+    // was:
+    // $vp_query = "SELECT * FROM folio WHERE id='$num'";
+	// $vp_result = mysql_query($vp_query);
+	// $vp_row = mysql_num_rows($vp_result);
+    //
+	// if($vp_row == 0) redirect("/projects");
+    //
+	// $vp_id = mysql_result($vp_result,0,"id");
+	// $vp_title = mysql_result($vp_result,0,"title");
+	// $vp_type = get_project_type(mysql_result($vp_result,0,"type"));
+	// $vp_medium_num = mysql_result($vp_result,0,"medium");
+	// $vp_medium = get_project_medium(mysql_result($vp_result,0,"medium"));
+	// $vp_status = get_project_status(mysql_result($vp_result,0,"status"));
+	// $vp_text = format_long_text(mysql_result($vp_result,0,"text"));
+	// $vp_tools = mysql_result($vp_result,0,"tools");
+	// $vp_file = mysql_result($vp_result,0,"file");
+	// $vp_date = format_date(mysql_result($vp_result,0,"date"));
+	// $vp_comment_query=mysql_query("SELECT * FROM comments WHERE post_id='$vp_id' && post_section='$page'");
+	// $vp_comments_count=mysql_num_rows($vp_comment_query);
 	?>
     <!--VIEW PROJECT AREA-->
     <div class="row">

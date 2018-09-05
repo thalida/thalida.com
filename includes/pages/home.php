@@ -1,4 +1,19 @@
 <?
+$ft_id = 6;
+$ft_title = "Sheeply";
+$ft_subtitle = "Lorem Ipsum";
+$ft_type = get_thought_type(1);
+$ft_text = format_text(substr(remove_tags("Jelly pudding lemon drops. Pastry chocolate bar I love I love dessert danish pudding tootsie roll oat cake. Cotton candy candy jujubes pastry. Gummi bears pie brownie cheesecake sweet lemon drops I love cupcake. Cake gummi bears wafer brownie macaroon. Jelly beans powder soufflé marshmallow I love I love apple pie pudding. Gummies macaroon tootsie roll brownie soufflé. Candy canes I love caramels. Lollipop topping sweet roll. Cookie powder topping gingerbread muffin lemon drops sweet roll cupcake. Gummi bears pie candy canes chocolate biscuit candy canes jelly apple pie dessert. Croissant carrot cake bear claw cupcake jujubes sweet roll bear claw chocolate bar biscuit. Cake cake pastry. Pudding liquorice pudding candy canes topping."), 0, 120)) . '...';
+$ft_comments_count=10;
+
+$fp_id = 7;
+$fp_title = "HTML5 Interactive Dots";
+$fp_type = get_project_type(1);
+$fp_medium = get_project_medium(6);
+$fp_status = get_project_status(3);
+$fp_text = format_text(substr(remove_tags("Jelly pudding lemon drops. Pastry chocolate bar I love I love dessert danish pudding tootsie roll oat cake. Cotton candy candy jujubes pastry. Gummi bears pie brownie cheesecake sweet lemon drops I love cupcake. Cake gummi bears wafer brownie macaroon. Jelly beans powder soufflé marshmallow I love I love apple pie pudding. Gummies macaroon tootsie roll brownie soufflé. Candy canes I love caramels. Lollipop topping sweet roll. Cookie powder topping gingerbread muffin lemon drops sweet roll cupcake. Gummi bears pie candy canes chocolate biscuit candy canes jelly apple pie dessert. Croissant carrot cake bear claw cupcake jujubes sweet roll bear claw chocolate bar biscuit. Cake cake pastry. Pudding liquorice pudding candy canes topping."), 0, 120)) . '...';
+
+// was:
 // $ft_query="SELECT * FROM post ORDER BY id DESC";
 // $ft_result=mysql_query($ft_query);
 // $ft_id = mysql_result($ft_result,0,"id");
