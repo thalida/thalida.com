@@ -1,7 +1,2 @@
-FROM php
-
-WORKDIR /app/
-
-COPY . /app/
-
-CMD ["php", "-S", "0.0.0.0:8000"]
+FROM thalida/docker-php-apache:latest
+COPY --chown=755 . /var/www/html
