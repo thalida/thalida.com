@@ -1,2 +1,3 @@
 FROM thalida/docker-php-apache:latest
-COPY --chown=755 . /var/www/html
+COPY . /var/www/html
+RUN chmod -R 755 /var/www/html
