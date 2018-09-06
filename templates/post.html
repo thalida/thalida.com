@@ -15,20 +15,19 @@
     {% set collection = globals.all_collections[post.meta.collection] %}
     <div class="post_header">
     <div class="post_details">
-        {% set show_middot = True %}
+        <a class="link--secondary text--bold" href="/#collection-{{collection.key}}">#{{ collection.meta.title | safe }}</a>
         <span class="xtext--bold">
             {% if post.meta.subtext %}
+                <span class="text--middot">·</span>
                 {{ post.meta.subtext | safe }}
             {% elif post.meta.date_updated %}
+                <span class="text--middot">·</span>
                 {{ post.meta.date_updated | datetime('post') }}
             {% elif post.meta.date_posted and not post.meta.is_default_date %}
+                <span class="text--middot">·</span>
                 {{ post.meta.date_posted | datetime('post') }}
-            {% else %}
-                {% set show_middot = False %}
             {% endif %}
         </span>
-        {% if show_middot %}<span class="text--middot">·</span>{% endif %}
-        <a class="link--secondary text--bold" href="/#collection-{{collection.key}}">#{{ collection.meta.title | safe }}</a>
     </div>
         <h1 class="post_title header--secondary">{{ post.meta.title | safe }}</h1>
         <p class="post_summary text--primary">{{ post.meta.summary | safe }}</p>
