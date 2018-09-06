@@ -1,6 +1,7 @@
 <ol class="card-grid posts">
 {% for post_key in posts %}
     {% set post_meta = globals.all_posts_meta[post_key] %}
+    {% set collection = globals.all_collections[post_meta.collection] %}
     {% if not post_meta.is_hidden %}
         <li class="card-wrapper">
             <a
@@ -16,7 +17,10 @@
                 {% if post_meta.image %}
                     <div class="card__image" style="background-image:url({{ post_meta.image }})"></div>
                 {% endif %}
-                {% if post_meta.is_featured %}
+
+                {% if show_post_collection %}
+                    <small class="card__pre-header text--micro"><strong>#{{ collection.meta.title | safe }}</strong></small>
+                {% elif post_meta.is_featured %}
                     <small class="card__pre-header text--micro"><strong>Featured Post</strong></small>
                 {% endif %}
                 <h3 class="card__header header--tertiary">
