@@ -171,6 +171,7 @@ class PostCollection:
         """Get the Next Posts Paths in a Collection
 
         Given a post path get the next n (amount) posts in the collection
+        If no more posts in a collection, check the next collection, and repeat
 
         Arguments:
             curr_post_path {string} -- Path of the current post
@@ -183,29 +184,32 @@ class PostCollection:
         """
 
         # Get the current post by path
-        curr_post = self.get_post_by_path(curr_post_path)
+        return self._get_next_posts_overall(curr_post_path, amount, next_posts=[])
 
-        # Get the post collection data and find the post index in the collection
-        collection_posts = self.collections[curr_post['meta']['collection']]['posts_in_order']
-        curr_post_index = collection_posts.index(curr_post_path)
-
-        # Get the start and end index for the next set of posts
-        start_index = curr_post_index + 1
-        end_index = start_index + amount
-
-        # Splice the collection to get only the next posts
-        next_posts = collection_posts[start_index:end_index]
-
-        # If we don't have enough posts we've reached the end of the collection,
-        # loop back to the start and pull the reminder of post paths.
+    def _get_next_posts_overall(self, curr_post_path, amount, inclusive=False, next_posts=[]):
         if len(next_posts) < amount:
-            reminder_index = amount - len(next_posts) # number of missing posts
-            if reminder_index > curr_post_index:
-                reminder_index = curr_post_index
+            curr_post = self.get_post_by_path(curr_post_path)
+            collection_key = curr_post['meta']['collection']
+            collection_posts = self.collections[collection_key]['posts_in_order']
+            curr_post_index = collection_posts.index(curr_post['meta']['path'])
 
-            next_posts.extend(collection_posts[0:reminder_index])
+            # Get the start and end index for the next set of posts
+            start_index = curr_post_index if inclusive else curr_post_index + 1
+            end_index = start_index + (amount - len(next_posts))
 
-        return next_posts
+            print('==========',curr_post_path, start_index, end_index)
+
+            # Splice the collection to get only the next posts
+            next_posts.extend(collection_posts[start_index:end_index])
+
+        if len(next_posts) >= amount:
+            return next_posts[0:amount]
+        else:
+            curr_collection_idx = self.collections_order.index(collection_key)
+            next_collection_idx = curr_collection_idx + 1 if curr_collection_idx < len(self.collections_order) - 1 else 0
+            next_collection_key = self.collections_order[next_collection_idx]
+            post_path = self.collections[next_collection_key]['posts_in_order'][0]
+            return self._get_next_posts_overall(post_path, amount, inclusive=True, next_posts=next_posts)
 
     def _load(self):
         """Load Class Data
@@ -281,7 +285,13 @@ class PostCollection:
             tmp_collections_order = self._upsert(tmp_collections_order, collection_key)
 
         # We're done setting up the order of the collections, lets remove any lingering blanks (Nones)
-        self.collections_order = [c for c in tmp_collections_order if c is not None]
+        self.collections_order = [c for c in tmp_collections_order if self._is_valid_collection(c)]
+
+    def _is_valid_collection(self, collection_key):
+        is_valid_key = collection_key is not None
+        is_hidden = self.collections[collection_key]['meta']['is_hidden'] if is_valid_key else True
+        has_posts = len(self.collections[collection_key]['posts']) > 0 if is_valid_key else False
+        return is_valid_key and not is_hidden and has_posts
 
     def _get_filepaths(self):
         """Get all the files in our posts folder

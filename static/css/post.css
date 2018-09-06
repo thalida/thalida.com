@@ -18,13 +18,16 @@
         max-width: 800px;
         margin: 0 auto;
     }
-
     .post_footer {
         margin: 7.0rem 0 0;
-        padding: 3.5rem 0 0;
+        padding: 4rem 0 0;
         border-top: 4px solid #E5E6E7;
-        text-align: center;
     }
+        .post_footer .card-grid {
+            margin: 0;
+        }
 .collection__header {
     text-align: center;
 }
+
+.
