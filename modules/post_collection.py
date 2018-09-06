@@ -197,8 +197,6 @@ class PostCollection:
             start_index = curr_post_index if inclusive else curr_post_index + 1
             end_index = start_index + (amount - len(next_posts))
 
-            print('==========',curr_post_path, start_index, end_index)
-
             # Splice the collection to get only the next posts
             next_posts.extend(collection_posts[start_index:end_index])
 
