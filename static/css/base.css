@@ -46,6 +46,12 @@ a {
     text-decoration: none;
 }
 
+::selection {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #FFF433;
+}
+
 
 /*******************************************************************************
  * UTILITY STYLES
@@ -100,12 +106,12 @@ a {
  ******************************************************************************/
 .text--primary {
     font-size: 1.6em;
-    line-height: 1.5;
+    line-height: 1.6em;
 }
 
 .text--secondary {
     font-size: 1.4em;
-    line-height: 1.5;
+    line-height: 1.6em;
 }
 
 .text--micro {

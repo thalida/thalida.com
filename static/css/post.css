@@ -2,23 +2,14 @@
     .post_header {
         width: 90%;
         max-width: 800px;
-        margin: 7.0rem auto;
-    }
-    .post_title {
-        margin: 2rem auto;
-        line-height: 1em;
+        margin: 7.0rem auto 4rem;
     }
     .post_summary {
-        margin: 1rem auto;
-        text-align: center;
-        font-size: 2em;
+        margin: 0;
         font-weight: 300;
         color: rgba(28, 34, 51, 0.6);
     }
     .post_details {
-        margin: 1rem auto;
-        width: 100%;
-        text-align: center;
         font-weight: 300;
         font-size: 1.2em;
     }

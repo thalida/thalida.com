@@ -64,7 +64,7 @@
 
 .markdown-container .section2,
 .markdown-container .section3 {
-    margin: 3.0rem 0;
+    margin: 4.0rem 0;
 }
 .markdown-container .section2:first-child,
 .markdown-container .section3:first-child {
@@ -81,20 +81,23 @@
     padding: 0;
     color: #1C2233;
     line-height: 1.1em;
-    font-weight: 700;
+    font-weight: 300;
 }
 .markdown-container h1,
 .markdown-container h2 {
-    font-size: 2em;
+    font-size: 1.8em;
  }
-.markdown-container h3 { font-size: 1.5em; }
-.markdown-container h4 { font-size: 1.3em; }
-.markdown-container h5 { font-size: 1.1em; }
-.markdown-container h6 { font-size: 0.9em; }
+.markdown-container h6 {
+    font-weight: 700;
+}
+.markdown-container h3 { font-size: 1.4em; }
+.markdown-container h4 { font-size: 1.2em; }
+.markdown-container h5 { font-size: 1.0em; }
+.markdown-container h6 { font-size: 0.8em; }
 
 .markdown-container p {
     margin: 0.5rem 0 1.5rem 0;
-    line-height: 1.5;
+    line-height: 1.8em;
 }
 
 .markdown-container blockquote {
