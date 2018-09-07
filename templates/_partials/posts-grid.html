@@ -5,7 +5,7 @@
     {% if not post_meta.is_hidden %}
         <li class="card-wrapper">
             <a
-                class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured%} post--featured{% endif %}"
+                class="card post {% if post_meta.is_external%} post--external{% endif %}{% if post_meta.is_featured and not show_post_collection %} post--featured{% endif %}"
                 {% if post_meta.is_external %}
                     href="{{ post_meta.external_url | safe }}?t={{post_meta.date_updated or post_meta.date_posted | datetime('iso')}}"
                     target="_blank"
