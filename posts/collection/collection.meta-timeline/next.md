@@ -1,7 +1,7 @@
 Title:          Next
 Summary:        Active development branch of thalida.com, step into the future ✨
 Subtext:        Future
-Date_Updated:   30-08-2018 19:50
+Date_Updated:   06-09-2018 20:55
 
 ## What is Next?
 http://next.thalida.com/ is where you can follow along with the development of thalida.com. It's the staging enviroment for thalida.com where you can checkout what'll soon be applied to the site, and possibly get an early glance at any new themes.
@@ -29,7 +29,7 @@ http://next.thalida.com/ is where you can follow along with the development of t
     * [x] 2015
     * [x] 2014
     * [x] 2013
-    * [ ] Find mocks of all older versions
+    * [x] Find mocks of all older versions
 - [ ] Ideas: Collection of my random app/site/project ideas
     * [ ] Fiary
     * [ ] Mapdo

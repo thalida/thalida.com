@@ -273,23 +273,9 @@ a {
     text-align: center;
 }
     .header__link {
-        margin: 0;
-        padding: 0;
-        color: #1C2233;
+        padding: 0.3em 0;
         font: normal 400 1.8em 'Arbutus Slab', serif;
-        line-height: 2em;
-        text-decoration: none;
-    }
-    .header__link:before,
-    .header__link:after {
-        content: "";
-        display: inline-block;
-        width: 1.6em;
-        height: 0.25em;
-        margin: 0 0.3em;
-        border-radius: 0.3em;
-        vertical-align: middle;
-        background-color: #E5E6E7;
+        line-height: 1em;
     }
 
 /* Footer

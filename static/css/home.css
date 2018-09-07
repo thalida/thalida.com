@@ -915,16 +915,13 @@
         background-size: contain;
         background-repeat: no-repeat;
     }
-    @media (min-width: 51.8em) {
-        .about-section__content {
-          -webkit-columns: 2 20rem;
-                  columns: 2 20rem;
-          -webkit-column-gap: 2.5rem;
-                  column-gap: 2.5rem;
-        }
+    .about-section__content {
+        width: 100%;
+        max-width: 60.0em;
+        margin: 0 auto;
     }
     .about-section__text {
-        margin: 0.5rem 0 1.5rem 0;
+        margin: 1.5rem 0;
     }
     .about-section__list {
         -webkit-column-break-inside: avoid;

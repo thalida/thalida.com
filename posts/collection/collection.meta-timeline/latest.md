@@ -1,9 +1,12 @@
-Title:          Latest
+Title:          2018 v2: Latest
 Summary:        Window: The site you're interacting with at this very moment.
 Subtext:        Present
-Date_Updated:   30-08-2018 19:50
+Date_Updated:   06-09-2018 20:40
 
 <img alt="Screenshot of thalida.com: window version" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
+**Visit:**
+http://2018-v2.thalida.com
+http://thalida.com
 
 **Source:**
 https://github.com/thalida/thalida.com
@@ -45,7 +48,7 @@ Version 1 of my initial design alinged the most with my favorite concept sketche
 
 Version 4 changed my list of posts into a grid, once again to provide more space for a growing list of posts, and I also added link and post hover styles. (The missing version 3 was very similar to version 4 without link styles.) Version 5 introduced the concept of collections of posts, each with their own title and summary.
 
-_Note: As always the transition from static mockup to live site, resulted in changes to the design as I was able to interact and see it with real content._
+_Note: As always the transition from static mockup to live site resulted in changes to UI as I was able to fully interact with it and see it with live content._
 
 ## How it Works
 ### Posts Collection
