@@ -14,8 +14,14 @@ now = datetime.now()
 work_history = [
     {
         'company': 'Etsy',
-        'title': 'Engineering Manager on Discovery',
-        'dates': [utils.format_datetime('May 2017'), None],
+        'title': 'Product Engineering Manager',
+        'dates': [utils.format_datetime('July 2018'), None],
+        'is_hiring': True
+    },
+    {
+        'company': 'Etsy',
+        'title': 'Product Engineer',
+        'dates': [utils.format_datetime('May 2017'), utils.format_datetime('July 2018'),],
         'is_hiring': True
     },
     {
