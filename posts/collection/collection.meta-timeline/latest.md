@@ -6,8 +6,8 @@ Date_Updated:   06-09-2018 20:40
 <img alt="Screenshot of thalida.com: window version" src="/static/images/posts/meta-history/latest/screenshot.png" class="img--block">
 
 **Visit:**
-http://2019.thalida.me
-http://thalida.me
+https://2019.thalida.me
+https://thalida.me
 
 **Source:**
 https://github.com/thalida/thalida.com

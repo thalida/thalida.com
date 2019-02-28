@@ -4,7 +4,7 @@ Subtext:        Future
 Date_Updated:   06-09-2018 20:55
 
 ## What is Next?
-http://next.thalida.me/ is where you can follow along with the development of thalida.com. It's the staging enviroment for thalida.com where you can checkout what'll soon be applied to the site, and possibly get an early glance at any new themes.
+https://next.thalida.me/ is where you can follow along with the development of thalida.com. It's the staging enviroment for thalida.com where you can checkout what'll soon be applied to the site, and possibly get an early glance at any new themes.
 
 ## Things to Do
 - [ ] CSS Cleanup
