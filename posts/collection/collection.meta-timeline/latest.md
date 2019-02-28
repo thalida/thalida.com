@@ -7,7 +7,7 @@ Date_Updated:   06-09-2018 20:40
 
 **Visit:**
 http://2019.thalida.me
-http://thalida.com
+http://thalida.me
 
 **Source:**
 https://github.com/thalida/thalida.com
