@@ -17,6 +17,18 @@ https://next.thalida.me/ is where you can follow along with the development of t
     * [ ] Split into proper library
     * [ ] Move to seperate repo
     * [ ] Wiki & Documentation
+- [ ] Fix all mixed content warnings on sites
+    * [ ] 2012
+    * [ ] 2013-v1
+    * [ ] 2013-v2
+    * [ ] 2014
+    * [ ] 2015
+    * [ ] 2016
+    * [ ] 2017-v1
+    * [ ] 2017-v2
+    * [ ] 2018-v1
+    * [ ] 2018-v2
+
 
 ## Feedback & Ideas
 Have feedback or idea an idea for the next version for my site? Want to request I work on something? Head to my github and submit an issue! https://github.com/thalida/thalida.com
