@@ -43,8 +43,8 @@ FONTS USED:
     <!--===== REQUIRED SCRIPTS =====-->
     <script>document.cookie='resolution='+Math.max(screen.width,screen.height)+'; path=/';</script>
 	<script src="/includes/js/css3-mediaqueries.js" type="text/javascript"></script> <!-- CSS3 MEDIA QUERIES SUPPORT -->
-    <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script> <!-- LATEST VERSION OF JQUERY -->
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script> <!-- JQUERY UI -->
+    <script src="//code.jquery.com/jquery-latest.js" type="text/javascript"></script> <!-- LATEST VERSION OF JQUERY -->
+    <script src="//code.jquery.com/ui/1.9.2/jquery-ui.js"></script> <!-- JQUERY UI -->
 </head>
 <body>
 	<noscript>
@@ -64,7 +64,7 @@ FONTS USED:
 			<p>I apologize for any inconvience this has caused, Thalida.</p>
 			<a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">Check out Google Chrome</a>
 			<a href="https://www.mozilla.org/en-US/firefox/fx/#desktop" target="_blank">Check out Firefox</a>
-			<a href="http://windows.microsoft.com/en-US/internet-explorer/download-ie" target="_blank">Check out Internet Explorer 9</a>
+			<a href="//windows.microsoft.com/en-US/internet-explorer/download-ie" target="_blank">Check out Internet Explorer 9</a>
 		</div>
 	</noscript>
 	<!--===== WRAPPER USED TO ADD CUSTOM SCROLLBAR (WOOT! NO MORE UGLY SCROLLBARS!) =====-->
