@@ -18,10 +18,10 @@ require('includes/get_page.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<!--[if lte IE 9]><link type="text/css" rel="stylesheet" href="/includes/css/ie.css" media="screen" /><![endif]-->
 	<link rel="stylesheet" href="/includes/css/1140.css" type="text/css" media="screen" />
-    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700" />
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" />
     <link type="text/css" rel="stylesheet" href="/includes/css/style.css" media="screen" />
 
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-latest.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript"></script>
 </head>
 <body>
