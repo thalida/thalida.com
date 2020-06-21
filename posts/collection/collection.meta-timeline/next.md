@@ -4,31 +4,10 @@ Subtext:        Future
 Date_Updated:   06-09-2018 20:55
 
 ## What is Next?
-https://next.thalida.me/ is where you can follow along with the development of thalida.com. It's the staging enviroment for thalida.com where you can checkout what'll soon be applied to the site, and possibly get an early glance at any new themes.
+https://next.thalida.me/ is how you can follow along with the development of thalida.com. It's the staging enviroment for thalida.com where you can checkout what I'm exploring as the next iteration of the site.
 
-## Things to Do
-- [ ] CSS Cleanup
-    * [ ] Simplfy/cleanup selectors
-    * [ ] Manually re-run through autoprefixer
-- [ ] Python Cleanup
-    * [ ] Properly document `window.py`
-    * [ ] Properly document `post_collection.py`
-- [ ] Post Collection
-    * [ ] Split into proper library
-    * [ ] Move to seperate repo
-    * [ ] Wiki & Documentation
-- [ ] Fix all mixed content warnings on sites
-    * [ ] 2012
-    * [ ] 2013-v1
-    * [ ] 2013-v2
-    * [ ] 2014
-    * [ ] 2015
-    * [ ] 2016
-    * [ ] 2017-v1
-    * [ ] 2017-v2
-    * [ ] 2018-v1
-    * [ ] 2018-v2
-
+## What's next
+A website/portfolio that mimics a terminal.
 
 ## Feedback & Ideas
 Have feedback or idea an idea for the next version for my site? Want to request I work on something? Head to my github and submit an issue! https://github.com/thalida/thalida.com
