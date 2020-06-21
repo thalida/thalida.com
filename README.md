@@ -1,1 +1,0 @@
-# thalida.com
