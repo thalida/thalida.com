@@ -1,0 +1,29 @@
+version: '3'
+services:
+  reverse-proxy:
+    # The official v2 Traefik docker image
+    image: traefik:v2.2
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker
+    ports:
+      # The HTTP port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  tsh:
+    image: thalida/tsh:latest
+    labels:
+      - "traefik.http.services.tsh.loadBalancer.server.port=5000"
+      - "traefik.http.routers.tsh.priority=1"
+      - "traefik.http.routers.tsh.rule=PathPrefix(`/`)"
+
+  demo:
+    image: thalida/demo:latest
+    labels:
+      - "traefik.http.services.demo.loadBalancer.server.port=5000"
+      - "traefik.http.routers.demo.priority=2"
+      - "traefik.http.routers.demo.rule=PathPrefix(`/demo`)"
