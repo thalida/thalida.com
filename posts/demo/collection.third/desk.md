@@ -1,3 +1,0 @@
-Title:          Here's a post
-Summary:        Summary of this what's on
-Date:           2018-06-03

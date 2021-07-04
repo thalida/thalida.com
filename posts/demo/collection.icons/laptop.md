@@ -1,4 +1,0 @@
-Title:  laptop
-Icons:   laptop
-
-

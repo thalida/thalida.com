@@ -1,4 +1,0 @@
-Title:  camera
-Icons:   camera
-
-
