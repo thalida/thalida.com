@@ -18,12 +18,12 @@ class GithubApi:
 
     self.fetch_repos_cursor = None
     self.fetch_repos_query = """
-      query ($after_cursor:String) {
+      query ($owner:String!, $after_cursor:String) {
         rateLimit {
           remaining
           used
         }
-        repositoryOwner(login: "thalida") {
+        repositoryOwner(login: $owner) {
           repositories(ownerAffiliations: OWNER, isFork: false, isLocked: false, orderBy: {field: UPDATED_AT, direction: DESC}, first: 10, after:$after_cursor) {
             pageInfo {
               hasNextPage
@@ -52,12 +52,12 @@ class GithubApi:
 
     self.fetch_commits_cursor = None
     self.fetch_commits_query = """
-      query ($repo_name:String!, $after_cursor:String) {
+      query ($owner:String!, $repo_name:String!, $after_cursor:String) {
         rateLimit {
           remaining
           used
         }
-        repository(name: $repo_name, owner: "thalida") {
+        repository(name: $repo_name, owner: $owner) {
           defaultBranchRef {
             target {
               ... on Commit {
@@ -96,7 +96,8 @@ class GithubApi:
 
   def fetch_repos(self):
     variables = {
-        "after_cursor": self.fetch_repos_cursor
+      "owner": "thalida",
+      "after_cursor": self.fetch_repos_cursor
     }
 
     try:
@@ -114,6 +115,7 @@ class GithubApi:
 
   def fetch_commits_by_repo(self, repo_name):
     variables = {
+      "owner": "thalida",
       "repo_name": repo_name,
       "after_cursor": self.fetch_commits_cursor,
     }

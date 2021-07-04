@@ -20,9 +20,11 @@ class Repos:
         self.repos = {}
         self.highlights = {}
         self.aggregates = {}
+        self.averages = {}
 
     def fetch(self):
         now = time.time()
+
         if self.last_fetched_at is not None and now < self.last_fetched_at + self.cache_ttl:
             print("using cached repos data")
             return
@@ -63,6 +65,13 @@ class Repos:
 
                 self.aggregates[key] += aggregate
 
+            for key, average in self.repos[repo_id].averages.items():
+                if key not in self.averages:
+                    self.averages[key] = average
+                    continue
+
+                self.averages[key] = (self.averages[key] + average) / 2
+
     
     def simple_dump(self):
         data = {
@@ -70,6 +79,7 @@ class Repos:
             "cache_ttl": self.cache_ttl,
             "highlights": self.highlights,
             "aggregates": deepcopy(self.aggregates),
+            "averages": deepcopy(self.averages),
             "repos": { id: repo.simple_dump() for id, repo in self.repos.items() },
         }
         data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(50)

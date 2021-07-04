@@ -30,11 +30,16 @@ class Repo:
         self.metadata["is_homepage_up"] = helpers.get_is_url_up(self.metadata.get("homepageUrl"))
 
         self.commits = {}
+
+        num_languages = len(self.metadata.get("languages"))
         self.highlights = {
-            "most_languages": { "count": len(self.metadata.get("languages")) },
+            "most_languages": { "count": num_languages },
         }
         self.aggregates = {
             "language_counts": Counter([lang["name"] for lang in self.metadata.get("languages")]),
+        }
+        self.averages = {
+            "num_languages": num_languages,
         }
 
         self.fetch_commits()
@@ -79,6 +84,13 @@ class Repo:
                     continue
 
                 self.aggregates[key] += aggregate
+
+            for key, average in self.commits[commit_id].averages.items():
+                if key not in self.averages:
+                    self.averages[key] = average
+                    continue
+
+                self.averages[key] = (self.averages[key] + average) / 2
             
             self.prev_commit = self.commits[commit_id]
 
@@ -92,6 +104,20 @@ class Repo:
         }
 
         data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(50)
+
+        return data
+
+    def full_dump(self):
+        data = {
+            "id": self.id,
+            "metadata": deepcopy(self.metadata),
+            "highlights": deepcopy(self.highlights),
+            "aggregates": deepcopy(self.aggregates),
+            "averages": deepcopy(self.averages),
+            "commits": { id: commit.simple_dump() for id, commit in self.commits.items() },
+        }
+
+        data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(100)
 
         return data
 
