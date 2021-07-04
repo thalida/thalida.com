@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-cors = "*"
+requests = "*"
+python-dotenv = "*"
+emoji = "*"
+nltk = "*"
+python-dateutil = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
