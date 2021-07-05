@@ -5,4 +5,4 @@ __pycache__/
 .env
 .DS_Store
 .sublime/
-.github_cache/
+.cache/

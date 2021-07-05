@@ -7,10 +7,11 @@ from dateutil.parser import parse
 import nltk
 
 # App
-import helpers
+import github.helpers
 
 class Commit:
     def __init__(self, source, prev_commit=None):
+        self.prev_commit = prev_commit
         self.id = source["id"]
         self.metadata = {
             "oid": source["oid"],
@@ -22,17 +23,19 @@ class Commit:
             "url": source["url"],
         }
 
-        self.prev_commit = prev_commit
+        self.insights = self.setup_insights()
+    
+    def setup_insights(self):
         commit_gap = (self.prev_commit.metadata.get("commited_on") - self.metadata.get("commited_on")).total_seconds() if self.prev_commit else None
         
-        found_emoji = helpers.get_emoji(self.metadata.get("message"))
+        found_emoji = github.helpers.get_emoji(self.metadata.get("message"))
         num_emojis = len(found_emoji)
 
-        meaningful_words = helpers.get_meaningful_words(self.metadata.get("message"))
+        meaningful_words = github.helpers.get_meaningful_words(self.metadata.get("message"))
         message_length = len(self.metadata.get("message"))
         num_meaninful_words = len(meaningful_words)
 
-        self.highlights = {
+        highlights = {
             "longest_commit_gap": { "count": commit_gap, "comparison": "ge", "used_prev": True },
             "shortest_commit_gap": { "count": commit_gap, "comparison": "le", "used_prev": True },
             "most_additions": { "count": self.metadata.get("additions") },
@@ -48,19 +51,29 @@ class Commit:
             "most_emojis": { "count": num_emojis },
         }
 
-        self.aggregates = {
+        aggregates = {
             "num_emojis": num_emojis,
             "emoji_counts": Counter(found_emoji),
-            "word_freq": nltk.FreqDist(meaningful_words),
         }
 
-        self.averages = {
+        frequencies = {
+            "commit_words": nltk.FreqDist(meaningful_words),
+        }
+
+        averages = {
             "commit_gap": commit_gap if commit_gap else 0,
             "additions": self.metadata.get("additions"),
             "deletions": self.metadata.get("deletions"),
             "changed_files": self.metadata.get("changed_files"),
             "message_length": message_length,
             "num_meaninful_words": num_meaninful_words,
+        }
+
+        return {
+            "highlights": highlights,
+            "averages": averages,
+            "aggregates": aggregates,
+            "frequencies": frequencies,
         }
 
     def simple_dump(self):

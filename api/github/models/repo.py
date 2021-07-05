@@ -8,12 +8,12 @@ from dateutil.parser import parse
 import nltk
 
 # App
-from github import GithubApiError
-import helpers
-from .commit import Commit
+import github.errors
+import github.helpers
+from github.models.commit import Commit
 
 class Repo:
-    def __init__(self, source, api, cache_ttl=0):
+    def __init__(self, source, api, cache_ttl=github.helpers.DEFAULT_INSIGHTS_CACHE_TTL):
         self.api = api
         self.last_fetched_at = None
         self.cache_ttl = cache_ttl
@@ -30,39 +30,51 @@ class Repo:
             "total_commits": source["defaultBranchRef"]["target"]["history"]["totalCount"],
             "total_branches": source["refs"]["totalCount"],
         }
-        self.metadata["is_homepage_up"] = helpers.get_is_url_up(self.metadata.get("homepageUrl"))
-
+        self.metadata["is_homepage_up"] = github.helpers.get_is_url_up(self.metadata.get("homepageUrl"))
         self.branches = [edge["node"]["name"] for edge in source["refs"]["edges"]]
         self.commits = {}
+        self.insights = self.setup_insights()
+        self.prev_commit = None
+        self.fetch_commits()
 
+    def setup_insights(self):
         num_languages = len(self.metadata.get("languages"))
-        self.highlights = {
+
+        highlights = {
             "most_languages": { "count": num_languages },
             "most_commits": { "count": self.metadata.get("total_commits") },
             "fewest_commits": { "count": self.metadata.get("total_commits"), "comparison": "le" },
             "most_branches": { "count": self.metadata.get("total_branches") },
             "fewest_branches": { "count": self.metadata.get("total_branches"), "comparison": "le" },
         }
-        self.aggregates = {
+
+        aggregates = {
             "language_counts": Counter([lang["name"] for lang in self.metadata.get("languages")]),
             "total_commits": self.metadata.get("total_commits"),
             "total_branches": self.metadata.get("total_branches"),
-            "branch_freq": nltk.FreqDist(self.branches),
         }
-        self.averages = {
+
+        frequencies = {
+            "branch_names": nltk.FreqDist(self.branches),
+        }
+
+        averages = {
             "num_languages": num_languages,
             "commits": self.metadata.get("total_commits"),
             "branches": self.metadata.get("total_branches"),
         }
-        
-        self.prev_commit = None
-        self.fetch_commits()
+
+        return {
+            "highlights": highlights,
+            "aggregates": aggregates,
+            "averages": averages,
+            "frequencies": frequencies,
+        }
 
     def fetch_commits(self):
         now = time.time()
 
         if self.last_fetched_at is not None and now < self.last_fetched_at + self.cache_ttl:
-            print("using cached data")
             return
 
         try:
@@ -71,17 +83,15 @@ class Repo:
             
             page = 1
             for res in responses:
-                print(f"Processing Commit Page: {page}")
                 new_commits = self.get_collection(res)
                 self.commits.update(new_commits)
                 page += 1
 
-            self.highlights = helpers.get_highlights(self.commits, self.highlights)
-            self.aggregates = helpers.get_aggregates(self.commits, self.aggregates)
-            self.averages = helpers.get_averages(self.commits, self.averages)
+            insights = github.helpers.generate_insights(self.commits)
+            github.helpers.deep_update(self.insights, insights)
 
-        except GithubApiError as e:
-            print(e)
+        except github.errors.GithubApiError as e:
+            raise
 
     def get_collection(self, response):
         raw_commits = response["data"]["repository"]["defaultBranchRef"]["target"]["history"]["nodes"]
@@ -107,15 +117,12 @@ class Repo:
         data = {
             "id": self.id,
             "metadata": deepcopy(self.metadata),
-            "highlights": deepcopy(self.highlights),
-            "aggregates": deepcopy(self.aggregates),
-            "averages": deepcopy(self.averages),
+            "insights": deepcopy(self.insights),
             "branches": deepcopy(self.branches),
             "commits": { id: commit.simple_dump() for id, commit in self.commits.items() },
         }
-
-        data["aggregates"]["branch_freq"] = data["aggregates"]["branch_freq"].most_common(5)
-        data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(100)
+        
+        data["insights"]["frequencies"] = github.helpers.get_top_frequencies(data["insights"]["frequencies"])
 
         return data
 

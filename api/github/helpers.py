@@ -1,6 +1,8 @@
 # Internal
+import collections
 from copy import deepcopy
 from functools import reduce
+import math
 import operator
 
 # External
@@ -10,11 +12,22 @@ import requests
 nltk.download("stopwords")
 nltk.download("punkt")
 
-DEFAULT_CACHE_SECS = 5 * 60 # 5 minutues
+DEFAULT_API_CACHE_TTL = 60 * 60 # 1 hour
+DEFAULT_INSIGHTS_CACHE_TTL = 30 * 60 # 30 minutes
+# DEFAULT_INSIGHTS_CACHE_TTL = 5 # 5 seconds
 
 # https://stackoverflow.com/a/46890853
 def deep_get(dictionary, keys, default=None):
     return reduce(lambda d, key: d.get(key, default) if isinstance(d, dict) else default, keys.split("."), dictionary)
+
+def deep_update(source, overrides):
+    for k, v in overrides.items():
+        if k in source:
+            source[k].update(v)
+        else:
+            source[k] = deepcopy(v)
+
+    return source
 
 def get_emoji(message):
     return emoji.get_emoji_regexp().findall(message)
@@ -32,14 +45,19 @@ def get_is_url_up(url):
     except Exception as e:
         return False
 
-def get_highlights(collection, highlights=None):
-    if highlights is None:
-        highlights = {}
+def generate_insights(collection):
+    return {
+        "highlights": get_highlights(collection),
+        "aggregates": get_aggregates(collection),
+        "averages": get_averages(collection),
+        "frequencies": get_frequencies(collection),
+    }
 
-    highlights = deepcopy(highlights)
+def get_highlights(collection):
+    highlights = {}
 
     for id, item_cls in collection.items():
-        for key, item_highlight in item_cls.highlights.items():
+        for key, item_highlight in item_cls.insights["highlights"].items():
             if item_highlight.get("count") is None:
                 continue
                 
@@ -49,9 +67,9 @@ def get_highlights(collection, highlights=None):
             
             if key_exists and not is_new_highlight:
                 continue
-            
+
             if key_exists and item_highlight["count"] == highlights[key]["count"]:
-                highlight_items = highlights[key]["items"]
+                highlight_items = deepcopy(highlights[key]["items"])
             else:
                 highlight_items = list()
             
@@ -64,14 +82,11 @@ def get_highlights(collection, highlights=None):
     
     return highlights
 
-def get_aggregates(collection, aggregates=None):
-    if aggregates is None:
-        aggregates = {} 
-
-    aggregates = deepcopy(aggregates)
-
+def get_aggregates(collection):
+    aggregates = {}
+    
     for id, item_cls in collection.items():
-        for key, item_aggregate in item_cls.aggregates.items():
+        for key, item_aggregate in item_cls.insights["aggregates"].items():
             if key not in aggregates:
                 aggregates[key] = item_aggregate
                 continue
@@ -80,14 +95,11 @@ def get_aggregates(collection, aggregates=None):
 
     return aggregates
 
-def get_averages(collection, averages=None):
-    if averages is None:
-        averages = {}
-
-    averages = deepcopy(averages)
+def get_averages(collection):
+    averages = {}
 
     for id, item_cls in collection.items():
-        for key, item_average in collection[id].averages.items():
+        for key, item_average in item_cls.insights["averages"].items():
             if key not in averages:
                 averages[key] = item_average
                 continue
@@ -95,3 +107,26 @@ def get_averages(collection, averages=None):
             averages[key] = (averages[key] + item_average) / 2
 
     return averages
+
+def get_frequencies(collection):
+    frequencies = {}
+    
+    for id, item_cls in collection.items():
+        for key, freq in item_cls.insights["frequencies"].items():
+            if key not in frequencies:
+                frequencies[key] = freq
+                continue
+
+            frequencies[key] += freq
+
+    return frequencies
+
+def get_top_frequencies(collection, top_percent=10, max=100):
+    top_collection = {}
+    
+    for key, freq in collection.items():
+        n = math.ceil(len(freq) * (top_percent / 100))
+        n = max if n > max else n
+        top_collection[key] = freq.most_common(n)
+
+    return top_collection
