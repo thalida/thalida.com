@@ -7,16 +7,17 @@ import operator
 
 # External
 from dateutil.parser import parse
-from nltk import FreqDist
+import nltk
 import requests
 
 # App
+from github import GithubApiError
 import helpers
-import github
 from .commit import Commit
 
 class Repo:
-    def __init__(self, source):
+    def __init__(self, source, api):
+        self.api = api
         self.id = source["id"],
         self.metadata = {
             "name": source["name"],
@@ -26,40 +27,52 @@ class Repo:
             "description": source["description"],
             "homepageUrl": source["homepageUrl"],
             "languages": [lang for lang in source["languages"]["nodes"]],
+            "total_commits": source["defaultBranchRef"]["target"]["history"]["totalCount"],
+            "total_branches": source["refs"]["totalCount"],
         }
         self.metadata["is_homepage_up"] = helpers.get_is_url_up(self.metadata.get("homepageUrl"))
 
+        self.branches = [edge["node"]["name"] for edge in source["refs"]["edges"]]
         self.commits = {}
 
         num_languages = len(self.metadata.get("languages"))
         self.highlights = {
             "most_languages": { "count": num_languages },
+            "most_commits": { "count": self.metadata.get("total_commits") },
+            "fewest_commits": { "count": self.metadata.get("total_commits"), "comparison": "le" },
+            "most_branches": { "count": self.metadata.get("total_branches") },
+            "fewest_branches": { "count": self.metadata.get("total_branches"), "comparison": "le" },
         }
         self.aggregates = {
             "language_counts": Counter([lang["name"] for lang in self.metadata.get("languages")]),
+            "total_commits": self.metadata.get("total_commits"),
+            "total_branches": self.metadata.get("total_branches"),
+            "branch_freq": nltk.FreqDist(self.branches),
         }
         self.averages = {
             "num_languages": num_languages,
+            "commits": self.metadata.get("total_commits"),
+            "branches": self.metadata.get("total_branches"),
         }
 
+        
+        self.prev_commit = None
         self.fetch_commits()
 
-    def fetch_commits(self, page=1):
-        if page == 1:
-            self.prev_commit = None
-
+    def fetch_commits(self):
         try:
-            res = github.api.fetch_commits_by_repo(self.metadata["name"])
-            self.parse_response(res, page=page)
+            res, page_info = self.api.fetch_next_page("commits", variables={"repo_name": self.metadata["name"]})
+            print(f'Processing Commits - Page {page_info["curr_page"]}')
             
-            if github.api.fetch_commits_cursor:
-                self.fetch_commits(page=page+1)
-        except github.GithubApiError as e:
+            self.parse_response(res)
+            
+            if page_info["hasNextPage"]:
+                self.fetch_commits()
+        
+        except GithubApiError as e:
             print(e)
 
-    def parse_response(self, response, page=1):
-        print(f'Processing Commits - Page {page}')
-
+    def parse_response(self, response):
         commits = response["data"]["repository"]["defaultBranchRef"]["target"]["history"]["nodes"]
         for commit in commits:
             commit_id = commit["id"]
@@ -111,11 +124,7 @@ class Repo:
         data = {
             "id": self.id,
             "metadata": deepcopy(self.metadata),
-            "highlights": deepcopy(self.highlights),
-            "aggregates": deepcopy(self.aggregates),
         }
-
-        data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(50)
 
         return data
 
@@ -126,9 +135,11 @@ class Repo:
             "highlights": deepcopy(self.highlights),
             "aggregates": deepcopy(self.aggregates),
             "averages": deepcopy(self.averages),
+            "branches": deepcopy(self.branches),
             "commits": { id: commit.simple_dump() for id, commit in self.commits.items() },
         }
 
+        data["aggregates"]["branch_freq"] = data["aggregates"]["branch_freq"].most_common(5)
         data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(100)
 
         return data

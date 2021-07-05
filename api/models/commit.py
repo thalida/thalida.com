@@ -69,7 +69,7 @@ class Commit:
         data = {
             "id": self.id,
             "metadata": deepcopy(self.metadata),
-            "prev_commit_id": self.prev_commit.get('id')
+            "prev_commit_id": self.prev_commit.id if self.prev_commit else None
         }
 
         return data

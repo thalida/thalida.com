@@ -1,9 +1,18 @@
+# Internal
+from functools import reduce
+
 # External
 import emoji
 import nltk
 import requests
 nltk.download("stopwords")
 nltk.download("punkt")
+
+DEFAULT_API_CACHE = 60 * 1000
+
+# https://stackoverflow.com/a/46890853
+def deep_get(dictionary, keys, default=None):
+    return reduce(lambda d, key: d.get(key, default) if isinstance(d, dict) else default, keys.split("."), dictionary)
 
 def get_emoji(message):
     return emoji.get_emoji_regexp().findall(message)

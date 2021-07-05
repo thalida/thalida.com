@@ -9,14 +9,17 @@ import urllib.request
 from nltk import FreqDist
 
 # App
-import github
+from github import GithubApiError
+import helpers
 from .repo import Repo
 
 class Repos:
-    def __init__(self):
+    def __init__(self, api):
+        self.api = api
         self.last_fetched_at = None
-        self.cache_ttl = 60 * 1000
+        self.cache_ttl = helpers.DEFAULT_API_CACHE
         
+        self.total_repos = 0
         self.repos = {}
         self.highlights = {}
         self.aggregates = {}
@@ -30,23 +33,26 @@ class Repos:
             return
 
         try:
-            res = github.api.fetch_repos()
+            res, page_info = self.api.fetch_next_page("repos")
             self.parse_response(res)
-            self.last_fetched_at = time.time()
             
-            if github.api.fetch_repos_cursor:
-                return self.fetch()
-            
-        except github.GithubApiError as e:
+            if page_info["hasNextPage"]:
+                self.fetch()
+            else:
+                self.last_fetched_at = time.time()
+
+        except GithubApiError as e:
             print(e)
 
     def parse_response(self, response):
-        repos = response["data"]["repositoryOwner"]["repositories"]["nodes"]
+        self.total_repos = response["data"]["repositoryOwner"]["repositories"]["totalCount"]
+        repos = [edge["node"] for edge in response["data"]["repositoryOwner"]["repositories"]["edges"]]
+
         for repo in repos:
             print(f"Processing Repo: {repo['name']}")
 
             repo_id = repo["id"]
-            self.repos[repo_id] = Repo(source=repo)
+            self.repos[repo_id] = Repo(api=self.api, source=repo)
 
             for key, highlight in self.repos[repo_id].highlights.items():
                 key_exists = key in self.highlights
@@ -91,8 +97,11 @@ class Repos:
             "highlights": self.highlights,
             "aggregates": deepcopy(self.aggregates),
             "averages": deepcopy(self.averages),
+            "total_repos": self.total_repos,
             "repos": { id: repo.simple_dump() for id, repo in self.repos.items() },
         }
+
+        data["aggregates"]["branch_freq"] = data["aggregates"]["branch_freq"].most_common(5)
         data["aggregates"]["word_freq"] = data["aggregates"]["word_freq"].most_common(50)
 
         return data
