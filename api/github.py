@@ -14,6 +14,7 @@ class GithubApiError(Exception):
 
 class GithubApi:
   def __init__(self):
+    self.owner = "thalida"
     self.headers = {"Authorization": f"bearer {os.getenv('GITHUB_TOKEN')}"} 
 
     self.fetch_repos_cursor = None
@@ -96,7 +97,7 @@ class GithubApi:
 
   def fetch_repos(self):
     variables = {
-      "owner": "thalida",
+      "owner": self.owner,
       "after_cursor": self.fetch_repos_cursor
     }
 
@@ -115,7 +116,7 @@ class GithubApi:
 
   def fetch_commits_by_repo(self, repo_name):
     variables = {
-      "owner": "thalida",
+      "owner": self.owner,
       "repo_name": repo_name,
       "after_cursor": self.fetch_commits_cursor,
     }

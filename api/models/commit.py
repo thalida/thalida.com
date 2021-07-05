@@ -24,9 +24,8 @@ class Commit:
             "url": source["url"],
         }
 
-        prev_commit_id = prev_commit.id if prev_commit else None
-        prev_commit_oid = prev_commit.metadata.get("oid") if prev_commit else None
-        commit_gap = (prev_commit.metadata.get("commited_on") - self.metadata.get("commited_on")).total_seconds() if prev_commit else None
+        self.prev_commit = prev_commit
+        commit_gap = (self.prev_commit.metadata.get("commited_on") - self.metadata.get("commited_on")).total_seconds() if self.prev_commit else None
         
         found_emoji = helpers.get_emoji(self.metadata.get("message"))
         num_emojis = len(found_emoji)
@@ -36,18 +35,18 @@ class Commit:
         num_meaninful_words = len(meaningful_words)
 
         self.highlights = {
-            "longest_commit_gap": { "count": commit_gap, "comparison": "gt", "prev_commit_id": prev_commit_id, "prev_commit_oid": prev_commit_oid },
-            "shortest_commit_gap": { "count": commit_gap, "comparison": "lt", "prev_commit_id": prev_commit_id, "prev_commit_oid": prev_commit_oid },
+            "longest_commit_gap": { "count": commit_gap, "comparison": "ge", "used_prev": True },
+            "shortest_commit_gap": { "count": commit_gap, "comparison": "le", "used_prev": True },
             "most_additions": { "count": self.metadata.get("additions") },
-            "fewest_additions": { "count": self.metadata.get("additions"), "comparison": "lt"},
+            "fewest_additions": { "count": self.metadata.get("additions"), "comparison": "le" },
             "most_deletions": { "count": self.metadata.get("deletions") },
-            "fewest_deletions": { "count": self.metadata.get("deletions"), "comparison": "lt"},
+            "fewest_deletions": { "count": self.metadata.get("deletions"), "comparison": "le" },
             "most_changed_files": { "count": self.metadata.get("changed_files") },
-            "fewest_deletions": { "count": self.metadata.get("changed_files"), "comparison": "lt"},
+            "fewest_deletions": { "count": self.metadata.get("changed_files"), "comparison": "le" },
             "longest_message": { "count": message_length },
-            "shortest_message": { "count": message_length, "comparison": "lt" },
+            "shortest_message": { "count": message_length, "comparison": "le" },
             "most_meaninful_words": { "count": num_meaninful_words },
-            "fewest_meaninful_words": { "count": num_meaninful_words, "comparison": "lt" },
+            "fewest_meaninful_words": { "count": num_meaninful_words, "comparison": "le" },
             "most_emojis": { "count": num_emojis },
         }
 
@@ -70,6 +69,7 @@ class Commit:
         data = {
             "id": self.id,
             "metadata": deepcopy(self.metadata),
+            "prev_commit_id": self.prev_commit.get('id')
         }
 
         return data

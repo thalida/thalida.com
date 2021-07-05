@@ -67,16 +67,28 @@ class Repo:
             self.commits[commit_id] = Commit(source=commit, prev_commit=self.prev_commit)
 
             for key, highlight in self.commits[commit_id].highlights.items():
-                found = key in self.highlights
-                has_count = highlight.get("count") is not None
-                operator_fn = getattr(operator, highlight.get("comparison", "gt"))
-                is_better = operator_fn(highlight["count"], self.highlights[key]["count"]) if found and has_count else False
-                if (not found and has_count) or (is_better):
-                    self.highlights[key] = {
-                        "commit_id": commit_id,
-                        "commit_oid": self.commits[commit_id].metadata['oid'],
-                        **highlight
-                    }
+                if highlight.get("count") is None:
+                    continue
+
+                key_exists = key in self.highlights
+                operator_fn = getattr(operator, highlight.get("comparison", "ge"))
+                is_new_highlight = operator_fn(highlight["count"], self.highlights[key]["count"]) if key_exists else False
+
+                if key_exists and not is_new_highlight:
+                    continue
+                
+                if key_exists and highlight["count"] == self.highlights[key]["count"]:
+                    highlight_commits = self.highlights[key]["commits"]
+                else:
+                    highlight_commits = list()
+                
+                highlight_commits.append(commit_id)
+
+                self.highlights[key] = {
+                    "count": highlight.get("count"),
+                    "comparison": highlight.get("comparison", "ge"),
+                    "commits": highlight_commits,
+                }
 
             for key, aggregate in self.commits[commit_id].aggregates.items():
                 if key not in self.aggregates:

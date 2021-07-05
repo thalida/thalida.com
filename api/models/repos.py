@@ -49,14 +49,25 @@ class Repos:
             self.repos[repo_id] = Repo(source=repo)
 
             for key, highlight in self.repos[repo_id].highlights.items():
-                found = key in self.highlights
-                operator_fn = getattr(operator, highlight.get("comparison", "gt"))
-                is_better = operator_fn(highlight["count"], self.highlights[key]["count"]) if found else False
-                if not found or is_better:
-                    self.highlights[key] = {
-                        "repo_id": repo_id,
-                        **highlight,
-                    }
+                key_exists = key in self.highlights
+                operator_fn = getattr(operator, highlight.get("comparison", "ge"))
+                is_new_highlight = operator_fn(highlight["count"], self.highlights[key]["count"]) if key_exists else False
+                
+                if key_exists and not is_new_highlight:
+                    continue
+                
+                if key_exists and highlight["count"] == self.highlights[key]["count"]:
+                    highlight_repos = self.highlights[key]["repos"]
+                else:
+                    highlight_repos = list()
+                
+                highlight_repos.append(repo_id)
+                
+                self.highlights[key] = {
+                    "count": highlight.get("count"),
+                    "comparison": highlight.get("comparison", "ge"),
+                    "repos": highlight_repos,
+                }
 
             for key, aggregate in self.repos[repo_id].aggregates.items():
                 if key not in self.aggregates:
