@@ -8,7 +8,7 @@ import requests
 nltk.download("stopwords")
 nltk.download("punkt")
 
-DEFAULT_API_CACHE = 60 * 1000
+DEFAULT_CACHE_SECS = 5 * 60 # 5 minutues
 
 # https://stackoverflow.com/a/46890853
 def deep_get(dictionary, keys, default=None):

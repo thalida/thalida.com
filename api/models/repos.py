@@ -17,7 +17,7 @@ class Repos:
     def __init__(self, api):
         self.api = api
         self.last_fetched_at = None
-        self.cache_ttl = helpers.DEFAULT_API_CACHE
+        self.cache_ttl = helpers.DEFAULT_CACHE_SECS
         
         self.total_repos = 0
         self.repos = {}

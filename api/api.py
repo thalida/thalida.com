@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 
-gh_api = GithubApi(owner="thalida", token=os.getenv('GITHUB_TOKEN'), cache_ttl=helpers.DEFAULT_API_CACHE)
+gh_api = GithubApi(owner="thalida", token=os.getenv('GITHUB_TOKEN'), cache_ttl=helpers.DEFAULT_CACHE_SECS)
 gh_api.add_query(
   query_name="repos",
   query="""
