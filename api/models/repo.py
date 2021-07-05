@@ -69,9 +69,12 @@ class Repo:
             responses = self.api.fetch_all("commits", variables={"repo_name": self.metadata["name"]})
             self.last_fetched_at = time.time()
             
+            page = 1
             for res in responses:
+                print(f"Processing Commit Page: {page}")
                 new_commits = self.get_collection(res)
                 self.commits.update(new_commits)
+                page += 1
 
             self.highlights = helpers.get_highlights(self.commits, self.highlights)
             self.aggregates = helpers.get_aggregates(self.commits, self.aggregates)

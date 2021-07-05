@@ -55,10 +55,13 @@ class GithubApi:
         hasNextPage = True
         all_res = []
         
+        page = 1
         while hasNextPage:
+          print(f"Fetching Page #{page} for {query_name}")
           res, page_info = self.fetch_next_page(query_name, variables)
           all_res.append(res)
           hasNextPage = page_info["hasNextPage"]
+          page += 1
         
         return all_res
     except GithubApiError as e:

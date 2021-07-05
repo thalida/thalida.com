@@ -29,7 +29,7 @@ gh_api.add_query(
         used
       }
       repositoryOwner(login: $owner) {
-        repositories(ownerAffiliations: OWNER, isFork: false, isLocked: false, orderBy: {field: UPDATED_AT, direction: DESC}, first: 10, after:$after_cursor) {
+        repositories(ownerAffiliations: OWNER, isFork: false, isLocked: false, orderBy: {field: UPDATED_AT, direction: DESC}, first: 20, after:$after_cursor) {
           pageInfo {
             hasNextPage
             endCursor
@@ -90,7 +90,7 @@ gh_api.add_query(
         defaultBranchRef {
           target {
             ... on Commit {
-              history(first: 50, after:$after_cursor) {
+              history(first: 100, after:$after_cursor) {
                 pageInfo {
                   endCursor
                   hasNextPage
