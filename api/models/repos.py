@@ -1,12 +1,6 @@
 # Python
 from copy import deepcopy
 import time
-import numbers
-import operator
-import urllib.request
-
-# External
-from nltk import FreqDist
 
 # App
 from github import GithubApiError
@@ -14,10 +8,10 @@ import helpers
 from .repo import Repo
 
 class Repos:
-    def __init__(self, api):
+    def __init__(self, api, cache_ttl=0):
         self.api = api
         self.last_fetched_at = None
-        self.cache_ttl = helpers.DEFAULT_CACHE_SECS
+        self.cache_ttl = cache_ttl
         
         self.total_repos = 0
         self.repos = {}
@@ -33,62 +27,30 @@ class Repos:
             return
 
         try:
-            res, page_info = self.api.fetch_next_page("repos")
-            self.parse_response(res)
+            responses = self.api.fetch_all("repos")
+            self.last_fetched_at = time.time()
+            self.total_repos = responses[0]["data"]["repositoryOwner"]["repositories"]["totalCount"]
             
-            if page_info["hasNextPage"]:
-                self.fetch()
-            else:
-                self.last_fetched_at = time.time()
+            for res in responses:
+                new_repos = self.get_collection(res)
+                self.repos.update(new_repos)
+
+            self.highlights = helpers.get_highlights(self.repos, self.highlights)
+            self.aggregates = helpers.get_aggregates(self.repos, self.aggregates)
+            self.averages = helpers.get_averages(self.repos, self.averages)
 
         except GithubApiError as e:
             print(e)
 
-    def parse_response(self, response):
-        self.total_repos = response["data"]["repositoryOwner"]["repositories"]["totalCount"]
-        repos = [edge["node"] for edge in response["data"]["repositoryOwner"]["repositories"]["edges"]]
+    def get_collection(self, response):
+        raw_repos = [edge["node"] for edge in response["data"]["repositoryOwner"]["repositories"]["edges"]]
+        collection = {}
 
-        for repo in repos:
+        for repo in raw_repos:
             print(f"Processing Repo: {repo['name']}")
+            collection[repo["id"]] = Repo(source=repo, api=self.api, cache_ttl=self.cache_ttl)
 
-            repo_id = repo["id"]
-            self.repos[repo_id] = Repo(api=self.api, source=repo)
-
-            for key, highlight in self.repos[repo_id].highlights.items():
-                key_exists = key in self.highlights
-                operator_fn = getattr(operator, highlight.get("comparison", "ge"))
-                is_new_highlight = operator_fn(highlight["count"], self.highlights[key]["count"]) if key_exists else False
-                
-                if key_exists and not is_new_highlight:
-                    continue
-                
-                if key_exists and highlight["count"] == self.highlights[key]["count"]:
-                    highlight_repos = self.highlights[key]["repos"]
-                else:
-                    highlight_repos = list()
-                
-                highlight_repos.append(repo_id)
-                
-                self.highlights[key] = {
-                    "count": highlight.get("count"),
-                    "comparison": highlight.get("comparison", "ge"),
-                    "repos": highlight_repos,
-                }
-
-            for key, aggregate in self.repos[repo_id].aggregates.items():
-                if key not in self.aggregates:
-                    self.aggregates[key] = aggregate
-                    continue
-
-                self.aggregates[key] += aggregate
-
-            for key, average in self.repos[repo_id].averages.items():
-                if key not in self.averages:
-                    self.averages[key] = average
-                    continue
-
-                self.averages[key] = (self.averages[key] + average) / 2
-
+        return collection
     
     def simple_dump(self):
         data = {

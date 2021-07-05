@@ -50,6 +50,22 @@ class GithubApi:
     else:
         raise GithubApiError("Query failed to run by returning code of {}.\nQuery: {}\nVariables: {}".format(request.status_code, query, variables))
   
+  def fetch_all(self, query_name, variables={}):
+    try:
+        hasNextPage = True
+        all_res = []
+        
+        while hasNextPage:
+          res, page_info = self.fetch_next_page(query_name, variables)
+          all_res.append(res)
+          hasNextPage = page_info["hasNextPage"]
+        
+        return all_res
+    except GithubApiError as e:
+        raise
+
+    return
+
   def fetch_next_page(self, query_name, variables={}):
     query_data = self.queries[query_name]
     
@@ -89,3 +105,5 @@ class GithubApi:
       return response, page_info
     except Exception as e:
       raise
+
+    return

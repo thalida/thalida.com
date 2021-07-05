@@ -117,7 +117,7 @@ gh_api.add_query(
   page_info_key="data.repository.defaultBranchRef.target.history.pageInfo",
 )
 
-my_repos = Repos(gh_api)
+my_repos = Repos(gh_api, cache_ttl=helpers.DEFAULT_CACHE_SECS)
 
 @app.route('/api/repos', methods=['GET'])
 def get_repos():

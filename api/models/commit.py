@@ -1,8 +1,6 @@
 # Python
-from collections import defaultdict, Counter
+from collections import Counter
 from copy import deepcopy
-from datetime import datetime
-import operator
 
 # External
 from dateutil.parser import parse
