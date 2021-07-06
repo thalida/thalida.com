@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  api:
+    extends:
+      file: docker-compose.yml
+      service: api
+    env_file:
+      - ./api/env/secrets.env
+      - ./api/env/dev.env

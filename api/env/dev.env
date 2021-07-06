@@ -1,0 +1,1 @@
+export FLASK_ENV=development

@@ -2,7 +2,7 @@
 # GITHUB PYTHON DEFAULT IGNORES
 #-------------------------------------------------------------------------------
 __pycache__/
-.env
 .DS_Store
 .sublime/
 .cache/
+env/secrets.env

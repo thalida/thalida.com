@@ -6,12 +6,9 @@ import logging
 # External
 from flask import Flask, make_response, jsonify, abort
 from flask_cors import CORS
-from dotenv import load_dotenv
 
 # App
 from github import Github
-
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -43,10 +40,8 @@ def get_repo_by_id(repo_id):
         logger.exception(e)
         abort(500)
 
-
 """=============================================================================
 Main
 ============================================================================="""
 if __name__ == '__main__':
-#   app.config['TEMPLATES_AUTO_RELOAD'] = True
-  app.run(debug=True, host='0.0.0.0', port='5001')
+    app.run(host='0.0.0.0', port='5000')
