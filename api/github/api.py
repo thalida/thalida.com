@@ -10,7 +10,6 @@ import pathlib
 import requests
 
 # App
-import github.errors
 import github.helpers
 
 class GithubApi:
@@ -138,12 +137,16 @@ class GithubApi:
         return self.queries[query_name]
 
     def query_api(self, query, variables):
-        json = {"query": query, "variables": variables}
-        request = requests.post("https://api.github.com/graphql", json=json, headers=self.headers)
-        if request.status_code == 200:
-            return request.json()
-        else:
+        try:
+            json = {"query": query, "variables": variables}
+            request = requests.post("https://api.github.com/graphql", json=json, headers=self.headers)
+            if request.status_code == 200:
+                return request.json()
+            
             request.raise_for_status()
+        except:
+            raise
+
         return
     
     def fetch_all(self, query_name, variables={}):
@@ -157,7 +160,7 @@ class GithubApi:
                 hasNextPage = page_info["hasNextPage"]
             
             return all_res
-        except github.errors.GithubApiError as e:
+        except Exception as e:
             raise
 
         return

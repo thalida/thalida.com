@@ -1,2 +1,0 @@
-class GithubApiError(Exception):
-    pass

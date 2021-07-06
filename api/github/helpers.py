@@ -1,4 +1,5 @@
 # Internal
+import os
 import collections
 from copy import deepcopy
 from functools import reduce
@@ -12,9 +13,13 @@ import requests
 nltk.download("stopwords")
 nltk.download("punkt")
 
+DISABLE_CACHE = False
 DEFAULT_API_CACHE_TTL = 60 * 60 # 1 hour
 DEFAULT_INSIGHTS_CACHE_TTL = 30 * 60 # 30 minutes
-# DEFAULT_INSIGHTS_CACHE_TTL = 5 # 5 seconds
+
+if DISABLE_CACHE:
+    DEFAULT_API_CACHE_TTL = 0
+    DEFAULT_INSIGHTS_CACHE_TTL = 0
 
 # https://stackoverflow.com/a/46890853
 def deep_get(dictionary, keys, default=None):

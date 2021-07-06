@@ -5,9 +5,6 @@ services:
     extends:
       file: docker-compose.yml
       service: api
-    volumes:
-      - ./api:/api
-    env_file:
-      - ./api/.env
     environment:
-      - FLASK_ENV=developmemt
+      - PYTHONUNBUFFERED=1
+      - FLASK_ENV=development

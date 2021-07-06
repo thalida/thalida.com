@@ -4,7 +4,6 @@ import datetime
 import time
 
 # App
-import github.errors
 import github.helpers
 from github.models.repo import Repo
 
@@ -36,7 +35,7 @@ class Repos:
             insights = github.helpers.generate_insights(self.collection)
             github.helpers.deep_update(self.insights, insights)
 
-        except github.errors.GithubApiError as e:
+        except Exception:
             raise
 
     def get_collection(self, response):

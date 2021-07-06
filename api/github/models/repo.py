@@ -8,7 +8,6 @@ from dateutil.parser import parse
 import nltk
 
 # App
-import github.errors
 import github.helpers
 from github.models.commit import Commit
 
@@ -90,7 +89,7 @@ class Repo:
             insights = github.helpers.generate_insights(self.commits)
             github.helpers.deep_update(self.insights, insights)
 
-        except github.errors.GithubApiError as e:
+        except Exception as e:
             raise
 
     def get_collection(self, response):
