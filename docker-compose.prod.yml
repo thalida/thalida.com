@@ -5,6 +5,8 @@ services:
     extends:
       file: docker-compose.yml
       service: api
+    restart: always
     env_file:
-      - ./api/env/secrets.env
-      - ./api/env/prod.env
+      - ./api/.env
+    environment:
+      - FLASK_ENV=production

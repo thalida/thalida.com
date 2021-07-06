@@ -6,5 +6,3 @@ services:
     image: api
     ports:
       - 5000:5000
-    volumes:
-      - ./api:/api

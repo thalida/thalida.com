@@ -1,5 +1,6 @@
 # Python
 from copy import deepcopy
+import datetime
 import time
 
 # App
@@ -24,7 +25,7 @@ class Repos:
             return
 
         try:
-            responses = self.api.fetch_all("repos")
+            responses = self.api.fetch_all("repos", variables={"until": datetime.datetime.now().isoformat()})
             self.last_fetched_at = time.time()
             self.total_repos = responses[0]["data"]["repositoryOwner"]["repositories"]["totalCount"]
             

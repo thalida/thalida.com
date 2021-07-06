@@ -5,4 +5,4 @@ __pycache__/
 .DS_Store
 .sublime/
 .cache/
-env/secrets.env
+.env
