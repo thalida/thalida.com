@@ -1,5 +1,4 @@
-from python:3.6
-
+FROM python:3.6
 MAINTAINER Thalida Noel "hello@thalida.com"
 
 WORKDIR /tsh/

@@ -14,16 +14,23 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
 
-  tsh:
-    image: thalida/tsh:latest
+  tsh_client:
+    image: thalida/tsh_client:latest
     labels:
-      - "traefik.http.services.tsh.loadBalancer.server.port=5000"
-      - "traefik.http.routers.tsh.priority=1"
-      - "traefik.http.routers.tsh.rule=PathPrefix(`/`)"
+      - "traefik.http.services.tsh_client.loadBalancer.server.port=8000"
+      - "traefik.http.routers.tsh_client.priority=1"
+      - "traefik.http.routers.tsh_client.rule=PathPrefix(`/`)"
+
+  tsh_server:
+    image: thalida/tsh_server:latest
+    labels:
+      - "traefik.http.services.tsh_server.loadBalancer.server.port=5000"
+      - "traefik.http.routers.tsh_server.priority=5"
+      - "traefik.http.routers.tsh_server.rule=PathPrefix(`/api`)"
 
   demo:
     image: thalida/demo:latest
     labels:
       - "traefik.http.services.demo.loadBalancer.server.port=5000"
-      - "traefik.http.routers.demo.priority=2"
+      - "traefik.http.routers.demo.priority=10"
       - "traefik.http.routers.demo.rule=PathPrefix(`/demo`)"
