@@ -11,7 +11,7 @@ from functools import cmp_to_key
 # Third Party
 import markdown
 import pymdownx
-import mdx_outline
+# import mdx_outline
 import dateparser
 
 
@@ -44,7 +44,7 @@ class PostCollection:
         collections_order {list} -- List of post collections names in visual order
     """
     MARKDOWN_EXTENSIONS = [
-        'outline',
+        # 'outline',
         'pymdownx.keys',
         'pymdownx.mark',
         'pymdownx.caret',

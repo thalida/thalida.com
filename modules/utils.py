@@ -17,9 +17,9 @@ def format_datetime(str, format='iso'):
 
     try:
         date = dateparser.parse(str)
-        if format is 'iso':
+        if format == 'iso':
             return date.isoformat()
-        elif format is 'post':
+        elif format == 'post':
             return date.strftime('%d %B %Y')
         else:
             return date.strftime(format)

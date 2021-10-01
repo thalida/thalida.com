@@ -1,4 +1,4 @@
-from python:3.6
+from python:3.9
 
 MAINTAINER Thalida Noel "hello@thalida.com"
 
