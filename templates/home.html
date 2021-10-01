@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    Home
+Home
 {% endblock %}
 
 {% block styles %}
@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{url_for('static', filename='js/home.js', v=globals.datetime.server_start)}}"></script>
+<script type="text/javascript"
+    src="{{url_for('static', filename='js/home.js', v=globals.datetime.server_start)}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -21,20 +22,22 @@
                 <div class="window__scene__plant">
                     <div class="window__scene__leaf window__scene__leaf--1" data-show-on-readystate-complete></div>
                     <div class="window__scene__leaf window__scene__leaf--2" data-show-on-readystate-complete></div>
-                    <img
-                        class="window__scene__plant__image"
+                    <img class="window__scene__plant__image"
                         src="{{url_for('static', filename='images/window/plant.svg')}}"
                         alt="A slowly dying plant with falling leaves sitting on the window sill" />
                 </div>
                 <div class="window__scene__google-home">
                     <div class="google-home__colors">
-                        <span class="google-home__color google-home__color--circle google-home__color--green" data-show-on-readystate-complete></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--purple" data-show-on-readystate-complete></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--pink" data-show-on-readystate-complete></span>
-                        <span class="google-home__color google-home__color--circle google-home__color--blue" data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--green"
+                            data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--purple"
+                            data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--pink"
+                            data-show-on-readystate-complete></span>
+                        <span class="google-home__color google-home__color--circle google-home__color--blue"
+                            data-show-on-readystate-complete></span>
                     </div>
-                    <img
-                        class="window__scene__google-home__image"
+                    <img class="window__scene__google-home__image"
                         src="{{url_for('static', filename='images/window/google-home.svg')}}"
                         alt="An illustration of an activated Google Home sitting on the window sill" />
                 </div>
@@ -44,10 +47,14 @@
         <div class="window__label">
             {% include "_partials/window-label-text.html" %}
             <div class="window__label__colors google-home__colors">
-                <span class="google-home__color google-home__color--line google-home__color--blue" data-show-on-readystate-complete></span>
-                <span class="google-home__color google-home__color--line google-home__color--purple" data-show-on-readystate-complete></span>
-                <span class="google-home__color google-home__color--line google-home__color--green" data-show-on-readystate-complete></span>
-                <span class="google-home__color google-home__color--line google-home__color--pink" data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--blue"
+                    data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--purple"
+                    data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--green"
+                    data-show-on-readystate-complete></span>
+                <span class="google-home__color google-home__color--line google-home__color--pink"
+                    data-show-on-readystate-complete></span>
             </div>
         </div>
     </div>
@@ -61,11 +68,12 @@
         </h1>
         <div class="about-section__content">
             <p class="about-section__text text--primary">
-                <em>{{ window.saying.salutation }}</em>, my name’s Thalida <small>(pronouns they/she)</small>, I’m a queer
+                <em>{{ window.saying.salutation }}</em>, my name’s Thalida <small>(pronouns they/she)</small>, I’m a
+                queer
                 first generation Trinidadian-American software engineer based in New York.
             </p>
             <p class="about-section__text text--primary">
-                Over 10 years ago for my 16th birthday I wanted one thing:
+                Over {{ work.years_since_start }} years ago for my 16th birthday I wanted one thing:
                 a domain of my own. I was lucky enough to have a supportive
                 mother who gifted me thalida.com,
                 and over the years this site has allowed me to grow in the most amazing ways.
@@ -83,14 +91,13 @@
             </p>
             <p class="about-section__text text--primary">
                 I’ve come a long way since 16 year old me, I’m now a
-                {{ work.history[0].title }} at {{ work.history[0].company }}
-                {% if work.history[0].is_hiring %} <span class="white-space--nowrap">(<a class="link--secondary" href="https://etsy.com/careers" target="_blank">we’re hiring!</a>)</span>{% endif %}
+                {{ work.history[0].title }} at {{ work.history[0].company }}.
+                {% if work.history[0].is_hiring %} <span class="white-space--nowrap">(<a class="link--secondary"
+                        href="https://etsy.com/careers" target="_blank">we’re hiring!</a>)</span>{% endif %}
             </p>
             <p class="about-section__text text--primary">
-                Outside of work I build robots with my partner, work on one of
-                my (way too many) side projects, play MarioKart, and discuss
-                identities, intersectionality, and inclusivity. And hike, lots and
-                lots of hiking, getting away and being disconnected is a critical
+                Outside of work I play Minecraft, spend way too much time on TikTok, and work on one of
+                my (way too many) side projects. And camp, getting away and being disconnected is a critical
                 part of my life.
             </p>
             <p class="about-section__text text--primary">
@@ -98,8 +105,10 @@
                 date with my work:
             </p>
             <ul class="about-section__text about-section__list text--primary">
-                <li>I'm <a class="link--secondary" href="https://twitter.com/thalidanoel" target="_blank">@thalidanoel</a> on Twitter</li>
-                <li>Send me an <a class="link--secondary" href="mailto:hello@thalida.com?subject=Let's Connect">email</a></li>
+                <li>I'm <a class="link--secondary" href="https://twitter.com/thalidanoel"
+                        target="_blank">@thalidanoel</a> on Twitter</li>
+                <li>Send me an <a class="link--secondary"
+                        href="mailto:hello@thalida.com?subject=Let's Connect">email</a></li>
             </ul>
             <p class="about-section__text text--primary text-align--center">
                 (Fun Fact: I’m generally full of questions and bubble tea.)
@@ -109,28 +118,28 @@
 
     <section class="collections-section">
         {% for collection_key in collections_order %}
-            {% set collection = globals.all_collections[collection_key] %}
-            {% if not collection.meta.is_hidden %}
-                <section id="collection-{{ collection_key }}" class="collection">
-                    <h2 class="collection__header__h header--secondary">
-                        <a class="collection__header__link link--secondary" href="#collection-{{ collection_key }}">
-                            {% for icon in collection.meta.icons.before %}
-                                <span class="icon icon--small icon--before icon--{{icon}}"></span>
-                            {% endfor %}
-                            <span class="collection__header__title">{{ collection.meta.title | safe }}</span>
-                            {% for icon in collection.meta.icons.after %}
-                                <span class="icon icon--xsmall icon--after icon--{{icon}}"></span>
-                            {% endfor %}
-                        </a>
-                    </h2>
-                    <p class="collection__summary text--primary">
-                        {{ collection.meta.summary }}
-                    </p>
+        {% set collection = globals.all_collections[collection_key] %}
+        {% if not collection.meta.is_hidden %}
+        <section id="collection-{{ collection_key }}" class="collection">
+            <h2 class="collection__header__h header--secondary">
+                <a class="collection__header__link link--secondary" href="#collection-{{ collection_key }}">
+                    {% for icon in collection.meta.icons.before %}
+                    <span class="icon icon--small icon--before icon--{{icon}}"></span>
+                    {% endfor %}
+                    <span class="collection__header__title">{{ collection.meta.title | safe }}</span>
+                    {% for icon in collection.meta.icons.after %}
+                    <span class="icon icon--xsmall icon--after icon--{{icon}}"></span>
+                    {% endfor %}
+                </a>
+            </h2>
+            <p class="collection__summary text--primary">
+                {{ collection.meta.summary }}
+            </p>
 
-                    {% set posts = collection.posts_in_order %}
-                    {% include "_partials/posts-grid.html" %}
-                </section>
-            {% endif %}
+            {% set posts = collection.posts_in_order %}
+            {% include "_partials/posts-grid.html" %}
+        </section>
+        {% endif %}
         {% endfor %}
     </section>
 
@@ -138,18 +147,19 @@
         <h1 class="jobs-section__header header--primary">Career</h1>
         {% if work.history %}
         <ul class="card-grid jobs-section__content">
-        {% for job in work.history %}
+            {% for job in work.history %}
             {% set start, end = job.dates %}
             <li class="card-wrapper">
                 <div class="card job">
                     <h3 class="card__header job__header header--tertiary">{{ job.company | safe }}</h3>
                     <p class="card__summary job__summary text--primary">{{ job.title | safe }}</p>
                     <small class="card__details job__details text--micro">
-                        <span>{{ start | datetime('%b %Y') }}</span> - <span>{{ end | datetime('%b %Y') | default('Now',true) }}</span>
+                        <span>{{ start | datetime('%b %Y') }}</span> - <span>{{ end | datetime('%b %Y') |
+                            default('Now',true) }}</span>
                     </small>
                 </div>
             </li>
-        {% endfor %}
+            {% endfor %}
         </ul>
         {% endif %}
     </section>

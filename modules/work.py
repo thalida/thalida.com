@@ -13,16 +13,24 @@ Returns:
 now = datetime.now()
 work_history = [
     {
+        'company': 'Tourus',
+        'title': 'CTO & Co-founder',
+        'dates': [utils.format_datetime('July 2021'), None],
+    },
+    {
+        'company': 'Webflow',
+        'title': 'Engineering Manager',
+        'dates': [utils.format_datetime('October 2020'), utils.format_datetime('July 2021')],
+    },
+    {
         'company': 'Etsy',
         'title': 'Engineering Manager',
-        'dates': [utils.format_datetime('July 2018'), None],
-        'is_hiring': True
+        'dates': [utils.format_datetime('July 2018'), utils.format_datetime('September 2020')],
     },
     {
         'company': 'Etsy',
         'title': 'Senior Product Engineer',
         'dates': [utils.format_datetime('May 2017'), utils.format_datetime('July 2018'),],
-        'is_hiring': True
     },
     {
         'company': 'Kinnek',
