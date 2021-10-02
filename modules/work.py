@@ -30,7 +30,7 @@ work_history = [
     {
         'company': 'Etsy',
         'title': 'Senior Product Engineer',
-        'dates': [utils.format_datetime('May 2017'), utils.format_datetime('July 2018'),],
+        'dates': [utils.format_datetime('May 2017'), utils.format_datetime('July 2018'), ],
     },
     {
         'company': 'Kinnek',
@@ -48,14 +48,15 @@ work_history = [
         'dates': [utils.format_datetime('January 2013'), utils.format_datetime('January 2014')]
     },
     {
-        'company': 'NASA&nbsp;Goddard&nbsp;/ Space&nbsp;Operations&nbsp;Institute',
+        'company': 'NASA Goddard / Space Operations Institute',
         'title': 'Software Engineer Intern',
         'dates': [utils.format_datetime('March 2010'), utils.format_datetime('January 2013')]
     },
 ]
 
 first_job_startdate = dateparser.parse(work_history[-1]['dates'][0])
-years_since_start = int(now.strftime('%Y')) - int(first_job_startdate.strftime('%Y'))
+years_since_start = int(now.strftime('%Y')) - \
+    int(first_job_startdate.strftime('%Y'))
 
 work = {
     'history': work_history,

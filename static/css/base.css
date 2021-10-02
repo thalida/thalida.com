@@ -248,8 +248,7 @@ a {
     margin: 0 auto;
     padding: 0.25rem;
     width: 100%;
-    min-width: 385px;
-    max-width: 1270px;
+    max-width: 100vw;
 }
 @media (min-width: 60em) {
     .site-wrapper {
@@ -282,27 +281,20 @@ a {
  ******************************************************************************/
 .footer {
     position: relative;
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
     margin: 10.0rem 2.0rem 2.0rem;
+    justify-content: space-between;
 }
-    .footer::after {
-      content: "";
-      display: block;
-      clear: both;
-    }
-    .footer__copyright {
-        float: left;
-        position: relative;
-        text-align: left;
-    }
-    .footer__credits {
-        float: right;
-        position: relative;
-        text-align: right;
-    }
     @media (min-width: 60em) {
         .footer {
             margin: 10.0rem 0 2.0rem;
+        }
+    }
+    @media (max-width: 16em) {
+        .footer {
+            justify-content: center;
+            text-align: center;
         }
     }
 
@@ -501,7 +493,6 @@ a {
 /* Card (Job Type) ----------------------------------------------------------*/
 .card.job {
     min-height: 8rem;
-    height: 8rem;
 }
 
 /* Card (Post Type) ----------------------------------------------------------*/
