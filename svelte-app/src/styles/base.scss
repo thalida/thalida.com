@@ -1,0 +1,91 @@
+@import 'variables/colors.scss';
+@import 'variables/sizes.scss';
+
+:root {
+    --color-text-default: #{$theme-color-light};
+    --color-text-default-light: #{$theme-color-gray};
+
+    --color-text-gray: #{$theme-color-gray};
+    --color-text-brown: #{$theme-color-brown};
+    --color-text-orange: #{$theme-color-orange};
+    --color-text-yellow: #{$theme-color-yellow};
+    --color-text-green: #{$theme-color-green};
+    --color-text-blue: #{$theme-color-blue};
+    --color-text-purple: #{$theme-color-purple};
+    --color-text-pink: #{$theme-color-pink};
+    --color-text-red: #{$theme-color-red};
+    --color-text-gray-light: #{$theme-color-gray};
+    --color-text-brown-light: #{$theme-color-brown};
+    --color-text-orange-light: #{$theme-color-orange};
+    --color-text-yellow-light: #{$theme-color-yellow};
+    --color-text-green-light: #{$theme-color-green};
+    --color-text-blue-light: #{$theme-color-blue};
+    --color-text-purple-light: #{$theme-color-purple};
+    --color-text-pink-light: #{$theme-color-pink};
+    --color-text-red-light: #{$theme-color-red};
+
+    --color-bg-default: #{$theme-color-dark};
+    --color-bg-gray: #{$theme-color-gray};
+    --color-bg-brown: #{$theme-color-brown};
+    --color-bg-orange: #{$theme-color-orange};
+    --color-bg-yellow: #{$theme-color-yellow};
+    --color-bg-green: #{$theme-color-green};
+    --color-bg-blue: #{$theme-color-blue};
+    --color-bg-purple: #{$theme-color-purple};
+    --color-bg-pink: #{$theme-color-pink};
+    --color-bg-red: #{$theme-color-red};
+    --color-bg-gray-light: #{$theme-color-gray};
+    --color-bg-brown-light: #{$theme-color-brown};
+    --color-bg-orange-light: #{$theme-color-orange};
+    --color-bg-yellow-light: #{$theme-color-yellow};
+    --color-bg-green-light: #{$theme-color-green};
+    --color-bg-blue-light: #{$theme-color-blue};
+    --color-bg-purple-light: #{$theme-color-purple};
+    --color-bg-pink-light: #{$theme-color-pink};
+    --color-bg-red-light: #{$theme-color-red};
+
+
+    --color-pill-default: #{rgba($theme-color-light,0.1)};
+    --color-pill-gray: #{$theme-color-gray};
+    --color-pill-brown: #{$theme-color-brown};
+    --color-pill-orange: #{$theme-color-orange};
+    --color-pill-yellow: #{$theme-color-yellow};
+    --color-pill-green: #{$theme-color-green};
+    --color-pill-blue: #{$theme-color-blue};
+    --color-pill-purple: #{$theme-color-purple};
+    --color-pill-pink: #{$theme-color-pink};
+    --color-pill-red: #{$theme-color-red};
+
+    --color-ui-hover-bg: rgb(26,26,26);
+    --color-ui-hover-bg-light: #{rgba($theme-color-light,0.1)};
+    --color-card-bg: #{$theme-color-dark};
+    --color-accent-bg: #{$theme-color-blue};
+    --color-border-default: #{rgba($theme-color-light,0.1)};
+    --color-border-dark: #{rgba($theme-color-light,0.1)};
+    --column-spacing: #{$column-spacing};
+    --collection-card-cover-size-small: #{$collection-card-cover-size-small};
+    --collection-card-cover-size-medium: #{$collection-card-cover-size-medium};
+    --collection-card-cover-size-large: #{$collection-card-cover-size-large};
+
+    // My custom variables
+    --color-t-gray-light: #{$theme-color-gray-light};
+    --color-t-brown-light: #{$theme-color-brown-light};
+    --color-t-orange-light: #{$theme-color-orange-light};
+    --color-t-yellow-light: #{$theme-color-yellow-light};
+    --color-t-green-light: #{$theme-color-green-light};
+    --color-t-blue-light: #{$theme-color-blue-light};
+    --color-t-purple-light: #{$theme-color-purple-light};
+    --color-t-pink-light: #{$theme-color-pink-light};
+    --color-t-red-light: #{$theme-color-red-light};
+}
+
+html {
+  font-size: 18px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: Fira Sans, Helvetica, Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Noto Color Emoji, Segoe UI Symbol, Android Emoji, EmojiSymbols, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Noto Sans, sans-serif !important;
+  font-weight: normal;
+}

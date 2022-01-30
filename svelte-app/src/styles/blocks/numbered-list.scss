@@ -1,0 +1,10 @@
+
+ol.notion-numbered-list {
+  list-style-type: number;
+  & > & {
+    list-style-type: lower-alpha;
+  }
+  & > & > & {
+    list-style-type: lower-roman;
+  }
+}

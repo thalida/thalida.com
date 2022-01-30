@@ -1,0 +1,10 @@
+.notion-table-of-contents__item {
+  color: var(--color-text-default);
+}
+.notion-table-of-contents__item:hover {
+  color: var(--color-text-default-light);
+}
+
+.notion-table-of-contents__item .notion-semantic-string {
+  border-bottom: 0;
+}

@@ -36,7 +36,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'dist/bundle.js'
+		file: 'public/dist/bundle.js'
 	},
 	plugins: [
 		svelte({
@@ -51,7 +51,7 @@ export default {
 		css({ output: 'bundle.css' }),
 		scss({
 			watch: 'src',
-			output: 'dist/global.css',
+			output: 'public/dist/global.css',
 			outputStyle: (production) ? 'compressed' : 'expanded',
 		}),
 

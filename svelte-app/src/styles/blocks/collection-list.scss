@@ -1,0 +1,36 @@
+.notion-collection-list__item {
+  flex-flow: column wrap;
+  align-items: flex-start;
+  margin: 4px 0;
+  padding: 10px;
+  border-radius: 0;
+
+  .notion-property__title {
+    .notion-semantic-string {
+      font-weight: 700;
+
+      & > span {
+        border: 0;
+      }
+    }
+
+    .notion-property__title__icon-wrapper {
+      display: none;
+    }
+  }
+
+  .notion-collection-list__item-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notion-collection-list__item-property .notion-semantic-string {
+    white-space: normal;
+  }
+
+  @media (max-width: 546px) {
+    flex-direction: column;
+    align-items: flex-start;
+    border: 0;
+  }
+}

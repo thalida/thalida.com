@@ -1,0 +1,32 @@
+@import 'variables/sizes.scss';
+
+.max-width {
+  max-width: #{$content-max-width} !important;
+}
+
+.notion-collection.notion-collection-page {
+  max-width: #{$content-max-width};
+  margin: 0 auto;
+}
+
+.notion-header.collection .notion-header__content.no-cover.no-icon,
+.notion-header.collection .notion-header__content.no-cover.has-icon,
+.notion-header__content.no-cover.no-icon,
+.notion-header__content.no-cover.has-icon {
+  .notion-header__title-wrapper {
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 10vh 0;
+
+    @media(max-width: 600px) {
+      margin: 5vh 0;
+    }
+  }
+}
+
+.notion-header__icon-wrapper.no-cover.has-icon {
+  position: relative;
+  top: 0;
+}

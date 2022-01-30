@@ -1,0 +1,112 @@
+.notion-collection .notion-collection-gallery,
+.notion-collection.inline .notion-collection-gallery{
+  border-top: 0;
+
+  .notion-collection-card {
+    background: transparent;
+    border-radius: 24px;
+    box-shadow: none;
+    overflow: visible;
+
+    .notion-collection-card__cover {
+      border-radius: 1em;
+      border: 0;
+      transition: all 200ms ease-in-out;
+      padding-top: 100%;
+      height: auto;
+    }
+
+    .notion-collection-card__content {
+      margin: 0;
+      padding: 0;
+
+      .notion-collection-card__property .notion-property__text {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    &:hover .notion-collection-card__cover {
+      background: transparent;
+      transform: translateY(15px);
+      z-index: 2;
+    }
+  }
+
+
+  .notion-property.notion-property__title {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: left;
+    margin: 0;
+    padding: 0;
+
+    .notion-property__title__icon-wrapper {
+      top: 0;
+    }
+
+    .notion-semantic-string {
+      font-size: 18px;
+      line-height: 1.4;
+      display: flex;
+      flex-grow: 1;
+      flex-flow: row-reverse nowrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &.small {
+    gap: 24px;
+
+    .notion-collection-card__cover {
+      margin-bottom: 10px;
+    }
+
+    .notion-collection-card:hover .notion-collection-card__cover {
+      box-shadow: 0 0 48px black;
+    }
+
+    .notion-property__title .notion-semantic-string {
+      flex-flow: row wrap;
+      font-size: 14px;
+      white-space: normal;
+    }
+
+    .notion-property__title__icon-wrapper {
+      display: none;
+    }
+  }
+
+  &.medium {
+    gap: 32px;
+    @media(max-width: 300px) {
+      grid-template-columns: 100%;
+    }
+
+    .notion-collection-card__cover {
+      margin-bottom: 15px;
+    }
+
+    .notion-collection-card:hover .notion-collection-card__cover {
+      box-shadow: 0 0 64px black;
+    }
+  }
+
+  &.large {
+      gap: 48px;
+      @media(max-width: 350px) {
+        grid-template-columns: 100%;
+      }
+
+    .notion-collection-card__cover {
+      margin-bottom: 20px;
+    }
+
+    .notion-collection-card:hover .notion-collection-card__cover {
+      box-shadow: 0 0 96px black;
+    }
+  }
+}
