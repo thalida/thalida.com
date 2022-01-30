@@ -19,4 +19,6 @@ const app = new App({
   target: document.querySelector("#svelte-app"),
 });
 
+console.log('loading');
+
 export default app;

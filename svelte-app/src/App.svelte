@@ -1,18 +1,19 @@
 <script>
 	// import "styles/notion-theme.scss";
-	export let name;
+	// export let name;
+	console.log("in app script");
 </script>
 
-<main>
-	<h1>Hello {name}!</h1>
+<div>
+	<h1>Hello!</h1>
 	<p>
 		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
 		how to build Svelte apps.
 	</p>
-</main>
+</div>
 
 <style lang="scss">
-	main {
+	div {
 		text-align: center;
 		padding: 1em;
 		max-width: 240px;
@@ -27,7 +28,7 @@
 	}
 
 	@media (min-width: 640px) {
-		main {
+		div {
 			max-width: none;
 		}
 	}
