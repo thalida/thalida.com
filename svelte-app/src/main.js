@@ -3,9 +3,6 @@ import "./styles/notion-theme.scss";
 import App from "./App.svelte";
 import fitty from "fitty";
 
-const app = new App({
-  target: document.querySelector("#svelte-app"),
-});
 
 setTimeout(() => {
   fitty('.notion-header__title', {
@@ -17,5 +14,9 @@ setTimeout(() => {
     maxSize: 128,
   })
 }, 200);
+
+const app = new App({
+  target: document.querySelector("#svelte-app"),
+});
 
 export default app;
