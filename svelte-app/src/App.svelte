@@ -1,35 +1,63 @@
 <script>
-	// import "styles/notion-theme.scss";
-	// export let name;
-	console.log("in app script");
+	export const selectedPage = `/${window.location.pathname.split("/")[0]}`;
+	export const links = [
+		{ path: "/kit", label: "Kit" },
+		{ path: "/ref", label: "Ref" },
+		{ path: "/meta", label: "Meta" },
+		{ path: "/about", label: "About" },
+	];
 </script>
 
-<div>
-	<h1>Hello!</h1>
-	<p>
-		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
-		how to build Svelte apps.
-	</p>
-</div>
+<header>
+	<a class="notion-link link" class:active={selectedPage == "/"} href="/">
+		thalida.
+	</a>
+	<nav>
+		{#each links as link}
+			<a
+				class="notion-link link"
+				class:active={selectedPage == link.url}
+				href={link.url}
+			>
+				{link.label}
+			</a>
+		{/each}
+	</nav>
+</header>
 
 <style lang="scss">
-	div {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+	header {
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 8px 16px;
+		font-size: 16px;
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+		a {
+			text-decoration: none;
+			font-weight: bold;
+		}
 
-	@media (min-width: 640px) {
-		div {
-			max-width: none;
+		nav {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			justify-content: flex-end;
+
+			a {
+				margin: 0 8px;
+				&:hover {
+					opacity: 1;
+				}
+			}
+		}
+
+		.notion-link.active:after {
+			height: 100%;
+			z-index: -1;
+			transform: skewY(-2deg);
 		}
 	}
 </style>
