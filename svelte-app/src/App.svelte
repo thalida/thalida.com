@@ -31,7 +31,7 @@
 		flex-flow: row nowrap;
 		align-items: center;
 		justify-content: space-between;
-		width: 100%;
+		margin: 20px 20px 0;
 		padding: 8px 16px;
 		font-size: 16px;
 
