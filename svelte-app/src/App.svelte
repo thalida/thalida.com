@@ -17,7 +17,7 @@
 		{#each links as link}
 			<a
 				class="notion-link link"
-				class:active={selectedPage == link.url}
+				class:active={selectedPage == link.path}
 				href={link.path}
 			>
 				{link.label}
