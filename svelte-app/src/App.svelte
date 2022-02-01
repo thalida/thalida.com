@@ -1,5 +1,6 @@
 <script>
-	export const selectedPage = `/${window.location.pathname.split("/")[0]}`;
+	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
+	$: console.log(selectedPage);
 	export const links = [
 		{ path: "/kit", label: "Kit" },
 		{ path: "/ref", label: "Ref" },
@@ -8,7 +9,7 @@
 	];
 </script>
 
-<header>
+<header class="container">
 	<a class="notion-link link" class:active={selectedPage == "/"} href="/">
 		thalida.
 	</a>
@@ -26,12 +27,18 @@
 </header>
 
 <style lang="scss">
+	.container {
+		width: 100%;
+		padding-left: calc(env(safe-area-inset-left) + 96px);
+		padding-right: calc(env(safe-area-inset-right) + 96px);
+	}
+
 	header {
 		display: flex;
 		flex-flow: row nowrap;
 		align-items: center;
 		justify-content: space-between;
-		margin: 20px 20px 0;
+		margin: 20px 0 0;
 		padding: 8px 16px;
 		font-size: 16px;
 
