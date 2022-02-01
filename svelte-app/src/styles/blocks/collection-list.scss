@@ -6,8 +6,12 @@
   border-radius: 0;
 
   .notion-property__title {
+    position: relative;
+
     .notion-semantic-string {
       font-weight: 700;
+      margin-inline-start: 0;
+      margin-inline-end: 0;
 
       & > span {
         border: 0;
@@ -38,8 +42,11 @@
     align-items: flex-start;
   }
 
-  .notion-collection-list__item-property .notion-semantic-string {
-    white-space: normal;
+  .notion-collection-list__item-property {
+    padding: 4px 0;
+    .notion-semantic-string {
+      white-space: normal;
+    }
   }
 
   .notion-link:not(.notion-collection-list__item-anchor) {
