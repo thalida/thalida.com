@@ -1,6 +1,5 @@
 <script>
 	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
-	$: console.log(selectedPage);
 	export const links = [
 		{ path: "/kit", label: "Kit" },
 		{ path: "/ref", label: "Ref" },
