@@ -16,9 +16,9 @@
   .notion-header__title-wrapper {
     display: flex;
     flex-flow: row wrap;
-    align-items: flex-start;
-    justify-content: center;
-    margin: 8vh 0;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 4vh 0;
 
     @media(max-width: 600px) {
       margin: 4vh 0;
