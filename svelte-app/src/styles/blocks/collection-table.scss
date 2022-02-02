@@ -1,0 +1,8 @@
+.notion-collection-table__cell.title > a {
+  &,
+  &:hover {
+    .notion-semantic-string > span {
+      border: 0;
+    }
+  }
+}
