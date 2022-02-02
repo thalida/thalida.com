@@ -1,4 +1,4 @@
-@import 'variables/sizes.scss';
+ @import 'variables/sizes.scss';
 
 .max-width {
   max-width: #{$content-max-width} !important;
@@ -15,9 +15,9 @@
 .notion-header__content.no-cover.has-icon {
   .notion-header__title-wrapper {
     display: flex;
-    flex-flow: row-reverse nowrap;
-    align-items: center;
-    justify-content: space-between;
+    flex-flow: column nowrap;
+    align-items: flex-start;
+    justify-content: center;
     margin: 4vh 0;
 
     @media(max-width: 400px) {
@@ -39,8 +39,7 @@
 .notion-header__icon-wrapper.no-cover.has-icon {
   position: relative;
   top: 0;
-
-  @media(max-width: 400px) {
-    display: none;
-  }
+  bottom: unset;
+  padding: 0;
+  margin-bottom: 20px;
 }
