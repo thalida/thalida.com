@@ -11,9 +11,13 @@ h1.notion-header__title {
   text-align: left;
   font-size: 5rem;
 
-  line-height: 1.1;
+  line-height: 1;
   margin: 0;
   letter-spacing: -1px;
+
+  @media(max-width: 500px) {
+    font-size: 4rem;
+  }
 }
 
 h1.notion-heading {
