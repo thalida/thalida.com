@@ -1,3 +1,13 @@
+.notion-code pre,
+.notion-code code,
+code {
+  font-family: "Fira Code", Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
+}
+
 .notion-code.no-wrap {
   font-size: 0.75rem;
+}
+
+.notion-semantic-string .code {
+  color: var(--color-text-green);
 }
