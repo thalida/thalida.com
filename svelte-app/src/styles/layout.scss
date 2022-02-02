@@ -15,14 +15,14 @@
 .notion-header__content.no-cover.has-icon {
   .notion-header__title-wrapper {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row-reverse wrap;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     margin: 4vh 0;
 
-    @media(max-width: 600px) {
-      margin: 4vh 0;
-    }
+    // @media(max-width: 600px) {
+    //   margin: 4vh 0;
+    // }
 
     // display: flex;
     // flex-flow: column wrap;
@@ -39,5 +39,4 @@
 .notion-header__icon-wrapper.no-cover.has-icon {
   position: relative;
   top: 0;
-  display: none;
 }
