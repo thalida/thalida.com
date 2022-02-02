@@ -56,7 +56,7 @@
     --color-pill-pink: #{$theme-color-pink};
     --color-pill-red: #{$theme-color-red};
 
-    --color-ui-hover-bg: rgb(26,26,26);
+    --color-ui-hover-bg: #{$theme-color-ui-hover};
     --color-ui-hover-bg-light: #{rgba($theme-color-light,0.1)};
     --color-card-bg: #{$theme-color-dark};
     --color-accent-bg: #{$theme-color-blue};
