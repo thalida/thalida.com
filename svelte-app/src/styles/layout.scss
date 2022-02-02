@@ -1,5 +1,9 @@
  @import 'variables/sizes.scss';
 
+.super-content {
+  padding-bottom: 5vh;
+}
+
 .max-width {
   max-width: #{$content-max-width} !important;
 }
