@@ -28,8 +28,11 @@
 <style lang="scss">
 	.container {
 		width: 100%;
+		max-width: 1270px;
 		padding-left: calc(env(safe-area-inset-left) + 96px);
 		padding-right: calc(env(safe-area-inset-right) + 96px);
+		margin-left: auto;
+		margin-right: auto;
 
 		@media (max-width: 546px) {
 			padding-left: calc(env(safe-area-inset-left) + 24px);
