@@ -24,7 +24,6 @@
     "svelte-preprocess": "^4.10.1"
   },
   "dependencies": {
-    "fitty": "^2.3.6",
     "sirv-cli": "^2.0.0",
     "svelte-preprocess": "^4.10.2"
   }

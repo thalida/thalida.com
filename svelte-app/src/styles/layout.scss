@@ -9,6 +9,14 @@
   margin: 0 auto;
 }
 
+.notion-header__icon-wrapper.no-cover.has-icon {
+  position: relative;
+  top: 0;
+  bottom: unset;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
 .notion-header__cover.has-cover,
 .notion-header__content.no-cover.no-icon,
 .notion-header__content.no-cover.has-icon {
@@ -17,39 +25,4 @@
 
 .notion-header__content.no-cover.has-icon .notion-header__title-wrapper {
   margin-top: 0;
-}
-
-.notion-header.collection .notion-header__content.no-cover.no-icon,
-.notion-header.collection .notion-header__content.no-cover.has-icon,
-.notion-header__content.no-cover.no-icon,
-.notion-header__content.no-cover.has-icon {
-  .notion-header__title-wrapper {
-    // display: flex;
-    // flex-flow: column nowrap;
-    // align-items: flex-start;
-    // justify-content: center;
-    // margin: 4vh 0;
-
-    // @media(max-width: 400px) {
-    //   flex-flow: column-reverse nowrap;
-    // }
-
-    // display: flex;
-    // flex-flow: column wrap;
-    // align-items: flex-start;
-    // justify-content: center;
-    // margin: 10vh 0;
-
-    // @media(max-width: 600px) {
-    //   margin: 5vh 0;
-    // }
-  }
-}
-
-.notion-header__icon-wrapper.no-cover.has-icon {
-  position: relative;
-  top: 0;
-  bottom: unset;
-  padding: 0;
-  margin-bottom: 20px;
 }
