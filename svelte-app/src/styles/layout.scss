@@ -15,14 +15,24 @@
 .notion-header__content.no-cover.has-icon {
   .notion-header__title-wrapper {
     display: flex;
-    flex-flow: column wrap;
-    align-items: center;
+    flex-flow: row wrap;
+    align-items: flex-start;
     justify-content: center;
-    margin: 10vh 0;
+    margin: 8vh 0;
 
     @media(max-width: 600px) {
-      margin: 5vh 0;
+      margin: 4vh 0;
     }
+
+    // display: flex;
+    // flex-flow: column wrap;
+    // align-items: flex-start;
+    // justify-content: center;
+    // margin: 10vh 0;
+
+    // @media(max-width: 600px) {
+    //   margin: 5vh 0;
+    // }
   }
 }
 
