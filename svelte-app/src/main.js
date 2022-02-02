@@ -5,7 +5,7 @@ import fitty from "fitty";
 setTimeout(() => {
   fitty('.notion-header__title', {
     minSize: 32,
-    maxSize: 256,
+    maxSize: 128,
   });
   fitty('h1.notion-heading .notion-semantic-string', {
     minSize: 18,
