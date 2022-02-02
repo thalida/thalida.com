@@ -30,6 +30,14 @@
 		width: 100%;
 		padding-left: calc(env(safe-area-inset-left) + 96px);
 		padding-right: calc(env(safe-area-inset-right) + 96px);
+
+		@media (max-width: 546px) {
+			.container {
+				padding-left: calc(env(safe-area-inset-left) + 24px);
+				padding-right: calc(env(safe-area-inset-right) + 24px);
+				padding-bottom: 180px;
+			}
+		}
 	}
 
 	header {
