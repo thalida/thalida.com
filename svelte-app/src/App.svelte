@@ -22,25 +22,23 @@
 
 <svelte:window bind:scrollY />
 
-<header
-	use:updateHeader={scrollY}
-	class="container"
-	class:is-sticky={isHeaderSticky}
->
-	<a class="notion-link link" class:active={selectedPage == "/"} href="/">
-		thalida.
-	</a>
-	<nav>
-		{#each links as link}
-			<a
-				class="notion-link link"
-				class:active={selectedPage == link.path}
-				href={link.path}
-			>
-				{link.label}
-			</a>
-		{/each}
-	</nav>
+<header use:updateHeader={scrollY} class:is-sticky={isHeaderSticky}>
+	<div class="container">
+		<a class="notion-link link" class:active={selectedPage == "/"} href="/">
+			thalida.
+		</a>
+		<nav>
+			{#each links as link}
+				<a
+					class="notion-link link"
+					class:active={selectedPage == link.path}
+					href={link.path}
+				>
+					{link.label}
+				</a>
+			{/each}
+		</nav>
+	</div>
 </header>
 
 <style lang="scss">
@@ -66,6 +64,14 @@
 		margin: 0;
 		padding: 32px 16px 16px;
 		font-size: 16px;
+		width: 100%;
+
+		.container {
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			justify-content: space-between;
+		}
 
 		a {
 			text-decoration: none;
