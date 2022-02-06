@@ -1,4 +1,7 @@
 <script>
+	let scrollY = 0;
+
+	export let isHeaderSticky = false;
 	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
 	export const links = [
 		{ path: "/kit", label: "Kit" },
@@ -6,9 +9,24 @@
 		{ path: "/meta", label: "Meta" },
 		{ path: "/about", label: "About" },
 	];
+
+	function updateHeader(node) {
+		const rect = node.getBoundingClientRect();
+		return {
+			update(scrollY) {
+				isHeaderSticky = scrollY > rect.bottom;
+			},
+		};
+	}
 </script>
 
-<header class="container">
+<svelte:window bind:scrollY />
+
+<header
+	use:updateHeader={scrollY}
+	class="container"
+	class:is-sticky={isHeaderSticky}
+>
 	<a class="notion-link link" class:active={selectedPage == "/"} href="/">
 		thalida.
 	</a>
@@ -72,6 +90,11 @@
 			height: 100%;
 			z-index: -1;
 			transform: skewY(-2deg);
+		}
+
+		&.is-sticky {
+			position: fixed;
+			top: 0;
 		}
 	}
 </style>

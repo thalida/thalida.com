@@ -51,7 +51,14 @@ export default {
 		css({ output: 'bundle.css' }),
 		scss({
 			watch: 'src',
+			exclude: ['src/styles/notion-theme/**/*.scss'],
 			output: 'public/dist/global.css',
+			outputStyle: (production) ? 'compressed' : 'expanded',
+		}),
+		scss({
+			watch: 'src/styles/notion-theme',
+			include: ['src/styles/notion-theme/**/*.scss'],
+			output: 'public/dist/notion-theme.css',
 			outputStyle: (production) ? 'compressed' : 'expanded',
 		}),
 

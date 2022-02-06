@@ -1,4 +1,5 @@
-import "./styles/notion-theme.scss";
+import "./styles/notion-theme/index.scss";
+import "./styles/app.scss";
 import App from "./App.svelte";
 
 const app = new App({
