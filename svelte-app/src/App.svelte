@@ -63,8 +63,8 @@
 		flex-flow: row nowrap;
 		align-items: center;
 		justify-content: space-between;
-		margin: 20px 0 0;
-		padding: 8px 16px;
+		margin: 0;
+		padding: 32px 16px 8px;
 		font-size: 16px;
 
 		a {
@@ -95,6 +95,7 @@
 		&.is-sticky {
 			position: fixed;
 			top: 0;
+			z-index: 30;
 			box-shadow: 0 0 30px var(--color-bg-default);
 			background-color: var(--color-bg-default);
 		}
