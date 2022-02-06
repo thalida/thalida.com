@@ -14,7 +14,7 @@
 		const rect = node.getBoundingClientRect();
 		return {
 			update(scrollY) {
-				isHeaderSticky = scrollY > rect.bottom;
+				isHeaderSticky = scrollY > rect.top + 10;
 			},
 		};
 	}
