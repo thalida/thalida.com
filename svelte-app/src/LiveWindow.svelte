@@ -6,33 +6,45 @@
     minWidth: 250,
     minHeight: 400,
   };
-  export const liveWindowHeight = `${liveWindowSize.height}vh`;
-  export const liveWindowMinHeight = `${liveWindowSize.minHeight}px`;
-  export const liveWindowInnerWidth = `${liveWindowSize.width}vw`;
-  export const liveWindowInnerMinWidth = `${liveWindowSize.minWidth}px`;
-  export const blindsWidthScale = 1.4;
-  export const collapsedSlatHeightScale = 0.5;
-  export const rodHeightScale = 0.75;
 
   export const numBlinds = 20;
   export let numBlindsCollpased = 0;
   export let maxBlindsOpenDeg = 20;
+  export let collapsedBlindRotateDeg = 70;
   export let maxSkewDeg = numBlindsCollpased === 0 ? 0 : 30;
   export let skewDirection = 0;
   export let leftStringHeight = "100%";
   export let rightStringHeight = "100%";
   export let blindRenderKey = 0;
 
+  export const liveWindowHeight = `${liveWindowSize.height}vh`;
+  export const liveWindowMinHeight = `${liveWindowSize.minHeight}px`;
+  export const liveWindowInnerWidth = `${liveWindowSize.width}vw`;
+  export const liveWindowInnerMinWidth = `${liveWindowSize.minWidth}px`;
+  export const rodHeightScale = 0.75;
+  export const blindsWidthScale = 1.4;
+  export const collapsedSlatHeightScale = 0.3;
+
   function updateStrings() {
     const blinds = document.querySelector(".blinds");
     const blindsRect = blinds.getBoundingClientRect();
-    let guideBlind = document.querySelector(
-      `.slat-${numBlinds - numBlindsCollpased}`
+    const selectNext = numBlindsCollpased === 0 ? 0 : 1;
+    const guideBlind = document.querySelector(
+      `.slat-${numBlinds - numBlindsCollpased + selectNext}`
     );
     const guideBlindRect = guideBlind.getBoundingClientRect();
-    const shortString =
-      guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
-    const longString = guideBlindRect.bottom - blindsRect.top;
+
+    let shortString, longString;
+
+    if (numBlindsCollpased === 0) {
+      shortString = guideBlindRect.top - blindsRect.top;
+      longString =
+        guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
+    } else {
+      shortString =
+        guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
+      longString = guideBlindRect.top + guideBlindRect.height - blindsRect.top;
+    }
     const shortStringHeight = `${shortString}px`;
     const longStringHeight = `${longString}px`;
 
@@ -43,8 +55,8 @@
       leftStringHeight = shortStringHeight;
       rightStringHeight = longStringHeight;
     } else {
-      leftStringHeight = longStringHeight;
-      rightStringHeight = longStringHeight;
+      leftStringHeight = shortString;
+      rightStringHeight = shortString;
     }
   }
 
@@ -60,9 +72,9 @@
 
       if (isCollapsed) {
         const skewFix = skewDirection === 0 || maxSkewDeg <= 0 ? 1 : maxSkewDeg;
-        currSlide.style.top = `${
-          prevSlideRect.top + prevSlideRect.height / skewFix - blindsRect.top
-        }px`;
+        const top =
+          prevSlideRect.top + prevSlideRect.height / skewFix - blindsRect.top;
+        currSlide.style.top = `${top}px`;
       }
     }
   }
@@ -76,14 +88,12 @@
     setTimeout(() => {
       const percentageCollpased = 0.7;
       numBlindsCollpased = numBlinds * percentageCollpased;
-      maxBlindsOpenDeg = 80;
+      maxBlindsOpenDeg = 70;
       maxSkewDeg = numBlindsCollpased === 0 ? 0 : 10;
-      skewDirection = -1;
-
+      skewDirection = 1;
       blindRenderKey += 1;
     }, 600);
   }
-  animate();
 
   export function getIsCollapsed(blindIndex) {
     return blindIndex + numBlindsCollpased >= numBlinds;
@@ -98,17 +108,28 @@
   }
 
   export function getSlatTransform(blindIndex) {
+    const isCollapsed = getIsCollapsed(blindIndex);
     const currBlind = numBlinds - blindIndex;
-    const skewSteps = maxSkewDeg / numBlinds;
-    const skewDeg =
-      skewDirection === 0 ? 0 : maxSkewDeg - currBlind * skewSteps;
-    const rotateDeg = maxBlindsOpenDeg - skewDeg;
+    const skewSteps = maxSkewDeg / (numBlinds - numBlindsCollpased);
+    let skewDeg = 0;
+
+    if (skewDirection !== 0 && maxSkewDeg >= 0) {
+      if (!isCollapsed) {
+        skewDeg = maxSkewDeg - (currBlind - numBlindsCollpased - 1) * skewSteps;
+      } else {
+        skewDeg = maxSkewDeg;
+      }
+    }
+    const rotateDeg = isCollapsed
+      ? collapsedBlindRotateDeg - skewDeg
+      : maxBlindsOpenDeg - skewDeg;
     const rotate = `rotateX(${rotateDeg}deg)`;
     const skew = `skewY(${skewDeg * skewDirection}deg)`;
     return `${rotate} ${skew}`;
   }
 
   afterUpdate(updateBlinds);
+  animate();
 </script>
 
 <div
@@ -245,7 +266,7 @@
           position: relative;
           width: 100%;
           background: var(--color-bg-default);
-          transition: all ease-in-out 200ms;
+          transition: all ease-in-out 500ms;
 
           &:not(.collapse) {
             height: calc(
