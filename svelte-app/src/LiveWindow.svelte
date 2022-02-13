@@ -1,79 +1,88 @@
 <script>
   import { afterUpdate } from "svelte";
+
   export const time = {
     hour: 0,
     minute: 0,
   };
-  const liveWindowSize = {
+
+  export let blindsRenderKey = 0;
+  export const NUM_BLINDS = 20;
+  export const COLLAPSED_BLINDS_ROTATE_DEG = 70;
+
+  export const liveWindowStyles = {
     width: 25,
     height: 40,
     minWidth: 250,
     minHeight: 400,
+    rodHeightScale: 0.75,
+    blindsWidthScale: 1.4,
+    collapsedSlatHeightScale: 0.3,
   };
 
-  export const numBlinds = 20;
-  export let numBlindsCollpased = 0;
-  export let maxBlindsOpenDeg = 20;
-  export let collapsedBlindRotateDeg = 70;
-  export let maxSkewDeg = numBlindsCollpased === 0 ? 0 : 30;
-  export let skewDirection = 0;
-  export let leftStringHeight = "100%";
-  export let rightStringHeight = "100%";
-  export let blindRenderKey = 0;
-
-  export const liveWindowHeight = `${liveWindowSize.height}vh`;
-  export const liveWindowMinHeight = `${liveWindowSize.minHeight}px`;
-  export const liveWindowInnerWidth = `${liveWindowSize.width}vw`;
-  export const liveWindowInnerMinWidth = `${liveWindowSize.minWidth}px`;
-  export const rodHeightScale = 0.75;
-  export const blindsWidthScale = 1.4;
-  export const collapsedSlatHeightScale = 0.3;
+  export const liveWindowSettings = {
+    numBlindsCollpased: 0,
+    blindsOpenDeg: 20,
+    blindsSkewDeg: 0,
+    skewDirection: 0,
+    string: {
+      leftHeight: "100%",
+      rightHeight: "100%",
+    },
+  };
 
   export function getIsCollapsed(blindIndex) {
-    return blindIndex + numBlindsCollpased >= numBlinds;
+    return blindIndex + liveWindowSettings.numBlindsCollpased >= NUM_BLINDS;
   }
 
   export function getASkewClass() {
-    return skewDirection === 1
+    return liveWindowSettings.skewDirection === 1
       ? "askew-left"
-      : skewDirection === -1
+      : liveWindowSettings.skewDirection === -1
       ? "askew-right"
       : "not-askew";
   }
 
   export function getSlatTransform(blindIndex) {
     const isCollapsed = getIsCollapsed(blindIndex);
-    const currBlind = numBlinds - blindIndex;
-    const skewSteps = maxSkewDeg / (numBlinds - numBlindsCollpased);
+    const currBlind = NUM_BLINDS - blindIndex;
+    const skewSteps =
+      liveWindowSettings.blindsSkewDeg /
+      (NUM_BLINDS - liveWindowSettings.numBlindsCollpased);
     let skewDeg = 0;
 
-    if (skewDirection !== 0 && maxSkewDeg >= 0) {
+    if (
+      liveWindowSettings.skewDirection !== 0 &&
+      liveWindowSettings.blindsSkewDeg >= 0
+    ) {
       if (!isCollapsed) {
-        skewDeg = maxSkewDeg - (currBlind - numBlindsCollpased - 1) * skewSteps;
+        skewDeg =
+          liveWindowSettings.blindsSkewDeg -
+          (currBlind - liveWindowSettings.numBlindsCollpased - 1) * skewSteps;
       } else {
-        skewDeg = maxSkewDeg;
+        skewDeg = liveWindowSettings.blindsSkewDeg;
       }
     }
     const rotateDeg = isCollapsed
-      ? collapsedBlindRotateDeg - skewDeg
-      : maxBlindsOpenDeg - skewDeg;
+      ? COLLAPSED_BLINDS_ROTATE_DEG - skewDeg
+      : liveWindowSettings.blindsOpenDeg - skewDeg;
     const rotate = `rotateX(${rotateDeg}deg)`;
-    const skew = `skewY(${skewDeg * skewDirection}deg)`;
+    const skew = `skewY(${skewDeg * liveWindowSettings.skewDirection}deg)`;
     return `${rotate} ${skew}`;
   }
 
   function updateStrings() {
     const blinds = document.querySelector(".blinds");
     const blindsRect = blinds.getBoundingClientRect();
-    const selectNext = numBlindsCollpased === 0 ? 0 : 1;
+    const selectNext = liveWindowSettings.numBlindsCollpased === 0 ? 0 : 1;
     const guideBlind = document.querySelector(
-      `.slat-${numBlinds - numBlindsCollpased + selectNext}`
+      `.slat-${NUM_BLINDS - liveWindowSettings.numBlindsCollpased + selectNext}`
     );
     const guideBlindRect = guideBlind.getBoundingClientRect();
 
     let shortString, longString;
 
-    if (numBlindsCollpased === 0) {
+    if (liveWindowSettings.numBlindsCollpased === 0) {
       shortString = guideBlindRect.top - blindsRect.top;
       longString =
         guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
@@ -85,15 +94,15 @@
     const shortStringHeight = `${shortString}px`;
     const longStringHeight = `${longString}px`;
 
-    if (skewDirection === -1) {
-      leftStringHeight = longStringHeight;
-      rightStringHeight = shortStringHeight;
-    } else if (skewDirection === 1) {
-      leftStringHeight = shortStringHeight;
-      rightStringHeight = longStringHeight;
+    if (liveWindowSettings.skewDirection === -1) {
+      liveWindowSettings.string.leftHeight = longStringHeight;
+      liveWindowSettings.string.rightHeight = shortStringHeight;
+    } else if (liveWindowSettings.skewDirection === 1) {
+      liveWindowSettings.string.leftHeight = shortStringHeight;
+      liveWindowSettings.string.rightHeight = longStringHeight;
     } else {
-      leftStringHeight = shortString;
-      rightStringHeight = shortString;
+      liveWindowSettings.string.leftHeight = shortString;
+      liveWindowSettings.string.rightHeight = shortString;
     }
   }
 
@@ -108,7 +117,11 @@
       const isCollapsed = currSlide.classList.contains("collapse");
 
       if (isCollapsed) {
-        const skewFix = skewDirection === 0 || maxSkewDeg <= 0 ? 1 : maxSkewDeg;
+        const skewFix =
+          liveWindowSettings.skewDirection === 0 ||
+          liveWindowSettings.blindsSkewDeg <= 0
+            ? 1
+            : liveWindowSettings.blindsSkewDeg;
         const top =
           prevSlideRect.top + prevSlideRect.height / skewFix - blindsRect.top;
         currSlide.style.top = `${top}px`;
@@ -121,15 +134,71 @@
     updateSlats();
   }
 
+  function stepAnimation(animateFrom, targetAnimations, speedMs = 100) {
+    const animateTo = { ...targetAnimations };
+    return new Promise((resolve) => {
+      const blindsInterval = setInterval(() => {
+        let finishedAnimations = 0;
+        const numAnimations = Object.keys(animateTo).length;
+        for (const [prop, animation] of Object.entries(animateTo)) {
+          let reachedTarget;
+          let direction = animateFrom[prop] < animation.targetValue ? 1 : -1;
+          animateFrom[prop] += animation.step * direction;
+
+          if (direction === -1) {
+            reachedTarget = animateFrom[prop] <= animation.targetValue;
+          } else {
+            reachedTarget = animateFrom[prop] >= animation.targetValue;
+          }
+
+          if (!reachedTarget) {
+            continue;
+          }
+
+          finishedAnimations += 1;
+          delete animateTo[prop];
+        }
+
+        blindsRenderKey += 1;
+
+        if (finishedAnimations >= numAnimations) {
+          clearInterval(blindsInterval);
+          resolve();
+        }
+      }, speedMs);
+    });
+  }
+
   function animate() {
-    setTimeout(() => {
-      const percentageCollpased = 0.75;
-      numBlindsCollpased = numBlinds * percentageCollpased;
-      maxBlindsOpenDeg = 70;
-      maxSkewDeg = numBlindsCollpased === 0 ? 0 : 10;
-      skewDirection = 1;
-      blindRenderKey += 1;
-    }, 600);
+    stepAnimation(
+      liveWindowSettings,
+      {
+        blindsOpenDeg: {
+          targetValue: 75,
+          step: 5,
+        },
+      },
+      150
+    ).then(() => {
+      stepAnimation(liveWindowSettings, {
+        blindsOpenDeg: {
+          targetValue: 80,
+          step: 1,
+        },
+        numBlindsCollpased: {
+          targetValue: NUM_BLINDS * 0.7,
+          step: 1,
+        },
+        blindsSkewDeg: {
+          targetValue: 5,
+          step: 1,
+        },
+        skewDirection: {
+          targetValue: -1,
+          step: 1,
+        },
+      });
+    });
   }
 
   function startClock() {
@@ -148,14 +217,14 @@
 <div
   class="live-window"
   style="
-    --live-window-num-blinds: {numBlinds};
-    --live-window-height: {liveWindowHeight};
-    --live-window-min-height: {liveWindowMinHeight};
-    --live-window-inner-width: {liveWindowInnerWidth};
-    --live-window-inner-min-width: {liveWindowInnerMinWidth};
-    --live-window-blinds-width-scale: {blindsWidthScale};
-    --live-window-collapsed-slat-height-scale: {collapsedSlatHeightScale};
-    --live-window-rod-height-scale: {rodHeightScale};
+    --live-window-num-blinds: {NUM_BLINDS};
+    --live-window-height: {`${liveWindowStyles.height}vh`};
+    --live-window-min-height: {`${liveWindowStyles.minHeight}px`};
+    --live-window-inner-width: {`${liveWindowStyles.width}vw`};
+    --live-window-inner-min-width: {`${liveWindowStyles.minWidth}px`};
+    --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
+    --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
+    --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
   "
 >
   <div class="clock">
@@ -163,15 +232,21 @@
     <span class="seperator">:</span>
     <span>{time.minute < 10 ? "0" : ""}{time.minute}</span>
   </div>
-  {#key blindRenderKey}
-    <div class="rod" />
+  <div class="rod" />
+  {#key blindsRenderKey}
     <div class="blinds">
       <div class="strings">
-        <div class="string" style:height={leftStringHeight} />
-        <div class="string" style:height={rightStringHeight} />
+        <div
+          class="string"
+          style:height={liveWindowSettings.string.leftHeight}
+        />
+        <div
+          class="string"
+          style:height={liveWindowSettings.string.rightHeight}
+        />
       </div>
       <div class="slats {getASkewClass()}">
-        {#each new Array(numBlinds) as _, blindIndex}
+        {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased + liveWindowSettings.numBlindsCollpased) as _, blindIndex}
           <div
             class="slat slat-{blindIndex + 1}"
             class:collapse={getIsCollapsed(blindIndex)}
@@ -180,8 +255,8 @@
         {/each}
       </div>
     </div>
-    <div class="horizontal-bar" />
   {/key}
+  <div class="horizontal-bar" />
   <div class="sky" />
 </div>
 
