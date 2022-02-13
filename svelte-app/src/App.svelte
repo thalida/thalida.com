@@ -1,4 +1,5 @@
 <script>
+	import LiveWindow from "./LiveWindow.svelte";
 	let scrollY = 0;
 
 	export let isHeaderSticky = false;
@@ -40,6 +41,8 @@
 		</nav>
 	</div>
 </header>
+
+<LiveWindow />
 
 <style lang="scss">
 	.container {
