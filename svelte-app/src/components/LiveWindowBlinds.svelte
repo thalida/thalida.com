@@ -1,24 +1,9 @@
 <script>
   import { afterUpdate } from "svelte";
 
-  export const time = {
-    hour: 0,
-    minute: 0,
-  };
-
   export let blindsRenderKey = 0;
   export const NUM_BLINDS = 20;
   export const COLLAPSED_BLINDS_ROTATE_DEG = 70;
-
-  export const liveWindowStyles = {
-    width: 25,
-    height: 40,
-    minWidth: 250,
-    minHeight: 400,
-    rodHeightScale: 0.75,
-    blindsWidthScale: 1.4,
-    collapsedSlatHeightScale: 0.3,
-  };
 
   export const liveWindowSettings = {
     numBlindsCollpased: 0,
@@ -129,11 +114,6 @@
     }
   }
 
-  function updateBlinds() {
-    updateStrings();
-    updateSlats();
-  }
-
   function stepAnimation(animateFrom, targetAnimations, speedMs = 100) {
     const animateTo = { ...targetAnimations };
     return new Promise((resolve) => {
@@ -169,7 +149,7 @@
     });
   }
 
-  function animate() {
+  function runAnimation() {
     stepAnimation(
       liveWindowSettings,
       {
@@ -201,116 +181,55 @@
     });
   }
 
-  function startClock() {
-    setInterval(() => {
-      const today = new Date();
-      time.hour = today.getHours();
-      time.minute = today.getMinutes();
-    }, 100);
-  }
+  afterUpdate(() => {
+    updateStrings();
+    updateSlats();
+  });
 
-  startClock();
-  afterUpdate(updateBlinds);
-  animate();
+  runAnimation();
 </script>
 
-<div
-  class="live-window"
-  style="
-    --live-window-num-blinds: {NUM_BLINDS};
-    --live-window-height: {`${liveWindowStyles.height}vh`};
-    --live-window-min-height: {`${liveWindowStyles.minHeight}px`};
-    --live-window-inner-width: {`${liveWindowStyles.width}vw`};
-    --live-window-inner-min-width: {`${liveWindowStyles.minWidth}px`};
-    --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
-    --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
-    --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
-  "
->
-  <div class="clock">
-    <span>{time.hour < 10 ? "0" : ""}{time.hour}</span>
-    <span class="seperator">:</span>
-    <span>{time.minute < 10 ? "0" : ""}{time.minute}</span>
-  </div>
-  <div class="rod" />
-  {#key blindsRenderKey}
-    <div class="blinds">
-      <div class="strings">
-        <div
-          class="string"
-          style:height={liveWindowSettings.string.leftHeight}
-        />
-        <div
-          class="string"
-          style:height={liveWindowSettings.string.rightHeight}
-        />
-      </div>
-      <div class="slats {getASkewClass()}">
-        {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased + liveWindowSettings.numBlindsCollpased) as _, blindIndex}
-          <div
-            class="slat slat-{blindIndex + 1}"
-            class:collapse={getIsCollapsed(blindIndex)}
-            style:transform={getSlatTransform(blindIndex)}
-          />
-        {/each}
-      </div>
+{#key blindsRenderKey}
+  <div
+    class="blinds"
+    style="
+    --live-window-num-blinds: {NUM_BLINDS};"
+  >
+    <div class="rod" />
+    <div class="strings">
+      <div class="string" style:height={liveWindowSettings.string.leftHeight} />
+      <div
+        class="string"
+        style:height={liveWindowSettings.string.rightHeight}
+      />
     </div>
-  {/key}
-  <div class="horizontal-bar" />
-  <div class="sky" />
-</div>
+    <div class="slats {getASkewClass()}">
+      {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased + liveWindowSettings.numBlindsCollpased) as _, blindIndex}
+        <div
+          class="slat slat-{blindIndex + 1}"
+          class:collapse={getIsCollapsed(blindIndex)}
+          style:transform={getSlatTransform(blindIndex)}
+        />
+      {/each}
+    </div>
+  </div>
+{/key}
 
 <style lang="scss">
-  .live-window {
+  .blinds {
     position: relative;
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
-    height: var(--live-window-height);
-    min-height: var(--live-window-min-height);
-
-    .clock {
-      position: absolute;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
-      align-items: center;
-      bottom: -2px;
-      right: 20%;
-      z-index: 2;
-      width: 90px;
-      height: 40px;
-      border-radius: 8px;
-      font-size: 24px;
-      font-family: "Squada One";
-      color: var(--color-text-red);
-      background: var(--color-bg-default);
-
-      &:before {
-        content: "";
-        position: absolute;
-        top: -3px;
-        height: 3px;
-        width: 40%;
-        border-radius: 3px 3px 0 0;
-        background: var(--color-bg-default);
-      }
-
-      .seperator {
-        animation: 0.8s infinite alternate flash;
-
-        @keyframes flash {
-          from {
-            opacity: 1;
-          }
-
-          to {
-            opacity: 0.2;
-          }
-        }
-      }
-    }
+    z-index: 1;
+    width: calc(
+      var(--live-window-inner-width) * var(--live-window-blinds-width-scale)
+    );
+    min-width: calc(
+      var(--live-window-inner-min-width) * var(--live-window-blinds-width-scale)
+    );
+    height: auto;
 
     .rod {
       z-index: 2;
@@ -324,135 +243,87 @@
       background: var(--color-bg-default);
     }
 
-    .horizontal-bar {
+    .strings {
       position: absolute;
       display: flex;
-      flex-flow: column nowrap;
-      align-items: center;
-      justify-content: flex-start;
+      flex-flow: row nowrap;
+      justify-content: space-between;
       width: 100%;
-      height: 15px;
-      background: var(--color-bg-default);
-      top: calc((100% - 15px) / 2);
-      z-index: 1;
+      height: 100%;
+      padding: 0 25%;
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: -5px;
-        width: 8%;
-        height: 5px;
-        border-radius: 5px 5px 0 0;
+      .string {
+        width: 2px;
+        height: 100%;
         background: var(--color-bg-default);
       }
     }
 
-    .blinds {
+    .slats {
       position: relative;
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: flex-start;
-      align-items: center;
-      z-index: 1;
-      width: calc(
-        var(--live-window-inner-width) * var(--live-window-blinds-width-scale)
-      );
-      min-width: calc(
-        var(--live-window-inner-min-width) *
-          var(--live-window-blinds-width-scale)
-      );
-      height: auto;
+      width: 100%;
+      z-index: -1;
 
-      .strings {
-        position: absolute;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        width: 100%;
-        height: 100%;
-        padding: 0 25%;
-
-        .string {
-          width: 2px;
-          height: 100%;
-          background: var(--color-bg-default);
-        }
+      &.askew-left .slat {
+        transform-origin: top left;
       }
 
-      .slats {
+      &.askew-right .slat {
+        transform-origin: top right;
+      }
+
+      &.not-askew .slat {
+        transform-origin: top center;
+      }
+
+      .slat {
         position: relative;
         width: 100%;
-        z-index: -1;
+        background: var(--color-bg-default);
 
-        &.askew-left .slat {
-          transform-origin: top left;
+        &:not(.collapse) {
+          height: calc(
+            var(--live-window-height) / (var(--live-window-num-blinds) - 1)
+          );
+          min-height: calc(
+            var(--live-window-min-height) / (var(--live-window-num-blinds) - 1)
+          );
         }
 
-        &.askew-right .slat {
-          transform-origin: top right;
-        }
+        &.collapse {
+          position: absolute;
+          left: 0;
+          height: calc(
+            (var(--live-window-height) / (var(--live-window-num-blinds) - 1)) *
+              var(--live-window-collapsed-slat-height-scale)
+          );
+          min-height: calc(
+            (
+                var(--live-window-min-height) /
+                  (var(--live-window-num-blinds) - 1)
+              ) * var(--live-window-collapsed-slat-height-scale)
+          );
 
-        &.not-askew .slat {
-          transform-origin: top center;
-        }
-
-        .slat {
-          position: relative;
-          width: 100%;
-          background: var(--color-bg-default);
-
-          &:not(.collapse) {
-            height: calc(
-              var(--live-window-height) / (var(--live-window-num-blinds) - 1)
-            );
-            min-height: calc(
-              var(--live-window-min-height) /
-                (var(--live-window-num-blinds) - 1)
-            );
+          &:before,
+          &:after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 200%;
+            background: var(--color-bg-default);
           }
 
-          &.collapse {
-            position: absolute;
-            left: 0;
-            height: calc(
-              (var(--live-window-height) / (var(--live-window-num-blinds) - 1)) *
-                var(--live-window-collapsed-slat-height-scale)
-            );
-            min-height: calc(
-              (
-                  var(--live-window-min-height) /
-                    (var(--live-window-num-blinds) - 1)
-                ) * var(--live-window-collapsed-slat-height-scale)
-            );
+          &:before {
+            top: -100%;
+            left: 25%;
+          }
 
-            &:before,
-            &:after {
-              content: "";
-              position: absolute;
-              width: 2px;
-              height: 200%;
-              background: var(--color-bg-default);
-            }
-
-            &:before {
-              top: -100%;
-              left: 25%;
-            }
-
-            &:after {
-              top: -100%;
-              right: 25%;
-            }
+          &:after {
+            top: -100%;
+            right: 25%;
           }
         }
       }
-    }
-    .sky {
-      position: absolute;
-      height: 100%;
-      width: var(--live-window-inner-width);
-      min-width: var(--live-window-inner-min-width);
-      background: blue;
     }
   }
 </style>

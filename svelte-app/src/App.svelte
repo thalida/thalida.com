@@ -1,5 +1,5 @@
 <script>
-	import LiveWindow from "./LiveWindow.svelte";
+	import LiveWindow from "./components/LiveWindow.svelte";
 	let scrollY = 0;
 
 	export let isHeaderSticky = false;
