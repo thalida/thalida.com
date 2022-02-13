@@ -279,12 +279,13 @@
       bottom: -2px;
       right: 20%;
       z-index: 2;
-      background: var(--color-bg-default);
-      padding: 10px 20px;
+      width: 90px;
+      height: 40px;
       border-radius: 8px;
       font-size: 24px;
       font-family: "Squada One";
       color: var(--color-text-red);
+      background: var(--color-bg-default);
 
       &:before {
         content: "";
