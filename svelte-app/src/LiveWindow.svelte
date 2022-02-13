@@ -1,11 +1,26 @@
 <script>
   import { afterUpdate } from "svelte";
+  const liveWindowSize = {
+    width: 25,
+    height: 40,
+    minWidth: 250,
+    minHeight: 400,
+  };
+  export const liveWindowHeight = `${liveWindowSize.height}vh`;
+  export const liveWindowMinHeight = `${liveWindowSize.minHeight}px`;
+  export const liveWindowInnerWidth = `${liveWindowSize.width}vw`;
+  export const liveWindowInnerMinWidth = `${liveWindowSize.minWidth}px`;
+  export const blindsWidthScale = 1.4;
+  export const collapsedSlatHeightScale = 0.5;
+  export const rodHeightScale = 0.75;
+
   export const numBlinds = 20;
-  export const numBlindsCollpased = 0;
-  export const maxBlindsOpenDeg = 20; // 20 - 70
+  export const numBlindsCollpased = 5;
+  export const maxBlindsOpenDeg = 70; // 20 - 70
   export const maxSkewDeg = numBlindsCollpased === 0 ? 0 : 30;
-  export const skewDirection = -1;
-  export let stringHeight = "100%";
+  export const skewDirection = 0;
+  export let leftStringHeight = "100%";
+  export let rightStringHeight = "100%";
 
   afterUpdate(() => {
     const blinds = document.querySelector(".blinds");
@@ -14,8 +29,22 @@
       `.slat-${numBlinds - numBlindsCollpased}`
     );
     const guideBlindRect = guideBlind.getBoundingClientRect();
-    const stringLength = guideBlindRect.bottom - blindsRect.top - 1;
-    stringHeight = `${stringLength}px`;
+    const shortString =
+      guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
+    const longString = guideBlindRect.bottom - blindsRect.top;
+    const shortStringHeight = `${shortString}px`;
+    const longStringHeight = `${longString}px`;
+
+    if (skewDirection === -1) {
+      leftStringHeight = longStringHeight;
+      rightStringHeight = shortStringHeight;
+    } else if (skewDirection === 1) {
+      leftStringHeight = shortStringHeight;
+      rightStringHeight = longStringHeight;
+    } else {
+      leftStringHeight = longStringHeight;
+      rightStringHeight = longStringHeight;
+    }
 
     const allSlides = document.querySelectorAll(".slat");
     for (let i = 1; i < allSlides.length; i += 1) {
@@ -25,7 +54,7 @@
       const isCollapsed = currSlide.classList.contains("collapse");
 
       if (isCollapsed) {
-        const skewFix = maxSkewDeg <= 0 ? 1 : maxSkewDeg;
+        const skewFix = skewDirection === 0 || maxSkewDeg <= 0 ? 1 : maxSkewDeg;
         currSlide.style.top = `${
           prevSlideRect.top + prevSlideRect.height / skewFix - blindsRect.top
         }px`;
@@ -37,27 +66,19 @@
     return blindIndex + numBlindsCollpased >= numBlinds;
   }
 
-  export function getSlatHeight(blindIndex) {
-    const isCollapsed = getIsCollapsed(blindIndex);
-    const height = 40 / (numBlinds - 1);
-    return isCollapsed ? `${height / 2}vh` : `${height}vh`;
-  }
-
-  export function getSlatMinHeight(blindIndex) {
-    const isCollapsed = getIsCollapsed(blindIndex);
-    const minHeight = 400 / (numBlinds - 1);
-    return isCollapsed ? `${minHeight / 2}px` : `${minHeight}px`;
-  }
-
-  export function getSlatTransformOrigin() {
-    const transformOrigin = skewDirection === -1 ? "top right" : "top left";
-    return transformOrigin;
+  export function getASkewClass() {
+    return skewDirection === 1
+      ? "askew-left"
+      : skewDirection === -1
+      ? "askew-right"
+      : "not-askew";
   }
 
   export function getSlatTransform(blindIndex) {
     const currBlind = numBlinds - blindIndex;
     const skewSteps = maxSkewDeg / numBlinds;
-    const skewDeg = maxSkewDeg - currBlind * skewSteps;
+    const skewDeg =
+      skewDirection === 0 ? 0 : maxSkewDeg - currBlind * skewSteps;
     const rotateDeg = maxBlindsOpenDeg - skewDeg;
     const rotate = `rotateX(${rotateDeg}deg)`;
     const skew = `skewY(${skewDeg * skewDirection}deg)`;
@@ -65,22 +86,31 @@
   }
 </script>
 
-<div class="live-window">
+<div
+  class="live-window"
+  style="
+    --live-window-num-blinds: {numBlinds};
+    --live-window-height: {liveWindowHeight};
+    --live-window-min-height: {liveWindowMinHeight};
+    --live-window-inner-width: {liveWindowInnerWidth};
+    --live-window-inner-min-width: {liveWindowInnerMinWidth};
+    --live-window-blinds-width-scale: {blindsWidthScale};
+    --live-window-collapsed-slat-height-scale: {collapsedSlatHeightScale};
+    --live-window-rod-height-scale: {rodHeightScale};
+  "
+>
   <div class="rod" />
   <div class="blinds">
-    <div class="strings" style:height={stringHeight}>
-      <div class="string" />
-      <div class="string" />
+    <div class="strings">
+      <div class="string" style:height={leftStringHeight} />
+      <div class="string" style:height={rightStringHeight} />
     </div>
-    <div class="slats">
+    <div class="slats {getASkewClass()}">
       {#each new Array(numBlinds) as _, blindIndex}
         <div
           class="slat slat-{blindIndex + 1}"
           class:collapse={getIsCollapsed(blindIndex)}
           style:transform={getSlatTransform(blindIndex)}
-          style:transform-origin={getSlatTransformOrigin()}
-          style:height={getSlatHeight(blindIndex)}
-          style:min-height={getSlatMinHeight(blindIndex)}
         />
       {/each}
     </div>
@@ -95,16 +125,18 @@
     flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
-    height: 40vh;
-    min-height: 400px;
+    height: var(--live-window-height);
+    min-height: var(--live-window-min-height);
 
     .rod {
+      z-index: 2;
       position: absolute;
       width: 5px;
-      height: 75%;
-      min-height: 300px;
       left: 18%;
-      z-index: 2;
+      height: 75%;
+      min-height: calc(
+        var(--live-window-min-height) * var(--live-window-rod-height-scale)
+      );
       background: var(--color-bg-default);
     }
 
@@ -115,8 +147,13 @@
       justify-content: flex-start;
       align-items: center;
       z-index: 1;
-      width: 34vw;
-      min-width: 340px;
+      width: calc(
+        var(--live-window-inner-width) * var(--live-window-blinds-width-scale)
+      );
+      min-width: calc(
+        var(--live-window-inner-min-width) *
+          var(--live-window-blinds-width-scale)
+      );
       height: auto;
 
       .strings {
@@ -140,14 +177,47 @@
         width: 100%;
         z-index: -1;
 
+        &.askew-left .slat {
+          transform-origin: top left;
+        }
+
+        &.askew-right .slat {
+          transform-origin: top right;
+        }
+
+        &.not-askew .slat {
+          transform-origin: top center;
+        }
+
         .slat {
           position: relative;
           width: 100%;
           background: var(--color-bg-default);
 
+          &:not(.collapse) {
+            height: calc(
+              var(--live-window-height) / (var(--live-window-num-blinds) - 1)
+            );
+            min-height: calc(
+              var(--live-window-min-height) /
+                (var(--live-window-num-blinds) - 1)
+            );
+          }
+
           &.collapse {
             position: absolute;
             left: 0;
+            height: calc(
+              (var(--live-window-height) / (var(--live-window-num-blinds) - 1)) *
+                var(--live-window-collapsed-slat-height-scale)
+            );
+            min-height: calc(
+              (
+                  var(--live-window-min-height) /
+                    (var(--live-window-num-blinds) - 1)
+                ) * var(--live-window-collapsed-slat-height-scale)
+            );
+
             &:before,
             &:after {
               content: "";
@@ -173,8 +243,8 @@
     .sky {
       position: absolute;
       height: 100%;
-      width: 25vw;
-      min-width: 250px;
+      width: var(--live-window-inner-width);
+      min-width: var(--live-window-inner-min-width);
       background: blue;
     }
   }
