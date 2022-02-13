@@ -15,14 +15,15 @@
   export const rodHeightScale = 0.75;
 
   export const numBlinds = 20;
-  export const numBlindsCollpased = 5;
-  export const maxBlindsOpenDeg = 70; // 20 - 70
-  export const maxSkewDeg = numBlindsCollpased === 0 ? 0 : 30;
-  export const skewDirection = 0;
+  export let numBlindsCollpased = 0;
+  export let maxBlindsOpenDeg = 20;
+  export let maxSkewDeg = numBlindsCollpased === 0 ? 0 : 30;
+  export let skewDirection = 0;
   export let leftStringHeight = "100%";
   export let rightStringHeight = "100%";
+  export let blindRenderKey = 0;
 
-  afterUpdate(() => {
+  function updateStrings() {
     const blinds = document.querySelector(".blinds");
     const blindsRect = blinds.getBoundingClientRect();
     let guideBlind = document.querySelector(
@@ -45,7 +46,11 @@
       leftStringHeight = longStringHeight;
       rightStringHeight = longStringHeight;
     }
+  }
 
+  function updateSlats() {
+    const blinds = document.querySelector(".blinds");
+    const blindsRect = blinds.getBoundingClientRect();
     const allSlides = document.querySelectorAll(".slat");
     for (let i = 1; i < allSlides.length; i += 1) {
       const prevSlide = allSlides[i - 1];
@@ -60,7 +65,25 @@
         }px`;
       }
     }
-  });
+  }
+
+  function updateBlinds() {
+    updateStrings();
+    updateSlats();
+  }
+
+  function animate() {
+    setTimeout(() => {
+      const percentageCollpased = 0.7;
+      numBlindsCollpased = numBlinds * percentageCollpased;
+      maxBlindsOpenDeg = 80;
+      maxSkewDeg = numBlindsCollpased === 0 ? 0 : 10;
+      skewDirection = -1;
+
+      blindRenderKey += 1;
+    }, 600);
+  }
+  animate();
 
   export function getIsCollapsed(blindIndex) {
     return blindIndex + numBlindsCollpased >= numBlinds;
@@ -84,6 +107,8 @@
     const skew = `skewY(${skewDeg * skewDirection}deg)`;
     return `${rotate} ${skew}`;
   }
+
+  afterUpdate(updateBlinds);
 </script>
 
 <div
@@ -99,22 +124,25 @@
     --live-window-rod-height-scale: {rodHeightScale};
   "
 >
-  <div class="rod" />
-  <div class="blinds">
-    <div class="strings">
-      <div class="string" style:height={leftStringHeight} />
-      <div class="string" style:height={rightStringHeight} />
+  {#key blindRenderKey}
+    <div class="rod" />
+    <div class="blinds">
+      <div class="strings">
+        <div class="string" style:height={leftStringHeight} />
+        <div class="string" style:height={rightStringHeight} />
+      </div>
+      <div class="slats {getASkewClass()}">
+        {#each new Array(numBlinds) as _, blindIndex}
+          <div
+            class="slat slat-{blindIndex + 1}"
+            class:collapse={getIsCollapsed(blindIndex)}
+            style:transform={getSlatTransform(blindIndex)}
+          />
+        {/each}
+      </div>
     </div>
-    <div class="slats {getASkewClass()}">
-      {#each new Array(numBlinds) as _, blindIndex}
-        <div
-          class="slat slat-{blindIndex + 1}"
-          class:collapse={getIsCollapsed(blindIndex)}
-          style:transform={getSlatTransform(blindIndex)}
-        />
-      {/each}
-    </div>
-  </div>
+    <div class="horizontal-bar" />
+  {/key}
   <div class="sky" />
 </div>
 
@@ -138,6 +166,29 @@
         var(--live-window-min-height) * var(--live-window-rod-height-scale)
       );
       background: var(--color-bg-default);
+    }
+
+    .horizontal-bar {
+      position: absolute;
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      height: 15px;
+      background: var(--color-bg-default);
+      top: calc((100% - 15px) / 2);
+      z-index: 1;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        width: 8%;
+        height: 5px;
+        border-radius: 5px 5px 0 0;
+        background: var(--color-bg-default);
+      }
     }
 
     .blinds {
@@ -169,6 +220,7 @@
           width: 2px;
           height: 100%;
           background: var(--color-bg-default);
+          transition: all ease-in-out 100ms;
         }
       }
 
@@ -193,6 +245,7 @@
           position: relative;
           width: 100%;
           background: var(--color-bg-default);
+          transition: all ease-in-out 200ms;
 
           &:not(.collapse) {
             height: calc(
