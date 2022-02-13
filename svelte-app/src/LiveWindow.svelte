@@ -295,6 +295,20 @@
         border-radius: 3px 3px 0 0;
         background: var(--color-bg-default);
       }
+
+      .seperator {
+        animation: 0.8s infinite alternate flash;
+
+        @keyframes flash {
+          from {
+            opacity: 1;
+          }
+
+          to {
+            opacity: 0.2;
+          }
+        }
+      }
     }
 
     .rod {
