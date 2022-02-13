@@ -376,7 +376,6 @@
           width: 2px;
           height: 100%;
           background: var(--color-bg-default);
-          transition: all ease-in-out 100ms;
         }
       }
 
@@ -401,7 +400,6 @@
           position: relative;
           width: 100%;
           background: var(--color-bg-default);
-          transition: all ease-in-out 200ms;
 
           &:not(.collapse) {
             height: calc(
