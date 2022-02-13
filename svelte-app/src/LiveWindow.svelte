@@ -123,7 +123,7 @@
 
   function animate() {
     setTimeout(() => {
-      const percentageCollpased = 0.7;
+      const percentageCollpased = 0.75;
       numBlindsCollpased = numBlinds * percentageCollpased;
       maxBlindsOpenDeg = 70;
       maxSkewDeg = numBlindsCollpased === 0 ? 0 : 10;
@@ -203,7 +203,7 @@
       align-items: center;
       bottom: -2px;
       right: 20%;
-      z-index: 1;
+      z-index: 2;
       background: var(--color-bg-default);
       padding: 10px 20px;
       border-radius: 8px;
