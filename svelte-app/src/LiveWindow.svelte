@@ -1,5 +1,9 @@
 <script>
   import { afterUpdate } from "svelte";
+  export const time = {
+    hour: 0,
+    minute: 0,
+  };
   const liveWindowSize = {
     width: 25,
     height: 40,
@@ -24,6 +28,39 @@
   export const rodHeightScale = 0.75;
   export const blindsWidthScale = 1.4;
   export const collapsedSlatHeightScale = 0.3;
+
+  export function getIsCollapsed(blindIndex) {
+    return blindIndex + numBlindsCollpased >= numBlinds;
+  }
+
+  export function getASkewClass() {
+    return skewDirection === 1
+      ? "askew-left"
+      : skewDirection === -1
+      ? "askew-right"
+      : "not-askew";
+  }
+
+  export function getSlatTransform(blindIndex) {
+    const isCollapsed = getIsCollapsed(blindIndex);
+    const currBlind = numBlinds - blindIndex;
+    const skewSteps = maxSkewDeg / (numBlinds - numBlindsCollpased);
+    let skewDeg = 0;
+
+    if (skewDirection !== 0 && maxSkewDeg >= 0) {
+      if (!isCollapsed) {
+        skewDeg = maxSkewDeg - (currBlind - numBlindsCollpased - 1) * skewSteps;
+      } else {
+        skewDeg = maxSkewDeg;
+      }
+    }
+    const rotateDeg = isCollapsed
+      ? collapsedBlindRotateDeg - skewDeg
+      : maxBlindsOpenDeg - skewDeg;
+    const rotate = `rotateX(${rotateDeg}deg)`;
+    const skew = `skewY(${skewDeg * skewDirection}deg)`;
+    return `${rotate} ${skew}`;
+  }
 
   function updateStrings() {
     const blinds = document.querySelector(".blinds");
@@ -95,39 +132,15 @@
     }, 600);
   }
 
-  export function getIsCollapsed(blindIndex) {
-    return blindIndex + numBlindsCollpased >= numBlinds;
+  function startClock() {
+    setInterval(() => {
+      const today = new Date();
+      time.hour = today.getHours();
+      time.minute = today.getMinutes();
+    }, 100);
   }
 
-  export function getASkewClass() {
-    return skewDirection === 1
-      ? "askew-left"
-      : skewDirection === -1
-      ? "askew-right"
-      : "not-askew";
-  }
-
-  export function getSlatTransform(blindIndex) {
-    const isCollapsed = getIsCollapsed(blindIndex);
-    const currBlind = numBlinds - blindIndex;
-    const skewSteps = maxSkewDeg / (numBlinds - numBlindsCollpased);
-    let skewDeg = 0;
-
-    if (skewDirection !== 0 && maxSkewDeg >= 0) {
-      if (!isCollapsed) {
-        skewDeg = maxSkewDeg - (currBlind - numBlindsCollpased - 1) * skewSteps;
-      } else {
-        skewDeg = maxSkewDeg;
-      }
-    }
-    const rotateDeg = isCollapsed
-      ? collapsedBlindRotateDeg - skewDeg
-      : maxBlindsOpenDeg - skewDeg;
-    const rotate = `rotateX(${rotateDeg}deg)`;
-    const skew = `skewY(${skewDeg * skewDirection}deg)`;
-    return `${rotate} ${skew}`;
-  }
-
+  startClock();
   afterUpdate(updateBlinds);
   animate();
 </script>
@@ -145,6 +158,11 @@
     --live-window-rod-height-scale: {rodHeightScale};
   "
 >
+  <div class="clock">
+    <span>{time.hour < 10 ? "0" : ""}{time.hour}</span>
+    <span class="seperator">:</span>
+    <span>{time.minute < 10 ? "0" : ""}{time.minute}</span>
+  </div>
   {#key blindRenderKey}
     <div class="rod" />
     <div class="blinds">
@@ -176,6 +194,33 @@
     align-items: center;
     height: var(--live-window-height);
     min-height: var(--live-window-min-height);
+
+    .clock {
+      position: absolute;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      bottom: -2px;
+      right: 20%;
+      z-index: 1;
+      background: var(--color-bg-default);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 24px;
+      font-family: "Squada One";
+      color: var(--color-text-red);
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        height: 3px;
+        width: 40%;
+        border-radius: 3px 3px 0 0;
+        background: var(--color-bg-default);
+      }
+    }
 
     .rod {
       z-index: 2;
@@ -266,7 +311,7 @@
           position: relative;
           width: 100%;
           background: var(--color-bg-default);
-          transition: all ease-in-out 500ms;
+          transition: all ease-in-out 200ms;
 
           &:not(.collapse) {
             height: calc(
