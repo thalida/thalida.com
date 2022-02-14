@@ -1,4 +1,6 @@
 <script>
+  import { store } from "../store";
+
   import LiveWindowBlinds from "./LiveWindowBlinds.svelte";
   import LiveWindowClock from "./LiveWindowClock.svelte";
   import LiveWindowSky from "./LiveWindowSky.svelte";
@@ -15,24 +17,38 @@
 </script>
 
 <div
-  class="live-window"
+  class="scene"
   style="
-    --live-window-height: {`${liveWindowStyles.height}vh`};
-    --live-window-min-height: {`${liveWindowStyles.minHeight}px`};
-    --live-window-inner-width: {`${liveWindowStyles.width}vw`};
-    --live-window-inner-min-width: {`${liveWindowStyles.minWidth}px`};
-    --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
-    --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
-    --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
-  "
+      --live-window-height: {`${liveWindowStyles.height}vh`};
+      --live-window-min-height: {`${liveWindowStyles.minHeight}px`};
+      --live-window-inner-width: {`${liveWindowStyles.width}vw`};
+      --live-window-inner-min-width: {`${liveWindowStyles.minWidth}px`};
+      --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
+      --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
+      --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
+    "
 >
-  <LiveWindowClock />
-  <LiveWindowBlinds />
-  <div class="horizontal-bar" />
-  <LiveWindowSky />
+  <div class="live-window">
+    <LiveWindowClock />
+    <LiveWindowBlinds />
+    <div class="horizontal-bar" />
+    <LiveWindowSky />
+  </div>
+  {#if $store.weather.current}
+    <p class="current-weather-text">
+      It&rsquo;s currently
+      {$store.weather.current.temp}&deg;C and
+      {$store.weather.current.description}
+    </p>
+  {/if}
 </div>
 
 <style lang="scss">
+  .scene {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+  }
   .live-window {
     position: relative;
     display: flex;
@@ -64,5 +80,12 @@
         background: var(--color-bg-default);
       }
     }
+  }
+  .current-weather-text {
+    font-family: Josefin Sans, Helvetica, sans-serif;
+    font-size: 18px;
+    width: var(--live-window-inner-width);
+    min-width: var(--live-window-inner-min-width);
+    text-align: center;
   }
 </style>

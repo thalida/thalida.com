@@ -1,44 +1,19 @@
 <script>
-  import { writable } from "svelte/store";
   import axios from "axios";
   import { onMount } from "svelte";
-
-  const IP_RATE_LIMIT = 30 * 60000; // 30minute
-  const WEATHER_RATE_LIMIT = 30 * 60000; // 30minute
-  const OPEN_WEATHER_KEY = "45e138203c325d6879937693da1703d8";
-  const IP_REGISTRY_KEY = "crbibyp671da1qve";
-  const defaultData = {
-    location: { version: 1, lastFetched: null, lat: null, lng: null },
-    weather: {
-      version: 3,
-      lastFetched: null,
-      current: null,
-      sunrise: null,
-      sunset: null,
-    },
-  };
-  const storedData = localStorage.liveWindowStore
-    ? JSON.parse(localStorage.liveWindowStore)
-    : {};
-  const store = writable({
-    location: {
-      ...defaultData.location,
-      ...storedData.location,
-    },
-    weather: {
-      ...defaultData.weather,
-      ...storedData.weather,
-    },
-  });
-  store.subscribe((value) => {
-    localStorage.liveWindowStore = JSON.stringify(value);
-  });
-  store.set($store);
+  import {
+    IP_RATE_LIMIT,
+    IP_REGISTRY_KEY,
+    WEATHER_RATE_LIMIT,
+    OPEN_WEATHER_KEY,
+    defaultStore,
+    store,
+  } from "../store";
 
   async function getLocation() {
     const now = Date.now();
     if (
-      $store.location.version === defaultData.location.version &&
+      $store.location.version === defaultStore.location.version &&
       $store.location.lastFetched !== null &&
       now - $store.location.lastFetched < IP_RATE_LIMIT
     ) {
@@ -56,7 +31,7 @@
   async function getWeather() {
     const now = Date.now();
     if (
-      $store.weather.version === defaultData.weather.version &&
+      $store.weather.version === defaultStore.weather.version &&
       $store.weather.lastFetched !== null &&
       now - $store.weather.lastFetched < WEATHER_RATE_LIMIT
     ) {
