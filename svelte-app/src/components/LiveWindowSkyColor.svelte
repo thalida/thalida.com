@@ -13,6 +13,7 @@
     { r: 255, g: 103, b: 116 },
     { r: 20, g: 40, b: 116 },
   ];
+  const SUNSET_COLOR_IDX = 6;
 
   const time = {
     hour: 0,
@@ -75,7 +76,7 @@
     let gradient;
     // gradient goes "in reverse" during sunset / late night
     // so that the brightest colors are at the bottom (closer to the horizon)
-    if (startColorIdx * numSegements >= 18) {
+    if (startColorIdx >= SUNSET_COLOR_IDX) {
       gradient = {
         start: gradientEnd,
         end: gradientStart,
