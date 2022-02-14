@@ -1,6 +1,7 @@
 <script>
   import LiveWindowBlinds from "./LiveWindowBlinds.svelte";
   import LiveWindowClock from "./LiveWindowClock.svelte";
+  import LiveWindowSky from "./LiveWindowSky.svelte";
 
   export const liveWindowStyles = {
     width: 25,
@@ -28,7 +29,7 @@
   <LiveWindowClock />
   <LiveWindowBlinds />
   <div class="horizontal-bar" />
-  <div class="sky" />
+  <LiveWindowSky />
 </div>
 
 <style lang="scss">
@@ -62,13 +63,6 @@
         border-radius: 5px 5px 0 0;
         background: var(--color-bg-default);
       }
-    }
-    .sky {
-      position: absolute;
-      height: 100%;
-      width: var(--live-window-inner-width);
-      min-width: var(--live-window-inner-min-width);
-      background: blue;
     }
   }
 </style>

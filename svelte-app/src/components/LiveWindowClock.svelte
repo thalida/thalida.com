@@ -1,14 +1,19 @@
 <script>
+  import { onDestroy } from "svelte";
   export const time = {
     hour: 0,
     minute: 0,
   };
 
-  setInterval(() => {
+  const updateTimeInterval = setInterval(() => {
     const today = new Date();
     time.hour = today.getHours();
     time.minute = today.getMinutes();
   }, 100);
+
+  onDestroy(() => {
+    clearInterval(updateTimeInterval);
+  });
 </script>
 
 <div class="clock">
