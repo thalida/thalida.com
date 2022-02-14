@@ -87,5 +87,6 @@
     width: var(--live-window-inner-width);
     min-width: var(--live-window-inner-min-width);
     text-align: center;
+    margin: 30px 0;
   }
 </style>
