@@ -4,14 +4,14 @@
   const HOURS_IN_DAY = 24;
   const MINUTES_IN_HOUR = 60;
   const TIME_COLORS = [
-    { r: 50, g: 60, b: 100 },
+    { r: 4, g: 10, b: 30 },
     { r: 139, g: 152, b: 206 },
     { r: 86, g: 216, b: 255 },
     { r: 255, g: 216, b: 116 },
     { r: 255, g: 183, b: 116 },
     { r: 255, g: 153, b: 116 },
     { r: 255, g: 103, b: 116 },
-    { r: 40, g: 75, b: 215 },
+    { r: 20, g: 40, b: 116 },
   ];
 
   const time = {
@@ -57,8 +57,8 @@
       colorEndTimeInMins - colorStartTimeInMins
     );
     const gradientStartDistance =
-      minSinceColorStart - 10 >= 0
-        ? (minSinceColorStart - 10) / minsInColorRange
+      minSinceColorStart - 60 >= 0
+        ? (minSinceColorStart - 60) / minsInColorRange
         : 0;
     const gradientStart = getColorBlend(
       startColor,
@@ -88,7 +88,7 @@
     class="color"
     style="
       background: linear-gradient(
-        45deg,
+        180deg,
         rgb({`${Object.values(gradient.start).join(',')}`}),
         rgb({`${Object.values(gradient.end).join(',')}`})
       )
