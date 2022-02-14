@@ -72,10 +72,22 @@
       gradientEndDistance
     );
 
-    return {
-      start: gradientStart,
-      end: gradientEnd,
-    };
+    let gradient;
+    // gradient goes "in reverse" during sunset / late night
+    // so that the brightest colors are at the bottom (closer to the horizon)
+    if (startColorIdx * numSegements >= 18) {
+      gradient = {
+        start: gradientEnd,
+        end: gradientStart,
+      };
+    } else {
+      gradient = {
+        start: gradientStart,
+        end: gradientEnd,
+      };
+    }
+
+    return gradient;
   }
 
   onDestroy(() => {
