@@ -1,9 +1,10 @@
 <script>
+  import LiveWindowSkyWeather from "./LiveWindowSkyWeather.svelte";
   import LiveWindowSkyColor from "./LiveWindowSkyColor.svelte";
 </script>
 
 <div class="sky">
-  <div class="weather" />
+  <LiveWindowSkyWeather />
   <LiveWindowSkyColor />
 </div>
 

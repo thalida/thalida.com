@@ -20,7 +20,7 @@
     minute: 0,
   };
 
-  export let gradient;
+  export let gradient = {};
 
   const updateTimeInterval = setInterval(() => {
     const today = new Date();
@@ -96,7 +96,7 @@
   });
 </script>
 
-{#if gradient}
+{#if gradient.start}
   <div
     class="color"
     style="
