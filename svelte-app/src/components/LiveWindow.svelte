@@ -40,10 +40,10 @@
     "
 >
   <div class="live-window">
-    <LiveWindowClock />
-    <LiveWindowBlinds />
-    <div class="horizontal-bar" />
     <LiveWindowSky />
+    <div class="horizontal-bar" />
+    <LiveWindowBlinds />
+    <LiveWindowClock />
   </div>
   {#if $store.weather.current}
     <p class="current-weather-text">
@@ -78,7 +78,6 @@
       height: 15px;
       background: var(--color-bg-default);
       top: calc((100% - 15px) / 2);
-      z-index: 1;
 
       &::before {
         content: "";

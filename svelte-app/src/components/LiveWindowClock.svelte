@@ -31,7 +31,6 @@
     align-items: center;
     bottom: -2px;
     right: 20%;
-    z-index: 2;
     width: 90px;
     height: 40px;
     border-radius: 8px;

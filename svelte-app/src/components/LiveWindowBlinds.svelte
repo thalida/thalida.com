@@ -149,14 +149,6 @@
     style="
     --live-window-num-blinds: {NUM_BLINDS};"
   >
-    <div class="rod" />
-    <div class="strings">
-      <div class="string" style:height={liveWindowSettings.string.leftHeight} />
-      <div
-        class="string"
-        style:height={liveWindowSettings.string.rightHeight}
-      />
-    </div>
     <div class="slats">
       {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased) as _, blindIndex}
         <div
@@ -174,6 +166,14 @@
         <div class="string string-right-end" />
       </div>
     </div>
+    <div class="rod" />
+    <div class="strings">
+      <div class="string" style:height={liveWindowSettings.string.leftHeight} />
+      <div
+        class="string"
+        style:height={liveWindowSettings.string.rightHeight}
+      />
+    </div>
   </div>
 {/key}
 
@@ -184,14 +184,12 @@
     flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
-    z-index: 1;
     width: calc(
       var(--live-window-width) * var(--live-window-blinds-width-scale)
     );
     height: auto;
 
     .rod {
-      z-index: 2;
       position: absolute;
       width: 5px;
       left: 18%;
@@ -229,7 +227,6 @@
     .slats {
       position: relative;
       width: 100%;
-      z-index: -1;
 
       .slat {
         position: relative;

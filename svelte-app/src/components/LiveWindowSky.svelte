@@ -4,8 +4,8 @@
 </script>
 
 <div class="sky">
-  <LiveWindowSkyWeather />
   <LiveWindowSkyColor />
+  <LiveWindowSkyWeather />
 </div>
 
 <style lang="scss">
