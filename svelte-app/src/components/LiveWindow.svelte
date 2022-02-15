@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { store, fetchWeather, fetchLocation } from "../store";
-
   import LiveWindowBlinds from "./LiveWindowBlinds.svelte";
   import LiveWindowClock from "./LiveWindowClock.svelte";
   import LiveWindowSky from "./LiveWindowSky.svelte";

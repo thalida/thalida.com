@@ -1,6 +1,6 @@
 <script>
-  import { onDestroy } from "svelte";
-  import { store, fetchWeather } from "../store";
+  import { onMount, onDestroy } from "svelte";
+  import { store, fetchWeather, gradient } from "../store";
 
   const HOURS_IN_DAY = 24;
   const MINUTES_IN_HOUR = 60;
@@ -17,17 +17,7 @@
   const SUNRISE_COLOR_IDX = 2;
   const SUNSET_COLOR_IDX = 6;
 
-  const time = {
-    hour: 0,
-    minute: 0,
-  };
-
-  export let gradient = {};
-
-  const updateTimeInterval = setInterval(async () => {
-    await fetchWeather($store);
-    gradient = getRealisticColorGradient();
-  }, 2000);
+  let updateTimeInterval;
 
   function getColorBlend(startColor, endColor, distance) {
     const blendedColor = {};
@@ -162,19 +152,29 @@
     return gradient;
   }
 
+  async function updateGradient() {
+    await fetchWeather($store);
+    gradient.set(getRealisticColorGradient());
+  }
+  onMount(async () => {
+    const updateEvery = 15 * 60 * 1000; // 15 minutes
+    updateTimeInterval = setInterval(updateGradient, updateEvery);
+    updateGradient();
+  });
+
   onDestroy(() => {
     clearInterval(updateTimeInterval);
   });
 </script>
 
-{#if gradient.start}
+{#if $gradient.start}
   <div
     class="color"
     style="
       background: linear-gradient(
         180deg,
-        rgb({`${Object.values(gradient.start).join(',')}`}),
-        rgb({`${Object.values(gradient.end).join(',')}`})
+        rgb({`${Object.values($gradient.start).join(',')}`}),
+        rgb({`${Object.values($gradient.end).join(',')}`})
       )
     "
   />

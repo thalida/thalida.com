@@ -1,6 +1,8 @@
 <script>
   import { afterUpdate } from "svelte";
+  import { gradient } from "../store";
 
+  let isLoading = true;
   export let blindsRenderKey = 0;
   export const NUM_BLINDS = 20;
   export const COLLAPSED_BLINDS_ROTATE_DEG = 70;
@@ -186,7 +188,12 @@
     updateSlats();
   });
 
-  runAnimation();
+  gradient.subscribe((newGradient) => {
+    if (newGradient.start && isLoading) {
+      isLoading = false;
+      runAnimation();
+    }
+  });
 </script>
 
 {#key blindsRenderKey}

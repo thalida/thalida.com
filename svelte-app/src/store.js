@@ -31,6 +31,8 @@ export const store = writable({
   },
 });
 
+export const gradient = writable({});
+
 store.subscribe((value) => {
   localStorage.liveWindowStore = JSON.stringify(value);
 });
