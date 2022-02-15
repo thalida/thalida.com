@@ -1,5 +1,6 @@
 <script>
-  import { store } from "../store";
+  import { onMount } from "svelte";
+  import { store, fetchWeather, fetchLocation } from "../store";
 
   import LiveWindowBlinds from "./LiveWindowBlinds.svelte";
   import LiveWindowClock from "./LiveWindowClock.svelte";
@@ -14,6 +15,11 @@
     blindsWidthScale: 1.4,
     collapsedSlatHeightScale: 0.3,
   };
+
+  onMount(async () => {
+    await fetchLocation($store);
+    await fetchWeather($store);
+  });
 </script>
 
 <div

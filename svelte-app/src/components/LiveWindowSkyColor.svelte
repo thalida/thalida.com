@@ -1,5 +1,6 @@
 <script>
   import { onDestroy } from "svelte";
+  import { store, fetchWeather } from "../store";
 
   const HOURS_IN_DAY = 24;
   const MINUTES_IN_HOUR = 60;
@@ -13,6 +14,7 @@
     { r: 255, g: 103, b: 116 },
     { r: 20, g: 40, b: 116 },
   ];
+  const SUNRISE_COLOR_IDX = 2;
   const SUNSET_COLOR_IDX = 6;
 
   const time = {
@@ -22,12 +24,14 @@
 
   export let gradient = {};
 
-  const updateTimeInterval = setInterval(() => {
-    const today = new Date();
-    time.hour = today.getHours();
-    time.minute = today.getMinutes();
-    gradient = getColorGradient(time);
-  }, 100);
+  const updateTimeInterval = setInterval(async () => {
+    await fetchWeather($store);
+    // const today = new Date();
+    // time.hour = today.getHours();
+    // time.minute = today.getMinutes();
+    // gradient = getColorGradient(time);
+    gradient = getRealisticColorGradient();
+  }, 2000);
 
   function getColorBlend(startColor, endColor, distance) {
     const blendedColor = {};
@@ -37,6 +41,77 @@
       blendedColor[part] = Math.round(start + (end - start) * distance);
     }
     return blendedColor;
+  }
+
+  function getRealisticColorGradient() {
+    const date = new Date();
+    const now = date.getTime();
+    const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
+    const hourAgoIsh = new Date(now - shiftBy);
+    if (hourAgoIsh.getDate() !== date.getDate()) {
+      hourAgoIsh = new Date(now);
+      hourAgoIsh.setHours(0, 0, 0, 0);
+    }
+    const gradientStart = getRealisticColor(hourAgoIsh);
+    const gradientEnd = getRealisticColor(now);
+
+    let gradient;
+
+    if (now >= $store.weather.sunset) {
+      gradient = {
+        start: gradientEnd,
+        end: gradientStart,
+      };
+    } else {
+      gradient = {
+        start: gradientStart,
+        end: gradientEnd,
+      };
+    }
+
+    return gradient;
+  }
+
+  function getRealisticColor(now) {
+    const sunriseTime = $store.weather.sunrise;
+    const sunsetTime = $store.weather.sunset;
+
+    let colorPhase, phaseStartTime, phaseEndTime;
+    if (now < sunriseTime) {
+      const midnight = new Date(now);
+      midnight.setHours(0, 0, 0, 0);
+      colorPhase = TIME_COLORS.slice(0, SUNRISE_COLOR_IDX + 1);
+      phaseStartTime = midnight.getTime();
+      phaseEndTime = sunriseTime;
+    } else if (now >= sunsetTime) {
+      const EOD = new Date(now);
+      EOD.setHours(23, 59, 59, 9999);
+      colorPhase = TIME_COLORS.slice(SUNSET_COLOR_IDX);
+      colorPhase.push(TIME_COLORS[0]);
+      phaseStartTime = sunsetTime;
+      phaseEndTime = EOD.getTime();
+    } else {
+      colorPhase = TIME_COLORS.slice(SUNRISE_COLOR_IDX, SUNSET_COLOR_IDX + 1);
+      phaseStartTime = sunriseTime;
+      phaseEndTime = sunsetTime;
+    }
+
+    const timeSinceStart = now - phaseStartTime;
+    const timeInPhase = phaseEndTime - phaseStartTime;
+    const distance = timeSinceStart / timeInPhase;
+    const phaseSegments = timeInPhase / (colorPhase.length - 1);
+    const startColorIdx = Math.floor((colorPhase.length - 1) * distance);
+    const endColorIdx = startColorIdx + 1;
+    const startColorTime = phaseStartTime + startColorIdx * phaseSegments;
+    const endColorTime = phaseStartTime + endColorIdx * phaseSegments;
+    const timeInSegment = endColorTime - startColorTime;
+    const timeSinceSegmentStart = now - startColorTime;
+    const distanceInSegment = timeSinceSegmentStart / timeInSegment;
+    const startColor = colorPhase[startColorIdx];
+    const endColor = colorPhase[endColorIdx];
+
+    const color = getColorBlend(startColor, endColor, distanceInSegment);
+    return color;
   }
 
   function getColorGradient({ hour, minute }) {
