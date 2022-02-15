@@ -42,9 +42,9 @@
   </div>
   {#if $store.weather.current}
     <p class="current-weather-text">
-      It&rsquo;s currently
+      It&rsquo;s
       {$store.weather.current.temp}&deg;C and
-      {$store.weather.current.description}
+      {$store.weather.current.main}
     </p>
   {/if}
 </div>
