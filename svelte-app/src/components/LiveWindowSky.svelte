@@ -12,6 +12,6 @@
   .sky {
     position: absolute;
     height: 100%;
-    width: var(--live-window-inner-width);
+    width: var(--live-window-width);
   }
 </style>

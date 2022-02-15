@@ -224,7 +224,7 @@
     align-items: center;
     z-index: 1;
     width: calc(
-      var(--live-window-inner-width) * var(--live-window-blinds-width-scale)
+      var(--live-window-width) * var(--live-window-blinds-width-scale)
     );
     height: auto;
 

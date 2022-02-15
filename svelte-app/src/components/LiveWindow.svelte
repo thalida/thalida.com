@@ -24,7 +24,7 @@
   class="scene"
   style="
       --live-window-height: {`${liveWindowStyles.height}px`};
-      --live-window-inner-width: {`${liveWindowStyles.width}px`};
+      --live-window-width: {`${liveWindowStyles.width}px`};
       --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
       --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
       --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
@@ -85,7 +85,7 @@
   .current-weather-text {
     font-family: Josefin Sans, Helvetica, sans-serif;
     font-size: 18px;
-    width: var(--live-window-inner-width);
+    width: var(--live-window-width);
     text-align: center;
     margin: 30px 0;
   }
