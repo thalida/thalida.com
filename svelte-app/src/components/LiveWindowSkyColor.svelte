@@ -152,11 +152,12 @@
     return gradient;
   }
 
-  async function updateGradient() {
-    await fetchWeather($store);
-    gradient.set(getRealisticColorGradient());
+  function updateGradient() {
+    const newGradient = getRealisticColorGradient();
+    gradient.set(newGradient);
   }
-  onMount(async () => {
+
+  onMount(() => {
     const updateEvery = 15 * 60 * 1000; // 15 minutes
     updateTimeInterval = setInterval(updateGradient, updateEvery);
     updateGradient();

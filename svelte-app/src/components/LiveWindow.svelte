@@ -1,10 +1,11 @@
 <script>
-  import { onMount } from "svelte";
-  import { store, fetchWeather, fetchLocation } from "../store";
+  import { onMount, onDestroy } from "svelte";
+  import { store, fetchWeather } from "../store";
   import LiveWindowBlinds from "./LiveWindowBlinds.svelte";
   import LiveWindowClock from "./LiveWindowClock.svelte";
   import LiveWindowSky from "./LiveWindowSky.svelte";
 
+  let updateWeatherInterval;
   export const liveWindowStyles = {
     width: 256,
     height: 385,
@@ -13,9 +14,18 @@
     collapsedSlatHeightScale: 0.3,
   };
 
-  onMount(async () => {
-    await fetchLocation($store);
+  async function updateWeather() {
     await fetchWeather($store);
+  }
+
+  onMount(async () => {
+    const updateEvery = 60 * 60 * 1000; // 1 hour
+    updateWeatherInterval = setInterval(updateWeather, updateEvery);
+    updateWeather();
+  });
+
+  onDestroy(() => {
+    clearInterval(updateWeatherInterval);
   });
 </script>
 

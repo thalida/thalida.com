@@ -72,6 +72,8 @@ export async function fetchWeather($store) {
     return;
   }
 
+  await fetchLocation($store);
+
   const { lat, lng } = $store.location;
   const url = `https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lng}&appid=${OPEN_WEATHER_KEY}`;
   const { data } = await axios.get(url);

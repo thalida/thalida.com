@@ -9,7 +9,7 @@
     const today = new Date();
     time.hour = today.getHours();
     time.minute = today.getMinutes();
-  }, 100);
+  }, 1000);
 
   onDestroy(() => {
     clearInterval(updateTimeInterval);
