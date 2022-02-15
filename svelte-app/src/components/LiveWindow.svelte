@@ -7,10 +7,8 @@
   import LiveWindowSky from "./LiveWindowSky.svelte";
 
   export const liveWindowStyles = {
-    width: 25,
-    height: 40,
-    minWidth: 250,
-    minHeight: 400,
+    width: 256,
+    height: 385,
     rodHeightScale: 0.75,
     blindsWidthScale: 1.4,
     collapsedSlatHeightScale: 0.3,
@@ -25,10 +23,8 @@
 <div
   class="scene"
   style="
-      --live-window-height: {`${liveWindowStyles.height}vh`};
-      --live-window-min-height: {`${liveWindowStyles.minHeight}px`};
-      --live-window-inner-width: {`${liveWindowStyles.width}vw`};
-      --live-window-inner-min-width: {`${liveWindowStyles.minWidth}px`};
+      --live-window-height: {`${liveWindowStyles.height}px`};
+      --live-window-inner-width: {`${liveWindowStyles.width}px`};
       --live-window-blinds-width-scale: {liveWindowStyles.blindsWidthScale};
       --live-window-collapsed-slat-height-scale: {liveWindowStyles.collapsedSlatHeightScale};
       --live-window-rod-height-scale: {liveWindowStyles.rodHeightScale};
@@ -62,7 +58,6 @@
     justify-content: flex-start;
     align-items: center;
     height: var(--live-window-height);
-    min-height: var(--live-window-min-height);
 
     .horizontal-bar {
       position: absolute;
@@ -91,7 +86,6 @@
     font-family: Josefin Sans, Helvetica, sans-serif;
     font-size: 18px;
     width: var(--live-window-inner-width);
-    min-width: var(--live-window-inner-min-width);
     text-align: center;
     margin: 30px 0;
   }

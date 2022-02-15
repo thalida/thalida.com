@@ -26,10 +26,6 @@
 
   const updateTimeInterval = setInterval(async () => {
     await fetchWeather($store);
-    // const today = new Date();
-    // time.hour = today.getHours();
-    // time.minute = today.getMinutes();
-    // gradient = getColorGradient(time);
     gradient = getRealisticColorGradient();
   }, 2000);
 

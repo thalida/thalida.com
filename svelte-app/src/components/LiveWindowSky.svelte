@@ -13,6 +13,5 @@
     position: absolute;
     height: 100%;
     width: var(--live-window-inner-width);
-    min-width: var(--live-window-inner-min-width);
   }
 </style>

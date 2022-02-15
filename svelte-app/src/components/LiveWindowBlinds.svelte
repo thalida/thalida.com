@@ -226,9 +226,6 @@
     width: calc(
       var(--live-window-inner-width) * var(--live-window-blinds-width-scale)
     );
-    min-width: calc(
-      var(--live-window-inner-min-width) * var(--live-window-blinds-width-scale)
-    );
     height: auto;
 
     .rod {
@@ -237,9 +234,6 @@
       width: 5px;
       left: 18%;
       height: 75%;
-      min-height: calc(
-        var(--live-window-min-height) * var(--live-window-rod-height-scale)
-      );
       background: var(--color-bg-default);
     }
 
@@ -285,9 +279,6 @@
           height: calc(
             var(--live-window-height) / (var(--live-window-num-blinds) - 1)
           );
-          min-height: calc(
-            var(--live-window-min-height) / (var(--live-window-num-blinds) - 1)
-          );
         }
 
         &.collapse {
@@ -296,12 +287,6 @@
           height: calc(
             (var(--live-window-height) / (var(--live-window-num-blinds) - 1)) *
               var(--live-window-collapsed-slat-height-scale)
-          );
-          min-height: calc(
-            (
-                var(--live-window-min-height) /
-                  (var(--live-window-num-blinds) - 1)
-              ) * var(--live-window-collapsed-slat-height-scale)
           );
 
           &:before,
