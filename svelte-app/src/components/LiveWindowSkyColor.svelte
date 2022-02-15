@@ -29,14 +29,15 @@
     return blendedColor;
   }
 
-  function getRealisticColorGradient() {
+  async function getRealisticColorGradient() {
     const date = new Date();
     const now = date.getTime();
     const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
-    const hourAgoIsh = new Date(now - shiftBy);
+    let hourAgoIsh = new Date(now - shiftBy);
     if (hourAgoIsh.getDate() !== date.getDate()) {
       hourAgoIsh = new Date(now);
       hourAgoIsh.setHours(0, 0, 0, 0);
+      await fetchWeather($store);
     }
     const gradientStart = getRealisticColor(hourAgoIsh);
     const gradientEnd = getRealisticColor(now);
@@ -152,8 +153,8 @@
     return gradient;
   }
 
-  function updateGradient() {
-    const newGradient = getRealisticColorGradient();
+  async function updateGradient() {
+    const newGradient = await getRealisticColorGradient();
     gradient.set(newGradient);
   }
 

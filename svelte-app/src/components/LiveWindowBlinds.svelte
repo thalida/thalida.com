@@ -18,102 +18,50 @@
     },
   };
 
-  export function getIsCollapsed(blindIndex) {
-    return blindIndex + liveWindowSettings.numBlindsCollpased >= NUM_BLINDS;
-  }
-
-  export function getASkewClass() {
-    return liveWindowSettings.skewDirection === 1
-      ? "askew-left"
-      : liveWindowSettings.skewDirection === -1
-      ? "askew-right"
-      : "not-askew";
-  }
-
-  export function getSlatTransform(blindIndex) {
-    const isCollapsed = getIsCollapsed(blindIndex);
+  export function getSkewAndRotateTransform(blindIndex) {
     const currBlind = NUM_BLINDS - blindIndex;
     const skewSteps =
       liveWindowSettings.blindsSkewDeg /
       (NUM_BLINDS - liveWindowSettings.numBlindsCollpased);
-    let skewDeg = 0;
 
+    let skewDeg = 0;
     if (
       liveWindowSettings.skewDirection !== 0 &&
       liveWindowSettings.blindsSkewDeg >= 0
     ) {
-      if (!isCollapsed) {
-        skewDeg =
-          liveWindowSettings.blindsSkewDeg -
-          (currBlind - liveWindowSettings.numBlindsCollpased - 1) * skewSteps;
-      } else {
-        skewDeg = liveWindowSettings.blindsSkewDeg;
-      }
+      skewDeg =
+        liveWindowSettings.blindsSkewDeg -
+        (currBlind - liveWindowSettings.numBlindsCollpased - 1) * skewSteps;
     }
-    const rotateDeg = isCollapsed
-      ? COLLAPSED_BLINDS_ROTATE_DEG - skewDeg
-      : liveWindowSettings.blindsOpenDeg - skewDeg;
+    const rotateDeg = liveWindowSettings.blindsOpenDeg;
     const rotate = `rotateX(${rotateDeg}deg)`;
     const skew = `skewY(${skewDeg * liveWindowSettings.skewDirection}deg)`;
     return `${rotate} ${skew}`;
   }
 
+  export function getSkewOnlyTransform() {
+    let skewDeg = 0;
+    if (
+      liveWindowSettings.skewDirection !== 0 &&
+      liveWindowSettings.blindsSkewDeg >= 0
+    ) {
+      skewDeg = liveWindowSettings.blindsSkewDeg / 2;
+    }
+    const skew = `skewY(${skewDeg * liveWindowSettings.skewDirection}deg)`;
+    return `${skew}`;
+  }
+
   function updateStrings() {
     const blinds = document.querySelector(".blinds");
     const blindsRect = blinds.getBoundingClientRect();
-    const selectNext = liveWindowSettings.numBlindsCollpased === 0 ? 0 : 1;
-    const guideBlind = document.querySelector(
-      `.slat-${NUM_BLINDS - liveWindowSettings.numBlindsCollpased + selectNext}`
-    );
-    const guideBlindRect = guideBlind.getBoundingClientRect();
-
-    let shortString, longString;
-
-    if (liveWindowSettings.numBlindsCollpased === 0) {
-      shortString = guideBlindRect.top - blindsRect.top;
-      longString =
-        guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
-    } else {
-      shortString =
-        guideBlindRect.top + guideBlindRect.height / 2 - blindsRect.top;
-      longString = guideBlindRect.top + guideBlindRect.height - blindsRect.top;
-    }
-    const shortStringHeight = `${shortString}px`;
-    const longStringHeight = `${longString}px`;
-
-    if (liveWindowSettings.skewDirection === -1) {
-      liveWindowSettings.string.leftHeight = longStringHeight;
-      liveWindowSettings.string.rightHeight = shortStringHeight;
-    } else if (liveWindowSettings.skewDirection === 1) {
-      liveWindowSettings.string.leftHeight = shortStringHeight;
-      liveWindowSettings.string.rightHeight = longStringHeight;
-    } else {
-      liveWindowSettings.string.leftHeight = shortString;
-      liveWindowSettings.string.rightHeight = shortString;
-    }
-  }
-
-  function updateSlats() {
-    const blinds = document.querySelector(".blinds");
-    const blindsRect = blinds.getBoundingClientRect();
-    const allSlides = document.querySelectorAll(".slat");
-    for (let i = 1; i < allSlides.length; i += 1) {
-      const prevSlide = allSlides[i - 1];
-      const currSlide = allSlides[i];
-      const prevSlideRect = prevSlide.getBoundingClientRect();
-      const isCollapsed = currSlide.classList.contains("collapse");
-
-      if (isCollapsed) {
-        const skewFix =
-          liveWindowSettings.skewDirection === 0 ||
-          liveWindowSettings.blindsSkewDeg <= 0
-            ? 1
-            : liveWindowSettings.blindsSkewDeg;
-        const top =
-          prevSlideRect.top + prevSlideRect.height / skewFix - blindsRect.top;
-        currSlide.style.top = `${top}px`;
-      }
-    }
+    const leftStringEnd = blinds.querySelector(".string-left-end");
+    const rightStringEnd = blinds.querySelector(".string-right-end");
+    const leftStringTop = leftStringEnd.getBoundingClientRect().top;
+    const rightStringTop = rightStringEnd.getBoundingClientRect().top;
+    const leftHeight = leftStringTop - blindsRect.top;
+    const rightHeight = rightStringTop - blindsRect.top;
+    liveWindowSettings.string.leftHeight = `${leftHeight}px`;
+    liveWindowSettings.string.rightHeight = `${rightHeight}px`;
   }
 
   function stepAnimation(animateFrom, targetAnimations, speedMs = 100) {
@@ -185,7 +133,6 @@
 
   afterUpdate(() => {
     updateStrings();
-    updateSlats();
   });
 
   gradient.subscribe((newGradient) => {
@@ -210,14 +157,22 @@
         style:height={liveWindowSettings.string.rightHeight}
       />
     </div>
-    <div class="slats {getASkewClass()}">
-      {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased + liveWindowSettings.numBlindsCollpased) as _, blindIndex}
+    <div class="slats">
+      {#each new Array(NUM_BLINDS - liveWindowSettings.numBlindsCollpased) as _, blindIndex}
         <div
           class="slat slat-{blindIndex + 1}"
-          class:collapse={getIsCollapsed(blindIndex)}
-          style:transform={getSlatTransform(blindIndex)}
+          style:transform={getSkewAndRotateTransform(blindIndex)}
         />
       {/each}
+      <div class="slat-collapse-group" style:transform={getSkewOnlyTransform()}>
+        {#each new Array(liveWindowSettings.numBlindsCollpased) as _, blindIndex}
+          <div class="slat collapse" />
+        {/each}
+      </div>
+      <div class="slat-bar" style:transform={getSkewOnlyTransform()}>
+        <div class="string string-left-end" />
+        <div class="string string-right-end" />
+      </div>
     </div>
   </div>
 {/key}
@@ -240,17 +195,19 @@
       position: absolute;
       width: 5px;
       left: 18%;
-      height: 75%;
+      height: calc(
+        var(--live-window-height) * var(--live-window-rod-height-scale)
+      );
       background: var(--color-bg-default);
     }
 
-    .strings {
+    .strings,
+    .slat-bar {
       position: absolute;
       display: flex;
       flex-flow: row nowrap;
       justify-content: space-between;
       width: 100%;
-      height: 100%;
       padding: 0 25%;
 
       .string {
@@ -260,22 +217,19 @@
       }
     }
 
+    .strings {
+      height: 100%;
+    }
+
+    .slat-bar {
+      height: 10px;
+      background: var(--color-bg-default);
+    }
+
     .slats {
       position: relative;
       width: 100%;
       z-index: -1;
-
-      &.askew-left .slat {
-        transform-origin: top left;
-      }
-
-      &.askew-right .slat {
-        transform-origin: top right;
-      }
-
-      &.not-askew .slat {
-        transform-origin: top center;
-      }
 
       .slat {
         position: relative;
@@ -289,31 +243,10 @@
         }
 
         &.collapse {
-          position: absolute;
-          left: 0;
           height: calc(
             (var(--live-window-height) / (var(--live-window-num-blinds) - 1)) *
               var(--live-window-collapsed-slat-height-scale)
           );
-
-          &:before,
-          &:after {
-            content: "";
-            position: absolute;
-            width: 2px;
-            height: 200%;
-            background: var(--color-bg-default);
-          }
-
-          &:before {
-            top: -100%;
-            left: 25%;
-          }
-
-          &:after {
-            top: -100%;
-            right: 25%;
-          }
         }
       }
     }

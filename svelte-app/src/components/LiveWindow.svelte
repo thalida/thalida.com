@@ -11,7 +11,7 @@
     height: 385,
     rodHeightScale: 0.75,
     blindsWidthScale: 1.4,
-    collapsedSlatHeightScale: 0.3,
+    collapsedSlatHeightScale: 0.05,
   };
 
   async function updateWeather() {
