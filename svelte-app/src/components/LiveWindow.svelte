@@ -19,7 +19,7 @@
   }
 
   onMount(async () => {
-    const updateEvery = 60 * 60 * 1000; // 1 hour
+    const updateEvery = 1 * 60 * 60 * 1000; // 1 hour
     updateWeatherInterval = setInterval(updateWeather, updateEvery);
     updateWeather();
   });

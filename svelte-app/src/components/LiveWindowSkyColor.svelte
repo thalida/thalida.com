@@ -29,12 +29,16 @@
     return blendedColor;
   }
 
+  function isSameDate(a, b) {
+    return a.getDate() === b.getDate();
+  }
+
   async function getRealisticColorGradient() {
     const date = new Date();
     const now = date.getTime();
     const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
     let hourAgoIsh = new Date(now - shiftBy);
-    if (hourAgoIsh.getDate() !== date.getDate()) {
+    if (!isSameDate(hourAgoIsh, date)) {
       hourAgoIsh = new Date(now);
       hourAgoIsh.setHours(0, 0, 0, 0);
       await fetchWeather($store);
