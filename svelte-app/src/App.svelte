@@ -104,7 +104,7 @@
 		&.is-sticky {
 			position: fixed;
 			top: 0;
-			z-index: 30;
+			z-index: 50;
 			box-shadow: 0 0 30px var(--color-bg-default);
 			background-color: var(--color-bg-default);
 		}
