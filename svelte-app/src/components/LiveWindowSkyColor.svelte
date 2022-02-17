@@ -76,11 +76,17 @@
       phaseEndTime = sunriseTime;
     } else if (now >= sunsetTime) {
       const EOD = new Date(now);
-      EOD.setHours(23, 59, 59, 9999);
+      EOD.setHours(23, 59, 59, 999);
       colorPhase = TIME_COLORS.slice(SUNSET_COLOR_IDX);
       colorPhase.push(TIME_COLORS[0]);
       phaseStartTime = sunsetTime;
       phaseEndTime = EOD.getTime();
+
+      const ifValidStart = isSameDate(new Date(phaseStartTime), EOD);
+      if (!ifValidStart) {
+        console.log(phaseStartTime, EOD);
+        phaseStartTime += 24 * 60 * 60 * 1000;
+      }
     } else {
       colorPhase = TIME_COLORS.slice(SUNRISE_COLOR_IDX, SUNSET_COLOR_IDX + 1);
       phaseStartTime = sunriseTime;
