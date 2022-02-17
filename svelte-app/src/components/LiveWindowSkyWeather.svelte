@@ -35,20 +35,6 @@
 
   store.subscribe(() => {
     icon = $store.weather.current.icon;
-    // icon = "02d";
-    // icon = "02n";
-    // icon = "03d";
-    // icon = "03n";
-    // icon = "04d";
-    // icon = "04n";
-    // icon = "09d";
-    // icon = "09n";
-    // icon = "10d";
-    // icon = "10n";
-    // icon = "11d";
-    // icon = "11n";
-    // icon = "13d";
-    // icon = "13n";
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
@@ -76,6 +62,11 @@
   {/if}
   {#if weatherVisibility.cloudSm}
     <div class="cloud cloud-sm" />
+  {/if}
+  {#if weatherVisibility.mist}
+    <div class="mist mist-lg" />
+    <div class="mist mist-md" />
+    <div class="mist mist-sm" />
   {/if}
   {#if weatherVisibility.showDroplets}
     <div class="droplets">
@@ -304,6 +295,43 @@
         right: -4px;
         transform: rotateZ(35deg);
         transform-origin: top left;
+      }
+    }
+
+    .mist {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 120%;
+      animation: 5s linear infinite alternate mist-roll;
+
+      &.mist-lg {
+        height: 45%;
+        opacity: 0.1;
+        background: rgb(128, 128, 128);
+        box-shadow: 0 -10px 20px 10px rgb(128, 128, 128);
+      }
+
+      &.mist-md {
+        height: 20%;
+        opacity: 0.2;
+        background: rgb(128, 128, 128);
+        box-shadow: 0 -10px 40px 30px rgb(128, 128, 128);
+      }
+
+      &.mist-sm {
+        height: 0;
+        opacity: 0.4;
+        box-shadow: 0 -10px 30px 20px rgb(128, 128, 128);
+      }
+
+      @keyframes mist-roll {
+        0% {
+          transform: translate(-20%, 0%);
+        }
+        100% {
+          transform: translate(0%, 20%);
+        }
       }
     }
 
