@@ -31,6 +31,7 @@ export const store = writable({
   },
 });
 
+export const isDataFetched = writable(false);
 export const gradient = writable({});
 
 store.subscribe((value) => {
@@ -69,6 +70,7 @@ export async function fetchWeather($store) {
     $store.weather.lastFetched !== null &&
     now - $store.weather.lastFetched < WEATHER_RATE_LIMIT
   ) {
+    isDataFetched.set(true);
     return;
   }
 
@@ -85,4 +87,5 @@ export async function fetchWeather($store) {
   $store.weather.sunset = data.sys.sunset * 1000; // ^^
   $store.weather.lastFetched = Date.now();
   store.set($store);
+  isDataFetched.set(true);
 }

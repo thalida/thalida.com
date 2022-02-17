@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy } from "svelte";
-  import { store, fetchWeather, gradient } from "../store";
+  import { store, fetchWeather, gradient, isDataFetched } from "../store";
 
   const HOURS_IN_DAY = 24;
   const MINUTES_IN_HOUR = 60;
@@ -110,7 +110,10 @@
     return color;
   }
 
-  function getColorGradient({ hour, minute }) {
+  function getColorGradient() {
+    const date = new Date();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
     const numSegements = HOURS_IN_DAY / TIME_COLORS.length;
     const startColorIdx = Math.floor(hour / numSegements);
     const endColorIdx =
@@ -163,13 +166,17 @@
   }
 
   async function updateGradient() {
-    const newGradient = await getRealisticColorGradient();
+    let newGradient;
+    if ($isDataFetched) {
+      newGradient = await getRealisticColorGradient();
+    } else {
+      newGradient = getColorGradient();
+    }
     gradient.set(newGradient);
   }
 
-  store.subscribe(() => {
-    updateGradient();
-  });
+  store.subscribe(updateGradient);
+  isDataFetched.subscribe(updateGradient);
 
   onMount(() => {
     const updateEvery = 15 * 60 * 1000; // 15 minutes
