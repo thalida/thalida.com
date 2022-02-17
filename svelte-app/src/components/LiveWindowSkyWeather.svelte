@@ -12,6 +12,7 @@
     thunderstorm: false,
     snow: false,
     mist: false,
+    showDroplets: false,
   };
   export const iconWeatherMap = {
     "02d": ["cloudSm"],
@@ -24,8 +25,8 @@
     "09n": ["cloudMd", "lightRain"],
     "10d": ["cloudMd", "cloudLg", "rain"],
     "10n": ["cloudMd", "cloudLg", "rain"],
-    "11d": ["thunderstorm"],
-    "11n": ["thunderstorm"],
+    "11d": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
+    "11n": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
     "13d": ["snow"],
     "13n": ["snow"],
     "50d": ["mist"],
@@ -44,26 +45,36 @@
     // icon = "09n";
     // icon = "10d";
     // icon = "10n";
+    // icon = "11d";
+    // icon = "11n";
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
         ? iconWeather.includes(weather)
         : false;
     }
+
+    weatherVisibility.showDroplets =
+      weatherVisibility.lightRain ||
+      weatherVisibility.rain ||
+      weatherVisibility.thunderstorm;
   });
 </script>
 
 <div class="weather weather-{icon}">
-  {#if weatherVisibility.cloudSm}
-    <div class="cloud cloud-sm" />
+  {#if weatherVisibility.cloudLg}
+    <div class="cloud cloud-lg" />
   {/if}
   {#if weatherVisibility.cloudMd}
     <div class="cloud cloud-md" />
   {/if}
-  {#if weatherVisibility.cloudLg}
-    <div class="cloud cloud-lg" />
+  {#if weatherVisibility.thunderstorm}
+    <div class="lightning" />
   {/if}
-  {#if weatherVisibility.lightRain || weatherVisibility.rain}
+  {#if weatherVisibility.cloudSm}
+    <div class="cloud cloud-sm" />
+  {/if}
+  {#if weatherVisibility.showDroplets}
     <div class="droplets">
       {#each new Array(6) as _, i}
         <div class="droplet-col droplet-col-{i}">
@@ -167,7 +178,6 @@
         top: 5%;
         right: 10%;
         border-radius: 30% 50% 0 50%;
-        opacity: 0.8;
         transform: translate(0, 0);
         animation: 8s ease-in-out infinite alternate cloud-md-hover;
 
@@ -246,11 +256,58 @@
       }
     }
 
+    .lightning {
+      position: absolute;
+      top: 70px;
+      left: 50%;
+      width: 50px;
+      height: 10px;
+      background: yellow;
+      border-radius: 10px;
+      animation: 5s linear infinite flash;
+
+      @keyframes flash {
+        0% {
+          opacity: 1;
+        }
+        5% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+      }
+
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        background: yellow;
+        border-radius: 10px;
+      }
+
+      &:before {
+        height: 100px;
+        top: -94px;
+        left: -2px;
+        transform: rotateZ(35deg);
+        transform-origin: bottom right;
+      }
+
+      &:after {
+        height: 200px;
+        top: -2px;
+        right: -4px;
+        transform: rotateZ(35deg);
+        transform-origin: top left;
+      }
+    }
+
     &.weather-09d,
     &.weather-09n {
       .cloud {
-        opacity: 0.2;
-        top: 25%;
+        top: 50%;
         right: 20%;
       }
 
@@ -270,11 +327,52 @@
         }
       }
     }
+
     &.weather-10d,
     &.weather-10n {
       .cloud-md {
-        opacity: 0.2;
         top: 40%;
+        left: 10%;
+        right: unset;
+      }
+
+      .droplet {
+        width: 4px;
+        height: 9px;
+        background: #28afff;
+        border-radius: 3px;
+      }
+
+      .droplet-col {
+        &:nth-of-type(2n) {
+          animation-duration: 0.5s;
+        }
+        &:nth-of-type(2n + 1) {
+          animation-duration: 0.8s;
+          opacity: 0.6;
+        }
+      }
+    }
+
+    &.weather-11d,
+    &.weather-11n {
+      .cloud,
+      .cloud:before,
+      .cloud:after {
+        background: rgb(69, 69, 69);
+      }
+      .cloud-sm {
+        top: 20%;
+        left: 35%;
+        right: unset;
+      }
+      .cloud-md {
+        top: 5%;
+        left: 80%;
+        right: unset;
+      }
+      .cloud-lg {
+        top: -10%;
         left: 10%;
         right: unset;
       }
