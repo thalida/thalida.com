@@ -68,6 +68,7 @@
 		padding: 32px 0 16px;
 		font-size: 16px;
 		width: 100%;
+		z-index: 50;
 
 		.container {
 			display: flex;
