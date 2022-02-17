@@ -65,7 +65,7 @@
 		align-items: center;
 		justify-content: space-between;
 		margin: 0;
-		padding: 32px 16px 16px;
+		padding: 32px 0 16px;
 		font-size: 16px;
 		width: 100%;
 
