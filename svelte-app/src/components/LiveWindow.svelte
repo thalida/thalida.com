@@ -67,6 +67,7 @@
     justify-content: flex-start;
     align-items: center;
     height: var(--live-window-height);
+    transform: translateX(0);
 
     .horizontal-bar {
       position: absolute;
