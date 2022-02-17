@@ -309,6 +309,7 @@
       left: 0;
       width: 120%;
       animation: 5s linear infinite alternate mist-roll;
+      transform: translate(0, 0);
 
       &.mist-lg {
         height: 45%;
