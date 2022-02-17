@@ -47,6 +47,8 @@
     // icon = "10n";
     // icon = "11d";
     // icon = "11n";
+    // icon = "13d";
+    // icon = "13n";
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
@@ -57,7 +59,8 @@
     weatherVisibility.showDroplets =
       weatherVisibility.lightRain ||
       weatherVisibility.rain ||
-      weatherVisibility.thunderstorm;
+      weatherVisibility.thunderstorm ||
+      weatherVisibility.snow;
   });
 </script>
 
@@ -392,6 +395,20 @@
           animation-duration: 0.8s;
           opacity: 0.6;
         }
+      }
+    }
+
+    &.weather-13d,
+    &.weather-13n {
+      .droplet {
+        width: 6px;
+        height: 6px;
+        background: #fff;
+        border-radius: 50%;
+      }
+
+      .droplet-col {
+        animation-duration: 3s;
       }
     }
   }
