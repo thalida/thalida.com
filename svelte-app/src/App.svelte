@@ -30,11 +30,7 @@
 		</a>
 		<nav>
 			{#each links as link}
-				<a
-					class="notion-link link"
-					class:active={selectedPage == link.path}
-					href={link.path}
-				>
+				<a class="notion-link link" href={link.path}>
 					{link.label}
 				</a>
 			{/each}
@@ -42,7 +38,9 @@
 	</div>
 </header>
 
-<LiveWindow />
+{#if selectedPage === "/"}
+	<LiveWindow />
+{/if}
 
 <style lang="scss">
 	.container {
