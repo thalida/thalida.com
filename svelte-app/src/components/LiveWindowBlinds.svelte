@@ -197,6 +197,7 @@
         var(--live-window-height) * var(--live-window-rod-height-scale)
       );
       background: var(--color-bg-default);
+      transform: translateX(0);
     }
 
     .strings,
@@ -207,6 +208,7 @@
       justify-content: space-between;
       width: 100%;
       padding: 0 25%;
+      transform: translateX(0);
 
       .string {
         width: 2px;
@@ -227,11 +229,13 @@
     .slats {
       position: relative;
       width: 100%;
+      transform: translateX(0);
 
       .slat {
         position: relative;
         width: 100%;
         background: var(--color-bg-default);
+        transform: translateX(0);
 
         &:not(.collapse) {
           height: calc(
