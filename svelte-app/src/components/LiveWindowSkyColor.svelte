@@ -84,7 +84,6 @@
 
       const ifValidStart = isSameDate(new Date(phaseStartTime), EOD);
       if (!ifValidStart) {
-        console.log(phaseStartTime, EOD);
         phaseStartTime += 24 * 60 * 60 * 1000;
       }
     } else {
@@ -167,6 +166,10 @@
     const newGradient = await getRealisticColorGradient();
     gradient.set(newGradient);
   }
+
+  store.subscribe(() => {
+    updateGradient();
+  });
 
   onMount(() => {
     const updateEvery = 15 * 60 * 1000; // 15 minutes

@@ -16,7 +16,7 @@ export const defaultStore = {
     sunset: null,
   },
 };
-const storedData = localStorage.liveWindowStore
+const storedData = localStorage && localStorage.liveWindowStore
   ? JSON.parse(localStorage.liveWindowStore)
   : {};
 
@@ -34,10 +34,10 @@ export const store = writable({
 export const gradient = writable({});
 
 store.subscribe((value) => {
-  localStorage.liveWindowStore = JSON.stringify(value);
+  if (localStorage) {
+    localStorage.liveWindowStore = JSON.stringify(value);
+  }
 });
-
-
 
 export async function fetchLocation($store) {
   const now = Date.now();

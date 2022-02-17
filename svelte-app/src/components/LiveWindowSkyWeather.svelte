@@ -1,5 +1,4 @@
 <script>
-  import App from "../App.svelte";
   import { store } from "../store";
 
   export let icon;
@@ -34,7 +33,13 @@
   };
 
   store.subscribe(() => {
-    icon = $store.weather.current.icon;
+    icon = null;
+    if (
+      typeof $store.weather.current !== "undefined" &&
+      $store.weather.current !== null
+    ) {
+      icon = $store.weather.current.icon;
+    }
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
