@@ -40,6 +40,7 @@
     ) {
       icon = $store.weather.current.icon;
     }
+    icon = "13d";
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
@@ -76,9 +77,9 @@
   {#if weatherVisibility.showDroplets}
     <div class="droplets">
       {#each new Array(6) as _, i}
-        <div class="droplet-col droplet-col-{i}">
-          {#each new Array(10) as _, j}
-            <div class="droplet droplet-{j}" />
+        <div class="droplet-row droplet-row-{i + 1}">
+          {#each new Array(6) as _, j}
+            <div class="droplet droplet-{j + 1}" />
           {/each}
         </div>
       {/each}
@@ -208,71 +209,61 @@
 
     .droplets {
       display: flex;
-      flex-flow: row nowrap;
+      flex-flow: column nowrap;
       justify-content: space-evenly;
-      width: 300%;
-      height: 200%;
-      transform: translateX(-40%) translateY(-25%);
+      width: 150%;
+      height: 150%;
+      transform: rotateZ(-45deg) translate(0%, -50%);
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-name: precipitate;
 
-      .droplet-col {
-        height: 100%;
+      @keyframes precipitate {
+        0% {
+          transform: rotateZ(-45deg) translate(0%, -50%);
+        }
+        100% {
+          transform: rotateZ(-45deg) translate(0%, 43%);
+        }
+      }
+
+      .droplet-row {
+        width: 100%;
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: row wrap;
         justify-content: space-evenly;
-        transform: rotateZ(-45deg) translateY(0%);
-        animation-timing-function: linear;
-        animation-iteration-count: infinite;
-
-        &:nth-of-type(2n) {
-          animation-name: precipitate-evens;
-
-          @keyframes precipitate-evens {
-            0% {
-              transform: rotateZ(-40deg) translateY(0%);
-            }
-            100% {
-              transform: rotateZ(-40deg) translateY(9%);
-            }
-          }
-        }
-
-        &:nth-of-type(2n + 1) {
-          animation-name: precipitate-odds;
-
-          @keyframes precipitate-odds {
-            0% {
-              transform: rotateZ(-45deg) translateY(0%);
-            }
-            100% {
-              transform: rotateZ(-45deg) translateY(9%);
-            }
-          }
-        }
+        margin: 5% 0;
       }
 
       .droplet {
         display: block;
+        flex-shrink: 0;
+        @for $i from 1 through 6 {
+          &.droplet-#{$i} {
+            margin: (1% * $i) 10%;
+          }
+        }
       }
     }
 
     .lightning {
       position: absolute;
-      top: 70px;
+      top: 60px;
       left: 50%;
       width: 50px;
-      height: 10px;
+      height: 5px;
       background: yellow;
       border-radius: 10px;
-      animation: 5s linear infinite flash;
+      animation: 2s linear infinite flash;
 
       @keyframes flash {
         0% {
           opacity: 1;
         }
-        5% {
+        10% {
           opacity: 0;
         }
-        10% {
+        60% {
           opacity: 1;
         }
       }
@@ -281,7 +272,7 @@
       &:after {
         content: "";
         position: absolute;
-        width: 10px;
+        width: 5px;
         background: yellow;
         border-radius: 10px;
       }
@@ -296,7 +287,7 @@
 
       &:after {
         height: 200px;
-        top: -2px;
+        top: -1px;
         right: -4px;
         transform: rotateZ(35deg);
         transform-origin: top left;
@@ -348,19 +339,15 @@
         right: 20%;
       }
 
-      .droplet {
-        width: 3px;
-        height: 9px;
-        background: #28afff;
-        border-radius: 3px;
-      }
+      .droplets {
+        animation-duration: 6s;
 
-      .droplet-col {
-        &:nth-of-type(2n) {
-          animation-duration: 3s;
-        }
-        &:nth-of-type(2n + 1) {
-          animation-duration: 2s;
+        .droplet {
+          width: 3px;
+          height: 9px;
+          background: #28afff;
+          border-radius: 3px;
+          opacity: 0.7;
         }
       }
     }
@@ -373,20 +360,14 @@
         right: unset;
       }
 
-      .droplet {
-        width: 4px;
-        height: 9px;
-        background: #28afff;
-        border-radius: 3px;
-      }
+      .droplets {
+        animation-duration: 2s;
 
-      .droplet-col {
-        &:nth-of-type(2n) {
-          animation-duration: 0.5s;
-        }
-        &:nth-of-type(2n + 1) {
-          animation-duration: 0.8s;
-          opacity: 0.6;
+        .droplet {
+          width: 4px;
+          height: 9px;
+          background: #28afff;
+          border-radius: 3px;
         }
       }
     }
@@ -414,35 +395,28 @@
         right: unset;
       }
 
-      .droplet {
-        width: 4px;
-        height: 9px;
-        background: #28afff;
-        border-radius: 3px;
-      }
-
-      .droplet-col {
-        &:nth-of-type(2n) {
-          animation-duration: 0.5s;
-        }
-        &:nth-of-type(2n + 1) {
-          animation-duration: 0.8s;
-          opacity: 0.6;
+      .droplets {
+        animation-duration: 3s;
+        .droplet {
+          width: 4px;
+          height: 9px;
+          background: #28afff;
+          border-radius: 3px;
         }
       }
     }
 
     &.weather-13d,
     &.weather-13n {
-      .droplet {
-        width: 6px;
-        height: 6px;
-        background: #fff;
-        border-radius: 50%;
-      }
-
-      .droplet-col {
+      .droplets {
         animation-duration: 3s;
+
+        .droplet {
+          width: 6px;
+          height: 6px;
+          background: #fff;
+          border-radius: 50%;
+        }
       }
     }
   }
