@@ -40,7 +40,6 @@
     ) {
       icon = $store.weather.current.icon;
     }
-    icon = "13d";
     const iconWeather = iconWeatherMap[icon];
     for (const weather of Object.keys(weatherVisibility)) {
       weatherVisibility[weather] = iconWeather
