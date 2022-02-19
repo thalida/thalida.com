@@ -16,6 +16,7 @@
       font-weight: 700;
       margin-inline-start: 0;
       margin-inline-end: 0;
+      white-space: pre-wrap;
 
       & > span {
         border: 0;
@@ -48,6 +49,7 @@
 
   .notion-collection-list__item-property {
     padding: 4px 0;
+
     .notion-semantic-string {
       white-space: normal;
     }
