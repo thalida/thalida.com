@@ -1,55 +1,54 @@
 .notion-pill,
 .notion-collection-list__item-property .notion-property__select .notion-pill {
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 13px;
-  border-width: 1px;
-  border-style: solid;
+  padding: 0;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 
 .pill-gray,
 .pill-gray-light {
-  border-color: var(--color-t-gray-light);
+  color: var(--color-t-gray-light);
   background: transparent;
 }
 .pill-brown,
 .pill-brown-light {
-  border-color: var(--color-t-brown-light);
+  color: var(--color-t-brown-light);
   background: transparent;
 }
 .pill-orange,
 .pill-orange-light {
-  border-color: var(--color-t-orange-light);
+  color: var(--color-t-orange-light);
   background: transparent;
 }
 .pill-yellow,
 .pill-yellow-light {
-  border-color: var(--color-t-yellow-light);
+  color: var(--color-t-yellow-light);
   background: transparent;
 }
 .pill-green,
 .pill-green-light {
-  border-color: var(--color-t-green-light);
+  color: var(--color-t-green-light);
   background: transparent;
 }
 .pill-blue,
 .pill-blue-light {
-  border-color: var(--color-t-blue-light);
+  color: var(--color-t-blue-light);
   background: transparent;
 }
 .pill-purple,
 .pill-purple-light {
-  border-color: var(--color-t-purple-light);
+  color: var(--color-t-purple-light);
   background: transparent;
 }
 .pill-pink,
 .pill-pink-light {
-  border-color: var(--color-t-pink-light);
+  color: var(--color-t-pink-light);
   background: transparent;
 }
 .pill-red,
 .pill-red-light {
-  border-color: var(--color-t-red-light);
+  color: var(--color-t-red-light);
   background: transparent;
 }
