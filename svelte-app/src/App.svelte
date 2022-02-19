@@ -43,18 +43,13 @@
 {/if}
 
 <style lang="scss">
+	@import "./styles/notion-theme/variables/mixins.scss";
 	.container {
+		@include site-padding;
 		width: 100%;
 		max-width: 1270px;
-		padding-left: calc(env(safe-area-inset-left) + 50px);
-		padding-right: calc(env(safe-area-inset-right) + 50px);
 		margin-left: auto;
 		margin-right: auto;
-
-		@media (max-width: 546px) {
-			padding-left: calc(env(safe-area-inset-left) + 24px);
-			padding-right: calc(env(safe-area-inset-right) + 24px);
-		}
 	}
 
 	header {

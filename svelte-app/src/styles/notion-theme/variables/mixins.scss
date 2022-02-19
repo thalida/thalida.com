@@ -1,0 +1,9 @@
+@mixin site-padding {
+  padding-left: calc(env(safe-area-inset-left) + 50px);
+  padding-right: calc(env(safe-area-inset-right) + 50px);
+
+  @media (max-width: 546px) {
+    padding-left: calc(env(safe-area-inset-left) + 24px);
+    padding-right: calc(env(safe-area-inset-right) + 24px);
+  }
+}
