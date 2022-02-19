@@ -46,8 +46,8 @@
 	.container {
 		width: 100%;
 		max-width: 1270px;
-		padding-left: calc(env(safe-area-inset-left) + 96px);
-		padding-right: calc(env(safe-area-inset-right) + 96px);
+		padding-left: calc(env(safe-area-inset-left) + 50px);
+		padding-right: calc(env(safe-area-inset-right) + 50px);
 		margin-left: auto;
 		margin-right: auto;
 

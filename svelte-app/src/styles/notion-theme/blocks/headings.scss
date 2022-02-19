@@ -1,4 +1,9 @@
 
+.notion-header__content {
+  padding-left: calc(env(safe-area-inset-left) + 50px);
+  padding-right: calc(env(safe-area-inset-right) + 50px);
+}
+
 h1.notion-header__title,
 h1.notion-heading,
 .highlighted-color.color-gray strong {
