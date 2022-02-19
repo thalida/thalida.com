@@ -5,9 +5,9 @@
 	export let isHeaderSticky = false;
 	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
 	export const links = [
-		{ path: "/kit", label: "Kit" },
-		{ path: "/ref", label: "Ref" },
-		{ path: "/meta", label: "Meta" },
+		{ path: "/projects", label: "Projects" },
+		{ path: "/links", label: "Links" },
+		{ path: "/wiki", label: "Wiki" },
 		{ path: "/about", label: "About" },
 	];
 
