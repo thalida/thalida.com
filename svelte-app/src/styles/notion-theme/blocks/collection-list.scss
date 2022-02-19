@@ -53,7 +53,7 @@
     }
   }
 
-  .notion-link:not(.notion-collection-list__item-anchor) {
+  .notion-property__url .notion-link:not(.notion-collection-list__item-anchor) {
     position: absolute;
     top: 0;
     bottom: 0;
