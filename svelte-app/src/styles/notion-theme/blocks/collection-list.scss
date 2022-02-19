@@ -54,6 +54,10 @@
     .notion-semantic-string {
       white-space: normal;
     }
+
+    .notion-property__select {
+      flex-flow: row wrap;
+    }
   }
 
   .notion-property__url .notion-link:not(.notion-collection-list__item-anchor) {
