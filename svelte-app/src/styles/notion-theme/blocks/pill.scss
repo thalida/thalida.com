@@ -6,6 +6,10 @@
   font-weight: 500;
 }
 
+.pill-default {
+  color: var(--color-pill-default);
+  background: transparent;
+}
 
 .pill-gray,
 .pill-gray-light {
