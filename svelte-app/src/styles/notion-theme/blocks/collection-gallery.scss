@@ -37,15 +37,11 @@
 
 
   .notion-property.notion-property__title {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: left;
     margin: 0;
     padding: 0;
 
     .notion-property__title__icon-wrapper {
-      top: 0;
+      display: none;
     }
 
     .notion-semantic-string {
