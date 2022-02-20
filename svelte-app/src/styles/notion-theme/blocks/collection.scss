@@ -1,3 +1,5 @@
 .notion-collection .notion-collection__header-wrapper {
- display: none !important;
+  .notion-collection__header {
+    display: none !important;
+  }
 }
