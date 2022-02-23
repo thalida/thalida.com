@@ -1,7 +1,7 @@
 .notion-bookmark {
   margin: 0 0 16px;
 
-  .notion-bookmark > a {
+  & > a {
     display: flex;
     flex-flow: row-reverse nowrap;
   }
