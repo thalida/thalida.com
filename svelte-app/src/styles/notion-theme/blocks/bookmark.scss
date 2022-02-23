@@ -4,20 +4,11 @@
   & > a {
     display: flex;
     flex-flow: row-reverse nowrap;
-
-    @media only screen and (max-width: 680px) {
-      flex-flow: column-reverse nowrap;
-
-      .notion-bookmark__cover {
-        width: 100%;
-        height: 180px;
-      }
-    }
   }
 
   .notion-bookmark__cover {
     background-color: #fff;
-    flex: 1 1 180px;
+    flex: 1 1 60px;
   }
 
   .notion-bookmark__content {
