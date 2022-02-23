@@ -10,12 +10,14 @@
 
       .notion-bookmark__cover {
         width: 100%;
+        flex: 0;
       }
     }
   }
 
   .notion-bookmark__cover {
     background-color: #fff;
+    flex: 1 1;
   }
 
   .notion-bookmark__content {
