@@ -14,6 +14,14 @@
     }
   }
 
+  .notion-bookmark__cover {
+    background-color: #fff;
+  }
+
+  .notion-bookmark__content {
+    flex: 4 1;
+  }
+
   .notion-bookmark__title {
     font-size: 16px;
   }
