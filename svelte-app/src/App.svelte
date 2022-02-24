@@ -145,6 +145,7 @@
 			flex-flow: row nowrap;
 			align-items: center;
 			justify-content: flex-end;
+			transform: translate(0);
 
 			a {
 				margin: 0 8px;
@@ -155,12 +156,13 @@
 
 			@media (max-width: 500px) {
 				display: flex;
+				position: absolute;
 				flex-flow: column nowrap;
 				position: absolute;
 				justify-content: center;
-				position: absolute;
+				align-items: flex-start;
 				top: 64px;
-				right: 0;
+				left: 0;
 				width: 100%;
 				height: 0;
 				padding: 0;
@@ -169,16 +171,16 @@
 				transition: all 200ms ease-in-out;
 				background: var(--color-bg-default);
 				box-shadow: 0 5px 30px var(--color-bg-default);
-				font-size: 18px;
+				font-size: 24px;
 
 				&.is-open {
 					visibility: visible;
 					height: calc(95vh - 64px);
-					padding: 32px;
+					padding: 32px 0;
 				}
 
 				a {
-					margin: 16px 0;
+					margin: 16px 32px;
 				}
 			}
 		}
