@@ -171,6 +171,10 @@ h1.notion-heading,
   }
 }
 
+.notion-header__icon-wrapper {
+  display: none;
+}
+
 .notion-header__icon-wrapper.no-cover.has-icon {
   position: relative;
   top: 0;
