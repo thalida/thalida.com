@@ -34,7 +34,9 @@
 			class="nav-btn"
 			class:is-open={mobileNavOpen}
 			on:click={() => (mobileNavOpen = !mobileNavOpen)}
-		/>
+		>
+			<div class="middle-bar" />
+		</button>
 
 		<nav class:is-open={mobileNavOpen}>
 			{#each links as link}
@@ -87,13 +89,21 @@
 		.nav-btn {
 			position: relative;
 			display: none;
-			border: 0;
 			padding: 0;
+			border: 0;
+			background: transparent;
+			width: 24px;
+			height: 24px;
 
-			&,
+			.middle-bar {
+				margin: 4px 0;
+			}
+
+			.middle-bar,
 			&:before,
 			&:after {
-				width: 24px;
+				display: block;
+				width: 100%;
 				height: 2px;
 				background: var(--color-text-default);
 			}
@@ -101,38 +111,28 @@
 			&:before,
 			&:after {
 				content: "";
-				display: block;
-				position: absolute;
-				left: 0;
 				transform: rotate(0);
 				transform-origin: center;
 				transition: all 200ms ease-in-out;
 			}
 
-			&:before {
-				top: -6px;
-			}
-
-			&:after {
-				top: 6px;
-			}
-
 			&.is-open {
-				background: transparent;
+				.middle-bar {
+					display: none;
+				}
+
 				&:before,
 				&:after {
-					top: 0;
+					position: absolute;
+					top: 50%;
 				}
+
 				&:before {
 					transform: rotate(-45deg);
 				}
 				&:after {
 					transform: rotate(45deg);
 				}
-			}
-
-			@media (max-width: 500px) {
-				display: block;
 			}
 
 			@media (max-width: 500px) {
