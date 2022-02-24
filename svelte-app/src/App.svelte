@@ -93,8 +93,6 @@
 			&,
 			&:before,
 			&:after {
-				content: "";
-				display: block;
 				width: 24px;
 				height: 2px;
 				background: var(--color-text-default);
@@ -102,6 +100,8 @@
 
 			&:before,
 			&:after {
+				content: "";
+				display: block;
 				position: absolute;
 				left: 0;
 				transform: rotate(0);
@@ -129,6 +129,10 @@
 				&:after {
 					transform: rotate(45deg);
 				}
+			}
+
+			@media (max-width: 500px) {
+				display: block;
 			}
 
 			@media (max-width: 500px) {
