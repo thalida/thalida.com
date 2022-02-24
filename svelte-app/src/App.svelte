@@ -163,7 +163,7 @@
 				right: 0;
 				width: 100%;
 				height: 0;
-				padding: 32px;
+				padding: 0;
 				overflow: hidden;
 				visibility: hidden;
 				transition: all 200ms ease-in-out;
@@ -174,6 +174,7 @@
 				&.is-open {
 					visibility: visible;
 					height: calc(95vh - 64px);
+					padding: 32px;
 				}
 
 				a {
