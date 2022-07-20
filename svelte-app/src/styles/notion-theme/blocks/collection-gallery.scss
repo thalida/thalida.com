@@ -48,14 +48,14 @@
       display: none;
     }
 
-    .notion-semantic-string {
-      font-size: 1.1rem;
-      line-height: 1.4;
-    }
+    // .notion-semantic-string {
+    //   // font-size: 1.1rem;
+    //   line-height: 1.4;
+    // }
   }
 
   &.small {
-    gap: 24px;
+    gap: 18px;
 
     .notion-collection-card__cover {
       margin-bottom: 10px;
@@ -77,7 +77,7 @@
   }
 
   &.medium {
-    gap: 32px;
+    gap: 24px;
 
     @media(max-width: 300px) {
       grid-template-columns: 100%;
@@ -93,7 +93,7 @@
   }
 
   &.large {
-    gap: 48px;
+    gap: 32px;
 
     @media(max-width: 350px) {
       grid-template-columns: 100%;
