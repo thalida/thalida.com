@@ -32,7 +32,7 @@
       height: auto;
       min-height: 0;
       padding: 16px;
-      background: rgba(0, 0, 0, 0.5);
+      background: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.8);
 
       .notion-property__select {
         flex-flow: row wrap;
@@ -55,7 +55,9 @@
       .notion-collection-card__content {
         top: 0;
         min-height: 100%;
-        background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        background: linear-gradient(90deg,
+            hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.8) 0%,
+            transparent 100%);
       }
 
       .notion-collection-card__cover {
