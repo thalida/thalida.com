@@ -1,8 +1,10 @@
 // "H4"
 .highlighted-color.color-gray strong {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: bold;
   color: var(--color-text-default);
-  opacity: 0.6;
+  font-weight: var(--heading-weight);
+  margin-bottom: 0px;
+  padding: 3px 2px;
+  position: relative;
+  font-family: var(--primary-font);
+  font-size: 0.75rem;
 }
