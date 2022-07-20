@@ -6,10 +6,10 @@
     background: transparent;
     border-radius: 24px;
     box-shadow: none;
-    transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in;
 
     .notion-collection-card__cover {
-      transition: all 200ms ease-in-out;
+      transition: all 200ms ease-in;
       border-radius: 1em;
       border: 0;
       padding-top: 100%;
@@ -19,7 +19,7 @@
     }
 
     .notion-collection-card__content {
-      transition: all 200ms ease-in-out;
+      transition: all 200ms ease-in;
       margin: 0;
       padding: 0;
       display: flex;
@@ -30,6 +30,7 @@
       left: 0;
       width: 100%;
       height: auto;
+      min-height: 0;
       padding: 16px;
       background: rgba(0, 0, 0, 0.5);
 
@@ -53,7 +54,7 @@
 
       .notion-collection-card__content {
         top: 0;
-        height: 100%;
+        min-height: 100%;
         background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
       }
 
