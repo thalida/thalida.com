@@ -75,6 +75,11 @@
     font-size: 1.3rem;
     line-height: 1.2;
 
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    flex-grow: 1;
+
     .notion-property__title__icon-wrapper {
       display: none;
     }
