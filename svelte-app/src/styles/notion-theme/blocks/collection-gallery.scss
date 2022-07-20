@@ -26,7 +26,6 @@
       flex-flow: column nowrap;
       justify-content: space-between;
       position: absolute;
-      top: 0;
       left: 0;
       width: 100%;
       height: 100%;
@@ -52,6 +51,7 @@
       transform: scale(0.9);
 
       .notion-collection-card__content {
+        bottom: 0;
         height: auto;
         background: rgba(0, 0, 0, 0.5);
       }
