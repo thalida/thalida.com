@@ -21,6 +21,10 @@
       margin: 0;
       padding: 0;
 
+      .notion-property__select {
+        flex-flow: row wrap;
+      }
+
       .notion-collection-card__property .notion-property__text {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -45,7 +49,7 @@
     }
 
     .notion-semantic-string {
-      font-size: 18px;
+      font-size: 1.1rem;
       line-height: 1.4;
     }
   }
@@ -63,7 +67,7 @@
 
     .notion-property__title .notion-semantic-string {
       flex-flow: row wrap;
-      font-size: 14px;
+      font-size: 1rem;
       white-space: normal;
     }
 
@@ -74,6 +78,7 @@
 
   &.medium {
     gap: 32px;
+
     @media(max-width: 300px) {
       grid-template-columns: 100%;
     }
@@ -88,10 +93,11 @@
   }
 
   &.large {
-      gap: 48px;
-      @media(max-width: 350px) {
-        grid-template-columns: 100%;
-      }
+    gap: 48px;
+
+    @media(max-width: 350px) {
+      grid-template-columns: 100%;
+    }
 
     .notion-collection-card__cover {
       margin-bottom: 15px;
