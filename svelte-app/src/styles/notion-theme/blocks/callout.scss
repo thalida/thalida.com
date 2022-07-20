@@ -1,7 +1,3 @@
-.notion-callout.border {
-  border: 1px solid var(--color-text-default);
-}
-
 .notion-callout.border.bg-gray,
 .notion-callout.border.bg-gray-light,
 .notion-callout.border.bg-brown,
@@ -25,58 +21,45 @@
 
 .notion-callout.border.color-gray,
 .notion-callout.border.color-gray-light {
-  border: 1px solid var(--color-t-gray-light);
-}
-.notion-callout.border.color-brown,
-.notion-callout.border.color-brown-light {
-  border: 1px solid var(--color-t-brown-light);
-}
-.notion-callout.border.color-orange,
-.notion-callout.border.color-orange-light {
-  border: 1px solid var(--color-t-orange-light);
-}
-.notion-callout.border.color-yellow,
-.notion-callout.border.color-yellow-light {
-  border: 1px solid var(--color-t-yellow-light);
-}
-.notion-callout.border.color-green,
-.notion-callout.border.color-green-light {
-  border: 1px solid var(--color-t-green-light);
-}
-.notion-callout.border.color-blue,
-.notion-callout.border.color-blue-light {
-  border: 1px solid var(--color-t-blue-light);
-}
-.notion-callout.border.color-purple,
-.notion-callout.border.color-purple-light {
-  border: 1px solid var(--color-t-purple-light);
-}
-.notion-callout.border.color-pink,
-.notion-callout.border.color-pink-light {
-  border: 1px solid var(--color-t-pink-light);
-}
-.notion-callout.border.color-red,
-.notion-callout.border.color-red-light {
-  border: 1px solid var(--color-t-red-light);
+  border: 1px solid var(--color-bg-gray-light);
 }
 
-.notion-callout.color-gray,
-.notion-callout.color-gray-light,
-.notion-callout.color-brown,
-.notion-callout.color-brown-light,
-.notion-callout.color-orange,
-.notion-callout.color-orange-light,
-.notion-callout.color-yellow,
-.notion-callout.color-yellow-light,
-.notion-callout.color-green,
-.notion-callout.color-green-light,
-.notion-callout.color-blue,
-.notion-callout.color-blue-light,
-.notion-callout.color-purple,
-.notion-callout.color-purple-light,
-.notion-callout.color-pink,
-.notion-callout.color-pink-light,
-.notion-callout.color-red,
-.notion-callout.color-red-light {
-  color: var(--color-text-default);
+.notion-callout.border.color-brown,
+.notion-callout.border.color-brown-light {
+  border: 1px solid var(--color-bg-brown-light);
+}
+
+.notion-callout.border.color-orange,
+.notion-callout.border.color-orange-light {
+  border: 1px solid var(--color-bg-orange-light);
+}
+
+.notion-callout.border.color-yellow,
+.notion-callout.border.color-yellow-light {
+  border: 1px solid var(--color-bg-yellow-light);
+}
+
+.notion-callout.border.color-green,
+.notion-callout.border.color-green-light {
+  border: 1px solid var(--color-bg-green-light);
+}
+
+.notion-callout.border.color-blue,
+.notion-callout.border.color-blue-light {
+  border: 1px solid var(--color-bg-blue-light);
+}
+
+.notion-callout.border.color-purple,
+.notion-callout.border.color-purple-light {
+  border: 1px solid var(--color-bg-purple-light);
+}
+
+.notion-callout.border.color-pink,
+.notion-callout.border.color-pink-light {
+  border: 1px solid var(--color-bg-pink-light);
+}
+
+.notion-callout.border.color-red,
+.notion-callout.border.color-red-light {
+  border: 1px solid var(--color-bg-red-light);
 }

@@ -1,50 +1,9 @@
-@import "variables/mixins.scss";
-@import "variables/sizes.scss";
-
-.super-content {
-  @include site-padding;
-  padding-bottom: 5vh;
-}
-
-.max-width {
-  max-width: #{$content-max-width} !important;
-}
-
-.notion-collection.notion-collection-page {
-  max-width: #{$content-max-width};
-  margin: 0 auto;
-}
-
-.notion-header__icon-wrapper.no-cover.has-icon {
-  position: relative;
-  top: 0;
-  bottom: unset;
-  padding: 0;
-  margin-bottom: 20px;
-}
-
-.notion-header__cover.has-cover,
-.notion-header__content.no-cover.no-icon,
-.notion-header__content.no-cover.has-icon {
-  margin: 30px auto;
-}
-
-.notion-header__content.no-cover.has-icon .notion-header__title-wrapper {
-  margin-top: 0;
-}
-
-.notion-header__content.has-cover.has-icon .notion-header__title-wrapper {
-  margin-top: 130px;
-}
-
-.notion-header__icon-wrapper {
+.notion-header__cover,
+.notion-header__icon-wrapper,
+.notion-collection__header {
   display: none;
 }
 
-.notion-header__cover.has-cover {
-  display: none;
-}
-
-.notion-column > .notion-image {
+.notion-column>.notion-image {
   align-self: center;
 }
