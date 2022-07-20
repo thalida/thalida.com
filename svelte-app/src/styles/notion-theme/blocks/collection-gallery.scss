@@ -9,15 +9,17 @@
     transition: all 200ms ease-in-out;
 
     .notion-collection-card__cover {
+      transition: all 200ms ease-in-out;
       border-radius: 1em;
       border: 0;
       padding-top: 100%;
       height: auto;
       min-height: 0;
-      filter: blur(0);
+      filter: blur(2px);
     }
 
     .notion-collection-card__content {
+      transition: all 200ms ease-in-out;
       margin: 0;
       padding: 0;
       display: flex;
@@ -27,9 +29,9 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
       padding: 16px;
-      background: rgba(0, 0, 0, 0.5);
+      background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
 
       .notion-property__select {
         flex-flow: row wrap;
@@ -50,12 +52,12 @@
       transform: scale(0.9);
 
       .notion-collection-card__content {
-        height: 100%;
-        background: linear-gradient(90deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+        height: auto;
+        background: rgba(0, 0, 0, 0.5);
       }
 
       .notion-collection-card__cover {
-        filter: blur(2px);
+        filter: blur(0);
       }
     }
   }
