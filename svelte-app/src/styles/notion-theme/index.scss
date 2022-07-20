@@ -1,7 +1,9 @@
+@import 'variables.scss';
 @import 'layout.scss';
 @import 'blocks/hidden-blocks.scss';
 @import 'blocks/bookmark.scss';
 @import 'blocks/callout.scss';
+@import 'blocks/checkbox.scss';
 @import 'blocks/code.scss';
 @import 'blocks/collection.scss';
 @import 'blocks/collection-board.scss';
@@ -10,6 +12,7 @@
 @import 'blocks/collection-table.scss';
 @import 'blocks/divider.scss';
 @import 'blocks/headings.scss';
+@import 'blocks/image.scss';
 @import 'blocks/individual.scss';
 @import 'blocks/link.scss';
 @import 'blocks/numbered-list.scss';

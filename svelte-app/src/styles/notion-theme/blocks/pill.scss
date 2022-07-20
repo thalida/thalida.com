@@ -1,8 +1,7 @@
 .notion-pill,
 .notion-collection-list__item-property .notion-property__select .notion-pill {
-  padding: 0;
-  text-transform: uppercase;
-  font-size: 12px;
+  padding: 2px 8px !important;
+  border-radius: 4px;
   font-weight: 500;
 }
 
@@ -13,53 +12,53 @@
 .pill-gray,
 .pill-gray-light {
   color: var(--color-text-gray);
-  background: transparent;
+  background-color: var(--color-bg-gray-light);
 }
 
 .pill-brown,
 .pill-brown-light {
   color: var(--color-text-brown);
-  background: transparent;
+  background-color: var(--color-bg-brown-light);
 }
 
 .pill-orange,
 .pill-orange-light {
   color: var(--color-text-orange);
-  background: transparent;
+  background-color: var(--color-bg-orange-light);
 }
 
 .pill-yellow,
 .pill-yellow-light {
   color: var(--color-text-yellow);
-  background: transparent;
+  background-color: var(--color-bg-yellow-light);
 }
 
 .pill-green,
 .pill-green-light {
   color: var(--color-text-green);
-  background: transparent;
+  background-color: var(--color-bg-green-light);
 }
 
 .pill-blue,
 .pill-blue-light {
   color: var(--color-text-blue);
-  background: transparent;
+  background-color: var(--color-bg-blue-light);
 }
 
 .pill-purple,
 .pill-purple-light {
   color: var(--color-text-purple);
-  background: transparent;
+  background-color: var(--color-bg-purple-light);
 }
 
 .pill-pink,
 .pill-pink-light {
   color: var(--color-text-pink);
-  background: transparent;
+  background-color: var(--color-bg-pink-light);
 }
 
 .pill-red,
 .pill-red-light {
   color: var(--color-text-red);
-  background: transparent;
+  background-color: var(--color-bg-red-light);
 }

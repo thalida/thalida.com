@@ -17,16 +17,18 @@
     height: 2px;
     background-color: var(--color-text-blue);
     position: absolute;
-    bottom: 0;
+    bottom: 0.3rem;
     left: 0;
     cursor: pointer;
     transition: all 200ms ease-in-out;
+    z-index: -1;
   }
 
   &:hover:after {
     height: 100%;
     z-index: -1;
     transform: skewY(-2deg);
+    bottom: 0;
   }
 }
 
@@ -45,7 +47,7 @@
   transition: all 200ms ease-in-out;
 
   &:after {
-   display: none;
+    display: none;
   }
 
   &:hover {
