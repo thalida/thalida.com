@@ -2,7 +2,8 @@
 .notion-collection-list__item-property .notion-property__select .notion-pill {
   padding: 2px 8px !important;
   border-radius: 50px;
-  font-size: 0.8em !important;
+  font-size: 1em !important;
+  font-weight: 600;
 }
 
 .pill-default {
@@ -12,44 +13,62 @@
 .pill-gray,
 .pill-gray-light {
   border: 1px solid var(--color-gray);
+  color: var(--color-gray);
+  background: transparent;
 }
 
 .pill-brown,
 .pill-brown-light {
   border: 1px solid var(--color-brown);
+  color: var(--color-brown);
+  background: transparent;
 }
 
 .pill-orange,
 .pill-orange-light {
   border: 1px solid var(--color-orange);
+  color: var(--color-orange);
+  background: transparent;
 }
 
 .pill-yellow,
 .pill-yellow-light {
   border: 1px solid var(--color-yellow);
+  color: var(--color-yellow);
+  background: transparent;
 }
 
 .pill-green,
 .pill-green-light {
   border: 1px solid var(--color-green);
+  color: var(--color-green);
+  background: transparent;
 }
 
 .pill-blue,
 .pill-blue-light {
   border: 1px solid var(--color-blue);
+  color: var(--color-blue);
+  background: transparent;
 }
 
 .pill-purple,
 .pill-purple-light {
   border: 1px solid var(--color-purple);
+  color: var(--color-purple);
+  background: transparent;
 }
 
 .pill-pink,
 .pill-pink-light {
   border: 1px solid var(--color-pink);
+  color: var(--color-pink);
+  background: transparent;
 }
 
 .pill-red,
 .pill-red-light {
   border: 1px solid var(--color-red);
+  color: var(--color-red);
+  background: transparent;
 }
