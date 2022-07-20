@@ -1,6 +1,12 @@
-// .notion-collection-list {
-//   border: 0;
-// }
+.notion-collection-list {
+  border: 0;
+}
+
+.notion-collection-list__item {
+  .notion-property__title__icon-wrapper {
+    display: none;
+  }
+}
 
 // .notion-collection-list__item {
 //   flex-flow: column wrap;
