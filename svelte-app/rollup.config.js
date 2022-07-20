@@ -36,7 +36,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/dist/bundle.js'
+		file: 'public/dist/theme.js'
 	},
 	plugins: [
 		svelte({
@@ -46,33 +46,12 @@ export default {
 				dev: !production,
 			}
 		}),
-		// we'll extract any component CSS out into
-		// a separate file - better for performance
-		// css({ output: 'bundle.css' }),
 		scss({
 			watch: 'src',
 			output: 'public/dist/theme.css',
 			outputStyle: (production) ? 'compressed' : 'expanded',
 		}),
 
-		// scss({
-		// 	watch: 'src',
-		// 	exclude: ['src/styles/notion-theme/**/*.scss'],
-		// 	output: 'public/dist/global.css',
-		// 	outputStyle: (production) ? 'compressed' : 'expanded',
-		// }),
-		// scss({
-		// 	watch: 'src/styles/notion-theme',
-		// 	include: ['src/styles/notion-theme/**/*.scss'],
-		// 	output: 'public/dist/notion-theme.css',
-		// 	outputStyle: (production) ? 'compressed' : 'expanded',
-		// }),
-
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration -
-		// consult the documentation for details:
-		// https://github.com/rollup/plugins/tree/master/packages/commonjs
 		resolve({
 			browser: true,
 			dedupe: ['svelte']
