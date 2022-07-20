@@ -1,8 +1,8 @@
 .notion-pill,
 .notion-collection-list__item-property .notion-property__select .notion-pill {
   padding: 2px 8px !important;
-  border-radius: 4px;
-  font-weight: 500;
+  border-radius: 50px;
+  font-size: 0.8em !important;
 }
 
 .pill-default {
@@ -11,54 +11,45 @@
 
 .pill-gray,
 .pill-gray-light {
-  color: var(--color-text-gray);
-  background-color: var(--color-bg-gray-light);
+  border: 1px solix var(--color-gray);
 }
 
 .pill-brown,
 .pill-brown-light {
-  color: var(--color-text-brown);
-  background-color: var(--color-bg-brown-light);
+  border: 1px solix var(--color-brown);
 }
 
 .pill-orange,
 .pill-orange-light {
-  color: var(--color-text-orange);
-  background-color: var(--color-bg-orange-light);
+  border: 1px solix var(--color-orange);
 }
 
 .pill-yellow,
 .pill-yellow-light {
-  color: var(--color-text-yellow);
-  background-color: var(--color-bg-yellow-light);
+  border: 1px solix var(--color-yellow);
 }
 
 .pill-green,
 .pill-green-light {
-  color: var(--color-text-green);
-  background-color: var(--color-bg-green-light);
+  border: 1px solix var(--color-green);
 }
 
 .pill-blue,
 .pill-blue-light {
-  color: var(--color-text-blue);
-  background-color: var(--color-bg-blue-light);
+  border: 1px solix var(--color-blue);
 }
 
 .pill-purple,
 .pill-purple-light {
-  color: var(--color-text-purple);
-  background-color: var(--color-bg-purple-light);
+  border: 1px solix var(--color-purple);
 }
 
 .pill-pink,
 .pill-pink-light {
-  color: var(--color-text-pink);
-  background-color: var(--color-bg-pink-light);
+  border: 1px solix var(--color-pink);
 }
 
 .pill-red,
 .pill-red-light {
-  color: var(--color-text-red);
-  background-color: var(--color-bg-red-light);
+  border: 1px solix var(--color-red);
 }
