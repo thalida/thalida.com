@@ -57,13 +57,11 @@
   .notion-property.notion-property__title {
     margin: 0;
     padding: 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
 
     .notion-property__title__icon-wrapper {
       display: none;
-    }
-
-    .notion-semantic-string {
-      font-size: 3rem;
     }
   }
 
