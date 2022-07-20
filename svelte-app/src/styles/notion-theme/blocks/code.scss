@@ -4,6 +4,8 @@ code {
   font-family: "Fira Code", Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace !important;
 }
 
-.notion-code.no-wrap {
+.notion-code.no-wrap,
+.notion-code.no-wrap pre,
+.notion-code.no-wrap code {
   font-size: 0.75rem;
 }
