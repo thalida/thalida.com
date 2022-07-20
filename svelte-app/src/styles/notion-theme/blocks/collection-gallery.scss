@@ -67,15 +67,11 @@
   &.small {
     gap: 18px;
 
-    .notion-collection-card__cover {
-      margin-bottom: 10px;
-    }
-
-    .notion-collection-card:hover .notion-collection-card__cover {
+    .notion-collection-card:hover {
       box-shadow: 0 0 48px black;
     }
 
-    .notion-property__title .notion-semantic-string {
+    .notion-property__title {
       flex-flow: row wrap;
       font-size: 1rem;
       white-space: normal;
@@ -93,11 +89,7 @@
       grid-template-columns: 100%;
     }
 
-    .notion-collection-card__cover {
-      margin-bottom: 15px;
-    }
-
-    .notion-collection-card:hover .notion-collection-card__cover {
+    .notion-collection-card:hover {
       box-shadow: 0 0 64px black;
     }
   }
