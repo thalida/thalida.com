@@ -109,6 +109,10 @@
     .notion-collection-card .notion-collection-card__content {
       justify-content: space-between;
     }
+
+    .notion-collection-card__property-list {
+      font-size: 0.8rem;
+    }
   }
 
   &.large {
@@ -120,6 +124,10 @@
 
     .notion-collection-card .notion-collection-card__content {
       justify-content: space-between;
+    }
+
+    .notion-collection-card__property-list {
+      font-size: 0.8rem;
     }
   }
 }
