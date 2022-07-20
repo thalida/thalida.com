@@ -19,7 +19,7 @@
       margin-inline-end: 0;
       white-space: pre-wrap;
 
-      & > span {
+      &>span {
         border: 0;
       }
     }
@@ -34,7 +34,7 @@
       width: 100%;
       margin: 0 auto;
       height: 2px;
-      background-color: var(--color-text-blue);
+      background-color: var(--color-link);
       position: absolute;
       bottom: 0;
       left: 0;

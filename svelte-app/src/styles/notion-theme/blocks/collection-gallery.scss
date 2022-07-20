@@ -6,6 +6,7 @@
     background: transparent;
     border-radius: 24px;
     box-shadow: none;
+    border: 2px solid black;
 
     .notion-collection-card__cover {
       border-radius: 1em;
@@ -29,6 +30,7 @@
       min-height: 0px;
       padding: 16px;
       background: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.8);
+      backdrop-filter: blur(2px);
 
       .notion-property__select {
         flex-flow: row wrap;
@@ -51,6 +53,7 @@
 
     &:hover {
       transform: scale(0.95);
+      border-color: var(--color-link);
 
       .notion-collection-card__content {
         min-height: 100%;
@@ -133,7 +136,7 @@
     .notion-collection-card,
     .notion-collection-card__cover,
     .notion-collection-card__content {
-      transition: all 600ms ease-in-out;
+      transition: all 500ms ease-in-out;
     }
 
     .notion-collection-card .notion-collection-card__content {

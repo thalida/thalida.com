@@ -15,7 +15,7 @@
     width: 100%;
     margin: 0 auto;
     height: 2px;
-    background-color: var(--color-text-blue);
+    background-color: var(--color-link);
     position: absolute;
     bottom: 0.3rem;
     left: 0;
@@ -36,7 +36,7 @@
 .notion-text.color-blue .notion-link,
 .highlighted-color.color-blue .notion-link {
   display: inline-block;
-  border: 2px solid var(--color-bg-blue);
+  border: 2px solid var(--color-link);
   border-radius: 50px;
   padding: .5rem 1rem;
   text-align: center;
