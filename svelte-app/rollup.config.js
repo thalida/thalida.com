@@ -48,19 +48,25 @@ export default {
 		}),
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
-		css({ output: 'bundle.css' }),
+		// css({ output: 'bundle.css' }),
 		scss({
 			watch: 'src',
-			exclude: ['src/styles/notion-theme/**/*.scss'],
-			output: 'public/dist/global.css',
+			output: 'public/dist/theme.css',
 			outputStyle: (production) ? 'compressed' : 'expanded',
 		}),
-		scss({
-			watch: 'src/styles/notion-theme',
-			include: ['src/styles/notion-theme/**/*.scss'],
-			output: 'public/dist/notion-theme.css',
-			outputStyle: (production) ? 'compressed' : 'expanded',
-		}),
+
+		// scss({
+		// 	watch: 'src',
+		// 	exclude: ['src/styles/notion-theme/**/*.scss'],
+		// 	output: 'public/dist/global.css',
+		// 	outputStyle: (production) ? 'compressed' : 'expanded',
+		// }),
+		// scss({
+		// 	watch: 'src/styles/notion-theme',
+		// 	include: ['src/styles/notion-theme/**/*.scss'],
+		// 	output: 'public/dist/notion-theme.css',
+		// 	outputStyle: (production) ? 'compressed' : 'expanded',
+		// }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
