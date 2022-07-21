@@ -1,11 +1,12 @@
-.notion-pill,
-.notion-collection-list__item-property .notion-property__select .notion-pill {
+.notion-pill {
   padding: 2px 8px !important;
   border-radius: 50px;
   font-size: 0.9em;
   font-weight: 600;
+  font-size: 0.7em;
 }
 
+.notion-collection-list__item-property .notion-property__select .notion-pill,
 .notion-collection-table__cell.multi_select .notion-pill,
 .notion-collection-table__cell.select .notion-pill {
   font-size: 0.7em;
