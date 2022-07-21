@@ -1,6 +1,7 @@
 <script>
 	import LiveWindow from "./components/LiveWindow.svelte";
-	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
+	export let selectedPage = `/${window.location.pathname.split("/")[1]}`;
+	console.log(selectedPage);
 </script>
 
 {#if selectedPage === "/"}
