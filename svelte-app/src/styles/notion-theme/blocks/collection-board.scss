@@ -5,10 +5,10 @@
     border: 2px solid var(--color-border-default);
   }
 
-  .notion-collection-card__property-list .notion-property {
+  .notion-collection-card__property-list {
 
-    .notion-property__text,
-    .notion-semantic-string .date {
+    .notion-property.notion-property__text,
+    .notion-property .notion-semantic-string .date {
       color: var(--color-text-default-light);
     }
   }
