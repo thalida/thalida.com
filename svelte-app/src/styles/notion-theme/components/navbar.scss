@@ -16,15 +16,5 @@
     font-family: var(--primary-font);
     text-transform: uppercase;
     font-size: 0.8rem;
-    color: var(--color-link);
-  }
-
-  .super-navbar__item {
-    transform: scale(0.9);
-
-    &.active,
-    &:hover {
-      transform: scale(1);
-    }
   }
 }
