@@ -1,8 +1,3 @@
-.notion-navbar,
-.notion-navbar__search {
-  display: none;
-}
-
 .super-navbar {
   backdrop-filter: blur(4px);
 
@@ -15,5 +10,11 @@
 
   .super-navbar__logo {
     padding: 0;
+  }
+
+  .super-navbar__item-list {
+    font-family: var(--primary-font);
+    text-transform: uppercase;
+    font-size: 0.8rem;
   }
 }
