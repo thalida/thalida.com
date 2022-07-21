@@ -19,9 +19,9 @@
 
     &:nth-child(3n) {
       .notion-collection-card__cover {
-        background: linear-gradient(217deg, rgb(224 32 129), rgba(255, 0, 0, 0) 70.71%),
-          linear-gradient(127deg, rgb(20 237 161), rgba(0, 255, 0, 0) 70.71%),
-          linear-gradient(336deg, rgb(2 0 255), rgba(0, 0, 255, 0) 70.71%);
+        background: linear-gradient(217deg, var(--color-purple), rgba(255, 0, 0, 0) 70.71%),
+          linear-gradient(127deg, var(--color-blue), rgba(0, 255, 0, 0) 70.71%),
+          linear-gradient(336deg, var(--color-pink), rgba(0, 0, 255, 0) 70.71%);
       }
     }
 
