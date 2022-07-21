@@ -6,6 +6,14 @@
   font-size: 0.7em;
 }
 
+.notion-collection .notion-collection-gallery.large,
+.notion-collection.inline .notion-collection-gallery.large {
+  .notion-collection-card__property .notion-property__select .notion-pill {
+    font-size: 0.9em;
+  }
+}
+
+
 .notion-collection-list__item-property .notion-property__select .notion-pill,
 .notion-collection-table__cell.multi_select .notion-pill,
 .notion-collection-table__cell.select .notion-pill {
