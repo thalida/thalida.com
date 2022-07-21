@@ -24,11 +24,11 @@
 {/if}
 
 <style lang="scss" global>
-	@media (min-width: 960px) {
+	@media (min-width: 950px) {
 		.super-root.page__index {
 			.scene {
 				position: sticky;
-				top: 10px;
+				top: calc(var(--navbar-height) * 2);
 			}
 
 			.super-content-wrapper {
@@ -39,15 +39,14 @@
 				align-items: start;
 				justify-content: space-between;
 				width: 100%;
+				padding-left: var(--padding-left);
+				padding-right: var(--padding-right);
 			}
 
-			.notion-header.page {
-				display: none;
-			}
-
-			.super-content.max-width {
-				padding: 0;
+			.super-content {
+				padding: 0 64px;
 				flex-grow: 1;
+				margin: calc(var(--navbar-height) - 1rem) 0;
 			}
 		}
 	}

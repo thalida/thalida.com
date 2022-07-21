@@ -67,7 +67,9 @@
     flex-flow: column nowrap;
     justify-content: flex-start;
     align-items: center;
+    width: var(--live-window-width);
     height: var(--live-window-height);
+    overflow: hidden;
     transform: translateX(0);
 
     .horizontal-bar {
