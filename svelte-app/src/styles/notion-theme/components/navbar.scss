@@ -2,3 +2,16 @@
 .notion-navbar__search {
   display: none;
 }
+
+.super-navbar {
+  .super-navbar__content {
+    max-width: var(--layout-max-width);
+    margin: auto;
+    padding-left: var(--padding-left);
+    padding-right: var(--padding-right);
+  }
+
+  .super-navbar__logo {
+    padding: 0;
+  }
+}
