@@ -17,6 +17,30 @@
       filter: blur(0);
     }
 
+    &:nth-child(3n) {
+      .notion-collection-card__cover {
+        background: linear-gradient(217deg, rgb(224 32 129), rgba(255, 0, 0, 0) 70.71%),
+          linear-gradient(127deg, rgb(20 237 161), rgba(0, 255, 0, 0) 70.71%),
+          linear-gradient(336deg, rgb(2 0 255), rgba(0, 0, 255, 0) 70.71%);
+      }
+    }
+
+    &:nth-child(3n + 1) {
+      .notion-collection-card__cover {
+        background: linear-gradient(217deg, var(--color-yellow), rgba(255, 0, 0, 0) 70.71%),
+          linear-gradient(127deg, var(--color-pink), rgba(0, 255, 0, 0) 70.71%),
+          linear-gradient(336deg, var(--color-brown), rgba(0, 0, 255, 0) 70.71%);
+      }
+    }
+
+    &:nth-child(3n + 2) {
+      .notion-collection-card__cover {
+        background: linear-gradient(217deg, var(--color-pink), rgba(255, 0, 0, 0) 70.71%),
+          linear-gradient(127deg, var(--color-purple), rgba(0, 255, 0, 0) 70.71%),
+          linear-gradient(336deg, var(--color-red), rgba(0, 0, 255, 0) 70.71%);
+      }
+    }
+
     .notion-collection-card__content {
       margin: 0;
       padding: 0;
