@@ -45,6 +45,28 @@ export function updateCurrentRoute() {
   currentRoute.set(window.location.href);
 }
 
+window.onload = function () {
+  const bodyList = document.querySelector("body")
+
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      console.log(currentRoute, document.location.href);
+      if (currentRoute != document.location.href) {
+        console.log('changed!')
+        currentRoute.set(document.location.href);
+        /* Changed ! your code here */
+      }
+    });
+  });
+
+  const config = {
+    childList: true,
+    subtree: true
+  };
+
+  observer.observe(bodyList, config);
+};
+
 window.addEventListener('popstate', updateCurrentRoute)
 window.addEventListener('hashchange', updateCurrentRoute)
 window.addEventListener('locationchagne', updateCurrentRoute)
