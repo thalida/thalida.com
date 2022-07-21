@@ -6,6 +6,11 @@
     margin: auto;
     padding-left: var(--padding-left);
     padding-right: var(--padding-right);
+
+    @media(max-width: 546px) {
+      padding-left: var(--padding-left-mobile);
+      padding-right: var(--padding-right-mobile);
+    }
   }
 
   .super-navbar__logo {
