@@ -93,7 +93,7 @@
     }
   }
   .current-weather-text {
-    font-family: Josefin Sans, Helvetica, sans-serif;
+    font-family: var(--primary-font);
     font-size: 18px;
     width: var(--live-window-width);
     text-align: center;
