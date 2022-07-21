@@ -1,10 +1,10 @@
 <script>
-	import { currentRoute } from "./store";
+	import { currentUrlPath } from "./store";
 	import LiveWindow from "./components/LiveWindow.svelte";
-	export let selectedPage = `/${window.location.pathname.split("/")[1]}`;
+	export let selectedPage = null;
 
-	currentRoute.subscribe((newRoute) => {
-		console.log(newRoute);
+	currentUrlPath.subscribe((urlPath) => {
+		selectedPage = `/${urlPath.split("/")[1]}`;
 	});
 </script>
 

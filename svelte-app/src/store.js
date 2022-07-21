@@ -31,7 +31,7 @@ export const store = writable({
   },
 });
 
-export const currentRoute = writable(window.location.href)
+export const currentUrlPath = writable(window.location.pathname)
 export const isDataFetched = writable(false);
 export const gradient = writable({});
 
@@ -41,16 +41,12 @@ store.subscribe((value) => {
   }
 });
 
-export function updateCurrentRoute() {
-  currentRoute.set(window.location.href);
-}
-
 window.onload = function () {
   const bodyList = document.querySelector("body")
 
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function () {
-      currentRoute.set(document.location.href);
+      currentUrlPath.set(document.location.pathname);
     });
   });
 
@@ -61,10 +57,6 @@ window.onload = function () {
 
   observer.observe(bodyList, config);
 };
-
-// window.addEventListener('popstate', updateCurrentRoute)
-// window.addEventListener('hashchange', updateCurrentRoute)
-// window.addEventListener('locationchagne', updateCurrentRoute)
 
 export async function fetchLocation($store) {
   const now = Date.now();
