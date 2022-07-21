@@ -159,7 +159,7 @@
   --color-pill-text-default: hsl(var(--default-h), var(--default-s), calc(var(--default-l) + 23%));
   --color-text-default: #ffffff;
   --color-text-default-light: #d8d8d8;
-  --color-bg-default: hsl(222deg 32% 8%);
+  --color-bg-default: hsl(222deg 32% 6%);
   --color-border-default: #293246;
   --color-border-dark: var(--color-border-default);
   --color-ui-hover-bg: #273654;
@@ -185,7 +185,7 @@
   --heading4-size: calc(var(--heading-size) * 1.1);
   --color-bg-default-h: 222;
   --color-bg-default-s: 32%;
-  --color-bg-default-l: 8%;
+  --color-bg-default-l: 6%;
   --color-link: var(--color-blue);
   --collection-list-item-padding: var(--padding-layout);
 
