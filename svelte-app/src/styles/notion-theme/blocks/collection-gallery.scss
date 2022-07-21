@@ -39,6 +39,10 @@
         flex-flow: row wrap;
       }
 
+      .notion-property__text {
+        max-width: 100%;
+      }
+
       .notion-collection-card__property .notion-property__text {
         text-overflow: ellipsis;
         overflow: hidden;
