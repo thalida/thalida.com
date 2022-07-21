@@ -189,9 +189,12 @@
   --color-link: var(--color-blue);
   --collection-list-item-padding: var(--padding-layout);
 
-  --color-card-bg: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
+  --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
+  --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
+
+  --color-card-bg: var(--color-bg-default-darker);
   --color-card-bg-hover: var(--color-ui-hover-bg);
 
-  --table-header-bg: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
-  --color-calendar-weekend-bg: var(--table-header-bg);
+  --table-header-bg: var(--color-bg-default-dark);
+  --color-calendar-weekend-bg: var(--color-bg-default-dark);
 }
