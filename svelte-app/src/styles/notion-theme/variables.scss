@@ -15,7 +15,7 @@
   --color-bg-default: hsl(222deg 32% 6%);
   --scrollbar-background-color: transparent;
   --scrollbar-border-color: transparent;
-  --navbar-background-color: var(--color-bg-default);
+  --navbar-background-color: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.9);
   --navbar-menu-background-color: var(--navbar-background-color);
   --footer-background-color: var(--color-bg-default);
 
