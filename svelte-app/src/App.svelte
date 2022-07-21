@@ -1,4 +1,5 @@
 <script>
+	import { currentRoute } from "./store";
 	import LiveWindow from "./components/LiveWindow.svelte";
 	export let selectedPage = `/${window.location.pathname.split("/")[1]}`;
 	console.log(selectedPage);
@@ -13,6 +14,10 @@
 	});
 	window.addEventListener("locationchange", function (event) {
 		console.log(event.state);
+	});
+
+	currentRoute.subscribe((newRoute) => {
+		console.log(newRoute);
 	});
 </script>
 

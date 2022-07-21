@@ -31,6 +31,7 @@ export const store = writable({
   },
 });
 
+export const currentRoute = writable(window.location.href)
 export const isDataFetched = writable(false);
 export const gradient = writable({});
 
@@ -39,6 +40,14 @@ store.subscribe((value) => {
     localStorage.liveWindowStore = JSON.stringify(value);
   }
 });
+
+export function updateCurrentRoute() {
+  currentRoute.set(window.location.href);
+}
+
+window.addEventListener('popstate', updateCurrentRoute)
+window.addEventListener('hashchange', updateCurrentRoute)
+window.addEventListener('locationchagne', updateCurrentRoute)
 
 export async function fetchLocation($store) {
   const now = Date.now();
