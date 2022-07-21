@@ -31,7 +31,7 @@
       min-height: 0px;
       padding: 16px;
       background: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.8);
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(2px);
 
       .notion-property__select {
         flex-flow: row wrap;
@@ -64,7 +64,7 @@
       }
 
       .notion-collection-card__cover {
-        filter: blur(4px);
+        filter: blur(2px);
       }
     }
   }
