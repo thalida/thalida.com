@@ -188,4 +188,7 @@
   --color-bg-default-l: 8%;
   --color-link: var(--color-blue);
   --collection-list-item-padding: var(--padding-layout);
+
+  --table-header-bg: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
+  --color-calendar-weekend-bg: var(--table-header-bg);
 }
