@@ -24,6 +24,10 @@
     font-size: 0.8rem;
   }
 
+  .super-navbar__item {
+    padding: 14px 1vw;
+  }
+
 
   @media (max-width: 860px) {
     .super-navbar__item-list {
@@ -32,7 +36,7 @@
 
     .super-navbar__item {
       width: auto;
-      padding: 14px 20px;
+      padding: 14px 1vw;
       text-align: left;
     }
 
@@ -40,5 +44,4 @@
       display: none;
     }
   }
-
 }
