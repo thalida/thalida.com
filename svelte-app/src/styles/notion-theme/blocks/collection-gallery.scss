@@ -123,6 +123,10 @@
       transition: all 500ms ease-in-out;
     }
 
+    .notion-collection-card__cover {
+      height: var(--collection-card-cover-size-large);
+    }
+
     .notion-collection-card__property-list {
       font-size: 0.8rem;
     }
