@@ -9,9 +9,9 @@
 		Array.from(
 			document.querySelectorAll(".notion-link.super-navbar__item")
 		).forEach((el) => {
-			const href = el.getAttribute("href");
 			el.classList.remove("active");
 
+			const href = el.getAttribute("href");
 			if (selectedPage.startsWith(href)) {
 				el.classList.add("active");
 			}
