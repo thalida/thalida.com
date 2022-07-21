@@ -26,6 +26,13 @@
 
   .super-navbar__item {
     padding: 14px 1vw;
+    opacity: 1;
+    transform: scale(0.9);
+
+    &:hover,
+    &.active {
+      transform: scale(1);
+    }
   }
 
 
