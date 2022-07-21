@@ -11,6 +11,9 @@
 		// Log the state data to the console
 		console.log(event.state);
 	});
+	window.addEventListener("locationchange", function (event) {
+		console.log(event.state);
+	});
 </script>
 
 {#if selectedPage === "/"}
