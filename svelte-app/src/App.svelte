@@ -2,6 +2,7 @@
 	import LiveWindow from "./components/LiveWindow.svelte";
 	let scrollY = 0;
 
+	export const enableHeader = false;
 	export let mobileNavOpen = false;
 	export let isHeaderSticky = false;
 	export const selectedPage = `/${window.location.pathname.split("/")[1]}`;
@@ -24,29 +25,31 @@
 
 <svelte:window bind:scrollY />
 
-<header use:updateHeader={scrollY} class:is-sticky={isHeaderSticky}>
-	<div class="container">
-		<a class="notion-link link" class:active={selectedPage == "/"} href="/">
-			thalida.
-		</a>
+{#if enableHeader === true}
+	<header use:updateHeader={scrollY} class:is-sticky={isHeaderSticky}>
+		<div class="container">
+			<a class="notion-link link" class:active={selectedPage == "/"} href="/">
+				thalida.
+			</a>
 
-		<button
-			class="nav-btn"
-			class:is-open={mobileNavOpen}
-			on:click={() => (mobileNavOpen = !mobileNavOpen)}
-		>
-			<div class="middle-bar" />
-		</button>
+			<button
+				class="nav-btn"
+				class:is-open={mobileNavOpen}
+				on:click={() => (mobileNavOpen = !mobileNavOpen)}
+			>
+				<div class="middle-bar" />
+			</button>
 
-		<nav class:is-open={mobileNavOpen}>
-			{#each links as link}
-				<a class="notion-link link" href={link.path}>
-					{link.label}
-				</a>
-			{/each}
-		</nav>
-	</div>
-</header>
+			<nav class:is-open={mobileNavOpen}>
+				{#each links as link}
+					<a class="notion-link link" href={link.path}>
+						{link.label}
+					</a>
+				{/each}
+			</nav>
+		</div>
+	</header>
+{/if}
 
 {#if selectedPage === "/"}
 	<LiveWindow />
