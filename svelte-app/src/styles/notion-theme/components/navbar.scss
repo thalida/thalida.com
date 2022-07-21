@@ -23,4 +23,22 @@
     text-transform: uppercase;
     font-size: 0.8rem;
   }
+
+
+  @media (max-width: 860px) {
+    .super-navbar__item-list {
+      display: flex;
+    }
+
+    .super-navbar__item {
+      width: auto;
+      padding: 14px 20px;
+      text-align: left;
+    }
+
+    .super-navbar__actions.hide {
+      display: none;
+    }
+  }
+
 }
