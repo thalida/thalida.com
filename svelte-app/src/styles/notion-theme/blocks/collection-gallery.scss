@@ -31,7 +31,8 @@
       min-height: 0px;
       padding: 16px;
       background: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.95);
-      backdrop-filter: blur(2px);
+      border: 1px solid transparent;
+      // backdrop-filter: blur(2px);
 
       .notion-property__select {
         flex-flow: row wrap;
