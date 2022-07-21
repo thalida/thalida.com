@@ -1,6 +1,10 @@
 .super-navbar {
   backdrop-filter: blur(4px);
 
+  .super-navbar__menu-wrapper {
+    display: none;
+  }
+
   .super-navbar__content {
     max-width: var(--layout-max-width);
     margin: auto;
