@@ -94,6 +94,7 @@
 
   &.small {
     gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--collection-card-cover-height-small), 1fr));
 
     .notion-collection-card,
     .notion-collection-card__cover,
@@ -116,6 +117,7 @@
 
   &.medium {
     gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--collection-card-cover-height-medium), 1fr));
 
     @media(max-width: 300px) {
       grid-template-columns: 100%;
@@ -138,6 +140,7 @@
 
   &.large {
     gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(var(--collection-card-cover-height-large), 1fr));
 
     @media(max-width: 350px) {
       grid-template-columns: 100%;
