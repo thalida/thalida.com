@@ -1,7 +1,12 @@
-.notion-collection-table__cell.title > a {
+.notion-collection-table .notion-collection-table__head {
+  background-color: var(--table-header-bg);
+}
+
+.notion-collection-table__cell.title>a {
+
   &,
   &:hover {
-    .notion-semantic-string > span {
+    .notion-semantic-string>span {
       border: 0;
     }
   }
