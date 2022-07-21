@@ -8,8 +8,8 @@ import "./styles/app.scss";
 import App from "./App.svelte";
 
 const app = new App({
-  target: document.querySelector(".super-root"),
-  anchor: document.querySelector(".super-content-wrapper"),
+  target: document.querySelector(".super-content-wrapper"),
+  anchor: document.querySelector(".super-content"),
 });
 
 export default app;
