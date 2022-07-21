@@ -46,7 +46,7 @@ window.onload = function () {
 
   const observer = new MutationObserver(function (mutations) {
     mutations.forEach(function () {
-      currentUrlPath.set(document.location.pathname);
+      currentUrlPath.set(window.location.pathname);
     });
   });
 
