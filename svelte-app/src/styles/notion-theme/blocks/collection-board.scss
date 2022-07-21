@@ -1,3 +1,15 @@
 .notion-collection-board {
   border: 0;
+
+  .notion-collection-card {
+    border: 2px solid var(--color-border-default);
+  }
+
+  .notion-collection-card__property-list .notion-property {
+
+    .notion-property__text,
+    .notion-semantic-string .date {
+      color: var(--color-text-default-light);
+    }
+  }
 }

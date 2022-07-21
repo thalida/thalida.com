@@ -2,6 +2,10 @@
   background-color: var(--table-header-bg);
 }
 
+.notion-collection-table__wrapper .notion-property__title .notion-property__title__icon-wrapper {
+  display: none;
+}
+
 .notion-collection-table__cell.title>a {
 
   &,
