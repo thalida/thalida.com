@@ -49,13 +49,8 @@ window.onload = function () {
   const bodyList = document.querySelector("body")
 
   const observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-      console.log(currentRoute, document.location.href);
-      if (currentRoute != document.location.href) {
-        console.log('changed!')
-        currentRoute.set(document.location.href);
-        /* Changed ! your code here */
-      }
+    mutations.forEach(function () {
+      currentRoute.set(document.location.href);
     });
   });
 
@@ -67,9 +62,9 @@ window.onload = function () {
   observer.observe(bodyList, config);
 };
 
-window.addEventListener('popstate', updateCurrentRoute)
-window.addEventListener('hashchange', updateCurrentRoute)
-window.addEventListener('locationchagne', updateCurrentRoute)
+// window.addEventListener('popstate', updateCurrentRoute)
+// window.addEventListener('hashchange', updateCurrentRoute)
+// window.addEventListener('locationchagne', updateCurrentRoute)
 
 export async function fetchLocation($store) {
   const now = Date.now();
