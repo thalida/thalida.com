@@ -4,36 +4,37 @@
 
   import { writable } from "svelte/store";
 
-  const storedTheme = localStorage.getItem("isDarkMode");
-  const isDark =
+  const storedTheme = localStorage.getItem("theme");
+  const initialTheme =
     typeof storedTheme !== "undefined" && storedTheme !== null
       ? storedTheme
-      : true;
-  const isDarkMode = writable(isDark);
-  setThemeClasses(isDark);
+      : "dark";
+  const theme = writable(initialTheme);
 
-  isDarkMode.subscribe((state) => {
-    localStorage.setItem("isDarkMode", state);
-    setThemeClasses(state);
+  theme.subscribe((newTheme) => {
+    localStorage.setItem("theme", newTheme);
+    setThemeClasses(newTheme);
   });
 
   function handleClick() {
-    isDarkMode.update((state) => !state);
+    theme.update((state) => (state === "dark" ? "light" : "dark"));
   }
 
-  function setThemeClasses(isDark) {
-    if (isDark) {
+  function setThemeClasses(theme) {
+    if (theme === "light") {
+      document.body.classList.add("theme-light", "light");
+      document.documentElement.classList.add("theme-light", "light");
+      document.body.classList.remove("theme-dark", "dark");
+      document.documentElement.classList.remove("theme-dark", "dark");
+    } else {
       document.body.classList.add("theme-dark", "dark");
       document.documentElement.classList.add("theme-dark", "dark");
       document.body.classList.remove("theme-light", "light");
       document.documentElement.classList.remove("theme-light", "light");
-    } else {
-      document.body.classList.remove("theme-dark", "dark");
-      document.documentElement.classList.remove("theme-dark", "dark");
-      document.body.classList.add("theme-light", "light");
-      document.documentElement.classList.add("theme-light", "light");
     }
   }
+
+  setThemeClasses(initialTheme);
 </script>
 
 <div class="theme-toggle theme-toggle-js" on:click={handleClick}>
