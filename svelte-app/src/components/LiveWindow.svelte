@@ -80,7 +80,7 @@
       justify-content: flex-start;
       width: 100%;
       height: 15px;
-      background: var(--color-bg-default);
+      background: var(--window-color);
       top: calc((100% - 15px) / 2);
 
       &::before {
@@ -90,7 +90,7 @@
         width: 8%;
         height: 5px;
         border-radius: 5px 5px 0 0;
-        background: var(--color-bg-default);
+        background: var(--window-color);
       }
     }
   }

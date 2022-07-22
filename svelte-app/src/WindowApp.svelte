@@ -31,6 +31,11 @@
 {/if}
 
 <style lang="scss" global>
+	:root {
+		--window-color: var(--color-bg-default);
+		--window-sky-color-default: var(--color-bg-default-darker);
+	}
+
 	@media (min-width: 950px) {
 		.has-window {
 			.scene {

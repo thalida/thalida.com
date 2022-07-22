@@ -50,6 +50,7 @@
 
 <style lang="scss" global>
   .theme-dark {
+    --color-toggle-bg: var(--color-bg-default);
     --color-toggle-theme: #fff;
   }
   .theme-light {
@@ -71,7 +72,7 @@
       width: 37px;
       height: 37px;
       border-radius: 50%;
-      border: 4px solid var(--color-bg-default);
+      border: 4px solid var(--color-toggle-bg);
     }
 
     .sun__ray {
@@ -108,7 +109,7 @@
     height: 28px;
     width: 28px;
     position: absolute;
-    background: var(--color-bg-default);
+    background: var(--color-toggle-bg);
     border-radius: 50%;
     top: 0;
     right: 0;
@@ -120,7 +121,7 @@
 
   .theme-dark {
     .theme-toggle {
-      background-color: var(--color-bg-default);
+      background-color: var(--color-toggle-bg);
     }
 
     .theme-toggle:hover {

@@ -196,7 +196,7 @@
       height: calc(
         var(--live-window-height) * var(--live-window-rod-height-scale)
       );
-      background: var(--color-bg-default);
+      background: var(--window-color);
       transform: translateX(0);
     }
 
@@ -213,7 +213,7 @@
       .string {
         width: 2px;
         height: 100%;
-        background: var(--color-bg-default);
+        background: var(--window-color);
       }
     }
 
@@ -223,7 +223,7 @@
 
     .slat-bar {
       height: 10px;
-      background: var(--color-bg-default);
+      background: var(--window-color);
     }
 
     .slats {
@@ -234,7 +234,7 @@
       .slat {
         position: relative;
         width: 100%;
-        background: var(--color-bg-default);
+        background: var(--window-color);
         transform: translateX(0);
 
         &:not(.collapse) {
