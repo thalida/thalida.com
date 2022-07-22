@@ -94,7 +94,7 @@
     }
 
     .sun__ray {
-      width: 2px;
+      width: 4px;
       background: var(--color-sun-ray);
       display: block;
       height: 121%;
@@ -134,13 +134,12 @@
 
     .sun__ray {
       height: 0;
-      transition: 0.4s, transform 0.4s, height 0.2s 0.1s;
+      background: transparent;
 
-      $columns: 12;
-      @for $i from 1 through $columns {
-        &:nth-child(#{$i}) {
+      @for $i from 1 through $num_rays {
+        &:nth-child(#{$i + 1}) {
           transform: rotate(
-            calc(calc(#{$i} * calc(360deg / #{$columns})) - 45deg)
+            calc((#{$i} * (180deg / #{$num_rays})) - (180deg / #{$num_rays}))
           );
         }
       }
