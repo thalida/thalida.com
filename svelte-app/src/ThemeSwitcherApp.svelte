@@ -38,8 +38,7 @@
 </script>
 
 <div class="theme-toggle theme-toggle-js" on:click={handleClick}>
-  <span class="moon" />
-  <span class="sun" />
+  <span class="sun-moon" />
   <small class="sun__ray" />
   <small class="sun__ray" />
   <small class="sun__ray" />
@@ -50,11 +49,14 @@
 
 <style lang="scss" global>
   .theme-dark {
-    --color-toggle-bg: var(--color-bg-default);
-    --color-toggle-theme: #fff;
+    --color-moon-cutout-color: var(--color-bg-default);
+    --color-sun-moon: #fff;
+    --color-sun-ray: var(--color-sun-moon);
   }
   .theme-light {
-    --color-toggle-theme: #eec413;
+    --color-moon-cutout-color: var(--color-bg-default);
+    --color-sun-moon: #eec413;
+    --color-sun-ray: var(--color-sun-moon);
   }
 
   .theme-toggle {
@@ -67,17 +69,31 @@
     margin: 10px 10px;
     transform: translate(0, 0) scale(0.6);
 
-    .sun {
-      background: var(--color-toggle-theme);
+    .sun-moon {
+      background: var(--color-sun-moon);
       width: 37px;
       height: 37px;
       border-radius: 50%;
-      border: 4px solid var(--color-toggle-bg);
+
+      &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 75%;
+        height: 75%;
+        top: 0;
+        right: 0;
+        background: var(--color-moon-cutout-color);
+        border-radius: 100%;
+        transform: scale(0) translate(0, 0);
+        transition: 0.4s transform;
+        transform-origin: right;
+      }
     }
 
     .sun__ray {
       width: 2px;
-      background: var(--color-toggle-theme);
+      background: var(--color-sun-ray);
       display: block;
       height: 121%;
       position: absolute;
@@ -105,36 +121,16 @@
     }
   }
 
-  .moon {
-    height: 28px;
-    width: 28px;
-    position: absolute;
-    background: var(--color-toggle-bg);
-    border-radius: 50%;
-    top: 0;
-    right: 0;
-    transform: scale(0) translate(25%, -25%);
-    z-index: 9;
-    transition: 0.4s transform;
-    transform-origin: right;
-  }
-
-  .theme-dark {
-    .theme-toggle {
-      background-color: var(--color-toggle-bg);
+  .theme-dark .theme-toggle {
+    .sun-moon:before {
+      transform: scale(1) translate(5%, -10%);
     }
 
-    .theme-toggle:hover {
-      .moon {
-        transform: scale(1) translate(-3%, -18%);
-      }
+    &:hover .sun-moon:before {
+      transform: scale(1) translate(-10%, -15%);
     }
 
-    .moon {
-      transform: scale(1) translate(11%, -11%);
-    }
-
-    .theme-toggle .sun__ray {
+    .sun__ray {
       height: 0;
       transition: 0.4s, transform 0.4s, height 0.2s 0.1s;
 
