@@ -8,6 +8,10 @@
 		document.body.classList.add("theme-dark");
 	}
 
+	if (document.documentElement.classList.contains("theme-dark") === false) {
+		document.documentElement.classList.add("theme-dark");
+	}
+
 	currentUrlPath.subscribe((urlPath) => {
 		selectedPage = `/${urlPath.split("/")[1]}`;
 
