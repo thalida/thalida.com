@@ -43,11 +43,11 @@
   <small class="sun__ray" />
   <small class="sun__ray" />
   <small class="sun__ray" />
-  <small class="sun__ray" />
-  <small class="sun__ray" />
 </div>
 
 <style lang="scss" global>
+  $num_rays: 4;
+
   .theme-dark {
     --color-moon-cutout-color: var(--color-bg-default);
     --color-sun-moon: #fff;
@@ -74,6 +74,8 @@
       width: 37px;
       height: 37px;
       border-radius: 50%;
+      transform: scale(0.7);
+      transition: 0.4s transform;
 
       &:before {
         content: "";
@@ -100,21 +102,18 @@
       z-index: -1;
       transition: 0.4s all, height 0.3s ease-in-out;
 
-      $columns: 12;
-      @for $i from 1 through $columns {
-        &:nth-child(#{$i}) {
-          transform: rotate(calc(#{$i} * calc(360deg / #{$columns})));
+      @for $i from 1 through $num_rays {
+        &:nth-child(#{$i + 1}) {
+          transform: rotate(calc(#{$i} * (360deg / #{$num_rays})));
         }
       }
     }
 
     &:hover .sun__ray {
-      $columns: 12;
-
-      @for $i from 1 through $columns {
-        &:nth-child(#{$i}) {
+      @for $i from 1 through $num_rays {
+        &:nth-child(#{$i + 1}) {
           transform: rotate(
-            calc(calc(#{$i} * calc(360deg / #{$columns})) - 20deg)
+            calc((#{$i} * (360deg / #{$num_rays})) - (360deg / #{$num_rays}))
           );
         }
       }
@@ -122,8 +121,11 @@
   }
 
   .theme-dark .theme-toggle {
-    .sun-moon:before {
-      transform: scale(1) translate(5%, -10%);
+    .sun-moon {
+      transform: scale(1);
+      &:before {
+        transform: scale(1) translate(5%, -10%);
+      }
     }
 
     &:hover .sun-moon:before {
