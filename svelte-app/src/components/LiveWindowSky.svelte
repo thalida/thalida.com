@@ -13,6 +13,6 @@
     position: absolute;
     height: 100%;
     width: var(--live-window-width);
-    background-color: var(--color-bg-default-darker);
+    background-color: var(--window-sky-color-default);
   }
 </style>

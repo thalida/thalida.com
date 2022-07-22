@@ -37,7 +37,7 @@
     font-size: 24px;
     font-family: "Squada One";
     color: var(--color-text-red);
-    background: var(--window-color);
+    background: var(--window-clock-bg);
 
     &:before {
       content: "";
@@ -46,7 +46,7 @@
       height: 3px;
       width: 40%;
       border-radius: 3px 3px 0 0;
-      background: var(--window-color);
+      background: var(--window-clock-bg);
     }
 
     .seperator {

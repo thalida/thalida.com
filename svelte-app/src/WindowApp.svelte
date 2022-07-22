@@ -31,8 +31,14 @@
 {/if}
 
 <style lang="scss" global>
-	:root {
+	.theme-dark {
 		--window-color: var(--color-bg-default);
+		--window-clock-bg: var(--window-color);
+		--window-sky-color-default: var(--color-bg-default-darker);
+	}
+	.theme-light {
+		--window-color: #dbd7ca;
+		--window-clock-bg: #0e121b;
 		--window-sky-color-default: var(--color-bg-default-darker);
 	}
 

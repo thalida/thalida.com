@@ -71,6 +71,8 @@
     height: var(--live-window-height);
     overflow: hidden;
     transform: translateX(0);
+    border-radius: 18px;
+    border: 4px solid var(--window-color);
 
     .horizontal-bar {
       position: absolute;
