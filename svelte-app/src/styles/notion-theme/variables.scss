@@ -388,16 +388,16 @@
       calc(var(--gray-l) - 28%));
 
   /*Other*/
-  --color-text-default: #37352F;
-  --color-text-default-light: #7d7c78;
+  --color-text-default: #000;
+  --color-text-default-light: #666;
   --color-bg-default: #ffffff;
-  --color-border-default: #E9E9E7;
+  --color-border-default: hsl(218deg 31% 85%);
   --color-border-dark: var(--color-border-default);
-  --color-ui-hover-bg: #efefef;
+  --color-ui-hover-bg: hsl(214deg 26% 90%);
   --color-card-bg: #ffffff;
   --color-card-bg-hover: #f9f9f8;
   --color-calendar-weekend-bg: #f7f6f3;
-  --color-checkbox-bg: #2EAADC;
+  --color-checkbox-bg: #000;
   --color-code-bg: #474C50;
   --collection-card-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 
@@ -425,13 +425,21 @@
   --color-bg-default-h: 222;
   --color-bg-default-s: 32%;
   --color-bg-default-l: 6%;
+  --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
+  --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
+  --collection-card-border-color: #000;
+  --color-card-bg: var(--color-bg-default-darker);
 }
 
 .theme-light {
-  --color-bg-default: hsl(36deg 100% 97%);
-  --color-bg-default-h: 36;
-  --color-bg-default-s: 100%;
-  --color-bg-default-l: 97%;
+  --color-bg-default: hsl(222deg 32% 95%);
+  --color-bg-default-h: 222;
+  --color-bg-default-s: 32%;
+  --color-bg-default-l: 95%;
+  --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 1.02));
+  --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
+  --collection-card-border-color: hsl(214deg 26% 85%);
+  --color-card-bg: var(--color-bg-default-dark);
 }
 
 :root {
@@ -445,10 +453,6 @@
   --color-link: var(--color-blue);
   --collection-list-item-padding: var(--padding-layout);
 
-  --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
-  --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
-
-  --color-card-bg: var(--color-bg-default-darker);
   --color-card-bg-hover: var(--color-ui-hover-bg);
 
   --table-header-bg: var(--color-bg-default-dark);
