@@ -62,7 +62,7 @@
   .theme-toggle {
     height: 20px;
     width: 20px;
-    margin: 4px;
+    margin: 4px 16px 4px 4px;
     position: relative;
     cursor: pointer;
     display: flex;
