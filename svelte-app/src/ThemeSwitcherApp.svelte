@@ -60,19 +60,20 @@
   }
 
   .theme-toggle {
-    height: 37px;
-    width: 37px;
+    height: 20px;
+    width: 20px;
+    margin: 4px;
+    position: relative;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 10px 10px;
-    transform: translate(0, 0) scale(0.6);
+    transform: translate(0, 0);
 
     .sun-moon {
       background: var(--color-sun-moon);
-      width: 37px;
-      height: 37px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       transform: scale(0.7);
       transition: 0.4s transform;
@@ -94,13 +95,14 @@
     }
 
     .sun__ray {
-      width: 4px;
+      width: 2px;
       background: var(--color-sun-ray);
       display: block;
-      height: 121%;
+      height: 120%;
       position: absolute;
       z-index: -1;
       transition: 0.4s all, height 0.3s ease-in-out;
+      border-radius: 4px;
 
       @for $i from 1 through $num_rays {
         &:nth-child(#{$i + 1}) {
