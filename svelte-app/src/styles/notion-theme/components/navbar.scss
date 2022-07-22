@@ -26,6 +26,8 @@
     font-family: var(--primary-font);
     text-transform: uppercase;
     font-size: 0.8rem;
+    height: auto;
+    overflow: auto;
   }
 
   .super-navbar__item {
@@ -53,6 +55,23 @@
 
     .super-navbar__actions.hide {
       display: none;
+    }
+  }
+
+  @media (max-width: 300px) {
+    .super-navbar__item-list {
+      display: none;
+    }
+
+    .super-navbar__actions.hide {
+      display: grid;
+    }
+
+    .super-navbar__menu-wrapper.active {
+      display: flex;
+      transform: scale(1);
+      opacity: 1;
+      z-index: 10;
     }
   }
 }
