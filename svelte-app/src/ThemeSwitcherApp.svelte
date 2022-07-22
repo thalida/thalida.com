@@ -5,15 +5,23 @@
   import { writable } from "svelte/store";
 
   const storedTheme = localStorage.getItem("isDarkMode");
-  export const isDarkMode = writable(
+  const isDark =
     typeof storedTheme !== "undefined" && storedTheme !== null
       ? storedTheme
-      : true
-  );
+      : true;
+  const isDarkMode = writable(isDark);
+  setThemeClasses(isDark);
 
-  isDarkMode.subscribe((isDark) => {
-    localStorage.setItem("isDarkMode", isDark);
+  isDarkMode.subscribe((state) => {
+    localStorage.setItem("isDarkMode", state);
+    setThemeClasses(state);
+  });
 
+  function handleClick() {
+    isDarkMode.update((state) => !state);
+  }
+
+  function setThemeClasses(isDark) {
     if (isDark) {
       document.body.classList.add("theme-dark", "dark");
       document.documentElement.classList.add("theme-dark", "dark");
@@ -25,10 +33,6 @@
       document.body.classList.add("theme-light", "light");
       document.documentElement.classList.add("theme-light", "light");
     }
-  });
-
-  function handleClick() {
-    isDarkMode.update((state) => !state);
   }
 </script>
 
