@@ -442,7 +442,8 @@
   --color-card-bg: var(--color-bg-default-dark);
 }
 
-:root {
+.theme-dark,
+.theme-light {
   --scrollbar-background-color: transparent;
   --scrollbar-border-color: transparent;
   --navbar-background-color: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.9);
