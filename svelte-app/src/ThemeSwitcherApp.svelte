@@ -11,13 +11,10 @@
       : true
   );
 
-  isDarkMode.subscribe((state) => {
-    localStorage.setItem("isDarkMode", state);
-    setThemeClasses();
-  });
+  isDarkMode.subscribe((isDark) => {
+    localStorage.setItem("isDarkMode", isDark);
 
-  function setThemeClasses() {
-    if (isDarkMode) {
+    if (isDark) {
       document.body.classList.add("theme-dark", "dark");
       document.documentElement.classList.add("theme-dark", "dark");
       document.body.classList.remove("theme-light", "light");
@@ -28,7 +25,7 @@
       document.body.classList.add("theme-light", "light");
       document.documentElement.classList.add("theme-light", "light");
     }
-  }
+  });
 
   function handleClick() {
     isDarkMode.update((state) => !state);
