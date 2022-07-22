@@ -2,9 +2,16 @@
 	import { currentUrlPath } from "./store";
 	import LiveWindow from "./components/LiveWindow.svelte";
 	export let selectedPage = null;
+	export let windowPage = "/";
 
 	currentUrlPath.subscribe((urlPath) => {
 		selectedPage = `/${urlPath.split("/")[1]}`;
+
+		if (selectedPage === windowPage) {
+			document.body.classList.add("has-window");
+		} else {
+			document.body.classList.remove("has-window");
+		}
 
 		Array.from(
 			document.querySelectorAll(".notion-link.super-navbar__item")
@@ -19,13 +26,13 @@
 	});
 </script>
 
-{#if selectedPage === "/"}
+{#if selectedPage === windowPage}
 	<LiveWindow />
 {/if}
 
 <style lang="scss" global>
 	@media (min-width: 950px) {
-		.super-root.page__index {
+		.has-window {
 			.scene {
 				position: sticky;
 				top: calc(var(--navbar-height) * 2);
@@ -46,7 +53,7 @@
 			.super-content {
 				padding: 0 64px;
 				flex-grow: 1;
-				margin: calc(var(--navbar-height) - 1rem) 0;
+				margin: calc(var(--navbar-height) - 1rem) 0 !important;
 			}
 		}
 	}
