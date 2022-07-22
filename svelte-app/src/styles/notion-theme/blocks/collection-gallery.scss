@@ -164,6 +164,14 @@
       grid-template-columns: 100%;
     }
 
+    .notion-collection-card {
+      min-height: 400px;
+    }
+
+    .notion-collection-card__cover {
+      height: 100%;
+    }
+
     .notion-collection-card,
     .notion-collection-card__cover,
     .notion-collection-card__content {
