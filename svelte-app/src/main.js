@@ -5,11 +5,17 @@ import "./styles/notion-theme/index.scss";
 import "./styles/prism-themes/prism-shades-of-purple.css";
 import "./styles/app.scss";
 
-import App from "./App.svelte";
+import WindowApp from "./WindowApp.svelte";
+import ThemeSwitcherApp from './ThemeSwitcherApp.svelte'
 
-const app = new App({
+export const windowApp = new WindowApp({
   target: document.querySelector(".super-content-wrapper"),
   anchor: document.querySelector(".super-content"),
 });
 
-export default app;
+export const themeSwitcherApp = new ThemeSwitcherApp({
+  target: document.querySelector(".super-navbar__item-list"),
+  anchor: document.querySelector(".notion-link.super-navbar__item"),
+});
+
+// export default windowApp;
