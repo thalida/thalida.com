@@ -1,37 +1,28 @@
-// super variables rip
-:root {
-  // --color-border-default: #293246;
-  // --color-border-dark: var(--color-border-default);
-  // --color-ui-hover-bg: #273654;
-  // --scrollbar-thumb-color: #a1acc5;
-  // --navbar-text-color: #ffffff;
-  // --navbar-button-text-color: #191919;
-  // --navbar-button-background-color: #e1e1e1;
-  // --footer-text-color: #ffffff;
-}
+.theme-dark {
 
-// overrides
-:root {
-  --color-bg-default: hsl(222deg 32% 6%);
-  --scrollbar-background-color: transparent;
-  --scrollbar-border-color: transparent;
-  --navbar-background-color: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.9);
-  --navbar-menu-background-color: var(--navbar-background-color);
-  --footer-background-color: var(--color-bg-default);
+  // overrides
+  :root {
+    --color-bg-default: hsl(222deg 32% 6%);
+    --scrollbar-background-color: transparent;
+    --scrollbar-border-color: transparent;
+    --navbar-background-color: hsla(var(--color-bg-default-h), var(--color-bg-default-s), var(--color-bg-default-l), 0.9);
+    --navbar-menu-background-color: var(--navbar-background-color);
+    --footer-background-color: var(--color-bg-default);
 
-  --heading4-size: calc(var(--heading-size) * 1.1);
-  --color-bg-default-h: 222;
-  --color-bg-default-s: 32%;
-  --color-bg-default-l: 6%;
-  --color-link: var(--color-blue);
-  --collection-list-item-padding: var(--padding-layout);
+    --heading4-size: calc(var(--heading-size) * 1.1);
+    --color-bg-default-h: 222;
+    --color-bg-default-s: 32%;
+    --color-bg-default-l: 6%;
+    --color-link: var(--color-blue);
+    --collection-list-item-padding: var(--padding-layout);
 
-  --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
-  --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
+    --color-bg-default-dark: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) - (var(--color-bg-default-l) / 4)));
+    --color-bg-default-darker: hsl(var(--color-bg-default-h), var(--color-bg-default-s), calc(var(--color-bg-default-l) / 2));
 
-  --color-card-bg: var(--color-bg-default-darker);
-  --color-card-bg-hover: var(--color-ui-hover-bg);
+    --color-card-bg: var(--color-bg-default-darker);
+    --color-card-bg-hover: var(--color-ui-hover-bg);
 
-  --table-header-bg: var(--color-bg-default-dark);
-  --color-calendar-weekend-bg: var(--color-bg-default-dark);
+    --table-header-bg: var(--color-bg-default-dark);
+    --color-calendar-weekend-bg: var(--color-bg-default-dark);
+  }
 }

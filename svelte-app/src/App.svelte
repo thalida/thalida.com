@@ -4,6 +4,10 @@
 	export let selectedPage = null;
 	export let windowPage = "/";
 
+	if (document.body.classList.contains("theme-dark") === false) {
+		document.body.classList.add("theme-dark");
+	}
+
 	currentUrlPath.subscribe((urlPath) => {
 		selectedPage = `/${urlPath.split("/")[1]}`;
 
