@@ -2,9 +2,19 @@
   // Original Source
   // https://codepen.io/sandeshsapkota/pen/xxVmMpe
 
-  let isDarkMode =
-    document.body.classList.contains("theme-dark") ||
-    document.documentElement.classList.contains("theme-dark");
+  import { writable } from "svelte/store";
+
+  const storedTheme = localStorage.getItem("isDarkMode");
+  export const isDarkMode = writable(
+    typeof storedTheme !== "undefined" && storedTheme !== null
+      ? storedTheme
+      : true
+  );
+
+  isDarkMode.subscribe((state) => {
+    localStorage.setItem("isDarkMode", state);
+    setThemeClasses();
+  });
 
   function setThemeClasses() {
     if (isDarkMode) {
@@ -21,11 +31,8 @@
   }
 
   function handleClick() {
-    isDarkMode = !isDarkMode;
-    setThemeClasses();
+    isDarkMode.update((state) => !state);
   }
-
-  setThemeClasses();
 </script>
 
 <div class="theme-toggle theme-toggle-js" on:click={handleClick}>
@@ -40,6 +47,13 @@
 </div>
 
 <style lang="scss" global>
+  .theme-dark {
+    --color-toggle-theme: #fff;
+  }
+  .theme-light {
+    --color-toggle-theme: #eec413;
+  }
+
   .theme-toggle {
     height: 37px;
     width: 37px;
@@ -48,18 +62,19 @@
     align-items: center;
     justify-content: center;
     margin: 10px 10px;
-    transform: translate(0, 0);
+    transform: translate(0, 0) scale(0.6);
+
     .sun {
-      background: var(--color-secondary);
+      background: var(--color-toggle-theme);
       width: 37px;
       height: 37px;
       border-radius: 50%;
-      border: 4px solid var(--color-primary);
+      border: 4px solid var(--color-bg-default);
     }
 
     .sun__ray {
       width: 2px;
-      background: var(--color-secondary);
+      background: var(--color-toggle-theme);
       display: block;
       height: 121%;
       position: absolute;
@@ -91,7 +106,7 @@
     height: 28px;
     width: 28px;
     position: absolute;
-    background: var(--color-primary);
+    background: var(--color-bg-default);
     border-radius: 50%;
     top: 0;
     right: 0;
@@ -101,9 +116,9 @@
     transform-origin: right;
   }
 
-  .theme--dark {
+  .theme-dark {
     .theme-toggle {
-      background-color: var(--color-primary);
+      background-color: var(--color-bg-default);
     }
 
     .theme-toggle:hover {
