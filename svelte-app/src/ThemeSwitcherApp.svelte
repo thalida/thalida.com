@@ -104,7 +104,7 @@
 
       @for $i from 1 through $num_rays {
         &:nth-child(#{$i + 1}) {
-          transform: rotate(calc(#{$i} * (360deg / #{$num_rays})));
+          transform: rotate(calc(#{$i} * (180deg / #{$num_rays})));
         }
       }
     }
@@ -113,7 +113,7 @@
       @for $i from 1 through $num_rays {
         &:nth-child(#{$i + 1}) {
           transform: rotate(
-            calc((#{$i} * (360deg / #{$num_rays})) - (360deg / #{$num_rays}))
+            calc((#{$i} * (180deg / #{$num_rays})) - (180deg / #{$num_rays}))
           );
         }
       }
