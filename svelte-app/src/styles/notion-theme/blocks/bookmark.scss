@@ -9,6 +9,7 @@
     background: var(--color-bookmark-bg);
     border-radius: var(--bookmark-border-radii);
     border: 2px solid var(--bookmark-border-color);
+    transition: 400ms background ease-in-out;
 
     &:hover {
       background: var(--color-ui-hover-bg);
