@@ -100,6 +100,9 @@
         display: none;
       }
     }
+  }
+
+  &:not(.no-click) .notion-collection-card {
 
     &:hover,
     &:focus {
@@ -122,6 +125,10 @@
         width: 100%;
       }
     }
+  }
+
+  &.no-click {
+    opacity: 0.5;
   }
 
 
