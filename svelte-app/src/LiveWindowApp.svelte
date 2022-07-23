@@ -12,17 +12,6 @@
 		} else {
 			document.body.classList.remove("has-window");
 		}
-
-		// Array.from(
-		// 	document.querySelectorAll(".notion-link.super-navbar__item")
-		// ).forEach((el) => {
-		// 	el.classList.remove("active");
-
-		// 	const href = el.getAttribute("href");
-		// 	if (selectedPage.startsWith(href)) {
-		// 		el.classList.add("active");
-		// 	}
-		// });
 	});
 </script>
 
