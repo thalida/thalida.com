@@ -6,9 +6,9 @@
     display: flex;
     flex-flow: column-reverse nowrap;
     padding: 8px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 16px;
-    border: 2px solid var(--color-border-default);
+    background: var(--color-bookmark-bg);
+    border-radius: var(--bookmark-border-radii);
+    border: 2px solid var(--bookmark-border-color);
 
     &:hover {
       background: var(--color-ui-hover-bg);
@@ -23,10 +23,10 @@
     width: 100%;
     min-height: 150px;
     flex: 0 0 auto;
-    border-radius: 16px;
+    border-radius: var(--bookmark-border-radii);
 
     img {
-      border-radius: 16px;
+      border-radius: var(--bookmark-border-radii);
     }
   }
 
