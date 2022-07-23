@@ -100,12 +100,14 @@
         display: none;
       }
     }
-  }
 
-  &:not(.no-click) .notion-collection-card {
 
-    &:hover,
-    &:focus {
+    &.no-click {
+      opacity: 0.5;
+    }
+
+    &:not(.no-click):hover,
+    &:not(.no-click):focus {
       transform: scale(0.95);
       border-color: var(--color-link);
 
@@ -126,11 +128,6 @@
       }
     }
   }
-
-  &.no-click {
-    opacity: 0.5;
-  }
-
 
   &.small {
     gap: 18px;
