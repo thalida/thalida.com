@@ -1,3 +1,4 @@
+// Text Links
 .notion-link.link,
 .notion-collection-table__cell.title .notion-link,
 .notion-text__content .notion-link.link {
@@ -32,10 +33,12 @@
   }
 }
 
+// Button Links
 .notion-text.color-blue .notion-link,
 .highlighted-color.color-blue .notion-link {
   display: inline-block;
   border-radius: 8px;
+  margin: 5px 0;
   padding: .25rem 1rem;
   text-align: center;
   min-width: 150px;
