@@ -1,1 +1,62 @@
-.notion-bookmark {}
+.notion-bookmark {
+  border: 0;
+  border-radius: 0;
+
+  &>a.notion-link {
+    display: flex;
+    flex-flow: column-reverse nowrap;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    border: 2px solid var(--color-border-default);
+
+    &:hover {
+      background: var(--color-ui-hover-bg);
+    }
+  }
+
+  &:hover {
+    background: transparent;
+  }
+
+  .notion-bookmark__cover {
+    width: 100%;
+    min-height: 150px;
+    flex: 0 0 auto;
+    border-radius: 16px;
+
+    img {
+      border-radius: 16px;
+    }
+  }
+
+  .notion-bookmark__content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 16px;
+  }
+
+  .notion-bookmark__title {
+    font-weight: 500;
+  }
+
+  .notion-bookmark__link {
+    order: -1;
+    margin: 0 0 10px 0;
+  }
+
+  @media(min-width:500px) {
+    .notion-bookmark>a {
+      display: flex;
+      flex-flow: row-reverse nowrap;
+      justify-content: left;
+      align-items: center;
+    }
+
+    .notion-bookmark__cover {
+      width: 25%;
+      min-height: auto;
+    }
+  }
+}
