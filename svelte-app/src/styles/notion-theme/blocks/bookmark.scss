@@ -47,7 +47,7 @@
   }
 
   @media(min-width:500px) {
-    .notion-bookmark>a {
+    &>a.notion-link {
       display: flex;
       flex-flow: row-reverse nowrap;
       justify-content: left;
