@@ -101,7 +101,8 @@
       }
     }
 
-    &:hover {
+    &:hover,
+    &:focus {
       transform: scale(0.95);
       border-color: var(--color-link);
 
