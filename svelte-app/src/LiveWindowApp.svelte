@@ -37,7 +37,7 @@
 		}
 	}
 
-	@media (min-width: 950px) {
+	@media (min-width: 980px) {
 		.has-window {
 			.scene {
 				position: sticky;
