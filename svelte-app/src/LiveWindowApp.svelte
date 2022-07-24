@@ -31,6 +31,12 @@
 		--window-sky-color-default: var(--color-bg-default-darker);
 	}
 
+	.has-window {
+		.super-content.max-width {
+			margin-top: 100px;
+		}
+	}
+
 	@media (min-width: 950px) {
 		.has-window {
 			.scene {
