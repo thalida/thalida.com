@@ -92,6 +92,10 @@
 .notion-callout.border.color-red-light {
   border-width: 2px;
   border-style: solid;
+
+  .notion-toggle {
+    color: var(--color-text-default);
+  }
 }
 
 
