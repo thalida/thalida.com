@@ -32,6 +32,11 @@
       color: var(--color-text-default-light);
     }
 
+    .notion-collection-list__item-property .notion-property.notion-property__select {
+      display: flex;
+      flex-flow: row wrap;
+    }
+
     .notion-collection-list__item-property:first-child {
       width: 100%;
     }
