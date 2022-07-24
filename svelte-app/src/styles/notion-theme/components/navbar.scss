@@ -53,6 +53,10 @@
       text-align: left;
     }
 
+    .super-navbar__menu-open {
+      display: none;
+    }
+
     .super-navbar__actions.hide {
       display: none;
     }
@@ -61,6 +65,10 @@
   @media (max-width: 350px) {
     .super-navbar__item-list {
       display: none;
+    }
+
+    .super-navbar__menu-open {
+      display: flex;
     }
 
     .super-navbar__actions.hide {
