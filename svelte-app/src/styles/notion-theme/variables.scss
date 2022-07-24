@@ -524,6 +524,8 @@
   --color-card-bg: var(--color-bg-default-dark);
   --color-button-shadow: rgb(0 0 0 / 10%);
   --color-bookmark-bg: rgba(255, 255, 255, 0.5);
+  --color-pill-text-orange: hsl(calc(var(--orange-h) - 5), calc(var(--orange-s) - 18%), calc(var(--orange-l) - 10%));
+  --color-pill-text-yellow: hsl(calc(var(--yellow-h) - 11), calc(var(--yellow-s) - 22%), calc(var(--yellow-l) - 0%));
 }
 
 .theme-dark,
