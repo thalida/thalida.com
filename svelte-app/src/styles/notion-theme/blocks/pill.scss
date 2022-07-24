@@ -19,6 +19,12 @@
   font-size: 0.7em;
 }
 
+.pill-default {
+  border: 1px solid var(--color-pill-default);
+  color: var(--color-pill-default);
+  background: transparent;
+}
+
 .pill-gray,
 .pill-gray-light {
   border: 1px solid var(--color-pill-text-gray);
