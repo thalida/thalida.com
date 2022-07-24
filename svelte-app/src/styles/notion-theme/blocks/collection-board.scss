@@ -5,6 +5,11 @@
     border: 2px solid var(--color-border-default);
   }
 
+  .notion-collection-card__content .notion-property__select {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
   .notion-collection-card__property-list {
 
     .notion-property.notion-property__text,
