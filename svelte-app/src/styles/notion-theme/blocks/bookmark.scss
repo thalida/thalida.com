@@ -33,10 +33,11 @@
   }
 
   .notion-bookmark__content {
-    flex: 1 1 auto;
     display: flex;
     flex-flow: column nowrap;
     padding: 16px;
+    max-width: 100%;
+    flex: 1 1 50%;
   }
 
   .notion-bookmark__title {
@@ -51,14 +52,14 @@
   @media(min-width:500px) {
     &>a.notion-link {
       display: flex;
-      flex-flow: row-reverse nowrap;
+      flex-flow: row-reverse wrap-reverse;
       justify-content: left;
       align-items: center;
     }
 
     .notion-bookmark__cover {
-      width: 25%;
       min-height: auto;
+      flex: 1 1 150px;
     }
   }
 }
