@@ -41,13 +41,15 @@
   margin: 5px 0;
   padding: .25rem 1rem;
   text-align: center;
-  min-width: 150px;
   opacity: 1;
   border: 2px solid var(--color-button);
   box-shadow: 4px 4px var(--color-button-shadow);
   color: var(--color-text-default);
   transition: all 200ms ease-in-out;
-  word-break: normal;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:after {
     display: none;
