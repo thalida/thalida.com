@@ -47,6 +47,7 @@
   box-shadow: 4px 4px var(--color-button-shadow);
   color: var(--color-text-default);
   transition: all 200ms ease-in-out;
+  word-break: normal;
 
   &:after {
     display: none;
