@@ -37,30 +37,30 @@
 		}
 	}
 
-	@media (min-width: 980px) {
-		.has-window {
-			.scene {
-				position: sticky;
-				top: calc(var(--navbar-height) * 2);
-			}
+	// @media (min-width: 980px) {
+	// 	.has-window {
+	// 		.scene {
+	// 			position: sticky;
+	// 			top: calc(var(--navbar-height) * 2);
+	// 		}
 
-			.super-content-wrapper {
-				display: flex;
-				flex-flow: row wrap;
-				max-width: var(--layout-max-width);
-				margin: auto;
-				align-items: start;
-				justify-content: space-between;
-				width: 100%;
-				padding-left: var(--padding-left);
-				padding-right: var(--padding-right);
-			}
+	// 		.super-content-wrapper {
+	// 			display: flex;
+	// 			flex-flow: row wrap;
+	// 			max-width: var(--layout-max-width);
+	// 			margin: auto;
+	// 			align-items: start;
+	// 			justify-content: space-between;
+	// 			width: 100%;
+	// 			padding-left: var(--padding-left);
+	// 			padding-right: var(--padding-right);
+	// 		}
 
-			.super-content {
-				padding: 0 64px;
-				flex-grow: 1;
-				margin: calc(var(--navbar-height) - 1rem) 0 !important;
-			}
-		}
-	}
+	// 		.super-content {
+	// 			padding: 0 64px;
+	// 			flex-grow: 1;
+	// 			margin: calc(var(--navbar-height) - 1rem) 0 !important;
+	// 		}
+	// 	}
+	// }
 </style>
