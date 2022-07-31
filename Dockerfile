@@ -1,6 +1,4 @@
-from python:3.9
-
-MAINTAINER Thalida Noel "hello@thalida.com"
+FROM python:3.9
 
 WORKDIR /app/
 
