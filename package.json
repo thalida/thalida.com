@@ -46,7 +46,7 @@
     "angular-ui-router": "^0.4.2",
     "ngstorage": "^0.3.10",
     "jquery": "^2.1.4",
-    "jquery-color": "git+https://github.com/jquery/jquery-color#b41ab1b73fabf1cab08e8b08cb5db4c44b65270b",
+    "jquery-color": "^2.2.0",
     "moment": "^2.10.6"
   }
 }
