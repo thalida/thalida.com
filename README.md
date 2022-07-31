@@ -1,4 +1,6 @@
-# thalida.com
+# thalida.com - 2018
+Jan 2018 - Aug 2018
+
 
 > Personal website/portfolio
 
