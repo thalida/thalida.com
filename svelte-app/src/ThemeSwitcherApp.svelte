@@ -70,6 +70,11 @@
     justify-content: center;
     transform: translate(0, 0);
 
+    @media (max-width: 860px) {
+      height: 16px;
+      widht: 16px;
+    }
+
     .sun-moon {
       background: var(--color-sun-moon);
       width: 100%;
