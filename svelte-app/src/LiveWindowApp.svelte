@@ -26,7 +26,7 @@
 		--window-sky-color-default: var(--color-bg-default-darker);
 	}
 	.theme-light {
-		--window-color: var(--color-bg-default);
+		--window-color: #3e1300;
 		--window-clock-bg: #0e121b;
 		--window-sky-color-default: var(--color-bg-default-darker);
 	}
