@@ -11,13 +11,14 @@ function findPlacement(tag) {
 
 export function movePageProperties() {
   const notionPageProperties = document.querySelector(".notion-page__properties");
-  if (typeof notionPageProperties === "undefined") {
+
+  if (typeof notionPageProperties === "undefined" || notionPageProperties === null) {
     return;
   }
 
   const newPagePropertiesPlacement = findPlacement("{{ page_properties }}");
 
-  if (typeof newPagePropertiesPlacement === "undefined") {
+  if (typeof newPagePropertiesPlacement === "undefined" || newPagePropertiesPlacement === null) {
     notionPageProperties.style.display = "none";
     return;
   }

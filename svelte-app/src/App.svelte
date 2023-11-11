@@ -6,7 +6,6 @@
 	export let windowPage = "/";
 
 	currentUrlPath.subscribe((urlPath) => {
-		console.log("urlPath", urlPath);
 		movePageProperties();
 
 		selectedPage = `/${urlPath.split("/")[1]}`;
