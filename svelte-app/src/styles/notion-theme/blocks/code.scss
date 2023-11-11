@@ -9,3 +9,8 @@ code {
 .notion-code.no-wrap code {
   font-size: 0.9rem;
 }
+
+.notion-semantic-string .code {
+  background-color: var(--color-code-bg);
+  color: var(--color-text-default);
+}

@@ -2,11 +2,13 @@
 	import { movePageProperties } from "./domManipulation";
 	import { currentUrlPath } from "./store";
 	import LiveWindow from "./components/LiveWindow.svelte";
+	import Prism from 'prismjs';
 	export let selectedPage = null;
 	export let windowPage = "/";
 
 	currentUrlPath.subscribe((urlPath) => {
 		movePageProperties();
+		Prism.highlightAll();
 
 		selectedPage = `/${urlPath.split("/")[1]}`;
 
