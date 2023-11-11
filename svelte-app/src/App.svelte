@@ -1,10 +1,14 @@
 <script>
+	import { movePageProperties } from "./domManipulation";
 	import { currentUrlPath } from "./store";
 	import LiveWindow from "./components/LiveWindow.svelte";
 	export let selectedPage = null;
 	export let windowPage = "/";
 
 	currentUrlPath.subscribe((urlPath) => {
+		console.log("urlPath", urlPath);
+		movePageProperties();
+
 		selectedPage = `/${urlPath.split("/")[1]}`;
 
 		if (selectedPage === windowPage) {
