@@ -292,6 +292,9 @@ html.theme-dark {
   /*Footer*/
   --footer-text-color: #ffffff;
   --footer-background-color: #0e121b;
+
+  /*Code*/
+  --color-code-bg: rgba(255, 255, 255, 0.05);
 }
 
 
@@ -496,6 +499,9 @@ html.theme-light {
   /*Footer*/
   --footer-text-color: #000000;
   --footer-background-color: #eef0f6;
+
+  /*Code*/
+  --color-code-bg: rgba(0, 0, 0, 0.05);
 }
 
 // OVERRIDES
