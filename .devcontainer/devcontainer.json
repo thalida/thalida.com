@@ -18,6 +18,8 @@
 		"dbaeumer.vscode-eslint",
 		"svelte.svelte-vscode",
 		"ardenivanov.svelte-intellisense",
+		"GitHub.copilot",
+		"sleistner.vscode-fileutils"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
