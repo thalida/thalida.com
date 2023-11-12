@@ -294,7 +294,8 @@ html.theme-dark {
   --footer-background-color: #0e121b;
 
   /*Code*/
-  --color-code-bg: rgba(255, 255, 255, 0.05);
+  --color-code-bg: rgb(71 23 117);
+  --color-code-text: var(--color-text-default);
 }
 
 
@@ -501,7 +502,8 @@ html.theme-light {
   --footer-background-color: #eef0f6;
 
   /*Code*/
-  --color-code-bg: rgba(0, 0, 0, 0.05);
+  --color-code-bg: rgb(207 214 255);
+  --color-code-text: var(--color-text-default);
 }
 
 // OVERRIDES
