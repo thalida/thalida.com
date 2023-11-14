@@ -29,9 +29,9 @@
 
   .notion-collection-list__item-content {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
     width: 100%;
-    justify-content: flex-start;
+    align-items: start;
 
     .notion-property.notion-property__text {
       max-width: none;
