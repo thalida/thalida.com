@@ -45,6 +45,7 @@
 
     .notion-collection-list__item-property:first-child {
       width: 100%;
+      pointer-events: none;
     }
 
     .notion-semantic-string {
