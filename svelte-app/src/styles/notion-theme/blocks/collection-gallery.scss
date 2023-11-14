@@ -7,6 +7,7 @@
     border-radius: 24px;
     box-shadow: none;
     border: 2px solid var(--collection-card-border-color);
+    aspect-ratio: 1 / 1;
 
     .notion-collection-card__cover {
       border-radius: 1em;
@@ -38,7 +39,7 @@
       }
     }
 
-    .notion-collection-card__content {
+    .notion-collection-card__cover + .notion-collection-card__content {
       margin: 0;
       padding: 0;
       display: flex;
@@ -181,10 +182,6 @@
 
     @media(max-width: 350px) {
       grid-template-columns: 100%;
-    }
-
-    .notion-collection-card {
-      min-height: 400px;
     }
 
     .notion-collection-card__cover {
