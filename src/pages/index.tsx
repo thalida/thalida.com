@@ -148,8 +148,7 @@ export const query = graphql`
         id
         title
         excerpt
-        postPath
-        gatsbyPath(filePath: "/{mdx.postPath}")
+        gatsbyPath(filePath: "/{mdx.postFilePath}")
       }
     }
   }

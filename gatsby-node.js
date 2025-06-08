@@ -47,7 +47,7 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
             return toTitleCase(titleFromFilename)
           },
         },
-        postPath: {
+        postFilePath: {
           type: "String",
           resolve(source, args, context, info) {
             const parent = context.nodeModel.getNodeById({
@@ -57,8 +57,8 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
             const filename = parent.name
             const urlPathPrefix = "posts"
             const relativeDir = fileRelativeDir ? `${urlPathPrefix}/${fileRelativeDir}` : urlPathPrefix
-            const postPath = `${relativeDir}/${filename}`
-            return postPath
+            const postFilePath = `${relativeDir}/${filename}`
+            return postFilePath
           },
         },
       },

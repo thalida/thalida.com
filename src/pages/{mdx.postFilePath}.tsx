@@ -21,7 +21,7 @@ export const query = graphql`
         date(formatString: "MMMM D, YYYY")
       }
       title
-      postPath
+      postFilePath
     }
   }
 `
