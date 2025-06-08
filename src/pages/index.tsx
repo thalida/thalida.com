@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { HeadFC, PageProps } from "gatsby"
-import { graphql } from 'gatsby'
+import { Link, graphql } from 'gatsby'
 
 const pageStyles = {
   color: "#232129",
@@ -143,13 +143,13 @@ export const query = graphql`
       nodes {
         frontmatter {
           date(formatString: "MMMM D, YYYY")
-          title
-          category
           slug
-          tags
         }
         id
+        title
         excerpt
+        postPath
+        gatsbyPath(filePath: "/{mdx.postPath}")
       }
     }
   }
@@ -170,11 +170,14 @@ const IndexPage: React.FC<PageProps> = ({ data }) => {
       </p>
       <ul>
       {
-        data.allMdx.nodes.map((node) => (
+        data.allMdx.nodes.map(node => (
           <article key={node.id}>
-            <h2>{node.frontmatter.title}</h2>
+            <h2>
+              <Link to={`${node.gatsbyPath}`}>
+                {node.title}
+              </Link>
+            </h2>
             <p>Posted: {node.frontmatter.date}</p>
-            <p>{node.excerpt}</p>
           </article>
         ))
       }

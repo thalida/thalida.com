@@ -1,32 +1,64 @@
+const { title } = require("process")
+
+require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+
+function toTitleCase(str) {
+  return str.replace(
+    /\w\S*/g,
+    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+  );
+}
+
 exports.createSchemaCustomization = ({ actions, schema }) => {
   const { createTypes } = actions
   const typeDefs = [
-    "type Mdx implements Node { frontmatter: Frontmatter }",
     schema.buildObjectType({
-      name: "Frontmatter",
+      name: "Mdx",
       fields: {
-        tags: {
-          type: "[String!]",
-        },
-        category: {
+        title: {
           type: "String",
           resolve(source, args, context, info) {
-            const { category } = source
-            // const field = source[info.fieldName]
-            // // console.log("context", context.nodeModel)
+            const frontmatter = source.frontmatter || {}
+            const title = frontmatter.title
+            if (typeof title !== "undefined" && title !== null && title.length > 0) {
+              return title
+            }
 
-            // // get current directory path
-            // const currentPath = context.nodeModel.getNodeById({ id: source.parent }).dir
-            // console.log("currentPath", currentPath)
+            const fallbackTitle = "[Untitled]"
 
-            // if (field == null || !field.length) {
-            //   console.log("No category found for this post", field)
-            //   console.log("source parent folder:", source.parent)
-            //   console.log("source:", source)
-            //   console.log("info:", info)
-            //   return null
-            // }
-            return category
+            const parentNode = context.nodeModel.getNodeById({
+              id: source.parent,
+            })
+            if (!parentNode) {
+              return fallbackTitle
+            }
+
+            const filename = parentNode.name || ""
+            const titleFromFilename = filename
+              .replace(/-/g, " ")
+              .replace(/\.mdx?$/, "")
+              .replace(/\.md$/, "")
+              .trim()
+
+            if (!titleFromFilename || titleFromFilename.length === 0) {
+              return fallbackTitle
+            }
+
+            return toTitleCase(titleFromFilename)
+          },
+        },
+        postPath: {
+          type: "String",
+          resolve(source, args, context, info) {
+            const parent = context.nodeModel.getNodeById({
+              id: source.parent,
+            })
+            const fileRelativeDir = parent.relativeDirectory || ""
+            const filename = parent.name
+            const urlPathPrefix = "posts"
+            const relativeDir = fileRelativeDir ? `${urlPathPrefix}/${fileRelativeDir}` : urlPathPrefix
+            const postPath = `${relativeDir}/${filename}`
+            return postPath
           },
         },
       },
