@@ -144,6 +144,9 @@ export const query = graphql`
         frontmatter {
           date(formatString: "MMMM D, YYYY")
           title
+          category
+          slug
+          tags
         }
         id
         excerpt
