@@ -6,11 +6,11 @@ import { graphql } from 'gatsby'
 const BlogPost: React.FC<PageProps> = ({ data, children }) => {
   console.log("Rendering BlogPost component with data:", data);
   return (
-    <main>
+    <article className="prose lg:prose-xl">
       <h1>{data.mdx.title}</h1>
       <p>{data.mdx.frontmatter.date}</p>
       {children}
-    </main>
+    </article>
   )
 }
 
