@@ -31,8 +31,3 @@ collectstatic:
 
 infisical-login:
   cd "{{ project_dir }}"; infisical login
-
-init:
-  cd "{{ project_dir }}"; infisical run --env=dev -- uv sync --locked
-  cd "{{ project_dir }}"; infisical run --env=dev -- pre-commit install
-  cd "{{ project_dir }}"; infisical run --env=dev -- uv run manage.py migrate

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "GitHub.copilot",
+    "sleistner.vscode-fileutils",
+    "charliermarsh.ruff",
+    "ms-python.vscode-pylance",
+    "yzhang.markdown-all-in-one",
+    "tamasfe.even-better-toml"
+  ]
+}

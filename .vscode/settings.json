@@ -1,0 +1,14 @@
+{
+  // Python Settings
+  "python.defaultInterpreterPath": "./.venv/bin/python",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": true,
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": [
+      "source.fixAll",
+      "source.organizeImports"
+    ],
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  }
+}
