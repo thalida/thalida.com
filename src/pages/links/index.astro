@@ -1,17 +1,21 @@
 ---
-import { getCollection, render } from "astro:content";
-// 1. Generate a new path for every collection entry
-export async function getStaticPaths() {
-  const posts = await getCollection("links");
-  return posts.map((post) => ({
-    params: { slug: post.url },
-    props: { post },
-  }));
-}
-// 2. For your template, you can get the entry directly from the prop
-const { post } = Astro.props;
-const { Content } = await render(post);
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const posts = await getCollection("links");
 ---
 
-<h1>{post.data.title}</h1>
-<Content />
+<Layout>
+  <h1>Links</h1>
+  <ul>
+    {
+      posts.map((post) => (
+        <li>
+          <span>{post.id}</span>
+          <LinkPreview id={post.id} />
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

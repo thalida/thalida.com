@@ -5,11 +5,10 @@ import { defineCollection, reference, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
 // 3. Define your collection(s)
-function makeMdCollection(name: ["food", "art", "work", "link"][number]) {
+function makeMdCollection(name: ["food", "art", "work", "links"][number]) {
   return defineCollection({
     loader: glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${name}` }),
     schema: z.object({
-      type: z.enum(["food", "art", "work", "link"]).default(name),
       title: z.string(),
       description: z.string(),
       publishedOn: z.coerce.date(),
@@ -24,7 +23,6 @@ function makeMdCollection(name: ["food", "art", "work", "link"][number]) {
 const links = defineCollection({
   loader:  file("./src/content/links/links.yaml"),
   schema: z.object({
-    type: z.literal("link").default("link"),
     rating: z.coerce.number().optional(),
     review: z.string().optional(),
     publishedOn: z.coerce.date(),

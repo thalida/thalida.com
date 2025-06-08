@@ -31,11 +31,12 @@ interface Props {
       posts.map((post) => (
         <li>
           {post.collection === "links" ? (
-            <a href={post.id} target="_blank" rel="noopener noreferrer">
-              {post.id} - {post.data.rating} (external link)
-            </a>
+            <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
           ) : (
-            <a href={`/${post.data.type}/${post.id}/`}>
+            // <a href={post.id} target="_blank" rel="noopener noreferrer">
+            //   {post.id} - {post.data.rating} (external link)
+            // </a>
+            <a href={`/${post.collection}/${post.id}/`}>
               {post.data.title || post.id}
             </a>
           )}
