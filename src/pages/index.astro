@@ -1,15 +1,46 @@
 ---
 import { getCollection } from "astro:content";
-const posts = await getCollection("blog");
+import type { CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const foodPosts = await getCollection("food");
+const linksPosts = await getCollection("links");
+const workPosts = await getCollection("work");
+const artPosts = await getCollection("art");
+const posts = [...foodPosts, ...linksPosts, ...workPosts, ...artPosts];
+posts.sort((a, b) => {
+  const dateA =
+    new Date(a.data.updatedOn).getTime() ||
+    new Date(a.data.publishedOn).getTime();
+  const dateB =
+    new Date(b.data.updatedOn).getTime() ||
+    new Date(b.data.publishedOn).getTime();
+
+  return dateB - dateA; // Sort in descending order
+});
+
+interface Props {
+  entry: CollectionEntry<"food" | "links" | "work" | "art">;
+}
 ---
 
-<h1>My posts</h1>
-<ul>
-  {
-    posts.map((post) => (
-      <li>
-        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-      </li>
-    ))
-  }
-</ul>
+<Layout>
+  <h1>My posts</h1>
+  <ul>
+    {
+      posts.map((post) => (
+        <li>
+          {post.collection === "links" ? (
+            <a href={post.id} target="_blank" rel="noopener noreferrer">
+              {post.id} - {post.data.rating} (external link)
+            </a>
+          ) : (
+            <a href={`/${post.data.type}/${post.id}/`}>
+              {post.data.title || post.id}
+            </a>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

@@ -9,6 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astro-community/astro-embed-link-preview": "^0.2.2",
+    "@astrojs/mdx": "^4.3.0",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/sitemap": "^3.4.1",
     "@tailwindcss/vite": "^4.1.8",

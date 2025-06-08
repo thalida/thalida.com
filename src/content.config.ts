@@ -5,16 +5,38 @@ import { defineCollection, reference, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
 // 3. Define your collection(s)
-const blog = defineCollection({
-  loader: glob({ pattern: ['**/*.md', '**/*.mdx'], base: './src/content/blog' }),
+function makeMdCollection(name: ["food", "art", "work", "link"][number]) {
+  return defineCollection({
+    loader: glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${name}` }),
+    schema: z.object({
+      type: z.enum(["food", "art", "work", "link"]).default(name),
+      title: z.string(),
+      description: z.string(),
+      publishedOn: z.coerce.date(),
+      updatedOn: z.coerce.date().optional(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).optional(),
+      related: z.array(reference(name)).optional(),
+    }),
+  });
+}
+
+const links = defineCollection({
+  loader:  file("./src/content/links/links.yaml"),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    relatedPosts: z.array(reference('blog')).optional(),
-  })
+    type: z.literal("link").default("link"),
+    rating: z.coerce.number().optional(),
+    review: z.string().optional(),
+    publishedOn: z.coerce.date(),
+    updatedOn: z.coerce.date().optional(),
+    draft: z.boolean().optional(),
+    tags: z.array(z.string()).optional(),
+    related: z.array(reference("links")).optional(),
+  }),
 });
+const food = makeMdCollection("food");
+const art = makeMdCollection("art");
+const work = makeMdCollection("work");
 
 // 4. Export a single `collections` object to register your collection(s)
-export const collections = { blog };
+export const collections = { links, food, art, work };
