@@ -1,0 +1,23 @@
+[project]
+name = "thalida-com"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "rust-just>=1.40.0",
+    "pre-commit>=4.2.0",
+]
+
+[tool.ruff.lint]
+extend-select = ["I", "F"]
+
+[tool.ruff.lint.isort]
+force-wrap-aliases = true
+combine-as-imports = true
+known-first-party = ["api"]

@@ -1,0 +1,17 @@
+name: thalida-com
+
+services:
+  db:
+    container_name: thalida-com-db
+    image: postgres:latest
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: $POSTGRES_DATA_DIR/postgres-data
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
