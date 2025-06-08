@@ -53,11 +53,13 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
             const parent = context.nodeModel.getNodeById({
               id: source.parent,
             })
-            const fileRelativeDir = parent.relativeDirectory || ""
+            if (!parent) {
+              return source.id
+            }
+
+            const fileRelativeDir = parent.relativeDirectory
             const filename = parent.name
-            const urlPathPrefix = "posts"
-            const relativeDir = fileRelativeDir ? `${urlPathPrefix}/${fileRelativeDir}` : urlPathPrefix
-            const postFilePath = `${relativeDir}/${filename}`
+            const postFilePath = fileRelativeDir ? `${fileRelativeDir}/${filename}` : filename
             return postFilePath
           },
         },
