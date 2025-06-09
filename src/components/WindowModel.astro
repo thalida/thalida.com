@@ -17,8 +17,8 @@ import "../styles/global.css";
       Bodies = Matter.Bodies,
       Body = Matter.Body,
       Composite = Matter.Composite,
-      Composites = Matter.Composites,
-      Constraint = Matter.Constraint;
+      Events = Matter.Events,
+      Common = Matter.Common;
 
     // create an engine
     var engine = Engine.create();
@@ -38,7 +38,10 @@ import "../styles/global.css";
       options: {
         width: 800,
         height: 600,
-        wireframes: false,
+        wireframes: true,
+        showAxes: true,
+        showAngleIndicator: true,
+        showCollisions: true,
       },
     });
 
@@ -48,83 +51,66 @@ import "../styles/global.css";
     var runner = Runner.create();
     Runner.run(runner, engine);
 
-    var group = Body.nextGroup(true);
-
-    var ropeA = Composites.stack(100, 50, 2, 1, 10, 10, function (x, y) {
-      return Bodies.rectangle(x, y, 50, 20, {
-        collisionFilter: { group: group },
-      });
-    });
-
-    Composites.chain(ropeA, 0.5, 0, -0.5, 0, {
-      stiffness: 0.8,
-      length: 0,
-      render: { type: "line" },
-    });
-    Composite.add(
-      ropeA,
-      Constraint.create({
-        bodyB: ropeA.bodies[0],
-        pointB: { x: -25, y: 0 },
-        pointA: {
-          x: ropeA.bodies[0].position.x,
-          y: ropeA.bodies[0].position.y,
-        },
-        stiffness: 0.5,
-      })
-    );
-
-    Composite.add(world, [ropeA]);
-
     Composite.add(world, [
-      // walls
+      // top wall
       Bodies.rectangle(400, 0, 800, 20, {
         isStatic: true,
         render: { fillStyle: "red" },
-      }), // top wall
+      }),
+      // bottom wall
       Bodies.rectangle(400, 600, 800, 20, {
         isStatic: true,
-        render: { fillStyle: "red" },
-      }), // bottom wall
+        render: { fillStyle: "yellow" },
+      }),
+      // right wall
       Bodies.rectangle(800, 300, 20, 600, {
         isStatic: true,
-        render: { fillStyle: "red" },
-      }), // right wall
+        render: { fillStyle: "blue" },
+      }),
+      // left wall
       Bodies.rectangle(0, 300, 20, 600, {
         isStatic: true,
-        render: { fillStyle: "red" },
-      }), // left wall
-    ]);
-
-    Composite.add(world, [
-      Bodies.rectangle(400, 300, 400, 20, {
-        isStatic: true,
-        angle: Math.PI * 0.06,
-        render: { fillStyle: "#060a19" },
+        render: { fillStyle: "green" },
       }),
     ]);
 
-    Composite.add(world, [
-      Bodies.rectangle(400, 300, 200, 20, {
-        isStatic: true,
-        angle: Math.PI * 0.06,
-        render: { fillStyle: "#060a19" },
-      }),
-    ]);
+    var hourBody = Bodies.rectangle(400 - 100, 300, 200, 20, {
+      isStatic: true,
+      render: { fillStyle: "pink" },
+    });
+    Body.setCentre(hourBody, { x: 100, y: 0 }, true);
 
-    // Composite.add(world, [
-    //   Bodies.rectangle(300, 520, 700, 20, {
-    //     isStatic: true,
-    //     angle: Math.PI * 0.06,
-    //     render: { fillStyle: "#060a19" },
-    //   }),
-    //   // Bodies.rectangle(300, 430, 40, 40, { friction: 0 }),
-    // ]);
+    var minuteBody = Bodies.rectangle(400 - 125, 300, 250, 20, {
+      isStatic: true,
+      render: { fillStyle: "pink" },
+    });
+    Body.setCentre(minuteBody, { x: 125, y: 0 }, true);
 
-    // add all of the bodies to the world
-    // Composite.add(engine.world, [boxA, boxB, ground]);
+    Composite.add(world, [hourBody, minuteBody]);
+
+    // var hourDegrees = 90;
+    // var minuteDegrees = 90;
+    // Body.setAngle(hourBody, (Math.PI * hourDegrees) / 180);
+    // Body.setAngle(minuteBody, (Math.PI * minuteDegrees) / 180);
 
     // run the renderer
     Render.run(render);
+
+    Events.on(engine, "beforeUpdate", function (event) {
+      var engine = event.source;
+
+      const currentTime = Date.now();
+      const hour = new Date(currentTime).getHours() % 12;
+      const minute = new Date(currentTime).getMinutes();
+      const second = new Date(currentTime).getSeconds();
+      const degreesPerHour = 360 / 12;
+      const degreesPerMinute = 360 / 60;
+      const hourDegrees =
+        (hour % 12) * degreesPerHour + (minute / 60) * degreesPerHour;
+      const minuteDegrees = minute * degreesPerMinute;
+      const offset = 90; // Offset to align with the top of the clock
+      Body.setAngle(hourBody, (Math.PI * (hourDegrees + offset)) / 180);
+      Body.setAngle(minuteBody, (Math.PI * (minuteDegrees + offset)) / 180);
+    });
   }
 </script>
