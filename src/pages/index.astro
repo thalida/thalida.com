@@ -2,12 +2,14 @@
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import { COLLECTION_NAMES } from "../content.config";
 
-const foodPosts = await getCollection("food");
-const linksPosts = await getCollection("links");
-const workPosts = await getCollection("work");
-const artPosts = await getCollection("art");
-const posts = [...foodPosts, ...linksPosts, ...workPosts, ...artPosts];
+let posts = [];
+for (const collection of COLLECTION_NAMES) {
+  const collectionPosts = await getCollection(collection);
+  posts = posts.concat(collectionPosts);
+}
+
 posts.sort((a, b) => {
   const dateA =
     new Date(a.data.updatedOn).getTime() ||
@@ -20,7 +22,7 @@ posts.sort((a, b) => {
 });
 
 interface Props {
-  entry: CollectionEntry<"food" | "links" | "work" | "art">;
+  entry: CollectionEntry<"food" | "links" | "tech" | "craft">;
 }
 ---
 

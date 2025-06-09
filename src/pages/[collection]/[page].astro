@@ -1,11 +1,11 @@
 ---
 import { getCollection, render } from "astro:content";
-import { collectionNames } from "../../content.config";
+import { COLLECTION_NAMES } from "../../content.config";
 
 export async function getStaticPaths({ paginate }) {
   let paths = [];
 
-  for (const collection of collectionNames) {
+  for (const collection of COLLECTION_NAMES) {
     const posts = await getCollection(collection);
     const paginatedPosts = paginate(posts, {
       params: { collection, page: 1 },
