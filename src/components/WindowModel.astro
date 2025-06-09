@@ -12,6 +12,7 @@ import "../styles/global.css";
 
   let container;
   let camera, scene, renderer, stats;
+  const frustumSize = 5;
   let physics, position;
 
   let boxes, spheres;
@@ -45,14 +46,15 @@ import "../styles/global.css";
     physics = await RapierPhysics();
     position = new THREE.Vector3();
 
-    camera = new THREE.PerspectiveCamera(
-      50,
-      containerRect.width / containerRect.height,
+    const aspect = containerRect.width / containerRect.height;
+    camera = new THREE.OrthographicCamera(
+      (frustumSize * aspect) / -2,
+      (frustumSize * aspect) / 2,
+      frustumSize / 2,
+      frustumSize / -2,
       0.1,
       100
     );
-    camera.position.set(-1, 1.5, 2);
-    camera.lookAt(0, 0.5, 0);
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x666666);
@@ -166,8 +168,15 @@ import "../styles/global.css";
       return;
     }
 
-    camera.aspect = containerRect.width / containerRect.height;
+    const aspect = containerRect.width / containerRect.height;
+
+    camera.left = (-frustumSize * aspect) / 2;
+    camera.right = (frustumSize * aspect) / 2;
+    camera.top = frustumSize / 2;
+    camera.bottom = -frustumSize / 2;
+
     camera.updateProjectionMatrix();
+
     renderer.setSize(containerRect.width, containerRect.height);
   }
 
