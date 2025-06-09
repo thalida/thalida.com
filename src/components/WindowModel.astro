@@ -2,181 +2,129 @@
 import "../styles/global.css";
 ---
 
-<div id="window-container" class="w-1/2 h-full"></div>
+<div id="window-container"></div>
 
 <script>
-  import * as THREE from "three";
-  import { RapierPhysics } from "three/addons/physics/RapierPhysics.js";
-  import { toonOutlinePass } from "three/tsl";
-
-  let container;
-  let camera, scene, renderer, stats;
-  const frustumSize = 5;
-  let physics, position;
-
-  let boxes, spheres;
-  let containerRect;
+  import * as Matter from "matter-js";
 
   init();
 
-  function getContainerRect() {
+  function init() {
+    // module aliases
+    var Engine = Matter.Engine,
+      Render = Matter.Render,
+      Runner = Matter.Runner,
+      Bodies = Matter.Bodies,
+      Body = Matter.Body,
+      Composite = Matter.Composite,
+      Composites = Matter.Composites,
+      Constraint = Matter.Constraint;
+
+    // create an engine
+    var engine = Engine.create();
+    var world = engine.world;
+
+    var container = document.getElementById("window-container");
+
     if (!container) {
       console.error("Container element not found");
-      return null;
-    }
-    return container.getBoundingClientRect();
-  }
-
-  async function init() {
-    container = document.getElementById("window-container");
-    if (!container) {
-      console.error("Container element not found");
       return;
     }
 
-    containerRect = getContainerRect();
-    if (!containerRect) {
-      console.error("Container dimensions could not be determined");
-      return;
-    }
+    // create a renderer
+    var render = Render.create({
+      element: container,
+      engine: engine,
+      options: {
+        width: 800,
+        height: 600,
+        wireframes: false,
+      },
+    });
 
-    console.log("Container dimensions:", containerRect);
+    Render.run(render);
 
-    physics = await RapierPhysics();
-    position = new THREE.Vector3();
+    // create runner
+    var runner = Runner.create();
+    Runner.run(runner, engine);
 
-    const aspect = containerRect.width / containerRect.height;
-    camera = new THREE.OrthographicCamera(
-      (frustumSize * aspect) / -2,
-      (frustumSize * aspect) / 2,
-      frustumSize / 2,
-      frustumSize / -2,
-      0.1,
-      100
+    var group = Body.nextGroup(true);
+
+    var ropeA = Composites.stack(100, 50, 2, 1, 10, 10, function (x, y) {
+      return Bodies.rectangle(x, y, 50, 20, {
+        collisionFilter: { group: group },
+      });
+    });
+
+    Composites.chain(ropeA, 0.5, 0, -0.5, 0, {
+      stiffness: 0.8,
+      length: 0,
+      render: { type: "line" },
+    });
+    Composite.add(
+      ropeA,
+      Constraint.create({
+        bodyB: ropeA.bodies[0],
+        pointB: { x: -25, y: 0 },
+        pointA: {
+          x: ropeA.bodies[0].position.x,
+          y: ropeA.bodies[0].position.y,
+        },
+        stiffness: 0.5,
+      })
     );
-    camera.lookAt(0, 0, 0);
 
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x666666);
+    Composite.add(world, [ropeA]);
 
-    const hemiLight = new THREE.HemisphereLight();
-    scene.add(hemiLight);
+    Composite.add(world, [
+      // walls
+      Bodies.rectangle(400, 0, 800, 20, {
+        isStatic: true,
+        render: { fillStyle: "red" },
+      }), // top wall
+      Bodies.rectangle(400, 600, 800, 20, {
+        isStatic: true,
+        render: { fillStyle: "red" },
+      }), // bottom wall
+      Bodies.rectangle(800, 300, 20, 600, {
+        isStatic: true,
+        render: { fillStyle: "red" },
+      }), // right wall
+      Bodies.rectangle(0, 300, 20, 600, {
+        isStatic: true,
+        render: { fillStyle: "red" },
+      }), // left wall
+    ]);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-    dirLight.position.set(5, 5, 5);
-    dirLight.castShadow = true;
-    dirLight.shadow.camera.zoom = 2;
-    scene.add(dirLight);
+    Composite.add(world, [
+      Bodies.rectangle(400, 300, 400, 20, {
+        isStatic: true,
+        angle: Math.PI * 0.06,
+        render: { fillStyle: "#060a19" },
+      }),
+    ]);
 
-    const floorCollider = new THREE.Mesh(
-      new THREE.BoxGeometry(10, 1, 10),
-      new THREE.MeshBasicMaterial({ color: "rgb(255,0,0)" })
-    );
-    floorCollider.position.y = -3;
-    floorCollider.userData.physics = { mass: 0 };
-    floorCollider.visible = false;
-    scene.add(floorCollider);
+    Composite.add(world, [
+      Bodies.rectangle(400, 300, 200, 20, {
+        isStatic: true,
+        angle: Math.PI * 0.06,
+        render: { fillStyle: "#060a19" },
+      }),
+    ]);
 
-    //
+    // Composite.add(world, [
+    //   Bodies.rectangle(300, 520, 700, 20, {
+    //     isStatic: true,
+    //     angle: Math.PI * 0.06,
+    //     render: { fillStyle: "#060a19" },
+    //   }),
+    //   // Bodies.rectangle(300, 430, 40, 40, { friction: 0 }),
+    // ]);
 
-    const material = new THREE.MeshToonMaterial();
+    // add all of the bodies to the world
+    // Composite.add(engine.world, [boxA, boxB, ground]);
 
-    const matrix = new THREE.Matrix4();
-    const color = new THREE.Color();
-
-    // Boxes
-
-    const geometryBox = new THREE.BoxGeometry(0.075, 0.075, 0.075);
-    boxes = new THREE.InstancedMesh(geometryBox, material, 400);
-    boxes.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
-    boxes.castShadow = true;
-    boxes.receiveShadow = true;
-    boxes.userData.physics = { mass: 1 };
-    scene.add(boxes);
-
-    for (let i = 0; i < boxes.count; i++) {
-      matrix.setPosition(
-        Math.random() - 0.5,
-        Math.random() * 2,
-        Math.random() - 0.5
-      );
-      boxes.setMatrixAt(i, matrix);
-      boxes.setColorAt(i, color.setHex(0xffffff * Math.random()));
-    }
-
-    // Spheres
-
-    const geometrySphere = new THREE.IcosahedronGeometry(0.05, 4);
-    spheres = new THREE.InstancedMesh(geometrySphere, material, 400);
-    spheres.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
-    spheres.castShadow = true;
-    spheres.receiveShadow = true;
-    spheres.userData.physics = { mass: 1 };
-    scene.add(spheres);
-
-    for (let i = 0; i < spheres.count; i++) {
-      matrix.setPosition(
-        Math.random() - 0.5,
-        Math.random() * 2,
-        Math.random() - 0.5
-      );
-      spheres.setMatrixAt(i, matrix);
-      spheres.setColorAt(i, color.setHex(0xffffff * Math.random()));
-    }
-
-    physics.addScene(scene);
-
-    //
-
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(containerRect.width, containerRect.height);
-    renderer.setAnimationLoop(animate);
-    renderer.shadowMap.enabled = true;
-    container.appendChild(renderer.domElement);
-
-    //
-
-    // postProcessing = new THREE.PostProcessing(renderer);
-
-    // postProcessing.outputNode = toonOutlinePass(scene, camera);
-
-    setInterval(() => {
-      let index = Math.floor(Math.random() * boxes.count);
-
-      position.set(0, Math.random() + 1, 0);
-      physics.setMeshPosition(boxes, position, index);
-
-      //
-
-      index = Math.floor(Math.random() * spheres.count);
-
-      position.set(0, Math.random() + 1, 0);
-      physics.setMeshPosition(spheres, position, index);
-    }, 1000 / 60);
-
-    window.addEventListener("resize", onWindowResize);
-  }
-
-  function onWindowResize() {
-    containerRect = getContainerRect();
-    if (!containerRect) {
-      return;
-    }
-
-    const aspect = containerRect.width / containerRect.height;
-
-    camera.left = (-frustumSize * aspect) / 2;
-    camera.right = (frustumSize * aspect) / 2;
-    camera.top = frustumSize / 2;
-    camera.bottom = -frustumSize / 2;
-
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(containerRect.width, containerRect.height);
-  }
-
-  function animate() {
-    renderer.render(scene, camera);
+    // run the renderer
+    Render.run(render);
   }
 </script>
