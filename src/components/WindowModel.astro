@@ -2,7 +2,7 @@
 import "../styles/global.css";
 ---
 
-<div id="window-container" class="w-1/3 h-1/3"></div>
+<div id="window-container" class="w-1/2 h-full"></div>
 
 <script>
   import * as THREE from "three";
@@ -15,8 +15,17 @@ import "../styles/global.css";
   let physics, position;
 
   let boxes, spheres;
+  let containerRect;
 
   init();
+
+  function getContainerRect() {
+    if (!container) {
+      console.error("Container element not found");
+      return null;
+    }
+    return container.getBoundingClientRect();
+  }
 
   async function init() {
     container = document.getElementById("window-container");
@@ -25,16 +34,20 @@ import "../styles/global.css";
       return;
     }
 
-    let containerRect = container.getBoundingClientRect();
-    let containerWidth = containerRect.width,
-      containerHeight = containerRect.height;
+    containerRect = getContainerRect();
+    if (!containerRect) {
+      console.error("Container dimensions could not be determined");
+      return;
+    }
+
+    console.log("Container dimensions:", containerRect);
 
     physics = await RapierPhysics();
     position = new THREE.Vector3();
 
     camera = new THREE.PerspectiveCamera(
       50,
-      containerWidth / containerHeight,
+      containerRect.width / containerRect.height,
       0.1,
       100
     );
@@ -125,7 +138,7 @@ import "../styles/global.css";
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(containerWidth, containerHeight);
+    renderer.setSize(containerRect.width, containerRect.height);
     renderer.setAnimationLoop(animate);
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
@@ -148,11 +161,14 @@ import "../styles/global.css";
   }
 
   function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
+    containerRect = getContainerRect();
+    if (!containerRect) {
+      return;
+    }
 
+    camera.aspect = containerRect.width / containerRect.height;
     camera.updateProjectionMatrix();
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(containerRect.width, containerRect.height);
   }
 
   function animate() {
