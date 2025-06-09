@@ -5,7 +5,7 @@ import { defineCollection, reference, z } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 
 // 3. Define your collection(s)
-function makeMdCollection(name: ["food", "art", "work", "links"][number]) {
+function makeMdCollection(name: ["food", "art", "work"][number]) {
   return defineCollection({
     loader: glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${name}` }),
     schema: z.object({
@@ -38,3 +38,4 @@ const work = makeMdCollection("work");
 
 // 4. Export a single `collections` object to register your collection(s)
 export const collections = { links, food, art, work };
+export const collectionNames = Object.keys(collections) as (keyof typeof collections)[];
