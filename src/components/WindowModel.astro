@@ -6,9 +6,8 @@ import "../styles/global.css";
 
 <script>
   import * as THREE from "three";
-  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
   import { RapierPhysics } from "three/addons/physics/RapierPhysics.js";
-  import Stats from "three/addons/libs/stats.module.js";
+  import { toonOutlinePass } from "three/tsl";
 
   let container;
   let camera, scene, renderer, stats;
@@ -55,6 +54,7 @@ import "../styles/global.css";
       0.1,
       100
     );
+    camera.lookAt(0, 0, 0);
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x666666);
@@ -68,28 +68,18 @@ import "../styles/global.css";
     dirLight.shadow.camera.zoom = 2;
     scene.add(dirLight);
 
-    const shadowPlane = new THREE.Mesh(
-      new THREE.PlaneGeometry(10, 10),
-      new THREE.ShadowMaterial({
-        color: 0x444444,
-      })
-    );
-    shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.receiveShadow = true;
-    scene.add(shadowPlane);
-
     const floorCollider = new THREE.Mesh(
-      new THREE.BoxGeometry(10, 5, 10),
-      new THREE.MeshBasicMaterial({ color: 0x666666 })
+      new THREE.BoxGeometry(10, 1, 10),
+      new THREE.MeshBasicMaterial({ color: "rgb(255,0,0)" })
     );
-    floorCollider.position.y = -2.5;
+    floorCollider.position.y = -3;
     floorCollider.userData.physics = { mass: 0 };
     floorCollider.visible = false;
     scene.add(floorCollider);
 
     //
 
-    const material = new THREE.MeshLambertMaterial();
+    const material = new THREE.MeshToonMaterial();
 
     const matrix = new THREE.Matrix4();
     const color = new THREE.Color();
@@ -144,6 +134,12 @@ import "../styles/global.css";
     renderer.setAnimationLoop(animate);
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
+
+    //
+
+    // postProcessing = new THREE.PostProcessing(renderer);
+
+    // postProcessing.outputNode = toonOutlinePass(scene, camera);
 
     setInterval(() => {
       let index = Math.floor(Math.random() * boxes.count);
