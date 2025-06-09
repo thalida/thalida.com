@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { COLLECTION_NAMES } from "../content.config";
+import WindowModel from "../components/WindowModel.astro";
 
 let posts = [];
 for (const collection of COLLECTION_NAMES) {
@@ -27,6 +28,10 @@ interface Props {
 ---
 
 <Layout>
+  <div class="model">
+    <WindowModel />
+  </div>
+
   <h1>My posts</h1>
   <ul>
     {
