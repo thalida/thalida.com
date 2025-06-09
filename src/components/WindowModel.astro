@@ -1,74 +1,161 @@
-<div id="window-container"></div>
+---
+import "../styles/global.css";
+---
+
+<div id="window-container" class="w-1/3 h-1/3"></div>
 
 <script>
   import * as THREE from "three";
-  import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { RapierPhysics } from "three/addons/physics/RapierPhysics.js";
+  import Stats from "three/addons/libs/stats.module.js";
 
-  export default class Sketch {
-    constructor(options) {
-      this.container = options.domElement;
-      this.width = this.container.offsetWidth;
-      this.height = this.container.offsetHeight;
+  let container;
+  let camera, scene, renderer, stats;
+  let physics, position;
 
-      this.camera = new THREE.PerspectiveCamera(
-        70,
-        this.width / this.height,
-        0.01,
-        10
+  let boxes, spheres;
+
+  init();
+
+  async function init() {
+    container = document.getElementById("window-container");
+    if (!container) {
+      console.error("Container element not found");
+      return;
+    }
+
+    let containerRect = container.getBoundingClientRect();
+    let containerWidth = containerRect.width,
+      containerHeight = containerRect.height;
+
+    physics = await RapierPhysics();
+    position = new THREE.Vector3();
+
+    camera = new THREE.PerspectiveCamera(
+      50,
+      containerWidth / containerHeight,
+      0.1,
+      100
+    );
+    camera.position.set(-1, 1.5, 2);
+    camera.lookAt(0, 0.5, 0);
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x666666);
+
+    const hemiLight = new THREE.HemisphereLight();
+    scene.add(hemiLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+    dirLight.position.set(5, 5, 5);
+    dirLight.castShadow = true;
+    dirLight.shadow.camera.zoom = 2;
+    scene.add(dirLight);
+
+    const shadowPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(10, 10),
+      new THREE.ShadowMaterial({
+        color: 0x444444,
+      })
+    );
+    shadowPlane.rotation.x = -Math.PI / 2;
+    shadowPlane.receiveShadow = true;
+    scene.add(shadowPlane);
+
+    const floorCollider = new THREE.Mesh(
+      new THREE.BoxGeometry(10, 5, 10),
+      new THREE.MeshBasicMaterial({ color: 0x666666 })
+    );
+    floorCollider.position.y = -2.5;
+    floorCollider.userData.physics = { mass: 0 };
+    floorCollider.visible = false;
+    scene.add(floorCollider);
+
+    //
+
+    const material = new THREE.MeshLambertMaterial();
+
+    const matrix = new THREE.Matrix4();
+    const color = new THREE.Color();
+
+    // Boxes
+
+    const geometryBox = new THREE.BoxGeometry(0.075, 0.075, 0.075);
+    boxes = new THREE.InstancedMesh(geometryBox, material, 400);
+    boxes.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
+    boxes.castShadow = true;
+    boxes.receiveShadow = true;
+    boxes.userData.physics = { mass: 1 };
+    scene.add(boxes);
+
+    for (let i = 0; i < boxes.count; i++) {
+      matrix.setPosition(
+        Math.random() - 0.5,
+        Math.random() * 2,
+        Math.random() - 0.5
       );
-      this.camera.position.z = 1;
-
-      this.scene = new THREE.Scene();
-
-      this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      // this.renderer.setPixelRatio(window.devicePixelRatio)
-      this.renderer.setPixelRatio(2);
-
-      this.container.appendChild(this.renderer.domElement);
-      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
-      this.time = 0;
-      this.resize();
-      this.addObjects();
-      this.render();
-
-      this.setupResize();
+      boxes.setMatrixAt(i, matrix);
+      boxes.setColorAt(i, color.setHex(0xffffff * Math.random()));
     }
 
-    resize() {
-      this.width = this.container.offsetWidth;
-      this.height = this.container.offsetHeight;
-      this.renderer.setSize(this.width, this.height);
-      this.camera.aspect = this.width / this.height;
-      this.camera.updateProjectionMatrix();
+    // Spheres
+
+    const geometrySphere = new THREE.IcosahedronGeometry(0.05, 4);
+    spheres = new THREE.InstancedMesh(geometrySphere, material, 400);
+    spheres.instanceMatrix.setUsage(THREE.DynamicDrawUsage); // will be updated every frame
+    spheres.castShadow = true;
+    spheres.receiveShadow = true;
+    spheres.userData.physics = { mass: 1 };
+    scene.add(spheres);
+
+    for (let i = 0; i < spheres.count; i++) {
+      matrix.setPosition(
+        Math.random() - 0.5,
+        Math.random() * 2,
+        Math.random() - 0.5
+      );
+      spheres.setMatrixAt(i, matrix);
+      spheres.setColorAt(i, color.setHex(0xffffff * Math.random()));
     }
 
-    setupResize() {
-      window.addEventListener("resize", this.resize.bind(this));
-    }
+    physics.addScene(scene);
 
-    addObjects() {
-      this.geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-      this.material = new THREE.MeshNormalMaterial();
+    //
 
-      this.mesh = new THREE.Mesh(this.geometry, this.material);
-      this.scene.add(this.mesh);
-    }
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(containerWidth, containerHeight);
+    renderer.setAnimationLoop(animate);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
 
-    render() {
-      this.time += 0.05;
-      this.mesh.rotation.x = this.time / 2000;
-      this.mesh.rotation.y = this.time / 1000;
+    setInterval(() => {
+      let index = Math.floor(Math.random() * boxes.count);
 
-      this.renderer.render(this.scene, this.camera);
-      // console.log(this.time)
-      requestAnimationFrame(this.render.bind(this));
-    }
+      position.set(0, Math.random() + 1, 0);
+      physics.setMeshPosition(boxes, position, index);
+
+      //
+
+      index = Math.floor(Math.random() * spheres.count);
+
+      position.set(0, Math.random() + 1, 0);
+      physics.setMeshPosition(spheres, position, index);
+    }, 1000 / 60);
+
+    window.addEventListener("resize", onWindowResize);
   }
 
-  new Sketch({
-    domElement: document.getElementById("window-container"),
-  });
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
 
-  // const width = window.innerWidth, height = window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  function animate() {
+    renderer.render(scene, camera);
+  }
 </script>
