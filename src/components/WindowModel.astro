@@ -83,6 +83,7 @@ import "../styles/global.css";
         width: 800,
         height: 600,
         wireframes: false,
+        background: "black",
       },
     });
 
@@ -120,14 +121,18 @@ import "../styles/global.css";
     var hourBody = Bodies.rectangle(400 - 100, 300, 200, 20, {
       isStatic: true,
       render: { fillStyle: "pink" },
-      restitution: 1,
+      chamfer: {
+        radius: 10,
+      },
     });
     Body.setCentre(hourBody, { x: 100, y: 0 }, true);
 
     var minuteBody = Bodies.rectangle(400 - 125, 300, 250, 20, {
       isStatic: true,
       render: { fillStyle: "purple" },
-      restitution: 1,
+      chamfer: {
+        radius: 10,
+      },
     });
     Body.setCentre(minuteBody, { x: 125, y: 0 }, true);
 
@@ -136,28 +141,13 @@ import "../styles/global.css";
     Body.setAngle(hourBody, clockPosition.hour);
     Body.setAngle(minuteBody, clockPosition.minute);
 
-    Composite.add(world, [hourBody, minuteBody]);
+    Composite.add(world, [minuteBody, hourBody]);
     Render.run(render);
 
-    var stack = Composites.stack(0, 0, 100, 6, 10, 10, function (x, y) {
-      const radius = Common.random(2, 4);
-      const lightness = Common.random(50, 25);
-      const rgbColor = HSLToRGB(200, 50, lightness);
-
-      const body = Bodies.circle(x, y, radius, {
-        friction: 0.00001,
-        restitution: 0.5,
-        density: 0.001,
-        render: {
-          fillStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
-        },
-      });
-
-      return body;
+    const percipitationLayer = Composite.create({
+      label: "Percipitation Layer",
     });
-
-    Composite.add(world, [stack]);
-    Render.run(render);
+    Composite.add(world, percipitationLayer);
 
     Events.on(engine, "beforeUpdate", function (event) {
       // Update the clock hands every second
@@ -165,6 +155,44 @@ import "../styles/global.css";
         const clockPosition = calculateClockPosition();
         Body.setAngle(hourBody, clockPosition.hour);
         Body.setAngle(minuteBody, clockPosition.minute);
+      }
+
+      const isRaining = true;
+      const intensity = 1; // Rain intensity (0 to 1))
+      if (isRaining) {
+        const randomIntensity = Common.random(0, 1);
+        if (randomIntensity > intensity) {
+          return; // Skip creating raindrops based on intensity
+        }
+
+        const maxBodies = 1000; // Maximum number of raindrops
+        const currentBodies = Composite.allBodies(percipitationLayer).length;
+        if (currentBodies >= maxBodies) {
+          // Remove the oldest raindrop if the limit is reached
+          Composite.remove(
+            percipitationLayer,
+            Composite.allBodies(percipitationLayer)[0]
+          );
+        }
+
+        // Create raindrops
+        const x = Common.random(0, 800);
+        const y = 0;
+        const radius = Common.random(2, 4);
+        const lightness = Common.random(60, 40);
+        const rgbColor = HSLToRGB(200, 50, lightness);
+
+        const raindrop = Bodies.circle(x, y, radius, {
+          friction: 0.00001,
+          frictionAir: 0.01,
+          restitution: 0.5,
+          density: 0.001,
+          render: {
+            fillStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
+          },
+        });
+
+        Composite.add(percipitationLayer, raindrop);
       }
     });
   }
