@@ -5,464 +5,546 @@ import "../styles/global.css";
 <canvas id="matter-canvas" width="800" height="600"></canvas>
 
 <script>
-  import * as Matter from "matter-js";
-  import polyDecomp from "poly-decomp";
-  import "pathseg";
+  import {
+    Engine,
+    Render,
+    Runner,
+    Bodies,
+    Body,
+    Composite,
+    Events,
+    Common,
+    Query,
+    World,
+  } from "matter-js";
 
-  init();
-
-  function HSLToRGB(h: number, s: number, l: number) {
-    s /= 100;
-    l /= 100;
-    const k = (n: number) => (n + h / 30) % 12;
-    const a = s * Math.min(l, 1 - l);
-    const f = (n: number) =>
-      l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-    return [255 * f(0), 255 * f(8), 255 * f(4)];
+  interface Coords {
+    x: number;
+    y: number;
   }
 
-  function generateLightningBolt(
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number
-  ) {
-    const distance = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
-    const segments = Math.ceil(distance / 25); // Number of segments based on distance
-    const pathPoints = [];
+  class MatterScene {
+    canvas: HTMLCanvasElement | null = null;
+    engine: Engine | null = null;
+    world: World | null = null;
+    render: Render | null = null;
+    runner: Runner | null = null;
 
-    // Generate the main path points for the lightning line
-    for (let i = 0; i <= segments; i++) {
-      const progress = i / segments;
-      const randomXShift = Matter.Common.random(-20, 20);
-      const x = startX + (endX - startX) * progress + randomXShift;
-      const y = startY + (endY - startY) * progress;
-      pathPoints.push({ x, y });
-    }
+    canvasWidth: number = 800;
+    canvasHeight: number = 600;
 
-    return pathPoints;
-  }
-
-  function calculateClockPosition() {
-    const currentTime = new Date();
-
-    const offset = 90; // Offset to align with the top of the clock
-
-    // Calculate the angles for hour, minute, and second hands
-    const hours = currentTime.getHours() % 12;
-    const minutes = currentTime.getMinutes();
-    const seconds = currentTime.getSeconds();
-    // const hours = 6;
-    // const minutes = 0;
-    // const seconds = 0;
-
-    const degreesPerHour = 360 / 12; // 12 hours on a clock
-    const degreesPerMinute = 360 / 60; // 60 minutes on a clock
-    const degreesPerSecond = 360 / 60; // 60 seconds on a clock
-
-    const hourDegrees =
-      hours * degreesPerHour + (minutes / 60) * degreesPerHour;
-    const minuteDegrees = minutes * degreesPerMinute;
-    const secondDegrees = seconds * degreesPerSecond;
-
-    // Convert degrees to radians
-    const hourRadians = (Math.PI * (hourDegrees + offset)) / 180;
-    const minuteRadians = (Math.PI * (minuteDegrees + offset)) / 180;
-    const secondRadians = (Math.PI * (secondDegrees + offset)) / 180;
-
-    return {
-      hour: hourRadians,
-      minute: minuteRadians,
-      second: secondRadians,
+    CATEGORIES = {
+      DEFAULT: 0x0001,
+      CLOCK: 0x0002,
+      PERCIPITATION: 0x0004,
+      LIGHTNING: 0x0008,
     };
+
+    LAYERS = {
+      CLOCK: Composite.create({
+        label: "Clock Layer",
+      }),
+      PERCIPITATION: Composite.create({
+        label: "Percipitation Layer",
+      }),
+      LIGHTNING: Composite.create({
+        label: "Lightning Layer",
+      }),
+    };
+
+    constructor() {
+      this.canvas = document.getElementById(
+        "matter-canvas"
+      ) as HTMLCanvasElement;
+
+      if (!this.canvas) {
+        console.error("canvas element not found");
+        return;
+      }
+
+      this.engine = Engine.create({ enableSleeping: false });
+      this.world = this.engine.world;
+      this.canvasWidth = this.canvas.width;
+      this.canvasHeight = this.canvas.height;
+
+      // create a renderer
+      this.render = Render.create({
+        canvas: this.canvas,
+        engine: this.engine,
+        options: {
+          width: this.canvasWidth,
+          height: this.canvasHeight,
+          // wireframes: true,
+          wireframes: false,
+          pixelRatio: window.devicePixelRatio || 1,
+        },
+      });
+      Render.run(this.render);
+
+      // create runner
+      this.runner = Runner.create();
+      Runner.run(this.runner, this.engine);
+
+      // Set up the world
+      for (const layer of Object.values(this.LAYERS)) {
+        Composite.add(this.world, layer);
+      }
+
+      // Create walls
+      const WALL_THICKNESS = 6;
+      Composite.add(this.world, [
+        Bodies.rectangle(
+          this.canvasWidth / 2,
+          0,
+          this.canvasWidth,
+          WALL_THICKNESS,
+          {
+            isStatic: true,
+            render: { fillStyle: "red" },
+          }
+        ),
+        Bodies.rectangle(
+          this.canvasWidth / 2,
+          this.canvasHeight,
+          this.canvasWidth,
+          WALL_THICKNESS,
+          {
+            isStatic: true,
+            render: {
+              fillStyle: "yellow",
+              strokeStyle: "#555",
+              lineWidth: 1,
+            },
+          }
+        ),
+        Bodies.rectangle(
+          0,
+          this.canvasHeight / 2,
+          WALL_THICKNESS,
+          this.canvasHeight,
+          {
+            isStatic: true,
+            render: { fillStyle: "green" },
+          }
+        ),
+        Bodies.rectangle(
+          this.canvasWidth,
+          this.canvasHeight / 2,
+          WALL_THICKNESS,
+          this.canvasHeight,
+          {
+            isStatic: true,
+            render: { fillStyle: "blue" },
+          }
+        ),
+      ]);
+
+      const clock = new MatterClock(this);
+      const perciptiation = new MatterPercipitation(this);
+      const lightning = new MatterLightning(this);
+
+      clock.onTick();
+      perciptiation.onTick();
+      lightning.onTick();
+
+      Render.lookAt(this.render, {
+        min: { x: 0, y: 0 },
+        max: { x: this.canvasWidth, y: this.canvasHeight },
+      });
+
+      Render.run(this.render);
+
+      Events.on(this.runner, "tick", function (event) {
+        // Update the clock hands every second
+        if (event.timestamp % 1000 < 50) {
+          clock.onTick();
+        }
+
+        perciptiation.onTick();
+        lightning.onTick();
+      });
+    }
   }
 
-  function init() {
-    // module aliases
-    var Engine = Matter.Engine,
-      Render = Matter.Render,
-      Runner = Matter.Runner,
-      Bodies = Matter.Bodies,
-      Body = Matter.Body,
-      Composite = Matter.Composite,
-      Composites = Matter.Composites,
-      Events = Matter.Events,
-      Common = Matter.Common,
-      Constraint = Matter.Constraint,
-      Query = Matter.Query,
-      Svg = Matter.Svg,
-      Vertices = Matter.Vertices;
+  class MatterClock {
+    scene: MatterScene;
+    body: Body | Composite;
+    hourBody: Body | null = null;
+    minuteBody: Body | null = null;
+    secondBody: Body | null = null;
+    handsCenterBody: Body | null = null;
 
-    Common.setDecomp(polyDecomp);
-
-    // create an engine
-    var engine = Engine.create({ enableSleeping: false });
-    var world = engine.world;
-
-    var canvas = document.getElementById("matter-canvas") as HTMLCanvasElement;
-    var canvasWidth = canvas.width;
-    var canvasHeight = canvas.height;
-
-    if (!canvas) {
-      console.error("canvas element not found");
-      return;
+    constructor(scene: MatterScene) {
+      this.scene = scene;
+      this.body = this.createBody();
+      Composite.add(scene.LAYERS.CLOCK, this.body);
     }
 
-    // create a renderer
-    var render = Render.create({
-      canvas: canvas,
-      engine: engine,
-      options: {
-        width: canvasWidth,
-        height: canvasHeight,
-        // wireframes: true,
-        wireframes: false,
-        pixelRatio: window.devicePixelRatio || 1,
-        // showAxes: true,
-      },
-    });
+    createBody() {
+      const hourHandLength = 200; // Length of the hour hand
+      const minuteHandLength = 250; // Length of the minute hand
+      const secondHandLength = 280; // Length of the second hand
 
-    Render.run(render);
+      const handWidth = 20; // Width of the hands
+      const overlap = 10; // Overlap between the hands and the center
 
-    // create runner
-    var runner = Runner.create();
-    Runner.run(runner, engine);
-
-    // define our categories (as bit fields, there are up to 32 available)
-    var defaultCategory = 0x0001,
-      clockCategory = 0x0002,
-      percipitationCategory = 0x0004,
-      lightningCategory = 0x0008;
-
-    const clockLayer = Composite.create({
-      label: "Clock Layer",
-    });
-    Composite.add(world, clockLayer);
-
-    const percipitationLayer = Composite.create({
-      label: "Percipitation Layer",
-    });
-    Composite.add(world, percipitationLayer);
-
-    const lightningLayer = Composite.create({
-      label: "Lightning Layer",
-    });
-    Composite.add(world, lightningLayer);
-
-    function segmentBody() {
-      const segmentBodyPart1 = Bodies.rectangle(200, 200, 100, 25, {
-        chamfer: { radius: 25 / 2 },
-      });
-      const segmentBodyPart2 = Bodies.rectangle(200, 275, 100, 25, {
-        chamfer: { radius: 25 / 2 },
-      });
-      const segmentBodyPart3 = Bodies.rectangle(200, 275 + 75, 100, 25, {
-        chamfer: { radius: 25 / 2 },
-      });
-
-      const segmentBodyPart4 = Bodies.rectangle(
-        250 - Math.floor(25 / 2),
-        250 - 25 / 2,
-        25,
-        100,
+      this.hourBody = Bodies.rectangle(
+        400 - hourHandLength / 2 + overlap,
+        300,
+        hourHandLength + overlap,
+        handWidth,
         {
-          chamfer: { radius: 25 / 2 },
+          isStatic: true,
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "#ddd",
+            lineWidth: 1,
+          },
+          chamfer: {
+            radius: handWidth / 2,
+          },
         }
       );
-
-      const segmentBodyPart5 = Bodies.rectangle(
-        250 - 25 / 2,
-        325 - 25 / 2,
-        25,
-        100,
-        {
-          chamfer: { radius: 25 / 2 },
-        }
+      Body.setCentre(
+        this.hourBody,
+        { x: hourHandLength / 2 - overlap, y: 0 },
+        true
       );
 
-      const segmentBodyPart6 = Bodies.rectangle(
-        175 - 25 / 2,
-        250 - 25 / 2,
-        25,
-        100,
+      this.minuteBody = Bodies.rectangle(
+        400 - minuteHandLength / 2 + overlap,
+        300,
+        minuteHandLength + overlap,
+        handWidth,
         {
-          chamfer: { radius: 25 / 2 },
+          isStatic: true,
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "#ddd",
+            lineWidth: 1,
+          },
+          chamfer: {
+            radius: handWidth / 2,
+          },
         }
       );
-
-      const segmentBodyPart7 = Bodies.rectangle(
-        175 - 25 / 2,
-        325 - 25 / 2,
-        25,
-        100,
-        {
-          chamfer: { radius: 25 / 2 },
-        }
+      Body.setCentre(
+        this.minuteBody,
+        { x: minuteHandLength / 2 - overlap, y: 0 },
+        true
       );
 
-      const segmentBody = Body.create({
-        collisionFilter: {
-          category: clockCategory,
-        },
+      this.secondBody = Bodies.rectangle(
+        400 - secondHandLength / 2 + overlap,
+        300,
+        secondHandLength + overlap,
+        2,
+        {
+          isStatic: true,
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "#ddd",
+            lineWidth: 1,
+          },
+          chamfer: {
+            radius: 1,
+          },
+        }
+      );
+      Body.setCentre(
+        this.secondBody,
+        { x: secondHandLength / 2 - overlap, y: 0 },
+        true
+      );
+
+      this.handsCenterBody = Bodies.rectangle(400, 300, 10, 10, {
         isStatic: true,
-        parts: [
-          segmentBodyPart1,
-          segmentBodyPart2,
-          segmentBodyPart3,
-          segmentBodyPart4,
-          segmentBodyPart5,
-          segmentBodyPart6,
-          segmentBodyPart7,
+        collisionFilter: {
+          category: this.scene.CATEGORIES.CLOCK,
+        },
+        render: {
+          fillStyle: "rgba(255,255,255,1)",
+          strokeStyle: "#ddd",
+          lineWidth: 1,
+        },
+        chamfer: { radius: 5 },
+      });
+
+      const clock = Composite.create({
+        label: "Clock",
+        bodies: [
+          this.hourBody,
+          this.minuteBody,
+          this.secondBody,
+          this.handsCenterBody,
         ],
       });
 
-      return segmentBody;
+      return clock;
     }
 
-    const displayBodies = segmentBody();
-
-    Composite.add(clockLayer, displayBodies);
-
-    // Create the clock hands
-    const hourHandLength = 200; // Length of the hour hand
-    const minuteHandLength = 250; // Length of the minute hand
-    const handWidth = 20; // Width of the hands
-    const overlap = 10; // Overlap between the hands and the center
-    var hourBody = Bodies.rectangle(
-      400 - hourHandLength / 2 + overlap,
-      300,
-      hourHandLength + overlap,
-      handWidth,
-      {
-        collisionFilter: {
-          category: clockCategory,
-        },
-        isStatic: true,
-        render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
-        chamfer: {
-          radius: handWidth / 2,
-        },
-      }
-    );
-    Body.setCentre(hourBody, { x: hourHandLength / 2 - overlap, y: 0 }, true);
-
-    var minuteBody = Bodies.rectangle(
-      400 - minuteHandLength / 2 + overlap,
-      300,
-      minuteHandLength + overlap,
-      handWidth,
-      {
-        collisionFilter: {
-          category: clockCategory,
-        },
-        isStatic: true,
-        render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
-        chamfer: {
-          radius: handWidth / 2,
-        },
-      }
-    );
-    Body.setCentre(
-      minuteBody,
-      { x: minuteHandLength / 2 - overlap, y: 0 },
-      true
-    );
-
-    var handsCenter = Bodies.rectangle(400, 300, 10, 10, {
-      collisionFilter: {
-        category: clockCategory,
-      },
-      isStatic: true,
-      render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
-      chamfer: { radius: 5 },
-    });
-
-    // Set the position of the hour and minute hands based on the current time
-    const clockPosition = calculateClockPosition();
-    Body.setAngle(hourBody, clockPosition.hour);
-    Body.setAngle(minuteBody, clockPosition.minute);
-
-    Composite.add(clockLayer, [hourBody, minuteBody, handsCenter]);
-    Composite.add(world, clockLayer);
-    Render.run(render);
-
-    // Create walls
-    Composite.add(world, [
-      // top wall
-      Bodies.rectangle(400, 0, 800, 20, {
-        isStatic: true,
-        render: { fillStyle: "transparent" },
-      }),
-      // bottom wall
-      Bodies.rectangle(400, 600, 800, 4, {
-        isStatic: true,
-        render: { fillStyle: "transparent", strokeStyle: "#333", lineWidth: 1 },
-      }),
-      // right wall
-      Bodies.rectangle(800, 300, 4, 600, {
-        isStatic: true,
-        render: { fillStyle: "transparent" },
-      }),
-      // left wall
-      Bodies.rectangle(0, 300, 4, 600, {
-        isStatic: true,
-        render: { fillStyle: "transparent" },
-      }),
-    ]);
-
-    Render.lookAt(render, {
-      min: { x: 0, y: 0 },
-      max: { x: 800, y: 600 },
-    });
-
-    Events.on(runner, "tick", function (event) {
-      // Update the clock hands every second
-      if (event.timestamp % 1000 < 50) {
-        const clockPosition = calculateClockPosition();
-        Body.setAngle(hourBody, clockPosition.hour);
-        Body.setAngle(minuteBody, clockPosition.minute);
+    onTick() {
+      if (!this.hourBody || !this.minuteBody || !this.secondBody) {
+        console.error("Clock hands not initialized");
+        return;
       }
 
-      const isRaining = true;
-      if (isRaining) {
-        const rainIntensity = 0.3; // Rain intensity (0 to 1))
-        const randomRainIntensity = Common.random(0, 1);
-        if (randomRainIntensity < rainIntensity) {
-          const maxBodies = 1000; // Maximum number of raindrops
-          const currentBodies = Composite.allBodies(percipitationLayer).length;
-          if (currentBodies >= maxBodies) {
-            // Remove the oldest raindrop if the limit is reached
-            Composite.remove(
-              percipitationLayer,
-              Composite.allBodies(percipitationLayer)[0]
-            );
-          }
+      const clockPosition = MatterClock.calculateClockAngles();
+      Body.setAngle(this.hourBody, clockPosition.hour);
+      Body.setAngle(this.minuteBody, clockPosition.minute);
+      Body.setAngle(this.secondBody, clockPosition.second);
+    }
 
-          // Create raindrops
-          const x = Common.random(0.0, 800.0);
-          const y = 0;
-          const width = Common.random(2, 4);
-          const height = Common.random(4, 8);
-          const lightness = Common.random(60, 50);
-          const rgbColor = HSLToRGB(200, 50, lightness);
-          const raindrop = Bodies.rectangle(x, y, width, height, {
-            collisionFilter: {
-              category: percipitationCategory,
-              mask: defaultCategory | clockCategory | percipitationCategory,
-            },
-            chamfer: {
-              radius: Math.min(width, height) / 2,
-            },
-            friction: 0.0001,
-            frictionAir: 0.01,
-            restitution: 0.5,
-            density: 0.001,
-            render: {
-              fillStyle: "transparent",
-              lineWidth: 1,
-              strokeStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
-            },
-          });
+    static calculateClockAngles() {
+      const currentTime = new Date();
 
-          Composite.add(percipitationLayer, raindrop);
-        }
-      }
+      const offset = 90; // Offset to align with the top of the clock
 
-      const isLightning = true; // Force lightning for demonstration
-      if (isLightning) {
-        const baseLightningIntensity = 0.01; // Lightning intensity (0 to 1)
-        const numLightningBolts = Composite.allBodies(lightningLayer).length;
-        const lightningIntensity =
-          baseLightningIntensity * (1 / (numLightningBolts + 1));
-        const randomLightningIntensity = Common.random(0, 1);
+      // Calculate the angles for hour, minute, and second hands
+      const hours = currentTime.getHours() % 12;
+      const minutes = currentTime.getMinutes();
+      const seconds = currentTime.getSeconds();
+      // const hours = 6;
+      // const minutes = 15;
+      // const seconds = 0;
 
-        if (randomLightningIntensity < lightningIntensity) {
-          const startX = Common.random(50, 750);
-          const startY = Common.random(0, 100);
-          let endX = startX + Common.random(-100, 100);
-          let endY = Common.random(400, 580);
+      const degreesPerHour = 360 / 12; // 12 hours on a clock
+      const degreesPerMinute = 360 / 60; // 60 minutes on a clock
+      const degreesPerSecond = 360 / 60; // 60 seconds on a clock
 
-          const clockBodies = Composite.allBodies(clockLayer);
-          const collisions = Query.ray(
-            clockBodies,
-            {
-              x: startX,
-              y: startY,
-            },
-            {
-              x: endX,
-              y: endY,
-            }
-          );
-          if (collisions.length > 0) {
-            // If the lightning intersects with the clock, adjust the end point
-            const collisionPoint = collisions[0].supports[0];
-            endX = collisionPoint.x;
-            endY = collisionPoint.y;
-          }
+      const hourDegrees =
+        hours * degreesPerHour + (minutes / 60) * degreesPerHour;
+      const minuteDegrees = minutes * degreesPerMinute;
+      const secondDegrees = seconds * degreesPerSecond;
 
-          // Generate lightning bolt path points
-          const lightningPath = generateLightningBolt(
-            startX,
-            startY,
-            endX,
-            endY
-          );
+      // Convert degrees to radians
+      const hourRadians = (Math.PI * (hourDegrees + offset)) / 180;
+      const minuteRadians = (Math.PI * (minuteDegrees + offset)) / 180;
+      const secondRadians = (Math.PI * (secondDegrees + offset)) / 180;
 
-          // Create line segments connecting each point
-          const lightningBodies: Matter.Body[] = [];
-          for (let i = 0; i < lightningPath.length - 1; i++) {
-            const point1 = lightningPath[i];
-            const point2 = lightningPath[i + 1];
-
-            // Calculate the center point and dimensions for the line segment
-            const centerX = (point1.x + point2.x) / 2;
-            const centerY = (point1.y + point2.y) / 2;
-            const dx = point2.x - point1.x;
-            const dy = point2.y - point1.y;
-            const length = Math.sqrt(dx * dx + dy * dy);
-            const angle = Math.atan2(dy, dx);
-            const baseWidth = Common.random(4, 8);
-            // Calculate the width based on the current segment index, the decreasing width effect
-            const width = baseWidth * (1 - i / lightningPath.length);
-
-            // Create a thin rectangle to represent the line segment
-            const lineSegment = Bodies.rectangle(
-              centerX,
-              centerY,
-              length,
-              width,
-              {
-                collisionFilter: {
-                  category: lightningCategory,
-                  mask: defaultCategory | clockCategory,
-                },
-                isStatic: true,
-                render: {
-                  fillStyle: "transparent",
-                  strokeStyle: "white",
-                  lineWidth: 1,
-                },
-              }
-            );
-
-            // Rotate the line segment to match the angle
-            Body.setAngle(lineSegment, angle);
-            lightningBodies.push(lineSegment);
-          }
-
-          // Add all line segments to the world
-          Composite.add(lightningLayer, lightningBodies);
-
-          // Remove the lightning after a short duration
-          setTimeout(
-            () => {
-              Composite.remove(lightningLayer, lightningBodies);
-            },
-            Common.random(300, 600)
-          );
-        }
-      }
-    });
+      return {
+        hour: hourRadians,
+        minute: minuteRadians,
+        second: secondRadians,
+      };
+    }
   }
+
+  class MatterPercipitation {
+    scene: MatterScene;
+    layer: Composite;
+
+    isRaining: boolean = true;
+    RAIN_FREQUENCY = 0.3; // Rain intensity (0 to 1)
+    MAX_BODIES = 1000; // Maximum number of raindrops
+
+    constructor(scene: MatterScene) {
+      this.scene = scene;
+      this.layer = this.scene.LAYERS.PERCIPITATION;
+    }
+
+    createBody() {
+      const x = Common.random(0, this.scene.canvasWidth);
+      const y = 0;
+      const width = Common.random(2, 4);
+      const height = Common.random(4, 8);
+      const lightness = Common.random(60, 20);
+      const raindrop = Bodies.rectangle(x, y, width, height, {
+        collisionFilter: {
+          category: this.scene.CATEGORIES.PERCIPITATION,
+          mask:
+            this.scene.CATEGORIES.DEFAULT |
+            this.scene.CATEGORIES.CLOCK |
+            this.scene.CATEGORIES.PERCIPITATION,
+        },
+        chamfer: {
+          radius: Math.min(width, height) / 2,
+        },
+        friction: 0.0001,
+        frictionAir: 0.01,
+        restitution: 0.5,
+        density: 0.001,
+        render: {
+          fillStyle: "transparent",
+          lineWidth: 1,
+          strokeStyle: `hsl(200, 50%, ${lightness}%)`,
+        },
+      });
+
+      return raindrop;
+    }
+
+    onTick() {
+      if (!this.isRaining) {
+        return; // Skip if not raining
+      }
+
+      const frequencyCheck = Common.random(0, 1);
+      if (frequencyCheck > this.RAIN_FREQUENCY) {
+        return; // Skip if random intensity is less than the set intensity
+      }
+
+      const currentBodies = Composite.allBodies(this.layer).length;
+      if (currentBodies >= this.MAX_BODIES) {
+        // Remove the oldest raindrop if the limit is reached
+        Composite.remove(this.layer, Composite.allBodies(this.layer)[0]);
+      }
+
+      const raindrop = this.createBody();
+      Composite.add(this.layer, raindrop);
+    }
+  }
+
+  class MatterLightning {
+    scene: MatterScene;
+    isLightning: boolean = true;
+    LIGHNING_FREQUENCY = 0.01; // Lightning intensity (0 to 1)
+    MAX_BOLTS = 10; // Maximum number of lightning bolts
+    RENDER_OFFSET_X = 50;
+    RENDER_OFFSET_Y = 100;
+
+    constructor(scene: MatterScene) {
+      this.scene = scene;
+    }
+
+    onTick() {
+      if (!this.isLightning) {
+        return; // Skip if lightning is not enabled
+      }
+
+      const numLightningBolts = Composite.allBodies(
+        this.scene.LAYERS.LIGHTNING
+      ).length;
+      if (numLightningBolts >= this.MAX_BOLTS) {
+        return;
+      }
+
+      const lightningIntensity =
+        this.LIGHNING_FREQUENCY * (1 / (numLightningBolts + 1));
+      const lightningCheck = Common.random(0, 1);
+
+      if (lightningCheck > lightningIntensity) {
+        return; // Skip if random intensity is less than the set intensity
+      }
+
+      const startX = Common.random(
+        this.RENDER_OFFSET_X,
+        this.scene.canvasWidth - this.RENDER_OFFSET_X
+      );
+      const startY = Common.random(0, this.RENDER_OFFSET_Y);
+      let endX = startX + Common.random(-100, 100);
+      let endY = Common.random(
+        this.scene.canvasHeight / 2,
+        this.scene.canvasHeight - this.RENDER_OFFSET_Y
+      );
+
+      const clockBodies = Composite.allBodies(this.scene.LAYERS.CLOCK);
+      const collisions = Query.ray(
+        clockBodies,
+        {
+          x: startX,
+          y: startY,
+        },
+        {
+          x: endX,
+          y: endY,
+        }
+      );
+      if (collisions.length > 0) {
+        // If the lightning intersects with the clock, adjust the end point
+        const collisionPoint = collisions[0].supports[0];
+        endX = collisionPoint.x;
+        endY = collisionPoint.y;
+      }
+
+      // Generate lightning bolt path points
+      const lightningPath = MatterLightning.generateLightningBoltPath(
+        { x: startX, y: startY },
+        { x: endX, y: endY }
+      );
+
+      // Create line segments connecting each point
+      const lightningBodies: Body[] = [];
+      for (let i = 0; i < lightningPath.length - 1; i++) {
+        const point1 = lightningPath[i];
+        const point2 = lightningPath[i + 1];
+
+        // Calculate the center point and dimensions for the line segment
+        const centerX = (point1.x + point2.x) / 2;
+        const centerY = (point1.y + point2.y) / 2;
+        const dx = point2.x - point1.x;
+        const dy = point2.y - point1.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx);
+        const baseWidth = Common.random(4, 8);
+        // Calculate the width based on the current segment index, the decreasing width effect
+        const width = baseWidth * (1 - i / lightningPath.length);
+
+        // Create a thin rectangle to represent the line segment
+        const lineSegment = Bodies.rectangle(centerX, centerY, length, width, {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.LIGHTNING,
+            mask:
+              this.scene.CATEGORIES.DEFAULT |
+              this.scene.CATEGORIES.CLOCK |
+              this.scene.CATEGORIES.LIGHTNING,
+          },
+          isStatic: true,
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "white",
+            lineWidth: 1,
+          },
+        });
+
+        // Rotate the line segment to match the angle
+        Body.setAngle(lineSegment, angle);
+        lightningBodies.push(lineSegment);
+      }
+
+      // Add all line segments to the world
+      Composite.add(this.scene.LAYERS.LIGHTNING, lightningBodies);
+
+      // Remove the lightning after a short duration
+      setTimeout(
+        () => {
+          Composite.remove(this.scene.LAYERS.LIGHTNING, lightningBodies);
+        },
+        Common.random(300, 600)
+      );
+    }
+
+    static generateLightningBoltPath(startCoords: Coords, endCoords: Coords) {
+      const startX = startCoords.x;
+      const startY = startCoords.y;
+      const endX = endCoords.x;
+      const endY = endCoords.y;
+
+      const distance = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+      const segments = Math.ceil(distance / 25); // Number of segments based on distance
+      const pathPoints = [];
+
+      // Generate the main path points for the lightning line
+      for (let i = 0; i <= segments; i++) {
+        const progress = i / segments;
+        const randomXShift = Common.random(-20, 20);
+        const x = startX + (endX - startX) * progress + randomXShift;
+        const y = startY + (endY - startY) * progress;
+        pathPoints.push({ x, y });
+      }
+
+      return pathPoints;
+    }
+  }
+
+  const scene = new MatterScene();
 </script>
