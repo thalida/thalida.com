@@ -2,10 +2,9 @@
 import "../styles/global.css";
 ---
 
-<div id="window-container"></div>
+<canvas id="matter-canvas" width="800" height="600"></canvas>
 
 <script>
-  import { fade } from "astro:transitions";
   import * as Matter from "matter-js";
 
   init();
@@ -94,21 +93,24 @@ import "../styles/global.css";
     var engine = Engine.create({ enableSleeping: false });
     var world = engine.world;
 
-    var container = document.getElementById("window-container");
+    var canvas = document.getElementById("matter-canvas") as HTMLCanvasElement;
+    var canvasWidth = canvas.width;
+    var canvasHeight = canvas.height;
 
-    if (!container) {
-      console.error("Container element not found");
+    if (!canvas) {
+      console.error("canvas element not found");
       return;
     }
 
     // create a renderer
     var render = Render.create({
-      element: container,
+      canvas: canvas,
       engine: engine,
       options: {
-        width: 800,
-        height: 600,
+        width: canvasWidth,
+        height: canvasHeight,
         wireframes: true,
+        pixelRatio: window.devicePixelRatio || 1,
         // showAxes: true,
       },
     });
@@ -220,7 +222,7 @@ import "../styles/global.css";
       max: { x: 800, y: 600 },
     });
 
-    Events.on(engine, "beforeUpdate", function (event) {
+    Events.on(runner, "tick", function (event) {
       // Update the clock hands every second
       if (event.timestamp % 1000 < 50) {
         const clockPosition = calculateClockPosition();
