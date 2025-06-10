@@ -29,6 +29,9 @@ import "../styles/global.css";
     const hours = currentTime.getHours() % 12;
     const minutes = currentTime.getMinutes();
     const seconds = currentTime.getSeconds();
+    // const hours = 6;
+    // const minutes = 0;
+    // const seconds = 0;
 
     const degreesPerHour = 360 / 12; // 12 hours on a clock
     const degreesPerMinute = 360 / 60; // 60 minutes on a clock
@@ -36,8 +39,7 @@ import "../styles/global.css";
 
     const hourDegrees =
       hours * degreesPerHour + (minutes / 60) * degreesPerHour;
-    const minuteDegrees =
-      minutes * degreesPerMinute + (seconds / 60) * degreesPerMinute;
+    const minuteDegrees = minutes * degreesPerMinute;
     const secondDegrees = seconds * degreesPerSecond;
 
     // Convert degrees to radians
@@ -65,7 +67,7 @@ import "../styles/global.css";
       Common = Matter.Common;
 
     // create an engine
-    var engine = Engine.create();
+    var engine = Engine.create({ enableSleeping: false });
     var world = engine.world;
 
     var container = document.getElementById("window-container");
@@ -82,8 +84,8 @@ import "../styles/global.css";
       options: {
         width: 800,
         height: 600,
-        wireframes: false,
-        background: "black",
+        wireframes: true,
+        // showAxes: true,
       },
     });
 
@@ -118,36 +120,67 @@ import "../styles/global.css";
     ]);
 
     // Create the clock hands
-    var hourBody = Bodies.rectangle(400 - 100, 300, 200, 20, {
-      isStatic: true,
-      render: { fillStyle: "pink" },
-      chamfer: {
-        radius: 10,
-      },
-    });
-    Body.setCentre(hourBody, { x: 100, y: 0 }, true);
+    const hourHandLength = 200; // Length of the hour hand
+    const minuteHandLength = 250; // Length of the minute hand
+    const handWidth = 20; // Width of the hands
+    const overlap = 10; // Overlap between the hands and the center
+    var hourBody = Bodies.rectangle(
+      400 - hourHandLength / 2 + overlap,
+      300,
+      hourHandLength + overlap,
+      handWidth,
+      {
+        isStatic: true,
+        render: { fillStyle: "pink" },
+        chamfer: {
+          radius: handWidth / 2,
+        },
+      }
+    );
+    Body.setCentre(hourBody, { x: hourHandLength / 2 - overlap, y: 0 }, true);
 
-    var minuteBody = Bodies.rectangle(400 - 125, 300, 250, 20, {
+    var minuteBody = Bodies.rectangle(
+      400 - minuteHandLength / 2 + overlap,
+      300,
+      minuteHandLength + overlap,
+      handWidth,
+      {
+        isStatic: true,
+        render: { fillStyle: "purple" },
+        chamfer: {
+          radius: handWidth / 2,
+        },
+      }
+    );
+    Body.setCentre(
+      minuteBody,
+      { x: minuteHandLength / 2 - overlap, y: 0 },
+      true
+    );
+
+    var handsCenter = Bodies.rectangle(400, 300, 10, 10, {
       isStatic: true,
-      render: { fillStyle: "purple" },
-      chamfer: {
-        radius: 10,
-      },
+      render: { fillStyle: "red" },
+      chamfer: { radius: 5 },
     });
-    Body.setCentre(minuteBody, { x: 125, y: 0 }, true);
 
     // Set the position of the hour and minute hands based on the current time
     const clockPosition = calculateClockPosition();
     Body.setAngle(hourBody, clockPosition.hour);
     Body.setAngle(minuteBody, clockPosition.minute);
 
-    Composite.add(world, [minuteBody, hourBody]);
+    Composite.add(world, [minuteBody, hourBody, handsCenter]);
     Render.run(render);
 
     const percipitationLayer = Composite.create({
       label: "Percipitation Layer",
     });
     Composite.add(world, percipitationLayer);
+
+    Render.lookAt(render, {
+      min: { x: 0, y: 0 },
+      max: { x: 800, y: 600 },
+    });
 
     Events.on(engine, "beforeUpdate", function (event) {
       // Update the clock hands every second
@@ -158,7 +191,7 @@ import "../styles/global.css";
       }
 
       const isRaining = true;
-      const intensity = 1; // Rain intensity (0 to 1))
+      const intensity = 0.1; // Rain intensity (0 to 1))
       if (isRaining) {
         const randomIntensity = Common.random(0, 1);
         if (randomIntensity > intensity) {
@@ -176,10 +209,10 @@ import "../styles/global.css";
         }
 
         // Create raindrops
-        const x = Common.random(0, 800);
+        const x = Common.random(0.0, 800.0);
         const y = 0;
         const radius = Common.random(2, 4);
-        const lightness = Common.random(60, 40);
+        const lightness = Common.random(60, 50);
         const rgbColor = HSLToRGB(200, 50, lightness);
 
         const raindrop = Bodies.circle(x, y, radius, {
