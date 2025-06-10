@@ -6,6 +6,8 @@ import "../styles/global.css";
 
 <script>
   import * as Matter from "matter-js";
+  import polyDecomp from "poly-decomp";
+  import "pathseg";
 
   init();
 
@@ -87,7 +89,11 @@ import "../styles/global.css";
       Events = Matter.Events,
       Common = Matter.Common,
       Constraint = Matter.Constraint,
-      Query = Matter.Query;
+      Query = Matter.Query,
+      Svg = Matter.Svg,
+      Vertices = Matter.Vertices;
+
+    Common.setDecomp(polyDecomp);
 
     // create an engine
     var engine = Engine.create({ enableSleeping: false });
@@ -109,7 +115,8 @@ import "../styles/global.css";
       options: {
         width: canvasWidth,
         height: canvasHeight,
-        wireframes: true,
+        // wireframes: true,
+        wireframes: false,
         pixelRatio: window.devicePixelRatio || 1,
         // showAxes: true,
       },
@@ -123,8 +130,98 @@ import "../styles/global.css";
 
     // define our categories (as bit fields, there are up to 32 available)
     var defaultCategory = 0x0001,
-      percipitationCategory = 0x0002,
-      lightningCategory = 0x0004;
+      clockCategory = 0x0002,
+      percipitationCategory = 0x0004,
+      lightningCategory = 0x0008;
+
+    const clockLayer = Composite.create({
+      label: "Clock Layer",
+    });
+    Composite.add(world, clockLayer);
+
+    const percipitationLayer = Composite.create({
+      label: "Percipitation Layer",
+    });
+    Composite.add(world, percipitationLayer);
+
+    const lightningLayer = Composite.create({
+      label: "Lightning Layer",
+    });
+    Composite.add(world, lightningLayer);
+
+    function segmentBody() {
+      const segmentBodyPart1 = Bodies.rectangle(200, 200, 100, 25, {
+        chamfer: { radius: 25 / 2 },
+      });
+      const segmentBodyPart2 = Bodies.rectangle(200, 275, 100, 25, {
+        chamfer: { radius: 25 / 2 },
+      });
+      const segmentBodyPart3 = Bodies.rectangle(200, 275 + 75, 100, 25, {
+        chamfer: { radius: 25 / 2 },
+      });
+
+      const segmentBodyPart4 = Bodies.rectangle(
+        250 - Math.floor(25 / 2),
+        250 - 25 / 2,
+        25,
+        100,
+        {
+          chamfer: { radius: 25 / 2 },
+        }
+      );
+
+      const segmentBodyPart5 = Bodies.rectangle(
+        250 - 25 / 2,
+        325 - 25 / 2,
+        25,
+        100,
+        {
+          chamfer: { radius: 25 / 2 },
+        }
+      );
+
+      const segmentBodyPart6 = Bodies.rectangle(
+        175 - 25 / 2,
+        250 - 25 / 2,
+        25,
+        100,
+        {
+          chamfer: { radius: 25 / 2 },
+        }
+      );
+
+      const segmentBodyPart7 = Bodies.rectangle(
+        175 - 25 / 2,
+        325 - 25 / 2,
+        25,
+        100,
+        {
+          chamfer: { radius: 25 / 2 },
+        }
+      );
+
+      const segmentBody = Body.create({
+        collisionFilter: {
+          category: clockCategory,
+        },
+        isStatic: true,
+        parts: [
+          segmentBodyPart1,
+          segmentBodyPart2,
+          segmentBodyPart3,
+          segmentBodyPart4,
+          segmentBodyPart5,
+          segmentBodyPart6,
+          segmentBodyPart7,
+        ],
+      });
+
+      return segmentBody;
+    }
+
+    const displayBodies = segmentBody();
+
+    Composite.add(clockLayer, displayBodies);
 
     // Create the clock hands
     const hourHandLength = 200; // Length of the hour hand
@@ -137,8 +234,11 @@ import "../styles/global.css";
       hourHandLength + overlap,
       handWidth,
       {
+        collisionFilter: {
+          category: clockCategory,
+        },
         isStatic: true,
-        render: { fillStyle: "pink" },
+        render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
         chamfer: {
           radius: handWidth / 2,
         },
@@ -152,8 +252,11 @@ import "../styles/global.css";
       minuteHandLength + overlap,
       handWidth,
       {
+        collisionFilter: {
+          category: clockCategory,
+        },
         isStatic: true,
-        render: { fillStyle: "purple" },
+        render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
         chamfer: {
           radius: handWidth / 2,
         },
@@ -166,8 +269,11 @@ import "../styles/global.css";
     );
 
     var handsCenter = Bodies.rectangle(400, 300, 10, 10, {
+      collisionFilter: {
+        category: clockCategory,
+      },
       isStatic: true,
-      render: { fillStyle: "red" },
+      render: { fillStyle: "transparent", strokeStyle: "#ddd", lineWidth: 1 },
       chamfer: { radius: 5 },
     });
 
@@ -176,44 +282,31 @@ import "../styles/global.css";
     Body.setAngle(hourBody, clockPosition.hour);
     Body.setAngle(minuteBody, clockPosition.minute);
 
-    const clockLayer = Composite.create({
-      label: "Clock Layer",
-    });
     Composite.add(clockLayer, [hourBody, minuteBody, handsCenter]);
     Composite.add(world, clockLayer);
     Render.run(render);
-
-    const percipitationLayer = Composite.create({
-      label: "Percipitation Layer",
-    });
-    Composite.add(world, percipitationLayer);
-
-    const lightningLayer = Composite.create({
-      label: "Lightning Layer",
-    });
-    Composite.add(world, lightningLayer);
 
     // Create walls
     Composite.add(world, [
       // top wall
       Bodies.rectangle(400, 0, 800, 20, {
         isStatic: true,
-        render: { fillStyle: "red" },
+        render: { fillStyle: "transparent" },
       }),
       // bottom wall
-      Bodies.rectangle(400, 600, 800, 20, {
+      Bodies.rectangle(400, 600, 800, 4, {
         isStatic: true,
-        render: { fillStyle: "yellow" },
+        render: { fillStyle: "transparent", strokeStyle: "#333", lineWidth: 1 },
       }),
       // right wall
-      Bodies.rectangle(800, 300, 20, 600, {
+      Bodies.rectangle(800, 300, 4, 600, {
         isStatic: true,
-        render: { fillStyle: "blue" },
+        render: { fillStyle: "transparent" },
       }),
       // left wall
-      Bodies.rectangle(0, 300, 20, 600, {
+      Bodies.rectangle(0, 300, 4, 600, {
         isStatic: true,
-        render: { fillStyle: "green" },
+        render: { fillStyle: "transparent" },
       }),
     ]);
 
@@ -255,7 +348,7 @@ import "../styles/global.css";
           const raindrop = Bodies.rectangle(x, y, width, height, {
             collisionFilter: {
               category: percipitationCategory,
-              mask: defaultCategory | percipitationCategory,
+              mask: defaultCategory | clockCategory | percipitationCategory,
             },
             chamfer: {
               radius: Math.min(width, height) / 2,
@@ -265,7 +358,9 @@ import "../styles/global.css";
             restitution: 0.5,
             density: 0.001,
             render: {
-              fillStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
+              fillStyle: "transparent",
+              lineWidth: 1,
+              strokeStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
             },
           });
 
@@ -340,12 +435,12 @@ import "../styles/global.css";
               {
                 collisionFilter: {
                   category: lightningCategory,
-                  mask: defaultCategory | lightningCategory,
+                  mask: defaultCategory | clockCategory,
                 },
                 isStatic: true,
                 render: {
-                  fillStyle: "rgba(255, 255, 255, 0.9)",
-                  strokeStyle: "rgba(200, 200, 255, 0.6)",
+                  fillStyle: "transparent",
+                  strokeStyle: "white",
                   lineWidth: 1,
                 },
               }

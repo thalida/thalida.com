@@ -16,6 +16,8 @@
     "@tailwindcss/vite": "^4.1.8",
     "astro": "^5.9.1",
     "matter-js": "^0.20.0",
+    "pathseg": "^1.2.1",
+    "poly-decomp": "^0.3.0",
     "tailwindcss": "^4.1.8",
     "three": "^0.177.0"
   },
