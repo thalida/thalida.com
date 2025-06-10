@@ -176,6 +176,8 @@ import "../styles/global.css";
 
     renderSeconds: boolean = false; // Whether to render seconds hand
 
+    isDigital: boolean = true; // Whether the clock is analog or digital
+
     constructor(scene: MatterScene) {
       this.scene = scene;
       this.body = this.createBody();
@@ -183,6 +185,198 @@ import "../styles/global.css";
     }
 
     createBody() {
+      return this.isDigital
+        ? this.createDigitalBody()
+        : this.createAnalogBody();
+    }
+
+    createDigitalBody() {
+      const numSegments = 4; // Number of segments in the digital clock
+      const gap = 25;
+
+      const segmentWidth = 100; // Width of each segment
+      const segmentHeight = 25; // Height of each segment
+
+      const canvasCenterX = this.scene.canvasWidth / 2;
+      const canvasCenterY = this.scene.canvasHeight / 2;
+      const clockWidth = numSegments * segmentWidth;
+      const clockHeight = (segmentWidth - segmentHeight) * 2; // Height of the clock
+      const clockX =
+        canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
+      const clockY = canvasCenterY - clockHeight / 2;
+
+      // Create segments for the digital clock
+      const segments = [];
+      for (let i = 0; i < numSegments; i++) {
+        const x = clockX + i * (segmentWidth + gap);
+        const y = clockY;
+        const segment = this.createSegment(x, y, segmentWidth, segmentHeight);
+        segments.push(segment);
+
+        const isMiddle = i === Math.floor(numSegments / 2);
+        if (isMiddle) {
+          const circleA = Bodies.circle(
+            canvasCenterX,
+            canvasCenterY - segmentHeight,
+            segmentHeight / 4,
+            {
+              collisionFilter: {
+                category: this.scene.CATEGORIES.CLOCK,
+              },
+              isStatic: true,
+              render: {
+                fillStyle: "transparent",
+                strokeStyle: "white",
+                lineWidth: 1,
+              },
+            }
+          );
+          const circleB = Bodies.circle(
+            canvasCenterX,
+            canvasCenterY + segmentHeight,
+            segmentHeight / 4,
+            {
+              collisionFilter: {
+                category: this.scene.CATEGORIES.CLOCK,
+              },
+              isStatic: true,
+              render: {
+                fillStyle: "transparent",
+                strokeStyle: "white",
+                lineWidth: 1,
+              },
+            }
+          );
+          segments.push(circleA);
+          segments.push(circleB);
+        }
+      }
+
+      const composite = Composite.create({
+        label: "Digital Clock",
+        bodies: segments,
+      });
+      return composite;
+    }
+
+    createSegment(x: number, y: number, width: number, height: number) {
+      const segmentBodyPart1 = Bodies.rectangle(x, y, width, height, {
+        chamfer: { radius: height / 2 },
+        render: {
+          fillStyle: "transparent",
+          strokeStyle: "red",
+          lineWidth: 1,
+        },
+      });
+      const segmentBodyPart2 = Bodies.rectangle(
+        x,
+        y + width - height,
+        width,
+        height,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "orange",
+            lineWidth: 1,
+          },
+        }
+      );
+      const segmentBodyPart3 = Bodies.rectangle(
+        x,
+        y + (width - height) * 2,
+        width,
+        height,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "yellow",
+            lineWidth: 1,
+          },
+        }
+      );
+
+      const segmentBodyPart4 = Bodies.rectangle(
+        x + (width - height) / 2,
+        y + (width - height) / 2,
+        height,
+        width,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "green",
+            lineWidth: 1,
+          },
+        }
+      );
+
+      const segmentBodyPart5 = Bodies.rectangle(
+        x + (width - height) / 2,
+        y + (width - height) * 1.5,
+        height,
+        width,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "blue",
+            lineWidth: 1,
+          },
+        }
+      );
+
+      const segmentBodyPart6 = Bodies.rectangle(
+        x - (width - height) / 2,
+        y + (width - height) / 2,
+        height,
+        width,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "purple",
+            lineWidth: 1,
+          },
+        }
+      );
+
+      const segmentBodyPart7 = Bodies.rectangle(
+        x - (width - height) / 2,
+        y + (width - height) * 1.5,
+        height,
+        width,
+        {
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "pink",
+            lineWidth: 1,
+          },
+        }
+      );
+
+      const segmentBody = Body.create({
+        collisionFilter: {
+          category: this.scene.CATEGORIES.CLOCK,
+        },
+        isStatic: true,
+        parts: [
+          segmentBodyPart1,
+          segmentBodyPart2,
+          segmentBodyPart3,
+          segmentBodyPart4,
+          segmentBodyPart5,
+          segmentBodyPart6,
+          segmentBodyPart7,
+        ],
+      });
+
+      return segmentBody;
+    }
+
+    createAnalogBody() {
       const hourHandLength = 200; // Length of the hour hand
       const minuteHandLength = 250; // Length of the minute hand
       const secondHandLength = 280; // Length of the second hand
@@ -298,6 +492,14 @@ import "../styles/global.css";
     }
 
     onTick() {
+      if (this.isDigital) {
+        // this.updateDigitalClock();
+      } else {
+        this.updateAnalogClock();
+      }
+    }
+
+    updateAnalogClock() {
       if (
         !this.hourBody ||
         !this.minuteBody ||
