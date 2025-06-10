@@ -248,16 +248,19 @@ import "../styles/global.css";
           // Create raindrops
           const x = Common.random(0.0, 800.0);
           const y = 0;
-          const radius = Common.random(2, 4);
+          const width = Common.random(2, 4);
+          const height = Common.random(4, 8);
           const lightness = Common.random(60, 50);
           const rgbColor = HSLToRGB(200, 50, lightness);
-
-          const raindrop = Bodies.circle(x, y, radius, {
+          const raindrop = Bodies.rectangle(x, y, width, height, {
             collisionFilter: {
               category: percipitationCategory,
               mask: defaultCategory | percipitationCategory,
             },
-            friction: 0.00001,
+            chamfer: {
+              radius: Math.min(width, height) / 2,
+            },
+            friction: 0.0001,
             frictionAir: 0.01,
             restitution: 0.5,
             density: 0.001,
@@ -272,8 +275,12 @@ import "../styles/global.css";
 
       const isLightning = true; // Force lightning for demonstration
       if (isLightning) {
-        const lightningIntensity = 0.01; // Lightning intensity (0 to 1)
+        const baseLightningIntensity = 0.01; // Lightning intensity (0 to 1)
+        const numLightningBolts = Composite.allBodies(lightningLayer).length;
+        const lightningIntensity =
+          baseLightningIntensity * (1 / (numLightningBolts + 1));
         const randomLightningIntensity = Common.random(0, 1);
+
         if (randomLightningIntensity < lightningIntensity) {
           const startX = Common.random(50, 750);
           const startY = Common.random(0, 100);
@@ -320,20 +327,29 @@ import "../styles/global.css";
             const dy = point2.y - point1.y;
             const length = Math.sqrt(dx * dx + dy * dy);
             const angle = Math.atan2(dy, dx);
+            const baseWidth = Common.random(4, 8);
+            // Calculate the width based on the current segment index, the decreasing width effect
+            const width = baseWidth * (1 - i / lightningPath.length);
 
             // Create a thin rectangle to represent the line segment
-            const lineSegment = Bodies.rectangle(centerX, centerY, length, 2, {
-              collisionFilter: {
-                category: lightningCategory,
-                mask: defaultCategory | lightningCategory,
-              },
-              isStatic: true,
-              render: {
-                fillStyle: "rgba(255, 255, 255, 0.9)",
-                strokeStyle: "rgba(200, 200, 255, 0.6)",
-                lineWidth: 1,
-              },
-            });
+            const lineSegment = Bodies.rectangle(
+              centerX,
+              centerY,
+              length,
+              width,
+              {
+                collisionFilter: {
+                  category: lightningCategory,
+                  mask: defaultCategory | lightningCategory,
+                },
+                isStatic: true,
+                render: {
+                  fillStyle: "rgba(255, 255, 255, 0.9)",
+                  strokeStyle: "rgba(200, 200, 255, 0.6)",
+                  lineWidth: 1,
+                },
+              }
+            );
 
             // Rotate the line segment to match the angle
             Body.setAngle(lineSegment, angle);
@@ -348,7 +364,7 @@ import "../styles/global.css";
             () => {
               Composite.remove(lightningLayer, lightningBodies);
             },
-            Common.random(100, 300)
+            Common.random(300, 600)
           );
         }
       }
