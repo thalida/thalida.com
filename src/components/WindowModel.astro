@@ -64,7 +64,8 @@ import "../styles/global.css";
       Composite = Matter.Composite,
       Composites = Matter.Composites,
       Events = Matter.Events,
-      Common = Matter.Common;
+      Common = Matter.Common,
+      Constraint = Matter.Constraint;
 
     // create an engine
     var engine = Engine.create({ enableSleeping: false });
@@ -94,30 +95,6 @@ import "../styles/global.css";
     // create runner
     var runner = Runner.create();
     Runner.run(runner, engine);
-
-    // Create walls
-    Composite.add(world, [
-      // top wall
-      Bodies.rectangle(400, 0, 800, 20, {
-        isStatic: true,
-        render: { fillStyle: "red" },
-      }),
-      // bottom wall
-      Bodies.rectangle(400, 600, 800, 20, {
-        isStatic: true,
-        render: { fillStyle: "yellow" },
-      }),
-      // right wall
-      Bodies.rectangle(800, 300, 20, 600, {
-        isStatic: true,
-        render: { fillStyle: "blue" },
-      }),
-      // left wall
-      Bodies.rectangle(0, 300, 20, 600, {
-        isStatic: true,
-        render: { fillStyle: "green" },
-      }),
-    ]);
 
     // Create the clock hands
     const hourHandLength = 200; // Length of the hour hand
@@ -176,6 +153,30 @@ import "../styles/global.css";
       label: "Percipitation Layer",
     });
     Composite.add(world, percipitationLayer);
+
+    // Create walls
+    Composite.add(world, [
+      // top wall
+      Bodies.rectangle(400, 0, 800, 20, {
+        isStatic: true,
+        render: { fillStyle: "red" },
+      }),
+      // bottom wall
+      Bodies.rectangle(400, 600, 800, 20, {
+        isStatic: true,
+        render: { fillStyle: "yellow" },
+      }),
+      // right wall
+      Bodies.rectangle(800, 300, 20, 600, {
+        isStatic: true,
+        render: { fillStyle: "blue" },
+      }),
+      // left wall
+      Bodies.rectangle(0, 300, 20, 600, {
+        isStatic: true,
+        render: { fillStyle: "green" },
+      }),
+    ]);
 
     Render.lookAt(render, {
       min: { x: 0, y: 0 },
