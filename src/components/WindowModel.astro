@@ -10,14 +10,36 @@ import "../styles/global.css";
 
   init();
 
-  function HSLToRGB(h, s, l) {
+  function HSLToRGB(h: number, s: number, l: number) {
     s /= 100;
     l /= 100;
-    const k = (n) => (n + h / 30) % 12;
+    const k = (n: number) => (n + h / 30) % 12;
     const a = s * Math.min(l, 1 - l);
-    const f = (n) =>
+    const f = (n: number) =>
       l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
     return [255 * f(0), 255 * f(8), 255 * f(4)];
+  }
+
+  function generateLightningBolt(
+    startX: number,
+    startY: number,
+    endX: number,
+    endY: number
+  ) {
+    const distance = Math.sqrt((endX - startX) ** 2 + (endY - startY) ** 2);
+    const segments = Math.ceil(distance / 25); // Number of segments based on distance
+    const pathPoints = [];
+
+    // Generate the main path points for the lightning line
+    for (let i = 0; i <= segments; i++) {
+      const progress = i / segments;
+      const randomXShift = Matter.Common.random(-20, 20);
+      const x = startX + (endX - startX) * progress + randomXShift;
+      const y = startY + (endY - startY) * progress;
+      pathPoints.push({ x, y });
+    }
+
+    return pathPoints;
   }
 
   function calculateClockPosition() {
@@ -65,7 +87,8 @@ import "../styles/global.css";
       Composites = Matter.Composites,
       Events = Matter.Events,
       Common = Matter.Common,
-      Constraint = Matter.Constraint;
+      Constraint = Matter.Constraint,
+      Query = Matter.Query;
 
     // create an engine
     var engine = Engine.create({ enableSleeping: false });
@@ -95,6 +118,11 @@ import "../styles/global.css";
     // create runner
     var runner = Runner.create();
     Runner.run(runner, engine);
+
+    // define our categories (as bit fields, there are up to 32 available)
+    var defaultCategory = 0x0001,
+      percipitationCategory = 0x0002,
+      lightningCategory = 0x0004;
 
     // Create the clock hands
     const hourHandLength = 200; // Length of the hour hand
@@ -146,13 +174,22 @@ import "../styles/global.css";
     Body.setAngle(hourBody, clockPosition.hour);
     Body.setAngle(minuteBody, clockPosition.minute);
 
-    Composite.add(world, [minuteBody, hourBody, handsCenter]);
+    const clockLayer = Composite.create({
+      label: "Clock Layer",
+    });
+    Composite.add(clockLayer, [hourBody, minuteBody, handsCenter]);
+    Composite.add(world, clockLayer);
     Render.run(render);
 
     const percipitationLayer = Composite.create({
       label: "Percipitation Layer",
     });
     Composite.add(world, percipitationLayer);
+
+    const lightningLayer = Composite.create({
+      label: "Lightning Layer",
+    });
+    Composite.add(world, lightningLayer);
 
     // Create walls
     Composite.add(world, [
@@ -192,41 +229,126 @@ import "../styles/global.css";
       }
 
       const isRaining = true;
-      const intensity = 0.1; // Rain intensity (0 to 1))
       if (isRaining) {
-        const randomIntensity = Common.random(0, 1);
-        if (randomIntensity > intensity) {
-          return; // Skip creating raindrops based on intensity
-        }
+        const rainIntensity = 0.1; // Rain intensity (0 to 1))
+        const randomRainIntensity = Common.random(0, 1);
+        if (randomRainIntensity < rainIntensity) {
+          const maxBodies = 1000; // Maximum number of raindrops
+          const currentBodies = Composite.allBodies(percipitationLayer).length;
+          if (currentBodies >= maxBodies) {
+            // Remove the oldest raindrop if the limit is reached
+            Composite.remove(
+              percipitationLayer,
+              Composite.allBodies(percipitationLayer)[0]
+            );
+          }
 
-        const maxBodies = 1000; // Maximum number of raindrops
-        const currentBodies = Composite.allBodies(percipitationLayer).length;
-        if (currentBodies >= maxBodies) {
-          // Remove the oldest raindrop if the limit is reached
-          Composite.remove(
-            percipitationLayer,
-            Composite.allBodies(percipitationLayer)[0]
+          // Create raindrops
+          const x = Common.random(0.0, 800.0);
+          const y = 0;
+          const radius = Common.random(2, 4);
+          const lightness = Common.random(60, 50);
+          const rgbColor = HSLToRGB(200, 50, lightness);
+
+          const raindrop = Bodies.circle(x, y, radius, {
+            collisionFilter: {
+              category: percipitationCategory,
+              mask: defaultCategory | percipitationCategory,
+            },
+            friction: 0.00001,
+            frictionAir: 0.01,
+            restitution: 0.5,
+            density: 0.001,
+            render: {
+              fillStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
+            },
+          });
+
+          Composite.add(percipitationLayer, raindrop);
+        }
+      }
+
+      const isLightning = true; // Force lightning for demonstration
+      if (isLightning) {
+        const lightningIntensity = 0.01; // Lightning intensity (0 to 1)
+        const randomLightningIntensity = Common.random(0, 1);
+        if (randomLightningIntensity < lightningIntensity) {
+          const startX = Common.random(50, 750);
+          const startY = Common.random(0, 100);
+          let endX = startX + Common.random(-100, 100);
+          let endY = Common.random(400, 580);
+
+          const clockBodies = Composite.allBodies(clockLayer);
+          const collisions = Query.ray(
+            clockBodies,
+            {
+              x: startX,
+              y: startY,
+            },
+            {
+              x: endX,
+              y: endY,
+            }
+          );
+          if (collisions.length > 0) {
+            // If the lightning intersects with the clock, adjust the end point
+            const collisionPoint = collisions[0].supports[0];
+            endX = collisionPoint.x;
+            endY = collisionPoint.y;
+          }
+
+          // Generate lightning bolt path points
+          const lightningPath = generateLightningBolt(
+            startX,
+            startY,
+            endX,
+            endY
+          );
+
+          // Create line segments connecting each point
+          const lightningBodies: Matter.Body[] = [];
+          for (let i = 0; i < lightningPath.length - 1; i++) {
+            const point1 = lightningPath[i];
+            const point2 = lightningPath[i + 1];
+
+            // Calculate the center point and dimensions for the line segment
+            const centerX = (point1.x + point2.x) / 2;
+            const centerY = (point1.y + point2.y) / 2;
+            const dx = point2.x - point1.x;
+            const dy = point2.y - point1.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx);
+
+            // Create a thin rectangle to represent the line segment
+            const lineSegment = Bodies.rectangle(centerX, centerY, length, 2, {
+              collisionFilter: {
+                category: lightningCategory,
+                mask: defaultCategory | lightningCategory,
+              },
+              isStatic: true,
+              render: {
+                fillStyle: "rgba(255, 255, 255, 0.9)",
+                strokeStyle: "rgba(200, 200, 255, 0.6)",
+                lineWidth: 1,
+              },
+            });
+
+            // Rotate the line segment to match the angle
+            Body.setAngle(lineSegment, angle);
+            lightningBodies.push(lineSegment);
+          }
+
+          // Add all line segments to the world
+          Composite.add(lightningLayer, lightningBodies);
+
+          // Remove the lightning after a short duration
+          setTimeout(
+            () => {
+              Composite.remove(lightningLayer, lightningBodies);
+            },
+            Common.random(100, 300)
           );
         }
-
-        // Create raindrops
-        const x = Common.random(0.0, 800.0);
-        const y = 0;
-        const radius = Common.random(2, 4);
-        const lightness = Common.random(60, 50);
-        const rgbColor = HSLToRGB(200, 50, lightness);
-
-        const raindrop = Bodies.circle(x, y, radius, {
-          friction: 0.00001,
-          frictionAir: 0.01,
-          restitution: 0.5,
-          density: 0.001,
-          render: {
-            fillStyle: `rgb(${rgbColor[0]}, ${rgbColor[1]}, ${rgbColor[2]})`,
-          },
-        });
-
-        Composite.add(percipitationLayer, raindrop);
       }
     });
   }
