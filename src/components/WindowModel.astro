@@ -46,17 +46,17 @@ import "../styles/global.css";
     };
 
     LAYERS = {
+      ATMOSPHERIC: Composite.create({
+        label: "Atmospheric Layer",
+      }),
+      LIGHTNING: Composite.create({
+        label: "Lightning Layer",
+      }),
       CLOCK: Composite.create({
         label: "Clock Layer",
       }),
       PERCIPITATION: Composite.create({
         label: "Percipitation Layer",
-      }),
-      LIGHTNING: Composite.create({
-        label: "Lightning Layer",
-      }),
-      ATMOSPHERIC: Composite.create({
-        label: "Atmospheric Layer",
       }),
     };
 
@@ -929,9 +929,9 @@ import "../styles/global.css";
     scene: MatterScene;
 
     isAtmospheric: boolean = true; // Whether to render atmospheric effects
-    atmosphereEffect: "mist" | "clouds" = "mist"; // Type of atmospheric effect
+    atmosphereEffect: "mist" | "clouds" = "clouds"; // Type of atmospheric effect
     ATMOSPHERIC_FREQUENCY = 0.1; // Atmospheric effect intensity (0 to 1)
-    PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
+    PERIOD_ADJUSTMENT = 0.5; // Adjustment factor
     MAX_BODIES = 8; // Maximum number of atmospheric bodies
 
     constructor(scene: MatterScene) {
@@ -946,7 +946,7 @@ import "../styles/global.css";
     createBody(isInit: boolean = false) {
       return this.atmosphereEffect === "mist"
         ? this.createMistBody(isInit)
-        : this.createCloudsBody(isInit);
+        : this.createCloudBody(isInit);
     }
 
     createMistBody(isInit: boolean = false) {
@@ -978,24 +978,49 @@ import "../styles/global.css";
       return mistLayer;
     }
 
-    createCloudsBody(isInit: boolean = false) {
-      const cloud = Bodies.rectangle(
-        this.scene.canvasWidth / 2,
-        this.scene.canvasHeight / 2,
-        this.scene.canvasWidth,
-        this.scene.canvasHeight,
-        {
-          isStatic: true,
-          collisionFilter: {
-            category: this.scene.CATEGORIES.ATMOSPHERIC,
-          },
-          render: {
-            fillStyle: "rgba(255, 255, 255, 0.3)", // Light cloud effect
-            strokeStyle: "transparent",
-            lineWidth: 0,
-          },
-        }
-      );
+    createCloudBody(isInit: boolean = false) {
+      const width = random(this.scene.canvasWidth / 2, this.scene.canvasWidth);
+      const x = isInit
+        ? random(0, this.scene.canvasWidth)
+        : -1 * (width / random(1, 2)); // Start off-screen to the left
+      const y = random(50, 150);
+      const cloudParts = [];
+      const numParts = Math.ceil(random(2, 4) * this.ATMOSPHERIC_FREQUENCY);
+      for (let i = 0; i < numParts; i++) {
+        const partWidth = random(128, 256);
+        const partHeight = random(64, 128);
+        const partX = x + random(-partWidth / 2, partWidth / 2);
+        const partY = y + random(-partHeight / 2, partHeight / 2);
+        const cloudPart = Bodies.rectangle(
+          partX,
+          partY,
+          partWidth,
+          partHeight,
+          {
+            isStatic: true,
+            collisionFilter: {
+              category: this.scene.CATEGORIES.ATMOSPHERIC,
+            },
+            render: {
+              opacity: random(0.1, 0.2), // Random opacity for each cloud part
+              fillStyle: "hsl(200, 20%, 40%)", // Cloud color
+              lineWidth: 0,
+            },
+            chamfer: {
+              radius: Math.min(partWidth, partHeight) / random(2, 4), // Chamfer the edges for a softer look
+            },
+          }
+        );
+        cloudParts.push(cloudPart);
+      }
+
+      const cloud = Body.create({
+        parts: cloudParts,
+        isStatic: true,
+        collisionFilter: {
+          category: this.scene.CATEGORIES.ATMOSPHERIC,
+        },
+      });
       return cloud;
     }
 
