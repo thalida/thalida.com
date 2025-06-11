@@ -161,29 +161,22 @@ import "../styles/global.css";
       this.perciptiation = new MatterPercipitation(this);
       this.lightning = new MatterLightning(this);
 
-      this.clock.onTick();
-      this.atmospheric.onTick();
-      this.perciptiation.onTick();
-      this.lightning.onTick();
+      this.onTick();
 
       Render.run(this.render);
 
-      Events.on(this.runner, "tick", this.onTick.bind(this));
+      Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
     }
 
-    onTick(event: any) {
-      if (this.clock && event.timestamp % 1000 < 50) {
-        this.clock.onTick();
+    onTick() {
+      if (!this.engine || !this.render) {
+        return; // Ensure engine and render are initialized
       }
-      if (this.atmospheric) {
-        this.atmospheric.onTick();
-      }
-      if (this.perciptiation) {
-        this.perciptiation.onTick();
-      }
-      if (this.lightning) {
-        this.lightning.onTick();
-      }
+
+      this.clock?.onTick();
+      this.atmospheric?.onTick();
+      this.perciptiation?.onTick();
+      this.lightning?.onTick();
     }
   }
 
@@ -197,7 +190,7 @@ import "../styles/global.css";
 
     renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = false; // Whether the clock is analog or digital
+    isDigital: boolean = true; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -214,7 +207,7 @@ import "../styles/global.css";
     }
 
     createDigitalBody() {
-      const numSegments = 4; // Number of segments in the digital clock
+      const numSegments = this.renderSeconds ? 6 : 4; // Number of segments for the digital clock
       const gap = 25;
 
       const segmentWidth = 80; // Width of each segment
@@ -228,24 +221,33 @@ import "../styles/global.css";
         canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
       const clockY = canvasCenterY - clockHeight / 2;
 
+      const pairHues = [100, 190, 280];
+
       // Create segments for the digital clock
       const displayBodies = [];
       for (let i = 0; i < numSegments; i++) {
+        const pairs = Math.floor(i / 2);
+        const hue = pairHues[pairs % pairHues.length];
+
         const x = clockX + i * (segmentWidth + gap);
         const y = clockY;
         const segment = this.createDigitalSegment(
           x,
           y,
           segmentWidth,
-          segmentHeight
+          segmentHeight,
+          {
+            fillStyle: `hsl(${hue}, 20%, 70%)`, // Color for the segment
+            strokeStyle: `hsl(${hue}, 20%, 90%)`, // Stroke color for the segment
+          }
         );
         this.segmentComposites.push(segment);
         displayBodies.push(segment);
 
-        const isMiddle = i === Math.floor(numSegments / 2);
+        const isMiddle = i % 2 === 1 && i < numSegments - 1; // Middle segments for seconds
         if (isMiddle) {
           const circleA = Bodies.circle(
-            canvasCenterX,
+            x + segmentWidth / 2 + gap / 2,
             canvasCenterY - segmentHeight,
             segmentHeight / 4,
             {
@@ -261,7 +263,7 @@ import "../styles/global.css";
             }
           );
           const circleB = Bodies.circle(
-            canvasCenterX,
+            x + segmentWidth / 2 + gap / 2,
             canvasCenterY + segmentHeight,
             segmentHeight / 4,
             {
@@ -284,8 +286,14 @@ import "../styles/global.css";
       return displayBodies;
     }
 
-    createDigitalSegment(x: number, y: number, width: number, height: number) {
-      const segmentBodyPart1 = Bodies.rectangle(x, y, width, height, {
+    createDigitalSegment(
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      renderOptions: any
+    ) {
+      const combinedOptions = {
         collisionFilter: {
           category: this.scene.CATEGORIES.CLOCK,
         },
@@ -295,115 +303,53 @@ import "../styles/global.css";
           fillStyle: "transparent",
           strokeStyle: "white",
           lineWidth: 1,
+          ...renderOptions, // Merge with provided render options
         },
+      };
+      const segmentBodyPart1 = Bodies.rectangle(x, y, width, height, {
+        ...combinedOptions,
       });
       const segmentBodyPart2 = Bodies.rectangle(
         x + (width - height) / 2,
         y + (width - height) / 2,
         height,
         width,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        { ...combinedOptions }
       );
       const segmentBodyPart3 = Bodies.rectangle(
         x + (width - height) / 2,
         y + (width - height) * 1.5,
         height,
         width,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        { ...combinedOptions }
       );
       const segmentBodyPart4 = Bodies.rectangle(
         x,
         y + (width - height) * 2,
         width,
         height,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        { ...combinedOptions }
       );
       const segmentBodyPart5 = Bodies.rectangle(
         x - (width - height) / 2,
         y + (width - height) * 1.5,
         height,
         width,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        { ...combinedOptions }
       );
       const segmentBodyPart6 = Bodies.rectangle(
         x - (width - height) / 2,
         y + (width - height) / 2,
         height,
         width,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        { ...combinedOptions }
       );
       const segmentBodyPart7 = Bodies.rectangle(
         x,
         y + width - height,
         width,
         height,
-        {
-          collisionFilter: {
-            category: this.scene.CATEGORIES.CLOCK,
-          },
-          isStatic: true,
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
-            lineWidth: 1,
-          },
-        }
+        combinedOptions
       );
 
       const segmentComposite = Composite.create({
@@ -622,11 +568,18 @@ import "../styles/global.css";
       const hour2 = parseInt(hours[1], 10);
       const minute1 = parseInt(minutes[0], 10);
       const minute2 = parseInt(minutes[1], 10);
+      const second1 = parseInt(seconds[0], 10);
+      const second2 = parseInt(seconds[1], 10);
 
       this.updateDigitalSegment(this.segmentComposites[0], hour1);
       this.updateDigitalSegment(this.segmentComposites[1], hour2);
       this.updateDigitalSegment(this.segmentComposites[2], minute1);
       this.updateDigitalSegment(this.segmentComposites[3], minute2);
+
+      if (this.renderSeconds && this.segmentComposites.length > 4) {
+        this.updateDigitalSegment(this.segmentComposites[4], second1);
+        this.updateDigitalSegment(this.segmentComposites[5], second2);
+      }
     }
 
     updateDigitalSegment(composite: Composite, value: number) {
@@ -656,17 +609,13 @@ import "../styles/global.css";
               this.scene.CATEGORIES.PERCIPITATION |
               this.scene.CATEGORIES.LIGHTNING,
           };
-          segmentBody.render.opacity = 1; // Show the segment
-          segmentBody.render.fillStyle = "rgba(255,255,255,0.2)"; // Set the segment color
-          segmentBody.render.strokeStyle = "white"; // Set the segment stroke color
-          segmentBody.render.lineWidth = 1; // Set the segment stroke width
+          segmentBody.render.opacity = 0.4;
         } else {
           segmentBody.collisionFilter = {
             category: this.scene.CATEGORIES.DEFAULT,
             mask: 0, // No collisions
           };
-          segmentBody.render.opacity = 0.2; // Hide the segment
-          segmentBody.render.fillStyle = "transparent"; // Set the segment color to transparent
+          segmentBody.render.opacity = 0.05;
         }
       }
     }
