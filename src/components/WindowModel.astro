@@ -109,6 +109,7 @@ import "../styles/global.css";
 
       // Create walls
       const WALL_THICKNESS = 6;
+      const FLOOR_HEIGHT = 30;
       Composite.add(this.world, [
         Bodies.rectangle(
           this.canvasWidth / 2,
@@ -124,12 +125,12 @@ import "../styles/global.css";
           this.canvasWidth / 2,
           this.canvasHeight,
           this.canvasWidth,
-          WALL_THICKNESS,
+          FLOOR_HEIGHT,
           {
             isStatic: true,
             render: {
               fillStyle: "transparent",
-              strokeStyle: "#555",
+              strokeStyle: "#333",
               lineWidth: 1,
             },
           }
@@ -609,13 +610,13 @@ import "../styles/global.css";
               this.scene.CATEGORIES.PERCIPITATION |
               this.scene.CATEGORIES.LIGHTNING,
           };
-          segmentBody.render.opacity = 0.4;
+          segmentBody.render.opacity = 0.8;
         } else {
           segmentBody.collisionFilter = {
             category: this.scene.CATEGORIES.DEFAULT,
             mask: 0, // No collisions
           };
-          segmentBody.render.opacity = 0.05;
+          segmentBody.render.opacity = 0.1;
         }
       }
     }
@@ -678,8 +679,9 @@ import "../styles/global.css";
     layer: Composite;
 
     isPercipitating: boolean = true;
-    isSnow: boolean = true; // Whether to render snow instead of rain
-    RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
+    percipitationType: "rain" | "snow" = "snow"; // Type of percipitation
+    RAIN_FREQUENCY = 1; // Rain intensity (0 to 1)
+    PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
     MAX_BODIES = 800; // Maximum number of raindrops
 
     constructor(scene: MatterScene) {
@@ -688,7 +690,9 @@ import "../styles/global.css";
     }
 
     createBody() {
-      return this.isSnow ? this.createSnowBody() : this.createRainBody();
+      return this.percipitationType === "snow"
+        ? this.createSnowBody()
+        : this.createRainBody();
     }
 
     createSnowBody() {
@@ -759,7 +763,7 @@ import "../styles/global.css";
       }
 
       const frequencyCheck = random(0, 1);
-      if (frequencyCheck > this.RAIN_FREQUENCY) {
+      if (frequencyCheck > this.RAIN_FREQUENCY * this.PERIOD_ADJUSTMENT) {
         return; // Skip if random intensity is less than the set intensity
       }
 
@@ -778,6 +782,7 @@ import "../styles/global.css";
     scene: MatterScene;
     isLightning: boolean = true;
     LIGHNING_FREQUENCY = 0.5; // Lightning intensity (0 to 1)
+    PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
     MAX_BOLTS = 10; // Maximum number of lightning bolts
     RENDER_OFFSET_X = 50;
     RENDER_OFFSET_Y = 100;
@@ -802,7 +807,7 @@ import "../styles/global.css";
         this.LIGHNING_FREQUENCY * (1 / (numLightningBolts + 1));
       const lightningCheck = random(0, 1);
 
-      if (lightningCheck > lightningIntensity) {
+      if (lightningCheck > lightningIntensity * this.PERIOD_ADJUSTMENT) {
         return; // Skip if random intensity is less than the set intensity
       }
 
@@ -926,29 +931,34 @@ import "../styles/global.css";
     isAtmospheric: boolean = true; // Whether to render atmospheric effects
     atmosphereEffect: "mist" | "clouds" = "mist"; // Type of atmospheric effect
     ATMOSPHERIC_FREQUENCY = 0.1; // Atmospheric effect intensity (0 to 1)
+    PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
     MAX_BODIES = 8; // Maximum number of atmospheric bodies
 
     constructor(scene: MatterScene) {
       this.scene = scene;
-      const body = this.createBody();
-      Composite.add(this.scene.LAYERS.ATMOSPHERIC, body);
+      for (let i = 0; i < this.MAX_BODIES; i++) {
+        const body = this.createBody(true);
+        Composite.add(this.scene.LAYERS.ATMOSPHERIC, body);
+      }
       // Atmospheric effects can be added here
     }
 
-    createBody() {
+    createBody(isInit: boolean = false) {
       return this.atmosphereEffect === "mist"
-        ? this.createMistBody()
-        : this.createCloudsBody();
+        ? this.createMistBody(isInit)
+        : this.createCloudsBody(isInit);
     }
 
-    createMistBody() {
+    createMistBody(isInit: boolean = false) {
       const buffer = 5; // Buffer around the mist layer
       const adjustedHeight = this.scene.canvasHeight - buffer * 2; // Adjust height for the mist layer
       const width = random(this.scene.canvasWidth / 2, this.scene.canvasWidth);
       const height = random(32, 64);
-      const x = -1 * (width / random(1, 2)); // Start off-screen to the left
+      const x = isInit
+        ? random(0, this.scene.canvasWidth)
+        : -1 * (width / random(1, 2)); // Start off-screen to the left
       const y = random(adjustedHeight / 1.5, adjustedHeight);
-      const opacity = random(0.05, 0.1);
+      const opacity = random(0.1, 0.2);
 
       const mistLayer = Bodies.rectangle(x, y, width, height, {
         isStatic: true,
@@ -968,7 +978,7 @@ import "../styles/global.css";
       return mistLayer;
     }
 
-    createCloudsBody() {
+    createCloudsBody(isInit: boolean = false) {
       const cloud = Bodies.rectangle(
         this.scene.canvasWidth / 2,
         this.scene.canvasHeight / 2,
@@ -1023,7 +1033,10 @@ import "../styles/global.css";
         return; // Skip if the maximum number of atmospheric bodies is reached
       }
       const frequencyCheck = random(0, 1);
-      if (frequencyCheck > this.ATMOSPHERIC_FREQUENCY) {
+      if (
+        frequencyCheck >
+        this.ATMOSPHERIC_FREQUENCY * this.PERIOD_ADJUSTMENT
+      ) {
         return; // Skip if random intensity is less than the set intensity
       }
 
