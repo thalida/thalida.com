@@ -736,9 +736,9 @@ import "../styles/global.css";
         restitution: 0.5,
         density: 0.001,
         render: {
-          fillStyle: "transparent",
-          lineWidth: 1,
+          fillStyle: `hsl(200, 50%, ${lightness / 2}%)`,
           strokeStyle: `hsl(200, 50%, ${lightness}%)`,
+          lineWidth: 1,
         },
       });
 
@@ -769,7 +769,7 @@ import "../styles/global.css";
   class MatterLightning {
     scene: MatterScene;
     isLightning: boolean = true;
-    LIGHNING_FREQUENCY = 0.01; // Lightning intensity (0 to 1)
+    LIGHNING_FREQUENCY = 0.5; // Lightning intensity (0 to 1)
     MAX_BOLTS = 10; // Maximum number of lightning bolts
     RENDER_OFFSET_X = 50;
     RENDER_OFFSET_Y = 100;
@@ -848,8 +848,10 @@ import "../styles/global.css";
         const length = Math.sqrt(dx * dx + dy * dy);
         const angle = Math.atan2(dy, dx);
         const baseWidth = Common.random(4, 8);
+
         // Calculate the width based on the current segment index, the decreasing width effect
         const width = baseWidth * (1 - i / lightningPath.length);
+        const opacity = Common.random(0.1, 0.3); // Random opacity for each segment
 
         // Create a thin rectangle to represent the line segment
         const lineSegment = Bodies.rectangle(centerX, centerY, length, width, {
@@ -862,8 +864,8 @@ import "../styles/global.css";
           },
           isStatic: true,
           render: {
-            fillStyle: "transparent",
-            strokeStyle: "white",
+            fillStyle: `rgba(255, 255, 0, ${opacity / 2})`, // Yellow fill with random opacity
+            strokeStyle: `rgba(255, 255, 0, ${opacity})`, // Yellow stroke with random opacity
             lineWidth: 1,
           },
         });
