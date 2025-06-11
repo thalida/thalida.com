@@ -93,10 +93,6 @@ import "../styles/global.css";
       this.canvasWidth = elementDimensions.width;
       this.canvasHeight = elementDimensions.height;
 
-      console.log(
-        `Canvas dimensions: ${this.canvasWidth}x${this.canvasHeight}`
-      );
-
       // create a renderer
       this.render = Render.create({
         element: this.element,
@@ -209,7 +205,7 @@ import "../styles/global.css";
 
     renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = true; // Whether the clock is analog or digital
+    isDigital: boolean = false; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -227,10 +223,16 @@ import "../styles/global.css";
 
     createDigitalBody() {
       const numSegments = this.renderSeconds ? 6 : 4; // Number of segments for the digital clock
-      const gap = 25;
+      const gap = Math.min(Math.max(this.scene.canvasWidth / 30, 10), 25); // Gap between segments
 
-      const segmentWidth = 80; // Width of each segment
-      const segmentHeight = 20; // Height of each segment
+      const minSegmentWidth = 20; // Minimum width for the segments
+      const maxSegmentWidth = 80;
+      const segmentWidth = Math.min(Math.max(
+      (this.scene.canvasWidth / 1.5) / numSegments - gap,
+        minSegmentWidth,
+      ), maxSegmentWidth);
+
+      const segmentHeight = segmentWidth / 4;
 
       const canvasCenterX = this.scene.canvasWidth / 2;
       const canvasCenterY = this.scene.canvasHeight / 2;
@@ -406,8 +408,8 @@ import "../styles/global.css";
       const centerPinSize = 20; // Width of the center pin
 
       this.hourBody = Bodies.rectangle(
-        400 - hourHandLength / 2 + overlap,
-        300,
+        (this.scene.canvasWidth / 2) - (hourHandLength / 2) + overlap,
+        (this.scene.canvasHeight / 2),
         hourHandLength + overlap,
         hourHandWidth,
         {
@@ -437,8 +439,8 @@ import "../styles/global.css";
       );
 
       this.minuteBody = Bodies.rectangle(
-        400 - minuteHandLength / 2 + overlap,
-        300,
+        (this.scene.canvasWidth / 2) - (minuteHandLength / 2) + overlap,
+        (this.scene.canvasHeight / 2),
         minuteHandLength + overlap,
         minuteHandWidth,
         {
@@ -469,8 +471,8 @@ import "../styles/global.css";
 
       if (this.renderSeconds) {
         const secondHand = Bodies.rectangle(
-          400 - secondHandLength / 2 + overlap,
-          300,
+          (this.scene.canvasWidth / 2) - (secondHandLength / 2) + overlap,
+          (this.scene.canvasHeight / 2),
           secondHandLength + overlap,
           secondHandWidth,
           {
@@ -494,8 +496,8 @@ import "../styles/global.css";
           }
         );
         const secondHitBox = Bodies.rectangle(
-          400 - secondHandLength / 2 + overlap,
-          300,
+          (this.scene.canvasWidth / 2) - (secondHandLength / 2) + overlap,
+          (this.scene.canvasHeight / 2),
           secondHandHitBoxLength + overlap,
           secondHandHitBoxWidth,
           {
@@ -533,7 +535,7 @@ import "../styles/global.css";
         );
       }
 
-      this.handsCenterBody = Bodies.circle(400, 300, centerPinSize / 2, {
+      this.handsCenterBody = Bodies.circle(this.scene.canvasWidth / 2, this.scene.canvasHeight / 2, centerPinSize / 2, {
         isStatic: true,
         collisionFilter: {
           category: this.scene.CATEGORIES.CLOCK,
