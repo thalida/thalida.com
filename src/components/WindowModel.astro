@@ -678,7 +678,7 @@ import "../styles/global.css";
     layer: Composite;
 
     isPercipitating: boolean = true;
-    isSnow: boolean = false; // Whether to render snow instead of rain
+    isSnow: boolean = true; // Whether to render snow instead of rain
     RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
     MAX_BODIES = 800; // Maximum number of raindrops
 
@@ -706,8 +706,8 @@ import "../styles/global.css";
             this.scene.CATEGORIES.PERCIPITATION,
         },
         friction: 0.0001,
-        frictionAir: 0.01,
-        restitution: 0.5,
+        frictionAir: 0.1,
+        restitution: 0.3,
         density: 0.001,
         chamfer: {
           radius: radius / 4, // Chamfer the edges for a softer look
