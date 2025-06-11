@@ -74,7 +74,6 @@ import "../styles/global.css";
         options: {
           width: this.canvasWidth,
           height: this.canvasHeight,
-          // wireframes: true,
           wireframes: false,
           pixelRatio: window.devicePixelRatio || 1,
         },
@@ -100,7 +99,7 @@ import "../styles/global.css";
           WALL_THICKNESS,
           {
             isStatic: true,
-            render: { fillStyle: "red" },
+            render: { fillStyle: "transparent" },
           }
         ),
         Bodies.rectangle(
@@ -111,7 +110,7 @@ import "../styles/global.css";
           {
             isStatic: true,
             render: {
-              fillStyle: "yellow",
+              fillStyle: "transparent",
               strokeStyle: "#555",
               lineWidth: 1,
             },
@@ -124,7 +123,7 @@ import "../styles/global.css";
           this.canvasHeight,
           {
             isStatic: true,
-            render: { fillStyle: "green" },
+            render: { fillStyle: "transparent" },
           }
         ),
         Bodies.rectangle(
@@ -134,7 +133,7 @@ import "../styles/global.css";
           this.canvasHeight,
           {
             isStatic: true,
-            render: { fillStyle: "blue" },
+            render: { fillStyle: "transparent" },
           }
         ),
       ]);
@@ -159,9 +158,8 @@ import "../styles/global.css";
         if (event.timestamp % 1000 < 50) {
           clock.onTick();
         }
-
-        perciptiation.onTick();
         lightning.onTick();
+        perciptiation.onTick();
       });
     }
   }
@@ -174,9 +172,9 @@ import "../styles/global.css";
     secondBody: Body | null = null;
     handsCenterBody: Body | null = null;
 
-    renderSeconds: boolean = false; // Whether to render seconds hand
+    renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = true; // Whether the clock is analog or digital
+    isDigital: boolean = false; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -402,18 +400,28 @@ import "../styles/global.css";
     }
 
     createAnalogBody() {
-      const hourHandLength = 200; // Length of the hour hand
-      const minuteHandLength = 250; // Length of the minute hand
-      const secondHandLength = 280; // Length of the second hand
+      const minSize = Math.min(this.scene.canvasWidth, this.scene.canvasHeight);
+      const clockBuffer = 50; // Buffer around the clock
+      const clockRadius = (minSize - clockBuffer * 2) / 2;
 
-      const handWidth = 20; // Width of the hands
-      const overlap = 10; // Overlap between the hands and the center
+      const hourHandLength = clockRadius * 0.7; // Length of the hour hand
+      const minuteHandLength = clockRadius * 0.9; // Length of the minute hand
+      const secondHandLength = clockRadius; // Length of the second hand
+      const secondHandHitBoxLength = secondHandLength + 8; // Length of the hitbox for the second hand
+
+      const hourHandWidth = 10; // Width of the hands
+      const minuteHandWidth = 5; // Width of the hands
+      const secondHandWidth = 1; // Width of the hands
+      const secondHandHitBoxWidth = secondHandWidth + 8; // Width of the hitbox for the second hand
+
+      const overlap = 30; // Overlap between the hands and the center
+      const centerPinSize = 20; // Width of the center pin
 
       this.hourBody = Bodies.rectangle(
         400 - hourHandLength / 2 + overlap,
         300,
         hourHandLength + overlap,
-        handWidth,
+        hourHandWidth,
         {
           isStatic: true,
           collisionFilter: {
@@ -425,7 +433,12 @@ import "../styles/global.css";
             lineWidth: 1,
           },
           chamfer: {
-            radius: handWidth / 2,
+            radius: [
+              hourHandWidth / 2,
+              hourHandWidth / 4,
+              hourHandWidth / 4,
+              hourHandWidth / 2,
+            ],
           },
         }
       );
@@ -439,7 +452,7 @@ import "../styles/global.css";
         400 - minuteHandLength / 2 + overlap,
         300,
         minuteHandLength + overlap,
-        handWidth,
+        minuteHandWidth,
         {
           isStatic: true,
           collisionFilter: {
@@ -451,7 +464,12 @@ import "../styles/global.css";
             lineWidth: 1,
           },
           chamfer: {
-            radius: handWidth / 2,
+            radius: [
+              minuteHandWidth / 2,
+              minuteHandWidth / 4,
+              minuteHandWidth / 4,
+              minuteHandWidth / 2,
+            ],
           },
         }
       );
@@ -462,11 +480,11 @@ import "../styles/global.css";
       );
 
       if (this.renderSeconds) {
-        this.secondBody = Bodies.rectangle(
+        const secondHand = Bodies.rectangle(
           400 - secondHandLength / 2 + overlap,
           300,
           secondHandLength + overlap,
-          2,
+          secondHandWidth,
           {
             isStatic: true,
             collisionFilter: {
@@ -474,14 +492,52 @@ import "../styles/global.css";
             },
             render: {
               fillStyle: "transparent",
-              strokeStyle: "#ddd",
+              strokeStyle: "red",
               lineWidth: 1,
             },
             chamfer: {
-              radius: 1,
+              radius: [
+                secondHandWidth / 2,
+                secondHandWidth / 4,
+                secondHandWidth / 4,
+                secondHandWidth / 2,
+              ],
             },
           }
         );
+        const secondHitBox = Bodies.rectangle(
+          400 - secondHandLength / 2 + overlap,
+          300,
+          secondHandHitBoxLength + overlap,
+          secondHandHitBoxWidth,
+          {
+            isStatic: true,
+            collisionFilter: {
+              category: this.scene.CATEGORIES.CLOCK,
+            },
+            render: {
+              opacity: 0.1,
+              fillStyle: "white",
+              strokeStyle: "transparent",
+              lineWidth: 1,
+            },
+            chamfer: {
+              radius: [
+                secondHandHitBoxWidth / 2,
+                secondHandHitBoxWidth / 4,
+                secondHandHitBoxWidth / 4,
+                secondHandHitBoxWidth / 2,
+              ],
+            },
+          }
+        );
+        this.secondBody = Body.create({
+          parts: [secondHand, secondHitBox],
+          isStatic: true,
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+        });
         Body.setCentre(
           this.secondBody,
           { x: secondHandLength / 2 - overlap, y: 0 },
@@ -489,17 +545,16 @@ import "../styles/global.css";
         );
       }
 
-      this.handsCenterBody = Bodies.rectangle(400, 300, 10, 10, {
+      this.handsCenterBody = Bodies.circle(400, 300, centerPinSize / 2, {
         isStatic: true,
         collisionFilter: {
           category: this.scene.CATEGORIES.CLOCK,
         },
         render: {
-          fillStyle: "rgba(255,255,255,1)",
+          fillStyle: "rgba(0,0,0,0.9)",
           strokeStyle: "#ddd",
-          lineWidth: 1,
+          lineWidth: 2,
         },
-        chamfer: { radius: 5 },
       });
 
       let bodies = [this.hourBody, this.minuteBody];
@@ -651,7 +706,7 @@ import "../styles/global.css";
     layer: Composite;
 
     isRaining: boolean = true;
-    RAIN_FREQUENCY = 0.3; // Rain intensity (0 to 1)
+    RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
     MAX_BODIES = 1000; // Maximum number of raindrops
 
     constructor(scene: MatterScene) {
