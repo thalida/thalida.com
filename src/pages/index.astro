@@ -28,9 +28,31 @@ interface Props {
 ---
 
 <Layout>
-  <WindowModel />
-
   <h1>My posts</h1>
+
+  <div class="flex flex-row flex-wrap h-full w-full">
+    <div class="flex w-1/2 h-1/2 bg-red-200 p-2">
+      <div class="w-full h-full bg-gray-300 overflow-hidden">
+        <WindowModel />
+      </div>
+    </div>
+    {
+      posts.map((post) => (
+        <div class="flex  w-1/2 h-1/2 bg-red-200 p-2">
+          <div class="w-full h-full bg-gray-300 p-4">
+            {post.collection === "links" ? (
+              <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
+            ) : (
+              <a href={`/${post.collection}/${post.id}/`}>
+                {post.data.title || post.id}
+              </a>
+            )}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
   <ul>
     {
       posts.map((post) => (

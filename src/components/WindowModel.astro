@@ -2,7 +2,17 @@
 import "../styles/global.css";
 ---
 
-<canvas id="matter-canvas" width="800" height="600"></canvas>
+<div id="matter-container" class="w-full h-full"></div>
+
+<style>
+  #matter-container {
+    display: block;
+    width: 50%,
+    height: 50%;
+    background: #9afbda;
+    background: radial-gradient(at left top, #9afbda, #ccc88b);
+  }
+</style>
 
 <script>
   import {
@@ -28,7 +38,7 @@ import "../styles/global.css";
   }
 
   class MatterScene {
-    canvas: HTMLCanvasElement | null = null;
+    element: HTMLElement | null = null;
     engine: Engine | null = null;
     world: World | null = null;
     render: Render | null = null;
@@ -66,29 +76,37 @@ import "../styles/global.css";
     atmospheric: MatterAtmospheric | null = null;
 
     constructor() {
-      this.canvas = document.getElementById(
-        "matter-canvas"
-      ) as HTMLCanvasElement;
+      this.element = document.getElementById(
+        "matter-container"
+      );
 
-      if (!this.canvas) {
+      if (!this.element) {
         console.error("canvas element not found");
         return;
       }
 
       this.engine = Engine.create({ enableSleeping: false });
       this.world = this.engine.world;
-      this.canvasWidth = this.canvas.width;
-      this.canvasHeight = this.canvas.height;
+
+      const elementDimensions = this.element.getBoundingClientRect();
+
+      this.canvasWidth = elementDimensions.width;
+      this.canvasHeight = elementDimensions.height;
+
+      console.log(
+        `Canvas dimensions: ${this.canvasWidth}x${this.canvasHeight}`
+      );
 
       // create a renderer
       this.render = Render.create({
-        canvas: this.canvas,
+        element: this.element,
         engine: this.engine,
         options: {
           width: this.canvasWidth,
           height: this.canvasHeight,
           wireframes: false,
           pixelRatio: window.devicePixelRatio || 1,
+          background: "transparent", // Set background to transparent
         },
       });
       Render.run(this.render);
@@ -129,7 +147,7 @@ import "../styles/global.css";
           {
             isStatic: true,
             render: {
-              fillStyle: "transparent",
+              fillStyle: "rgba(0,0,0,0.5)",
               strokeStyle: "#333",
               lineWidth: 1,
             },
