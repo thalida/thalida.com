@@ -10,7 +10,7 @@ import "../styles/global.css";
     width: 50%,
     height: 50%;
     background: #9afbda;
-    background: radial-gradient(at left top, #9afbda, #ccc88b);
+    background: radial-gradient(at left top, #333, #222);
   }
 </style>
 
@@ -148,14 +148,13 @@ import "../styles/global.css";
       }
 
       // Create walls
-      const WALL_THICKNESS = 6;
-      const FLOOR_HEIGHT = 30;
+      const WALL_WIDTH = 50;
       Composite.add(this.world, [
         Bodies.rectangle(
           this.canvasWidth / 2,
-          0,
+          0 - (WALL_WIDTH / 2),
           this.canvasWidth,
-          WALL_THICKNESS,
+          WALL_WIDTH,
           {
             isStatic: true,
             render: { fillStyle: "transparent" },
@@ -163,22 +162,22 @@ import "../styles/global.css";
         ),
         Bodies.rectangle(
           this.canvasWidth / 2,
-          this.canvasHeight,
+          this.canvasHeight + (WALL_WIDTH / 2),
           this.canvasWidth,
-          FLOOR_HEIGHT,
+          WALL_WIDTH,
           {
             isStatic: true,
             render: {
-              fillStyle: "rgba(0,0,0,0.5)",
-              strokeStyle: "#333",
+              fillStyle: "rgba(0,0,0,1)",
+              strokeStyle: "rgba(255,255,255,0.2)",
               lineWidth: 1,
             },
           }
         ),
         Bodies.rectangle(
-          0,
+          0 - (WALL_WIDTH / 2),
           this.canvasHeight / 2,
-          WALL_THICKNESS,
+         WALL_WIDTH,
           this.canvasHeight,
           {
             isStatic: true,
@@ -186,9 +185,9 @@ import "../styles/global.css";
           }
         ),
         Bodies.rectangle(
-          this.canvasWidth,
+          this.canvasWidth + (WALL_WIDTH / 2),
           this.canvasHeight / 2,
-          WALL_THICKNESS,
+          WALL_WIDTH,
           this.canvasHeight,
           {
             isStatic: true,
@@ -289,13 +288,13 @@ import "../styles/global.css";
         canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
       const clockY = canvasCenterY - clockHeight / 2;
 
-      const pairHues = [100, 190, 280];
+      const pairOpacity = [0.95, 0.7, 0.4];
 
       // Create segments for the digital clock
       const displayBodies = [];
       for (let i = 0; i < numSegments; i++) {
         const pairs = Math.floor(i / 2);
-        const hue = pairHues[pairs % pairHues.length];
+        const opacity = pairOpacity[pairs % pairOpacity.length];
 
         const x = clockX + i * (segmentWidth + gap);
         const y = clockY;
@@ -305,8 +304,8 @@ import "../styles/global.css";
           segmentWidth,
           segmentHeight,
           {
-            fillStyle: `hsl(${hue}, 20%, 70%)`, // Color for the segment
-            strokeStyle: `hsl(${hue}, 20%, 90%)`, // Stroke color for the segment
+            fillStyle: `rgba(255, 255, 255, ${opacity})`, // Fill color for the segment
+            strokeStyle: `rgba(255, 255, 255, 1)`, // Stroke color for the segment
           }
         );
         this.segmentComposites.push(segment);
@@ -452,7 +451,7 @@ import "../styles/global.css";
       const secondHandHitBoxWidth = secondHandWidth + 8; // Width of the hitbox for the second hand
 
       const overlap = Math.min(Math.max(minSize / 30, 10), 30); // Gap between segments
-      const centerPinSize = overlap + overlap / 2; // Size of the center pin
+      const centerPinSize = hourHandWidth + (hourHandWidth / 2); // Size of the center pin
 
       this.hourBody = Bodies.rectangle(
         (this.scene.canvasWidth / 2) - (hourHandLength / 2) + overlap,
@@ -465,8 +464,8 @@ import "../styles/global.css";
             category: this.scene.CATEGORIES.CLOCK,
           },
           render: {
-            fillStyle: "transparent",
-            strokeStyle: "#ddd",
+            fillStyle: "rgba(255, 255, 255, 0.4)",
+            strokeStyle: "rgba(255, 255, 255, 0.8)",
             lineWidth: 1,
           },
           chamfer: {
@@ -496,8 +495,8 @@ import "../styles/global.css";
             category: this.scene.CATEGORIES.CLOCK,
           },
           render: {
-            fillStyle: "transparent",
-            strokeStyle: "#ddd",
+            fillStyle: "rgba(255, 255, 255, 0.2)",
+            strokeStyle: "rgba(255, 255, 255, 0.6)",
             lineWidth: 1,
           },
           chamfer: {
@@ -588,8 +587,8 @@ import "../styles/global.css";
           category: this.scene.CATEGORIES.CLOCK,
         },
         render: {
-          fillStyle: "rgba(0,0,0,0.9)",
-          strokeStyle: "#ddd",
+          fillStyle: "rgba(0,0,0,0.6)",
+          strokeStyle: "rgba(255,255,255,0.9)",
           lineWidth: 2,
         },
       });
@@ -746,8 +745,8 @@ import "../styles/global.css";
     layer: Composite;
 
     isPercipitating: boolean = true;
-    percipitationType: "rain" | "snow" = "snow"; // Type of percipitation
-    RAIN_FREQUENCY = 1; // Rain intensity (0 to 1)
+    percipitationType: "rain" | "snow" = "rain"; // Type of percipitation
+    RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
     MAX_BODIES = 800; // Maximum number of raindrops
 
@@ -767,7 +766,7 @@ import "../styles/global.css";
       const y = 0;
       const sides = random(5, 7); // Random number of sides for the snowflake
       const radius = random(4, 8);
-      const lightness = random(80, 100);
+      const opacity = random(0.8, 1); // Random opacity for the snowflake
       const snowflake = Bodies.polygon(x, y, sides, radius, {
         collisionFilter: {
           category: this.scene.CATEGORIES.PERCIPITATION,
@@ -784,8 +783,8 @@ import "../styles/global.css";
           radius: radius / 4, // Chamfer the edges for a softer look
         },
         render: {
-          fillStyle: `hsl(200, 50%, ${lightness}%)`,
-          strokeStyle: `hsl(200, 50%, ${lightness / 2}%)`,
+          fillStyle: `rgba(255, 255, 255, ${opacity / 1.2})`, // White fill with random opacity
+          strokeStyle: `rgba(255, 255, 255, ${opacity})`, // White stroke with random opacity
           lineWidth: 1,
         },
       });
@@ -798,7 +797,7 @@ import "../styles/global.css";
       const y = 0;
       const width = random(4, 8);
       const height = random(4, 8);
-      const lightness = random(40, 70);
+      const opacity = random(0.4, 0.8); // Random opacity for the raindrop
       const raindrop = Bodies.rectangle(x, y, width, height, {
         collisionFilter: {
           category: this.scene.CATEGORIES.PERCIPITATION,
@@ -815,8 +814,8 @@ import "../styles/global.css";
         restitution: 0.5,
         density: 0.001,
         render: {
-          fillStyle: `hsl(200, 50%, ${lightness / 2}%)`,
-          strokeStyle: `hsl(200, 50%, ${lightness}%)`,
+          fillStyle: `rgba(180, 225, 255, ${opacity / 1.2})`, // Light blue fill with random opacity
+          strokeStyle: `rgba(180, 225, 255, ${opacity})`, // Light blue stroke with random opacity
           lineWidth: 1,
         },
       });
@@ -933,7 +932,7 @@ import "../styles/global.css";
 
         // Calculate the width based on the current segment index, the decreasing width effect
         const width = baseWidth * (1 - i / lightningPath.length);
-        const opacity = random(0.1, 0.3); // Random opacity for each segment
+        const opacity = random(0.4, 0.8); // Random opacity for each segment
 
         // Create a thin rectangle to represent the line segment
         const lineSegment = Bodies.rectangle(centerX, centerY, length, width, {
@@ -946,9 +945,9 @@ import "../styles/global.css";
           },
           isStatic: true,
           render: {
-            fillStyle: `rgba(255, 255, 0, ${opacity / 2})`, // Yellow fill with random opacity
-            strokeStyle: `rgba(255, 255, 0, ${opacity})`, // Yellow stroke with random opacity
-            lineWidth: 1,
+            fillStyle: `rgba(255, 255, 255, ${opacity / 4})`, // Yellow stroke with random opacity
+            strokeStyle: `rgba(255, 255, 255, ${opacity})`, // Yellow stroke with random opacity
+            lineWidth: 2,
           },
         });
 
@@ -1003,14 +1002,25 @@ import "../styles/global.css";
 
     constructor(scene: MatterScene) {
       this.scene = scene;
+      this.setupScene();
+    }
+
+    setupScene() {
+      if (!this.isAtmospheric) {
+        return; // Skip if atmospheric effects are not enabled
+      }
+
       for (let i = 0; i < this.MAX_BODIES; i++) {
         const body = this.createBody(true);
         Composite.add(this.scene.LAYERS.ATMOSPHERIC, body);
       }
-      // Atmospheric effects can be added here
     }
 
     createBody(isInit: boolean = false) {
+      if (!this.isAtmospheric) {
+        return; // Skip if atmospheric effects are not enabled
+      }
+
       return this.atmosphereEffect === "mist"
         ? this.createMistBody(isInit)
         : this.createCloudBody(isInit);
@@ -1070,7 +1080,7 @@ import "../styles/global.css";
             },
             render: {
               opacity: random(0.1, 0.2), // Random opacity for each cloud part
-              fillStyle: "hsl(200, 20%, 40%)", // Cloud color
+              fillStyle: "rgba(255, 255, 255, 0.4)", // White fill for cloud parts
               lineWidth: 0,
             },
             chamfer: {
