@@ -231,8 +231,8 @@ import "../styles/global.css";
               },
               isStatic: true,
               render: {
-                fillStyle: "transparent",
-                strokeStyle: "rgba(255,255,255,0.5)",
+                fillStyle: "rgba(255,255,255,0.1)",
+                strokeStyle: "rgba(255,255,255,0.4)",
                 lineWidth: 1,
               },
             }
@@ -247,8 +247,8 @@ import "../styles/global.css";
               },
               isStatic: true,
               render: {
-                fillStyle: "transparent",
-                strokeStyle: "rgba(255,255,255,0.5)",
+                fillStyle: "rgba(255,255,255,0.1)",
+                strokeStyle: "rgba(255,255,255,0.4)",
                 lineWidth: 1,
               },
             }
@@ -819,7 +819,8 @@ import "../styles/global.css";
         {
           x: endX,
           y: endY,
-        }
+        },
+        10
       );
       if (collisions.length > 0) {
         const smallestCollision = collisions.reduce((prev, curr) =>
