@@ -404,8 +404,8 @@ import "../styles/global.css";
       const secondHandWidth = 1; // Width of the hands
       const secondHandHitBoxWidth = secondHandWidth + 8; // Width of the hitbox for the second hand
 
-      const overlap = 30; // Overlap between the hands and the center
-      const centerPinSize = 20; // Width of the center pin
+      const overlap = Math.min(Math.max(minSize / 30, 10), 30); // Gap between segments
+      const centerPinSize = overlap + overlap / 2; // Size of the center pin
 
       this.hourBody = Bodies.rectangle(
         (this.scene.canvasWidth / 2) - (hourHandLength / 2) + overlap,
