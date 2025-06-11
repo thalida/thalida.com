@@ -37,6 +37,16 @@ import "../styles/global.css";
     return Math.random() * (max - min) + min;
   }
 
+  function debounce (callback: (...args: any[]) => void, wait: number) {
+    let timeoutId: number;
+    return (...args: any[]) => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => {
+        callback(...args);
+      }, wait);
+    };
+  }
+
   class MatterScene {
     element: HTMLElement | null = null;
     engine: Engine | null = null;
@@ -46,6 +56,8 @@ import "../styles/global.css";
 
     canvasWidth: number = 800;
     canvasHeight: number = 600;
+
+    isResizing: boolean = false;
 
     CATEGORIES = {
       DEFAULT: 0x0001,
@@ -116,6 +128,20 @@ import "../styles/global.css";
         max: { x: this.canvasWidth, y: this.canvasHeight },
       });
 
+      this.drawScene();
+      this.onTick();
+      Render.run(this.render);
+
+      Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
+      window.addEventListener('resize', debounce(this.onResize.bind(this), 100));
+    }
+
+    drawScene() {
+      if (!this.engine || !this.world || !this.render) {
+        console.error("Engine, world, or render not initialized");
+        return;
+      }
+
       // Set up the world
       for (const layer of Object.values(this.LAYERS)) {
         Composite.add(this.world, layer);
@@ -175,16 +201,10 @@ import "../styles/global.css";
       this.atmospheric = new MatterAtmospheric(this);
       this.perciptiation = new MatterPercipitation(this);
       this.lightning = new MatterLightning(this);
-
-      this.onTick();
-
-      Render.run(this.render);
-
-      Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
     }
 
     onTick() {
-      if (!this.engine || !this.render) {
+      if (this.isResizing || !this.engine || !this.render) {
         return; // Ensure engine and render are initialized
       }
 
@@ -192,6 +212,33 @@ import "../styles/global.css";
       this.atmospheric?.onTick();
       this.perciptiation?.onTick();
       this.lightning?.onTick();
+    }
+
+    onResize() {
+      if (!this.engine || !this.world || !this.element || !this.render) {
+        return; // Ensure element and render are initialized
+      }
+
+      this.isResizing = true;
+
+      Render.stop(this.render);
+      Composite.clear(this.world, false, true); // Clear the world without removing the engine
+
+      const elementDimensions = this.element.getBoundingClientRect();
+
+      this.canvasWidth = elementDimensions.width;
+      this.canvasHeight = elementDimensions.height;
+      Render.setSize(this.render, this.canvasWidth, this.canvasHeight);
+      Render.setPixelRatio(this.render, window.devicePixelRatio);
+      Render.lookAt(this.render, {
+        min: { x: 0, y: 0 },
+        max: { x: this.canvasWidth, y: this.canvasHeight },
+      });
+
+      this.drawScene();
+      Render.run(this.render);
+
+      this.isResizing = false;
     }
   }
 
