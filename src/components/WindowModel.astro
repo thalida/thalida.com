@@ -196,8 +196,8 @@ import "../styles/global.css";
       const numSegments = 4; // Number of segments in the digital clock
       const gap = 25;
 
-      const segmentWidth = 100; // Width of each segment
-      const segmentHeight = 25; // Height of each segment
+      const segmentWidth = 80; // Width of each segment
+      const segmentHeight = 20; // Height of each segment
 
       const canvasCenterX = this.scene.canvasWidth / 2;
       const canvasCenterY = this.scene.canvasHeight / 2;
@@ -234,7 +234,7 @@ import "../styles/global.css";
               isStatic: true,
               render: {
                 fillStyle: "transparent",
-                strokeStyle: "white",
+                strokeStyle: "rgba(255,255,255,0.5)",
                 lineWidth: 1,
               },
             }
@@ -250,7 +250,7 @@ import "../styles/global.css";
               isStatic: true,
               render: {
                 fillStyle: "transparent",
-                strokeStyle: "white",
+                strokeStyle: "rgba(255,255,255,0.5)",
                 lineWidth: 1,
               },
             }
@@ -578,8 +578,8 @@ import "../styles/global.css";
               this.scene.CATEGORIES.PERCIPITATION |
               this.scene.CATEGORIES.LIGHTNING,
           };
-          segmentBody.render.opacity = 0.5; // Show the segment
-          segmentBody.render.fillStyle = "white"; // Set the segment color
+          segmentBody.render.opacity = 1; // Show the segment
+          segmentBody.render.fillStyle = "rgba(255,255,255,0.2)"; // Set the segment color
           segmentBody.render.strokeStyle = "white"; // Set the segment stroke color
           segmentBody.render.lineWidth = 1; // Set the segment stroke width
         } else {
