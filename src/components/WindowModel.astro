@@ -168,7 +168,7 @@ import "../styles/global.css";
 
   class MatterClock {
     scene: MatterScene;
-    body: Body | Composite;
+    body: Body | Composite | (Body | Composite)[] | null = null;
     hourBody: Body | null = null;
     minuteBody: Body | null = null;
     secondBody: Body | null = null;
@@ -177,6 +177,8 @@ import "../styles/global.css";
     renderSeconds: boolean = false; // Whether to render seconds hand
 
     isDigital: boolean = true; // Whether the clock is analog or digital
+
+    segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
     constructor(scene: MatterScene) {
       this.scene = scene;
@@ -199,19 +201,25 @@ import "../styles/global.css";
 
       const canvasCenterX = this.scene.canvasWidth / 2;
       const canvasCenterY = this.scene.canvasHeight / 2;
-      const clockWidth = numSegments * segmentWidth;
+      const clockWidth = numSegments * segmentWidth + (numSegments - 1) * gap; // Width of the clock
       const clockHeight = (segmentWidth - segmentHeight) * 2; // Height of the clock
       const clockX =
         canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
       const clockY = canvasCenterY - clockHeight / 2;
 
       // Create segments for the digital clock
-      const segments = [];
+      const displayBodies = [];
       for (let i = 0; i < numSegments; i++) {
         const x = clockX + i * (segmentWidth + gap);
         const y = clockY;
-        const segment = this.createSegment(x, y, segmentWidth, segmentHeight);
-        segments.push(segment);
+        const segment = this.createDigitalSegment(
+          x,
+          y,
+          segmentWidth,
+          segmentHeight
+        );
+        this.segmentComposites.push(segment);
+        displayBodies.push(segment);
 
         const isMiddle = i === Math.floor(numSegments / 2);
         if (isMiddle) {
@@ -247,122 +255,139 @@ import "../styles/global.css";
               },
             }
           );
-          segments.push(circleA);
-          segments.push(circleB);
+          displayBodies.push(circleA);
+          displayBodies.push(circleB);
         }
       }
 
-      const composite = Composite.create({
-        label: "Digital Clock",
-        bodies: segments,
-      });
-      return composite;
+      return displayBodies;
     }
 
-    createSegment(x: number, y: number, width: number, height: number) {
+    createDigitalSegment(x: number, y: number, width: number, height: number) {
       const segmentBodyPart1 = Bodies.rectangle(x, y, width, height, {
+        collisionFilter: {
+          category: this.scene.CATEGORIES.CLOCK,
+        },
+        isStatic: true,
         chamfer: { radius: height / 2 },
         render: {
           fillStyle: "transparent",
-          strokeStyle: "red",
+          strokeStyle: "white",
           lineWidth: 1,
         },
       });
       const segmentBodyPart2 = Bodies.rectangle(
-        x,
-        y + width - height,
-        width,
-        height,
-        {
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "orange",
-            lineWidth: 1,
-          },
-        }
-      );
-      const segmentBodyPart3 = Bodies.rectangle(
-        x,
-        y + (width - height) * 2,
-        width,
-        height,
-        {
-          chamfer: { radius: height / 2 },
-          render: {
-            fillStyle: "transparent",
-            strokeStyle: "yellow",
-            lineWidth: 1,
-          },
-        }
-      );
-
-      const segmentBodyPart4 = Bodies.rectangle(
         x + (width - height) / 2,
         y + (width - height) / 2,
         height,
         width,
         {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
           chamfer: { radius: height / 2 },
           render: {
             fillStyle: "transparent",
-            strokeStyle: "green",
+            strokeStyle: "white",
             lineWidth: 1,
           },
         }
       );
-
-      const segmentBodyPart5 = Bodies.rectangle(
+      const segmentBodyPart3 = Bodies.rectangle(
         x + (width - height) / 2,
         y + (width - height) * 1.5,
         height,
         width,
         {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
           chamfer: { radius: height / 2 },
           render: {
             fillStyle: "transparent",
-            strokeStyle: "blue",
+            strokeStyle: "white",
             lineWidth: 1,
           },
         }
       );
-
+      const segmentBodyPart4 = Bodies.rectangle(
+        x,
+        y + (width - height) * 2,
+        width,
+        height,
+        {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "white",
+            lineWidth: 1,
+          },
+        }
+      );
+      const segmentBodyPart5 = Bodies.rectangle(
+        x - (width - height) / 2,
+        y + (width - height) * 1.5,
+        height,
+        width,
+        {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
+          chamfer: { radius: height / 2 },
+          render: {
+            fillStyle: "transparent",
+            strokeStyle: "white",
+            lineWidth: 1,
+          },
+        }
+      );
       const segmentBodyPart6 = Bodies.rectangle(
         x - (width - height) / 2,
         y + (width - height) / 2,
         height,
         width,
         {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
           chamfer: { radius: height / 2 },
           render: {
             fillStyle: "transparent",
-            strokeStyle: "purple",
+            strokeStyle: "white",
             lineWidth: 1,
           },
         }
       );
-
       const segmentBodyPart7 = Bodies.rectangle(
-        x - (width - height) / 2,
-        y + (width - height) * 1.5,
-        height,
+        x,
+        y + width - height,
         width,
+        height,
         {
+          collisionFilter: {
+            category: this.scene.CATEGORIES.CLOCK,
+          },
+          isStatic: true,
           chamfer: { radius: height / 2 },
           render: {
             fillStyle: "transparent",
-            strokeStyle: "pink",
+            strokeStyle: "white",
             lineWidth: 1,
           },
         }
       );
 
-      const segmentBody = Body.create({
-        collisionFilter: {
-          category: this.scene.CATEGORIES.CLOCK,
-        },
-        isStatic: true,
-        parts: [
+      const segmentComposite = Composite.create({
+        label: "Segment",
+        bodies: [
           segmentBodyPart1,
           segmentBodyPart2,
           segmentBodyPart3,
@@ -373,7 +398,7 @@ import "../styles/global.css";
         ],
       });
 
-      return segmentBody;
+      return segmentComposite;
     }
 
     createAnalogBody() {
@@ -493,9 +518,78 @@ import "../styles/global.css";
 
     onTick() {
       if (this.isDigital) {
-        // this.updateDigitalClock();
+        this.updateDigitalClock();
       } else {
         this.updateAnalogClock();
+      }
+    }
+
+    updateDigitalClock() {
+      if (!this.body) {
+        console.error("Digital clock body not initialized");
+        return;
+      }
+
+      const currentTime = new Date();
+      const hours = String(currentTime.getHours()).padStart(2, "0");
+      const minutes = String(currentTime.getMinutes()).padStart(2, "0");
+      const seconds = String(currentTime.getSeconds()).padStart(2, "0");
+
+      // Update the segments based on the current time
+      if (this.segmentComposites.length < 4) {
+        console.error("Not enough segment bodies initialized");
+        return;
+      }
+      const hour1 = parseInt(hours[0], 10);
+      const hour2 = parseInt(hours[1], 10);
+      const minute1 = parseInt(minutes[0], 10);
+      const minute2 = parseInt(minutes[1], 10);
+
+      this.updateDigitalSegment(this.segmentComposites[0], hour1);
+      this.updateDigitalSegment(this.segmentComposites[1], hour2);
+      this.updateDigitalSegment(this.segmentComposites[2], minute1);
+      this.updateDigitalSegment(this.segmentComposites[3], minute2);
+    }
+
+    updateDigitalSegment(composite: Composite, value: number) {
+      const segmentStates = [
+        [1, 1, 1, 1, 1, 1, 0], // 0
+        [0, 1, 1, 0, 0, 0, 0], // 1
+        [1, 1, 0, 1, 1, 0, 1], // 2
+        [1, 1, 1, 1, 0, 0, 1], // 3
+        [0, 1, 1, 0, 0, 1, 1], // 4
+        [1, 0, 1, 1, 0, 1, 1], // 5
+        [1, 0, 1, 1, 1, 1, 1], // 6
+        [1, 1, 1, 0, 0, 0, 0], // 7
+        [1, 1, 1, 1, 1, 1, 1], //8
+        [1, 1, 1, 1, 0, 1, 1], // 9
+        [0, 0, 0, 0, 0, 0, 0], // Blank
+      ];
+      const state = segmentStates[value];
+      for (let i = 0; i < composite.bodies.length; i++) {
+        const segmentBody = composite.bodies[i];
+        const stateValue = state[i];
+        if (stateValue === 1) {
+          segmentBody.collisionFilter = {
+            category: this.scene.CATEGORIES.CLOCK,
+            mask:
+              this.scene.CATEGORIES.DEFAULT |
+              this.scene.CATEGORIES.CLOCK |
+              this.scene.CATEGORIES.PERCIPITATION |
+              this.scene.CATEGORIES.LIGHTNING,
+          };
+          segmentBody.render.opacity = 0.5; // Show the segment
+          segmentBody.render.fillStyle = "white"; // Set the segment color
+          segmentBody.render.strokeStyle = "white"; // Set the segment stroke color
+          segmentBody.render.lineWidth = 1; // Set the segment stroke width
+        } else {
+          segmentBody.collisionFilter = {
+            category: this.scene.CATEGORIES.DEFAULT,
+            mask: 0, // No collisions
+          };
+          segmentBody.render.opacity = 0.2; // Hide the segment
+          segmentBody.render.fillStyle = "transparent"; // Set the segment color to transparent
+        }
       }
     }
 
