@@ -705,7 +705,8 @@ import "../styles/global.css";
     scene: MatterScene;
     layer: Composite;
 
-    isRaining: boolean = true;
+    isPercipitating: boolean = true;
+    isSnow: boolean = true; // Whether to render snow instead of rain
     RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
     MAX_BODIES = 1000; // Maximum number of raindrops
 
@@ -715,6 +716,41 @@ import "../styles/global.css";
     }
 
     createBody() {
+      return this.isSnow ? this.createSnowBody() : this.createRainBody();
+    }
+
+    createSnowBody() {
+      const x = Common.random(0, this.scene.canvasWidth);
+      const y = 0;
+      const sides = Common.random(5, 7); // Random number of sides for the snowflake
+      const radius = Common.random(4, 8);
+      const lightness = Common.random(80, 100);
+      const snowflake = Bodies.polygon(x, y, sides, radius, {
+        collisionFilter: {
+          category: this.scene.CATEGORIES.PERCIPITATION,
+          mask:
+            this.scene.CATEGORIES.DEFAULT |
+            this.scene.CATEGORIES.CLOCK |
+            this.scene.CATEGORIES.PERCIPITATION,
+        },
+        friction: 0.0001,
+        frictionAir: 0.01,
+        restitution: 0.5,
+        density: 0.001,
+        chamfer: {
+          radius: radius / 4, // Chamfer the edges for a softer look
+        },
+        render: {
+          fillStyle: `hsl(200, 50%, ${lightness}%)`,
+          strokeStyle: `hsl(200, 50%, ${lightness / 2}%)`,
+          lineWidth: 1,
+        },
+      });
+
+      return snowflake;
+    }
+
+    createRainBody() {
       const x = Common.random(0, this.scene.canvasWidth);
       const y = 0;
       const width = Common.random(2, 4);
@@ -746,7 +782,7 @@ import "../styles/global.css";
     }
 
     onTick() {
-      if (!this.isRaining) {
+      if (!this.isPercipitating) {
         return; // Skip if not raining
       }
 
