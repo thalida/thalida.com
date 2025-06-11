@@ -822,10 +822,11 @@ import "../styles/global.css";
         }
       );
       if (collisions.length > 0) {
-        // If the lightning intersects with the clock, adjust the end point
-        const collisionPoint = collisions[0].supports[0];
-        endX = collisionPoint.x;
-        endY = collisionPoint.y;
+        const smallestCollision = collisions.reduce((prev, curr) =>
+          prev.supports[0].y < curr.supports[0].y ? prev : curr
+        );
+        endX = smallestCollision.supports[0].x;
+        endY = smallestCollision.supports[0].y;
       }
 
       // Generate lightning bolt path points
