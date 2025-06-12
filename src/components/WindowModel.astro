@@ -254,7 +254,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
 
     renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = false; // Whether the clock is analog or digital
+    isDigital: boolean = true; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -335,8 +335,8 @@ import { contain } from "three/src/extras/TextureUtils.js";
               },
               isStatic: true,
               render: {
-                fillStyle: "rgba(255,255,255,0.1)",
-                strokeStyle: "rgba(255,255,255,0.4)",
+                fillStyle: "rgba(255,255,255,0.55)",
+                strokeStyle: "rgba(255,255,255,1)",
                 lineWidth: 1,
               },
             }
@@ -351,8 +351,8 @@ import { contain } from "three/src/extras/TextureUtils.js";
               },
               isStatic: true,
               render: {
-                fillStyle: "rgba(255,255,255,0.1)",
-                strokeStyle: "rgba(255,255,255,0.4)",
+                fillStyle: "rgba(255,255,255,0.55)",
+                strokeStyle: "rgba(255,255,255,1)",
                 lineWidth: 1,
               },
             }
@@ -756,7 +756,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     scene: MatterScene;
     layer: Composite;
 
-    isPercipitating: boolean = true;
+    isEnabled: boolean = false;
     percipitationType: "rain" | "snow" = "rain"; // Type of percipitation
     RAIN_FREQUENCY = 0.1; // Rain intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
@@ -836,7 +836,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     }
 
     onTick() {
-      if (!this.isPercipitating) {
+      if (!this.isEnabled) {
         return; // Skip if not raining
       }
 
@@ -1006,9 +1006,9 @@ import { contain } from "three/src/extras/TextureUtils.js";
   class MatterAtmospheric {
     scene: MatterScene;
 
-    isAtmospheric: boolean = true; // Whether to render atmospheric effects
+    isEnabled: boolean = true; // Whether to render atmospheric effects
     atmosphereEffect: "mist" | "clouds" = "clouds"; // Type of atmospheric effect
-    ATMOSPHERIC_FREQUENCY = 0.1; // Atmospheric effect intensity (0 to 1)
+    ATMOSPHERIC_FREQUENCY = 0.05; // Atmospheric effect intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor
 
     constructor(scene: MatterScene) {
@@ -1026,7 +1026,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     }
 
     setupScene() {
-      if (!this.isAtmospheric) {
+      if (!this.isEnabled) {
         return; // Skip if atmospheric effects are not enabled
       }
 
@@ -1040,7 +1040,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     }
 
     createBody(isInit: boolean = false) {
-      if (!this.isAtmospheric) {
+      if (!this.isEnabled) {
         return; // Skip if atmospheric effects are not enabled
       }
 
@@ -1125,7 +1125,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     }
 
     onTick() {
-      if (!this.isAtmospheric) {
+      if (!this.isEnabled) {
         return; // Skip if atmospheric effects are not enabled
       }
 
@@ -1133,7 +1133,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
       let numBodies = bodies.length;
 
       for (const body of bodies) {
-        const x = body.position.x + random(0, 1);
+        const x = body.position.x + random(0.1, 0.4);
         const y = body.position.y;
         Body.setPosition(body, { x, y });
 
@@ -1213,8 +1213,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
     return a.getDate() === b.getDate();
   }
 
-  async function getRealisticColorGradient() {
-    const date = new Date();
+  async function getRealisticColorGradient(date: Date) {
     const now = date.getTime();
 
     const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
@@ -1224,8 +1223,8 @@ import { contain } from "three/src/extras/TextureUtils.js";
       hourAgoIsh.setHours(0, 0, 0, 0);
       // await fetchWeather($store);
     }
-    const gradientStart = getRealisticColor(hourAgoIsh.getTime());
-    const gradientEnd = getRealisticColor(now);
+    const gradientStart = getRealisticColor(hourAgoIsh);
+    const gradientEnd = getRealisticColor(date);
 
     let gradient;
 
@@ -1244,7 +1243,8 @@ import { contain } from "three/src/extras/TextureUtils.js";
     return gradient;
   }
 
-  function getRealisticColor(now: number) {
+  function getRealisticColor(date: Date) {
+    const now = date.getTime();
     const sunriseTime = sunrise;
     const sunsetTime = sunset;
 
@@ -1291,70 +1291,19 @@ import { contain } from "three/src/extras/TextureUtils.js";
     return color;
   }
 
-  function getColorGradient() {
-    const date = new Date();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const numSegements = HOURS_IN_DAY / TIME_COLORS.length;
-    const startColorIdx = Math.floor(hour / numSegements);
-    const endColorIdx =
-      startColorIdx + 1 < TIME_COLORS.length ? startColorIdx + 1 : 0;
-
-    const timeInMins = hour * MINUTES_IN_HOUR + minute;
-    const startColor = TIME_COLORS[startColorIdx];
-    const endColor = TIME_COLORS[endColorIdx];
-    const colorStartTimeInMins = startColorIdx * numSegements * MINUTES_IN_HOUR;
-    const colorEndTimeInMins =
-      endColorIdx === 0
-        ? HOURS_IN_DAY * MINUTES_IN_HOUR
-        : endColorIdx * numSegements * MINUTES_IN_HOUR;
-    const minSinceColorStart = timeInMins - colorStartTimeInMins;
-    const minsInColorRange = Math.abs(
-      colorEndTimeInMins - colorStartTimeInMins
-    );
-    const gradientStartDistance =
-      minSinceColorStart - 60 >= 0
-        ? (minSinceColorStart - 60) / minsInColorRange
-        : 0;
-    const gradientStart = getColorBlend(
-      startColor,
-      endColor,
-      gradientStartDistance
-    );
-    const gradientEndDistance = minSinceColorStart / minsInColorRange;
-    const gradientEnd = getColorBlend(
-      startColor,
-      endColor,
-      gradientEndDistance
-    );
-
-    let gradient;
-    // gradient goes "in reverse" during sunset / late night
-    // so that the brightest colors are at the bottom (closer to the horizon)
-    if (startColorIdx >= SUNSET_COLOR_IDX) {
-      gradient = {
-        start: gradientEnd,
-        end: gradientStart,
-      };
-    } else {
-      gradient = {
-        start: gradientStart,
-        end: gradientEnd,
-      };
-    }
-
-    return gradient;
-  }
-
   function getContrastColor(color: IColor): "white" | "black" {
     const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
     return brightness > 125 ? "black" : "white";
   }
 
+  function getIsDark({ r, g, b}: IColor): boolean {
+    return ((r * 0.299) + (g * 0.587) + (b * 0.114)) <= 186;
+  }
+
   async function updateGradient() {
     const backdrop = document.querySelector("#matter-backdrop") as HTMLDivElement;
-    if (!backdrop) {
-      console.error("Matter backdrop not found");
+    const html = document.querySelector("html");
+    if (!backdrop || !html) {
       return;
     }
 
@@ -1363,19 +1312,27 @@ import { contain } from "three/src/extras/TextureUtils.js";
       return;
     }
 
-    const gradient = await getRealisticColorGradient();
-    const newGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
-    backdrop.style.background = newGradient;
+    const now = new Date();
 
-    const contrastColor = getContrastColor(gradient.start);
-    if (contrastColor === "black") {
-      container.style.filter = `invert(1)`;
-    } else {
+    const gradient = await getRealisticColorGradient(now);
+
+    if (getIsDark(gradient.start)) {
       container.style.filter = `invert(0)`;
+    } else {
+      container.style.filter = `invert(1)`;
     }
+
+    const backdropGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
+    backdrop.style.background = backdropGradient;
 
     const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
     document.body.style.background = bodyGradient;
+
+    const color = await getRealisticColor(now);
+    const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+    if (html) {
+      html.style.backgroundColor = colorString;
+    }
   }
 
 
