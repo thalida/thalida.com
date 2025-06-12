@@ -1216,6 +1216,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
   async function getRealisticColorGradient() {
     const date = new Date();
     const now = date.getTime();
+
     const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
     let hourAgoIsh = new Date(now - shiftBy);
     if (!isSameDate(hourAgoIsh, date)) {
@@ -1368,16 +1369,13 @@ import { contain } from "three/src/extras/TextureUtils.js";
 
     const contrastColor = getContrastColor(gradient.start);
     if (contrastColor === "black") {
-      container.style.filter = `brightness(80%) contrast(0%)`;
+      container.style.filter = `invert(1)`;
     } else {
-      container.style.filter = `brightness(100%)`;
+      container.style.filter = `invert(0)`;
     }
 
-    // const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
-    // document.body.style.background = bodyGradient;
-
-    // const color = await getRealisticColor(new Date().getTime());
-    // document.body.style.backgroundColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+    const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
+    document.body.style.background = bodyGradient;
   }
 
 
@@ -1386,7 +1384,6 @@ import { contain } from "three/src/extras/TextureUtils.js";
     new MatterScene();
     window.setInterval(updateGradient, 1000);
   }
-  // init();
 
   window.addEventListener("load", init);
 

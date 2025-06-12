@@ -28,12 +28,12 @@ interface Props {
 ---
 
 <Layout>
-  <div class="grid grid-cols-5 gap-1 p-1 auto-rows-[40vh] text-gray-100">
-    <div class="row-span-2 grid grid-cols-subgrid gap-1">
+  <div class="grid grid-cols-5 gap-0.5 p-0.5 auto-rows-[40vh] text-gray-100">
+    <div class="row-span-2 grid grid-cols-subgrid gap-0.5">
       <div class="flex bg-gray-900 p-4 rounded-4xl">06</div>
       <div class="flex bg-gray-900 p-4 rounded-4xl">07</div>
     </div>
-    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-1">
+    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-0.5">
       <div class="flex overflow-hidden rounded-4xl row-span-2 col-span-3">
         <WindowModel />
       </div>
@@ -55,22 +55,4 @@ interface Props {
       ))
     }
   </div>
-  <ul>
-    {
-      posts.map((post) => (
-        <li>
-          {post.collection === "links" ? (
-            <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
-          ) : (
-            // <a href={post.id} target="_blank" rel="noopener noreferrer">
-            //   {post.id} - {post.data.rating} (external link)
-            // </a>
-            <a href={`/${post.collection}/${post.id}/`}>
-              {post.data.title || post.id}
-            </a>
-          )}
-        </li>
-      ))
-    }
-  </ul>
 </Layout>
