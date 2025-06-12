@@ -28,16 +28,22 @@ interface Props {
 ---
 
 <Layout>
-  <div class="flex flex-row flex-wrap w-ful justify-start gap-8 p-8">
-    <div class="flex w-screen h-[85vh] overflow-hidden rounded-4xl">
-      <WindowModel />
+  <div class="grid grid-cols-5 gap-1 p-1 auto-rows-[40vh] text-gray-100">
+    <div class="row-span-2 grid grid-cols-subgrid gap-1">
+      <div class="flex bg-gray-900 p-4 rounded-4xl">06</div>
+      <div class="flex bg-gray-900 p-4 rounded-4xl">07</div>
     </div>
-    <div class="flex h-[50vh] grow bg-gray-900 p-4 rounded-4xl">
-      current info
+    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-1">
+      <div class="flex overflow-hidden rounded-4xl row-span-2 col-span-3">
+        <WindowModel />
+      </div>
+      <div class="flex bg-gray-900 p-4 rounded-4xl row-span-2">
+        current weather & controls
+      </div>
     </div>
     {
       posts.map((post) => (
-        <div class="flex h-[50vh] grow max-w-[50vw] bg-gray-900 p-4 rounded-4xl">
+        <div class="flex bg-gray-900 p-4 rounded-4xl">
           {post.collection === "links" ? (
             <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
           ) : (
@@ -49,7 +55,6 @@ interface Props {
       ))
     }
   </div>
-
   <ul>
     {
       posts.map((post) => (

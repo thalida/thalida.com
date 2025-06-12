@@ -1007,14 +1007,22 @@ import { contain } from "three/src/extras/TextureUtils.js";
     scene: MatterScene;
 
     isAtmospheric: boolean = true; // Whether to render atmospheric effects
-    atmosphereEffect: "mist" | "clouds" = "clouds"; // Type of atmospheric effect
-    ATMOSPHERIC_FREQUENCY = 0.1; // Atmospheric effect intensity (0 to 1)
+    atmosphereEffect: "mist" | "clouds" = "mist"; // Type of atmospheric effect
+    ATMOSPHERIC_FREQUENCY = 1; // Atmospheric effect intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor
-    MAX_BODIES = 8; // Maximum number of atmospheric bodies
 
     constructor(scene: MatterScene) {
       this.scene = scene;
       this.setupScene();
+    }
+
+    get MAX_BODIES() {
+      const canvasWidth = this.scene.canvasWidth;
+      return Math.floor(canvasWidth / 10); // Maximum number of atmospheric bodies based on canvas width
+    }
+
+    get ADJUSTED_MAX_BODIES() {
+      return this.MAX_BODIES * this.ATMOSPHERIC_FREQUENCY;
     }
 
     setupScene() {
@@ -1022,8 +1030,11 @@ import { contain } from "three/src/extras/TextureUtils.js";
         return; // Skip if atmospheric effects are not enabled
       }
 
-      for (let i = 0; i < this.MAX_BODIES; i++) {
+      for (let i = 0; i < this.ADJUSTED_MAX_BODIES; i++) {
         const body = this.createBody(true);
+        if (!body) {
+          continue; // Skip if body creation failed
+        }
         Composite.add(this.scene.LAYERS.ATMOSPHERIC, body);
       }
     }
@@ -1126,12 +1137,9 @@ import { contain } from "three/src/extras/TextureUtils.js";
         const y = body.position.y;
         Body.setPosition(body, { x, y });
 
-        const bodyWidth = body.bounds.max.x - body.bounds.min.x;
-        const bodyHeight = body.bounds.max.y - body.bounds.min.y;
-
         if (
-          body.bounds.min.x + bodyWidth > this.scene.canvasWidth ||
-          body.bounds.min.y + bodyHeight > this.scene.canvasHeight
+          body.bounds.max.x > this.scene.canvasWidth ||
+          body.bounds.max.y > this.scene.canvasHeight
         ) {
           numBodies--; // Decrease the count of atmospheric bodies
           if (
@@ -1143,7 +1151,7 @@ import { contain } from "three/src/extras/TextureUtils.js";
         }
       }
 
-      if (numBodies >= this.MAX_BODIES) {
+      if (numBodies >= this.ADJUSTED_MAX_BODIES) {
         return; // Skip if the maximum number of atmospheric bodies is reached
       }
       const frequencyCheck = random(0, 1);
@@ -1155,6 +1163,9 @@ import { contain } from "three/src/extras/TextureUtils.js";
       }
 
       const newBody = this.createBody();
+      if (!newBody) {
+        return; // Skip if body creation failed
+      }
       Composite.add(this.scene.LAYERS.ATMOSPHERIC, newBody);
     }
   }
@@ -1357,9 +1368,9 @@ import { contain } from "three/src/extras/TextureUtils.js";
 
     const contrastColor = getContrastColor(gradient.start);
     if (contrastColor === "black") {
-      container.style.filter = `invert(100%)`;
+      container.style.filter = `brightness(80%) contrast(0%)`;
     } else {
-      container.style.filter = `invert(0%)`;
+      container.style.filter = `brightness(100%)`;
     }
 
     // const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
