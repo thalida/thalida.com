@@ -28,20 +28,16 @@ interface Props {
 ---
 
 <Layout>
-  <h1>My posts</h1>
-
-  <div class="flex flex-row flex-wrap w-ful justify-start gap-16 p-16">
-    <div
-      class="flex w-screen h-[75vh] overflow-hidden bg-slate-950 rounded-4xl"
-    >
+  <div class="flex flex-row flex-wrap w-ful justify-start gap-8 p-8">
+    <div class="flex w-screen h-[85vh] overflow-hidden rounded-4xl">
       <WindowModel />
     </div>
-    <div class="flex h-[50vh] grow bg-gray-900 p-4 -rounded-4xl">
+    <div class="flex h-[50vh] grow bg-gray-900 p-4 rounded-4xl">
       current info
     </div>
     {
       posts.map((post) => (
-        <div class="flex h-[50vh] grow max-w-[50vw] bg-gray-900 p-4 -rounded-4xl">
+        <div class="flex h-[50vh] grow max-w-[50vw] bg-gray-900 p-4 rounded-4xl">
           {post.collection === "links" ? (
             <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
           ) : (

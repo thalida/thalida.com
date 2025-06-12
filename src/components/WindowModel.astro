@@ -2,7 +2,9 @@
 import "../styles/global.css";
 ---
 
-<div id="matter-container" class="w-full h-full"></div>
+<div id="matter-backdrop" class="w-full h-full">
+  <div id="matter-container" class="w-full h-full"></div>
+</div>
 
 <style>
   #matter-container {
@@ -26,6 +28,7 @@ import "../styles/global.css";
     World,
   } from "matter-js";
   import * as dayjs from 'dayjs'
+import { contain } from "three/src/extras/TextureUtils.js";
 
   interface Coords {
     x: number;
@@ -152,17 +155,17 @@ import "../styles/global.css";
       Composite.add(this.world, [
         Bodies.rectangle(
           this.canvasWidth / 2,
-          0 - (WALL_WIDTH / 2),
+          0 - ((WALL_WIDTH + 1) / 2),
           this.canvasWidth,
           WALL_WIDTH,
           {
             isStatic: true,
-            render: { fillStyle: "transparent" },
+            render: { fillStyle: "transparent", strokeStyle: "transparent", lineWidth: 0 },
           }
         ),
         Bodies.rectangle(
           this.canvasWidth / 2,
-          this.canvasHeight + (WALL_WIDTH / 2),
+          this.canvasHeight + ((WALL_WIDTH + 1) / 2),
           this.canvasWidth,
           WALL_WIDTH,
           {
@@ -175,7 +178,7 @@ import "../styles/global.css";
           }
         ),
         Bodies.rectangle(
-          0 - (WALL_WIDTH / 2),
+          0 - ((WALL_WIDTH + 1) / 2),
           this.canvasHeight / 2,
          WALL_WIDTH,
           this.canvasHeight,
@@ -185,7 +188,7 @@ import "../styles/global.css";
           }
         ),
         Bodies.rectangle(
-          this.canvasWidth + (WALL_WIDTH / 2),
+          this.canvasWidth + ((WALL_WIDTH + 1) / 2),
           this.canvasHeight / 2,
           WALL_WIDTH,
           this.canvasHeight,
@@ -251,7 +254,7 @@ import "../styles/global.css";
 
     renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = true; // Whether the clock is analog or digital
+    isDigital: boolean = false; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -288,13 +291,15 @@ import "../styles/global.css";
         canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
       const clockY = canvasCenterY - clockHeight / 2;
 
-      const pairHues = [70, 30, 0]; // Hues for the pairs of segments
-      const pairOpacity = [0.9, 0.9, 0.9];
+      // const pairHues = [50, 30, 10];
+      const pairHues = [255, 255, 255];
+      const pairOpacity = [0.95, 0.95, 0.55];
 
       // Create segments for the digital clock
       const displayBodies = [];
       for (let i = 0; i < numSegments; i++) {
         const pairs = Math.floor(i / 2);
+        const hue = pairHues[pairs % pairHues.length];
         const opacity = pairOpacity[pairs % pairOpacity.length];
 
         const x = clockX + i * (segmentWidth + gap);
@@ -305,8 +310,11 @@ import "../styles/global.css";
           segmentWidth,
           segmentHeight,
           {
-            fillStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Color for the segment
-            strokeStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Stroke color for the segment
+            // fillStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Color for the segment
+            // strokeStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Stroke color for the segment
+
+            fillStyle: `rgba(${hue}, ${hue}, ${hue}, ${opacity})`, // Fill color for the segment
+            strokeStyle: `rgba(${hue}, ${hue}, ${hue}, 1)`, // Stroke color for the segment
 
             // fillStyle: `rgba(255, 255, 255, ${opacity})`, // Fill color for the segment
             // strokeStyle: `rgba(255, 255, 255, 1)`, // Stroke color for the segment
@@ -532,7 +540,7 @@ import "../styles/global.css";
             },
             render: {
               fillStyle: "transparent",
-              strokeStyle: "red",
+              strokeStyle: "white",
               lineWidth: 1,
             },
             chamfer: {
@@ -1326,18 +1334,33 @@ import "../styles/global.css";
     return gradient;
   }
 
-
+  function getContrastColor(color: IColor): "white" | "black" {
+    const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
+    return brightness > 125 ? "black" : "white";
+  }
 
   async function updateGradient() {
-    const container = document.querySelector("#matter-container") as HTMLDivElement;
+    const backdrop = document.querySelector("#matter-backdrop") as HTMLDivElement;
+    if (!backdrop) {
+      console.error("Matter backdrop not found");
+      return;
+    }
+
+    const container = backdrop.querySelector("#matter-container") as HTMLDivElement;
     if (!container) {
-      console.error("Matter container not found");
       return;
     }
 
     const gradient = await getRealisticColorGradient();
     const newGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
-    container.style.background = newGradient;
+    backdrop.style.background = newGradient;
+
+    const contrastColor = getContrastColor(gradient.start);
+    if (contrastColor === "black") {
+      container.style.filter = `invert(100%)`;
+    } else {
+      container.style.filter = `invert(0%)`;
+    }
 
     // const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
     // document.body.style.background = bodyGradient;
@@ -1347,13 +1370,12 @@ import "../styles/global.css";
   }
 
 
-  function init() {
-    updateGradient()
-    window.setInterval(() => {
-      updateGradient()
-    }, 1000);
-    const scene = new MatterScene();
+  async function init() {
+    await updateGradient()
+    new MatterScene();
+    window.setInterval(updateGradient, 1000);
   }
+  // init();
 
   window.addEventListener("load", init);
 
