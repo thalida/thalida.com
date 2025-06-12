@@ -9,8 +9,6 @@ import "../styles/global.css";
     display: block;
     width: 50%,
     height: 50%;
-    background: #9afbda;
-    background: radial-gradient(at left top, #333, #222);
   }
 </style>
 
@@ -27,6 +25,7 @@ import "../styles/global.css";
     Query,
     World,
   } from "matter-js";
+  import * as dayjs from 'dayjs'
 
   interface Coords {
     x: number;
@@ -114,6 +113,7 @@ import "../styles/global.css";
           height: this.canvasHeight,
           wireframes: false,
           pixelRatio: window.devicePixelRatio || 1,
+          wireframeBackground: "transparent", // Set wireframe background to transparent
           background: "transparent", // Set background to transparent
         },
       });
@@ -251,7 +251,7 @@ import "../styles/global.css";
 
     renderSeconds: boolean = true; // Whether to render seconds hand
 
-    isDigital: boolean = false; // Whether the clock is analog or digital
+    isDigital: boolean = true; // Whether the clock is analog or digital
 
     segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
@@ -288,7 +288,8 @@ import "../styles/global.css";
         canvasCenterX - ((numSegments - 1) * (segmentWidth + gap)) / 2;
       const clockY = canvasCenterY - clockHeight / 2;
 
-      const pairOpacity = [0.95, 0.7, 0.4];
+      const pairHues = [70, 30, 0]; // Hues for the pairs of segments
+      const pairOpacity = [0.9, 0.9, 0.9];
 
       // Create segments for the digital clock
       const displayBodies = [];
@@ -304,8 +305,11 @@ import "../styles/global.css";
           segmentWidth,
           segmentHeight,
           {
-            fillStyle: `rgba(255, 255, 255, ${opacity})`, // Fill color for the segment
-            strokeStyle: `rgba(255, 255, 255, 1)`, // Stroke color for the segment
+            fillStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Color for the segment
+            strokeStyle: `hsl(${pairHues[pairs % pairHues.length]}, 100%, 50%, ${opacity})`, // Stroke color for the segment
+
+            // fillStyle: `rgba(255, 255, 255, ${opacity})`, // Fill color for the segment
+            // strokeStyle: `rgba(255, 255, 255, 1)`, // Stroke color for the segment
           }
         );
         this.segmentComposites.push(segment);
@@ -846,7 +850,7 @@ import "../styles/global.css";
 
   class MatterLightning {
     scene: MatterScene;
-    isLightning: boolean = true;
+    isLightning: boolean = false;
     LIGHNING_FREQUENCY = 0.5; // Lightning intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
     MAX_BOLTS = 10; // Maximum number of lightning bolts
@@ -1147,5 +1151,210 @@ import "../styles/global.css";
     }
   }
 
-  const scene = new MatterScene();
+  const HOURS_IN_DAY = 24;
+  const MINUTES_IN_HOUR = 60;
+  const TIME_COLORS = [
+    { r: 4, g: 10, b: 30 },
+    { r: 139, g: 152, b: 206 },
+    { r: 86, g: 216, b: 255 },
+    { r: 255, g: 216, b: 116 },
+    { r: 255, g: 183, b: 116 },
+    { r: 255, g: 153, b: 116 },
+    { r: 255, g: 103, b: 116 },
+    { r: 20, g: 40, b: 116 },
+  ];
+  const SUNRISE_COLOR_IDX = 2;
+  const SUNSET_COLOR_IDX = 6;
+
+  const sunriseDate = new Date();
+  sunriseDate.setHours(6, 0, 0, 0); // Default sunrise time at 6 AM
+  const sunrise = sunriseDate.getTime();
+
+  const sunsetDate = new Date();
+  sunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
+  const sunset = sunsetDate.getTime();
+
+  interface IColor {
+    r: number;
+    g: number;
+    b: number;
+  }
+
+  function getColorBlend(startColor: IColor, endColor: IColor, distance: number) {
+    const blendedColor: IColor = { r: 0, g: 0, b: 0 };
+    for (const part of ["r", "g", "b"]) {
+      const start = startColor[part];
+      const end = endColor[part];
+      blendedColor[part] = Math.round(start + (end - start) * distance);
+    }
+    return blendedColor;
+  }
+
+  function isSameDate(a: Date, b: Date) {
+    return a.getDate() === b.getDate();
+  }
+
+  async function getRealisticColorGradient() {
+    const date = new Date();
+    const now = date.getTime();
+    const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
+    let hourAgoIsh = new Date(now - shiftBy);
+    if (!isSameDate(hourAgoIsh, date)) {
+      hourAgoIsh = new Date(now);
+      hourAgoIsh.setHours(0, 0, 0, 0);
+      // await fetchWeather($store);
+    }
+    const gradientStart = getRealisticColor(hourAgoIsh.getTime());
+    const gradientEnd = getRealisticColor(now);
+
+    let gradient;
+
+    if (now >= sunset) {
+      gradient = {
+        start: gradientEnd,
+        end: gradientStart,
+      };
+    } else {
+      gradient = {
+        start: gradientStart,
+        end: gradientEnd,
+      };
+    }
+
+    return gradient;
+  }
+
+  function getRealisticColor(now: number) {
+    const sunriseTime = sunrise;
+    const sunsetTime = sunset;
+
+    let colorPhase, phaseStartTime, phaseEndTime;
+    if (now < sunriseTime) {
+      const midnight = new Date(now);
+      midnight.setHours(0, 0, 0, 0);
+      colorPhase = TIME_COLORS.slice(0, SUNRISE_COLOR_IDX + 1);
+      phaseStartTime = midnight.getTime();
+      phaseEndTime = sunriseTime;
+    } else if (now >= sunsetTime) {
+      const EOD = new Date(now);
+      EOD.setHours(23, 59, 59, 999);
+      colorPhase = TIME_COLORS.slice(SUNSET_COLOR_IDX);
+      colorPhase.push(TIME_COLORS[0]);
+      phaseStartTime = sunsetTime;
+      phaseEndTime = EOD.getTime();
+
+      const ifValidStart = isSameDate(new Date(phaseStartTime), EOD);
+      if (!ifValidStart) {
+        phaseStartTime += 24 * 60 * 60 * 1000;
+      }
+    } else {
+      colorPhase = TIME_COLORS.slice(SUNRISE_COLOR_IDX, SUNSET_COLOR_IDX + 1);
+      phaseStartTime = sunriseTime;
+      phaseEndTime = sunsetTime;
+    }
+
+    const timeSinceStart = now - phaseStartTime;
+    const timeInPhase = phaseEndTime - phaseStartTime;
+    const distance = timeSinceStart / timeInPhase;
+    const phaseSegments = timeInPhase / (colorPhase.length - 1);
+    const startColorIdx = Math.floor((colorPhase.length - 1) * distance);
+    const endColorIdx = startColorIdx + 1;
+    const startColorTime = phaseStartTime + startColorIdx * phaseSegments;
+    const endColorTime = phaseStartTime + endColorIdx * phaseSegments;
+    const timeInSegment = endColorTime - startColorTime;
+    const timeSinceSegmentStart = now - startColorTime;
+    const distanceInSegment = timeSinceSegmentStart / timeInSegment;
+    const startColor = colorPhase[startColorIdx];
+    const endColor = colorPhase[endColorIdx];
+
+    const color = getColorBlend(startColor, endColor, distanceInSegment);
+    return color;
+  }
+
+  function getColorGradient() {
+    const date = new Date();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const numSegements = HOURS_IN_DAY / TIME_COLORS.length;
+    const startColorIdx = Math.floor(hour / numSegements);
+    const endColorIdx =
+      startColorIdx + 1 < TIME_COLORS.length ? startColorIdx + 1 : 0;
+
+    const timeInMins = hour * MINUTES_IN_HOUR + minute;
+    const startColor = TIME_COLORS[startColorIdx];
+    const endColor = TIME_COLORS[endColorIdx];
+    const colorStartTimeInMins = startColorIdx * numSegements * MINUTES_IN_HOUR;
+    const colorEndTimeInMins =
+      endColorIdx === 0
+        ? HOURS_IN_DAY * MINUTES_IN_HOUR
+        : endColorIdx * numSegements * MINUTES_IN_HOUR;
+    const minSinceColorStart = timeInMins - colorStartTimeInMins;
+    const minsInColorRange = Math.abs(
+      colorEndTimeInMins - colorStartTimeInMins
+    );
+    const gradientStartDistance =
+      minSinceColorStart - 60 >= 0
+        ? (minSinceColorStart - 60) / minsInColorRange
+        : 0;
+    const gradientStart = getColorBlend(
+      startColor,
+      endColor,
+      gradientStartDistance
+    );
+    const gradientEndDistance = minSinceColorStart / minsInColorRange;
+    const gradientEnd = getColorBlend(
+      startColor,
+      endColor,
+      gradientEndDistance
+    );
+
+    let gradient;
+    // gradient goes "in reverse" during sunset / late night
+    // so that the brightest colors are at the bottom (closer to the horizon)
+    if (startColorIdx >= SUNSET_COLOR_IDX) {
+      gradient = {
+        start: gradientEnd,
+        end: gradientStart,
+      };
+    } else {
+      gradient = {
+        start: gradientStart,
+        end: gradientEnd,
+      };
+    }
+
+    return gradient;
+  }
+
+
+
+  async function updateGradient() {
+    const container = document.querySelector("#matter-container") as HTMLDivElement;
+    if (!container) {
+      console.error("Matter container not found");
+      return;
+    }
+
+    const gradient = await getRealisticColorGradient();
+    const newGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
+    container.style.background = newGradient;
+
+    // const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
+    // document.body.style.background = bodyGradient;
+
+    // const color = await getRealisticColor(new Date().getTime());
+    // document.body.style.backgroundColor = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+  }
+
+
+  function init() {
+    updateGradient()
+    window.setInterval(() => {
+      updateGradient()
+    }, 1000);
+    const scene = new MatterScene();
+  }
+
+  window.addEventListener("load", init);
+
 </script>
