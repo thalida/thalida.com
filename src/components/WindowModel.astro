@@ -1007,8 +1007,8 @@ import { contain } from "three/src/extras/TextureUtils.js";
     scene: MatterScene;
 
     isAtmospheric: boolean = true; // Whether to render atmospheric effects
-    atmosphereEffect: "mist" | "clouds" = "mist"; // Type of atmospheric effect
-    ATMOSPHERIC_FREQUENCY = 1; // Atmospheric effect intensity (0 to 1)
+    atmosphereEffect: "mist" | "clouds" = "clouds"; // Type of atmospheric effect
+    ATMOSPHERIC_FREQUENCY = 0.1; // Atmospheric effect intensity (0 to 1)
     PERIOD_ADJUSTMENT = 0.5; // Adjustment factor
 
     constructor(scene: MatterScene) {
