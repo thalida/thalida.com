@@ -52,9 +52,15 @@ export default class SceneClock {
     this.isRendering = false;
   }
 
-  onTick(now: Date) {
-    if (this.isRendering || !this.config.enabled) {
+  onTick(now: Date, useLiveData: boolean = true) {
+    if (this.isRendering) {
       return; // Skip if clock is disabled or body is not initialized
+    }
+
+    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+
+    if (!this.config.enabled) {
+      return; // Skip if clock is not enabled
     }
 
     switch (this.config.format) {
@@ -69,6 +75,10 @@ export default class SceneClock {
 
   updateConfig(config: Partial<ISceneClockConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
+    return this.config;
+  }
+
+  getLiveConfig() {
     return this.config;
   }
 

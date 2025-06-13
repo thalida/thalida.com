@@ -3,11 +3,13 @@ import { merge } from "lodash";
 import {
   Bodies,
   Composite,
+  use,
 } from "matter-js";
 
 import { random } from "../utils";
 import type LiveWindowScene from "../scene";
 import type { IScenePercipitationConfig } from "../types";
+import store from "../store";
 
 
 export default class ScenePercipitation {
@@ -42,7 +44,13 @@ export default class ScenePercipitation {
     this.isRendering = false;
   }
 
-  onTick(now: Date) {
+  onTick(now: Date, useLiveData: boolean = true) {
+    if (this.isRendering) {
+      return;
+    }
+
+    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+
     if (!this.config.enabled) {
       return; // Skip if not raining
     }
@@ -64,7 +72,45 @@ export default class ScenePercipitation {
 
   updateConfig(config: Partial<IScenePercipitationConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
+
     return this.config;
+  }
+
+  getLiveConfig() {
+    const liveConfig: IScenePercipitationConfig = {
+      ...this.config,
+      enabled: false,
+    }
+
+    switch (store.store.weather.current?.icon) {
+      case "09d": // Rain
+      case "09n":
+        liveConfig.enabled = true;
+        liveConfig.percipitationType = "rain"; // Set to rain
+        liveConfig.intensity = 0.3; // Moderate intensity for rain
+        break;
+      case "10d": // Rain showers
+      case "10n":
+        liveConfig.enabled = true;
+        liveConfig.percipitationType = "rain"; // Set to rain
+        liveConfig.intensity = 0.4; // Higher intensity for rain showers
+        break;
+      case "11d": // Thunderstorm
+      case "11n":
+        liveConfig.enabled = true;
+        liveConfig.intensity = 0.5; // High intensity for thunderstorms
+        break;
+      case "13d": // Snow
+      case "13n":
+        liveConfig.enabled = true;
+        liveConfig.percipitationType = "snow"; // Set to snow
+        liveConfig.intensity = 0.3; // Moderate intensity for snow
+        break;
+      default:
+        liveConfig.enabled = false; // Disable lightning for other weather conditions
+    }
+
+    return liveConfig;
   }
 
   clear() {

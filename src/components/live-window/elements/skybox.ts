@@ -1,6 +1,7 @@
 import { merge } from "lodash";
 import type { IColor, ISceneSkyboxConfig } from "../types";
 import type LiveWindowScene from "../scene";
+import store from "../store";
 
 
 export default class SceneSkyBox {
@@ -48,18 +49,19 @@ export default class SceneSkyBox {
     this.isRendering = false;
   }
 
-  async onTick(now: Date) {
+  async onTick(now: Date, useLiveData: boolean = true) {
     if (this.isRendering || !this.config.enabled) {
       return;
     }
 
-    const sunriseDate = new Date(now);
-    sunriseDate.setHours(6, 0, 0, 0); // Default sunrise time at 6 AM
-    this.sunrise = sunriseDate.getTime();
+    const defaultSunriseDate = new Date(now);
+    defaultSunriseDate.setHours(6, 0, 0, 0); // Default sunrise time at 6 AM
 
-    const sunsetDate = new Date(now);
-    sunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
-    this.sunset = sunsetDate.getTime();
+    const defaultSunsetDate = new Date(now);
+    defaultSunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
+
+    this.sunrise = useLiveData && store.store.weather.sunrise ? store.store.weather.sunrise : defaultSunriseDate.getTime();
+    this.sunset = useLiveData && store.store.weather.sunset ? store.store.weather.sunset : defaultSunsetDate.getTime();
 
     const gradient = await this._getRealisticColorGradient(now);
 
@@ -126,8 +128,8 @@ export default class SceneSkyBox {
     if (!this._isSameDate(hourAgoIsh, date)) {
       hourAgoIsh = new Date(now);
       hourAgoIsh.setHours(0, 0, 0, 0);
-      // await fetchWeather($store);
     }
+
     const gradientStart = this._getRealisticColor(hourAgoIsh);
     const gradientEnd = this._getRealisticColor(date);
 
@@ -150,27 +152,25 @@ export default class SceneSkyBox {
 
   _getRealisticColor(date: Date) {
     const now = date.getTime();
-    const sunriseTime = this.sunrise;
-    const sunsetTime = this.sunset;
 
-    if (!sunriseTime || !sunsetTime) {
+    if (!this.sunrise || !this.sunset) {
       console.warn("Sunrise or sunset time is not set.");
       return { r: 255, g: 255, b: 255 }; // Default to white if times are not set
     }
 
     let colorPhase, phaseStartTime, phaseEndTime;
-    if (now < sunriseTime) {
+    if (now < this.sunrise) {
       const midnight = new Date(now);
       midnight.setHours(0, 0, 0, 0);
       colorPhase = this.TIME_COLORS.slice(0, this.SUNRISE_COLOR_IDX + 1);
       phaseStartTime = midnight.getTime();
-      phaseEndTime = sunriseTime;
-    } else if (now >= sunsetTime) {
+      phaseEndTime = this.sunrise;
+    } else if (now >= this.sunset) {
       const EOD = new Date(now);
       EOD.setHours(23, 59, 59, 999);
       colorPhase = this.TIME_COLORS.slice(this.SUNSET_COLOR_IDX);
       colorPhase.push(this.TIME_COLORS[0]);
-      phaseStartTime = sunsetTime;
+      phaseStartTime = this.sunset;
       phaseEndTime = EOD.getTime();
 
       const ifValidStart = this._isSameDate(new Date(phaseStartTime), EOD);
@@ -182,8 +182,8 @@ export default class SceneSkyBox {
         this.SUNRISE_COLOR_IDX,
         this.SUNSET_COLOR_IDX + 1
       );
-      phaseStartTime = sunriseTime;
-      phaseEndTime = sunsetTime;
+      phaseStartTime = this.sunrise;
+      phaseEndTime = this.sunset;
     }
 
     const timeSinceStart = now - phaseStartTime;

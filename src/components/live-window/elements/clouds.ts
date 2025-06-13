@@ -8,6 +8,7 @@ import { random } from "../utils";
 import type LiveWindowScene from "../scene";
 import type { ISceneCloudsConfig } from "../types";
 import { merge } from "lodash";
+import store from "../store";
 
 
 export default class SceneClouds {
@@ -37,6 +38,8 @@ export default class SceneClouds {
       this.clear();
     }
 
+    this.updateConfig(this.config);
+
     if (!this.config.enabled) {
       this.isRendering = false;
       return;
@@ -54,8 +57,14 @@ export default class SceneClouds {
     this.isRendering = false;
   }
 
-  onTick(now: Date) {
-    if (this.isRendering || !this.config.enabled) {
+  onTick(now: Date, useLiveData: boolean = true) {
+    if (this.isRendering) {
+      return; // Skip if effects are not enabled
+    }
+
+    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+
+    if (!this.config.enabled) {
       return; // Skip if effects are not enabled
     }
 
@@ -102,6 +111,63 @@ export default class SceneClouds {
   updateConfig(config: Partial<ISceneCloudsConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
     return this.config;
+  }
+
+  getLiveConfig() {
+    const liveConfig: ISceneCloudsConfig = {
+      ...this.config,
+      enabled: true,
+    }
+    switch(store.store.weather.current?.icon ) {
+      case "01d":
+      case "01n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.05; // Clear sky
+        break;
+      case "02d":
+      case "02n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.1; // Few clouds
+        break;
+      case "03d":
+      case "03n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.2; // Scattered clouds
+        break;
+      case "04d":
+      case "04n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.3; // Broken clouds
+        break;
+      case "09d":
+      case "09n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.4; // Shower rain
+        break;
+      case "10d":
+      case "10n":
+      case "13d":
+      case "13n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.5; // Rain and Snow
+        break;
+      case "11d":
+      case "11n":
+        liveConfig.cloudType = "clouds";
+        liveConfig.intensity = 0.7; // Thunderstorm
+        break;
+      case "50d":
+      case "50n":
+        liveConfig.cloudType = "mist"; // Mist
+        liveConfig.intensity = 0.3; // Misty conditions
+        break;
+      default:
+        liveConfig.cloudType = this.defaultConfig.cloudType; // Default to clouds
+        liveConfig.intensity = this.defaultConfig.intensity; // Default intensity
+        break;
+    }
+
+    return liveConfig;
   }
 
   clear() {

@@ -5,9 +5,8 @@ export interface ILiveWindowSceneConfig {
   percipitation: Partial<IScenePercipitationConfig>;
   lightning: Partial<ISceneLightningConfig>;
   clouds: Partial<ISceneCloudsConfig>;
-  overrides?: {
-    currentTime: Date
-  }
+  useLiveData: boolean;
+  now?: Date;
 }
 
 export interface ISceneClockConfig {
@@ -21,6 +20,8 @@ export interface ISceneSkyboxConfig {
   enableScene: boolean;
   enableBody: boolean;
   enableHTML: boolean;
+  sunrise?: number | null; // Optional sunrise time in milliseconds
+  sunset?: number | null; // Optional sunset time in milliseconds
 }
 
 export interface IScenePercipitationConfig {

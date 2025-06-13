@@ -10,6 +10,7 @@ import {
 import { random } from "../utils";
 import type { ICoords, ISceneLightningConfig } from "../types";
 import type LiveWindowScene from "../scene";
+import store from "../store";
 
 
 export default class SceneLightning {
@@ -41,8 +42,14 @@ export default class SceneLightning {
     this.isRendering = false;
   }
 
-  onTick(now: Date) {
-    if (this.isRendering || !this.config.enabled) {
+  onTick(now: Date, useLiveData: boolean = true) {
+    if (this.isRendering) {
+      return;
+    }
+
+    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+
+    if (!this.config.enabled) {
       return; // Skip if lightning is not enabled
     }
 
@@ -156,6 +163,25 @@ export default class SceneLightning {
   updateConfig(config: Partial<ISceneLightningConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
     return this.config;
+  }
+
+  getLiveConfig() {
+    const liveConfig: ISceneLightningConfig = {
+      ...this.config,
+      enabled: false,
+    }
+
+    switch (store.store.weather.current?.icon) {
+      case "11d": // Thunderstorm
+      case "11n":
+        liveConfig.enabled = true;
+        liveConfig.intensity = 0.5; // High intensity for thunderstorms
+        break;
+      default:
+        liveConfig.enabled = false; // Disable lightning for other weather conditions
+    }
+
+    return liveConfig;
   }
 
   clear() {

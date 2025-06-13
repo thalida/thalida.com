@@ -1,4 +1,4 @@
-import { merge } from "lodash";
+import { clone, cloneDeep, merge } from "lodash";
 
 import {
   Engine,
@@ -17,6 +17,7 @@ import ScenePercipitation from "./elements/percipitation";
 import SceneLightning from "./elements/lightning";
 import SceneClouds from "./elements/clouds";
 import SceneSkyBox from "./elements/skybox";
+import store from "./store";
 
 
 export default class LiveWindowScene {
@@ -32,6 +33,7 @@ export default class LiveWindowScene {
   canvasHeight: number = 600;
 
   isRendering: boolean = false;
+  interval: number | null = null;
 
   CATEGORIES = {
     DEFAULT: 0x0001,
@@ -63,6 +65,7 @@ export default class LiveWindowScene {
   skybox: SceneSkyBox | null = null;
 
   defaultConfig: ILiveWindowSceneConfig = {
+    useLiveData: true,
     clock: {
       enabled: true, // Whether the clock is enabled
       format: "analog", // Style of the clock
@@ -99,6 +102,7 @@ export default class LiveWindowScene {
     this.engine = Engine.create({ enableSleeping: false });
     this.world = this.engine.world;
 
+    this.updateLiveData();
     this.render(true);
 
     Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
@@ -106,6 +110,7 @@ export default class LiveWindowScene {
       "resize",
       debounce(this.onResize.bind(this), 100)
     );
+    this.interval = window.setInterval(this.updateLiveData.bind(this), 1000);
   }
 
   render(isInitialRender = false) {
@@ -233,12 +238,13 @@ export default class LiveWindowScene {
     }
 
     const now = this._getNow();
+    const useLiveData = this.config.useLiveData;
 
-    this.clock?.onTick(now);
-    this.clouds?.onTick(now);
-    this.lightning?.onTick(now);
-    this.perciptiation?.onTick(now);
-    this.skybox?.onTick(now);
+    this.clock?.onTick(now, useLiveData);
+    this.clouds?.onTick(now, useLiveData);
+    this.lightning?.onTick(now, useLiveData);
+    this.perciptiation?.onTick(now, useLiveData);
+    this.skybox?.onTick(now, useLiveData);
   }
 
   onResize() {
@@ -257,8 +263,23 @@ export default class LiveWindowScene {
     newConfig.percipitation = this.perciptiation?.updateConfig(newConfig.percipitation) || newConfig.percipitation;
     newConfig.skybox = this.skybox?.updateConfig(newConfig.skybox) || newConfig.skybox;
     this.config = newConfig;
-
     return this.config;
+  }
+
+  async updateLiveData() {
+    const oldStore = cloneDeep(store.store);
+
+    await store.fetchWeather()
+
+    if (!this.config.useLiveData) {
+      return;
+    }
+
+    if (oldStore.weather.lastFetched === store.store.weather.lastFetched && oldStore.location.lastFetched === store.store.location.lastFetched) {
+      return;
+    }
+
+    this.render();
   }
 
   clear() {
@@ -278,6 +299,12 @@ export default class LiveWindowScene {
 
   destroy() {
     this.clear();
+
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+
     this.clock?.destroy();
     this.clouds?.destroy();
     this.lightning?.destroy();
@@ -286,6 +313,6 @@ export default class LiveWindowScene {
   }
 
   _getNow() {
-    return this.config.overrides?.currentTime || new Date();
+    return !this.config.useLiveData && this.config.now ? this.config.now : new Date();
   }
 }

@@ -29,25 +29,25 @@ interface Props {
 <script src="../components/live-window" />
 
 <script>
-  setTimeout(() => {
-    const el = document.getElementById('top-window');
-    if (el) {
-      const date = new Date();
-      date.setHours(10, 0, 0); // Set the time to 10:00 AM
-      el.config = {
-        // overrides: {
-        //   currentTime: date,
-        // },
-        clock: {
-          format: "digital",
-          showSeconds: false,
-        },
-        percipitation: {
-          enabled: true,
-        },
-      };
-    }
-  }, 1000);
+  // setTimeout(() => {
+  //   const el = document.getElementById('top-window');
+  //   if (el) {
+  //     const date = new Date();
+  //     date.setHours(10, 0, 0); // Set the time to 10:00 AM
+  //     el.config = {
+  //       useLiveData: true,
+  //       // now: date,
+  //       clock: {
+  //         format: "digital",
+  //         showSeconds: false,
+  //       },
+  //       percipitation: {
+  //         enabled: true,
+  //         intensity: 1,
+  //       },
+  //     };
+  //   }
+  // }, 5000);
   // setTimeout(() => {
   //   const el = document.getElementById('top-window');
   //   if (el) {
