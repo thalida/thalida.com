@@ -20,7 +20,7 @@ export default class SceneLightning {
   RENDER_OFFSET_Y = 100;
   timeouts: NodeJS.Timeout[] = [];
 
-  isRefreshing: boolean = false;
+  isRendering: boolean = false;
 
   defaultConfig: ISceneLightningConfig = {
     enabled: true,
@@ -33,28 +33,16 @@ export default class SceneLightning {
     this.config = this.updateConfig(config);
   }
 
-  updateConfig(config: Partial<ISceneLightningConfig> | null) {
-    this.config = merge({}, this.defaultConfig, config || {});
-    return this.config;
+  render(isInitialRender: boolean = false) {
+    this.isRendering = true;
+    if (!isInitialRender) {
+      this.clear();
+    }
+    this.isRendering = false;
   }
 
-  refresh() {
-    this.isRefreshing = true;
-    this.clear();
-    this.isRefreshing = false;
-  }
-
-  clear() {
-    // Clear all timeouts to prevent memory leaks
-    this.timeouts.forEach(timeout => clearTimeout(timeout));
-    this.timeouts = [];
-
-    // Clear the lightning layer
-    Composite.clear(this.scene.LAYERS.LIGHTNING, false, true);
-  }
-
-  onTick() {
-    if (this.isRefreshing || !this.config.enabled) {
+  onTick(now: Date) {
+    if (this.isRendering || !this.config.enabled) {
       return; // Skip if lightning is not enabled
     }
 
@@ -106,7 +94,7 @@ export default class SceneLightning {
     }
 
     // Generate lightning bolt path points
-    const lightningPath = SceneLightning.generateLightningBoltPath(
+    const lightningPath = this._generateLightningBoltPath(
       { x: startX, y: startY },
       { x: endX, y: endY }
     );
@@ -165,7 +153,25 @@ export default class SceneLightning {
     this.timeouts.push(timeout);
   }
 
-  static generateLightningBoltPath(startCoords: ICoords, endCoords: ICoords) {
+  updateConfig(config: Partial<ISceneLightningConfig> | null) {
+    this.config = merge({}, this.defaultConfig, config || {});
+    return this.config;
+  }
+
+  clear() {
+    // Clear all timeouts to prevent memory leaks
+    this.timeouts.forEach(timeout => clearTimeout(timeout));
+    this.timeouts = [];
+
+    // Clear the lightning layer
+    Composite.clear(this.scene.LAYERS.LIGHTNING, false, true);
+  }
+
+  destroy() {
+    this.clear();
+  }
+
+  _generateLightningBoltPath(startCoords: ICoords, endCoords: ICoords) {
     const startX = startCoords.x;
     const startY = startCoords.y;
     const endX = endCoords.x;

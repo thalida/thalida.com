@@ -31,7 +31,7 @@ export default class LiveWindowScene {
   canvasWidth: number = 800;
   canvasHeight: number = 600;
 
-  isResizing: boolean = false;
+  isRendering: boolean = false;
 
   CATEGORIES = {
     DEFAULT: 0x0001,
@@ -99,39 +99,7 @@ export default class LiveWindowScene {
     this.engine = Engine.create({ enableSleeping: false });
     this.world = this.engine.world;
 
-    const elementDimensions = this.matterElement.getBoundingClientRect();
-
-    this.canvasWidth = elementDimensions.width;
-    this.canvasHeight = elementDimensions.height;
-
-    // create a renderer
-    this.renderer = Render.create({
-      element: this.matterElement,
-      engine: this.engine,
-      options: {
-        width: this.canvasWidth,
-        height: this.canvasHeight,
-        wireframes: false,
-        pixelRatio: window.devicePixelRatio || 1,
-        wireframeBackground: "transparent", // Set wireframe background to transparent
-        background: "transparent", // Set background to transparent
-      },
-    });
-    Render.run(this.renderer);
-
-    // create runner
-    this.runner = Runner.create();
-    Runner.run(this.runner, this.engine);
-
-    Render.lookAt(this.renderer, {
-      min: { x: 0, y: 0 },
-      max: { x: this.canvasWidth, y: this.canvasHeight },
-    });
-
-    this.drawSkybox();
-    this.drawScene();
-    this.onTick();
-    Render.run(this.renderer);
+    this.render(true);
 
     Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
     window.addEventListener(
@@ -140,10 +108,49 @@ export default class LiveWindowScene {
     );
   }
 
-  drawScene() {
-    if (!this.engine || !this.world || !this.renderer) {
+  render(isInitialRender = false) {
+    if (!this.engine || !this.world) {
       return;
     }
+
+    this.isRendering = true;
+
+    if (!isInitialRender) {
+      this.clear();
+    }
+
+    const elementDimensions = this.element.getBoundingClientRect();
+    this.canvasWidth = elementDimensions.width;
+    this.canvasHeight = elementDimensions.height;
+
+    if (!this.renderer) {
+      this.renderer = Render.create({
+        element: this.matterElement,
+        engine: this.engine,
+        options: {
+          width: this.canvasWidth,
+          height: this.canvasHeight,
+          wireframes: false,
+          pixelRatio: window.devicePixelRatio || 1,
+          wireframeBackground: "transparent", // Set wireframe background to transparent
+          background: "transparent", // Set background to transparent
+        },
+      });
+      Render.run(this.renderer);
+    }
+
+    if (!this.runner) {
+      this.runner = Runner.create();
+      Runner.run(this.runner, this.engine);
+    }
+
+    // @ts-ignore
+    Render.setSize(this.renderer, this.canvasWidth, this.canvasHeight);
+    Render.setPixelRatio(this.renderer, window.devicePixelRatio);
+    Render.lookAt(this.renderer, {
+      min: { x: 0, y: 0 },
+      max: { x: this.canvasWidth, y: this.canvasHeight },
+    });
 
     // Set up the world
     for (const layer of Object.values(this.LAYERS)) {
@@ -203,30 +210,35 @@ export default class LiveWindowScene {
       ),
     ]);
 
-    this.clock = new SceneClock(this, this.config.clock);
-    this.clouds = new SceneClouds(this, this.config.clouds);
-    this.perciptiation = new ScenePercipitation(this, this.config.percipitation);
-    this.lightning = new SceneLightning(this, this.config.lightning);
-  }
+    this.clock = this.clock || new SceneClock(this, this.config.clock);
+    this.clouds = this.clouds || new SceneClouds(this, this.config.clouds);
+    this.lightning = this.lightning || new SceneLightning(this, this.config.lightning);
+    this.perciptiation = this.perciptiation || new ScenePercipitation(this, this.config.percipitation);
+    this.skybox = this.skybox || new SceneSkyBox(this, this.config.skybox);
 
-  drawSkybox() {
-    if (!this.renderer) {
-      return;
-    }
+    this.clock.render();
+    this.clouds.render();
+    this.lightning.render();
+    this.perciptiation.render();
+    this.skybox.render();
 
-    this.skybox = new SceneSkyBox(this, this.config.skybox);
+    Render.run(this.renderer);
+
+    this.isRendering = false;
   }
 
   onTick() {
-    if (this.isResizing || !this.engine || !this.renderer) {
-      return; // Ensure engine and render are initialized
+    if (this.isRendering) {
+      return;
     }
 
-    this.skybox?.onTick();
-    this.clock?.onTick();
-    this.clouds?.onTick();
-    this.perciptiation?.onTick();
-    this.lightning?.onTick();
+    const now = this._getNow();
+
+    this.clock?.onTick(now);
+    this.clouds?.onTick(now);
+    this.lightning?.onTick(now);
+    this.perciptiation?.onTick(now);
+    this.skybox?.onTick(now);
   }
 
   onResize() {
@@ -234,48 +246,19 @@ export default class LiveWindowScene {
       return; // Ensure element and render are initialized
     }
 
-    this.isResizing = true;
-
-    Render.stop(this.renderer);
-    Composite.clear(this.world, false, true); // Clear the world without removing the engine
-
-    const elementDimensions = this.element.getBoundingClientRect();
-
-    this.canvasWidth = elementDimensions.width;
-    this.canvasHeight = elementDimensions.height;
-    // @ts-ignore
-    Render.setSize(this.renderer, this.canvasWidth, this.canvasHeight);
-    Render.setPixelRatio(this.renderer, window.devicePixelRatio);
-    Render.lookAt(this.renderer, {
-      min: { x: 0, y: 0 },
-      max: { x: this.canvasWidth, y: this.canvasHeight },
-    });
-
-    this.drawScene();
-    Render.run(this.renderer);
-
-    this.isResizing = false;
-  }
-
-  getNow() {
-    return this.config.overrides?.currentTime || new Date();
+    this.render();
   }
 
   updateConfig(config: Partial<ILiveWindowSceneConfig> | null) {
-    this.config = merge({}, this.defaultConfig, config || {});
-    this.skybox?.updateConfig(this.config.skybox);
-    this.clock?.updateConfig(this.config.clock);
-    this.perciptiation?.updateConfig(this.config.percipitation);
-    this.lightning?.updateConfig(this.config.lightning);
-    this.clouds?.updateConfig(this.config.clouds);
-  }
+    const newConfig = merge({}, this.defaultConfig, config || {});
+    newConfig.clock = this.clock?.updateConfig(newConfig.clock) || newConfig.clock;
+    newConfig.clouds = this.clouds?.updateConfig(newConfig.clouds) || newConfig.clouds;
+    newConfig.lightning = this.lightning?.updateConfig(newConfig.lightning) || newConfig.lightning;
+    newConfig.percipitation = this.perciptiation?.updateConfig(newConfig.percipitation) || newConfig.percipitation;
+    newConfig.skybox = this.skybox?.updateConfig(newConfig.skybox) || newConfig.skybox;
+    this.config = newConfig;
 
-  refresh() {
-    this.skybox?.refresh();
-    this.clock?.refresh();
-    this.perciptiation?.refresh();
-    this.lightning?.refresh();
-    this.clouds?.refresh();
+    return this.config;
   }
 
   clear() {
@@ -285,14 +268,24 @@ export default class LiveWindowScene {
 
     Render.stop(this.renderer);
     Composite.clear(this.world, false, true);
+
+    this.clock?.clear();
+    this.clouds?.clear();
+    this.lightning?.clear();
+    this.perciptiation?.clear();
+    this.skybox?.clear();
   }
 
   destroy() {
     this.clear();
-    this.skybox?.clear();
-    this.clock?.clear();
-    this.perciptiation?.clear();
-    this.lightning?.clear();
-    this.clouds?.clear();
+    this.clock?.destroy();
+    this.clouds?.destroy();
+    this.lightning?.destroy();
+    this.perciptiation?.destroy();
+    this.skybox?.destroy();
+  }
+
+  _getNow() {
+    return this.config.overrides?.currentTime || new Date();
   }
 }

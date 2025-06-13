@@ -27,7 +27,7 @@ export default class LiveWindowComponent extends HTMLElement {
   set config(value: ILiveWindowSceneConfig | null) {
     this.#config = value;
     this.scene?.updateConfig(value);
-    this.scene?.refresh();
+    this.scene?.render();
   }
 
   connectedCallback() {
@@ -68,7 +68,7 @@ export default class LiveWindowComponent extends HTMLElement {
     }
 
     this.scene?.updateConfig(this.config);
-    this.scene?.refresh();
+    this.scene?.render();
   }
 }
 

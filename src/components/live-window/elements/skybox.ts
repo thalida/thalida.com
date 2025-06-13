@@ -1,5 +1,5 @@
 import { merge } from "lodash";
-import type { IColor, ISceneClockConfig, ISceneSkyboxConfig } from "../types";
+import type { IColor, ISceneSkyboxConfig } from "../types";
 import type LiveWindowScene from "../scene";
 
 
@@ -7,7 +7,6 @@ export default class SceneSkyBox {
   scene: LiveWindowScene;
   sunrise: number | null = null;
   sunset: number | null = null;
-  interval: number | null = null;
 
   HOURS_IN_DAY = 24;
   MINUTES_IN_HOUR = 60;
@@ -24,7 +23,7 @@ export default class SceneSkyBox {
   SUNRISE_COLOR_IDX = 2;
   SUNSET_COLOR_IDX = 6;
 
-  isRefreshing: boolean = false;
+  isRendering: boolean = false;
 
   defaultConfig: ISceneSkyboxConfig = {
     enabled: true,
@@ -39,8 +38,55 @@ export default class SceneSkyBox {
     this.config = this.updateConfig(config);
   }
 
+  render(isInitialRender: boolean = false) {
+    this.isRendering = true;
 
-  updateConfig(config: Partial<ISceneClockConfig> | null) {
+    if (!isInitialRender) {
+      this.clear();
+    }
+
+    this.isRendering = false;
+  }
+
+  async onTick(now: Date) {
+    if (this.isRendering || !this.config.enabled) {
+      return;
+    }
+
+    const sunriseDate = new Date(now);
+    sunriseDate.setHours(6, 0, 0, 0); // Default sunrise time at 6 AM
+    this.sunrise = sunriseDate.getTime();
+
+    const sunsetDate = new Date(now);
+    sunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
+    this.sunset = sunsetDate.getTime();
+
+    const gradient = await this._getRealisticColorGradient(now);
+
+    if (this.config.enableScene) {
+      if (this._getIsDark(gradient.start)) {
+        this.scene.matterElement.style.filter = `invert(0)`;
+      } else {
+        this.scene.matterElement.style.filter = `invert(1)`;
+      }
+
+      const skyboxGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
+      this.scene.element.style.background = skyboxGradient;
+    }
+
+    if (this.config.enableHTML) {
+      const color = await this._getRealisticColor(now);
+      const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+      document.documentElement.style.backgroundColor = colorString;
+    }
+
+    if (this.config.enableBody) {
+      const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
+      document.body.style.background = bodyGradient;
+    }
+  }
+
+  updateConfig(config: Partial<ISceneSkyboxConfig> | null): ISceneSkyboxConfig {
     this.config = merge({}, this.defaultConfig, config || {});
     return this.config;
   }
@@ -54,53 +100,11 @@ export default class SceneSkyBox {
     document.documentElement.style.backgroundColor = "";
   }
 
-  refresh() {
-    this.isRefreshing = true;
+  destroy() {
     this.clear();
-    this.isRefreshing = false;
   }
 
-  async onTick() {
-    if (this.isRefreshing || !this.config.enabled) {
-      return;
-    }
-
-    const now = this.scene.getNow();
-
-    const sunriseDate = new Date(now);
-    sunriseDate.setHours(6, 0, 0, 0); // Default sunrise time at 6 AM
-    this.sunrise = sunriseDate.getTime();
-
-    const sunsetDate = new Date(now);
-    sunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
-    this.sunset = sunsetDate.getTime();
-
-    const gradient = await this.getRealisticColorGradient(now);
-
-    if (this.config.enableScene) {
-      if (this.getIsDark(gradient.start)) {
-        this.scene.matterElement.style.filter = `invert(0)`;
-      } else {
-        this.scene.matterElement.style.filter = `invert(1)`;
-      }
-
-      const skyboxGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
-      this.scene.element.style.background = skyboxGradient;
-    }
-
-    if (this.config.enableHTML) {
-      const color = await this.getRealisticColor(now);
-      const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
-      document.documentElement.style.backgroundColor = colorString;
-    }
-
-    if (this.config.enableBody) {
-      const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
-      document.body.style.background = bodyGradient;
-    }
-  }
-
-  getColorBlend(startColor: IColor, endColor: IColor, distance: number) {
+  _getColorBlend(startColor: IColor, endColor: IColor, distance: number) {
     const blendedColor: IColor = { r: 0, g: 0, b: 0 };
     for (const part of ["r", "g", "b"] as const) {
       const start = startColor[part];
@@ -110,22 +114,22 @@ export default class SceneSkyBox {
     return blendedColor;
   }
 
-  isSameDate(a: Date, b: Date) {
+  _isSameDate(a: Date, b: Date) {
     return a.getDate() === b.getDate();
   }
 
-  async getRealisticColorGradient(date: Date) {
+  async _getRealisticColorGradient(date: Date) {
     const now = date.getTime();
 
     const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
     let hourAgoIsh = new Date(now - shiftBy);
-    if (!this.isSameDate(hourAgoIsh, date)) {
+    if (!this._isSameDate(hourAgoIsh, date)) {
       hourAgoIsh = new Date(now);
       hourAgoIsh.setHours(0, 0, 0, 0);
       // await fetchWeather($store);
     }
-    const gradientStart = this.getRealisticColor(hourAgoIsh);
-    const gradientEnd = this.getRealisticColor(date);
+    const gradientStart = this._getRealisticColor(hourAgoIsh);
+    const gradientEnd = this._getRealisticColor(date);
 
     let gradient;
 
@@ -144,7 +148,7 @@ export default class SceneSkyBox {
     return gradient;
   }
 
-  getRealisticColor(date: Date) {
+  _getRealisticColor(date: Date) {
     const now = date.getTime();
     const sunriseTime = this.sunrise;
     const sunsetTime = this.sunset;
@@ -169,7 +173,7 @@ export default class SceneSkyBox {
       phaseStartTime = sunsetTime;
       phaseEndTime = EOD.getTime();
 
-      const ifValidStart = this.isSameDate(new Date(phaseStartTime), EOD);
+      const ifValidStart = this._isSameDate(new Date(phaseStartTime), EOD);
       if (!ifValidStart) {
         phaseStartTime += 24 * 60 * 60 * 1000;
       }
@@ -196,16 +200,16 @@ export default class SceneSkyBox {
     const startColor = colorPhase[startColorIdx];
     const endColor = colorPhase[endColorIdx];
 
-    const color = this.getColorBlend(startColor, endColor, distanceInSegment);
+    const color = this._getColorBlend(startColor, endColor, distanceInSegment);
     return color;
   }
 
-  getContrastColor(color: IColor): "white" | "black" {
+  _getContrastColor(color: IColor): "white" | "black" {
     const brightness = (color.r * 299 + color.g * 587 + color.b * 114) / 1000;
     return brightness > 125 ? "black" : "white";
   }
 
-  getIsDark({ r, g, b }: IColor): boolean {
+  _getIsDark({ r, g, b }: IColor): boolean {
     return r * 0.299 + g * 0.587 + b * 0.114 <= 186;
   }
 }

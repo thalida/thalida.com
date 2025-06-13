@@ -17,7 +17,7 @@ export default class ScenePercipitation {
   PERIOD_ADJUSTMENT = 0.5; // Adjustment factor for rain frequency
   MAX_BODIES = 800; // Maximum number of raindrops
 
-  isRefreshing: boolean = false;
+  isRendering: boolean = false;
 
   defaultConfig: IScenePercipitationConfig = {
     enabled: true,
@@ -32,15 +32,39 @@ export default class ScenePercipitation {
     this.layer = this.scene.LAYERS.PERCIPITATION;
   }
 
+  render(isInitialRender: boolean = false) {
+    this.isRendering = true;
+
+    if (!isInitialRender) {
+      this.clear();
+    }
+
+    this.isRendering = false;
+  }
+
+  onTick(now: Date) {
+    if (!this.config.enabled) {
+      return; // Skip if not raining
+    }
+
+    const frequencyCheck = random(0, 1);
+    if (frequencyCheck > this.config.intensity * this.PERIOD_ADJUSTMENT) {
+      return; // Skip if random intensity is less than the set intensity
+    }
+
+    const currentBodies = Composite.allBodies(this.layer).length;
+    if (currentBodies >= this.MAX_BODIES) {
+      // Remove the oldest raindrop if the limit is reached
+      Composite.remove(this.layer, Composite.allBodies(this.layer)[0]);
+    }
+
+    const raindrop = this._createBody();
+    Composite.add(this.layer, raindrop);
+  }
+
   updateConfig(config: Partial<IScenePercipitationConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
     return this.config;
-  }
-
-  refresh() {
-    this.isRefreshing = true;
-    this.clear();
-    this.isRefreshing = false;
   }
 
   clear() {
@@ -48,13 +72,17 @@ export default class ScenePercipitation {
     Composite.clear(this.layer, false, true);
   }
 
-  createBody() {
-    return this.config.percipitationType === "snow"
-      ? this.createSnowBody()
-      : this.createRainBody();
+  destroy() {
+    this.clear();
   }
 
-  createSnowBody() {
+  _createBody() {
+    return this.config.percipitationType === "snow"
+      ? this._createSnowBody()
+      : this._createRainBody();
+  }
+
+  _createSnowBody() {
     const x = random(0, this.scene.canvasWidth);
     const y = 0;
     const sides = random(5, 7); // Random number of sides for the snowflake
@@ -85,7 +113,7 @@ export default class ScenePercipitation {
     return snowflake;
   }
 
-  createRainBody() {
+  _createRainBody() {
     const x = random(0, this.scene.canvasWidth);
     const y = 0;
     const width = random(4, 8);
@@ -114,25 +142,5 @@ export default class ScenePercipitation {
     });
 
     return raindrop;
-  }
-
-  onTick() {
-    if (!this.config.enabled) {
-      return; // Skip if not raining
-    }
-
-    const frequencyCheck = random(0, 1);
-    if (frequencyCheck > this.config.intensity * this.PERIOD_ADJUSTMENT) {
-      return; // Skip if random intensity is less than the set intensity
-    }
-
-    const currentBodies = Composite.allBodies(this.layer).length;
-    if (currentBodies >= this.MAX_BODIES) {
-      // Remove the oldest raindrop if the limit is reached
-      Composite.remove(this.layer, Composite.allBodies(this.layer)[0]);
-    }
-
-    const raindrop = this.createBody();
-    Composite.add(this.layer, raindrop);
   }
 }

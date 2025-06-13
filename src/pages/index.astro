@@ -35,12 +35,15 @@ interface Props {
       const date = new Date();
       date.setHours(10, 0, 0); // Set the time to 10:00 AM
       el.config = {
-        overrides: {
-          currentTime: date,
-        },
+        // overrides: {
+        //   currentTime: date,
+        // },
         clock: {
           format: "digital",
           showSeconds: false,
+        },
+        percipitation: {
+          enabled: true,
         },
       };
     }

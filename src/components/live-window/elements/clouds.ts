@@ -15,7 +15,7 @@ export default class SceneClouds {
 
   PERIOD_ADJUSTMENT = 0.5; // Adjustment factor
 
-  isRefreshing: boolean = false;
+  isRendering: boolean = false;
 
   defaultConfig: ISceneCloudsConfig = {
     enabled: true,
@@ -27,7 +27,76 @@ export default class SceneClouds {
   constructor(scene: LiveWindowScene, config: Partial<ISceneCloudsConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
-    this.render();
+    this.render(true);
+  }
+
+  render(isInitialRender: boolean = false) {
+    this.isRendering = true;
+
+    if (!isInitialRender) {
+      this.clear();
+    }
+
+    if (!this.config.enabled) {
+      this.isRendering = false;
+      return;
+    }
+
+
+    for (let i = 0; i < this.ADJUSTED_MAX_BODIES; i++) {
+      const body = this._createBody(true);
+      if (!body) {
+        continue; // Skip if body creation failed
+      }
+      Composite.add(this.scene.LAYERS.CLOUDS, body);
+    }
+
+    this.isRendering = false;
+  }
+
+  onTick(now: Date) {
+    if (this.isRendering || !this.config.enabled) {
+      return; // Skip if effects are not enabled
+    }
+
+    const bodies = Composite.allBodies(this.scene.LAYERS.CLOUDS);
+    let numBodies = bodies.length;
+
+    for (const body of bodies) {
+      const x = body.position.x + random(0.1, 0.4);
+      const y = body.position.y;
+      Body.setPosition(body, { x, y });
+
+      if (
+        body.bounds.max.x > this.scene.canvasWidth ||
+        body.bounds.max.y > this.scene.canvasHeight
+      ) {
+        numBodies--; // Decrease the count of bodies
+        if (
+          body.bounds.min.x > this.scene.canvasWidth ||
+          body.bounds.min.y > this.scene.canvasHeight
+        ) {
+          Composite.remove(this.scene.LAYERS.CLOUDS, body);
+        }
+      }
+    }
+
+    if (numBodies >= this.ADJUSTED_MAX_BODIES) {
+      return; // Skip if the maximum number of bodies is reached
+    }
+    const frequencyCheck = random(0, 1);
+    if (
+      frequencyCheck >
+      this.config.intensity * this.PERIOD_ADJUSTMENT
+    ) {
+      return; // Skip if random intensity is less than the set intensity
+    }
+
+    const newBody = this._createBody();
+    if (!newBody) {
+      return; // Skip if body creation failed
+    }
+    Composite.add(this.scene.LAYERS.CLOUDS, newBody);
   }
 
   updateConfig(config: Partial<ISceneCloudsConfig> | null) {
@@ -38,11 +107,9 @@ export default class SceneClouds {
   clear() {
     Composite.clear(this.scene.LAYERS.CLOUDS, false, true); // Clear the clouds layer
   }
-  refresh() {
-    this.isRefreshing = true;
+
+  destroy() {
     this.clear();
-    this.render();
-    this.isRefreshing = false;
   }
 
   get MAX_BODIES() {
@@ -54,31 +121,17 @@ export default class SceneClouds {
     return this.MAX_BODIES * this.config.intensity; // Adjusted maximum based on intensity
   }
 
-  render() {
-    if (!this.config.enabled) {
-      return; // Skip if  effects are not enabled
-    }
-
-    for (let i = 0; i < this.ADJUSTED_MAX_BODIES; i++) {
-      const body = this.createBody(true);
-      if (!body) {
-        continue; // Skip if body creation failed
-      }
-      Composite.add(this.scene.LAYERS.CLOUDS, body);
-    }
-  }
-
-  createBody(isInit: boolean = false) {
+  _createBody(isInit: boolean = false) {
     if (!this.config.enabled) {
       return; // Skip if  effects are not enabled
     }
 
     return this.config.cloudType === "mist"
-      ? this.createMistBody(isInit)
-      : this.createCloudBody(isInit);
+      ? this._createMistBody(isInit)
+      : this._createCloudBody(isInit);
   }
 
-  createMistBody(isInit: boolean = false) {
+  _createMistBody(isInit: boolean = false) {
     const buffer = 5; // Buffer around the mist layer
     const adjustedHeight = this.scene.canvasHeight - buffer * 2; // Adjust height for the mist layer
     const width = random(this.scene.canvasWidth / 2, this.scene.canvasWidth);
@@ -107,7 +160,7 @@ export default class SceneClouds {
     return mistLayer;
   }
 
-  createCloudBody(isInit: boolean = false) {
+  _createCloudBody(isInit: boolean = false) {
     const width = random(this.scene.canvasWidth / 2, this.scene.canvasWidth);
     const x = isInit
       ? random(0, this.scene.canvasWidth)
@@ -151,50 +204,5 @@ export default class SceneClouds {
       },
     });
     return cloud;
-  }
-
-  onTick() {
-    if (this.isRefreshing || !this.config.enabled) {
-      return; // Skip if effects are not enabled
-    }
-
-    const bodies = Composite.allBodies(this.scene.LAYERS.CLOUDS);
-    let numBodies = bodies.length;
-
-    for (const body of bodies) {
-      const x = body.position.x + random(0.1, 0.4);
-      const y = body.position.y;
-      Body.setPosition(body, { x, y });
-
-      if (
-        body.bounds.max.x > this.scene.canvasWidth ||
-        body.bounds.max.y > this.scene.canvasHeight
-      ) {
-        numBodies--; // Decrease the count of bodies
-        if (
-          body.bounds.min.x > this.scene.canvasWidth ||
-          body.bounds.min.y > this.scene.canvasHeight
-        ) {
-          Composite.remove(this.scene.LAYERS.CLOUDS, body);
-        }
-      }
-    }
-
-    if (numBodies >= this.ADJUSTED_MAX_BODIES) {
-      return; // Skip if the maximum number of bodies is reached
-    }
-    const frequencyCheck = random(0, 1);
-    if (
-      frequencyCheck >
-      this.config.intensity * this.PERIOD_ADJUSTMENT
-    ) {
-      return; // Skip if random intensity is less than the set intensity
-    }
-
-    const newBody = this.createBody();
-    if (!newBody) {
-      return; // Skip if body creation failed
-    }
-    Composite.add(this.scene.LAYERS.CLOUDS, newBody);
   }
 }

@@ -19,7 +19,7 @@ export default class SceneClock {
   handsCenterBody: Body | null = null;
   segmentComposites: Composite[] = []; // Store segment bodies for digital clock
 
-  isRefreshing: boolean = false;
+  isRendering: boolean = false;
 
   defaultConfig: ISceneClockConfig = {
     enabled: true,
@@ -31,21 +31,45 @@ export default class SceneClock {
   constructor(scene: LiveWindowScene, config: Partial<ISceneClockConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
-    this.render();
+    this.render(true);
+  }
+
+  render(isInitialRender = false) {
+    this.isRendering = true;
+
+    if (!isInitialRender) {
+      this.clear();
+    }
+
+    if (!this.config.enabled) {
+      this.isRendering = false;
+      return;
+    }
+
+    this.body = this._createBody();
+    Composite.add(this.scene.LAYERS.CLOCK, this.body);
+
+    this.isRendering = false;
+  }
+
+  onTick(now: Date) {
+    if (this.isRendering || !this.config.enabled) {
+      return; // Skip if clock is disabled or body is not initialized
+    }
+
+    switch (this.config.format) {
+      case "digital":
+        this._updateDigitalClock(now);
+        break;
+      case "analog":
+        this._updateAnalogClock(now);
+        break;
+    }
   }
 
   updateConfig(config: Partial<ISceneClockConfig> | null) {
     this.config = merge({}, this.defaultConfig, config || {});
     return this.config;
-  }
-
-  render() {
-    if (!this.config.enabled) {
-      return;
-    }
-
-    this.body = this.createBody();
-    Composite.add(this.scene.LAYERS.CLOCK, this.body);
   }
 
   clear() {
@@ -58,18 +82,15 @@ export default class SceneClock {
     this.segmentComposites = [];
   }
 
-  refresh() {
-    this.isRefreshing = true;
+  destroy() {
     this.clear();
-    this.render();
-    this.isRefreshing = false;
   }
 
-  createBody() {
-    return this.config.format === "digital" ? this.createDigitalBody() : this.createAnalogBody();
+  _createBody() {
+    return this.config.format === "digital" ? this._createDigitalBody() : this._createAnalogBody();
   }
 
-  createDigitalBody() {
+  _createDigitalBody() {
     const numSegments = this.config.showSeconds ? 6 : 4; // Number of segments for the digital clock
     const gap = Math.min(Math.max(this.scene.canvasWidth / 30, 10), 25); // Gap between segments
 
@@ -106,7 +127,7 @@ export default class SceneClock {
 
       const x = clockX + i * (segmentWidth + gap);
       const y = clockY;
-      const segment = this.createDigitalSegment(
+      const segment = this._createDigitalSegment(
         x,
         y,
         segmentWidth,
@@ -161,7 +182,7 @@ export default class SceneClock {
     return displayBodies;
   }
 
-  createDigitalSegment(
+  _createDigitalSegment(
     x: number,
     y: number,
     width: number,
@@ -243,7 +264,7 @@ export default class SceneClock {
     return segmentComposite;
   }
 
-  createAnalogBody() {
+  _createAnalogBody() {
     const minSize = Math.min(this.scene.canvasWidth, this.scene.canvasHeight);
     const clockBuffer = 50; // Buffer around the clock
     const clockRadius = (minSize - clockBuffer * 2) / 2;
@@ -420,26 +441,10 @@ export default class SceneClock {
     return clock;
   }
 
-  onTick() {
-    if (this.isRefreshing || !this.config.enabled) {
-      return; // Skip if clock is disabled or body is not initialized
-    }
-
-    switch (this.config.format) {
-      case "digital":
-        this.updateDigitalClock();
-        break;
-      case "analog":
-        this.updateAnalogClock();
-        break;
-    }
-  }
-
-  updateDigitalClock() {
-    const currentTime = this.scene.getNow();
-    const hours = String(currentTime.getHours()).padStart(2, "0");
-    const minutes = String(currentTime.getMinutes()).padStart(2, "0");
-    const seconds = String(currentTime.getSeconds()).padStart(2, "0");
+  _updateDigitalClock(now: Date) {
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
 
     // Update the segments based on the current time
     if (this.segmentComposites.length < 4) {
@@ -452,18 +457,18 @@ export default class SceneClock {
     const second1 = parseInt(seconds[0], 10);
     const second2 = parseInt(seconds[1], 10);
 
-    this.updateDigitalSegment(this.segmentComposites[0], hour1);
-    this.updateDigitalSegment(this.segmentComposites[1], hour2);
-    this.updateDigitalSegment(this.segmentComposites[2], minute1);
-    this.updateDigitalSegment(this.segmentComposites[3], minute2);
+    this._updateDigitalSegment(this.segmentComposites[0], hour1);
+    this._updateDigitalSegment(this.segmentComposites[1], hour2);
+    this._updateDigitalSegment(this.segmentComposites[2], minute1);
+    this._updateDigitalSegment(this.segmentComposites[3], minute2);
 
     if (this.config.showSeconds && this.segmentComposites.length > 4) {
-      this.updateDigitalSegment(this.segmentComposites[4], second1);
-      this.updateDigitalSegment(this.segmentComposites[5], second2);
+      this._updateDigitalSegment(this.segmentComposites[4], second1);
+      this._updateDigitalSegment(this.segmentComposites[5], second2);
     }
   }
 
-  updateDigitalSegment(composite: Composite, value: number) {
+  _updateDigitalSegment(composite: Composite, value: number) {
     const segmentStates = [
       [1, 1, 1, 1, 1, 1, 0], // 0
       [0, 1, 1, 0, 0, 0, 0], // 1
@@ -501,7 +506,7 @@ export default class SceneClock {
     }
   }
 
-  updateAnalogClock() {
+  _updateAnalogClock(now: Date) {
     if (
       !this.hourBody ||
       !this.minuteBody ||
@@ -510,8 +515,7 @@ export default class SceneClock {
       return;
     }
 
-    const currentTime = this.scene.getNow();
-    const clockPosition = this.calculateClockAngles(currentTime);
+    const clockPosition = this._calculateClockAngles(now);
     Body.setAngle(this.hourBody, clockPosition.hour);
     Body.setAngle(this.minuteBody, clockPosition.minute);
     if (this.config.showSeconds && this.secondBody) {
@@ -519,7 +523,7 @@ export default class SceneClock {
     }
   }
 
-  calculateClockAngles(time: Date | null = null) {
+  _calculateClockAngles(time: Date | null = null) {
     const currentTime = time || new Date();
 
     const offset = 90; // Offset to align with the top of the clock
