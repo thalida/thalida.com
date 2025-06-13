@@ -1,12 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import Layout from "../layouts/Layout.astro";
 import { COLLECTION_NAMES } from "../content.config";
-import WindowModel from "../components/WindowModel.astro";
+import Layout from "../layouts/Layout.astro";
 
 let posts = [];
-for (const collection of COLLECTION_NAMES) {
+for (const collection of COLLECTION_NAMES as const) {
   const collectionPosts = await getCollection(collection);
   posts = posts.concat(collectionPosts);
 }
@@ -27,6 +26,37 @@ interface Props {
 }
 ---
 
+<script src="../components/live-window" />
+
+<script>
+  setTimeout(() => {
+    const el = document.getElementById('top-window');
+    if (el) {
+      const date = new Date();
+      date.setHours(10, 0, 0); // Set the time to 10:00 AM
+      el.config = {
+        overrides: {
+          currentTime: date,
+        },
+        clock: {
+          format: "digital",
+          showSeconds: false,
+        },
+      };
+    }
+  }, 1000);
+  // setTimeout(() => {
+  //   const el = document.getElementById('top-window');
+  //   if (el) {
+  //     el.config = {
+  //       clock: {
+  //         format: "analog",
+  //       },
+  //     };
+  //   }
+  // }, 3000);
+</script>
+
 <Layout>
   <div class="grid grid-cols-5 gap-0.5 p-0.5 auto-rows-[40vh] text-gray-100">
     <div class="row-span-2 grid grid-cols-subgrid gap-0.5">
@@ -35,7 +65,7 @@ interface Props {
     </div>
     <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-0.5">
       <div class="flex overflow-hidden rounded-4xl row-span-2 col-span-3">
-        <WindowModel />
+        <live-window id="top-window" class="w-full h-full"></live-window>
       </div>
       <div class="flex bg-gray-900 p-4 rounded-4xl row-span-2">
         current weather & controls
