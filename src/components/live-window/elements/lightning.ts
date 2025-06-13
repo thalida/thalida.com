@@ -9,7 +9,7 @@ import {
 
 import { random } from "../utils";
 import type { ICoords, ISceneLightningConfig } from "../types";
-import type LiveWindowScene from "..";
+import type LiveWindowScene from "../scene";
 
 
 export default class SceneLightning {

@@ -5,7 +5,7 @@ import {
 } from "matter-js";
 
 import { random } from "../utils";
-import type LiveWindowScene from "..";
+import type LiveWindowScene from "../scene";
 import type { ISceneCloudsConfig } from "../types";
 import { merge } from "lodash";
 

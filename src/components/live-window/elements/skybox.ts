@@ -1,6 +1,6 @@
 import { merge } from "lodash";
 import type { IColor, ISceneClockConfig, ISceneSkyboxConfig } from "../types";
-import type LiveWindowScene from "..";
+import type LiveWindowScene from "../scene";
 
 
 export default class SceneSkyBox {

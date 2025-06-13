@@ -7,7 +7,7 @@ import {
 } from "matter-js";
 
 import type { ISceneClockConfig } from "../types";
-import type LiveWindowScene from "..";
+import type LiveWindowScene from "../scene";
 
 
 export default class SceneClock {
