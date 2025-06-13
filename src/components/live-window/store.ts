@@ -8,6 +8,9 @@ export const IP_REGISTRY_KEY = import.meta.env.PUBLIC_IP_REGISTRY_API_KEY;
 interface IStore {
   location: {
     lastFetched: number | null;
+    city: string | null;
+    region: string | null;
+    country: string | null;
     lat: number | null;
     lng: number | null;
   };
@@ -29,7 +32,14 @@ class Store {
   store: IStore;
 
   defaultStore: IStore = {
-    location: { lastFetched: null, lat: null, lng: null },
+    location: {
+      lastFetched: null,
+      lat: null,
+      lng: null,
+      city: null,
+      region: null,
+      country: null,
+    },
     weather: {
       lastFetched: null,
       current: null,
@@ -71,6 +81,9 @@ class Store {
     const data = await response.json();
     this.store.location.lat = data.location.latitude;
     this.store.location.lng = data.location.longitude;
+    this.store.location.city = data.location.city || null;
+    this.store.location.country = data.location.country.name || null;
+    this.store.location.region = data.location.region.name || null;
     this.store.location.lastFetched = Date.now();
     this.save();
   }
