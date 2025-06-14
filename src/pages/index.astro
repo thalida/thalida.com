@@ -33,7 +33,7 @@ interface Props {
     const el = document.getElementById('top-window');
     if (el) {
       const date = new Date();
-      date.setHours(1, 0, 0); // Set the time to 10:00 AM
+      date.setHours(18, 0, 0); // Set the time to 10:00 AM
       el.config = {
         useLiveWeather: true,
         useLiveTime: true,
@@ -43,7 +43,7 @@ interface Props {
           enableBody: true,
         },
         clock: {
-          // format: "digital",
+          format: "digital",
           // showSeconds: false,
         },
         // percipitation: {
@@ -52,7 +52,7 @@ interface Props {
         // },
       };
     }
-  }, 1000);
+  }, 10);
   // setTimeout(() => {
   //   const el = document.getElementById('top-window');
   //   if (el) {

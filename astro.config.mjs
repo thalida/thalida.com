@@ -18,5 +18,8 @@ export default defineConfig({
     server: {
       allowedHosts: ['localhost', 'thalida.tunl.sh'],
     },
+    preview: {
+      allowedHosts: ['localhost', 'thalida.tunl.sh'],
+    },
   },
 });

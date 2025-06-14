@@ -37,13 +37,10 @@ export default class LiveWindowComponent extends HTMLElement {
     wrapper.style.width = "100%";
     wrapper.style.height = "100%";
     this.#shadow.appendChild(wrapper);
-    this.scene = new LiveWindowScene(wrapper, this.config);
-    this.resizeObserver = new ResizeObserver(
-      throttle(() => {
-        this.scene?.onResize();
-      }, 100)
-    );
-    this.resizeObserver.observe(this);
+
+    window.addEventListener("load", () => {
+      this.scene = new LiveWindowScene(wrapper, this.config);
+    });
   }
 
   disconnectedCallback() {

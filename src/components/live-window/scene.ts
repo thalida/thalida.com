@@ -99,6 +99,8 @@ export default class LiveWindowScene {
 
   config: ILiveWindowSceneConfig;
 
+  _lastTickTime: number = 0;
+
   constructor(container: HTMLElement, config: Partial<ILiveWindowSceneConfig> | null = null) {
     this.config = merge({}, this.defaultConfig, config || {});
     this.element = container;
@@ -250,7 +252,15 @@ export default class LiveWindowScene {
       return;
     }
 
+    if (!this.engine || !this.world || !this.renderer) {
+      return; // Ensure engine, world, and renderer are initialized
+    }
+
     const now = this._getNow();
+
+    if(this.engine.timing.timestamp - this._lastTickTime < 20) {
+      return;
+    }
 
     this.clock?.onTick(now, this.config.useLiveWeather);
     this.clouds?.onTick(now, this.config.useLiveWeather);
@@ -258,6 +268,8 @@ export default class LiveWindowScene {
     this.lightning?.onTick(now, this.config.useLiveWeather);
     this.perciptiation?.onTick(now, this.config.useLiveWeather);
     this.skybox?.onTick(now, this.config.useLiveWeather);
+
+    this._lastTickTime = this.engine.timing.timestamp;
   }
 
   onResize() {
@@ -303,6 +315,8 @@ export default class LiveWindowScene {
 
     Render.stop(this.renderer);
     Composite.clear(this.world, false, true);
+
+    this._lastTickTime = 0;
 
     this.clock?.clear();
     this.clouds?.clear();

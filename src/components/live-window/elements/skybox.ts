@@ -12,22 +12,83 @@ export default class SceneSkyBox {
   HOURS_IN_DAY = 24;
   MINUTES_IN_HOUR = 60;
 
+  // TIME_COLORS = [
+  //   { r: 3, g: 8, b: 22 },
+  //   { r: 13, g: 19, b: 38 },
+  //   { r: 49, g: 89, b: 129 },
+  //   { r: 94, g: 201, b: 237 },
+  //   { r: 94, g: 237, b: 151 },
+  //   { r: 178, g: 237, b: 94 },
+  //   { r: 235, g: 237, b: 94 },
+  //   { r: 235, g: 154, b: 94 },
+  //   { r: 154, g: 94, b: 237 },
+  //   { r: 29, g: 29, b: 201 },
+  //   { r: 10, g: 19, b: 67 },
+  //   { r: 6, g: 13, b: 45 },
+  // ];
+
+  // TIME_COLORS = [
+  //   { r: 3, g: 8, b: 22 },
+  //   { r: 13, g: 19, b: 38 },
+  //   { r: 49, g: 89, b: 129 },
+  //   { r: 94, g: 201, b: 237 },
+  //   { r: 140, g: 230, b: 242 },
+  //   { r: 163, g: 245, b: 186 },
+  //   { r: 245, g: 245, b: 163 },
+  //   { r: 245, g: 216, b: 163 },
+  //   { r: 245, g: 163, b: 234 },
+  //   { r: 154, g: 94, b: 237 },
+  //   { r: 48, g: 19, b: 134 },
+  //   { r: 16, g: 6, b: 45 },
+  // ];
+
+  // TIME_COLORS = [
+  //   { r: 3, g: 8, b: 22 },
+  //   { r: 13, g: 19, b: 38 },
+  //   { r: 49, g: 89, b: 129 },
+  //   { r: 94, g: 201, b: 237 },
+  //   { r: 140, g: 230, b: 242 },
+  //   { r: 163, g: 245, b: 186 },
+  //   { r: 255, g: 255, b: 153 },
+  //   { r: 252, g: 220, b: 156 },
+  //   { r: 249, g: 184, b: 185 },
+  //   { r: 154, g: 94, b: 237 },
+  //   { r: 48, g: 19, b: 134 },
+  //   { r: 16, g: 6, b: 45 },
+  // ];
+
+  // TIME_COLORS = [
+  //   { r: 0, g: 6, b: 10 },
+  //   { r: 0, g: 15, b: 26 },
+  //   { r: 0, g: 30, b: 51 },
+  //   { r: 0, g: 45, b: 77 },
+  //   { r: 0, g: 104, b: 179 },
+  //   { r: 51, g: 170, b: 255 },
+  //   { r: 153, g: 229, b: 255 },
+  //   { r: 128, g: 202, b: 255 },
+  //   { r: 128, g: 149, b: 255 },
+  //   { r: 255, g: 102, b: 255 },
+  //   { r: 34, g: 0, b: 102 },
+  //   { r: 0, g: 6, b: 51 },
+  // ];
+
   TIME_COLORS = [
-    { r: 3, g: 8, b: 22 },
-    { r: 13, g: 19, b: 38 },
-    { r: 49, g: 89, b: 129 },
-    { r: 94, g: 201, b: 237 },
-    { r: 94, g: 237, b: 151 },
-    { r: 178, g: 237, b: 94 },
-    { r: 235, g: 237, b: 94 },
-    { r: 235, g: 154, b: 94 },
-    { r: 154, g: 94, b: 237 },
-    { r: 29, g: 29, b: 201 },
-    { r: 10, g: 19, b: 67 },
-    { r: 6, g: 13, b: 45 },
+    { r: 0, g: 6, b: 10 },
+    { r: 0, g: 15, b: 26 },
+    { r: 0, g: 30, b: 51 },
+    { r: 0, g: 45, b: 77 },
+    { r: 0, g: 104, b: 179 },
+    { r: 51, g: 170, b: 255 },
+    { r: 153, g: 229, b: 255 },
+    { r: 128, g: 202, b: 255 },
+    { r: 128, g: 149, b: 255 },
+    { r: 255, g: 102, b: 255 },
+    { r: 34, g: 0, b: 102 },
+    { r: 0, g: 9, b: 51 },
+    { r: 0, g: 13, b: 26 },
   ];
-  SUNRISE_COLOR_IDX = 3;
-  SUNSET_COLOR_IDX = 8;
+  SUNRISE_COLOR_IDX = 4;
+  SUNSET_COLOR_IDX = 9;
 
 
   isRendering: boolean = false;
@@ -66,8 +127,8 @@ export default class SceneSkyBox {
     const defaultSunsetDate = new Date(now);
     defaultSunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
 
-    const hourInTheFuture = new Date(now.getTime() + (1 * 60 * 60 * 1000)); // 1 hour in the future
-    const hourInThePast = new Date(now.getTime() - (1 * 60 * 60 * 1000)); // 1 hour in the past
+    const hourInTheFuture = new Date(now.getTime() + (0.15 * 60 * 60 * 1000)); // 1 hour in the future
+    const hourInThePast = new Date(now.getTime() - (0.15 * 60 * 60 * 1000)); // 1 hour in the past
 
     const sunrise = useLiveWeather && store.store.weather.sunrise ? store.store.weather.sunrise : defaultSunriseDate.getTime();
     const sunset = useLiveWeather && store.store.weather.sunset ? store.store.weather.sunset : defaultSunsetDate.getTime();

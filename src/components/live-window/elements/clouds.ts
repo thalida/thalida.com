@@ -162,7 +162,7 @@ export default class SceneClouds {
       case "50d":
       case "50n":
         liveConfig.cloudType = "mist"; // Mist
-        liveConfig.intensity = 0.3; // Misty conditions
+        liveConfig.intensity = 0.1; // Misty conditions
         break;
       default:
         liveConfig.cloudType = this.defaultConfig.cloudType; // Default to clouds
@@ -215,7 +215,7 @@ export default class SceneClouds {
       ? random(0, this.scene.canvasWidth)
       : -1 * (width / random(1, 2)); // Start off-screen to the left
     const y = random(adjustedHeight / 1.5, adjustedHeight);
-    const opacity = random(0.1, 0.2);
+    const opacity = random(0.05, 0.1);
 
     const mistLayer = Bodies.rectangle(x, y, width, height, {
       isStatic: true,
