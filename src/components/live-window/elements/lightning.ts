@@ -34,7 +34,7 @@ export default class SceneLightning {
     this.config = this.updateConfig(config);
   }
 
-  render(isInitialRender: boolean = false) {
+  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
     if (!isInitialRender) {
       this.clear();

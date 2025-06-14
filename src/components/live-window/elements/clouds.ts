@@ -28,17 +28,16 @@ export default class SceneClouds {
   constructor(scene: LiveWindowScene, config: Partial<ISceneCloudsConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
-    this.render(true);
   }
 
-  render(isInitialRender: boolean = false) {
+  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
 
     if (!isInitialRender) {
       this.clear();
     }
 
-    this.updateConfig(this.config);
+    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
 
     if (!this.config.enabled) {
       this.isRendering = false;

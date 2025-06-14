@@ -45,7 +45,7 @@ export default class SceneSkyBox {
     this.config = this.updateConfig(config);
   }
 
-  render(isInitialRender: boolean = false) {
+  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
 
     if (!isInitialRender) {
@@ -104,13 +104,12 @@ export default class SceneSkyBox {
     }
 
     if (this.config.enableHTML) {
-      const color = await this._getRealisticColor(now, { sunrise, sunset });
-      const colorString = `rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+      const colorString = `rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.1)`;
       document.documentElement.style.backgroundColor = colorString;
     }
 
     if (this.config.enableBody) {
-      const bodyGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 0.5), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.5))`;
+      const bodyGradient = `linear-gradient(to bottom, rgba(${pastGradient.start.r}, ${pastGradient.start.g}, ${pastGradient.start.b}, 0.5), rgba(${futureGradient.end.r}, ${futureGradient.end.g}, ${futureGradient.end.b}, 0.5))`;
       document.body.style.background = bodyGradient;
     }
   }

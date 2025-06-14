@@ -31,15 +31,16 @@ export default class SceneClock {
   constructor(scene: LiveWindowScene, config: Partial<ISceneClockConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
-    this.render(true);
   }
 
-  render(isInitialRender = false) {
+  render(isInitialRender = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
 
     if (!isInitialRender) {
       this.clear();
     }
+
+    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
 
     if (!this.config.enabled) {
       this.isRendering = false;

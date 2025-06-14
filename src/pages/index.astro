@@ -33,15 +33,19 @@ interface Props {
     const el = document.getElementById('top-window');
     if (el) {
       const date = new Date();
-      date.setHours(0, 0, 0); // Set the time to 10:00 AM
+      date.setHours(1, 0, 0); // Set the time to 10:00 AM
       el.config = {
         useLiveWeather: true,
         useLiveTime: true,
         now: date,
-        // clock: {
-        //   format: "digital",
-        //   // showSeconds: false,
-        // },
+        skybox: {
+          enableHTML: true,
+          enableBody: true,
+        },
+        clock: {
+          // format: "digital",
+          // showSeconds: false,
+        },
         // percipitation: {
         //   enabled: true,
         //   intensity: 1,

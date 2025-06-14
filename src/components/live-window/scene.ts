@@ -231,12 +231,14 @@ export default class LiveWindowScene {
     this.perciptiation = this.perciptiation || new ScenePercipitation(this, this.config.percipitation);
     this.skybox = this.skybox || new SceneSkyBox(this, this.config.skybox);
 
-    this.clock.render();
-    this.clouds.render();
-    this.fluff.render();
-    this.lightning.render();
-    this.perciptiation.render();
-    this.skybox.render();
+    const now = this._getNow();
+
+    this.clock.render(isInitialRender, now, this.config.useLiveWeather);
+    this.clouds.render(isInitialRender, now, this.config.useLiveWeather);
+    this.fluff.render(isInitialRender, now, this.config.useLiveWeather);
+    this.lightning.render(isInitialRender, now, this.config.useLiveWeather);
+    this.perciptiation.render(isInitialRender, now, this.config.useLiveWeather);
+    this.skybox.render(isInitialRender, now, this.config.useLiveWeather);
 
     Render.run(this.renderer);
 

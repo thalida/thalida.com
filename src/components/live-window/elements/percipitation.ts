@@ -34,7 +34,7 @@ export default class ScenePercipitation {
     this.layer = this.scene.LAYERS.PERCIPITATION;
   }
 
-  render(isInitialRender: boolean = false) {
+  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
 
     if (!isInitialRender) {

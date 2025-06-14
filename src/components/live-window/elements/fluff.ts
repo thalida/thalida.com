@@ -33,7 +33,7 @@ export default class SceneFluff {
     this.layer = this.scene.LAYERS.FLUFF;
   }
 
-  render(isInitialRender: boolean = false) {
+  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
     this.isRendering = true;
 
     if (!isInitialRender) {
