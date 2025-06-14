@@ -52,12 +52,12 @@ export default class SceneClock {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveData: boolean = true) {
+  onTick(now: Date, useLiveWeather: boolean = true) {
     if (this.isRendering) {
       return; // Skip if clock is disabled or body is not initialized
     }
 
-    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
 
     if (!this.config.enabled) {
       return; // Skip if clock is not enabled

@@ -18,6 +18,7 @@ import SceneLightning from "./elements/lightning";
 import SceneClouds from "./elements/clouds";
 import SceneSkyBox from "./elements/skybox";
 import store from "./store";
+import SceneFluff from "./elements/fluff";
 
 
 export default class LiveWindowScene {
@@ -56,16 +57,21 @@ export default class LiveWindowScene {
     PERCIPITATION: Composite.create({
       label: "Percipitation Layer",
     }),
+    FLUFF: Composite.create({
+      label: "Fluff Layer",
+    }),
   };
 
   clock: SceneClock | null = null;
-  perciptiation: ScenePercipitation | null = null;
-  lightning: SceneLightning | null = null;
   clouds: SceneClouds | null = null;
+  fluff: SceneFluff | null = null;
+  lightning: SceneLightning | null = null;
+  perciptiation: ScenePercipitation | null = null;
   skybox: SceneSkyBox | null = null;
 
   defaultConfig: ILiveWindowSceneConfig = {
-    useLiveData: true,
+    useLiveWeather: true,
+    useLiveTime: true,
     clock: {
       enabled: true, // Whether the clock is enabled
       format: "analog", // Style of the clock
@@ -74,8 +80,11 @@ export default class LiveWindowScene {
     skybox: {
       enabled: true,
       enableScene: true,
-      enableBody: true,
-      enableHTML: true,
+      enableBody: false,
+      enableHTML: false,
+    },
+    fluff: {
+      enabled: false,
     },
     percipitation: {
       enabled: false,
@@ -217,12 +226,14 @@ export default class LiveWindowScene {
 
     this.clock = this.clock || new SceneClock(this, this.config.clock);
     this.clouds = this.clouds || new SceneClouds(this, this.config.clouds);
+    this.fluff = this.fluff || new SceneFluff(this, this.config.fluff);
     this.lightning = this.lightning || new SceneLightning(this, this.config.lightning);
     this.perciptiation = this.perciptiation || new ScenePercipitation(this, this.config.percipitation);
     this.skybox = this.skybox || new SceneSkyBox(this, this.config.skybox);
 
     this.clock.render();
     this.clouds.render();
+    this.fluff.render();
     this.lightning.render();
     this.perciptiation.render();
     this.skybox.render();
@@ -238,13 +249,13 @@ export default class LiveWindowScene {
     }
 
     const now = this._getNow();
-    const useLiveData = this.config.useLiveData;
 
-    this.clock?.onTick(now, useLiveData);
-    this.clouds?.onTick(now, useLiveData);
-    this.lightning?.onTick(now, useLiveData);
-    this.perciptiation?.onTick(now, useLiveData);
-    this.skybox?.onTick(now, useLiveData);
+    this.clock?.onTick(now, this.config.useLiveWeather);
+    this.clouds?.onTick(now, this.config.useLiveWeather);
+    this.fluff?.onTick(now, this.config.useLiveWeather);
+    this.lightning?.onTick(now, this.config.useLiveWeather);
+    this.perciptiation?.onTick(now, this.config.useLiveWeather);
+    this.skybox?.onTick(now, this.config.useLiveWeather);
   }
 
   onResize() {
@@ -259,6 +270,7 @@ export default class LiveWindowScene {
     const newConfig = merge({}, this.defaultConfig, config || {});
     newConfig.clock = this.clock?.updateConfig(newConfig.clock) || newConfig.clock;
     newConfig.clouds = this.clouds?.updateConfig(newConfig.clouds) || newConfig.clouds;
+    newConfig.fluff = this.fluff?.updateConfig(newConfig.fluff) || newConfig.fluff;
     newConfig.lightning = this.lightning?.updateConfig(newConfig.lightning) || newConfig.lightning;
     newConfig.percipitation = this.perciptiation?.updateConfig(newConfig.percipitation) || newConfig.percipitation;
     newConfig.skybox = this.skybox?.updateConfig(newConfig.skybox) || newConfig.skybox;
@@ -271,7 +283,7 @@ export default class LiveWindowScene {
 
     await store.fetchWeather()
 
-    if (!this.config.useLiveData) {
+    if (!this.config.useLiveWeather) {
       return;
     }
 
@@ -292,6 +304,7 @@ export default class LiveWindowScene {
 
     this.clock?.clear();
     this.clouds?.clear();
+    this.fluff?.clear();
     this.lightning?.clear();
     this.perciptiation?.clear();
     this.skybox?.clear();
@@ -307,12 +320,13 @@ export default class LiveWindowScene {
 
     this.clock?.destroy();
     this.clouds?.destroy();
+    this.fluff?.destroy();
     this.lightning?.destroy();
     this.perciptiation?.destroy();
     this.skybox?.destroy();
   }
 
   _getNow() {
-    return !this.config.useLiveData && this.config.now ? this.config.now : new Date();
+    return !this.config.useLiveTime && this.config.now ? this.config.now : new Date();
   }
 }

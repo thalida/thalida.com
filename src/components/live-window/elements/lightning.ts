@@ -42,12 +42,12 @@ export default class SceneLightning {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveData: boolean = true) {
+  onTick(now: Date, useLiveWeather: boolean = true) {
     if (this.isRendering) {
       return;
     }
 
-    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
 
     if (!this.config.enabled) {
       return; // Skip if lightning is not enabled

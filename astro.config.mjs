@@ -15,5 +15,8 @@ export default defineConfig({
   integrations: [partytown(), sitemap(), mdx()],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ['localhost', 'thalida.tunl.sh'],
+    },
   },
 });

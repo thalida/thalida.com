@@ -29,25 +29,26 @@ interface Props {
 <script src="../components/live-window" />
 
 <script>
-  // setTimeout(() => {
-  //   const el = document.getElementById('top-window');
-  //   if (el) {
-  //     const date = new Date();
-  //     date.setHours(10, 0, 0); // Set the time to 10:00 AM
-  //     el.config = {
-  //       useLiveData: true,
-  //       // now: date,
-  //       clock: {
-  //         format: "digital",
-  //         showSeconds: false,
-  //       },
-  //       percipitation: {
-  //         enabled: true,
-  //         intensity: 1,
-  //       },
-  //     };
-  //   }
-  // }, 5000);
+  setTimeout(() => {
+    const el = document.getElementById('top-window');
+    if (el) {
+      const date = new Date();
+      date.setHours(0, 0, 0); // Set the time to 10:00 AM
+      el.config = {
+        useLiveWeather: true,
+        useLiveTime: true,
+        now: date,
+        // clock: {
+        //   format: "digital",
+        //   // showSeconds: false,
+        // },
+        // percipitation: {
+        //   enabled: true,
+        //   intensity: 1,
+        // },
+      };
+    }
+  }, 1000);
   // setTimeout(() => {
   //   const el = document.getElementById('top-window');
   //   if (el) {
@@ -61,12 +62,12 @@ interface Props {
 </script>
 
 <Layout>
-  <div class="grid grid-cols-5 gap-0.5 p-0.5 auto-rows-[40vh] text-gray-100">
-    <div class="row-span-2 grid grid-cols-subgrid gap-0.5">
+  <div class="grid grid-cols-5 gap-1 p-1 auto-rows-[40vh] text-gray-100">
+    <div class="row-span-2 grid grid-cols-subgrid gap-1">
       <div class="flex bg-gray-900 p-4 rounded-4xl">06</div>
       <div class="flex bg-gray-900 p-4 rounded-4xl">07</div>
     </div>
-    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-0.5">
+    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-1">
       <div class="flex overflow-hidden rounded-4xl row-span-2 col-span-3">
         <live-window id="top-window" class="w-full h-full"></live-window>
       </div>
@@ -76,7 +77,7 @@ interface Props {
     </div>
     {
       posts.map((post) => (
-        <div class="flex bg-gray-900 p-4 rounded-4xl">
+        <div class="flex bg-gray-900 p-4 rounded-4xl overflow-clip">
           {post.collection === "links" ? (
             <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
           ) : (

@@ -32,6 +32,7 @@ export default class LiveWindowComponent extends HTMLElement {
 
   connectedCallback() {
     const wrapper = document.createElement("div");
+    wrapper.setAttribute("part", "live-window");
     wrapper.setAttribute("class", "live-window");
     wrapper.style.width = "100%";
     wrapper.style.height = "100%";

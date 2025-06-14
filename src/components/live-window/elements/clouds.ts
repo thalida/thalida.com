@@ -57,12 +57,12 @@ export default class SceneClouds {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveData: boolean = true) {
+  onTick(now: Date, useLiveWeather: boolean = true) {
     if (this.isRendering) {
       return; // Skip if effects are not enabled
     }
 
-    this.updateConfig(useLiveData ? this.getLiveConfig() : this.config);
+    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
 
     if (!this.config.enabled) {
       return; // Skip if effects are not enabled
@@ -73,7 +73,11 @@ export default class SceneClouds {
 
     for (const body of bodies) {
       const x = body.position.x + random(0.1, 0.4);
-      const y = body.position.y;
+      // const y = body.position.y;
+      const cachedY = body.cachedPosition || body.position.y;
+      body.cachedPosition = cachedY;
+      const y = body.cachedPosition + (5 * Math.sin(now.getTime() * 0.0012));
+
       Body.setPosition(body, { x, y });
 
       if (
@@ -192,9 +196,15 @@ export default class SceneClouds {
       return; // Skip if  effects are not enabled
     }
 
-    return this.config.cloudType === "mist"
+    const body = this.config.cloudType === "mist"
       ? this._createMistBody(isInit)
       : this._createCloudBody(isInit);
+
+    if (!body) {
+      return; // Skip if body creation failed
+    }
+
+    return body;
   }
 
   _createMistBody(isInit: boolean = false) {
