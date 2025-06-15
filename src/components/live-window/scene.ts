@@ -80,8 +80,7 @@ export default class LiveWindowScene {
     skybox: {
       enabled: true,
       enableScene: true,
-      enableBody: false,
-      enableHTML: false,
+      enableHTMLTheme: false,
     },
     fluff: {
       enabled: false,

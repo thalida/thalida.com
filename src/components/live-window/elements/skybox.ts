@@ -12,66 +12,6 @@ export default class SceneSkyBox {
   HOURS_IN_DAY = 24;
   MINUTES_IN_HOUR = 60;
 
-  // TIME_COLORS = [
-  //   { r: 3, g: 8, b: 22 },
-  //   { r: 13, g: 19, b: 38 },
-  //   { r: 49, g: 89, b: 129 },
-  //   { r: 94, g: 201, b: 237 },
-  //   { r: 94, g: 237, b: 151 },
-  //   { r: 178, g: 237, b: 94 },
-  //   { r: 235, g: 237, b: 94 },
-  //   { r: 235, g: 154, b: 94 },
-  //   { r: 154, g: 94, b: 237 },
-  //   { r: 29, g: 29, b: 201 },
-  //   { r: 10, g: 19, b: 67 },
-  //   { r: 6, g: 13, b: 45 },
-  // ];
-
-  // TIME_COLORS = [
-  //   { r: 3, g: 8, b: 22 },
-  //   { r: 13, g: 19, b: 38 },
-  //   { r: 49, g: 89, b: 129 },
-  //   { r: 94, g: 201, b: 237 },
-  //   { r: 140, g: 230, b: 242 },
-  //   { r: 163, g: 245, b: 186 },
-  //   { r: 245, g: 245, b: 163 },
-  //   { r: 245, g: 216, b: 163 },
-  //   { r: 245, g: 163, b: 234 },
-  //   { r: 154, g: 94, b: 237 },
-  //   { r: 48, g: 19, b: 134 },
-  //   { r: 16, g: 6, b: 45 },
-  // ];
-
-  // TIME_COLORS = [
-  //   { r: 3, g: 8, b: 22 },
-  //   { r: 13, g: 19, b: 38 },
-  //   { r: 49, g: 89, b: 129 },
-  //   { r: 94, g: 201, b: 237 },
-  //   { r: 140, g: 230, b: 242 },
-  //   { r: 163, g: 245, b: 186 },
-  //   { r: 255, g: 255, b: 153 },
-  //   { r: 252, g: 220, b: 156 },
-  //   { r: 249, g: 184, b: 185 },
-  //   { r: 154, g: 94, b: 237 },
-  //   { r: 48, g: 19, b: 134 },
-  //   { r: 16, g: 6, b: 45 },
-  // ];
-
-  // TIME_COLORS = [
-  //   { r: 0, g: 6, b: 10 },
-  //   { r: 0, g: 15, b: 26 },
-  //   { r: 0, g: 30, b: 51 },
-  //   { r: 0, g: 45, b: 77 },
-  //   { r: 0, g: 104, b: 179 },
-  //   { r: 51, g: 170, b: 255 },
-  //   { r: 153, g: 229, b: 255 },
-  //   { r: 128, g: 202, b: 255 },
-  //   { r: 128, g: 149, b: 255 },
-  //   { r: 255, g: 102, b: 255 },
-  //   { r: 34, g: 0, b: 102 },
-  //   { r: 0, g: 6, b: 51 },
-  // ];
-
   TIME_COLORS = [
     { r: 0, g: 6, b: 10 },
     { r: 0, g: 15, b: 26 },
@@ -96,8 +36,7 @@ export default class SceneSkyBox {
   defaultConfig: ISceneSkyboxConfig = {
     enabled: true,
     enableScene: true,
-    enableBody: true,
-    enableHTML: true,
+    enableHTMLTheme: true,
   };
   config: ISceneSkyboxConfig;
 
@@ -127,51 +66,38 @@ export default class SceneSkyBox {
     const defaultSunsetDate = new Date(now);
     defaultSunsetDate.setHours(18, 0, 0, 0); // Default sunset time at 6 PM
 
-    const hourInTheFuture = new Date(now.getTime() + (0.15 * 60 * 60 * 1000)); // 1 hour in the future
-    const hourInThePast = new Date(now.getTime() - (0.15 * 60 * 60 * 1000)); // 1 hour in the past
+    const future = new Date(now.getTime() + (1 * 60 * 60 * 1000));
+    const past = new Date(now.getTime() - (15 * 60 * 1000));
 
     const sunrise = useLiveWeather && store.store.weather.sunrise ? store.store.weather.sunrise : defaultSunriseDate.getTime();
     const sunset = useLiveWeather && store.store.weather.sunset ? store.store.weather.sunset : defaultSunsetDate.getTime();
 
     const gradient = await this._getRealisticColorGradient(now, { sunrise, sunset });
-    const futureGradient = await this._getRealisticColorGradient(hourInTheFuture, { sunrise, sunset});
-    const pastGradient = await this._getRealisticColorGradient(hourInThePast,  { sunrise, sunset });
+    let futureGradient = await this._getRealisticColorGradient(future, { sunrise, sunset});
+    let pastGradient = await this._getRealisticColorGradient(past,  { sunrise, sunset });
+
+    const isNight = this._getIsNight(now, { sunrise, sunset });
+    const isAfterNoon = now.getHours() >= 12;
+
+    if (isAfterNoon) {
+      const futureCopy = { ...futureGradient };
+      futureGradient = { ...pastGradient };
+      pastGradient = futureCopy;
+    }
 
     if (this.config.enableScene) {
-      if (this._getIsDark(gradient.start)) {
-        this.scene.matterElement.style.filter = `invert(0)`;
-      } else {
-        this.scene.matterElement.style.filter = `invert(1)`;
-      }
-
-      // Set the background image with radial gradients
       this.scene.element.style.backgroundSize = "100% 100%";
       this.scene.element.style.backgroundPosition = "0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px";
       this.scene.element.style.backgroundRepeat = "no-repeat";
-      // this.scene.element.style.backgroundImage = "radial-gradient(49% 81% at 45% 47%, #FFE20345 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, #FF5A00FF 0%, #FF000000 100%), radial-gradient(142% 91% at 83% 7%, #FFDB00FF 0%, #FF000000 100%), radial-gradient(142% 91% at -6% 74%, #FF0049FF 0%, #FF000000 100%), radial-gradient(142% 91% at 111% 84%, #FF7000FF 0%, #FF0000FF 100%)";
-      this.scene.element.style.backgroundImage = `radial-gradient(49% 81% at 45% 47%, ${this._colorToString(pastGradient.start, 0.45)} 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, ${this._colorToString(futureGradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at 83% 7%, ${this._colorToString(gradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at -6% 74%, ${this._colorToString(futureGradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 111% 84%, ${this._colorToString(pastGradient.end)} 0%, ${this._colorToString(gradient.end)} 100%)`;
-
-
-      //  #FFE20345 0%, #FF000000 100% past start
-      //  #FF5A00FF 0%, #FF000000 100% futrue start
-      // #FFDB00FF 0%, #FF000000 100% past end
-      // #FF0049FF 0%, #FF000000 100% future end
-      // #FF7000FF 0%, #FF0000FF 100% - now start, end
-
-
-
-      // const skyboxGradient = `linear-gradient(to bottom, rgba(${gradient.start.r}, ${gradient.start.g}, ${gradient.start.b}, 1), rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 1))`;
-      // this.scene.element.style.background = skyboxGradient;
+      this.scene.element.style.backgroundImage = `radial-gradient(49% 81% at 45% 47%, ${this._colorToString(gradient.start)} 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, ${this._colorToString(pastGradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 83% 7%, ${this._colorToString(pastGradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at -6% 74%, ${this._colorToString(gradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 111% 84%,  ${this._colorToString(futureGradient.start)} 0%,  ${this._colorToString(futureGradient.end)} 100%)`;
     }
 
-    if (this.config.enableHTML) {
-      const colorString = `rgba(${gradient.end.r}, ${gradient.end.g}, ${gradient.end.b}, 0.1)`;
-      document.documentElement.style.backgroundColor = colorString;
-    }
-
-    if (this.config.enableBody) {
-      const bodyGradient = `linear-gradient(to bottom, rgba(${pastGradient.start.r}, ${pastGradient.start.g}, ${pastGradient.start.b}, 0.5), rgba(${futureGradient.end.r}, ${futureGradient.end.g}, ${futureGradient.end.b}, 0.5))`;
-      document.body.style.background = bodyGradient;
+    if (this.config.enableHTMLTheme) {
+      if (isNight) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
     }
   }
 
@@ -183,8 +109,10 @@ export default class SceneSkyBox {
   clear() {
     this.scene.element.style.background = "";
     this.scene.matterElement.style.filter = "";
-    document.body.style.background = "";
-    document.documentElement.style.backgroundColor = "";
+
+    if (this.config.enableHTMLTheme) {
+      document.documentElement.classList.remove("dark");
+    }
   }
 
   destroy() {
@@ -209,45 +137,25 @@ export default class SceneSkyBox {
     return a.getDate() === b.getDate();
   }
 
-  async _getRealisticColorGradient(date: Date, bounds: { sunrise: number; sunset: number }) {
+   _getRealisticColorGradient(date: Date, bounds: { sunrise: number; sunset: number }) {
     const now = date.getTime();
 
+    const shiftBy = 30 * 60 * 1000;
+    let past = new Date(now - shiftBy);
 
-    if (!this._isSameDate(new Date(bounds.sunrise), date) || !this._isSameDate(new Date(bounds.sunset), date)) {
-      const sunriseExactTime = new Date(bounds.sunrise);
-      const sunsetExactTime = new Date(bounds.sunset);
-
-      const updatedSunrise = new Date(date);
-      updatedSunrise.setHours(sunriseExactTime.getHours(), sunriseExactTime.getMinutes(), sunriseExactTime.getSeconds(), 0);
-      const updatedSunset = new Date(date);
-      updatedSunset.setHours(sunsetExactTime.getHours(), sunsetExactTime.getMinutes(), sunsetExactTime.getSeconds(), 0);
-      bounds = {
-        sunrise: updatedSunrise.getTime(),
-        sunset: updatedSunset.getTime(),
-      };
-    }
-
-    const shiftBy = 1 * 60 * 60 * 1000; // 1 hour
-    let hourAgoIsh = new Date(now - shiftBy);
-    if (!this._isSameDate(hourAgoIsh, date)) {
-      hourAgoIsh = new Date(now);
-      hourAgoIsh.setHours(0, 0, 0, 0);
-    }
-
-    const gradientStart = this._getRealisticColor(hourAgoIsh, bounds);
+    const gradientStart = this._getRealisticColor(past, bounds);
     const gradientEnd = this._getRealisticColor(date, bounds);
 
-    let gradient;
+    let gradient = {
+      start: gradientStart,
+      end: gradientEnd,
+    };
 
-    if (now >= bounds.sunset) {
+    const isAfterNoon = date.getHours() >= 12;
+    if (isAfterNoon) {
       gradient = {
         start: gradientEnd,
         end: gradientStart,
-      };
-    } else {
-      gradient = {
-        start: gradientStart,
-        end: gradientEnd,
       };
     }
 
@@ -257,6 +165,25 @@ export default class SceneSkyBox {
   _getRealisticColor(date: Date, bounds: { sunrise: number; sunset: number }) {
     const now = date.getTime();
 
+    if (!this._isSameDate(new Date(bounds.sunrise), date) || !this._isSameDate(new Date(bounds.sunset), date)) {
+      const sunriseExactTime = new Date(bounds.sunrise);
+      const sunsetExactTime = new Date(bounds.sunset);
+
+      const updatedSunrise = new Date(date);
+      updatedSunrise.setHours(sunriseExactTime.getHours(), sunriseExactTime.getMinutes(), sunriseExactTime.getSeconds(), 0);
+
+      const updatedSunset = new Date(date);
+      updatedSunset.setHours(sunsetExactTime.getHours(), sunsetExactTime.getMinutes(), sunsetExactTime.getSeconds(), 0);
+
+      bounds = {
+        sunrise: updatedSunrise.getTime(),
+        sunset: updatedSunset.getTime(),
+      };
+    }
+
+    const sunsetDuration = 45 * 60 * 1000; // 45 minutes in milliseconds
+    const sunsetDurationPart = sunsetDuration / 2;
+
     let colorPhase, phaseStartTime, phaseEndTime;
     if (now < bounds.sunrise) {
       const midnight = new Date(now);
@@ -264,25 +191,24 @@ export default class SceneSkyBox {
       colorPhase = this.TIME_COLORS.slice(0, this.SUNRISE_COLOR_IDX + 1);
       phaseStartTime = midnight.getTime();
       phaseEndTime = bounds.sunrise;
-    } else if (now >= bounds.sunset) {
+    } else if (now > bounds.sunset) {
       const EOD = new Date(now);
       EOD.setHours(23, 59, 59, 999);
-      colorPhase = this.TIME_COLORS.slice(this.SUNSET_COLOR_IDX);
+      colorPhase = this.TIME_COLORS.slice(this.SUNSET_COLOR_IDX + 1);
       colorPhase.push(this.TIME_COLORS[0]);
       phaseStartTime = bounds.sunset;
       phaseEndTime = EOD.getTime();
-
-      const ifValidStart = this._isSameDate(new Date(phaseStartTime), EOD);
-      if (!ifValidStart) {
-        phaseStartTime += 24 * 60 * 60 * 1000;
-      }
+    } else if (now >= bounds.sunset - sunsetDurationPart && now <= bounds.sunset + sunsetDurationPart) {
+      colorPhase = this.TIME_COLORS.slice(this.SUNSET_COLOR_IDX-1, this.SUNSET_COLOR_IDX + 2);
+      phaseStartTime = bounds.sunset - sunsetDurationPart;
+      phaseEndTime = bounds.sunset + sunsetDurationPart;
     } else {
       colorPhase = this.TIME_COLORS.slice(
         this.SUNRISE_COLOR_IDX,
-        this.SUNSET_COLOR_IDX + 1
+        this.SUNSET_COLOR_IDX
       );
       phaseStartTime = bounds.sunrise;
-      phaseEndTime = bounds.sunset;
+      phaseEndTime = bounds.sunset
     }
 
     const timeSinceStart = now - phaseStartTime;
@@ -310,5 +236,45 @@ export default class SceneSkyBox {
 
   _getIsDark({ r, g, b }: IColor): boolean {
     return r * 0.299 + g * 0.587 + b * 0.114 <= 186;
+  }
+
+  _getIsNight(date: Date, bounds: { sunrise: number; sunset: number }): boolean {
+    const now = date.getTime();
+
+    if (!this._isSameDate(new Date(bounds.sunrise), date) || !this._isSameDate(new Date(bounds.sunset), date)) {
+      const sunriseExactTime = new Date(bounds.sunrise);
+      const sunsetExactTime = new Date(bounds.sunset);
+
+      const updatedSunrise = new Date(date);
+      updatedSunrise.setHours(sunriseExactTime.getHours(), sunriseExactTime.getMinutes(), sunriseExactTime.getSeconds(), 0);
+      const updatedSunset = new Date(date);
+      updatedSunset.setHours(sunsetExactTime.getHours(), sunsetExactTime.getMinutes(), sunsetExactTime.getSeconds(), 0);
+      bounds = {
+        sunrise: updatedSunrise.getTime(),
+        sunset: updatedSunset.getTime(),
+      };
+    }
+
+    return now < bounds.sunrise || now >= bounds.sunset;
+  }
+
+  _getIsAfterSunset(date: Date, bounds: { sunrise: number; sunset: number }): boolean {
+    const now = date.getTime();
+
+    if (!this._isSameDate(new Date(bounds.sunrise), date) || !this._isSameDate(new Date(bounds.sunset), date)) {
+      const sunriseExactTime = new Date(bounds.sunrise);
+      const sunsetExactTime = new Date(bounds.sunset);
+
+      const updatedSunrise = new Date(date);
+      updatedSunrise.setHours(sunriseExactTime.getHours(), sunriseExactTime.getMinutes(), sunriseExactTime.getSeconds(), 0);
+      const updatedSunset = new Date(date);
+      updatedSunset.setHours(sunsetExactTime.getHours(), sunsetExactTime.getMinutes(), sunsetExactTime.getSeconds(), 0);
+      bounds = {
+        sunrise: updatedSunrise.getTime(),
+        sunset: updatedSunset.getTime(),
+      };
+    }
+
+    return now >= bounds.sunset;
   }
 }

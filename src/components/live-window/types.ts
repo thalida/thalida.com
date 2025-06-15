@@ -20,8 +20,7 @@ export interface ISceneClockConfig {
 export interface ISceneSkyboxConfig {
   enabled: boolean;
   enableScene: boolean;
-  enableBody: boolean;
-  enableHTML: boolean;
+  enableHTMLTheme: boolean;
   sunrise?: number | null; // Optional sunrise time in milliseconds
   sunset?: number | null; // Optional sunset time in milliseconds
 }
