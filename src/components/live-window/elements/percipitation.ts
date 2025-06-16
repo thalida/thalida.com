@@ -164,7 +164,7 @@ export default class ScenePercipitation {
     const y = 0;
     const width = random(4, 8);
     const height = random(4, 8);
-    const opacity = random(0.4, 0.8); // Random opacity for the raindrop
+    const opacity = random(0.95, 1); // Random opacity for the raindrop
     const raindrop = Bodies.rectangle(x, y, width, height, {
       collisionFilter: {
         category: this.scene.CATEGORIES.PERCIPITATION,
@@ -181,8 +181,8 @@ export default class ScenePercipitation {
       restitution: 0.5,
       density: 0.001,
       render: {
-        fillStyle: `rgba(180, 225, 255, ${opacity / 1.2})`, // Light blue fill with random opacity
-        strokeStyle: `rgba(180, 225, 255, ${opacity})`, // Light blue stroke with random opacity
+        fillStyle: `rgba(190, 225, 255, ${opacity / 1.2})`, // Light blue fill with random opacity
+        strokeStyle: `rgba(255, 225, 255, ${opacity})`, // Light blue stroke with random opacity
         lineWidth: 1,
       },
     });

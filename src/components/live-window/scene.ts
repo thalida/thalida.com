@@ -72,6 +72,7 @@ export default class LiveWindowScene {
   defaultConfig: ILiveWindowSceneConfig = {
     useLiveWeather: true,
     useLiveTime: true,
+    topMargin: 64 + 32,
     clock: {
       enabled: true, // Whether the clock is enabled
       format: "analog", // Style of the clock
@@ -121,6 +122,10 @@ export default class LiveWindowScene {
       debounce(this.onResize.bind(this), 100)
     );
     this.interval = window.setInterval(this.updateLiveData.bind(this), 1000);
+  }
+
+  get topMargin() {
+    return this.config.topMargin || 0;
   }
 
   render(isInitialRender = false) {

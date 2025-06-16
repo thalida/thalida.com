@@ -37,12 +37,17 @@ export default class SceneSkyBox {
     enabled: true,
     enableScene: true,
     enableHTMLTheme: true,
+    sunsetDuration: 45 * 60 * 1000,
   };
   config: ISceneSkyboxConfig;
 
   constructor(scene: LiveWindowScene, config: Partial<ISceneSkyboxConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
+  }
+
+  get sunsetDurationPart() {
+    return this.config.sunsetDuration / 2;
   }
 
   render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
@@ -181,9 +186,6 @@ export default class SceneSkyBox {
       };
     }
 
-    const sunsetDuration = 45 * 60 * 1000; // 45 minutes in milliseconds
-    const sunsetDurationPart = sunsetDuration / 2;
-
     let colorPhase, phaseStartTime, phaseEndTime;
     if (now < bounds.sunrise) {
       const midnight = new Date(now);
@@ -198,10 +200,10 @@ export default class SceneSkyBox {
       colorPhase.push(this.TIME_COLORS[0]);
       phaseStartTime = bounds.sunset;
       phaseEndTime = EOD.getTime();
-    } else if (now >= bounds.sunset - sunsetDurationPart && now <= bounds.sunset + sunsetDurationPart) {
+    } else if (now >= bounds.sunset - this.sunsetDurationPart && now <= bounds.sunset + this.sunsetDurationPart) {
       colorPhase = this.TIME_COLORS.slice(this.SUNSET_COLOR_IDX-1, this.SUNSET_COLOR_IDX + 2);
-      phaseStartTime = bounds.sunset - sunsetDurationPart;
-      phaseEndTime = bounds.sunset + sunsetDurationPart;
+      phaseStartTime = bounds.sunset - this.sunsetDurationPart;
+      phaseEndTime = bounds.sunset + this.sunsetDurationPart;
     } else {
       colorPhase = this.TIME_COLORS.slice(
         this.SUNRISE_COLOR_IDX,
@@ -234,10 +236,6 @@ export default class SceneSkyBox {
     return brightness > 125 ? "black" : "white";
   }
 
-  _getIsDark({ r, g, b }: IColor): boolean {
-    return r * 0.299 + g * 0.587 + b * 0.114 <= 186;
-  }
-
   _getIsNight(date: Date, bounds: { sunrise: number; sunset: number }): boolean {
     const now = date.getTime();
 
@@ -255,26 +253,6 @@ export default class SceneSkyBox {
       };
     }
 
-    return now < bounds.sunrise || now >= bounds.sunset;
-  }
-
-  _getIsAfterSunset(date: Date, bounds: { sunrise: number; sunset: number }): boolean {
-    const now = date.getTime();
-
-    if (!this._isSameDate(new Date(bounds.sunrise), date) || !this._isSameDate(new Date(bounds.sunset), date)) {
-      const sunriseExactTime = new Date(bounds.sunrise);
-      const sunsetExactTime = new Date(bounds.sunset);
-
-      const updatedSunrise = new Date(date);
-      updatedSunrise.setHours(sunriseExactTime.getHours(), sunriseExactTime.getMinutes(), sunriseExactTime.getSeconds(), 0);
-      const updatedSunset = new Date(date);
-      updatedSunset.setHours(sunsetExactTime.getHours(), sunsetExactTime.getMinutes(), sunsetExactTime.getSeconds(), 0);
-      bounds = {
-        sunrise: updatedSunrise.getTime(),
-        sunset: updatedSunset.getTime(),
-      };
-    }
-
-    return now >= bounds.sunset;
+    return now < bounds.sunrise || now >= bounds.sunset - this.sunsetDurationPart;
   }
 }

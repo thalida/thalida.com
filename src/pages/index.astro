@@ -33,7 +33,7 @@ interface Props {
     const el = document.getElementById('top-window');
     if (el) {
       const date = new Date();
-      date.setHours(21, 0, 0); // Set the time to 10:00 AM
+      date.setHours(20, 50, 0);
       el.config = {
         useLiveWeather: true,
         useLiveTime: true,
@@ -42,54 +42,49 @@ interface Props {
           enableHTMLTheme: true,
         },
         clock: {
-          format: "digital",
+          // format: "digital",
           // showSeconds: false,
         },
-        // percipitation: {
-        //   enabled: true,
-        //   intensity: 1,
-        // },
+        percipitation: {
+          enabled: true,
+          // percipitationType: "snow",
+          intensity: 1,
+        },
       };
     }
   }, 10);
-  // setTimeout(() => {
-  //   const el = document.getElementById('top-window');
-  //   if (el) {
-  //     el.config = {
-  //       clock: {
-  //         format: "analog",
-  //       },
-  //     };
-  //   }
-  // }, 3000);
 </script>
 
 <Layout>
-  <div class="grid grid-cols-5 gap-1 p-1 auto-rows-[40vh] text-gray-900 dark:text-gray-100">
-    <div class="row-span-2 grid grid-cols-subgrid gap-1">
-      <div class="flex bg-gray-300 dark:bg-gray-900 p-4 -rounded-4xl">06</div>
-      <div class="flex bg-gray-300 dark:bg-gray-900 p-4 -rounded-4xl">07</div>
-    </div>
-    <div class="row-span-2 col-span-4 grid grid-cols-subgrid gap-1">
-      <div class="flex overflow-hidden -rounded-4xl row-span-2 col-span-3">
+  <div class="p-4">
+    <div class="relative grid grid-cols-5 gap-4 auto-rows-[95vh]">
+      <div class="flex overflow-hidden rounded-3xl col-span-5">
         <live-window id="top-window" class="w-full h-full"></live-window>
       </div>
-      <div class="flex bg-gray-300 dark:bg-gray-900 p-4 -rounded-4xl row-span-2">
-        current weather & controls
+
+        <div class="absolute inset-4 grid grid-cols-4 gap-2 h-16 overflow-hidden rounded-2xl bg-white backdrop-blur-md">
+        <!-- <div class="hh flex bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-3xl col-span-2">
+          me + links
+        </div>
+        <div class="hh flex bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-3xl col-span-2">
+          weather + controls
+        </div> -->
       </div>
     </div>
-    {
-      posts.map((post) => (
-        <div class="flex bg-gray-300 dark:bg-gray-900 p-4 -rounded-4xl overflow-clip">
-          {post.collection === "links" ? (
-            <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
-          ) : (
-            <a href={`/${post.collection}/${post.id}/`}>
-              {post.data.title || post.id}
-            </a>
-          )}
-        </div>
-      ))
-    }
+    <div class="grid grid-cols-4 gap-4 mt-4">
+      {
+        posts.map((post) => (
+          <div class="flex bg-white p-4 rounded-4xl overflow-clip  aspect-square">
+            {post.collection === "links" ? (
+              <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
+            ) : (
+              <a href={`/${post.collection}/${post.id}/`}>
+                {post.data.title || post.id}
+              </a>
+            )}
+          </div>
+        ))
+      }
+    </div>
   </div>
 </Layout>

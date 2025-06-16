@@ -9,6 +9,7 @@ export interface ILiveWindowSceneConfig {
   useLiveWeather: boolean;
   useLiveTime: boolean;
   now?: Date;
+  topMargin?: number; // Margin at the top of the scene
 }
 
 export interface ISceneClockConfig {
@@ -21,6 +22,7 @@ export interface ISceneSkyboxConfig {
   enabled: boolean;
   enableScene: boolean;
   enableHTMLTheme: boolean;
+  sunsetDuration: number; // Duration of sunset in milliseconds
   sunrise?: number | null; // Optional sunrise time in milliseconds
   sunset?: number | null; // Optional sunset time in milliseconds
 }

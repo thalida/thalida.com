@@ -214,7 +214,7 @@ export default class SceneClouds {
     const x = isInit
       ? random(0, this.scene.canvasWidth)
       : -1 * (width / random(1, 2)); // Start off-screen to the left
-    const y = random(adjustedHeight / 1.5, adjustedHeight);
+    const y =  random(adjustedHeight / 1.5, adjustedHeight);
     const opacity = random(0.05, 0.1);
 
     const mistLayer = Bodies.rectangle(x, y, width, height, {
@@ -240,7 +240,7 @@ export default class SceneClouds {
     const x = isInit
       ? random(0, this.scene.canvasWidth)
       : -1 * (width / random(1, 2)); // Start off-screen to the left
-    const y = random(50, 150);
+    const y = this.scene.topMargin + random(50, 150);
     const cloudParts = [];
     const numParts = Math.ceil(random(2, 4) * this.config.intensity); // Number of parts based on intensity
     for (let i = 0; i < numParts; i++) {
