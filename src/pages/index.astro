@@ -33,7 +33,7 @@ interface Props {
     const el = document.getElementById('top-window');
     if (el) {
       const date = new Date();
-      date.setHours(20, 50, 0);
+      date.setHours(0, 0, 0);
       el.config = {
         useLiveWeather: true,
         useLiveTime: true,
@@ -62,13 +62,16 @@ interface Props {
         <live-window id="top-window" class="w-full h-full"></live-window>
       </div>
 
-        <div class="absolute inset-4 grid grid-cols-4 gap-2 h-16 overflow-hidden rounded-2xl bg-white backdrop-blur-md">
-        <!-- <div class="hh flex bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-3xl col-span-2">
-          me + links
-        </div>
-        <div class="hh flex bg-gray-50/50 dark:bg-gray-900/50 p-4 rounded-3xl col-span-2">
-          weather + controls
-        </div> -->
+        <div class="absolute inset-4 grid grid-cols-4 gap-4 h-16 overflow-hidden rounded-2xl ">
+          <div class="flex bg-white p-4 rounded-3xl col-span-2 h-full overflow-hidden">
+            me + links
+          </div>
+          <div class="flex bg-white p-4 rounded-3xl col-span-1 h-full overflow-hidden">
+            weather + controls
+          </div>
+          <div class="flex bg-white p-4 rounded-3xl col-span-1 h-full overflow-hidden">
+            weather + controls
+          </div>
       </div>
     </div>
     <div class="grid grid-cols-4 gap-4 mt-4">

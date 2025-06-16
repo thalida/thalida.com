@@ -277,7 +277,7 @@ export default class SceneClock {
 
   _createAnalogBody() {
     const minSize = Math.min(this.scene.canvasWidth, this.scene.canvasHeight);
-    const clockBuffer = 50; // Buffer around the clock
+    const clockBuffer = 15; // Buffer around the clock
     const clockRadius = (minSize - clockBuffer * 2) / 2;
 
     const hourHandLength = clockRadius * 0.7; // Length of the hour hand
