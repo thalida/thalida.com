@@ -119,9 +119,9 @@ export default class ScenePercipitation {
         liveConfig.intensity = 0.3; // Moderate intensity for snow
         break;
       default:
-        liveConfig.enabled = true; // Disable lightning for other weather conditions
-        liveConfig.percipitationType = "fluff"; // Default to rain
-        liveConfig.intensity = 0.1; // Default low intensity
+        liveConfig.enabled = true;
+        liveConfig.percipitationType = "fluff";
+        liveConfig.intensity = 0.1;
     }
 
     return liveConfig;
@@ -217,7 +217,7 @@ export default class ScenePercipitation {
     }
 
     const pixelRatio = this.scene.renderer.options.pixelRatio || 1;
-    const scale = random(pixelRatio * 0.6, pixelRatio * 1.2); // Random scale for the fluff
+    const scale = random(pixelRatio * 0.6, pixelRatio * 0.8); // Random scale for the fluff
     const vertices = cloneDeep(this._starVertices);
     const star = Vertices.scale(vertices, scale, scale, { x: 0, y: 0 });
 
@@ -236,7 +236,7 @@ export default class ScenePercipitation {
         },
         friction: 0.0001,
         frictionAir: 0.05,
-        restitution: 0.8,
+        restitution: 0.5,
         density: 0.001,
         render: {
           fillStyle: `hsla(${hue}, 100%, 50%, 1)`, // Random color with random opacity
