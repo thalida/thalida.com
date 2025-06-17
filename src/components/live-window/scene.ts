@@ -1,4 +1,4 @@
-import { clone, cloneDeep, merge } from "lodash";
+import { cloneDeep, merge } from "lodash";
 
 import {
   Engine,
@@ -8,7 +8,13 @@ import {
   Composite,
   Events,
   World,
+  Common,
+  Svg,
+  Vertices,
+  Body,
 } from "matter-js";
+import "pathseg";
+import * as polyDecomp from "poly-decomp";
 
 import { debounce } from "./utils";
 import type { ILiveWindowSceneConfig  } from "./types";
@@ -19,6 +25,9 @@ import SceneClouds from "./elements/clouds";
 import SceneSkyBox from "./elements/skybox";
 import store from "./store";
 import SceneFluff from "./elements/fluff";
+
+
+Common.setDecomp(polyDecomp);
 
 
 export default class LiveWindowScene {
@@ -229,6 +238,33 @@ export default class LiveWindowScene {
         }
       ),
     ]);
+
+
+		const pathEl = document.createElementNS(
+			'http://www.w3.org/2000/svg',
+			'path'
+		)
+		pathEl.setAttribute('d', "M1 6 2 10 3 13 5 16 8 19 11 21 14 22 18 23 24 24H0V0Z")
+		const vertices = Vertices.scale(Svg.pathToVertices(pathEl, 1), this.renderer.options.pixelRatio || 1, this.renderer.options.pixelRatio || 1, { x: 0, y: 0 });
+    const cornerBottomLeft = Bodies.fromVertices(0, this.canvasHeight - (22 / 2), vertices, {
+        isStatic: true,
+        render: {
+            fillStyle: "transparent",
+            strokeStyle: "transparent",
+            lineWidth: 0
+        }
+      }, true);
+    const cornerBottomRight = Bodies.fromVertices(this.canvasWidth, this.canvasHeight - (22 / 2), vertices, {
+        isStatic: true,
+        render: {
+            fillStyle: "transparent",
+            strokeStyle: "transparent",
+            lineWidth: 0
+        }
+      }, true);
+    Body.setAngle(cornerBottomRight, 270 * Math.PI / 180);
+
+    Composite.add(this.world, [cornerBottomLeft, cornerBottomRight]);
 
     this.clock = this.clock || new SceneClock(this, this.config.clock);
     this.clouds = this.clouds || new SceneClouds(this, this.config.clouds);
