@@ -1,5 +1,5 @@
 import { merge } from "lodash";
-import type { IColor, ISceneSkyboxConfig } from "../types";
+import type { IColor, ILiveWindowSceneConfig, ISceneSkyboxConfig, ISceneWeather } from "../types";
 import type LiveWindowScene from "../scene";
 import store from "../store";
 
@@ -36,7 +36,6 @@ export default class SceneSkyBox {
   defaultConfig: ISceneSkyboxConfig = {
     enabled: true,
     enableScene: true,
-    enableHTMLTheme: true,
     sunsetDuration: 45 * 60 * 1000,
   };
   config: ISceneSkyboxConfig;
@@ -50,7 +49,7 @@ export default class SceneSkyBox {
     return this.config.sunsetDuration / 2;
   }
 
-  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
+  render(isInitialRender: boolean = false, now: Date, weather: ISceneWeather) {
     this.isRendering = true;
 
     if (!isInitialRender) {
@@ -60,9 +59,13 @@ export default class SceneSkyBox {
     this.isRendering = false;
   }
 
-  async onTick(now: Date, useLiveWeather: boolean = true) {
+  async onTick(now: Date, weather: ISceneWeather) {
     if (this.isRendering || !this.config.enabled) {
       return;
+    }
+
+    if (!this.config.enableScene) {
+      return; // Skip if scene is not enabled
     }
 
     const defaultSunriseDate = new Date(now);
@@ -74,36 +77,23 @@ export default class SceneSkyBox {
     const future = new Date(now.getTime() + (1 * 60 * 60 * 1000));
     const past = new Date(now.getTime() - (15 * 60 * 1000));
 
-    const sunrise = useLiveWeather && store.store.weather.sunrise ? store.store.weather.sunrise : defaultSunriseDate.getTime();
-    const sunset = useLiveWeather && store.store.weather.sunset ? store.store.weather.sunset : defaultSunsetDate.getTime();
+    const sunrise = weather.sunrise || defaultSunriseDate.getTime();
+    const sunset = weather.sunset || defaultSunsetDate.getTime();
 
     const gradient = await this._getRealisticColorGradient(now, { sunrise, sunset });
     let futureGradient = await this._getRealisticColorGradient(future, { sunrise, sunset});
     let pastGradient = await this._getRealisticColorGradient(past,  { sunrise, sunset });
 
-    const isNight = this._getIsNight(now, { sunrise, sunset });
-    const isAfterNoon = now.getHours() >= 12;
-
-    if (isAfterNoon) {
+    if (now.getHours() >= 12) {
       const futureCopy = { ...futureGradient };
       futureGradient = { ...pastGradient };
       pastGradient = futureCopy;
     }
 
-    if (this.config.enableScene) {
-      this.scene.element.style.backgroundSize = "100% 100%";
-      this.scene.element.style.backgroundPosition = "0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px";
-      this.scene.element.style.backgroundRepeat = "no-repeat";
-      this.scene.element.style.backgroundImage = `radial-gradient(49% 81% at 45% 47%, ${this._colorToString(gradient.start)} 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, ${this._colorToString(pastGradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 83% 7%, ${this._colorToString(pastGradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at -6% 74%, ${this._colorToString(gradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 111% 84%,  ${this._colorToString(futureGradient.start)} 0%,  ${this._colorToString(futureGradient.end)} 100%)`;
-    }
-
-    if (this.config.enableHTMLTheme) {
-      if (isNight) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-    }
+    this.scene.element.style.backgroundSize = "100% 100%";
+    this.scene.element.style.backgroundPosition = "0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px";
+    this.scene.element.style.backgroundRepeat = "no-repeat";
+    this.scene.element.style.backgroundImage = `radial-gradient(49% 81% at 45% 47%, ${this._colorToString(gradient.start)} 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, ${this._colorToString(pastGradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 83% 7%, ${this._colorToString(pastGradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at -6% 74%, ${this._colorToString(gradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 111% 84%,  ${this._colorToString(futureGradient.start)} 0%,  ${this._colorToString(futureGradient.end)} 100%)`;
   }
 
   updateConfig(config: Partial<ISceneSkyboxConfig> | null): ISceneSkyboxConfig {
@@ -112,11 +102,11 @@ export default class SceneSkyBox {
   }
 
   clear() {
-    this.scene.element.style.background = "";
-    this.scene.matterElement.style.filter = "";
-
-    if (this.config.enableHTMLTheme) {
-      document.documentElement.classList.remove("dark");
+    if (this.config.enableScene) {
+      this.scene.element.style.backgroundSize = "";
+      this.scene.element.style.backgroundPosition = "";
+      this.scene.element.style.backgroundRepeat = "";
+      this.scene.element.style.backgroundImage = "";
     }
   }
 

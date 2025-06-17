@@ -1,4 +1,4 @@
-import { cloneDeep, merge } from "lodash";
+import { cloneDeep, last, merge } from "lodash";
 
 import {
   Engine,
@@ -19,7 +19,7 @@ import "pathseg";
 import * as polyDecomp from "poly-decomp";
 
 import { debounce } from "./utils";
-import type { ILiveWindowSceneConfig  } from "./types";
+import type { ILiveWindowSceneConfig, ISceneWeather  } from "./types";
 import SceneClock from "./elements/clock";
 import ScenePercipitation from "./elements/percipitation";
 import SceneLightning from "./elements/lightning";
@@ -78,26 +78,8 @@ export default class LiveWindowScene {
   defaultConfig: ILiveWindowSceneConfig = {
     useLiveWeather: true,
     useLiveTime: true,
+    clockFormat: "analog", // Format of the clock
     topMargin: 64 + 32,
-    clock: {
-      enabled: true, // Whether the clock is enabled
-      format: "analog", // Style of the clock
-      showSeconds: true, // Whether to show seconds hand
-    },
-    skybox: {
-      enabled: true,
-      enableScene: true,
-      enableHTMLTheme: false,
-    },
-    percipitation: {
-      enabled: false,
-    },
-    lightning: {
-      enabled: false,
-    },
-    clouds: {
-      enabled: true,
-    },
   };
 
   config: ILiveWindowSceneConfig;
@@ -259,34 +241,20 @@ export default class LiveWindowScene {
 
     Composite.add(this.world, [cornerBottomLeft, cornerBottomRight]);
 
-    // var mouse = Mouse.create(this.renderer.canvas),
-    // mouseConstraint = MouseConstraint.create(this.engine, {
-    //   mouse: mouse,
-    //   constraint: {
-    //     stiffness: 0.2,
-    //     render: {
-    //       visible: false
-    //     }
-    //   }
-    // });
-
-    // Composite.add(this.world, mouseConstraint);
-    // this.renderer.mouse = mouse;
-    // mouseConstraint.collisionFilter.mask = this.CATEGORIES.PERCIPITATION;
-
-    this.clock = this.clock || new SceneClock(this, this.config.clock);
-    this.clouds = this.clouds || new SceneClouds(this, this.config.clouds);
-    this.lightning = this.lightning || new SceneLightning(this, this.config.lightning);
-    this.perciptiation = this.perciptiation || new ScenePercipitation(this, this.config.percipitation);
-    this.skybox = this.skybox || new SceneSkyBox(this, this.config.skybox);
+    this.clock = this.clock || new SceneClock(this, this.config.clockFormat);
+    this.clouds = this.clouds || new SceneClouds(this);
+    this.lightning = this.lightning || new SceneLightning(this);
+    this.perciptiation = this.perciptiation || new ScenePercipitation(this);
+    this.skybox = this.skybox || new SceneSkyBox(this);
 
     const now = this._getNow();
+    const weather = this._getWeather();
 
-    this.clock.render(isInitialRender, now, this.config.useLiveWeather);
-    this.clouds.render(isInitialRender, now, this.config.useLiveWeather);
-    this.lightning.render(isInitialRender, now, this.config.useLiveWeather);
-    this.perciptiation.render(isInitialRender, now, this.config.useLiveWeather);
-    this.skybox.render(isInitialRender, now, this.config.useLiveWeather);
+    this.clock.render(isInitialRender, now, weather);
+    this.clouds.render(isInitialRender, now, weather);
+    this.lightning.render(isInitialRender, now, weather);
+    this.perciptiation.render(isInitialRender, now, weather);
+    this.skybox.render(isInitialRender, now, weather);
 
     Render.run(this.renderer);
 
@@ -303,16 +271,17 @@ export default class LiveWindowScene {
     }
 
     const now = this._getNow();
+    const weather = this._getWeather();
 
     if(this.engine.timing.timestamp - this._lastTickTime < 20) {
       return;
     }
 
-    this.clock?.onTick(now, this.config.useLiveWeather);
-    this.clouds?.onTick(now, this.config.useLiveWeather);
-    this.lightning?.onTick(now, this.config.useLiveWeather);
-    this.perciptiation?.onTick(now, this.config.useLiveWeather);
-    this.skybox?.onTick(now, this.config.useLiveWeather);
+    this.clock?.onTick(now, weather);
+    this.clouds?.onTick(now, weather);
+    this.lightning?.onTick(now, weather);
+    this.perciptiation?.onTick(now, weather);
+    this.skybox?.onTick(now, weather);
 
     this._lastTickTime = this.engine.timing.timestamp;
   }
@@ -326,13 +295,7 @@ export default class LiveWindowScene {
   }
 
   updateConfig(config: Partial<ILiveWindowSceneConfig> | null) {
-    const newConfig = merge({}, this.defaultConfig, config || {});
-    newConfig.clock = this.clock?.updateConfig(newConfig.clock) || newConfig.clock;
-    newConfig.clouds = this.clouds?.updateConfig(newConfig.clouds) || newConfig.clouds;
-    newConfig.lightning = this.lightning?.updateConfig(newConfig.lightning) || newConfig.lightning;
-    newConfig.percipitation = this.perciptiation?.updateConfig(newConfig.percipitation) || newConfig.percipitation;
-    newConfig.skybox = this.skybox?.updateConfig(newConfig.skybox) || newConfig.skybox;
-    this.config = newConfig;
+    this.config =  merge({}, this.defaultConfig, config || {});;
     return this.config;
   }
 
@@ -385,6 +348,112 @@ export default class LiveWindowScene {
   }
 
   _getNow() {
-    return !this.config.useLiveTime && this.config.now ? this.config.now : new Date();
+    return !this.config.useLiveTime && this.config.overrideTime ? this.config.overrideTime : new Date();
+  }
+
+  _getCustomWeatherData(icon: string) {
+    switch (icon) {
+      case "01d":
+      case "01n":
+        return {
+          id: 0,
+          main: "Clear",
+          description: "Clear Sky",
+          icon,
+          temp: 20,
+        };
+      case "02d":
+      case "02n":
+        return {
+          id: 1,
+          main: "Clouds",
+          description: "Few Clouds",
+          icon,
+          temp: 20,
+        };
+      case "03d":
+      case "03n":
+        return {
+          id: 2,
+          main: "Clouds",
+          description: "Scattered Clouds",
+          icon,
+          temp: 20,
+        };
+      case "04d":
+      case "04n":
+        return {
+          id: 3,
+          main: "Clouds",
+          description: "Broken Clouds",
+          icon,
+          temp: 20,
+        };
+      case "09d":
+      case "09n":
+        return {
+          id: 4,
+          main: "Rain",
+          description: "Shower Rain",
+          icon,
+          temp: 20,
+        };
+      case "10d":
+      case "10n":
+        return {
+          id: 5,
+          main: "Rain",
+          description: "Rain",
+          icon,
+          temp: 20,
+        };
+      case "11d":
+      case "11n":
+        return {
+          id: 6,
+          main: "Thunderstorm",
+          description: "Thunderstorm",
+          icon,
+          temp: 20,
+        };
+      case "13d":
+      case "13n":
+        return {
+          id: 7,
+          main: "Snow",
+          description: "Snow",
+          icon,
+          temp: 20,
+        };
+      case "50d":
+      case "50n":
+        return {
+          id: 8,
+          main: "Mist",
+          description: "Mist",
+          icon,
+          temp: 20,
+        };
+      default:
+        return {
+          id: 0,
+          main: "Clear",
+          description: "Clear Sky",
+          icon: "01d",
+          temp: 20,
+        };
+      }
+  }
+
+  _getWeather(): ISceneWeather {
+    return !this.config.useLiveWeather && this.config.overrideWeather ? {
+      lastFetched: Date.now(),
+      current: {
+        ...this._getCustomWeatherData(this.config.overrideWeather),
+        temp: store.store.weather.current?.temp || 20,
+      },
+      sunrise: store.store.weather.sunrise || null,
+      sunset: store.store.weather.sunset || null,
+    }: store.store.weather;
   }
 }

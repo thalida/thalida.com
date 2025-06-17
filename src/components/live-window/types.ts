@@ -1,13 +1,10 @@
 
 export interface ILiveWindowSceneConfig {
-  clock: Partial<ISceneClockConfig>;
-  skybox: Partial<ISceneSkyboxConfig>;
-  percipitation: Partial<IScenePercipitationConfig>;
-  lightning: Partial<ISceneLightningConfig>;
-  clouds: Partial<ISceneCloudsConfig>;
   useLiveWeather: boolean;
   useLiveTime: boolean;
-  now?: Date;
+  clockFormat?: "analog" | "digital"; // Format of the clock
+  overrideTime?: Date;
+  overrideWeather?: "01d" | "01n" | "02d" | "02n" | "03d" | "03n" | "04d" | "04n" | "09d" | "09n" | "10d" | "10n" | "11d" | "11n" | "13d" | "13n" | "50d" | "50n"; // Weather icon code
   topMargin?: number; // Margin at the top of the scene
 }
 
@@ -20,7 +17,6 @@ export interface ISceneClockConfig {
 export interface ISceneSkyboxConfig {
   enabled: boolean;
   enableScene: boolean;
-  enableHTMLTheme: boolean;
   sunsetDuration: number; // Duration of sunset in milliseconds
   sunrise?: number | null; // Optional sunrise time in milliseconds
   sunset?: number | null; // Optional sunset time in milliseconds
@@ -51,4 +47,17 @@ export interface IColor {
   r: number;
   g: number;
   b: number;
+}
+
+export interface ISceneWeather {
+  lastFetched: number | null; // Timestamp of the last weather fetch
+  current: {
+    id: number; // Weather condition ID
+    main: string; // Main weather condition (e.g., Rain, Snow)
+    description: string; // Weather condition description
+    icon: string; // Weather icon code
+    temp: number; // Current temperature in Celsius
+  } | null,
+  sunrise: number | null; // Sunrise time in milliseconds
+  sunset: number | null; // Sunset time in milliseconds
 }

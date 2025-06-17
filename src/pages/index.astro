@@ -29,30 +29,22 @@ interface Props {
 <script src="../components/live-window" />
 
 <script>
+  import type { ILiveWindowSceneConfig } from "../components/live-window/types";
   setTimeout(() => {
     const el = document.getElementById('top-window');
     if (el) {
       const date = new Date();
       date.setHours(0, 0, 0);
-      el.config = {
+      const config: ILiveWindowSceneConfig = {
         useLiveWeather: true,
         useLiveTime: true,
-        now: date,
-        skybox: {
-          enableHTMLTheme: true,
-        },
-        clock: {
-          format: "digital",
-          // showSeconds: false,
-        },
-        percipitation: {
-          enabled: true,
-          // percipitationType: "snow",
-          intensity: 1,
-        },
-      };
+        overrideTime: date,
+        overrideWeather: "11d",
+        clockFormat: "digital",
+      }
+      el.config = config;
     }
-  }, 10);
+  }, 10000);
 </script>
 
 <Layout>

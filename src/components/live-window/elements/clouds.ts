@@ -6,7 +6,7 @@ import {
 
 import { random } from "../utils";
 import type LiveWindowScene from "../scene";
-import type { ISceneCloudsConfig } from "../types";
+import type { ILiveWindowSceneConfig, ISceneCloudsConfig, ISceneWeather } from "../types";
 import { merge } from "lodash";
 import store from "../store";
 
@@ -30,14 +30,14 @@ export default class SceneClouds {
     this.config = this.updateConfig(config);
   }
 
-  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
+  render(isInitialRender: boolean = false, now: Date, weather: ISceneWeather) {
     this.isRendering = true;
 
     if (!isInitialRender) {
       this.clear();
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather);
 
     if (!this.config.enabled) {
       this.isRendering = false;
@@ -56,12 +56,12 @@ export default class SceneClouds {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveWeather: boolean = true) {
+  onTick(now: Date, weather: ISceneWeather) {
     if (this.isRendering) {
       return; // Skip if effects are not enabled
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather);
 
     if (!this.config.enabled) {
       return; // Skip if effects are not enabled
@@ -116,16 +116,16 @@ export default class SceneClouds {
     return this.config;
   }
 
-  getLiveConfig() {
+  setLiveConfig(now: Date, weather: ISceneWeather): ISceneCloudsConfig {
     const liveConfig: ISceneCloudsConfig = {
       ...this.config,
       enabled: true,
     }
-    switch(store.store.weather.current?.icon ) {
+    switch(weather.current?.icon ) {
       case "01d":
       case "01n":
         liveConfig.cloudType = "clouds";
-        liveConfig.intensity = 0.05; // Clear sky
+        liveConfig.intensity = 0.01; // Clear sky
         break;
       case "02d":
       case "02n":
@@ -170,7 +170,7 @@ export default class SceneClouds {
         break;
     }
 
-    return liveConfig;
+    return this.updateConfig(liveConfig);
   }
 
   clear() {
@@ -243,6 +243,8 @@ export default class SceneClouds {
     const y = this.scene.topMargin + random(50, 150);
     const cloudParts = [];
     const numParts = Math.ceil(random(2, 4) * this.config.intensity); // Number of parts based on intensity
+    const fillColorMin = 255 * (1 - this.config.intensity); // Adjust fill color based on intensity
+    const fillColor = random(fillColorMin, 255);
     for (let i = 0; i < numParts; i++) {
       const partWidth = random(128, 256);
       const partHeight = random(64, 128);
@@ -260,7 +262,7 @@ export default class SceneClouds {
           },
           render: {
             opacity: random(0.1, 0.2), // Random opacity for each cloud part
-            fillStyle: "rgba(255, 255, 255, 0.4)", // White fill for cloud parts
+            fillStyle: `rgba(${fillColor}, ${fillColor}, ${fillColor}, 0.4)`, // White fill for cloud parts
             lineWidth: 0,
           },
           chamfer: {

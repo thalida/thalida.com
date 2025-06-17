@@ -11,7 +11,7 @@ import {
 
 import { random } from "../utils";
 import type LiveWindowScene from "../scene";
-import type { IScenePercipitationConfig } from "../types";
+import type { ILiveWindowSceneConfig, IScenePercipitationConfig, ISceneWeather } from "../types";
 import store from "../store";
 
 
@@ -46,7 +46,7 @@ export default class ScenePercipitation {
     this._starVertices = Svg.pathToVertices(pathEl, 0.5);
   }
 
-  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
+  render(isInitialRender: boolean = false, now: Date, weather: ISceneWeather) {
     this.isRendering = true;
 
     if (!isInitialRender) {
@@ -56,12 +56,12 @@ export default class ScenePercipitation {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveWeather: boolean = true) {
+  onTick(now: Date, weather: ISceneWeather) {
     if (this.isRendering) {
       return;
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather);
 
     if (!this.config.enabled) {
       return; // Skip if not raining
@@ -88,13 +88,13 @@ export default class ScenePercipitation {
     return this.config;
   }
 
-  getLiveConfig() {
+  setLiveConfig(now: Date, weather: ISceneWeather): IScenePercipitationConfig {
     const liveConfig: IScenePercipitationConfig = {
       ...this.config,
       enabled: true,
     }
 
-    switch (store.store.weather.current?.icon) {
+    switch (weather.current?.icon) {
       case "09d": // Rain
       case "09n":
         liveConfig.enabled = true;
@@ -110,6 +110,7 @@ export default class ScenePercipitation {
       case "11d": // Thunderstorm
       case "11n":
         liveConfig.enabled = true;
+        liveConfig.percipitationType = "rain"; // Set to rain
         liveConfig.intensity = 0.5; // High intensity for thunderstorms
         break;
       case "13d": // Snow
@@ -124,7 +125,7 @@ export default class ScenePercipitation {
         liveConfig.intensity = 0.1;
     }
 
-    return liveConfig;
+    return this.updateConfig(liveConfig);
   }
 
   clear() {
@@ -212,11 +213,7 @@ export default class ScenePercipitation {
   }
 
   _createFluffBody() {
-    if (!this.scene.renderer) {
-      return;
-    }
-
-    const pixelRatio = this.scene.renderer.options.pixelRatio || 1;
+    const pixelRatio = this.scene.renderer?.options.pixelRatio || 1;
     const scale = random(pixelRatio * 0.6, pixelRatio * 0.8); // Random scale for the fluff
     const vertices = cloneDeep(this._starVertices);
     const star = Vertices.scale(vertices, scale, scale, { x: 0, y: 0 });

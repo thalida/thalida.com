@@ -8,7 +8,7 @@ import {
 } from "matter-js";
 
 import { random } from "../utils";
-import type { ICoords, ISceneLightningConfig } from "../types";
+import type { ICoords, ILiveWindowSceneConfig, ISceneLightningConfig, ISceneWeather } from "../types";
 import type LiveWindowScene from "../scene";
 import store from "../store";
 
@@ -34,7 +34,7 @@ export default class SceneLightning {
     this.config = this.updateConfig(config);
   }
 
-  render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
+  render(isInitialRender: boolean = false, now: Date, weather: ISceneWeather) {
     this.isRendering = true;
     if (!isInitialRender) {
       this.clear();
@@ -42,12 +42,12 @@ export default class SceneLightning {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveWeather: boolean = true) {
+  onTick(now: Date, weather: ISceneWeather) {
     if (this.isRendering) {
       return;
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather);
 
     if (!this.config.enabled) {
       return; // Skip if lightning is not enabled
@@ -165,13 +165,13 @@ export default class SceneLightning {
     return this.config;
   }
 
-  getLiveConfig() {
+  setLiveConfig(now: Date, weather: ISceneWeather): ISceneLightningConfig {
     const liveConfig: ISceneLightningConfig = {
       ...this.config,
       enabled: false,
     }
 
-    switch (store.store.weather.current?.icon) {
+    switch (weather.current?.icon) {
       case "11d": // Thunderstorm
       case "11n":
         liveConfig.enabled = true;
@@ -181,7 +181,7 @@ export default class SceneLightning {
         liveConfig.enabled = false; // Disable lightning for other weather conditions
     }
 
-    return liveConfig;
+    return this.updateConfig(liveConfig);
   }
 
   clear() {

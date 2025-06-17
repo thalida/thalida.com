@@ -6,7 +6,7 @@ import {
   Composite,
 } from "matter-js";
 
-import type { ISceneClockConfig } from "../types";
+import type { ILiveWindowSceneConfig, ISceneClockConfig, ISceneWeather } from "../types";
 import type LiveWindowScene from "../scene";
 
 
@@ -28,19 +28,19 @@ export default class SceneClock {
   }
   config: ISceneClockConfig;
 
-  constructor(scene: LiveWindowScene, config: Partial<ISceneClockConfig> | null = null) {
+  constructor(scene: LiveWindowScene, clockFormat: "analog" | "digital" = "analog") {
     this.scene = scene;
-    this.config = this.updateConfig(config);
+    this.config = this.updateConfig({ format: clockFormat });
   }
 
-  render(isInitialRender = false, now: Date, useLiveWeather: boolean = true) {
+  render(isInitialRender = false, now: Date, weather: ISceneWeather) {
     this.isRendering = true;
 
     if (!isInitialRender) {
       this.clear();
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather)
 
     if (!this.config.enabled) {
       this.isRendering = false;
@@ -53,12 +53,12 @@ export default class SceneClock {
     this.isRendering = false;
   }
 
-  onTick(now: Date, useLiveWeather: boolean = true) {
+  onTick(now: Date, weather: ISceneWeather) {
     if (this.isRendering) {
       return; // Skip if clock is disabled or body is not initialized
     }
 
-    this.updateConfig(useLiveWeather ? this.getLiveConfig() : this.config);
+    this.setLiveConfig(now, weather)
 
     if (!this.config.enabled) {
       return; // Skip if clock is not enabled
@@ -79,7 +79,7 @@ export default class SceneClock {
     return this.config;
   }
 
-  getLiveConfig() {
+  setLiveConfig(now: Date, weather: ISceneWeather) {
     return this.config;
   }
 
