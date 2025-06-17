@@ -12,6 +12,8 @@ import {
   Svg,
   Vertices,
   Body,
+  Mouse,
+  MouseConstraint,
 } from "matter-js";
 import "pathseg";
 import * as polyDecomp from "poly-decomp";
@@ -24,7 +26,6 @@ import SceneLightning from "./elements/lightning";
 import SceneClouds from "./elements/clouds";
 import SceneSkyBox from "./elements/skybox";
 import store from "./store";
-import SceneFluff from "./elements/fluff";
 
 
 Common.setDecomp(polyDecomp);
@@ -66,14 +67,10 @@ export default class LiveWindowScene {
     PERCIPITATION: Composite.create({
       label: "Percipitation Layer",
     }),
-    FLUFF: Composite.create({
-      label: "Fluff Layer",
-    }),
   };
 
   clock: SceneClock | null = null;
   clouds: SceneClouds | null = null;
-  fluff: SceneFluff | null = null;
   lightning: SceneLightning | null = null;
   perciptiation: ScenePercipitation | null = null;
   skybox: SceneSkyBox | null = null;
@@ -91,9 +88,6 @@ export default class LiveWindowScene {
       enabled: true,
       enableScene: true,
       enableHTMLTheme: false,
-    },
-    fluff: {
-      enabled: false,
     },
     percipitation: {
       enabled: false,
@@ -239,7 +233,6 @@ export default class LiveWindowScene {
       ),
     ]);
 
-
 		const pathEl = document.createElementNS(
 			'http://www.w3.org/2000/svg',
 			'path'
@@ -266,9 +259,23 @@ export default class LiveWindowScene {
 
     Composite.add(this.world, [cornerBottomLeft, cornerBottomRight]);
 
+    // var mouse = Mouse.create(this.renderer.canvas),
+    // mouseConstraint = MouseConstraint.create(this.engine, {
+    //   mouse: mouse,
+    //   constraint: {
+    //     stiffness: 0.2,
+    //     render: {
+    //       visible: false
+    //     }
+    //   }
+    // });
+
+    // Composite.add(this.world, mouseConstraint);
+    // this.renderer.mouse = mouse;
+    // mouseConstraint.collisionFilter.mask = this.CATEGORIES.PERCIPITATION;
+
     this.clock = this.clock || new SceneClock(this, this.config.clock);
     this.clouds = this.clouds || new SceneClouds(this, this.config.clouds);
-    this.fluff = this.fluff || new SceneFluff(this, this.config.fluff);
     this.lightning = this.lightning || new SceneLightning(this, this.config.lightning);
     this.perciptiation = this.perciptiation || new ScenePercipitation(this, this.config.percipitation);
     this.skybox = this.skybox || new SceneSkyBox(this, this.config.skybox);
@@ -277,7 +284,6 @@ export default class LiveWindowScene {
 
     this.clock.render(isInitialRender, now, this.config.useLiveWeather);
     this.clouds.render(isInitialRender, now, this.config.useLiveWeather);
-    this.fluff.render(isInitialRender, now, this.config.useLiveWeather);
     this.lightning.render(isInitialRender, now, this.config.useLiveWeather);
     this.perciptiation.render(isInitialRender, now, this.config.useLiveWeather);
     this.skybox.render(isInitialRender, now, this.config.useLiveWeather);
@@ -304,7 +310,6 @@ export default class LiveWindowScene {
 
     this.clock?.onTick(now, this.config.useLiveWeather);
     this.clouds?.onTick(now, this.config.useLiveWeather);
-    this.fluff?.onTick(now, this.config.useLiveWeather);
     this.lightning?.onTick(now, this.config.useLiveWeather);
     this.perciptiation?.onTick(now, this.config.useLiveWeather);
     this.skybox?.onTick(now, this.config.useLiveWeather);
@@ -324,7 +329,6 @@ export default class LiveWindowScene {
     const newConfig = merge({}, this.defaultConfig, config || {});
     newConfig.clock = this.clock?.updateConfig(newConfig.clock) || newConfig.clock;
     newConfig.clouds = this.clouds?.updateConfig(newConfig.clouds) || newConfig.clouds;
-    newConfig.fluff = this.fluff?.updateConfig(newConfig.fluff) || newConfig.fluff;
     newConfig.lightning = this.lightning?.updateConfig(newConfig.lightning) || newConfig.lightning;
     newConfig.percipitation = this.perciptiation?.updateConfig(newConfig.percipitation) || newConfig.percipitation;
     newConfig.skybox = this.skybox?.updateConfig(newConfig.skybox) || newConfig.skybox;
@@ -360,7 +364,6 @@ export default class LiveWindowScene {
 
     this.clock?.clear();
     this.clouds?.clear();
-    this.fluff?.clear();
     this.lightning?.clear();
     this.perciptiation?.clear();
     this.skybox?.clear();
@@ -376,7 +379,6 @@ export default class LiveWindowScene {
 
     this.clock?.destroy();
     this.clouds?.destroy();
-    this.fluff?.destroy();
     this.lightning?.destroy();
     this.perciptiation?.destroy();
     this.skybox?.destroy();

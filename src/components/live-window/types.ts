@@ -5,7 +5,6 @@ export interface ILiveWindowSceneConfig {
   percipitation: Partial<IScenePercipitationConfig>;
   lightning: Partial<ISceneLightningConfig>;
   clouds: Partial<ISceneCloudsConfig>;
-  fluff: Partial<ISceneFluffConfig>;
   useLiveWeather: boolean;
   useLiveTime: boolean;
   now?: Date;
@@ -29,7 +28,7 @@ export interface ISceneSkyboxConfig {
 
 export interface IScenePercipitationConfig {
   enabled: boolean;
-  percipitationType: "rain" | "snow";
+  percipitationType: "rain" | "snow" | "fluff"; // Type of percipitation
   intensity: number;
 }
 
@@ -43,12 +42,6 @@ export interface ISceneCloudsConfig {
   cloudType: "mist" | "clouds";
   intensity: number; // 0 to 1, where 1 is very cloudy
 }
-
-export interface ISceneFluffConfig {
-  enabled: boolean;
-  intensity: number;
-}
-
 export interface ICoords {
   x: number;
   y: number;

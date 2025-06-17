@@ -1,9 +1,12 @@
-import { merge } from "lodash";
+import { cloneDeep, merge } from "lodash";
 
 import {
   Bodies,
   Composite,
+  Svg,
   use,
+  Vector,
+  Vertices,
 } from "matter-js";
 
 import { random } from "../utils";
@@ -28,10 +31,19 @@ export default class ScenePercipitation {
   };
   config: IScenePercipitationConfig;
 
+  _starVertices:  Vector[];
+
   constructor(scene: LiveWindowScene, config: Partial<IScenePercipitationConfig> | null = null) {
     this.scene = scene;
     this.config = this.updateConfig(config);
     this.layer = this.scene.LAYERS.PERCIPITATION;
+
+    const pathEl = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'path'
+    )
+    pathEl.setAttribute('d', "M11.454 12.3435C11.6141 13.1804 10.7212 13.8213 9.97952 13.4019L7.39427 11.9398C7.08333 11.764 6.7022 11.7673 6.39441 11.9487L3.83439 13.4568C3.09985 13.8896 2.1954 13.2636 2.34161 12.4237L2.89323 9.25509C2.95008 8.92853 2.84142 8.59501 2.60309 8.36462L0.306071 6.14404C-0.292648 5.56525 0.0369842 4.55104 0.861585 4.43485L3.87561 4.01016C4.21899 3.96178 4.5128 3.73895 4.65199 3.42133L5.88901 0.598615C6.23564 -0.19234 7.35438 -0.201605 7.71406 0.583503L8.99579 3.38128C9.14043 3.69701 9.43852 3.91508 9.78321 3.95735L12.7985 4.3271C13.6255 4.4285 13.9731 5.43743 13.3841 6.02666L11.1241 8.28735C10.8898 8.52169 10.7868 8.85684 10.8491 9.18229L11.454 12.3435Z");
+    this._starVertices = Svg.pathToVertices(pathEl, 0.5);
   }
 
   render(isInitialRender: boolean = false, now: Date, useLiveWeather: boolean = true) {
@@ -79,7 +91,7 @@ export default class ScenePercipitation {
   getLiveConfig() {
     const liveConfig: IScenePercipitationConfig = {
       ...this.config,
-      enabled: false,
+      enabled: true,
     }
 
     switch (store.store.weather.current?.icon) {
@@ -107,7 +119,9 @@ export default class ScenePercipitation {
         liveConfig.intensity = 0.3; // Moderate intensity for snow
         break;
       default:
-        liveConfig.enabled = false; // Disable lightning for other weather conditions
+        liveConfig.enabled = true; // Disable lightning for other weather conditions
+        liveConfig.percipitationType = "fluff"; // Default to rain
+        liveConfig.intensity = 0.1; // Default low intensity
     }
 
     return liveConfig;
@@ -123,9 +137,16 @@ export default class ScenePercipitation {
   }
 
   _createBody() {
-    return this.config.percipitationType === "snow"
-      ? this._createSnowBody()
-      : this._createRainBody();
+    switch (this.config.percipitationType) {
+      case "snow":
+        return this._createSnowBody();
+      case "rain":
+        return this._createRainBody();
+      case "fluff":
+        return this._createFluffBody(); // Placeholder for fluff, implement as needed
+      default:
+        return this._createRainBody(); // Default to rain if type is not recognized
+    }
   }
 
   _createSnowBody() {
@@ -188,5 +209,42 @@ export default class ScenePercipitation {
     });
 
     return raindrop;
+  }
+
+  _createFluffBody() {
+    if (!this.scene.renderer) {
+      return;
+    }
+
+    const pixelRatio = this.scene.renderer.options.pixelRatio || 1;
+    const scale = random(pixelRatio * 0.6, pixelRatio * 1.2); // Random scale for the fluff
+    const vertices = cloneDeep(this._starVertices);
+    const star = Vertices.scale(vertices, scale, scale, { x: 0, y: 0 });
+
+    const hue = random(0, 360); // Random hue for the star color
+    return Bodies.fromVertices(
+      random(0, this.scene.canvasWidth),
+      0,
+      star,
+      {
+        collisionFilter: {
+          category: this.scene.CATEGORIES.PERCIPITATION,
+          mask:
+            this.scene.CATEGORIES.DEFAULT |
+            this.scene.CATEGORIES.CLOCK |
+            this.scene.CATEGORIES.PERCIPITATION,
+        },
+        friction: 0.0001,
+        frictionAir: 0.05,
+        restitution: 0.8,
+        density: 0.001,
+        render: {
+          fillStyle: `hsla(${hue}, 100%, 50%, 1)`, // Random color with random opacity
+          strokeStyle: `hsla(${hue}, 100%, 50%, 1)`, // Random color with random opacity
+          lineWidth: 1,
+        },
+      },
+      true // Set to true to create a compound body
+    );
   }
 }
