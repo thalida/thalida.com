@@ -48,9 +48,9 @@ interface Props {
 </script>
 
 <Layout>
-  <div class="p-4">
-    <div class="relative grid grid-cols-5 gap-4 auto-rows-[22.5svh]">
-      <div class="grid grid-cols-subgrid gap-4 row-span-4 auto-rows-[22.5svh]">
+  <div class="p-8">
+    <div class="relative grid grid-cols-5 gap-8 auto-rows-[20svh]">
+      <div class="grid grid-cols-subgrid gap-8 row-span-4 auto-cols-fr">
         <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">
           thalida.com
         </div>
@@ -67,7 +67,7 @@ interface Props {
         ></livewindow-scene>
       </div>
 
-      <div class="grid grid-cols-subgrid gap-4 row-span-4 auto-rows-[22.5svh]">
+      <div class="grid grid-cols-subgrid gap-8 row-span-4 auto-rows-fr">
         <div class="flex bg-brand-50 p-4 rounded-3xl">
           <livewindow-details data-group="main-window"></livewindow-details>
         </div>
@@ -75,7 +75,7 @@ interface Props {
       </div>
     </div>
 
-    <div class="grid grid-cols-4 gap-4 mt-4">
+    <div class="grid grid-cols-4 gap-8 mt-8">
       {
         posts.map((post) => (
           <div class="flex bg-brand-50 p-4 rounded-4xl overflow-clip  aspect-square">
