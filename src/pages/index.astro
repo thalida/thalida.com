@@ -26,50 +26,59 @@ interface Props {
 }
 ---
 
-<script src="../components/live-window" />
+<script src="../components/live-window"></script>
 
 <script>
   import type { ILiveWindowSceneConfig } from "../components/live-window/types";
-  setTimeout(() => {
-    const el = document.getElementById('top-window');
-    if (el) {
-      const date = new Date();
-      date.setHours(0, 0, 0);
-      const config: ILiveWindowSceneConfig = {
-        useLiveWeather: true,
-        useLiveTime: true,
-        overrideTime: date,
-        overrideWeather: "11d",
-        clockFormat: "digital",
-      }
-      el.config = config;
-    }
-  }, 10000);
+  // setTimeout(() => {
+  //   const el = document.getElementById('top-window');
+  //   if (el) {
+  //     const date = new Date();
+  //     date.setHours(0, 0, 0);
+  //     const config: ILiveWindowSceneConfig = {
+  //       useLiveWeather: true,
+  //       useLiveTime: true,
+  //       overrideTime: date,
+  //       overrideWeather: "11d",
+  //       clockFormat: "digital",
+  //     }
+  //     el.config = config;
+  //   }
+  // }, 10000);
 </script>
 
 <Layout>
   <div class="p-4">
-    <div class="relative grid grid-cols-5 gap-4 auto-rows-[95vh]">
-      <div class="flex overflow-hidden rounded-3xl col-span-5">
-        <live-window id="top-window" class="w-full h-full"></live-window>
+    <div class="relative grid grid-cols-5 gap-4 auto-rows-[22.5svh]">
+      <div class="grid grid-cols-subgrid gap-4 row-span-4 auto-rows-[22.5svh]">
+        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">
+          thalida.com
+        </div>
+        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-2">
+          nav / about
+        </div>
+        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">links</div>
       </div>
 
-        <div class="absolute inset-4 grid grid-cols-4 gap-4 h-16 overflow-hidden rounded-2xl ">
-          <div class="flex bg-white p-4 rounded-3xl col-span-2 h-full overflow-hidden">
-            me + links
-          </div>
-          <div class="flex bg-white p-4 rounded-3xl col-span-1 h-full overflow-hidden">
-            weather + controls
-          </div>
-          <div class="flex bg-white p-4 rounded-3xl col-span-1 h-full overflow-hidden">
-            weather + controls
-          </div>
+      <div
+        class="relative flex overflow-hidden rounded-3xl col-span-3 row-span-4"
+      >
+        <livewindow-scene data-group="main-window" class="w-full h-full"
+        ></livewindow-scene>
+      </div>
+
+      <div class="grid grid-cols-subgrid gap-4 row-span-4 auto-rows-[22.5svh]">
+        <div class="flex bg-brand-50 p-4 rounded-3xl">
+          <livewindow-details data-group="main-window"></livewindow-details>
+        </div>
+        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-3">controls</div>
       </div>
     </div>
+
     <div class="grid grid-cols-4 gap-4 mt-4">
       {
         posts.map((post) => (
-          <div class="flex bg-white p-4 rounded-4xl overflow-clip  aspect-square">
+          <div class="flex bg-brand-50 p-4 rounded-4xl overflow-clip  aspect-square">
             {post.collection === "links" ? (
               <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
             ) : (

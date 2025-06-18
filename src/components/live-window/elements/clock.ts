@@ -280,7 +280,7 @@ export default class SceneClock {
     const clockBuffer = 15; // Buffer around the clock
     const clockRadius = (minSize - clockBuffer * 2) / 2;
 
-    const hourHandLength = clockRadius * 0.7; // Length of the hour hand
+    const hourHandLength = clockRadius * 0.6; // Length of the hour hand
     const minuteHandLength = clockRadius * 0.9; // Length of the minute hand
     const secondHandLength = clockRadius; // Length of the second hand
     const secondHandHitBoxLength = secondHandLength + 8; // Length of the hitbox for the second hand

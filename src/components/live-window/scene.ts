@@ -19,7 +19,7 @@ import "pathseg";
 import * as polyDecomp from "poly-decomp";
 
 import { debounce } from "./utils";
-import type { ILiveWindowSceneConfig, ISceneWeather  } from "./types";
+import type { ILiveWindowSceneConfig, ISceneLocation, ISceneWeather  } from "./types";
 import SceneClock from "./elements/clock";
 import ScenePercipitation from "./elements/percipitation";
 import SceneLightning from "./elements/lightning";
@@ -247,8 +247,8 @@ export default class LiveWindowScene {
     this.perciptiation = this.perciptiation || new ScenePercipitation(this);
     this.skybox = this.skybox || new SceneSkyBox(this);
 
-    const now = this._getNow();
-    const weather = this._getWeather();
+    const now = this.getNow();
+    const weather = this.getWeather();
 
     this.clock.render(isInitialRender, now, weather);
     this.clouds.render(isInitialRender, now, weather);
@@ -270,8 +270,8 @@ export default class LiveWindowScene {
       return; // Ensure engine, world, and renderer are initialized
     }
 
-    const now = this._getNow();
-    const weather = this._getWeather();
+    const now = this.getNow();
+    const weather = this.getWeather();
 
     if(this.engine.timing.timestamp - this._lastTickTime < 20) {
       return;
@@ -347,8 +347,31 @@ export default class LiveWindowScene {
     this.skybox?.destroy();
   }
 
-  _getNow() {
+  getNow() {
     return !this.config.useLiveTime && this.config.overrideTime ? this.config.overrideTime : new Date();
+  }
+
+  getWeather(): ISceneWeather {
+    return !this.config.useLiveWeather && this.config.overrideWeather ? {
+      lastFetched: Date.now(),
+      current: {
+        ...this._getCustomWeatherData(this.config.overrideWeather),
+        temp: store.store.weather.current?.temp || 20,
+      },
+      sunrise: store.store.weather.sunrise || null,
+      sunset: store.store.weather.sunset || null,
+    }: store.store.weather;
+  }
+
+  getLocation(): ISceneLocation {
+    return !this.config.useLiveLocation && this.config.overrideLocation ? {
+      lastFetched: Date.now(),
+      lat: this.config.overrideLocation.lat || 0,
+      lng: this.config.overrideLocation.lng || 0,
+      city: null,
+      region: null,
+      country: null,
+    } : store.store.location;
   }
 
   _getCustomWeatherData(icon: string) {
@@ -443,17 +466,5 @@ export default class LiveWindowScene {
           temp: 20,
         };
       }
-  }
-
-  _getWeather(): ISceneWeather {
-    return !this.config.useLiveWeather && this.config.overrideWeather ? {
-      lastFetched: Date.now(),
-      current: {
-        ...this._getCustomWeatherData(this.config.overrideWeather),
-        temp: store.store.weather.current?.temp || 20,
-      },
-      sunrise: store.store.weather.sunrise || null,
-      sunset: store.store.weather.sunset || null,
-    }: store.store.weather;
   }
 }

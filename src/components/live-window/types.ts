@@ -2,9 +2,14 @@
 export interface ILiveWindowSceneConfig {
   useLiveWeather: boolean;
   useLiveTime: boolean;
+  useLiveLocation: boolean;
   clockFormat?: "analog" | "digital"; // Format of the clock
   overrideTime?: Date;
   overrideWeather?: "01d" | "01n" | "02d" | "02n" | "03d" | "03n" | "04d" | "04n" | "09d" | "09n" | "10d" | "10n" | "11d" | "11n" | "13d" | "13n" | "50d" | "50n"; // Weather icon code
+  overrideLocation?: {
+    lat: number;
+    lng: number;
+  };
   topMargin?: number; // Margin at the top of the scene
 }
 
@@ -47,6 +52,22 @@ export interface IColor {
   r: number;
   g: number;
   b: number;
+}
+
+
+
+export interface IStore {
+  location: ISceneLocation,
+  weather: ISceneWeather
+}
+
+export interface ISceneLocation {
+  lastFetched: number | null; // Timestamp of the last location fetch
+  city: string | null; // City name
+  region: string | null; // Region name
+  country: string | null; // Country name
+  lat: number | null; // Latitude
+  lng: number | null; // Longitude
 }
 
 export interface ISceneWeather {

@@ -1,36 +1,13 @@
 import { merge } from "lodash";
+import type { IStore } from "./types";
 
 export const IP_RATE_LIMIT = 30 * 60000; // 30minute
 export const WEATHER_RATE_LIMIT = 30 * 60000; // 30minute
 export const OPEN_WEATHER_KEY = import.meta.env.PUBLIC_OPEN_WEATHER_API_KEY
 export const IP_REGISTRY_KEY = import.meta.env.PUBLIC_IP_REGISTRY_API_KEY;
 
-interface IStore {
-  location: {
-    lastFetched: number | null;
-    city: string | null;
-    region: string | null;
-    country: string | null;
-    lat: number | null;
-    lng: number | null;
-  };
-  weather: {
-    lastFetched: number | null;
-    current: {
-      id: number;
-      main: string;
-      description: string;
-      icon: string;
-      temp: number;
-    } | null;
-    sunrise: number | null;
-    sunset: number | null;
-  };
-}
-
 class Store {
   store: IStore;
-
   defaultStore: IStore = {
     location: {
       lastFetched: null,

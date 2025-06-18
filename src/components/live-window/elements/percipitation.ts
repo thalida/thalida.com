@@ -120,7 +120,7 @@ export default class ScenePercipitation {
         liveConfig.intensity = 0.3; // Moderate intensity for snow
         break;
       default:
-        liveConfig.enabled = true;
+        liveConfig.enabled = false;
         liveConfig.percipitationType = "fluff";
         liveConfig.intensity = 0.1;
     }
@@ -220,7 +220,7 @@ export default class ScenePercipitation {
 
     const hue = random(0, 360); // Random hue for the star color
     return Bodies.fromVertices(
-      random(0, this.scene.canvasWidth),
+      random(10, this.scene.canvasWidth-10),
       0,
       star,
       {
