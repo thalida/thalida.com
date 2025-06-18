@@ -1,5 +1,6 @@
   import type { ILiveWindowSceneConfig } from "./types";
 import LiveWindowScene from "./scene";
+import { throttle } from "lodash";
 
 const sceneMap: Record<string, LiveWindowScene> = {}
 
@@ -8,6 +9,8 @@ export class LiveWindowComponent extends HTMLElement {
   #shadow: ShadowRoot;
   #config: ILiveWindowSceneConfig | null = null;
   #group: string;
+
+  resizeObserver: ResizeObserver | null = null;
 
   constructor() {
     super();
@@ -65,6 +68,7 @@ export class LiveWindowComponent extends HTMLElement {
     window.addEventListener("load", () => {
       this.scene = new LiveWindowScene(wrapper, this.config);
     });
+
   }
 
   disconnectedCallback() {

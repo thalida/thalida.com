@@ -49,33 +49,40 @@ interface Props {
 
 <Layout>
   <div class="p-8">
-    <div class="relative grid grid-cols-5 gap-8 auto-rows-[20svh]">
-      <div class="grid grid-cols-subgrid gap-8 row-span-4 auto-cols-fr">
-        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">
-          thalida.com
-        </div>
+    <div
+      class="relative grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:h-[95svh]"
+    >
+      <div
+        class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+      >
         <div class="flex bg-brand-50 p-4 rounded-3xl row-span-2">
-          nav / about
+          thalida.com / about
         </div>
+        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">nav</div>
         <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">links</div>
       </div>
 
       <div
-        class="relative flex overflow-hidden rounded-3xl col-span-3 row-span-4"
+        class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-full"
       >
-        <livewindow-scene data-group="main-window" class="w-full h-full"
+        <livewindow-scene data-group="main-window" class="h-full w-full"
         ></livewindow-scene>
       </div>
 
-      <div class="grid grid-cols-subgrid gap-8 row-span-4 auto-rows-fr">
-        <div class="flex bg-brand-50 p-4 rounded-3xl">
+      <div
+        class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+      >
+        <div class="flex bg-brand-50 p-4 rounded-3xl xl:row-span-1 grow-0">
           <livewindow-details data-group="main-window"></livewindow-details>
         </div>
-        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-3">controls</div>
+        <div class="flex bg-brand-50 p-4 rounded-3xl xl:row-span-3">
+          controls
+        </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-4 gap-8 mt-8">
+    <div class="grid grid-cols-2 xl:grid-cols-4 gap-8 mt-8">
+      <div class="col-span-full">Header</div>
       {
         posts.map((post) => (
           <div class="flex bg-brand-50 p-4 rounded-4xl overflow-clip  aspect-square">
