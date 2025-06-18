@@ -133,20 +133,23 @@ export class LiveWindowDetailsComponent extends HTMLElement {
 
   refreshDetails() {
     const scene = sceneMap[this.#group];
-    if (scene) {
-      const location = scene.getLocation();
-      const weather = scene.getWeather();
-      this.#shadow.innerHTML = `
-        <div class="livewindow__details">
-          <p>Location: ${location?.city || "Unknown"}</p>
-          <p>${weather?.current?.main || "Unknown"}</p>
-          <p>${weather?.current?.description || "No description"}</p>
-          <p>${weather?.current?.temp ? `${weather.current.temp}°` : "No temperature"}</p>
-        </div>
-      `;
-    } else {
-      this.#shadow.innerHTML = "loading...";
+    if (!scene) {
+      return;
     }
+    const location = scene.getLocation();
+    const weather = scene.getWeather();
+
+    if (!location || !weather || !weather.current) {
+      this.#shadow.innerHTML = "";
+      return;
+    }
+
+    this.#shadow.innerHTML = `
+      <div class="livewindow__details">
+        <p>It's ${weather.current.temp}°C and ${weather.current.main}</p>
+        <p>${location.city}, ${location.country}</p>
+      </div>
+    `;
   }
 }
 
