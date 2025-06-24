@@ -78,6 +78,8 @@ export default class LiveWindowScene {
   defaultConfig: ILiveWindowSceneConfig = {
     useLiveWeather: true,
     useLiveTime: true,
+    useLiveLocation: true,
+    enableGlobalTheme: true, // Whether to use global theme colors
     clockFormat: "analog", // Format of the clock
     topMargin: 64 + 32,
   };
@@ -241,11 +243,11 @@ export default class LiveWindowScene {
 
     Composite.add(this.world, [cornerBottomLeft, cornerBottomRight]);
 
-    this.clock = this.clock || new SceneClock(this, this.config.clockFormat);
+    this.clock = this.clock || new SceneClock(this, {format: this.config.clockFormat});
     this.clouds = this.clouds || new SceneClouds(this);
     this.lightning = this.lightning || new SceneLightning(this);
     this.perciptiation = this.perciptiation || new ScenePercipitation(this);
-    this.skybox = this.skybox || new SceneSkyBox(this);
+    this.skybox = this.skybox || new SceneSkyBox(this, {enableGlobalTheme: this.config.enableGlobalTheme});
 
     const now = this.getNow();
     const weather = this.getWeather();
@@ -295,7 +297,18 @@ export default class LiveWindowScene {
   }
 
   updateConfig(config: Partial<ILiveWindowSceneConfig> | null) {
-    this.config =  merge({}, this.defaultConfig, config || {});;
+    this.config =  merge({}, this.defaultConfig, config || {});
+
+    if (this.clock) {
+      this.clock.updateConfig({ format: this.config.clockFormat });
+    }
+
+    if (this.skybox) {
+      this.skybox.updateConfig({
+        enableGlobalTheme: this.config.enableGlobalTheme,
+      });
+    }
+
     return this.config;
   }
 

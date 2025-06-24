@@ -3,6 +3,7 @@ export interface ILiveWindowSceneConfig {
   useLiveWeather: boolean;
   useLiveTime: boolean;
   useLiveLocation: boolean;
+  enableGlobalTheme: boolean; // Whether to use global theme colors
   clockFormat?: "analog" | "digital"; // Format of the clock
   overrideTime?: Date;
   overrideWeather?: "01d" | "01n" | "02d" | "02n" | "03d" | "03n" | "04d" | "04n" | "09d" | "09n" | "10d" | "10n" | "11d" | "11n" | "13d" | "13n" | "50d" | "50n"; // Weather icon code
@@ -22,6 +23,7 @@ export interface ISceneClockConfig {
 export interface ISceneSkyboxConfig {
   enabled: boolean;
   enableScene: boolean;
+  enableGlobalTheme: boolean; // Whether to use global theme colors
   sunsetDuration: number; // Duration of sunset in milliseconds
   sunrise?: number | null; // Optional sunrise time in milliseconds
   sunset?: number | null; // Optional sunset time in milliseconds

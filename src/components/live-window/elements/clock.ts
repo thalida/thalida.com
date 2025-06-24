@@ -28,9 +28,9 @@ export default class SceneClock {
   }
   config: ISceneClockConfig;
 
-  constructor(scene: LiveWindowScene, clockFormat: "analog" | "digital" = "analog") {
+  constructor(scene: LiveWindowScene, config: Partial<ISceneClockConfig> | null = null) {
     this.scene = scene;
-    this.config = this.updateConfig({ format: clockFormat });
+    this.config = this.updateConfig(config);
   }
 
   render(isInitialRender = false, now: Date, weather: ISceneWeather) {
