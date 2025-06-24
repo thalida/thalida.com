@@ -128,7 +128,7 @@ export class LiveWindowDetailsComponent extends HTMLElement {
     window.addEventListener("load", () => {
       setTimeout(this.refreshDetails.bind(this), 0);
     });
-    setInterval(this.refreshDetails.bind(this), 5000); // Update every 5 seconds
+    setInterval(this.refreshDetails.bind(this), 1000); // Update every 5 seconds
   }
 
   refreshDetails() {
@@ -138,6 +138,7 @@ export class LiveWindowDetailsComponent extends HTMLElement {
     }
     const location = scene.getLocation();
     const weather = scene.getWeather();
+    const time = scene.getNow();
 
     if (!location || !weather || !weather.current) {
       this.#shadow.innerHTML = "";
@@ -146,6 +147,7 @@ export class LiveWindowDetailsComponent extends HTMLElement {
 
     this.#shadow.innerHTML = `
       <div class="livewindow__details">
+        <p>${time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
         <p>It's ${weather.current.temp}°C and ${weather.current.main}</p>
         <p>${location.city}, ${location.country}</p>
       </div>

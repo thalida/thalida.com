@@ -72,11 +72,11 @@
   --color-brand-950: oklch(21.98% 0.029 268.88);
 }
 
-live-window {
+livewindow-scene {
   position: relative;
 }
 
-.dark live-window::after {
+.dark livewindow-scene::after {
   content: "";
   position: absolute;
   top: 0;

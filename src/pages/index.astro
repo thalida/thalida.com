@@ -1,8 +1,9 @@
 ---
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Image } from 'astro:assets';
 import { COLLECTION_NAMES } from "../content.config";
 import Layout from "../layouts/Layout.astro";
+import meImage from "../assets/images/me.avif";
 
 let posts = [];
 for (const collection of COLLECTION_NAMES as const) {
@@ -55,19 +56,34 @@ interface Props {
       class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
     >
       <div
-        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-2"
+        class="relative bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
       >
-        thalida.com / about
+        <Image
+          src={meImage}
+          alt="Thalida"
+          class="absolute right-0 bottom-0 object-contain object-bottom-right size-full pointer-events-none"
+          loading="lazy"
+          />
+        <div class="relative">
+          <p>thalida.com</p>
+          <p>created September 2007</p>
+          <p>updated June 2025</p>
+          <p>version: 45</p>
+        </div>
       </div>
+      <div
+        class="relative bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-2"
+      >
+      <p>Hey! My name's Thalida, I'm a Product Engineer based in New York.</p>
+
+      <p>Welcome to my homebase on the web, I use this domain to showcase my work, learn new frameworks, and explore new, interesting ways of building web experiences.</p>
+      <p> learn more about me -></p>
+      <p>explore previous versions -></p>
+    </div>
       <div
         class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
       >
-        nav
-      </div>
-      <div
-        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
-      >
-        links
+        linkedin, github, dribbble, email
       </div>
     </div>
 
@@ -100,15 +116,12 @@ interface Props {
       <div class="col-span-full">Header</div>
       {
         posts.map((post) => (
-          <div class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-4xl overflow-clip  aspect-video">
-            {post.collection === "links" ? (
-              <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
-            ) : (
-              <a href={`/${post.collection}/${post.id}/`}>
-                {post.data.title || post.id}
-              </a>
-            )}
-          </div>
+          <a
+            href={`/${post.collection}/${post.id}/`}
+            class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-4xl overflow-clip  aspect-3/2"
+          >
+            {post.data.title || post.id}
+          </a>
         ))
       }
     </div>
