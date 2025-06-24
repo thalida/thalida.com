@@ -30,62 +30,77 @@ interface Props {
 
 <script>
   import type { ILiveWindowSceneConfig } from "../components/live-window/types";
-  // setTimeout(() => {
-  //   const el = document.getElementById('top-window');
-  //   if (el) {
-  //     const date = new Date();
-  //     date.setHours(0, 0, 0);
-  //     const config: ILiveWindowSceneConfig = {
-  //       useLiveWeather: true,
-  //       useLiveTime: true,
-  //       overrideTime: date,
-  //       overrideWeather: "11d",
-  //       clockFormat: "digital",
-  //     }
-  //     el.config = config;
-  //   }
-  // }, 10000);
+  setTimeout(() => {
+    const el = document.getElementById("main-window");
+    if (el) {
+      const date = new Date();
+      date.setHours(12, 0, 0);
+      const config: ILiveWindowSceneConfig = {
+        useLiveWeather: true,
+        useLiveTime: true,
+        overrideTime: date,
+        overrideWeather: "11d",
+        clockFormat: "digital",
+      };
+      el.config = config;
+    }
+  }, 1000);
 </script>
 
 <Layout>
-  <div class="p-8">
+  <div
+    class="grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:h-screen p-8"
+  >
     <div
-      class="relative grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:h-[95svh]"
+      class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
     >
       <div
-        class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-2"
       >
-        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-2">
-          thalida.com / about
-        </div>
-        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">nav</div>
-        <div class="flex bg-brand-50 p-4 rounded-3xl row-span-1">links</div>
+        thalida.com / about
       </div>
-
       <div
-        class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-full"
+        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
       >
-        <livewindow-scene data-group="main-window" class="h-full w-full"
-        ></livewindow-scene>
+        nav
       </div>
-
       <div
-        class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
       >
-        <div class="flex bg-brand-50 p-4 rounded-3xl xl:row-span-1 grow-0">
-          <livewindow-details data-group="main-window"></livewindow-details>
-        </div>
-        <div class="flex bg-brand-50 p-4 rounded-3xl xl:row-span-3">
-          controls
-        </div>
+        links
       </div>
     </div>
 
+    <div
+      class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-full"
+    >
+      <livewindow-scene
+        id="main-window"
+        data-group="main-window"
+        class="h-full w-full"></livewindow-scene>
+    </div>
+
+    <div
+      class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+    >
+      <div
+        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl xl:row-span-1 grow-0"
+      >
+        <livewindow-details data-group="main-window"></livewindow-details>
+      </div>
+      <div
+        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl xl:row-span-3"
+      >
+        controls
+      </div>
+    </div>
+  </div>
+  <div class="p-8">
     <div class="grid grid-cols-2 xl:grid-cols-4 gap-8 mt-8">
       <div class="col-span-full">Header</div>
       {
         posts.map((post) => (
-          <div class="flex bg-brand-50 p-4 rounded-4xl overflow-clip  aspect-square">
+          <div class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-4xl overflow-clip  aspect-video">
             {post.collection === "links" ? (
               <a href={`/${post.collection}/${post.id}/`}>{post.id}</a>
             ) : (

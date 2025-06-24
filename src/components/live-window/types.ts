@@ -54,8 +54,6 @@ export interface IColor {
   b: number;
 }
 
-
-
 export interface IStore {
   location: ISceneLocation,
   weather: ISceneWeather

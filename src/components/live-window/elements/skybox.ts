@@ -94,6 +94,13 @@ export default class SceneSkyBox {
     this.scene.element.style.backgroundPosition = "0px 0px, 0px 0px, 0px 0px, 0px 0px, 0px 0px";
     this.scene.element.style.backgroundRepeat = "no-repeat";
     this.scene.element.style.backgroundImage = `radial-gradient(49% 81% at 45% 47%, ${this._colorToString(gradient.start)} 0%, #FF000000 100%), radial-gradient(113% 91% at 17% -2%, ${this._colorToString(pastGradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 83% 7%, ${this._colorToString(pastGradient.start)} 5%, #FF000000 95%), radial-gradient(142% 91% at -6% 74%, ${this._colorToString(gradient.end)} 5%, #FF000000 95%), radial-gradient(142% 91% at 111% 84%,  ${this._colorToString(futureGradient.start)} 0%,  ${this._colorToString(futureGradient.end)} 100%)`;
+
+    const isNight = this._getIsNight(now, { sunrise, sunset });
+    if (isNight) {
+      document.documentElement.classList.add("dark")
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }
 
   updateConfig(config: Partial<ISceneSkyboxConfig> | null): ISceneSkyboxConfig {

@@ -14,7 +14,7 @@
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/sitemap": "^3.4.1",
     "@tailwindcss/vite": "^4.1.8",
-    "astro": "^5.9.1",
+    "astro": "^5.10.1",
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "matter-js": "^0.20.0",
