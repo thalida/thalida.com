@@ -3,7 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { Image } from 'astro:assets';
 import { COLLECTION_NAMES } from "../content.config";
 import Layout from "../layouts/Layout.astro";
-import meImage from "../assets/images/me.avif";
+import meImage from "../assets/images/me.png";
 
 let posts = [];
 for (const collection of COLLECTION_NAMES as const) {
@@ -45,50 +45,72 @@ interface Props {
       };
       el.config = config;
     }
-  }, 1000);
+  }, 10000);
 </script>
 
 <Layout>
   <div
-    class="grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:h-screen p-8"
+    class="grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:min-h-screen p-8"
   >
     <div
       class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
     >
       <div
-        class="relative bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
+        class="flex flex-col justify-between relative bg-white dark:bg-black p-4 rounded-3xl row-span-1 overflow-hidden"
       >
-        <Image
-          src={meImage}
-          alt="Thalida"
-          class="absolute right-0 bottom-0 object-contain object-bottom-right size-full pointer-events-none"
-          loading="lazy"
-          />
         <div class="relative">
-          <p>thalida.com</p>
-          <p>created September 2007</p>
-          <p>updated June 2025</p>
-          <p>version: 45</p>
+          <p class="font-brand text-3xl">thalida.com</p>
+        </div>
+          <Image
+            src={meImage}
+            alt="Thalida"
+            class="absolute right-0 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none drop-shadow-lg"
+            loading="lazy"
+            />
+        <div class="relative text-white mix-blend-difference">
+          <p><span>created</span> <span class="font-bold">2007</span></p>
+          <p><span>updated</span> <span class="font-bold">2025</span></p>
+          <p><span>version</span> <span class="font-bold">#25</span></p>
         </div>
       </div>
       <div
-        class="relative bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-2"
+        class="flex flex-col justify-between bg-brand-50 dark:bg-brand-950 rounded-3xl row-span-2 overflow-hidden"
       >
-      <p>Hey! My name's Thalida, I'm a Product Engineer based in New York.</p>
+        <div class="flex flex-col gap-4 p-4 bg-white dark:bg-black flex-grow">
+          <p class="font-bold">Welcome! My name's Thalida Noel, I'm a Product Engineer based in New York State.</p>
 
-      <p>Welcome to my homebase on the web, I use this domain to showcase my work, learn new frameworks, and explore new, interesting ways of building web experiences.</p>
-      <p> learn more about me -></p>
-      <p>explore previous versions -></p>
-    </div>
+          <p>This domain is my homebase on the world wide web -- I use this space to explore and experiment, it also serves as a brain-dump of my collected knowledge, resources, and adventures.</p>
+          <p> learn more -></p>
+        </div>
+        <div class="flex flex-col gap-4 p-4">
+          <p>I'm regularly experimenting with this site, if you're curious you can explore previous versions!</p>
+          <p>explore -></p>
+        </div>
+      </div>
       <div
-        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1"
+        class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 justify-around"
       >
-        linkedin, github, dribbble, email
+        <a href="https://linkedin.com/in/thalida" class="flex items-center gap-2">
+          <span class="fa-linkedin fa-brands fa-lg text-blue-500"></span>
+          <span>linkedin.com/in/thalida</span>
+        </a>
+        <a href="https://github.com/thalida" class="flex items-center gap-2">
+          <span class="fa-github fa-brands fa-lg text-dark dark:text-white"></span>
+          <span>github.com/thalida</span>
+        </a>
+        <a href="https://dribbble.com/thalida" class="flex items-center gap-2">
+          <span class="fa-dribbble fa-brands fa-lg text-pink-500"></span>
+          <span>dribbble.com/thalida</span>
+        </a>
+        <a href="mailto:hello@thalida.com?subject=Hello%20from%20your%20website!" class="flex items-center gap-2">
+          <span class="fa-envelope fa-solid fa-lg text-brand-500"></span>
+          <span>hello@thalida.com</span>
+        </a>
       </div>
     </div>
 
     <div
-      class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-full"
+      class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-auto"
     >
       <livewindow-scene
         id="main-window"

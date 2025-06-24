@@ -10,8 +10,6 @@ export class LiveWindowComponent extends HTMLElement {
   #config: ILiveWindowSceneConfig | null = null;
   #group: string;
 
-  resizeObserver: ResizeObserver | null = null;
-
   constructor() {
     super();
     this.#shadow = this.attachShadow({ mode: "open" });
@@ -128,7 +126,7 @@ export class LiveWindowDetailsComponent extends HTMLElement {
     window.addEventListener("load", () => {
       setTimeout(this.refreshDetails.bind(this), 0);
     });
-    setInterval(this.refreshDetails.bind(this), 1000); // Update every 5 seconds
+    setInterval(this.refreshDetails.bind(this), 1000); // Update every second
   }
 
   refreshDetails() {

@@ -2,61 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* @theme {
-  --color-brand-50: oklch(95.63% 0.005 286.52);
-  --color-brand-100: oklch(92.36% 0.008 286.38);
-  --color-brand-200: oklch(83.67% 0.018 286.06);
-  --color-brand-300: oklch(75.97% 0.026 285.81);
-  --color-brand-400: oklch(68.41% 0.034 285.5);
-  --color-brand-500: oklch(60.68% 0.044 285.04);
-  --color-brand-600: oklch(51.96% 0.052 284.47);
-  --color-brand-700: oklch(44.2% 0.056 283.91);
-  --color-brand-800: oklch(36.48% 0.048 283.78);
-  --color-brand-900: oklch(28.68% 0.038 283.74);
-  --color-brand-950: oklch(24.34% 0.032 283.76);
-} */
-
-/* @theme {
-  --color-brand-50: #f4f2f1;
-  --color-brand-100: #eae8e6;
-  --color-brand-200: #d6d2cc;
-  --color-brand-300: #c1bbb3;
-  --color-brand-400: #aba297;
-  --color-brand-500: #968b7d;
-  --color-brand-600: #7f7467;
-  --color-brand-700: #655d52;
-  --color-brand-800: #4c463e;
-  --color-brand-900: #332f29;
-  --color-brand-950: #25221e;
-} */
-
-/* @theme {
-  --color-brand-50: oklch(95.88% 0.017 40.86);
-  --color-brand-100: oklch(92.25% 0.031 40.11);
-  --color-brand-200: oklch(84.23% 0.071 42.84);
-  --color-brand-300: oklch(75.95% 0.123 48.32);
-  --color-brand-400: oklch(66.63% 0.127 50.7);
-  --color-brand-500: oklch(57.89% 0.11 51);
-  --color-brand-600: oklch(48.96% 0.094 50.44);
-  --color-brand-700: oklch(40.3% 0.077 50.43);
-  --color-brand-800: oklch(31.66% 0.06 50.73);
-  --color-brand-900: oklch(22.78% 0.043 51.7);
-  --color-brand-950: oklch(18.01% 0.033 52.57);
-} */
-
-/* @theme {
-  --color-brand-50: oklch(96.62% 0.004 39.81);
-  --color-brand-100: oklch(93.81% 0.007 39.62);
-  --color-brand-200: oklch(84.74% 0.02 41.83);
-  --color-brand-300: oklch(76.27% 0.036 42.66);
-  --color-brand-400: oklch(67.55% 0.041 40.49);
-  --color-brand-500: oklch(59.01% 0.035 42.98);
-  --color-brand-600: oklch(49.33% 0.03 41.93);
-  --color-brand-700: oklch(40.86% 0.025 44.95);
-  --color-brand-800: oklch(32.08% 0.02 43.85);
-  --color-brand-900: oklch(22.64% 0.014 41.6);
-  --color-brand-950: oklch(17.82% 0.01 52.79);
-} */
+@theme {
+  --font-sans: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-brand: "Bagel Fat One", system-ui;
+}
 
 @theme {
   --color-brand-50: oklch(96.51% 0.008 278.75);
@@ -70,6 +19,20 @@
   --color-brand-800: oklch(40.82% 0.064 269.7);
   --color-brand-900: oklch(33.08% 0.053 270.19);
   --color-brand-950: oklch(21.98% 0.029 268.88);
+}
+
+@theme {
+  --color-accent-50: oklch(95.2% 0.039 148.69);
+  --color-accent-100: oklch(90.39% 0.088 148.14);
+  --color-accent-200: oklch(81.51% 0.102 147.75);
+  --color-accent-300: oklch(73.05% 0.092 147.74);
+  --color-accent-400: oklch(64.67% 0.081 147.74);
+  --color-accent-500: oklch(56.01% 0.07 147.75);
+  --color-accent-600: oklch(47.61% 0.06 147.62);
+  --color-accent-700: oklch(39.2% 0.05 147.45);
+  --color-accent-800: oklch(30.69% 0.039 147.18);
+  --color-accent-900: oklch(21.97% 0.027 146.64);
+  --color-accent-950: oklch(17.47% 0.021 147.4);
 }
 
 livewindow-scene {
@@ -90,4 +53,10 @@ livewindow-scene {
   opacity: 0.2;
   background-color: #00BEFF;
   background-blend-mode: color-burn;
+}
+
+a {
+  @apply text-brand-700 transition-colors duration-200 dark:text-brand-300;
+  @apply hover:text-brand-900 dark:hover:text-brand-200;
+  @apply focus-visible:text-brand-900 dark:focus-visible:text-brand-200;
 }
