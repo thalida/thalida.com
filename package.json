@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview --host --allowed-hosts=thalida.tunl.sh",
+    "build:preview": "astro build && astro preview --host --allowed-hosts=thalida.tunl.sh",
     "astro": "astro"
   },
   "dependencies": {

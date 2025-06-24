@@ -97,9 +97,9 @@ export default class SceneSkyBox {
 
     const isNight = this._getIsNight(now, { sunrise, sunset });
     if (isNight) {
-      document.documentElement.classList.add("dark")
+      document.documentElement.classList.add("dark-scene")
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove("dark-scene");
     }
   }
 

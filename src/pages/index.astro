@@ -35,28 +35,28 @@ interface Props {
     const el = document.getElementById("main-window");
     if (el) {
       const date = new Date();
-      date.setHours(12, 0, 0);
+      date.setHours(22, 0, 0);
       const config: ILiveWindowSceneConfig = {
         useLiveWeather: true,
-        useLiveTime: true,
+        useLiveTime: false,
         overrideTime: date,
         overrideWeather: "11d",
         clockFormat: "digital",
       };
       el.config = config;
     }
-  }, 10000);
+  }, 5000);
 </script>
 
 <Layout>
   <div
-    class="grid grid-cols-2 gap-8 xl:grid-rows-4 xl:grid-cols-5 xl:min-h-screen p-8"
+    class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-2 xl:grid-rows-4 xl:grid-cols-5 xl:min-h-[60rem] xl:max-h-[max(60rem,100vh)]"
   >
     <div
-      class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+      class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-2  xl:grid-rows-subgrid xl:col-span-1 xl:row-span-4"
     >
       <div
-        class="flex flex-col justify-between relative bg-white dark:bg-black p-4 rounded-3xl row-span-1 overflow-hidden"
+        class="flex flex-col justify-between relative bg-accent-200 dark:bg-accent-900 p-4 rounded-3xl row-span-1 overflow-hidden"
       >
         <div class="relative">
           <p class="font-brand text-3xl">thalida.com</p>
@@ -64,7 +64,7 @@ interface Props {
           <Image
             src={meImage}
             alt="Thalida"
-            class="absolute right-0 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none drop-shadow-lg"
+            class="absolute right-0 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none"
             loading="lazy"
             />
         <div class="relative text-white mix-blend-difference">
@@ -88,7 +88,7 @@ interface Props {
         </div>
       </div>
       <div
-        class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 justify-around"
+        class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 gap-2 justify-around"
       >
         <a href="https://linkedin.com/in/thalida" class="flex items-center gap-2">
           <span class="fa-linkedin fa-brands fa-lg text-blue-500"></span>
@@ -110,7 +110,7 @@ interface Props {
     </div>
 
     <div
-      class="flex rounded-3xl col-span-2 xl:col-span-3 xl:row-span-4 overflow-hidden h-[75svh] xl:h-auto"
+      class="flex rounded-3xl col-span-1 sm:col-span-2 overflow-hidden h-[75vh]  xl:col-span-3 xl:row-span-4 xl:h-full"
     >
       <livewindow-scene
         id="main-window"
@@ -119,7 +119,7 @@ interface Props {
     </div>
 
     <div
-      class="grid grid-cols-subgrid xl:grid-rows-subgrid gap-8 col-span-2 xl:col-span-1 xl:row-span-4"
+      class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-2 xl:grid-rows-subgrid xl:col-span-1 xl:row-span-4"
     >
       <div
         class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl xl:row-span-1 grow-0"
@@ -134,7 +134,7 @@ interface Props {
     </div>
   </div>
   <div class="p-8">
-    <div class="grid grid-cols-2 xl:grid-cols-4 gap-8 mt-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mt-8">
       <div class="col-span-full">Header</div>
       {
         posts.map((post) => (
