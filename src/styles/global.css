@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *, .dark-scene, .dark-scene *));
+@custom-variant loading (&:where(.loading, .loading *));
 
 @theme {
   --font-sans: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -22,51 +23,6 @@
   --color-brand-950: oklch(21.98% 0.029 268.88);
 }
 
-/* https://www.tints.dev/palette/v1:YWNjZW50fEU0RjJFN3wxMDB8bHwwfDB8MHwxMDB8YQ */
-@theme {
-  --color-accent-50: oklch(97.25% 0.01 154.89);
-  --color-accent-100: oklch(94.77% 0.021 152.09);
-  --color-accent-200: oklch(87.96% 0.048 151.77);
-  --color-accent-300: oklch(81.47% 0.076 150.48);
-  --color-accent-400: oklch(74.11% 0.105 150.12);
-  --color-accent-500: oklch(67.85% 0.132 148.87);
-  --color-accent-600: oklch(58.13% 0.114 148.94);
-  --color-accent-700: oklch(47.74% 0.092 148.88);
-  --color-accent-800: oklch(35.49% 0.064 149.39);
-  --color-accent-900: oklch(23.21% 0.035 148.72);
-  --color-accent-950: oklch(16.57% 0.02 151.03);
-}
-
-/* https://www.tints.dev/palette/v1:YWNjZW50fEYyRTRFNHwxMDB8bHwwfDB8MHwxMDB8YQ */
-@theme {
-  --color-accent-50: oklch(96.36% 0.008 17.52);
-  --color-accent-100: oklch(93% 0.015 17.54);
-  --color-accent-200: oklch(83.83% 0.037 17.94);
-  --color-accent-300: oklch(74.91% 0.06 18.6);
-  --color-accent-400: oklch(64.86% 0.087 19.71);
-  --color-accent-500: oklch(56.03% 0.115 21.45);
-  --color-accent-600: oklch(47.93% 0.099 21.49);
-  --color-accent-700: oklch(39.51% 0.08 21.36);
-  --color-accent-800: oklch(29.75% 0.055 20.93);
-  --color-accent-900: oklch(20.19% 0.029 19.89);
-  --color-accent-950: oklch(14.78% 0.017 19.24);
-}
-
-/* https://www.tints.dev/palette/v1:YWNjZW50fEZGQzQ0Qnw0MDB8bHwwfDB8MHwxMDB8YQ */
-@theme {
-  --color-accent-50: oklch(98.1% 0.019 83.04);
-  --color-accent-100: oklch(95.91% 0.044 85.23);
-  --color-accent-200: oklch(92.03% 0.085 84.95);
-  --color-accent-300: oklch(88.86% 0.119 84.44);
-  --color-accent-400: oklch(85.28% 0.149 81.93);
-  --color-accent-500: oklch(81.64% 0.168 76.8);
-  --color-accent-600: oklch(71.76% 0.152 74.24);
-  --color-accent-700: oklch(57.93% 0.122 75.58);
-  --color-accent-800: oklch(44.29% 0.093 76.39);
-  --color-accent-900: oklch(28.3% 0.058 81.46);
-  --color-accent-950: oklch(18.45% 0.038 85.81);
-}
-
 /* https://www.tints.dev/palette/v1:YWNjZW50fEJERkY0QXw0MDB8cHwwfDB8MHwxMDB8YQ */
 @theme {
   --color-accent-50: oklch(98.97% 0.023 128.64);
@@ -80,6 +36,21 @@
   --color-accent-800: oklch(39.87% 0.104 127.79);
   --color-accent-900: oklch(26.16% 0.068 127.48);
   --color-accent-950: oklch(20.38% 0.053 127.5);
+}
+
+/* https://www.tints.dev/palette/v1:YWNjZW50fEZGQzQ0Qnw0MDB8bHwwfDB8MHwxMDB8YQ */
+@theme {
+  --color-secondary-50: oklch(98.1% 0.019 83.04);
+  --color-secondary-100: oklch(95.91% 0.044 85.23);
+  --color-secondary-200: oklch(92.03% 0.085 84.95);
+  --color-secondary-300: oklch(88.86% 0.119 84.44);
+  --color-secondary-400: oklch(85.28% 0.149 81.93);
+  --color-secondary-500: oklch(81.64% 0.168 76.8);
+  --color-secondary-600: oklch(71.76% 0.152 74.24);
+  --color-secondary-700: oklch(57.93% 0.122 75.58);
+  --color-secondary-800: oklch(44.29% 0.093 76.39);
+  --color-secondary-900: oklch(28.3% 0.058 81.46);
+  --color-secondary-950: oklch(18.45% 0.038 85.81);
 }
 
 livewindow-scene {

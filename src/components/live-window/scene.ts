@@ -88,10 +88,14 @@ export default class LiveWindowScene {
 
   _lastTickTime: number = 0;
 
+  callbacks: Record<string, Array<(...args: any[]) => void>> = {}
+
   constructor(container: HTMLElement, config: Partial<ILiveWindowSceneConfig> | null = null) {
     this.config = merge({}, this.defaultConfig, config || {});
     this.element = container;
+  }
 
+  run() {
     this.matterElement = document.createElement("div");
     this.matterElement.style.width = "100%";
     this.matterElement.style.height = "100%";
@@ -102,13 +106,16 @@ export default class LiveWindowScene {
 
     this.updateLiveData();
     this.render(true);
-
-    Events.on(this.engine, "beforeUpdate", this.onTick.bind(this));
+    this.onTick(true);
+    Events.on(this.engine, "beforeUpdate", () => {
+      this.onTick();
+    });
     window.addEventListener(
       "resize",
       debounce(this.onResize.bind(this), 100)
     );
     this.interval = window.setInterval(this.updateLiveData.bind(this), 1000);
+    this.trigger("ready");
   }
 
   get topMargin() {
@@ -263,7 +270,37 @@ export default class LiveWindowScene {
     this.isRendering = false;
   }
 
-  onTick() {
+  on(event: "tick" | "ready", callback: (...args: any[]) => void) {
+    if (!this.callbacks[event]) {
+      this.callbacks[event] = [];
+    }
+
+    this.callbacks[event].push(callback);
+  }
+
+  trigger(event: "tick" | "ready", ...args: any[]) {
+    if (!this.callbacks[event]) {
+      return;
+    }
+
+    this.callbacks[event].forEach((callback) => {
+      try {
+        callback(...args);
+      } catch (error) {
+        console.error(`Error in ${event} callback:`, error);
+      }
+    });
+  }
+
+  off() {
+    for (const event in this.callbacks) {
+      if (Object.prototype.hasOwnProperty.call(this.callbacks, event)) {
+        this.callbacks[event] = [];
+      }
+    }
+  }
+
+  onTick(force: boolean = false) {
     if (this.isRendering) {
       return;
     }
@@ -274,8 +311,9 @@ export default class LiveWindowScene {
 
     const now = this.getNow();
     const weather = this.getWeather();
+    const location = this.getLocation();
 
-    if(this.engine.timing.timestamp - this._lastTickTime < 20) {
+    if(!force && this.engine.timing.timestamp - this._lastTickTime < 200) {
       return;
     }
 
@@ -284,7 +322,7 @@ export default class LiveWindowScene {
     this.lightning?.onTick(now, weather);
     this.perciptiation?.onTick(now, weather);
     this.skybox?.onTick(now, weather);
-
+    this.trigger("tick", now, weather, location);
     this._lastTickTime = this.engine.timing.timestamp;
   }
 
@@ -346,6 +384,7 @@ export default class LiveWindowScene {
   }
 
   destroy() {
+    this.off();
     this.clear();
 
     if (this.interval) {
@@ -385,6 +424,24 @@ export default class LiveWindowScene {
       region: null,
       country: null,
     } : store.store.location;
+  }
+
+  getGreeting(now: Date): string {
+    const hours = now.getHours();
+    const sunriseHour = store.store.weather.sunrise ? new Date(store.store.weather.sunrise).getHours() : 6; // Default sunrise at 6 AM
+    const sunsetHour = store.store.weather.sunset ? new Date(store.store.weather.sunset).getHours() : 18; // Default sunset at 6 PM
+
+    if (hours > 0 && hours < sunriseHour - 2) {
+      return "Hey, night owl!";
+    } else if (hours >= sunriseHour - 2 && hours < 11) {
+      return "Good morning!";
+    } else if (hours >= 11 && hours < sunsetHour - 1) {
+      return "Good afternoon!";
+    } else if (hours >= sunsetHour - 1 && hours < 20) {
+      return "Good evening!";
+    } else {
+      return "Good night!";
+    }
   }
 
   _getCustomWeatherData(icon: string) {

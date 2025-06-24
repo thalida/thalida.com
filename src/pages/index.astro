@@ -31,21 +31,26 @@ interface Props {
 
 <script>
   import type { ILiveWindowSceneConfig } from "../components/live-window/types";
+  document.documentElement.classList.add("loading");
+
+  const scene = document.getElementById("main-window");
+  scene.addEventListener("ready", () => {
+    document.documentElement.classList.remove("loading");
+  });
   setTimeout(() => {
-    const el = document.getElementById("main-window");
-    if (el) {
+    if (scene) {
       const date = new Date();
       date.setHours(22, 0, 0);
       const config: ILiveWindowSceneConfig = {
         useLiveWeather: true,
-        useLiveTime: false,
+        useLiveTime: true,
         overrideTime: date,
         overrideWeather: "11d",
         clockFormat: "digital",
       };
-      el.config = config;
+      scene.config = config;
     }
-  }, 5000);
+  }, 2000);
 </script>
 
 <Layout>
@@ -55,16 +60,14 @@ interface Props {
     <div
       class="flex flex-col justify-between relative bg-accent-200 dark:bg-accent-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:-order-1 2xl:order-0"
     >
-      <div class="relative">
-        <p class="font-brand text-3xl">thalida.com</p>
-      </div>
-        <Image
-          src={meImage}
-          alt="Thalida"
-          class="absolute right-4 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none"
-          loading="lazy"
-          />
-      <div class="relative text-white mix-blend-difference">
+      <p class="font-brand text-4xl text-emerald-800 dark:text-emerald-200">thalida.com</p>
+      <Image
+        src={meImage}
+        alt="Thalida"
+        class="absolute right-4 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none"
+        loading="lazy"
+        />
+      <div class="relative text-accent-50 mix-blend-difference">
         <p><span>created</span> <span class="font-bold">2007</span></p>
         <p><span>updated</span> <span class="font-bold">2025</span></p>
         <p><span>version</span> <span class="font-bold">#25</span></p>
@@ -72,26 +75,50 @@ interface Props {
     </div>
 
     <div
-      class="flex rounded-3xl col-span-1 h-[70svh]  overflow-hidden sm:col-span-2 2xl:col-span-3 2xl:row-span-4 2xl:h-full"
+      class="relative flex rounded-3xl col-span-1 h-[70svh]  overflow-hidden sm:col-span-2 2xl:col-span-3 2xl:row-span-4 2xl:h-full"
     >
+      <div class="opacity-0 loading:opacity-100 transition-all absolute top-0 left-0 w-full h-full grow p-4 bg-brand-200 dark:bg-black rounded-3xl">
+      </div>
       <livewindow-scene
         id="main-window"
-        data-group="main-window"
-        class="h-full w-full"></livewindow-scene>
+        group="main-window"
+        class="h-full w-full" />
     </div>
 
+
     <div
-      class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-2 2xl:grid-rows-subgrid 2xl:col-span-1 2xl:row-span-4"
+    class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-2 2xl:grid-rows-subgrid 2xl:col-span-1 2xl:row-span-4"
     >
       <div
-        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl 2xl:row-span-1 grow-0"
+        class="flex flex-col justify-between bg-transparent rounded-3xl 2xl:row-span-1 grow-0 overflow-hidden"
       >
-        <livewindow-details data-group="main-window"></livewindow-details>
+        <div
+          class="hidden loading:block grow p-4 bg-white dark:bg-black rounded-3xl"
+        >
+          Loading...
+        </div>
+        <div class="loading:hidden grow rounded-3xl flex flex-col justify-around overflow-hidden">
+          <div class="flex flex-col items-center justify-center p-4 gap-2 grow bg-brand-300 dark:bg-brand-700">
+            <span class="text-3xl font-bold" data-group="main-window" data-temperature></span>
+            <span class="text-xl" data-group="main-window" data-weather></span>
+          </div>
+          <div class="flex flex-col items-center justify-center p-2 bg-brand-200 dark:bg-brand-800 text-xs gap-1">
+            <p><span data-group="main-window" data-location></span></p>
+            <p>Weather provided by <a href="https://openweathermap.org/" class="text-brand-500" target="_blank">OpenWeather</a></p>
+          </div>
+        </div>
       </div>
       <div
-        class="flex bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl 2xl:row-span-3"
+        class="flex bg-brand-200 dark:bg-brand-800 p-4 rounded-3xl 2xl:row-span-3"
       >
-        controls
+        <div
+          class="hidden loading:block grow"
+        >
+          Loading...
+        </div>
+        <div class="loading:hidden grow">
+          controls
+        </div>
       </div>
     </div>
 
@@ -99,13 +126,13 @@ interface Props {
       class="flex flex-col justify-between bg-brand-50 dark:bg-brand-950 rounded-3xl row-span-2 overflow-hidden sm:-order-1 2xl:order-0"
     >
       <div class="flex flex-col gap-4 p-4 bg-white dark:bg-black flex-grow">
-        <p class="font-bold">Welcome! My name's Thalida, I'm a Product Engineer based in New York.</p>
+        <p class="font-bold"><span data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
         <p>This domain is my homebase on the world wide web -- I use this space to explore and experiment, and also to brain-dump my collected knowledge, resources, and adventures.</p>
-        <a href="/about" class="self-end text-brand-500">learn more <span class="fa fa-arrow-right text-sm ml-1"></span></a>
+        <a href="/about" class="self-end text-brand-500">learn more <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
       <div class="flex flex-col gap-4 p-4">
         <p>I'm regularly experimenting with this site, if you're curious you can explore previous versions!</p>
-        <a href="/versions" class="self-end text-brand-500"><span>explore</span> <span class="fa fa-arrow-right text-sm ml-1"></span></a>
+        <a href="/versions" class="self-end text-brand-500"><span>explore</span> <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
     </div>
 
@@ -113,19 +140,19 @@ interface Props {
       class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:-order-1 2xl:order-0"
     >
       <a href="https://linkedin.com/in/thalida" class="flex items-center gap-2">
-        <span class="fa-linkedin fa-brands fa-lg text-blue-500"></span>
+        <i class="fa-linkedin fa-brands fa-lg text-blue-500"></i>
         <span>linkedin.com/in/thalida</span>
       </a>
       <a href="https://github.com/thalida" class="flex items-center gap-2">
-        <span class="fa-github fa-brands fa-lg text-dark dark:text-white"></span>
+        <i class="fa-github fa-brands fa-lg text-dark dark:text-white"></i>
         <span>github.com/thalida</span>
       </a>
       <a href="https://dribbble.com/thalida" class="flex items-center gap-2">
-        <span class="fa-dribbble fa-brands fa-lg text-pink-500"></span>
+        <i class="fa-dribbble fa-brands fa-lg text-pink-500"></i>
         <span>dribbble.com/thalida</span>
       </a>
       <a href="mailto:hello@thalida.com?subject=Hello%20from%20your%20website!" class="flex items-center gap-2">
-        <span class="fa-envelope fa-solid fa-lg text-brand-500"></span>
+        <i class="fa-envelope fa-solid fa-lg text-brand-500"></i>
         <span>hello@thalida.com</span>
       </a>
     </div>
