@@ -167,8 +167,8 @@ interface Props {
   <div class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-4 2xl:grid-rows-4 2xl:grid-cols-5 2xl:min-h-[60rem] 2xl:max-h-[max(60rem,100vh)]">
 
     <!-- TILE | thalida.com -->
-    <div class="flex flex-col justify-between relative bg-secondary-200 dark:bg-secondary-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0">
-      <p class="font-brand text-4xl text-secondary-900 dark:text-secondary-200">thalida.com</p>
+    <div class="@container/me flex flex-col justify-between relative bg-secondary-200 dark:bg-secondary-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0">
+      <p class="font-brand text-[15cqi] text-secondary-900 dark:text-secondary-200">thalida.com</p>
 
       <Image
         src={meImage}
@@ -201,9 +201,9 @@ interface Props {
           Loading...
         </div>
         <div class="loading:hidden grow rounded-3xl flex flex-col justify-around overflow-hidden">
-          <div class="flex flex-col items-center justify-evenly p-4 gap-2 grow bg-white dark:bg-black">
-            <span class="text-secondary-500 dark:text-secondary-400 text-4xl font-brand font-bold" data-group="main-window" data-temperature></span>
-            <span class="text-secondary-700 dark:text-secondary-600 text-lg font-medium capitalize" data-group="main-window" data-weather></span>
+          <div class="@container/temp flex flex-col items-center justify-center p-1 grow bg-white dark:bg-black">
+            <span class="text-secondary-500 dark:text-secondary-400 text-[15cqi] font-brand font-bold" data-group="main-window" data-temperature></span>
+            <span class="text-secondary-700 dark:text-secondary-600 font-bold capitalize" data-group="main-window" data-weather></span>
           </div>
           <div class="flex flex-row items-center justify-between bg-gradient-to-r  from-sky-200 to-violet-200 dark:from-sky-400 dark:to-violet-400">
             <div class="flex flex-row items-center justify-start grow p-2 gap-2 truncate" title="Sunrise time">
