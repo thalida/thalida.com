@@ -202,15 +202,15 @@ interface Props {
         </div>
         <div class="loading:hidden grow rounded-3xl flex flex-col justify-around overflow-hidden">
           <div class="@container/temp flex flex-col items-center justify-center p-1 grow bg-white dark:bg-black">
-            <span class="text-secondary-500 dark:text-secondary-400 text-[15cqi] font-brand font-bold" data-group="main-window" data-temperature></span>
-            <span class="text-secondary-700 dark:text-secondary-600 font-bold capitalize" data-group="main-window" data-weather></span>
+            <span class="text-secondary-500 dark:text-secondary-300 text-[15cqi] font-brand font-bold" data-group="main-window" data-temperature></span>
+            <span class="text-secondary-700 dark:text-secondary-500 font-bold capitalize" data-group="main-window" data-weather></span>
           </div>
-          <div class="flex flex-row items-center justify-between bg-gradient-to-r  from-sky-200 to-violet-200 dark:from-sky-400 dark:to-violet-400">
-            <div class="flex flex-row items-center justify-start grow p-2 gap-2 truncate" title="Sunrise time">
+          <div class="flex flex-row items-center justify-between bg-gradient-to-r text-secondary-100 from-sky-400 to-violet-400 dark:from-sky-700 dark:to-violet-700">
+            <div class="flex flex-row items-center justify-start grow p-2 gap-2 truncate mix-blend-color-dodge" title="Sunrise time">
               <i class="fa-solid fa-sun"></i>
               <span data-group="main-window" data-sunrise></span>
             </div>
-            <div class="flex flex-row items-center justify-end grow p-2 gap-2 truncate" title="Sunset time">
+            <div class="flex flex-row items-center justify-end grow p-2 gap-2 truncate mix-blend-color-dodge" title="Sunset time">
               <span data-group="main-window" data-sunset></span>
               <i class="fa-solid fa-moon"></i>
             </div>
@@ -332,7 +332,7 @@ interface Props {
     >
       <!-- SUBSECTION | bio and introduction -->
       <div class="flex flex-col gap-2 p-4 bg-white dark:bg-black flex-grow">
-        <p class="text-lg font-bold"><span class="text-secondary-700 dark:text-secondary-300" data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
+        <p class="text-lg font-bold"><span class="text-secondary-500 dark:text-secondary-300" data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
         <p>This domain is my homebase on the world wide web: a space to experiment, explore, and catalog my learnings &amp; adventures.</p>
         <a href="/about" class="self-end text-surface-500">learn more <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
