@@ -122,45 +122,36 @@ export default class SceneClouds {
       enabled: true,
     }
     switch(weather.current?.icon ) {
-      case "01d":
-      case "01n":
+      case 1:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.01; // Clear sky
         break;
-      case "02d":
-      case "02n":
+      case 2:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.1; // Few clouds
         break;
-      case "03d":
-      case "03n":
+      case 3:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.2; // Scattered clouds
         break;
-      case "04d":
-      case "04n":
+      case 4:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.3; // Broken clouds
         break;
-      case "09d":
-      case "09n":
+      case 9:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.4; // Shower rain
         break;
-      case "10d":
-      case "10n":
-      case "13d":
-      case "13n":
+      case 10:
+      case 13:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.5; // Rain and Snow
         break;
-      case "11d":
-      case "11n":
+      case 11:
         liveConfig.cloudType = "clouds";
         liveConfig.intensity = 0.7; // Thunderstorm
         break;
-      case "50d":
-      case "50n":
+      case 50:
         liveConfig.cloudType = "mist"; // Mist
         liveConfig.intensity = 0.1; // Misty conditions
         break;

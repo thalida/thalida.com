@@ -1,4 +1,6 @@
 
+export type TWeatherIconCode = 1 | 2 | 3 | 4 | 9 | 10 | 11 | 13 | 50;
+
 export interface ILiveWindowSceneConfig {
   useLiveWeather: boolean;
   useLiveTime: boolean;
@@ -6,7 +8,8 @@ export interface ILiveWindowSceneConfig {
   enableGlobalTheme: boolean; // Whether to use global theme colors
   clockFormat?: "analog" | "digital"; // Format of the clock
   overrideTime?: Date;
-  overrideWeather?: "01d" | "01n" | "02d" | "02n" | "03d" | "03n" | "04d" | "04n" | "09d" | "09n" | "10d" | "10n" | "11d" | "11n" | "13d" | "13n" | "50d" | "50n"; // Weather icon code
+  // Weather icon code https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
+  overrideWeather?: TWeatherIconCode;
   overrideLocation?: {
     lat: number;
     lng: number;
@@ -76,7 +79,7 @@ export interface ISceneWeather {
     id: number; // Weather condition ID
     main: string; // Main weather condition (e.g., Rain, Snow)
     description: string; // Weather condition description
-    icon: string; // Weather icon code
+    icon: TWeatherIconCode; // Weather icon code
     temp: number; // Current temperature in Celsius
   } | null,
   sunrise: number | null; // Sunrise time in milliseconds

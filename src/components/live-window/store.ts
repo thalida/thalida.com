@@ -93,8 +93,11 @@ class Store {
     const response = await fetch(url);
     const data = await response.json();
 
+    const icon = parseInt(data.weather[0].icon.slice(0, 2), 10); // Extract the first two digits of the icon code
+
     this.store.weather.current = {
       ...data.weather[0],
+      icon, // Use the parsed icon code
       temp: data.main.temp,
     };
     this.store.weather.sunrise = data.sys.sunrise * 1000; // convert to milliseconds

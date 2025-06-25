@@ -5,7 +5,6 @@
 
 @theme {
   --font-sans: Mulish, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --font-heading: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-brand: "Bagel Fat One", system-ui;
 }
 
@@ -75,8 +74,8 @@ livewindow-scene {
 }
 
 a {
-  @apply transition-all ease-in-out duration-300;
-  @apply text-accent-700 dark:text-accent-300;
-  @apply hover:text-accent-900 dark:hover:text-accent-100 hover:scale-105 hover:drop-shadow-2xl;
+  @apply transition-all ease-in-out duration-400;
+  @apply text-accent-600 dark:text-accent-300;
+  @apply hover:text-accent-900 dark:hover:text-accent-100 hover:scale-105 hover:drop-shadow-2xl hover:-rotate-1;
   @apply focus-visible:text-accent-900 dark:focus-visible:text-accent-100;
 }

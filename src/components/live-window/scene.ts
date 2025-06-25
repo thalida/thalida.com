@@ -19,7 +19,7 @@ import "pathseg";
 import * as polyDecomp from "poly-decomp";
 
 import { debounce } from "./utils";
-import type { ILiveWindowSceneConfig, ISceneLocation, ISceneWeather  } from "./types";
+import type { ILiveWindowSceneConfig, ISceneLocation, ISceneWeather, TWeatherIconCode  } from "./types";
 import SceneClock from "./elements/clock";
 import ScenePercipitation from "./elements/percipitation";
 import SceneLightning from "./elements/lightning";
@@ -444,10 +444,9 @@ export default class LiveWindowScene {
     }
   }
 
-  _getCustomWeatherData(icon: string) {
+  _getCustomWeatherData(icon: TWeatherIconCode) {
     switch (icon) {
-      case "01d":
-      case "01n":
+      case 1:
         return {
           id: 0,
           main: "Clear",
@@ -455,8 +454,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "02d":
-      case "02n":
+      case 2:
         return {
           id: 1,
           main: "Clouds",
@@ -464,8 +462,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "03d":
-      case "03n":
+      case 3:
         return {
           id: 2,
           main: "Clouds",
@@ -473,8 +470,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "04d":
-      case "04n":
+      case 4:
         return {
           id: 3,
           main: "Clouds",
@@ -482,8 +478,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "09d":
-      case "09n":
+      case 9:
         return {
           id: 4,
           main: "Rain",
@@ -491,8 +486,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "10d":
-      case "10n":
+      case 10:
         return {
           id: 5,
           main: "Rain",
@@ -500,8 +494,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "11d":
-      case "11n":
+      case 11:
         return {
           id: 6,
           main: "Thunderstorm",
@@ -509,8 +502,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "13d":
-      case "13n":
+      case 13:
         return {
           id: 7,
           main: "Snow",
@@ -518,8 +510,7 @@ export default class LiveWindowScene {
           icon,
           temp: 20,
         };
-      case "50d":
-      case "50n":
+      case 50:
         return {
           id: 8,
           main: "Mist",
@@ -532,7 +523,7 @@ export default class LiveWindowScene {
           id: 0,
           main: "Clear",
           description: "Clear Sky",
-          icon: "01d",
+          icon: 1 as TWeatherIconCode, // Default to clear sky
           temp: 20,
         };
       }

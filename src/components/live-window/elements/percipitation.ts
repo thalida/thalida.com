@@ -95,29 +95,25 @@ export default class ScenePercipitation {
     }
 
     switch (weather.current?.icon) {
-      case "09d": // Rain
-      case "09n":
+      case 9: // Shower Rain
         liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
-        liveConfig.intensity = 0.3; // Moderate intensity for rain
+        liveConfig.intensity = 0.4; // Moderate intensity for rain
         break;
-      case "10d": // Rain showers
-      case "10n":
+      case 10: // Rain
         liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
-        liveConfig.intensity = 0.4; // Higher intensity for rain showers
+        liveConfig.intensity = 0.6; // Higher intensity for rain showers
         break;
-      case "11d": // Thunderstorm
-      case "11n":
+      case 11: // Thunderstorm
         liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
-        liveConfig.intensity = 0.5; // High intensity for thunderstorms
+        liveConfig.intensity = 0.8; // High intensity for thunderstorms
         break;
-      case "13d": // Snow
-      case "13n":
+      case 13: // Snow
         liveConfig.enabled = true;
         liveConfig.percipitationType = "snow"; // Set to snow
-        liveConfig.intensity = 0.3; // Moderate intensity for snow
+        liveConfig.intensity = 0.6; // Moderate intensity for snow
         break;
       default:
         liveConfig.enabled = false;
