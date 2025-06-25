@@ -7,7 +7,7 @@ export interface ILiveWindowSceneConfig {
   useLiveLocation: boolean;
   enableGlobalTheme: boolean; // Whether to use global theme colors
   clockFormat?: "analog" | "digital"; // Format of the clock
-  overrideTime?: Date;
+  overrideTime?: string; // Override the time, e.g., "HH:mm"
   // Weather icon code https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
   overrideWeather?: TWeatherIconCode;
   overrideLocation?: {

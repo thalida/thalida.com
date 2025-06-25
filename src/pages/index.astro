@@ -30,7 +30,7 @@ interface Props {
 <script src="../components/live-window"></script>
 
 <script>
-  import { merge } from "lodash";
+  import { merge, isEqual } from "lodash";
   import type { ILiveWindowSceneConfig } from "../components/live-window/types";
 
   document.documentElement.classList.add("loading");
@@ -38,15 +38,17 @@ interface Props {
   const defaultSettings: ILiveWindowSceneConfig = {
     useLiveWeather: true,
     useLiveTime: true,
-    overrideTime: undefined,
-    overrideWeather: undefined,
+    overrideTime: null,
+    overrideWeather: null,
     clockFormat: "analog",
   };
 
   const scene = document.getElementById("main-window");
   const form = document.getElementById("scene-controls-form");
+  let isDirty = false;
+  let canReset = false;
 
-  document.addEventListener("DOMContentLoaded", setup);
+  document.addEventListener("DOMContentLoaded", handleInit);
 
   scene.addEventListener("ready", () => {
     document.documentElement.classList.remove("loading");
@@ -57,10 +59,14 @@ interface Props {
     localStorage.removeItem("live-window-custom-settings");
     scene.updateConfig(defaultSettings);
     syncFieldValues();
+
+    toggleButtons();
     toggleCustomInputs();
   });
 
   form.addEventListener("change", (event) => {
+    toggleButtons();
+
     const target = event.target as HTMLInputElement | HTMLSelectElement;
     if (target.name === "use-live-time" || target.name === "use-live-weather") {
       toggleCustomInputs();
@@ -72,19 +78,31 @@ interface Props {
 
     toggleCustomInputs();
 
+    const config = parseFormSettings(form);
+    scene.updateConfig(config);
+    localStorage.setItem("live-window-custom-settings", JSON.stringify(config));
+    syncFieldValues();
+
+    toggleButtons();
+  });
+
+  function getSettings() {
+    const storedSettings = localStorage.getItem("live-window-custom-settings") || "{}";
+    const settings = merge({}, defaultSettings, JSON.parse(storedSettings));
+
+    if (settings.overrideWeather) {
+      settings.overrideWeather = parseInt(settings.overrideWeather, 10);
+    }
+
+    return settings;
+  }
+
+  function parseFormSettings(form) {
     const formData = new FormData(form);
     const useLiveTime = formData.get("use-live-time") === "on";
     const useLiveWeather = formData.get("use-live-weather") === "on";
     const clockFormat = formData.get("clock-format") as "digital" | "analog";
-
-    let overrideTime = formData.get("override-time");
-    if (!useLiveTime && overrideTime) {
-      const today = new Date();
-      const timeParts = formData.get("override-time").split(":");
-      today.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0);
-      overrideTime = today
-    }
-    overrideTime = overrideTime ? new Date(overrideTime) : null;
+    const overrideTime = !useLiveTime && formData.get("override-time") ? formData.get("override-time") : null;
 
     let overrideWeather = formData.get("override-weather");
     if (!useLiveWeather && overrideWeather) {
@@ -100,25 +118,16 @@ interface Props {
       overrideWeather,
       clockFormat,
     };
-    scene.updateConfig(config);
-    localStorage.setItem("live-window-custom-settings", JSON.stringify(config));
-    syncFieldValues();
-  });
 
-  function setup() {
-    const storedSettings = localStorage.getItem("live-window-custom-settings") || "{}";
-    const settings = merge({}, defaultSettings, JSON.parse(storedSettings));
+    return config;
+  }
 
-    if (settings.overrideTime) {
-      settings.overrideTime = new Date(settings.overrideTime);
-    }
-
-    if (settings.overrideWeather) {
-      settings.overrideWeather = parseInt(settings.overrideWeather, 10);
-    }
-
+  function handleInit() {
+    const settings = getSettings();
     scene.updateConfig(settings);
     syncFieldValues();
+
+    toggleButtons();
     toggleCustomInputs();
   }
 
@@ -132,10 +141,28 @@ interface Props {
     $useLiveWeather.checked = scene.config.useLiveWeather;
     $useLiveTime.checked = scene.config.useLiveTime;
     $clockFormat.value = scene.config.clockFormat;
-    $overrideTime.value = scene.config.overrideTime
-      ? scene.config.overrideTime.toTimeString().slice(0, 5) // Format as HH:MM
-      : "";
+    $overrideTime.value = scene.config.overrideTime || "";
     $overrideWeather.value = scene.config.overrideWeather || "";
+  }
+
+  function toggleButtons() {
+    const currSettings = getSettings();
+    const newSettings = parseFormSettings(form);
+    canReset = !isEqual(currSettings, defaultSettings);
+    isDirty = !isEqual(currSettings, newSettings);
+
+    form.classList.toggle("is-dirty", isDirty);
+    form.classList.toggle("can-reset", canReset);
+
+    const $saveButton = form.querySelector("button[type='submit']");
+    if ($saveButton) {
+      $saveButton.disabled = !isDirty;
+    }
+
+    const $resetButton = form.querySelector("button[type='reset']");
+    if ($resetButton) {
+      $resetButton.disabled = !canReset;
+    }
   }
 
   function toggleCustomInputs() {
@@ -228,21 +255,27 @@ interface Props {
           Loading...
         </div>
         <div class="loading:hidden flex flex-col grow">
-          <div class="mb-4">
-            <h2 class="text-lg font-bold">
-              <i class="fa-solid fa-sliders"></i>
-              Scene Controls
-            </h2>
-            <p class="text-sm mt-1">
-              Play around with the live scene settings below to customize your experience.
-            </p>
-            <p class="text-sm mt-1">
-              <a href="/learn-more" class="text-surface-500">How does this work?</a>
-            </p>
-          </div>
 
-          <form id="scene-controls-form" class="flex flex-col justify-between gap-4 grow">
+          <form id="scene-controls-form" class="group/form flex flex-col justify-between gap-4 grow">
             <div class="flex flex-col gap-4 grow">
+              <div class="flex flex-col gap-2 mb-4">
+                <div class="flex flex-row flex-wrap items-center justify-between gap-2">
+                  <h2 class="text-md font-bold">
+                    <i class="fa-solid fa-sliders mr-2"></i>
+                    Scene Controls
+                  </h2>
+                  <button type="reset" class="cursor-pointer py-1 px-4 gap-2 bg-red-300 dark:bg-red-800 text-black dark:text-white p-2 rounded-xl hover:bg-red-400 dark:hover:bg-red-700 disabled:hidden transition-all font-medium text-sm">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Reset
+                  </button>
+                </div>
+                <p class="text-sm mt-1">
+                  Play around with the live scene settings below to customize your experience.
+                </p>
+                <p class="text-sm mt-1">
+                  <a href="/learn-more" class="text-surface-500">How does this work?</a>
+                </p>
+              </div>
               <div>
                 <label for="scene-input__clock-format" class="block text-sm/6 font-medium">Clock Style</label>
                 <div class="mt-2 grid grid-cols-1">
@@ -317,9 +350,8 @@ interface Props {
               </div>
             </div>
 
-            <div class="flex flex-col gap-1">
-              <button type="submit" class="cursor-pointer bg-primary-500 text-white p-2 rounded-xl hover:bg-primary-600 transition-colors font-medium text-sm">Save</button>
-              <button type="reset" class="cursor-pointer bg-gray-300 dark:bg-gray-700 text-black dark:text-white p-2 rounded-xl hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors font-medium text-sm">Reset</button>
+            <div class="flex flex-row gap-1">
+              <button type="submit" class="grow cursor-pointer bg-primary-500 text-white p-2 rounded-xl hover:bg-primary-600 dark:hover:bg-primary-400 disabled:grayscale-50 disabled:opacity-50 disabled:hover:bg-primary-500 disabled:cursor-not-allowed transition-all font-medium text-sm">Save</button>
             </div>
           </form>
         </div>

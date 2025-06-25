@@ -415,7 +415,15 @@ export default class LiveWindowScene {
   }
 
   getNow() {
-    return !this.config.useLiveTime && this.config.overrideTime ? this.config.overrideTime : new Date();
+    const now = new Date();
+
+    if (!this.config.useLiveTime && this.config.overrideTime) {
+      const time = this.config.overrideTime;
+      const [hours, minutes] = time.split(":").map(Number);
+      now.setHours(hours, minutes, 0, 0);
+    }
+
+    return now;
   }
 
   getWeather(): ISceneWeather {
