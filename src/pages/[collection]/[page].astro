@@ -1,11 +1,12 @@
 ---
 import { getCollection, render } from "astro:content";
-import { COLLECTION_NAMES } from "../../content.config";
+import { COLLECTION_CHOICES } from "../../content.config";
+import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths({ paginate }) {
   let paths = [];
 
-  for (const collection of COLLECTION_NAMES) {
+  for (const collection of COLLECTION_CHOICES) {
     const posts = await getCollection(collection);
     const paginatedPosts = paginate(posts, {
       params: { collection, page: 1 },
@@ -21,20 +22,22 @@ const { page } = Astro.props;
 const params = Astro.params;
 ---
 
-<h1>{params.collection} - Page {page.currentPage} / {page.lastPage}</h1>
-<ul>
-  {
-    page.data.map((post) => (
-      <li>
-        <a href={`/${post.collection}/${post.id}/`}>
-          {post.data.title || post.id}
-        </a>
-      </li>
-    ))
-  }
-</ul>
+<Layout>
+  <h1>{params.collection} - Page {page.currentPage} / {page.lastPage}</h1>
+  <ul>
+    {
+      page.data.map((post) => (
+        <li>
+          <a href={`/${post.collection}/${post.id}/`}>
+            {post.data.title || post.id}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
 
-{page.url.first ? <a href={page.url.first}>First</a> : null}
-{page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
-{page.url.next ? <a href={page.url.next}>Next</a> : null}
-{page.url.last ? <a href={page.url.last}>Last</a> : null}
+  {page.url.first ? <a href={page.url.first}>First</a> : null}
+  {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
+  {page.url.next ? <a href={page.url.next}>Next</a> : null}
+  {page.url.last ? <a href={page.url.last}>Last</a> : null}
+</Layout>

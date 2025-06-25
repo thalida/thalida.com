@@ -1,12 +1,12 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
 import { Image } from 'astro:assets';
-import { COLLECTION_NAMES } from "../content.config";
+import { COLLECTION_CHOICES } from "../content.config";
 import Layout from "../layouts/Layout.astro";
 import meImage from "../assets/images/me.png";
 
 let posts = [];
-for (const collection of COLLECTION_NAMES as const) {
+for (const collection of COLLECTION_CHOICES) {
   const collectionPosts = await getCollection(collection);
   posts = posts.concat(collectionPosts);
 }
@@ -23,7 +23,7 @@ posts.sort((a, b) => {
 });
 
 interface Props {
-  entry: CollectionEntry<"food" | "links" | "tech" | "craft">;
+  entry: CollectionEntry;
 }
 ---
 

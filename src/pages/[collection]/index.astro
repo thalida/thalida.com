@@ -1,10 +1,10 @@
 ---
-import { COLLECTION_NAMES } from "../../content.config";
+import { COLLECTION_CHOICES } from "../../content.config";
 
 const params = Astro.params;
 
 export function getStaticPaths() {
-  return COLLECTION_NAMES.map((collection) => ({
+  return COLLECTION_CHOICES.map((collection) => ({
     params: { collection },
   }));
 }

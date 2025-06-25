@@ -1,5 +1,10 @@
 ---
 title: Bang Bang Shrimp
+tags:
+  - shrimp
+  - seafood
+  - quick meal
+  - appetizer
 description: A delicious recipe for Bang Bang Shrimp, perfect for a quick meal.
 publishedOn: 2023-10-01
 ---
