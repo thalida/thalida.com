@@ -70,6 +70,8 @@ interface Props {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    toggleCustomInputs();
+
     const formData = new FormData(form);
     const useLiveTime = formData.get("use-live-time") === "on";
     const useLiveWeather = formData.get("use-live-weather") === "on";
@@ -101,7 +103,6 @@ interface Props {
     scene.updateConfig(config);
     localStorage.setItem("live-window-custom-settings", JSON.stringify(config));
     syncFieldValues();
-    toggleCustomInputs();
   });
 
   function setup() {
@@ -226,86 +227,99 @@ interface Props {
         <div class="hidden loading:block grow">
           Loading...
         </div>
-        <div class="loading:hidden grow">
-          <form id="scene-controls-form" class="flex flex-col gap-4">
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-bold text-gray-900 dark:text-white">Live Scene Controls</h2>
-            </div>
+        <div class="loading:hidden flex flex-col grow">
+          <div class="mb-4">
+            <h2 class="text-lg font-bold">
+              <i class="fa-solid fa-sliders"></i>
+              Scene Controls
+            </h2>
+            <p class="text-sm mt-1">
+              Play around with the live scene settings below to customize your experience.
+            </p>
+            <p class="text-sm mt-1">
+              <a href="/learn-more" class="text-brand-500">How does this work?</a>
+            </p>
+          </div>
 
-            <div>
-              <label for="scene-input__clock-format" class="block text-sm/6 font-medium">Clock Style</label>
-              <div class="mt-2 grid grid-cols-1">
-                <select id="scene-input__clock-format" name="clock-format" class="col-start-1 row-start-1 w-full appearance-none rounded-lg bg-white dark:bg-black py-1.5 pl-3 pr-8 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-500 sm:text-sm/6">
-                  <option value="digital">Digital</option>
-                  <option value="analog">Analog</option>
-                </select>
-                <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-brand-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
-                  <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </div>
-
-            <div class="peer/time flex gap-3">
-              <div class="flex h-6 shrink-0 items-center">
-                <div class="group grid size-4 grid-cols-1">
-                  <input id="scene-input__use-live-time" aria-describedby="use-live-time-description" name="use-live-time" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded border border-brand-300 dark:border-brand-900 bg-white dark:bg-black checked:border-accent-500 checked:bg-accent-500 indeterminate:border-accent-500 indeterminate:bg-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:border-brand-300 disabled:bg-brand-100 disabled:checked:bg-brand-100 forced-colors:appearance-auto" />
-                  <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                    <path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <form id="scene-controls-form" class="flex flex-col justify-between gap-4 grow">
+            <div class="flex flex-col gap-4 grow">
+              <div>
+                <label for="scene-input__clock-format" class="block text-sm/6 font-medium">Clock Style</label>
+                <div class="mt-2 grid grid-cols-1">
+                  <select id="scene-input__clock-format" name="clock-format" class="col-start-1 row-start-1 w-full appearance-none rounded-lg bg-white dark:bg-black py-1.5 pl-3 pr-8 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-500 sm:text-sm/6">
+                    <option value="digital">Digital</option>
+                    <option value="analog">Analog</option>
+                  </select>
+                  <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-brand-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                    <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                   </svg>
                 </div>
               </div>
-              <div class="text-sm/6 w-full">
-                <label for="scene-input__use-live-time" class="font-medium">Use Current Time?</label>
-              </div>
-            </div>
 
-            <div class="w-full peer-has-[:checked]/time:hidden">
-              <label for="scene-input__override-time" class="block text-sm/6 font-medium">Custom Time</label>
-              <div class="mt-2">
-                <input type="time" name="override-time" id="scene-input__override-time" class="block w-full rounded-md bg-white dark:bg-black px-3 py-1.5 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-600 sm:text-sm/6" />
-              </div>
-            </div>
-
-            <div class="peer/weather flex gap-3">
-              <div class="flex h-6 shrink-0 items-center">
-                <div class="group grid size-4 grid-cols-1">
-                  <input id="scene-input__use-live-weather" name="use-live-weather" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded border border-brand-300 dark:border-brand-900 bg-white dark:bg-black checked:border-accent-500 checked:bg-accent-500 indeterminate:border-accent-500 indeterminate:bg-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:border-brand-300 disabled:bg-brand-100 disabled:checked:bg-brand-100 forced-colors:appearance-auto" />
-                  <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                    <path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
+              <div class="flex flex-col gap-1">
+                <div class="peer/time flex gap-3">
+                  <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                      <input id="scene-input__use-live-time" name="use-live-time" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded border border-brand-300 dark:border-brand-900 bg-white dark:bg-black checked:border-accent-500 checked:bg-accent-500 indeterminate:border-accent-500 indeterminate:bg-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:border-brand-300 disabled:bg-brand-100 disabled:checked:bg-brand-100 forced-colors:appearance-auto" />
+                      <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
+                        <path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="text-sm/6 w-full">
+                    <label for="scene-input__use-live-time" class="font-medium">Use Current Time?</label>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1 w-full peer-has-[:checked]/time:hidden mb-2">
+                  <label for="scene-input__override-time" class="block text-sm/6 font-medium">Custom Time</label>
+                  <div class="grow">
+                    <input type="time" name="override-time" id="scene-input__override-time" class="block w-full rounded-md bg-white dark:bg-black px-3 py-1.5 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-600 sm:text-sm/6" />
+                  </div>
                 </div>
               </div>
-              <div class="text-sm/6 w-full">
-                <label for="scene-input__use-live-weather" class="font-medium">Use Current Weather?</label>
+
+              <div class="flex flex-col gap-1">
+                <div class="peer/weather flex gap-3">
+                  <div class="flex h-6 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                      <input id="scene-input__use-live-weather" name="use-live-weather" type="checkbox" class="col-start-1 row-start-1 appearance-none rounded border border-brand-300 dark:border-brand-900 bg-white dark:bg-black checked:border-accent-500 checked:bg-accent-500 indeterminate:border-accent-500 indeterminate:bg-accent-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500 disabled:border-brand-300 disabled:bg-brand-100 disabled:checked:bg-brand-100 forced-colors:appearance-auto" />
+                      <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
+                        <path class="opacity-0 group-has-[:checked]:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path class="opacity-0 group-has-[:indeterminate]:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="text-sm/6 w-full">
+                    <label for="scene-input__use-live-weather" class="font-medium">Use Current Weather?</label>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1 w-full peer-has-[:checked]/weather:hidden mb-2">
+                  <label for="scene-input__override-weather" class="block text-sm/6 font-medium">Custom Weather</label>
+                  <div class="grow grid grid-cols-1">
+                    <select id="scene-input__override-weather" name="override-weather" class="col-start-1 row-start-1 w-full appearance-none rounded-lg bg-white dark:bg-black py-1.5 pl-3 pr-8 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-500 sm:text-sm/6">
+                      <option value="">Select Weather</option>
+                      <option value="1">Clear Sky</option>
+                      <option value="2">Few Clouds</option>
+                      <option value="3">Scattered Clouds</option>
+                      <option value="4">Broken Clouds</option>
+                      <option value="9">Shower Rain</option>
+                      <option value="10">Rain</option>
+                      <option value="11">Thunderstorm</option>
+                      <option value="13">Snow</option>
+                      <option value="50">Mist</option>
+                    </select>
+                    <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-brand-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                      <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="w-full peer-has-[:checked]/weather:hidden">
-              <label for="scene-input__override-weather" class="block text-sm/6 font-medium">Custom Weather</label>
-              <div class="mt-2 grid grid-cols-1">
-                <select id="scene-input__override-weather" name="override-weather" class="col-start-1 row-start-1 w-full appearance-none rounded-lg bg-white dark:bg-black py-1.5 pl-3 pr-8 text-base outline -outline-offset-1 outline-brand-300 dark:outline-brand-900 focus:outline-2 focus:-outline-offset-2 focus:outline-accent-500 sm:text-sm/6">
-                  <option value="">Select Weather</option>
-                  <option value="1">Clear Sky</option>
-                  <option value="2">Few Clouds</option>
-                  <option value="3">Scattered Clouds</option>
-                  <option value="4">Broken Clouds</option>
-                  <option value="9">Shower Rain</option>
-                  <option value="10">Rain</option>
-                  <option value="11">Thunderstorm</option>
-                  <option value="13">Snow</option>
-                  <option value="50">Mist</option>
-                </select>
-                <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-brand-500 sm:size-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
-                  <path fill-rule="evenodd" d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                </svg>
-              </div>
-            </div>
-
-            <div>
-              <button type="submit" class="mt-4 bg-brand-500 text-white p-2 rounded-lg hover:bg-brand-600 transition-colors">Save</button>
-              <button type="reset" class="mt-2 bg-gray-300 dark:bg-gray-700 text-black dark:text-white p-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors">Reset to Default</button>
+            <div class="flex flex-col gap-1">
+              <button type="submit" class="cursor-pointer bg-accent-500 text-white p-2 rounded-lg hover:bg-accent-600 transition-colors font-medium text-sm">Save</button>
+              <button type="reset" class="cursor-pointer bg-gray-300 dark:bg-gray-700 text-black dark:text-white p-2 rounded-lg hover:bg-gray-400 dark:hover:bg-gray-600 transition-colors font-medium text-sm">Reset</button>
             </div>
           </form>
         </div>
