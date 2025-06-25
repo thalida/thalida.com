@@ -129,13 +129,16 @@ export default class LiveWindowScene {
 
     this.isRendering = true;
 
+    const elementDimensions = this.element.getBoundingClientRect();
+    const newCanvasWidth = elementDimensions.width;
+    const newCanvasHeight = elementDimensions.height;
+
     if (!isInitialRender) {
       this.clear();
     }
 
-    const elementDimensions = this.element.getBoundingClientRect();
-    this.canvasWidth = elementDimensions.width;
-    this.canvasHeight = elementDimensions.height;
+    this.canvasWidth = newCanvasWidth;
+    this.canvasHeight = newCanvasHeight;
 
     if (!this.renderer) {
       this.renderer = Render.create({
@@ -329,6 +332,18 @@ export default class LiveWindowScene {
   onResize() {
     if (!this.engine || !this.world || !this.element || !this.renderer) {
       return; // Ensure element and render are initialized
+    }
+
+
+    const oldCanvasWidth = this.canvasWidth;
+    const oldCanvasHeight = this.canvasHeight;
+
+    const elementDimensions = this.element.getBoundingClientRect();
+    const newCanvasWidth = elementDimensions.width;
+    const newCanvasHeight = elementDimensions.height;
+
+    if (oldCanvasWidth === newCanvasWidth && oldCanvasHeight === newCanvasHeight) {
+      return;
     }
 
     this.render();
