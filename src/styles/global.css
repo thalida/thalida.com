@@ -4,7 +4,8 @@
 @custom-variant loading (&:where(.loading, .loading *));
 
 @theme {
-  --font-sans: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: Mulish, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-brand: "Bagel Fat One", system-ui;
 }
 
@@ -25,32 +26,32 @@
 
 /* https://www.tints.dev/palette/v1:YWNjZW50fEJERkY0QXw0MDB8cHwwfDB8MHwxMDB8YQ */
 @theme {
-  --color-accent-50: oklch(98.97% 0.023 128.64);
-  --color-accent-100: oklch(97.86% 0.048 128.99);
-  --color-accent-200: oklch(95.71% 0.103 128.52);
-  --color-accent-300: oklch(94.61% 0.135 128.47);
-  --color-accent-400: oklch(92.37% 0.213 127.73);
-  --color-accent-500: oklch(78.73% 0.204 127.38);
-  --color-accent-600: oklch(65.93% 0.171 127.58);
-  --color-accent-700: oklch(52.55% 0.137 127.53);
-  --color-accent-800: oklch(39.87% 0.104 127.79);
-  --color-accent-900: oklch(26.16% 0.068 127.48);
-  --color-accent-950: oklch(20.38% 0.053 127.5);
+  --color-secondary-50: oklch(98.97% 0.023 128.64);
+  --color-secondary-100: oklch(97.86% 0.048 128.99);
+  --color-secondary-200: oklch(95.71% 0.103 128.52);
+  --color-secondary-300: oklch(94.61% 0.135 128.47);
+  --color-secondary-400: oklch(92.37% 0.213 127.73);
+  --color-secondary-500: oklch(78.73% 0.204 127.38);
+  --color-secondary-600: oklch(65.93% 0.171 127.58);
+  --color-secondary-700: oklch(52.55% 0.137 127.53);
+  --color-secondary-800: oklch(39.87% 0.104 127.79);
+  --color-secondary-900: oklch(26.16% 0.068 127.48);
+  --color-secondary-950: oklch(20.38% 0.053 127.5);
 }
 
-/* https://www.tints.dev/palette/v1:YWNjZW50fEZGQzQ0Qnw0MDB8bHwwfDB8MHwxMDB8YQ */
+/* https://www.tints.dev/palette/v1:YWNjZW50fDRBRkZBNXwxMDB8cHwwfDB8MHwxMDB8YQ */
 @theme {
-  --color-secondary-50: oklch(98.1% 0.019 83.04);
-  --color-secondary-100: oklch(95.91% 0.044 85.23);
-  --color-secondary-200: oklch(92.03% 0.085 84.95);
-  --color-secondary-300: oklch(88.86% 0.119 84.44);
-  --color-secondary-400: oklch(85.28% 0.149 81.93);
-  --color-secondary-500: oklch(81.64% 0.168 76.8);
-  --color-secondary-600: oklch(71.76% 0.152 74.24);
-  --color-secondary-700: oklch(57.93% 0.122 75.58);
-  --color-secondary-800: oklch(44.29% 0.093 76.39);
-  --color-secondary-900: oklch(28.3% 0.058 81.46);
-  --color-secondary-950: oklch(18.45% 0.038 85.81);
+  --color-accent-50: oklch(94.7% 0.083 156.56);
+  --color-accent-100: oklch(88.9% 0.191 156.6);
+  --color-accent-200: oklch(80.56% 0.193 156.55);
+  --color-accent-300: oklch(72.15% 0.174 156.42);
+  --color-accent-400: oklch(63.78% 0.154 156.37);
+  --color-accent-500: oklch(55.42% 0.133 156.45);
+  --color-accent-600: oklch(47.03% 0.113 156.26);
+  --color-accent-700: oklch(38.59% 0.092 156.85);
+  --color-accent-800: oklch(30.32% 0.073 156.75);
+  --color-accent-900: oklch(21.8% 0.052 157.03);
+  --color-accent-950: oklch(17.21% 0.042 156.2);
 }
 
 livewindow-scene {
@@ -75,7 +76,7 @@ livewindow-scene {
 
 a {
   @apply transition-all ease-in-out duration-300;
-  @apply text-brand-700 dark:text-brand-300;
-  @apply hover:text-brand-900 dark:hover:text-brand-200 hover:scale-105 hover:drop-shadow-2xl;
-  @apply focus-visible:text-brand-900 dark:focus-visible:text-brand-200;
+  @apply text-accent-700 dark:text-accent-300;
+  @apply hover:text-accent-900 dark:hover:text-accent-100 hover:scale-105 hover:drop-shadow-2xl;
+  @apply focus-visible:text-accent-900 dark:focus-visible:text-accent-100;
 }

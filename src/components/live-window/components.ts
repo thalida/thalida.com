@@ -124,6 +124,16 @@ export class LiveWindowComponent extends HTMLElement {
     this._updateElement("greeting", () => this.scene?.getGreeting(timestamp) || "Hello!");
     this._updateElement("temperature", () => weather.current ? `${weather.current.temp}°C` : "N/A");
     this._updateElement("weather", () => weather.current?.main || "N/A");
+    this._updateElement("sunrise", () => {
+      if (!weather.sunrise) return "N/A";
+      const sunriseDate = new Date(weather.sunrise);
+      return sunriseDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    });
+    this._updateElement("sunset", () => {
+      if (!weather.sunset) return "N/A";
+      const sunsetDate = new Date(weather.sunset);
+      return sunsetDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    });
   }
 
   _updateElement(key: string, val: (...args: any[]) => string) {

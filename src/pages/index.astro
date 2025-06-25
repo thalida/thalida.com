@@ -37,107 +37,155 @@ interface Props {
   scene.addEventListener("ready", () => {
     document.documentElement.classList.remove("loading");
   });
-  setTimeout(() => {
-    if (scene) {
-      const date = new Date();
-      date.setHours(22, 0, 0);
-      const config: ILiveWindowSceneConfig = {
-        useLiveWeather: true,
-        useLiveTime: true,
-        overrideTime: date,
-        overrideWeather: "11d",
-        clockFormat: "digital",
-      };
-      scene.config = config;
-    }
-  }, 2000);
+  // setTimeout(() => {
+  //   if (scene) {
+  //     const date = new Date();
+  //     date.setHours(12, 0, 0);
+  //     const config: ILiveWindowSceneConfig = {
+  //       useLiveWeather: true,
+  //       useLiveTime: false,
+  //       overrideTime: date,
+  //       overrideWeather: "11d",
+  //       clockFormat: "digital",
+  //     };
+  //     scene.config = config;
+  //   }
+  // }, 10000);
 </script>
 
 <Layout>
-  <div
-    class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-2 2xl:grid-rows-4 2xl:grid-cols-5 2xl:min-h-[60rem] 2xl:max-h-[max(60rem,100vh)]"
-  >
-    <div
-      class="flex flex-col justify-between relative bg-accent-200 dark:bg-accent-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:-order-1 2xl:order-0"
-    >
-      <p class="font-brand text-4xl text-emerald-800 dark:text-emerald-200">thalida.com</p>
+  <div class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-4 2xl:grid-rows-4 2xl:grid-cols-5 2xl:min-h-[60rem] 2xl:max-h-[max(60rem,100vh)]">
+
+    <!-- TILE | thalida.com -->
+    <div class="flex flex-col justify-between relative bg-accent-200 dark:bg-accent-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0">
+      <p class="font-brand text-4xl text-accent-800 dark:text-accent-200">thalida.com</p>
+
       <Image
         src={meImage}
         alt="Thalida"
         class="absolute right-4 bottom-0 object-contain object-bottom-right size-5/6 pointer-events-none"
         loading="lazy"
-        />
-      <div class="relative text-accent-50 mix-blend-difference">
+      />
+
+      <div class="relative text-secondary-100 mix-blend-difference">
         <p><span>created</span> <span class="font-bold">2007</span></p>
         <p><span>updated</span> <span class="font-bold">2025</span></p>
         <p><span>version</span> <span class="font-bold">#25</span></p>
       </div>
     </div>
 
-    <div
-      class="relative flex rounded-3xl col-span-1 h-[70svh]  overflow-hidden sm:col-span-2 2xl:col-span-3 2xl:row-span-4 2xl:h-full"
-    >
-      <div class="opacity-0 loading:opacity-100 transition-all absolute top-0 left-0 w-full h-full grow p-4 bg-brand-200 dark:bg-black rounded-3xl">
-      </div>
+    <!-- TILE | live scene -->
+    <div class="relative flex rounded-3xl h-[80svh]  overflow-hidden col-span-1 sm:col-span-4 lg:col-span-3 lg:row-span-4 2xl:h-full">
       <livewindow-scene
         id="main-window"
         group="main-window"
         class="h-full w-full" />
     </div>
 
+    <!-- TILE GROUP | live scene data/actions -->
+    <div class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-4 lg:grid-rows-subgrid lg:col-span-1 lg:row-span-4">
 
-    <div
-    class="grid gap-8 grid-cols-subgrid col-span-1 sm:col-span-2 2xl:grid-rows-subgrid 2xl:col-span-1 2xl:row-span-4"
-    >
-      <div
-        class="flex flex-col justify-between bg-transparent rounded-3xl 2xl:row-span-1 grow-0 overflow-hidden"
-      >
-        <div
-          class="hidden loading:block grow p-4 bg-white dark:bg-black rounded-3xl"
-        >
+      <!-- TILE | live scene data -->
+      <div class="flex flex-col justify-between bg-transparent rounded-3xl sm:col-span-2 lg:col-span-1 lg:row-span-1 grow-0 overflow-hidden">
+        <div class="hidden loading:block grow p-4 bg-white dark:bg-black rounded-3xl">
           Loading...
         </div>
         <div class="loading:hidden grow rounded-3xl flex flex-col justify-around overflow-hidden">
           <div class="flex flex-col items-center justify-center p-4 gap-2 grow bg-brand-300 dark:bg-brand-700">
-            <span class="text-3xl font-bold" data-group="main-window" data-temperature></span>
-            <span class="text-xl" data-group="main-window" data-weather></span>
+            <span class="text-3xl font-heading font-bold" data-group="main-window" data-temperature></span>
+            <span class="text-xl font-heading" data-group="main-window" data-weather></span>
+          </div>
+          <div class="flex flex-row items-center justify-between bg-gradient-to-r from-sky-400 to-violet-400 text-white">
+            <div class="flex flex-row items-center justify-start grow p-2 gap-2 truncate" title="Sunrise time">
+              <i class="fa-solid fa-sun"></i>
+              <span data-group="main-window" data-sunrise></span>
+            </div>
+            <div class="flex flex-row items-center justify-end grow p-2 gap-2 truncate" title="Sunset time">
+              <span data-group="main-window" data-sunset></span>
+              <i class="fa-solid fa-moon"></i>
+            </div>
           </div>
           <div class="flex flex-col items-center justify-center p-2 bg-brand-200 dark:bg-brand-800 text-xs gap-1">
-            <p><span data-group="main-window" data-location></span></p>
-            <p>Weather provided by <a href="https://openweathermap.org/" class="text-brand-500" target="_blank">OpenWeather</a></p>
+            <p class="w-full text-center truncate"><span data-group="main-window" data-location></span></p>
+            <p><a href="https://openweathermap.org/" class="text-brand-500" target="_blank">OpenWeather</a></p>
           </div>
         </div>
       </div>
-      <div
-        class="flex bg-brand-200 dark:bg-brand-800 p-4 rounded-3xl 2xl:row-span-3"
-      >
-        <div
-          class="hidden loading:block grow"
-        >
+
+      <!-- TILE | live scene controls -->
+      <div class="flex bg-brand-200 dark:bg-brand-800 p-4 rounded-3xl sm:col-span-2 lg:col-span-1 lg:row-span-3">
+        <div class="hidden loading:block grow">
           Loading...
         </div>
         <div class="loading:hidden grow">
-          controls
+          <form>
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-gray-900 dark:text-white">Live Scene Controls</h2>
+            </div>
+            <div>
+              <label for="scene-input__clock-format" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Clock Format</label>
+              <select id="scene-input__clock-format" name="scene-input__clock-format" class="w-full p-2 rounded-lg bg-white dark:bg-black text-black dark:text-white">
+                <option value="digital">Digital</option>
+                <option value="analog">Analog</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <input type="checkbox" name="scene-input__use-live-time" class="mr-2" />
+                <span>Use current time?</span>
+              </label>
+            </div>
+            <div>
+              <label for="scene-input__time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Custom Time</label>
+              <input type="time" id="scene-input__time" name="scene-input__time" class="w-full p-2 rounded-lg bg-white dark:bg-black text-black dark:text-white" />
+            </div>
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <input type="checkbox" name="scene-input__use-live-weather" class="mr-2" />
+                <span>Use current weather?</span>
+              </label>
+            </div>
+            <div>
+              <label for="scene-input__weather" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Custom Weather</label>
+              <select id="scene-input__weather" name="scene-input__weather" class="w-full p-2 rounded-lg bg-white dark:bg-black text-black dark:text-white">
+                <option value="">Select Weather</option>
+                <option value="01d">Clear Sky</option>
+                <option value="02d">Few Clouds</option>
+                <option value="03d">Scattered Clouds</option>
+                <option value="04d">Broken Clouds</option>
+                <option value="09d">Shower Rain</option>
+                <option value="10d">Rain</option>
+                <option value="11d">Thunderstorm</option>
+                <option value="13d">Snow</option>
+                <option value="50d">Mist</option>
+              </select>
+            </div>
+          </form>
         </div>
       </div>
     </div>
 
+    <!-- TILE | about me -->
     <div
-      class="flex flex-col justify-between bg-brand-50 dark:bg-brand-950 rounded-3xl row-span-2 overflow-hidden sm:-order-1 2xl:order-0"
+      class="flex flex-col justify-between bg-brand-50 dark:bg-brand-950 rounded-3xl row-span-2 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0"
     >
+      <!-- SUBSECTION | bio and introduction -->
       <div class="flex flex-col gap-4 p-4 bg-white dark:bg-black flex-grow">
-        <p class="font-bold"><span data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
-        <p>This domain is my homebase on the world wide web -- I use this space to explore and experiment, and also to brain-dump my collected knowledge, resources, and adventures.</p>
+        <p class="text-lg font-bold"><span class="text-secondary-700 dark:text-secondary-300" data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
+        <p>This domain is my homebase on the world wide web: a space to experiment, explore, and catalog my adventures.</p>
         <a href="/about" class="self-end text-brand-500">learn more <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
+
+      <!-- SUBSECTION | versions -->
       <div class="flex flex-col gap-4 p-4">
-        <p>I'm regularly experimenting with this site, if you're curious you can explore previous versions!</p>
+        <p>Explore all of the previous versions and experiments of thalida.com!</p>
         <a href="/versions" class="self-end text-brand-500"><span>explore</span> <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
     </div>
 
+    <!-- TILE | social links -->
     <div
-      class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:-order-1 2xl:order-0"
+      class="flex flex-col bg-brand-50 dark:bg-brand-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0"
     >
       <a href="https://linkedin.com/in/thalida" class="flex items-center gap-2">
         <i class="fa-linkedin fa-brands fa-lg text-blue-500"></i>
