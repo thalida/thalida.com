@@ -8,49 +8,50 @@
   --font-brand: "Bagel Fat One", system-ui;
 }
 
-/* https://www.tints.dev/palette/v1:YnJhbmR8ZTJlNWYxfDEwMHxsfDB8MHwwfDEwMHxh */
+/* https://www.tints.dev/palette/v1:c3VyZmFjZXxlMmU1ZjF8MTAwfHB8MHwwfDB8MTAwfGE */
 @theme {
-  --color-brand-50: oklch(96.51% 0.008 278.75);
-  --color-brand-100: oklch(92.31% 0.017 274.86);
-  --color-brand-200: oklch(85.43% 0.031 275.57);
-  --color-brand-300: oklch(77.74% 0.049 273.55);
-  --color-brand-400: oklch(69.95% 0.068 272.96);
-  --color-brand-500: oklch(63.2% 0.084 271.18);
-  --color-brand-600: oklch(55.49% 0.088 270.25);
-  --color-brand-700: oklch(47.63% 0.077 270.4);
-  --color-brand-800: oklch(40.82% 0.064 269.7);
-  --color-brand-900: oklch(33.08% 0.053 270.19);
-  --color-brand-950: oklch(21.98% 0.029 268.88);
+  --color-surface-50: oklch(96.51% 0.008 278.75);
+  --color-surface-100: oklch(92.31% 0.017 274.86);
+  --color-surface-200: oklch(83.83% 0.036 273.21);
+  --color-surface-300: oklch(75.2% 0.056 272.36);
+  --color-surface-400: oklch(66.67% 0.078 270.74);
+  --color-surface-500: oklch(58.08% 0.091 268.72);
+  --color-surface-600: oklch(48.54% 0.077 268.81);
+  --color-surface-700: oklch(39.9% 0.062 267.99);
+  --color-surface-800: oklch(31.27% 0.049 267.49);
+  --color-surface-900: oklch(22.57% 0.036 269.31);
+  --color-surface-950: oklch(17.68% 0.03 270.98);
 }
 
-/* https://www.tints.dev/palette/v1:YWNjZW50fEJERkY0QXw0MDB8cHwwfDB8MHwxMDB8YQ */
+
+/* https://www.tints.dev/palette/v1:c2Vjb25kYXJ5fDRBQTBGRnw0MDB8cHwwfDB8MHwxMDB8YQ */
 @theme {
-  --color-secondary-50: oklch(98.97% 0.023 128.64);
-  --color-secondary-100: oklch(97.86% 0.048 128.99);
-  --color-secondary-200: oklch(95.71% 0.103 128.52);
-  --color-secondary-300: oklch(94.61% 0.135 128.47);
-  --color-secondary-400: oklch(92.37% 0.213 127.73);
-  --color-secondary-500: oklch(78.73% 0.204 127.38);
-  --color-secondary-600: oklch(65.93% 0.171 127.58);
-  --color-secondary-700: oklch(52.55% 0.137 127.53);
-  --color-secondary-800: oklch(39.87% 0.104 127.79);
-  --color-secondary-900: oklch(26.16% 0.068 127.48);
-  --color-secondary-950: oklch(20.38% 0.053 127.5);
+  --color-primary-50: oklch(96.66% 0.016 266.31);
+  --color-primary-100: oklch(92.29% 0.037 263.63);
+  --color-primary-200: oklch(84.49% 0.077 261.92);
+  --color-primary-300: oklch(77.7% 0.114 258.43);
+  --color-primary-400: oklch(69.72% 0.163 253.1);
+  --color-primary-500: oklch(60.39% 0.171 249.96);
+  --color-primary-600: oklch(50.94% 0.144 249.97);
+  --color-primary-700: oklch(41.41% 0.118 250.11);
+  --color-primary-800: oklch(32.79% 0.093 250.06);
+  --color-primary-900: oklch(23.2% 0.066 250.45);
+  --color-primary-950: oklch(17.58% 0.051 251.02);
 }
 
 /* https://www.tints.dev/palette/v1:YWNjZW50fDRBRkZBNXwxMDB8cHwwfDB8MHwxMDB8YQ */
 @theme {
-  --color-accent-50: oklch(94.7% 0.083 156.56);
-  --color-accent-100: oklch(88.9% 0.191 156.6);
-  --color-accent-200: oklch(80.56% 0.193 156.55);
-  --color-accent-300: oklch(72.15% 0.174 156.42);
-  --color-accent-400: oklch(63.78% 0.154 156.37);
-  --color-accent-500: oklch(55.42% 0.133 156.45);
-  --color-accent-600: oklch(47.03% 0.113 156.26);
-  --color-accent-700: oklch(38.59% 0.092 156.85);
-  --color-accent-800: oklch(30.32% 0.073 156.75);
-  --color-accent-900: oklch(21.8% 0.052 157.03);
-  --color-accent-950: oklch(17.21% 0.042 156.2);
+  --color-secondary-50: oklch(94.7% 0.083 156.56);
+  --color-secondary-100: oklch(88.9% 0.191 156.6);
+  --color-secondary-200: oklch(80.56% 0.193 156.55);
+  --color-secondary-300: oklch(72.15% 0.174 156.42);
+  --color-secondary-400: oklch(63.78% 0.154 156.37);
+  --color-secondary-500: oklch(55.42% 0.133 156.45);
+  --color-secondary-600: oklch(47.03% 0.113 156.26);
+  --color-secondary-700: oklch(38.59% 0.092 156.85);
+  --color-secondary-800: oklch(30.32% 0.073 156.75);
+  --color-secondary-900: oklch(21.8% 0.052 157.03);
+  --color-secondary-950: oklch(17.21% 0.042 156.2);
 }
 
 livewindow-scene {
@@ -75,7 +76,7 @@ livewindow-scene {
 
 a {
   @apply transition-all ease-in-out duration-400;
-  @apply text-accent-600 dark:text-accent-300;
-  @apply hover:text-accent-900 dark:hover:text-accent-100 hover:scale-105 hover:drop-shadow-2xl hover:-rotate-1;
-  @apply focus-visible:text-accent-900 dark:focus-visible:text-accent-100;
+  @apply text-primary-600 dark:text-primary-300;
+  @apply hover:text-primary-900 dark:hover:text-primary-100 hover:scale-105 hover:drop-shadow-2xl hover:-rotate-1;
+  @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100;
 }
