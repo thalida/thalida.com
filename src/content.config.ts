@@ -3,7 +3,6 @@ import { defineCollection, reference, z } from 'astro:content';
 
 // 2. Import loader(s)
 import { glob, file } from 'astro/loaders';
-import { sub } from 'three/tsl';
 
 // 3. Define your collection(s)
 

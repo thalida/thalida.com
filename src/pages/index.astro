@@ -8,19 +8,27 @@ import meImage from "../assets/images/me.png";
 const collections = {
   "creations": {
     "title": "Creations",
-    "description": "A collection of my personal and professional projects, arts, and experiments.",
+    "description": "A collection of my personal and professional projects, crafts, and experiments.",
+    "bgColor": "bg-surface-950",
+    "headerColor": "bg-gradient-to-r from-rose-400 to-red-600 bg-clip-text text-transparent",
   },
   "guides": {
     "title": "Guides",
     "description": "Step-by-step guides and tutorials on various topics, from web development to design.",
+    "bgColor": "bg-surface-950",
+    "headerColor": "bg-gradient-to-r from-indigo-400 to-violet-600 bg-clip-text text-transparent",
   },
   "links": {
     "title": "Links",
     "description": "A curated list of resources, tools, and websites that I find useful and inspiring.",
+    "bgColor": "bg-surface-950",
+    "headerColor": "bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent",
   },
   "recipes": {
     "title": "Recipes",
     "description": "A collection of my favorite recipes, from quick meals to elaborate dishes.",
+    "bgColor": "bg-surface-950",
+    "headerColor": "bg-gradient-to-r from-lime-400 to-green-600 bg-clip-text text-transparent",
   },
 }
 const collectionOrder = [
@@ -265,7 +273,7 @@ interface Props {
           </div>
           <div class="flex flex-col items-center justify-center p-2 bg-surface-50 dark:bg-surface-950 text-xs gap-1">
             <p class="w-full text-center truncate"><span data-group="main-window" data-location></span></p>
-            <p><a href="https://openweathermap.org/" class="text-surface-500" target="_blank">OpenWeather</a></p>
+            <p><a href="https://openweathermap.org/" class="inline-link text-surface-500" target="_blank">OpenWeather</a></p>
           </div>
         </div>
       </div>
@@ -294,7 +302,7 @@ interface Props {
                   Play around with the live scene settings below to customize your experience.
                 </p>
                 <p class="text-sm mt-1">
-                  <a href="/learn-more" class="text-surface-500">How does this work?</a>
+                  <a href="/learn-more" class="inline-link text-surface-500">How does this work?</a>
                 </p>
               </div>
               <div>
@@ -387,13 +395,13 @@ interface Props {
       <div class="flex flex-col gap-2 p-4 bg-white dark:bg-black flex-grow">
         <p class="text-lg font-bold"><span class="text-secondary-500 dark:text-secondary-300" data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
         <p>This domain is my homebase on the world wide web: a space to experiment, explore, and catalog my learnings &amp; adventures.</p>
-        <a href="/about" class="self-end text-surface-500">learn more <i class="fa fa-arrow-right text-sm ml-1"></i></a>
+        <a href="/about" class="inline-link self-end text-surface-500">learn more <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
 
       <!-- SUBSECTION | versions -->
-      <div class="flex flex-col gap-2 p-4 grow">
+      <div class="flex flex-col gap-2 p-4">
         <p>Explore all of the previous versions and experiments of thalida.com!</p>
-        <a href="/versions" class="self-end text-surface-500"><span>explore</span> <i class="fa fa-arrow-right text-sm ml-1"></i></a>
+        <a href="/versions" class="inline-link self-end text-surface-500"><span>explore</span> <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
     </div>
 
@@ -422,34 +430,43 @@ interface Props {
 
 
   <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-8 px-8 pb-8">
-    <div class="col-span-full rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-4">
-      <h2 class="font-brand text-6xl font-bold">Explore</h2>
+    <!-- <div class="@container col-span-full rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-4">
+      <h2 class="font-brand text-[10cqi] font-bold">Explore</h2>
       <p>
         Discover my latest creations, guides, links, and recipes. <br />
         Each collection showcases my work and interests, providing a glimpse into my world.
       </p>
-    </div>
+    </div> -->
+    {collectionOrder.map((collection) => {
+      const collectionData = collections[collection];
+      const mostRecentPost = mostRecentPostsByCollection[collection];
 
-    {
-      collectionOrder.map((collection) => (
-        <div class="col-span-1 flex flex-col gap-4 bg-surface-50 dark:bg-surface-950 p-4 rounded-3xl">
-          <div class="flex flex-col gap-2">
-            <h2 class="text-lg font-bold">{collections[collection].title}</h2>
-            <p class="text-sm text-secondary-500 dark:text-secondary-300">{collections[collection].description}</p>
-            <a href={`/${collection}/`} class="text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 transition-all">View all <i class="fa fa-arrow-right text-sm ml-1"></i></a>
-          </div>
-          <div>
-            {mostRecentPostsByCollection[collection] && (
-              <div class="mb-4">
-                <a href={`/${collection}/${mostRecentPostsByCollection[collection].id}/`} class="text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 transition-all">
-                  <h3 class="text-lg font-bold">{mostRecentPostsByCollection[collection].data.title || mostRecentPostsByCollection[collection].id}</h3>
-                </a>
-                <p class="text-sm text-secondary-500 dark:text-secondary-300">{mostRecentPostsByCollection[collection].data.description || "No description available."}</p>
-              </div>
-            )}
-          </div>
+      return (
+        <div
+          class={`grid grid-cols-subgrid p-2 rounded-3xl ${collectionData.bgColor} col-span-1 gap-4 sm:col-span-2`}
+          >
+          <a
+            href={`/${collection}`}
+            class={`@container col-span-1 flex flex-col justify-between p-2 rounded-2xl text-white gap-4`}
+          >
+            <span class={`font-brand text-[12cqi] sm:text-[16cqi] leading-none ${collectionData.headerColor}`}>{collectionData.title}</span>
+            <p class="text-sm">{collectionData.description}</p>
+            <div class="flex flex-row items-center justify-between mt-4">
+              <span>Explore</span>
+              <i class="fa fa-arrow-right text-sm ml-1"></i>
+            </div>
+          </a>
+          {mostRecentPost && (
+            <a
+              href={`/${collection}/${mostRecentPost.id}`}
+              class="col-span-1 text-sm bg-surface-800 rounded-2xl p-4"
+            >
+              <p class="font-bold">{mostRecentPost.data.title || mostRecentPost.id}</p>
+              <p class="text-xs">Updated: {mostRecentPost.data.updatedOn || mostRecentPost.data.publishedOn}</p>
+            </a>
+          )}
         </div>
-      ))
-    }
+      )
+    })}
   </div>
 </Layout>
