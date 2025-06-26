@@ -9,25 +9,25 @@ const collections = {
   "creations": {
     "title": "Creations",
     "description": "A collection of my personal and professional projects, crafts, and experiments.",
-    "bgColor": "bg-surface-950",
+    "bgColor": "bg-surface-50 dark:bg-surface-950",
     "headerColor": "bg-gradient-to-r from-rose-400 to-red-600 bg-clip-text text-transparent",
   },
   "guides": {
     "title": "Guides",
     "description": "Step-by-step guides and tutorials on various topics, from web development to design.",
-    "bgColor": "bg-surface-950",
+    "bgColor": "bg-surface-50 dark:bg-surface-950",
     "headerColor": "bg-gradient-to-r from-indigo-400 to-violet-600 bg-clip-text text-transparent",
   },
   "links": {
     "title": "Links",
     "description": "A curated list of resources, tools, and websites that I find useful and inspiring.",
-    "bgColor": "bg-surface-950",
+    "bgColor": "bg-surface-50 dark:bg-surface-950",
     "headerColor": "bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent",
   },
   "recipes": {
     "title": "Recipes",
     "description": "A collection of my favorite recipes, from quick meals to elaborate dishes.",
-    "bgColor": "bg-surface-950",
+    "bgColor": "bg-surface-50 dark:bg-surface-950",
     "headerColor": "bg-gradient-to-r from-lime-400 to-green-600 bg-clip-text text-transparent",
   },
 }
@@ -447,7 +447,7 @@ interface Props {
           >
           <a
             href={`/${collection}`}
-            class={`@container col-span-1 flex flex-col justify-between p-2 rounded-2xl text-white gap-4`}
+            class={`@container col-span-1 flex flex-col justify-between p-2 rounded-2xl gap-4`}
           >
             <span class={`font-brand text-[12cqi] sm:text-[16cqi] leading-none ${collectionData.headerColor}`}>{collectionData.title}</span>
             <p class="text-sm">{collectionData.description}</p>
@@ -459,7 +459,7 @@ interface Props {
           {mostRecentPost && (
             <a
               href={`/${collection}/${mostRecentPost.id}`}
-              class="col-span-1 text-sm bg-surface-800 rounded-2xl p-4"
+              class="col-span-1 text-sm bg-white dark:bg-black rounded-2xl p-4"
             >
               <p class="font-bold">{mostRecentPost.data.title || mostRecentPost.id}</p>
               <p class="text-xs">Updated: {mostRecentPost.data.updatedOn || mostRecentPost.data.publishedOn}</p>
