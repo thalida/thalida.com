@@ -77,6 +77,6 @@ livewindow-scene {
 a {
   @apply inline-block transition-all ease-in-out duration-400;
   @apply text-primary-600 dark:text-primary-300;
-  @apply hover:text-primary-900 dark:hover:text-primary-100 hover:scale-105 hover:drop-shadow-2xl hover:-skew-1 perspective-origin-center;
+  @apply hover:text-primary-900 dark:hover:text-primary-100 hover:scale-105 hover:drop-shadow-2xl hover:-rotate-1;
   @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100;
 }

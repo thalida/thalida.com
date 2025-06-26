@@ -5,22 +5,43 @@ import { COLLECTION_CHOICES } from "../content.config";
 import Layout from "../layouts/Layout.astro";
 import meImage from "../assets/images/me.png";
 
-let posts = [];
-for (const collection of COLLECTION_CHOICES) {
-  const collectionPosts = await getCollection(collection);
-  posts = posts.concat(collectionPosts);
+const collections = {
+  "creations": {
+    "title": "Creations",
+    "description": "A collection of my personal and professional projects, arts, and experiments.",
+  },
+  "guides": {
+    "title": "Guides",
+    "description": "Step-by-step guides and tutorials on various topics, from web development to design.",
+  },
+  "links": {
+    "title": "Links",
+    "description": "A curated list of resources, tools, and websites that I find useful and inspiring.",
+  },
+  "recipes": {
+    "title": "Recipes",
+    "description": "A collection of my favorite recipes, from quick meals to elaborate dishes.",
+  },
 }
+const collectionOrder = [
+  "creations",
+  "guides",
+  "links",
+  "recipes",
+];
 
-posts.sort((a, b) => {
-  const dateA =
-    new Date(a.data.updatedOn).getTime() ||
-    new Date(a.data.publishedOn).getTime();
-  const dateB =
-    new Date(b.data.updatedOn).getTime() ||
-    new Date(b.data.publishedOn).getTime();
+let mostRecentPostsByCollection = {};
 
-  return dateB - dateA; // Sort in descending order
-});
+for (const collection of COLLECTION_CHOICES) {
+  const posts = await getCollection(collection);
+  posts.sort((a, b) => {
+    const dateA = new Date(a.data.updatedOn || a.data.publishedOn).getTime();
+    const dateB = new Date(b.data.updatedOn || b.data.publishedOn).getTime();
+    return dateB - dateA; // Sort in descending order
+  });
+
+  mostRecentPostsByCollection[collection] = posts.length > 0 ? posts[0] : null;
+}
 
 interface Props {
   entry: CollectionEntry;
@@ -212,7 +233,7 @@ interface Props {
     </div>
 
     <!-- TILE | live scene -->
-    <div class="pointer-events-none relative flex rounded-3xl h-[70svh] overflow-hidden col-span-1 sm:col-span-4 lg:h-[50rem] lg:col-span-3 lg:row-span-4 2xl:h-full">
+    <div class="pointer-events-none relative flex rounded-3xl h-[70svh] overflow-hidden col-span-1 sm:col-span-4 sm:min-h-[500px] lg:h-[50rem] lg:col-span-3 lg:row-span-4 2xl:h-full">
       <livewindow-scene
         id="main-window"
         group="main-window"
@@ -400,19 +421,35 @@ interface Props {
   </div>
 
 
-  <div class="p-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-8 mt-8">
-      <div class="col-span-full">Header</div>
-      {
-        posts.map((post) => (
-          <a
-            href={`/${post.collection}/${post.id}/`}
-            class="flex bg-surface-50 dark:bg-surface-950 p-4 rounded-4xl overflow-clip  aspect-3/2"
-          >
-            {post.data.title || post.id}
-          </a>
-        ))
-      }
+  <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-8 px-8 pb-8">
+    <div class="col-span-full rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-4">
+      <h2 class="font-brand text-6xl font-bold">Explore</h2>
+      <p>
+        Discover my latest creations, guides, links, and recipes. <br />
+        Each collection showcases my work and interests, providing a glimpse into my world.
+      </p>
     </div>
+
+    {
+      collectionOrder.map((collection) => (
+        <div class="col-span-1 flex flex-col gap-4 bg-surface-50 dark:bg-surface-950 p-4 rounded-3xl">
+          <div class="flex flex-col gap-2">
+            <h2 class="text-lg font-bold">{collections[collection].title}</h2>
+            <p class="text-sm text-secondary-500 dark:text-secondary-300">{collections[collection].description}</p>
+            <a href={`/${collection}/`} class="text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 transition-all">View all <i class="fa fa-arrow-right text-sm ml-1"></i></a>
+          </div>
+          <div>
+            {mostRecentPostsByCollection[collection] && (
+              <div class="mb-4">
+                <a href={`/${collection}/${mostRecentPostsByCollection[collection].id}/`} class="text-surface-500 hover:text-surface-700 dark:hover:text-surface-300 transition-all">
+                  <h3 class="text-lg font-bold">{mostRecentPostsByCollection[collection].data.title || mostRecentPostsByCollection[collection].id}</h3>
+                </a>
+                <p class="text-sm text-secondary-500 dark:text-secondary-300">{mostRecentPostsByCollection[collection].data.description || "No description available."}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      ))
+    }
   </div>
 </Layout>

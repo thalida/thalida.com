@@ -7,7 +7,7 @@ import { sub } from 'three/tsl';
 
 // 3. Define your collection(s)
 
-export const COLLECTION_CHOICES = ["guides", "links", "projects", "recipes"] as const;
+export const COLLECTION_CHOICES = ["guides", "links", "creations", "recipes"] as const;
 
 function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
   return defineCollection({
