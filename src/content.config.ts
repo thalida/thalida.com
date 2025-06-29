@@ -11,10 +11,12 @@ export const COLLECTION_CHOICES = ["guides", "links", "creations", "recipes"] as
 function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
   return defineCollection({
     loader: glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${collectionName}` }),
-    schema: z.object({
+    schema: ({ image }) => z.object({
       title: z.string(),
       subtitle: z.string().optional(),
       link: z.string().optional(),
+      coverImage: image().optional(),
+      coverImageAlt: z.string().optional(),
       description: z.string().optional(),
       publishedOn: z.coerce.date(),
       updatedOn: z.coerce.date().optional(),

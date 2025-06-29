@@ -74,14 +74,16 @@ livewindow-scene {
   background-blend-mode: color-burn;
 }
 
-a {
-}
-
-a.inline-link {
-  @apply inline-block transition-all ease-in-out duration-400;
+a.inline-link,
+a.card {
+  @apply transition-all ease-in-out duration-500;
   @apply hover:-rotate-1 hover:scale-105 hover:drop-shadow-2xl;
-
+}
+a.inline-link {
+  @apply inline-block;
   @apply text-primary-600 dark:text-primary-300;
   @apply hover:text-primary-900 dark:hover:text-primary-100;
   @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100;
 }
+
+a.card {}

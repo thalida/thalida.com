@@ -9,26 +9,30 @@ const collections = {
   "creations": {
     "title": "Creations",
     "description": "A collection of my personal and professional projects, crafts, and experiments.",
-    "bgColor": "bg-surface-50 dark:bg-surface-950",
+    "bgColor": "bg-red-50 dark:bg-red-950",
     "headerColor": "bg-gradient-to-r from-rose-400 to-red-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-pink-400 to-rose-600",
   },
   "guides": {
     "title": "Guides",
     "description": "Step-by-step guides and tutorials on various topics, from web development to design.",
-    "bgColor": "bg-surface-50 dark:bg-surface-950",
-    "headerColor": "bg-gradient-to-r from-indigo-400 to-violet-600 bg-clip-text text-transparent",
+    "bgColor": "bg-purple-50 dark:bg-purple-950",
+    "headerColor": "bg-gradient-to-r from-violet-400 to-purple-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-indigo-400 to-violet-600",
   },
   "links": {
     "title": "Links",
     "description": "A curated list of resources, tools, and websites that I find useful and inspiring.",
-    "bgColor": "bg-surface-50 dark:bg-surface-950",
+    "bgColor": "bg-blue-50 dark:bg-blue-950",
     "headerColor": "bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-cyan-400 to-sky-600",
   },
   "recipes": {
     "title": "Recipes",
     "description": "A collection of my favorite recipes, from quick meals to elaborate dishes.",
-    "bgColor": "bg-surface-50 dark:bg-surface-950",
-    "headerColor": "bg-gradient-to-r from-lime-400 to-green-600 bg-clip-text text-transparent",
+    "bgColor": "bg-emerald-50 dark:bg-emerald-950",
+    "headerColor": "bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-lime-400 to-green-600",
   },
 }
 const collectionOrder = [
@@ -53,6 +57,11 @@ for (const collection of COLLECTION_CHOICES) {
 
 interface Props {
   entry: CollectionEntry;
+}
+
+function formatDate(date: string) {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(date).toLocaleDateString('en-US', options);
 }
 ---
 
@@ -409,21 +418,29 @@ interface Props {
     <div
       class="flex flex-col bg-surface-50 dark:bg-surface-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0"
     >
-      <a href="https://linkedin.com/in/thalida" target="_blank" class="flex items-center gap-2">
-        <i class="fa-linkedin fa-brands fa-lg text-blue-500"></i>
-        <span>linkedin.com/in/thalida</span>
+      <a href="https://linkedin.com/in/thalida" target="_blank" class="group flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-primary-100 hover:drop-shadow-2xl  hover:scale-105 transition-all ease-in-out duration-500">
+        <span class="inline-block group-hover:-rotate-1">
+          <i class="fa-linkedin fa-brands fa-lg text-blue-500"></i>
+          <span>linkedin.com/in/thalida</span>
+        </span>
       </a>
-      <a href="https://github.com/thalida" target="_blank" class="flex items-center gap-2">
-        <i class="fa-github fa-brands fa-lg text-dark dark:text-white"></i>
-        <span>github.com/thalida</span>
+      <a href="https://github.com/thalida" target="_blank" class="group flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-primary-100 hover:drop-shadow-2xl  hover:scale-105 transition-all ease-in-out duration-500">
+        <span class="inline-block group-hover:-rotate-1">
+          <i class="fa-github fa-brands fa-lg text-dark dark:text-white"></i>
+          <span>github.com/thalida</span>
+        </span>
       </a>
-      <a href="https://dribbble.com/thalida" target="_blank" class="flex items-center gap-2">
-        <i class="fa-dribbble fa-brands fa-lg text-pink-500"></i>
-        <span>dribbble.com/thalida</span>
+      <a href="https://dribbble.com/thalida" target="_blank" class="group flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-primary-100 hover:drop-shadow-2xl  hover:scale-105 transition-all ease-in-out duration-500">
+        <span class="inline-block group-hover:-rotate-1">
+          <i class="fa-dribbble fa-brands fa-lg text-pink-500"></i>
+          <span>dribbble.com/thalida</span>
+        </span>
       </a>
-      <a href="mailto:hello@thalida.com?subject=Hello%20from%20your%20website!" target="_blank" class="flex items-center gap-2">
-        <i class="fa-envelope fa-solid fa-lg text-surface-500"></i>
-        <span>hello@thalida.com</span>
+      <a href="mailto:hello@thalida.com?subject=Hello%20from%20your%20website!" target="_blank" class="group flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-primary-100 hover:drop-shadow-2xl  hover:scale-105 transition-all ease-in-out duration-500">
+        <span class="inline-block group-hover:-rotate-1">
+          <i class="fa-envelope fa-solid fa-lg text-surface-500"></i>
+          <span>hello@thalida.com</span>
+        </span>
       </a>
     </div>
   </div>
@@ -431,7 +448,7 @@ interface Props {
 
   <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-8 px-8 pb-8">
     <!-- <div class="@container col-span-full rounded-3xl p-4 flex flex-col items-center justify-center text-center gap-4">
-      <h2 class="font-brand text-[10cqi] font-bold">Explore</h2>
+      <h2 class="font-brand text-[14cqi] font-bold">Explore</h2>
       <p>
         Discover my latest creations, guides, links, and recipes. <br />
         Each collection showcases my work and interests, providing a glimpse into my world.
@@ -443,27 +460,40 @@ interface Props {
 
       return (
         <div
-          class={`grid grid-cols-subgrid p-2 rounded-3xl ${collectionData.bgColor} col-span-1 gap-4 sm:col-span-2`}
+          class={`rounded-3xl ${collectionData.bgColor} col-span-1 gap-4 flex flex-col`}
           >
           <a
             href={`/${collection}`}
-            class={`@container col-span-1 flex flex-col justify-between p-2 rounded-2xl gap-4`}
+            class={`@container group card col-span-1 flex flex-col justify-between p-4 rounded-2xl gap-2 ${collectionData.bgColor} grow-0`}
           >
-            <span class={`font-brand text-[12cqi] sm:text-[16cqi] leading-none ${collectionData.headerColor}`}>{collectionData.title}</span>
+            <span class={`font-brand text-[12cqi] leading-none ${collectionData.headerColor}`}>{collectionData.title}</span>
             <p class="text-sm">{collectionData.description}</p>
-            <div class="flex flex-row items-center justify-between mt-4">
-              <span>Explore</span>
-              <i class="fa fa-arrow-right text-sm ml-1"></i>
+            <div class="flex flex-row items-center justify-end text-primary-600 dark:text-primary-300 gap-2 transition-colors group-hover:text-primary-900 dark:group-hover:text-primary-100">
+              <span>View all</span>
+              <i class="fa fa-arrow-right text-sm"></i>
             </div>
           </a>
           {mostRecentPost && (
+          <div class="grow h-full w-full p-2">
             <a
               href={`/${collection}/${mostRecentPost.id}`}
-              class="col-span-1 text-sm bg-white dark:bg-black rounded-2xl p-4"
+              class="h-full w-full card col-span-1 flex flex-col justify-between bg-white dark:bg-black rounded-2xl p-4 gap-2"
             >
-              <p class="font-bold">{mostRecentPost.data.title || mostRecentPost.id}</p>
-              <p class="text-xs">Updated: {mostRecentPost.data.updatedOn || mostRecentPost.data.publishedOn}</p>
+              <div class={ `w-full aspect-video flex items-center justify-center ${collectionData.imageBgColor} rounded-lg overflow-hidden relative` }>
+                {mostRecentPost.data.coverImage && (<Image
+                  src={mostRecentPost.data.coverImage}
+                  alt={mostRecentPost.data.coverImageAlt}
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />)}
+              </div>
+              <div>
+                <p class="text-lg font-bold">{mostRecentPost.data.title}</p>
+                { mostRecentPost.data.description && (<p class="text-sm">{mostRecentPost.data.description}</p>)}
+              </div>
+              <p class="text-xs opacity-50">{formatDate(mostRecentPost.data.updatedOn || mostRecentPost.data.publishedOn)}</p>
             </a>
+          </div>
           )}
         </div>
       )
