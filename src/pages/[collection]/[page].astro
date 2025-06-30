@@ -22,7 +22,58 @@ const { page } = Astro.props;
 const params = Astro.params;
 ---
 
+
+<script src="../../components/live-window"></script>
+
+<script>
+  import { merge, isEqual } from "lodash";
+  import type { ILiveWindowSceneConfig } from "../../components/live-window/types";
+
+  document.documentElement.classList.add("loading");
+
+  const defaultSettings: ILiveWindowSceneConfig = {
+    useLiveWeather: true,
+    useLiveTime: true,
+    overrideTime: null,
+    overrideWeather: null,
+    clockFormat: "analog",
+    clockEnabled: false,
+    cloudsEnabled: false,
+    lightningEnabled: false,
+    percipitationEnabled: false,
+    skyboxEnabled: true,
+  };
+
+  const scene = document.getElementById("main-window");
+
+  document.addEventListener("DOMContentLoaded", handleInit);
+
+  scene.addEventListener("ready", () => {
+    document.documentElement.classList.remove("loading");
+  });
+
+  function getSettings() {
+    const storedSettings = localStorage.getItem("live-window-custom-settings") || "{}";
+    const settings = merge({}, defaultSettings, JSON.parse(storedSettings));
+
+    if (settings.overrideWeather) {
+      settings.overrideWeather = parseInt(settings.overrideWeather, 10);
+    }
+
+    return settings;
+  }
+
+  function handleInit() {
+    const settings = getSettings();
+    scene.updateConfig(settings);
+  }
+</script>
+
+
 <Layout>
+  <div class="w-full h-screen">
+    <livewindow-scene id="main-window" group="main-window" class="w-full h-screen" />
+  </div>
   <h1>{params.collection} - Page {page.currentPage} / {page.lastPage}</h1>
   <ul>
     {

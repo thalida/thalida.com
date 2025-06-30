@@ -82,6 +82,11 @@ export default class LiveWindowScene {
     enableGlobalTheme: true, // Whether to use global theme colors
     clockFormat: "analog", // Format of the clock
     topMargin: 64 + 32,
+    clockEnabled: true, // Whether to show the clock
+    cloudsEnabled: true, // Whether to show clouds
+    lightningEnabled: true, // Whether to show lightning
+    percipitationEnabled: true, // Whether to show percipitation
+    skyboxEnabled: true, // Whether to show the skybox
   };
 
   config: ILiveWindowSceneConfig;
@@ -253,11 +258,11 @@ export default class LiveWindowScene {
 
     Composite.add(this.world, [cornerBottomLeft, cornerBottomRight]);
 
-    this.clock = this.clock || new SceneClock(this, {format: this.config.clockFormat});
-    this.clouds = this.clouds || new SceneClouds(this);
-    this.lightning = this.lightning || new SceneLightning(this);
-    this.perciptiation = this.perciptiation || new ScenePercipitation(this);
-    this.skybox = this.skybox || new SceneSkyBox(this, {enableGlobalTheme: this.config.enableGlobalTheme});
+    this.clock = this.clock || new SceneClock(this, {enabled: this.config.clockEnabled, format: this.config.clockFormat});
+    this.clouds = this.clouds || new SceneClouds(this, {enabled: this.config.cloudsEnabled});
+    this.lightning = this.lightning || new SceneLightning(this, {enabled: this.config.lightningEnabled});
+    this.perciptiation = this.perciptiation || new ScenePercipitation(this, {enabled: this.config.percipitationEnabled});
+    this.skybox = this.skybox || new SceneSkyBox(this, {enabled: this.config.skyboxEnabled, enableGlobalTheme: this.config.enableGlobalTheme});
 
     const now = this.getNow();
     const weather = this.getWeather();
@@ -350,14 +355,29 @@ export default class LiveWindowScene {
   }
 
   updateConfig(config: Partial<ILiveWindowSceneConfig> | null) {
-    this.config =  merge({}, this.defaultConfig, config || {});
+    this.config =  merge({}, this.defaultConfig, this.config, config || {});
 
     if (this.clock) {
-      this.clock.updateConfig({ format: this.config.clockFormat });
+      this.clock.updateConfig({ enabled: this.config.clockEnabled, format: this.config.clockFormat });
+    }
+
+    if (this.clouds) {
+      this.clouds.updateConfig({ enabled: this.config.cloudsEnabled });
+    }
+
+    if (this.lightning) {
+      this.lightning.updateConfig({ enabled: this.config.lightningEnabled });
+    }
+
+    if (this.perciptiation) {
+      this.perciptiation.updateConfig({
+        enabled: this.config.percipitationEnabled
+      });
     }
 
     if (this.skybox) {
       this.skybox.updateConfig({
+        enabled: this.config.skyboxEnabled,
         enableGlobalTheme: this.config.enableGlobalTheme,
       });
     }

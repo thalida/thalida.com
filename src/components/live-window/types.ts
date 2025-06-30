@@ -8,6 +8,11 @@ export interface ILiveWindowSceneConfig {
   enableGlobalTheme: boolean; // Whether to use global theme colors
   clockFormat?: "analog" | "digital"; // Format of the clock
   overrideTime?: string; // Override the time, e.g., "HH:mm"
+  clockEnabled?: boolean; // Whether the clock is enabled
+  cloudsEnabled?: boolean; // Whether clouds are enabled
+  lightningEnabled?: boolean; // Whether lightning is enabled
+  percipitationEnabled?: boolean; // Whether percipitation is enabled
+  skyboxEnabled?: boolean; // Whether the skybox is enabled
   // Weather icon code https://openweathermap.org/weather-conditions#Weather-Condition-Codes-2
   overrideWeather?: TWeatherIconCode;
   overrideLocation?: {
@@ -25,7 +30,6 @@ export interface ISceneClockConfig {
 
 export interface ISceneSkyboxConfig {
   enabled: boolean;
-  enableScene: boolean;
   enableGlobalTheme: boolean; // Whether to use global theme colors
   sunsetDuration: number; // Duration of sunset in milliseconds
   sunrise?: number | null; // Optional sunrise time in milliseconds

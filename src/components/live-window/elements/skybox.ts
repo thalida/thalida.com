@@ -35,7 +35,6 @@ export default class SceneSkyBox {
 
   defaultConfig: ISceneSkyboxConfig = {
     enabled: true,
-    enableScene: true,
     enableGlobalTheme: true,
     sunsetDuration: 45 * 60 * 1000,
   };
@@ -61,11 +60,13 @@ export default class SceneSkyBox {
   }
 
   async onTick(now: Date, weather: ISceneWeather) {
-    if (this.isRendering || !this.config.enabled) {
+    if (this.isRendering) {
       return;
     }
 
-    if (!this.config.enableScene) {
+    if (!this.config.enabled) {
+      this.isRendering = false;
+      this.clear();
       return; // Skip if scene is not enabled
     }
 
@@ -112,7 +113,7 @@ export default class SceneSkyBox {
   }
 
   clear() {
-    if (this.config.enableScene) {
+    if (this.config.enabled) {
       this.scene.element.style.backgroundSize = "";
       this.scene.element.style.backgroundPosition = "";
       this.scene.element.style.backgroundRepeat = "";

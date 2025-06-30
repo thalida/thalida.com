@@ -40,8 +40,6 @@ export default class SceneClock {
       this.clear();
     }
 
-    this.setLiveConfig(now, weather)
-
     if (!this.config.enabled) {
       this.isRendering = false;
       return;
@@ -58,9 +56,9 @@ export default class SceneClock {
       return; // Skip if clock is disabled or body is not initialized
     }
 
-    this.setLiveConfig(now, weather)
-
     if (!this.config.enabled) {
+      this.isRendering = false;
+      this.clear();
       return; // Skip if clock is not enabled
     }
 
@@ -75,11 +73,7 @@ export default class SceneClock {
   }
 
   updateConfig(config: Partial<ISceneClockConfig> | null) {
-    this.config = merge({}, this.defaultConfig, config || {});
-    return this.config;
-  }
-
-  setLiveConfig(now: Date, weather: ISceneWeather) {
+    this.config = merge({}, this.defaultConfig, this.config, config || {});
     return this.config;
   }
 

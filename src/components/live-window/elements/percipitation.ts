@@ -61,10 +61,18 @@ export default class ScenePercipitation {
       return;
     }
 
+    if (!this.config.enabled) {
+      this.isRendering = false;
+      this.clear();
+      return; // Skip if not raining
+    }
+
     this.setLiveConfig(now, weather);
 
-    if (!this.config.enabled) {
-      return; // Skip if not raining
+    if (!this.config.intensity || this.config.intensity <= 0) {
+      this.isRendering = false;
+      this.clear();
+      return; // Skip if intensity is zero or not set
     }
 
     const frequencyCheck = random(0, 1);
@@ -91,34 +99,28 @@ export default class ScenePercipitation {
   setLiveConfig(now: Date, weather: ISceneWeather): IScenePercipitationConfig {
     const liveConfig: IScenePercipitationConfig = {
       ...this.config,
-      enabled: true,
     }
 
     switch (weather.current?.icon) {
       case 9: // Shower Rain
-        liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
         liveConfig.intensity = 0.4; // Moderate intensity for rain
         break;
       case 10: // Rain
-        liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
         liveConfig.intensity = 0.6; // Higher intensity for rain showers
         break;
       case 11: // Thunderstorm
-        liveConfig.enabled = true;
         liveConfig.percipitationType = "rain"; // Set to rain
         liveConfig.intensity = 0.8; // High intensity for thunderstorms
         break;
       case 13: // Snow
-        liveConfig.enabled = true;
         liveConfig.percipitationType = "snow"; // Set to snow
         liveConfig.intensity = 0.6; // Moderate intensity for snow
         break;
       default:
-        liveConfig.enabled = false;
-        liveConfig.percipitationType = "fluff";
-        liveConfig.intensity = 0.1;
+        liveConfig.percipitationType = "fluff"; // Default to fluff
+        liveConfig.intensity = 0;
     }
 
     return this.updateConfig(liveConfig);

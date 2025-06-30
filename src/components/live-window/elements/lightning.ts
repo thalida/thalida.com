@@ -47,10 +47,18 @@ export default class SceneLightning {
       return;
     }
 
+    if (!this.config.enabled) {
+      this.isRendering = false;
+      this.clear();
+      return; // Skip if lightning is not enabled
+    }
+
     this.setLiveConfig(now, weather);
 
-    if (!this.config.enabled) {
-      return; // Skip if lightning is not enabled
+    if (!this.config.intensity || this.config.intensity <= 0) {
+      this.isRendering = false;
+      this.clear();
+      return; // Skip if intensity is zero or not set
     }
 
     const numLightningBolts = Composite.allBodies(
@@ -168,17 +176,15 @@ export default class SceneLightning {
   setLiveConfig(now: Date, weather: ISceneWeather): ISceneLightningConfig {
     const liveConfig: ISceneLightningConfig = {
       ...this.config,
-      enabled: false,
     }
 
     switch (weather.current?.icon) {
       case "11d": // Thunderstorm
       case "11n":
-        liveConfig.enabled = true;
         liveConfig.intensity = 0.5; // High intensity for thunderstorms
         break;
       default:
-        liveConfig.enabled = false; // Disable lightning for other weather conditions
+        liveConfig.intensity = 0; // Disable lightning for other weather conditions
     }
 
     return this.updateConfig(liveConfig);

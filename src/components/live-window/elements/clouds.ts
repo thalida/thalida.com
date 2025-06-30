@@ -37,13 +37,12 @@ export default class SceneClouds {
       this.clear();
     }
 
-    this.setLiveConfig(now, weather);
-
     if (!this.config.enabled) {
       this.isRendering = false;
       return;
     }
 
+    this.setLiveConfig(now, weather);
 
     for (let i = 0; i < this.ADJUSTED_MAX_BODIES; i++) {
       const body = this._createBody(true);
@@ -61,11 +60,13 @@ export default class SceneClouds {
       return; // Skip if effects are not enabled
     }
 
-    this.setLiveConfig(now, weather);
-
     if (!this.config.enabled) {
+      this.isRendering = false;
+      this.clear();
       return; // Skip if effects are not enabled
     }
+
+    this.setLiveConfig(now, weather);
 
     const bodies = Composite.allBodies(this.scene.LAYERS.CLOUDS);
     let numBodies = bodies.length;
@@ -112,14 +113,13 @@ export default class SceneClouds {
   }
 
   updateConfig(config: Partial<ISceneCloudsConfig> | null) {
-    this.config = merge({}, this.defaultConfig, config || {});
+    this.config = merge({}, this.defaultConfig, this.config, config || {});
     return this.config;
   }
 
   setLiveConfig(now: Date, weather: ISceneWeather): ISceneCloudsConfig {
     const liveConfig: ISceneCloudsConfig = {
       ...this.config,
-      enabled: true,
     }
     switch(weather.current?.icon ) {
       case 1:
