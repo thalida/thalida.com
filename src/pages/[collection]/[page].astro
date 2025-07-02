@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../content.config";
 import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
 
 const { page } = Astro.props;
@@ -25,86 +26,30 @@ export async function getStaticPaths({ paginate }) {
 ---
 
 
-<script src="../../components/live-window"></script>
-
-<script>
-  import { merge, isEqual } from "lodash";
-  import type { ILiveWindowSceneConfig } from "../../components/live-window/types";
-
-  document.documentElement.classList.add("loading");
-
-  const defaultSettings: ILiveWindowSceneConfig = {
-    useLiveWeather: true,
-    useLiveTime: true,
-    overrideTime: null,
-    overrideWeather: null,
-    clockFormat: "digital",
-    clockEnabled: false,
-    cloudsEnabled: false,
-    lightningEnabled: false,
-    percipitationEnabled: false,
-    skyboxEnabled: true,
-  };
-
-  const scene = document.getElementById("main-window");
-
-  document.addEventListener("DOMContentLoaded", handleInit);
-
-  scene.addEventListener("ready", () => {
-    document.documentElement.classList.remove("loading");
-  });
-
-  function getSettings() {
-    const storedSettings = JSON.parse(localStorage.getItem("live-window-custom-settings") || "{}");
-    const settings = {...defaultSettings };
-    settings.useLiveTime = storedSettings.useLiveTime !== undefined ? storedSettings.useLiveTime : defaultSettings.useLiveTime;
-    settings.useLiveWeather = storedSettings.useLiveWeather !== undefined ? storedSettings.useLiveWeather : defaultSettings.useLiveWeather;
-    settings.overrideTime = storedSettings.overrideTime !== undefined ? storedSettings.overrideTime : defaultSettings.overrideTime;
-    settings.overrideWeather = storedSettings.overrideWeather !== undefined ? storedSettings.overrideWeather : defaultSettings.overrideWeather;
-    if (settings.overrideWeather) {
-      settings.overrideWeather = parseInt(settings.overrideWeather, 10);
-    }
-
-    return settings;
-  }
-
-  function handleInit() {
-    const settings = getSettings();
-    scene.updateConfig(settings);
-  }
-</script>
-
-
 <Layout>
   <div class="p-8">
-    <header class="relative px-8 py-4 w-full h-full flex flex-row items-center justify-between rounded-3xl overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-full">
-        <livewindow-scene id="main-window" group="main-window" />
-      </div>
 
-      <a href="/" class="relative flex flex-row items-center justify-start font-brand text-2xl lg:text-4xl text-secondary-100 mix-blend-color-dodge">
-        thalida.com
-      </a>
-
-      <nav class="relative flex flex-col sm:flex-row flex-wrap gap-4 lg:gap-8 grow items-end sm:items-center justify-end">
-        {collectionOrder.map((collectionName) => {
-          const collection = collectionMeta[collectionName];
-          const isActive = collectionName === params.collection;
-          return (
-            <a href={`/${collectionName}/1/`} class={`flex flex-col items-center justify-center font-bold text-base lg:text-xl ${isActive ? 'text-white mix-blend-difference' : 'text-secondary-100 mix-blend-color-dodge'}`}>
-              {collection.title}
-            </a>
-          );
-        })}
-      </nav>
-    </header>
+    <Header />
 
     <div class={`@container my-8 p-8 flex flex-col gap-4 ${collection.bgColor} rounded-3xl text-center`}>
       <h1 class={`text-5xl lg:text-7xl font-brand ${collection.headerColor} mb-2`}>
         {collection.title}
       </h1>
       <p class="text-base lg:text-xl">{collection.description}</p>
-      <p class="text-sm opacity-50">{page.total} post{page.total == 1 ? '' : 's'}</p>
+    </div>
+
+    <div class="flex flex-row items-center justify-between my-8 gap-8">
+      <p class="text-sm opacity-50 mt-4"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> posts </p>
+      <div class="flex flex-row items-center justify-between gap-4 mt-4">
+        <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+          <i class="fa-solid fa-arrow-left ml-2"></i>
+          <span>Previous</span>
+        </a>
+        <a href={page.url.next || '#'} class={page.url.next ? 'button-link ' : 'button-link opacity-20 cursor-default'} aria-label="Next page">
+          <span>Next</span>
+          <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
@@ -115,7 +60,7 @@ export async function getStaticPaths({ paginate }) {
       }
     </div>
 
-    <div class="flex flex-row items-center justify-between mt-8 gap-8">
+    <div class="flex flex-row items-center justify-between my-8 gap-8">
       <p class="text-sm opacity-50 mt-4"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> posts </p>
       <div class="flex flex-row items-center justify-between gap-4 mt-4">
         <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
