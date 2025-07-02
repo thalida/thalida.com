@@ -2,7 +2,7 @@
 import { getCollection, render } from "astro:content";
 import { LinkPreview } from "@astro-community/astro-embed-link-preview";
 import Layout from "../../layouts/Layout.astro";
-import { COLLECTION_CHOICES } from "../../content.config";
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../content.config";
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -18,12 +18,101 @@ export async function getStaticPaths() {
   return paths;
 }
 
-// 2. For your template, you can get the entry directly from the prop
 const { post } = Astro.props;
 const { Content } = await render(post);
+const collection = collectionMeta[post.collection]
 ---
 
+
+
+
+<script src="../../components/live-window"></script>
+
+<script>
+  import { merge, isEqual } from "lodash";
+  import type { ILiveWindowSceneConfig } from "../../components/live-window/types";
+
+  document.documentElement.classList.add("loading");
+
+  const defaultSettings: ILiveWindowSceneConfig = {
+    useLiveWeather: true,
+    useLiveTime: true,
+    overrideTime: null,
+    overrideWeather: null,
+    clockFormat: "digital",
+    clockEnabled: false,
+    cloudsEnabled: false,
+    lightningEnabled: false,
+    percipitationEnabled: false,
+    skyboxEnabled: true,
+  };
+
+  const scene = document.getElementById("main-window");
+
+  document.addEventListener("DOMContentLoaded", handleInit);
+
+  scene.addEventListener("ready", () => {
+    document.documentElement.classList.remove("loading");
+  });
+
+  function getSettings() {
+    const storedSettings = JSON.parse(localStorage.getItem("live-window-custom-settings") || "{}");
+    const settings = {...defaultSettings };
+    settings.useLiveTime = storedSettings.useLiveTime !== undefined ? storedSettings.useLiveTime : defaultSettings.useLiveTime;
+    settings.useLiveWeather = storedSettings.useLiveWeather !== undefined ? storedSettings.useLiveWeather : defaultSettings.useLiveWeather;
+    settings.overrideTime = storedSettings.overrideTime !== undefined ? storedSettings.overrideTime : defaultSettings.overrideTime;
+    settings.overrideWeather = storedSettings.overrideWeather !== undefined ? storedSettings.overrideWeather : defaultSettings.overrideWeather;
+    if (settings.overrideWeather) {
+      settings.overrideWeather = parseInt(settings.overrideWeather, 10);
+    }
+
+    return settings;
+  }
+
+  function handleInit() {
+    const settings = getSettings();
+    scene.updateConfig(settings);
+  }
+</script>
+
 <Layout>
-  <h1>{post.data.title}</h1>
-  <Content />
+  <div class="h-full p-8">
+
+    <header class="relative px-8 py-4 w-full h-full flex flex-row items-center justify-between rounded-3xl overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-full">
+        <livewindow-scene id="main-window" group="main-window" />
+      </div>
+
+      <a href="/" class="relative flex flex-row items-center justify-start font-brand text-2xl lg:text-4xl text-secondary-100 mix-blend-color-dodge">
+        thalida.com
+      </a>
+
+      <nav class="relative flex flex-col sm:flex-row flex-wrap gap-4 lg:gap-8 grow items-end sm:items-center justify-end">
+        {collectionOrder.map((collectionName) => {
+          const collection = collectionMeta[collectionName];
+          const isActive = false;
+          return (
+            <a href={`/${collectionName}/1/`} class={`flex flex-col items-center justify-center font-bold text-base lg:text-xl ${isActive ? 'text-white mix-blend-difference' : 'text-secondary-100 mix-blend-color-dodge'}`}>
+              {collection.title}
+            </a>
+          );
+        })}
+      </nav>
+    </header>
+
+
+    <div class="m-8 flex flex-col items-center">
+      <a href={`/${post.collection}`} class="inline-link">
+        {collection.title}
+      </a>
+      <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor}`}>
+        {post.data.title}
+      </h1>
+      <article class="mt-16 prose lg:prose-xl dark:prose-invert">
+        <Content />
+      </article>
+    </div>
+
+  </div>
+
 </Layout>

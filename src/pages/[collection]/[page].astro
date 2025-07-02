@@ -77,7 +77,7 @@ export async function getStaticPaths({ paginate }) {
 
 <Layout>
   <div class="p-8">
-    <div class="relative px-8 py-4 w-full h-full flex flex-row items-center justify-between rounded-3xl overflow-hidden">
+    <header class="relative px-8 py-4 w-full h-full flex flex-row items-center justify-between rounded-3xl overflow-hidden">
       <div class="absolute top-0 left-0 w-full h-full">
         <livewindow-scene id="main-window" group="main-window" />
       </div>
@@ -86,7 +86,7 @@ export async function getStaticPaths({ paginate }) {
         thalida.com
       </a>
 
-      <div class="relative flex flex-col sm:flex-row flex-wrap gap-4 lg:gap-8 grow items-end sm:items-center justify-end">
+      <nav class="relative flex flex-col sm:flex-row flex-wrap gap-4 lg:gap-8 grow items-end sm:items-center justify-end">
         {collectionOrder.map((collectionName) => {
           const collection = collectionMeta[collectionName];
           const isActive = collectionName === params.collection;
@@ -96,8 +96,8 @@ export async function getStaticPaths({ paginate }) {
             </a>
           );
         })}
-      </div>
-    </div>
+      </nav>
+    </header>
 
     <div class={`@container my-8 p-8 flex flex-col gap-4 ${collection.bgColor} rounded-3xl text-center`}>
       <h1 class={`text-5xl lg:text-7xl font-brand ${collection.headerColor} mb-2`}>
@@ -129,6 +129,4 @@ export async function getStaticPaths({ paginate }) {
       </div>
     </div>
   </div>
-
-
 </Layout>

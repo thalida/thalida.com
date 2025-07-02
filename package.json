@@ -25,6 +25,7 @@
     "three": "^0.177.0"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/lodash": "^4.17.17",
     "@types/matter-js": "^0.19.8",
     "@types/three": "^0.177.0"
