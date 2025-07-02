@@ -33,11 +33,3 @@ An analysed aggregated feed of my social media activity.
 ![List.png](maybe%20social%20010907c27c1e4c1187ebc213733db4ef/List.png)
 
 ![View - Teddy Bear.png](maybe%20social%20010907c27c1e4c1187ebc213733db4ef/View_-_Teddy_Bear.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

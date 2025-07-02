@@ -27,11 +27,3 @@ Automated playlist archiving and backups for Spotify.
 ### Mockups
 
 ![Tablet.png](Revibed%20beaafce272a04df795149740fe16a5ad/Tablet.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

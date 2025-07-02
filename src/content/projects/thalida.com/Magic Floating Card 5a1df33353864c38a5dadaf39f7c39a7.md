@@ -46,11 +46,3 @@ This version of the site was built using [AngularJS](https://angularjs.org/), b
 ## Next →
 
 [Untitled](Magic%20Floating%20Card%205a1df33353864c38a5dadaf39f7c39a7/Untitled%2027803bed9cae4aa98dcd04f902643285.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

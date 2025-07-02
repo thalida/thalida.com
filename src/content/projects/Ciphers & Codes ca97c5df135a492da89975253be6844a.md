@@ -78,11 +78,3 @@ Catalog of various redesigns over time as I got the itch to work on this again.
 ![ciphers.png](Ciphers%20&%20Codes%20ca97c5df135a492da89975253be6844a/ciphers.png)
 
 ![Desktop.png](Ciphers%20&%20Codes%20ca97c5df135a492da89975253be6844a/Desktop.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

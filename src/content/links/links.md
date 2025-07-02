@@ -1,0 +1,600 @@
+---
+title: Links
+description: A curated collection of interesting sites, products, resources, and tools.
+publishedOn: 2023-10-01
+---
+
+A curated collection of interesting sites, products, resources, and tools. Everything from [useful apps](https://numi.app/) to [amazing art](https://www.tatianapoblah.com/) to [beautiful self-defense](https://alythuh.com/) products.
+
+<aside>
+📱 **Apps (All Platforms)**
+
+</aside>
+
+<aside>
+❤️ **Faves**
+
+[Paper by WeTransfer | Simple Sketch App](https://wetransfer.com/paper)
+
+</aside>
+
+- **A Better…**
+
+    **Calculator**
+
+    [Beautiful calculator for Mac](https://numi.app/)
+
+    **Uninstaller**
+
+    [App Cleaner & Uninstaller - Remove Apps from Mac Entirely](https://nektony.com/mac-app-cleaner)
+
+    **Window Manager**
+
+    [Magnet](https://magnet.crowdcafe.com/)
+
+- **Focus**
+
+    [Forest - Stay focused, be present](https://www.forestapp.cc/)
+
+    [I Miss My Cafe](https://imissmycafe.com/)
+
+- **Todos & Notes**
+
+    [TickTick](https://ticktick.com/)
+
+    [Paper by WeTransfer | Simple Sketch App](https://wetransfer.com/paper)
+
+    [Notion - One workspace. Every team.](https://www.notion.so/)
+
+- **Weird & Interesting**
+
+    [FREVER - The Future of Expression](https://www.frever.com/)
+
+
+<aside>
+🖼️ **Art**
+
+</aside>
+
+<aside>
+💗 **Faves**
+
+Tatiana Poblah Art
+
+[Buy Women Art Online](https://www.tatianapoblah.com/)
+
+Not Your Grandma’s Embroidery
+
+[CREATE THE CULTURE EMBROIDERY](https://www.createtheculture-embroidery.com/)
+
+</aside>
+
+- **Prints, Photography, and Illustrations**
+
+    [Home | ShotbyMrStory](https://www.shotbymrstory.com/)
+
+    [Sharece Studios](https://sharecestudios.bigcartel.com/)
+
+    [Illustration | Bex Glendining](https://www.lgions.com/)
+
+    [The Art of Hippy Potter](https://hippypotter.bigcartel.com/)
+
+    [gldeng6rl](https://gldeng6rl.com/)
+
+    [Buy Women Art Online](https://www.tatianapoblah.com/)
+
+    [Pinktofu art](https://pinktofuart.com/)
+
+    [Home from little corvus shop](https://littlecorvus.storenvy.com/)
+
+    [Real. Weird. Art.](https://www.realweirdart.com/)
+
+    [Shop | Vashti Harrison](https://www.vashtiharrison.com/shop)
+
+    [Pop Chart | The things you love. Charted.](https://popchart.co/)
+
+    [agavnythepigeon | Etsy](https://www.etsy.com/shop/agavnythepigeon)
+
+    [](https://www.inprnt.com/gallery/taliaskyles/)
+
+    [](https://www.inprnt.com/gallery/titsay/)
+
+    [](https://www.inprnt.com/gallery/waneella/)
+
+- **Embroidery**
+
+    [CREATE THE CULTURE EMBROIDERY](https://www.createtheculture-embroidery.com/)
+
+- **Ceramics**
+
+    [The Studio Arhoj Web Shop](https://arhoj.com/)
+
+
+<aside>
+🛍️ **Products**
+
+</aside>
+
+<aside>
+💜 **Faves**
+
+Hay Crates
+
+[Colour Crate, Medium](https://us.hay.com/accessories/office/office-accessories/colour-crate---m/2516481.html?lang=en_US#q=crate&lang=en_US&start=1)
+
+Stylish Defense
+
+[ALYTHUH® Official Site](https://alythuh.com/)
+
+</aside>
+
+- **Audio**
+
+    [Tivoli Audio](https://tivoliaudio.com/)
+
+- **Furniture & Home**
+
+    [HAY - Danish inspired furniture and accessories for modern living](https://us.hay.com/)
+
+    [OrganicModernism - Organic Modernism | New York](https://organicmodernism.com/)
+
+    [Moving Mountains Design Studio](http://www.mvngmtns.com/)
+
+- **Device Accessories**
+
+    [Paperlike, the Screen Protector for iPad: write and draw like on paper](https://paperlike.com/)
+
+    [Wooden iPad Stands, MacBook Stands & Apple Accessories | Yohann](https://www.yohann.com/)
+
+    [Wood iphone stands, wireless dock chargers, cases](https://oakywood.shop/)
+
+    [Courant | Wireless Charging, Perfected | staycourant.com](https://staycourant.com/)
+
+- **Office & Organization**
+
+    [Memo Books, Notebooks, Journals & Planners](https://fieldnotesbrand.com/)
+
+    [MochiThings](https://shop.mochithings.com/)
+
+    [TheKey.Company is a premier destination for all things mech related.](https://thekey.company/)
+
+    [Clever Organisation for Better Living](https://www.orbitkey.com/)
+
+    [Modern Desk Organization & Office Accessories | Grovemade®](http://grovemade.com/)
+
+    [Balance Boards & Standing Desk Accessories | FluidStance](https://fluidstance.com/)
+
+- **Misc**
+
+    [BubbleSort Zines](https://shop.bubblesort.io/)
+
+    [](https://www.dollfacecreatiions.com/)
+
+    [ALYTHUH® Official Site](https://alythuh.com/)
+
+
+<aside>
+💅🏾 **Fashion & Beauty**
+
+</aside>
+
+<aside>
+💙 **Faves**
+
+Futuristic Goth-mode Activated
+
+[Shop Untitled NYC | Avant-Garde Clothing & Accessories for Men & Women](https://www.shopuntitled.com/)
+
+</aside>
+
+- **Clothing & Accessories**
+
+    [ORTTU - Independent Designer Clothing For Men](https://orttu.com/)
+
+    [Clothes for Deadbeat, Lowlife, Weirdos!](https://shoptunnelvision.com/)
+
+    [Afternoon Fika](https://www.afternoonfika.com/)
+
+    [ALYTHUH® Official Site](https://alythuh.com/)
+
+    [Bags, Backpacks & Accessories | Sandqvist](https://www.sandqvist.us/)
+
+    [MochiThings](https://shop.mochithings.com/)
+
+    [BubbleSort Zines](https://shop.bubblesort.io/)
+
+    [Shop Untitled NYC | Avant-Garde Clothing & Accessories for Men & Women](https://www.shopuntitled.com/)
+
+    [| Huckberry](https://huckberry.com/)
+
+    [Green Houwse Shop | Ivy Leaf Farms](https://www.ivyleaffarms.com/green-houwse-shop?page=2)
+
+    [LUCRIN Geneva | USA](https://www.lucrin.com/)
+
+- **Misc**
+
+    [Impala Rollerskates](https://impalarollerskates.com/)
+
+- **Enamel Pins & Stickers**
+
+    [Afternoon Fika](https://www.afternoonfika.com/)
+
+    [Home from little corvus shop](https://littlecorvus.storenvy.com/)
+
+    [agavnythepigeon | Etsy](https://www.etsy.com/shop/agavnythepigeon)
+
+- **Glasses**
+
+    [Online eyeglasses,Prescription Lenses,Sunglasses | Glasseslit](https://www.glasseslit.com/)
+
+- **Hair, Nails, Skin**
+
+    [Jones & Rose: Naturals Plant Based Skin & Body Care Products](https://www.jonesandrose.com/)
+
+    [Holo Taco](https://www.holotaco.com/)
+
+- **Jewelry**
+
+    [STONE AND STRAND - Fine Jewelry Without The Markup](https://www.stoneandstrand.com/)
+
+    [CREATE THE CULTURE EMBROIDERY](https://www.createtheculture-embroidery.com/)
+
+
+<aside>
+🥗 **Food**
+
+</aside>
+
+<aside>
+💚 **Faves**
+
+[Callaloo Box - Caribbean condiments, hot sauces, snacks & more](https://callaloobox.com/)
+
+</aside>
+
+[5 Min DIY Bubble Tea Kit | Premium Homemade Bubble Tea in Canada](https://baubleboba.com/)
+
+[Green Houwse Shop | Ivy Leaf Farms](https://www.ivyleaffarms.com/green-houwse-shop?page=2)
+
+[Callaloo Box - Caribbean condiments, hot sauces, snacks & more](https://callaloobox.com/)
+
+<aside>
+📚 **Books**
+
+</aside>
+
+<aside>
+💛 **Faves**
+
+Management / Tech
+
+[The Phoenix Project - Book](https://itrevolution.com/the-phoenix-project/)
+
+</aside>
+
+- **Fiction**
+
+    [Americanah - Chimamanda Ngozi Adichie](https://www.chimamanda.com/americanah/)
+
+    [Not Even Bones (Market of Monsters, #1)](https://www.goodreads.com/book/show/34324484-not-even-bones)
+
+    [Aristotle and Dante Discover the Secrets of the Universe (Aristotle and Dante, #1)](https://www.goodreads.com/book/show/12000020-aristotle-and-dante-discover-the-secrets-of-the-universe)
+
+    [Children of the New World](https://www.goodreads.com/book/show/29243630-children-of-the-new-world)
+
+- **Tech**
+
+    [Weapons of Math Destruction by Cathy O'Neil: 9780553418835 | PenguinRandomHouse.com: Books](https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/)
+
+    [The Phoenix Project - Book](https://itrevolution.com/the-phoenix-project/)
+
+- **Management**
+
+    [Five Dysfunctions Products | The Table Group](https://www.tablegroup.com/product/dysfunctions/)
+
+    [Leading Quality: How Great Leaders Deliver High Quality Software & Accelerate Growth​](https://www.leadingqualitybook.com/)
+
+    [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/)
+
+    [The Making of a Manager Book by Julie Zhuo](https://www.juliezhuo.com/book/manager.html)
+
+
+<aside>
+👩🏾‍💻 **Developer Toolkit**
+
+</aside>
+
+<aside>
+🧡 **Featured Link**
+
+[Super - Build websites with Notion](https://super.so/)
+
+</aside>
+
+- **Interesting Libraries and Packages**
+
+    [Editor.js](https://editorjs.io/)
+
+    [Headless WYSIWYG Text Editor - Tiptap Editor](https://tiptap.dev/)
+
+- **Resources**
+
+    **Common References**
+
+    [Paul Irish](https://www.paulirish.com/2012/box-sizing-border-box-ftw/)
+
+    [Web technology for developers | MDN](https://developer.mozilla.org/en-US/docs/Web)
+
+    [Devhints - TL;DR for developer documentation](https://devhints.io/)
+
+    [EmChart](https://fordinteractive.com/tools/emchart/)
+
+    **Libraries**
+
+    [Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.](https://tailwindcss.com/)
+
+- **Build, Deploy, Host**
+
+    [Storybook: UI component explorer for frontend developers](https://storybook.js.org/)
+
+    [](https://render.com/)
+
+    [Super - Build websites with Notion](https://super.so/)
+
+- **Code Sharing & Docs**
+
+    [Carbon](https://carbon.now.sh/)
+
+    [Monodraw for macOS - Helftone](https://monodraw.helftone.com/)
+
+- **Coding Playlists & Podcasts**
+
+    **Podcasts**
+
+    [Darknet Diaries - True stories from the dark side of the Internet.](https://darknetdiaries.com/)
+
+    [Introducing: Nice White Parents (Published 2020)](https://www.nytimes.com/2020/07/23/podcasts/nice-white-parents-serial.html)
+
+    [Ologies Episodes - alie ward](https://www.alieward.com/ologies)
+
+    **Coding Playlists**
+
+    [https://open.spotify.com/playlist/7JZcvu9Ngo3p1KiV57SQc7?si=38ac67316671434f](https://open.spotify.com/playlist/7JZcvu9Ngo3p1KiV57SQc7?si=38ac67316671434f)
+
+    [https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1](https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1)
+
+    [https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717](https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717)
+
+- **Rubber Ducky**
+
+    **Help! PWA Cache Issues**
+
+    [VUE | PWA | DISABLE](https://santhoshkumarravi.medium.com/vue-pwa-disable-5463e44b1f7f)
+
+    [How to clear cache of service worker?](https://stackoverflow.com/questions/45467842/how-to-clear-cache-of-service-worker)
+
+    **How to Flexbox**
+
+    [A Complete Guide to Flexbox | CSS-Tricks](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+
+    [Flexbox Froggy](https://flexboxfroggy.com/)
+
+    **Help! Other Stack Overflow Memories**
+
+    [webkit-transform breaks z-index on Safari](https://stackoverflow.com/questions/22621544/webkit-transform-breaks-z-index-on-safari)
+
+    [How to get client's IP address using JavaScript?](https://stackoverflow.com/questions/391979/how-to-get-clients-ip-address-using-javascript)
+
+    [how to draw smooth curve through N points using javascript HTML5 canvas?](https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas#7058606)
+
+- **Visual Studio Code Extensions**
+
+    **General**
+
+    [Todo Tree - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
+
+    [Auto Close Tag - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag)
+
+    [Auto Rename Tag - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
+
+    [Better Comments - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
+
+    [Docker - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+
+    [File Utils - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=sleistner.vscode-fileutils)
+
+    **Git + Github**
+
+    [GitHub Copilot - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot)
+
+    [GitLens - Git supercharged - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+
+    **Remote Development**
+
+    [Developing inside a Container using Visual Studio Code Remote Development](https://code.visualstudio.com/docs/remote/containers)
+
+    [Remote - Containers - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+    [Remote - SSH - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
+
+    [Remote Development - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
+
+    **Themes**
+
+    [Noctis - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=liviuschera.noctis)
+
+    **Vue**
+
+    [Vue Peek - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=dariofuzinato.vue-peek)
+
+- **Misc. Tools**
+
+    [Flagsmith - Open Source Feature Flag & Remote Config Service](https://flagsmith.com/)
+
+
+<aside>
+🧑🏾‍🎨 **Design Toolkit**
+
+</aside>
+
+<aside>
+🤎 **Featured Link**
+
+Free stock photos featuring yours truly, courtesy of WOCinTech Chat
+
+![25772082596_7966bd8338_c.jpg](Links%2049c6531844034e14b442d31e2a1e3ae5/25772082596_7966bd8338_c.jpg)
+
+[WOCinTech Chat](https://www.flickr.com/photos/wocintechchat/albums)
+
+</aside>
+
+- **Fonts**
+
+    [What sets Dank Mono apart?](https://medium.com/@philpl/what-sets-dank-mono-apart-1bbdc1cc3cbd)
+
+    [Introducing Operator | Fonts by Hoefler&Co.](https://www.typography.com/blog/introducing-operator)
+
+    [Google Fonts](https://fonts.google.com/specimen/Fira+Code)
+
+- **Icons & Illustrations**
+
+    **Icons**
+
+    [Budicon - Premium Icon Set Collection for your Design Project](https://budicon.co/)
+
+    [Flaticons | Premium Icon Sets](https://flaticons.co/)
+
+    [Iconic - Free "do wtf you want with" pixel-perfect icons](https://iconic.app/)
+
+    [Notion Icons](https://www.notion.vip/icons/)
+
+    **Illustrations**
+
+    [Stubborn - Free Illustrations Generator](https://stubborn.fun/)
+
+- **Resources**
+
+    **Figma Kits**
+
+    [Figma](https://www.figma.com/community/file/958383439532195363)
+
+    [Figma](https://www.figma.com/community/search?model_type=hub_files&q=wireframe)
+
+    **Lorem Ipsum**
+
+    [Meet The Ipsums](https://meettheipsums.com/)
+
+    **Color & Color Theory**
+
+    [https://www.youtube.com/watch?v=GyVMoejbGFg](https://www.youtube.com/watch?v=GyVMoejbGFg)
+
+- **Stock Photos**
+
+    [](https://www.pexels.com/)
+
+    [WOCinTech Chat](https://www.flickr.com/photos/wocintechchat/albums)
+
+- **Inspiration**
+
+    [Codrops](https://tympanus.net/codrops/)
+
+    [Mobbin - The world's largest mobile app design reference library](https://mobbin.design/browse/ios/apps)
+
+- **Design Trends**
+    - **2022**
+
+        ![628F8A28-14EB-4319-A350-14674058490D.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/628F8A28-14EB-4319-A350-14674058490D.jpeg)
+
+        [Moss | Where ideas grow](https://mossworkspace.com/)
+
+        ![5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg)
+
+        [Home - Sunroom](https://sunroom.so/)
+
+        ![3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg)
+
+        [Welcome to the world of Volv](https://volvmedia.com/)
+
+
+<aside>
+🧑🏾‍💼 **Manager Toolkit**
+
+</aside>
+
+<aside>
+🖤 **Faves**
+
+[Welcome to Rands Leadership Slack](https://randsinrepose.com/welcome-to-rands-leadership-slack/)
+
+</aside>
+
+[Management Coach & Trainer for the Tech Industry](https://larahogan.me/)
+
+[Advocate Personality](https://www.16personalities.com/infj-personality)
+
+[Welcome to Rands Leadership Slack](https://randsinrepose.com/welcome-to-rands-leadership-slack/)
+
+<aside>
+💡 **Inspiration & Interesting**
+
+</aside>
+
+<aside>
+🤍 **Faves**
+
+[Abelle hayford](https://abellehayford.com/)
+
+[Manu - I write](https://manuelmoreale.com/)
+
+</aside>
+
+- **Cool Peoples**
+
+    [LEGACY](https://www.legacy-bqpc.com/mobile-home)
+
+    [](https://www.artstation.com/amalasrosa)
+
+    [Abelle hayford](https://abellehayford.com/)
+
+    [ALYTHUH® Official Site](https://alythuh.com/)
+
+- **Cool Products**
+
+    [Mighty Networks | Build Communities, Courses & Memberships](https://www.mightynetworks.com/)
+
+    [[Forem] Community for Everyone](https://www.forem.com/)
+
+    [Qovery - The simplest way to deploy your applications on AWS](https://www.qovery.com/)
+
+    [Codespace - The code snippet manager you've been waiting for](https://codespace.app/)
+
+    [Heyday - your research helping hand](https://heyday.xyz/)
+
+    [Sift - Feel news differently](https://siftnewstherapy.com/)
+
+    [Slides - Create and Share Presentations for Free](https://slides.com/)
+
+- **Cool Websites**
+
+    [Today I Learned - web development musings semi-daily](https://ricostacruz.com/til/#articles)
+
+    [Make Lemonade](https://makelemonade.wtf/)
+
+    [Fuck I Wish I Knew That](https://fuckiwishiknewth.at/)
+
+    [Manu - I write](https://manuelmoreale.com/)
+
+    [Brucira | Strategy, Branding and UX UI Product Design Agency](https://www.brucira.com/)
+
+    [Turnislefthome.com | The Work of Timothy J. Reynolds](https://turnislefthome.com/projects)
+
+
+---
+
+- 🚫 **404 - Dead Links**
+
+    *These links no longer exist... let’s pour one out for:*
+
+    **Knotten** 🍺
+
+    ![Screen Shot 2022-02-22 at 01.02.06.png](Links%2049c6531844034e14b442d31e2a1e3ae5/Screen_Shot_2022-02-22_at_01.02.06.png)

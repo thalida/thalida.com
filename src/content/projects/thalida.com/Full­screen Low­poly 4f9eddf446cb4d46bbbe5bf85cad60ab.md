@@ -48,11 +48,3 @@ I had high-hopes of creating a version of my site with detailed case-studies for
 ## Next →
 
 [Untitled](Full%C2%ADscreen%20Low%C2%ADpoly%204f9eddf446cb4d46bbbe5bf85cad60ab/Untitled%20c230f179e70f458ea0c36694b924ac35.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

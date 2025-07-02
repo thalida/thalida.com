@@ -186,11 +186,3 @@ Snippet of the css used for styling the lines under the window label:
 ## Next →
 
 [Untitled](Illustra%C2%ADted%20Window%20bb7bf01616314ebcbfaa7f241a950bde/Untitled%200db0c41788004da6b9669b7422a932b5.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

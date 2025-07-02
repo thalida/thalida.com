@@ -115,11 +115,3 @@ You can checkout the code and fork this theme switcher on codpen! [https://codep
 You’ve reached the currently live version of thalida.com!
 
 What’s next? I dunno yet.
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

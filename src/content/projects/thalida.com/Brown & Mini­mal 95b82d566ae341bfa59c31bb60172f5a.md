@@ -54,11 +54,3 @@ Tested it out on Photoshop, liked the look, and it became part of my final desig
 ## Next →
 
 [Untitled](Brown%20&%20Mini%C2%ADmal%2095b82d566ae341bfa59c31bb60172f5a/Untitled%200d1ee187b77c44bead7f0cd5b4047737.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

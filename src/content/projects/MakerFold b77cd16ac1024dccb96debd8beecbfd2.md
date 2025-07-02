@@ -22,11 +22,3 @@ A platform for Makers to share their progress, plans, and ideas.
 ![makefold.png](MakerFold%20b77cd16ac1024dccb96debd8beecbfd2/makefold.png)
 
 ![makefold2.png](MakerFold%20b77cd16ac1024dccb96debd8beecbfd2/makefold2.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

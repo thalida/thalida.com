@@ -13,11 +13,3 @@ coverImageAlt: A screenshot of the WordBird Chrome extension interface, showing 
 A chrome plugin which will replace any words you choose with another one.
 
 [Github →](https://github.com/thalida/WordBird)   [Chrome Store →](https://chrome.google.com/webstore/detail/wordbird/phjelaokjghhjogbfmkljhghhnbidfgk?hl=en)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

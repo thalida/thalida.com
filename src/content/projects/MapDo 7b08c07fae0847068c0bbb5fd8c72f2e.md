@@ -30,11 +30,3 @@ An indoor location tracking todo app. Get reminders based on where you are in yo
 ![Dribbble HD2.png](MapDo%207b08c07fae0847068c0bbb5fd8c72f2e/Dribbble_HD2.png)
 
 ![Loading.png](MapDo%207b08c07fae0847068c0bbb5fd8c72f2e/Loading.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

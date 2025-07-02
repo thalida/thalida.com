@@ -56,11 +56,3 @@ Figure out the recipes and resources you’ll need for your next build!
 ![Recipe Tree: Collpased.png](Builder%E2%80%99s%20Guide%204ca5b9b26a3a405fab814547fd04a37a/Recipe_Tree_Collpased.png)
 
 ![Shopping List.png](Builder%E2%80%99s%20Guide%204ca5b9b26a3a405fab814547fd04a37a/Shopping_List.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

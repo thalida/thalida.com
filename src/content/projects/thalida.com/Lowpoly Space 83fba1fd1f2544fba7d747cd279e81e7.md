@@ -55,11 +55,3 @@ I created all of the images used in the scene with [Maxon3D](https://www.maxon.
 ## Next →
 
 [Untitled](Lowpoly%20Space%2083fba1fd1f2544fba7d747cd279e81e7/Untitled%2030abd728d02448978782501200487850.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

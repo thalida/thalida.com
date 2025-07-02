@@ -52,11 +52,3 @@ Visualize a Github Repo as a 3D City.
 ![Paper.codecity.14.png](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Paper.codecity.14.png)
 
 ![Paper.codecity.18.png](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Paper.codecity.18.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

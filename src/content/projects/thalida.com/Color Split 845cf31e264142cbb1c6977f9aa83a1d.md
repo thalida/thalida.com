@@ -57,11 +57,3 @@ It has a subtle parallax effect, with the shapes closer to the front moving fast
 ## Next →
 
 [Untitled](Color%20Split%20845cf31e264142cbb1c6977f9aa83a1d/Untitled%20d198ec3197be4ae3b09e67d598601551.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

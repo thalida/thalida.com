@@ -23,11 +23,3 @@ A 9x9 version of the classic game
 ![Screen Shot 2022-02-20 at 16.55.40.png](Tic-Tac-Toe%20Cubed%20902e5a7f47ed46ecac4d772923475a30/Screen_Shot_2022-02-20_at_16.55.40%201.png)
 
 ![Screen Shot 2022-02-20 at 16.58.57.png](Tic-Tac-Toe%20Cubed%20902e5a7f47ed46ecac4d772923475a30/Screen_Shot_2022-02-20_at_16.58.57.png)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

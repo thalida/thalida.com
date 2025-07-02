@@ -63,11 +63,3 @@ The “title” text at the top of the space scene changes based on the time of 
 ## Next →
 
 [Untitled](Space%20Calendar%20825ae7255e084572a394ebe10de09b5e/Untitled%20cde25c4e82db4a7d841b0177621b221e.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

@@ -24,11 +24,3 @@ The answer was yes.
 ![Screen Shot 2022-02-20 at 21.48.02.png](Is%20Trump%20Still%20Fucking%20President%209c387b2d90e44e40a9e7fade27b836b6/Screen_Shot_2022-02-20_at_21.48.02.png)
 
 [Github →](https://github.com/thalida/istrumpstillfuckingpresident)   [Website →](https://thalida.github.io/istrumpstillfuckingpresident/)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)

@@ -57,11 +57,3 @@ This folded-shadow look was all the rage for a while, and I created a mockup of 
 ## Next →
 
 [Untitled](Flat%20Cards%203e295c92fcd0402dbee1d35bff5cb07a/Untitled%2015cb81bae7b34ca8ba77075a515b4057.csv)
-
----
-
-# 🦄⚡
-
-**Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)**
-
-[View in Notion →](https://tunl.link/zOadMW)
