@@ -3,6 +3,8 @@ title: "Knowledge Base: Django Generic Fields"
 description: Guidelines and Answers to all things Django Generic Fields
 publishedOn: 2023-11-13T21:47:00Z
 updatedOn: 2023-11-14T02:33:00Z
+coverImage: knowledge-base-django-generic-fields/Screenshot 2025-07-02 at 17.43.24.png
+coverImageAlt: "Django Generic Fields"
 tags:
   - Knowledge Base
   - Django

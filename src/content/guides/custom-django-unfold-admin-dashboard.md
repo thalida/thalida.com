@@ -3,6 +3,8 @@ title: Custom Django Unfold Admin Dashboard
 description: Setup a custom admin dashboard in an existing repo, exactly like the one shown on Unfold Formula Demo project.
 publishedOn: 2023-11-11T23:18:00Z
 updatedOn: 2023-11-14T02:29:00Z
+coverImage: custom-django-unfold-admin-dashboard/Screenshot_2023-11-12_at_00.13.08.png
+coverImageAlt: Screenshot of the custom Django admin dashboard using Unfold theme, showing a modern and clean interface with various statistics and charts.
 tags:
   - Django
   - Django Unfold
@@ -12,7 +14,7 @@ tags:
 
 Setup a custom admin dashboard in an existing repo, using the templates provided by the Unfold Formula Demo project. [https://demo.unfoldadmin.com/admin/](https://demo.unfoldadmin.com/admin/)
 
-![Screenshot 2023-11-12 at 00.13.08.png](Custom%20Django%20Unfold%20Admin%20Dashboard%20ecbcab8f313a41d0a3c4bd2388b4136e/Screenshot_2023-11-12_at_00.13.08.png)
+![Screenshot 2023-11-12 at 00.13.08.png](custom-django-unfold-admin-dashboard/Screenshot_2023-11-12_at_00.13.08.png)
 
 ---
 

@@ -124,9 +124,9 @@ APIs & Services → Credentials
     4. **Authorized redirect URIs:**
         1. The same as Authorized Javascript origins
 
-![Screenshot 2023-11-11 at 13.22.17.png](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.22.17.png)
+![Screenshot 2023-11-11 at 13.22.17.png](django-react-native-auth/Screenshot_2023-11-11_at_13.22.17.png)
 
-![Screenshot 2023-11-11 at 13.37.21.png](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.37.21.png)
+![Screenshot 2023-11-11 at 13.37.21.png](django-react-native-auth/Screenshot_2023-11-11_at_13.37.21.png)
 
 ### 1.4.2 Update Django Settings
 
@@ -151,11 +151,11 @@ The settings for Microsoft OAuth are more complicated than setting up for Google
     2. **Supported account types:** Select which types of accounts should be allowed to sign in.
 3. Click **Register**
 
-![App Registration > New Application](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.36.11.png)
+![App Registration > New Application](django-react-native-auth/Screenshot_2023-11-11_at_13.36.11.png)
 
 App Registration > New Application
 
-![App Registration Page](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.44.41.png)
+![App Registration Page](django-react-native-auth/Screenshot_2023-11-11_at_13.44.41.png)
 
 App Registration Page
 
@@ -168,7 +168,7 @@ App Registration Page
 3. Under **Advanced settings** enable `Allow public client flows`
 4. **Save**
 
-![Screenshot 2023-11-11 at 13.58.47.png](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.58.47.png)
+![Screenshot 2023-11-11 at 13.58.47.png](django-react-native-auth/Screenshot_2023-11-11_at_13.58.47.png)
 
 **Update Permissions**
 
@@ -180,7 +180,7 @@ App Registration Page
     4. `profile`
     5. `User.Read`
 
-![Screenshot 2023-11-11 at 13.58.10.png](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9/Screenshot_2023-11-11_at_13.58.10.png)
+![Screenshot 2023-11-11 at 13.58.10.png](django-react-native-auth/Screenshot_2023-11-11_at_13.58.10.png)
 
 ### 1.5.2 Update **Django Settings**
 
@@ -427,7 +427,7 @@ return (
 
 When the Google Prompt is successful, get the `access_token`returned by Google, and send it to our Django API backend to convert to a Django Social Auth `access_token`
 
-For `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9.md))
+For `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](django-react-native-auth.md))
 
 Save the token returned by the Django API, this token can be used later on as an `Authorization` header on axios.
 
@@ -542,7 +542,7 @@ return (
 
 For Microsoft auth, we need to convert the code returned to an access token, and then pass *that* token along to our Django API.
 
-As with Google Auth, for `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](Django%20x%20React%20Native%20Authentication%20953904b7a53245b2a4cd095c0e18e5f9.md))
+As with Google Auth, for `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](django-react-native-auth.md))
 
 Save the `access_token` returned by the Django API in a state (or store), this token can be used later on as an `Authorization` header on axios.
 
