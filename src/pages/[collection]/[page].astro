@@ -14,6 +14,11 @@ export async function getStaticPaths({ paginate }) {
 
   for (const collection of COLLECTION_CHOICES) {
     const posts = await getCollection(collection);
+    posts.sort((a, b) => {
+      const dateA = new Date(a.data.updatedOn || a.data.publishedOn).getTime();
+      const dateB = new Date(b.data.updatedOn || b.data.publishedOn).getTime();
+      return dateB - dateA; // Sort in descending order
+    });
     const paginatedPosts = paginate(posts, {
       params: { collection, page: 1 },
       pageSize: 20,

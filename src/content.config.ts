@@ -6,7 +6,7 @@ import { glob, file } from 'astro/loaders';
 
 // 3. Define your collection(s)
 
-export const COLLECTION_CHOICES = ["guides", "links", "creations", "recipes"] as const;
+export const COLLECTION_CHOICES = ["guides", "links", "projects", "gallery", "recipes"] as const;
 
 function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
   return defineCollection({
@@ -38,8 +38,8 @@ export const collections = COLLECTION_CHOICES.reduce((acc, collectionName) => {
 
 
 export const collectionMeta = {
-  "creations": {
-    "title": "Creations",
+  "projects": {
+    "title": "Projects",
     "description": "A collection of my personal and professional projects, crafts, and experiments.",
     "bgColor": "bg-red-50 dark:bg-red-950",
     "headerColor": "bg-gradient-to-r from-rose-400 to-red-600 bg-clip-text text-transparent",
@@ -59,6 +59,13 @@ export const collectionMeta = {
     "headerColor": "bg-gradient-to-r from-sky-400 to-blue-600 bg-clip-text text-transparent",
     "imageBgColor": "bg-gradient-to-r from-cyan-100 to-sky-200 dark:from-cyan-700 dark:to-sky-800",
   },
+  "gallery": {
+    "title": "Gallery",
+    "description": "A showcase of my photography, art, and visual projects.",
+    "bgColor": "bg-yellow-50 dark:bg-yellow-950",
+    "headerColor": "bg-gradient-to-r from-amber-400 to-yellow-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-orange-100 to-amber-200 dark:from-orange-700 dark:to-amber-800",
+  },
   "recipes": {
     "title": "Recipes",
     "description": "A collection of my favorite recipes, from quick meals to elaborate dishes.",
@@ -69,8 +76,8 @@ export const collectionMeta = {
 }
 
 export const collectionOrder = [
-  "creations",
+  "projects",
   "guides",
+  "gallery",
   "links",
-  "recipes",
 ];

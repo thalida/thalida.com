@@ -1,5 +1,6 @@
 ---
 const { post } = Astro.props;
+import { Image } from 'astro:assets';
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.config";
 const collection = collectionMeta[post.collection]
 
