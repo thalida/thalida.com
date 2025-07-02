@@ -6,7 +6,7 @@ import { glob, file } from 'astro/loaders';
 
 // 3. Define your collection(s)
 
-export const COLLECTION_CHOICES = ["guides", "links", "projects", "gallery", "recipes"] as const;
+export const COLLECTION_CHOICES = ["guides", "links", "projects", "gallery", "recipes", "versions"] as const;
 
 function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
   return defineCollection({
@@ -72,6 +72,13 @@ export const collectionMeta = {
     "bgColor": "bg-emerald-50 dark:bg-emerald-950",
     "headerColor": "bg-gradient-to-r from-green-400 to-emerald-600 bg-clip-text text-transparent",
     "imageBgColor": "bg-gradient-to-r from-lime-100 to-green-200 dark:from-lime-700 dark:to-green-800",
+  },
+  "versions": {
+    "title": "thalida.com version history",
+    "description": "A detailed history of the versions of thalida.com, showcasing the evolution of the site.",
+    "bgColor": "bg-gray-50 dark:bg-gray-950",
+    "headerColor": "bg-gradient-to-r from-gray-400 to-gray-600 bg-clip-text text-transparent",
+    "imageBgColor": "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800",
   },
 }
 

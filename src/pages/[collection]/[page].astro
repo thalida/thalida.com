@@ -37,7 +37,7 @@ export async function getStaticPaths({ paginate }) {
     <Header />
 
     <div class={`@container my-8 p-8 flex flex-col gap-4 ${collection.bgColor} rounded-3xl text-center`}>
-      <h1 class={`text-5xl lg:text-7xl font-brand ${collection.headerColor} mb-2`}>
+      <h1 class={`text-5xl lg:text-7xl font-brand ${collection.headerColor} pb-2 lg:pb-4 mb-2`}>
         {collection.title}
       </h1>
       <p class="text-base lg:text-xl">{collection.description}</p>

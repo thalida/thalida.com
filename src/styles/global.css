@@ -75,6 +75,7 @@ livewindow-scene {
   background-blend-mode: color-burn;
 }
 
+.prose a,
 a.inline-link,
 a.button-link,
 a.card {
@@ -84,6 +85,7 @@ a.card {
 a.card {
   @apply transition-transform;
 }
+.prose a,
 a.inline-link {
   @apply inline-block transition-all;
   @apply text-primary-600 dark:text-primary-300;
@@ -96,5 +98,8 @@ a.button-link {
   @apply hover:text-primary-900 dark:hover:text-primary-100 hover:border-primary-900 dark:hover:border-primary-100;
   @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100 focus-visible:border-primary-900 dark:focus-visible:border-primary-100;
 }
-
 a.card {}
+
+.prose {
+  --tw-prose-hr: oklch(0 0 0 / 0.5);
+}
