@@ -29,14 +29,14 @@ const collection = collectionMeta[post.collection]
 
     <Header />
 
-    <div class="m-8 flex flex-col items-center">
+    <div class="my-8 lg:mx-8 flex flex-col items-center">
       <a href={`/${post.collection}`} class="inline-link">
         {collection.title}
       </a>
       <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor} text-center`}>
         {post.data.title}
       </h1>
-      <article class="mt-16 prose lg:prose-lg dark:prose-invert">
+      <article class="container mt-16 prose lg:prose-lg dark:prose-invert">
         <Content />
       </article>
     </div>
