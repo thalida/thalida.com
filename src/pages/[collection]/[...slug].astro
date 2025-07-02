@@ -4,6 +4,7 @@ import { LinkPreview } from "@astro-community/astro-embed-link-preview";
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../content.config";
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
+import BlogPostCard from "../../components/BlogPostCard.astro";
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -22,6 +23,20 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const collection = collectionMeta[post.collection]
+
+const collectionPosts = await getCollection(post.collection);
+collectionPosts.sort((a, b) => {
+  const dateA = new Date(a.data.updatedOn || a.data.publishedOn).getTime();
+  const dateB = new Date(b.data.updatedOn || b.data.publishedOn).getTime();
+  return dateB - dateA; // Sort in descending order
+});
+
+const currPostIndex = collectionPosts.findIndex(p => p.id === post.id);
+const prevPostIndex = currPostIndex - 1;
+const prevPost = collectionPosts[prevPostIndex] || null;
+const nextPostIndex = currPostIndex + 1;
+const nextPost = collectionPosts[nextPostIndex] || null;
+
 ---
 
 <Layout>
@@ -36,9 +51,30 @@ const collection = collectionMeta[post.collection]
       <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor} text-center`}>
         {post.data.title}
       </h1>
-      <article class="container mt-16 prose lg:prose-lg dark:prose-invert">
+      <article class="container mt-16 prose lg:prose-lg prose-slate dark:prose-invert">
         <Content />
       </article>
+
+      <div class="container grid grid-cols-2 my-8 gap-8 border-t-2 border-surface-200 pt-8">
+        <div class="flex flex-col items-start justify-start gap-4">
+          <a href={prevPost ? `/${prevPost.collection}/${prevPost.id}` : "#"} class={prevPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Previous</span>
+          </a>
+          <div class="max-w-96 w-full grow">
+            {prevPost ? <BlogPostCard post={prevPost} />: <div class="w-1/4"></div>}
+          </div>
+        </div>
+        <div class="flex flex-col items-end justify-start gap-4">
+          <a href={nextPost ? `/${nextPost.collection}/${nextPost.id}` : "#"} class={nextPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+            <span class="hidden sm:inline">Next</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <div class="max-w-96 w-full grow">
+            {nextPost ? <BlogPostCard post={nextPost} />: <div class="w-1/4"></div>}
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
