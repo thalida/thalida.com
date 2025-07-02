@@ -9,15 +9,9 @@ coverImageAlt: A fullscreen lowpoly live space scene, featuring a starry backgro
 
 ![Untitled](2014-fullscreen-lowpoly/Untitled.png)
 
-**A fullscreen lowpoly live space scene**
-
-**active:**
-
-Jan 2014 → Jan 2015
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2014)   [View Live →](https://2014.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2014 - January 2015 | [Github →](https://github.com/thalida/thalida.com/tree/v-2014) | [View Live →](https://2014.v.thalida.com) |
 
 <aside>
 ⚠️ I abandoned this design and stuck with my current site of the time.

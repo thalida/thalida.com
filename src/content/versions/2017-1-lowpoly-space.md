@@ -9,15 +9,9 @@ coverImageAlt: A screenshot of the lowpoly space scene, showing a split-screen w
 
 ![Untitled](2017-1-lowpoly-space/Untitled.png)
 
-**Split-screen v2: Re-using the lowpoly space scene an earlier version**
-
-**active:**
-
-Mar 2017 → Dec 2017
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2017-1)   [View Live →](https://2017-1.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| March 2017 - December 2017 | [Github →](https://github.com/thalida/thalida.com/tree/v-2017-1) | [View Live →](https://2017-1.v.thalida.com) |
 
 ## Story
 

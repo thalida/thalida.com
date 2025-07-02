@@ -7,6 +7,13 @@ coverImage: 2007-the-lost-era/Screenshot 2025-07-02 at 13.56.39.png
 coverImageAlt: Screenshot of the lost era of thalida.com, showcasing early web design elements and features.
 ---
 
+
+![The Lost Era](<2007-the-lost-era/Screenshot 2025-07-02 at 13.56.39.png>)
+
+| **Year(s)** | | |
+| ----------- | --------- | -------- |
+| January 2007 - January 2012 | | |
+
 ## Overview
 
 Somewhere around 2012/2013 I couldn’t afford hosting.

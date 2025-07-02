@@ -2,13 +2,8 @@
 const { post } = Astro.props;
 import { Image } from 'astro:assets';
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.config";
+import { formatDate } from "../utils";
 const collection = collectionMeta[post.collection]
-
-
-function formatDate(date: string) {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(date).toLocaleDateString('en-US', options);
-}
 ---
 
 <a

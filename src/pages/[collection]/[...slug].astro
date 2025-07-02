@@ -5,6 +5,7 @@ import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../conte
 import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/Header.astro";
 import BlogPostCard from "../../components/BlogPostCard.astro";
+import { formatDate } from "../../utils";
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {
@@ -36,7 +37,6 @@ const prevPostIndex = currPostIndex - 1;
 const prevPost = collectionPosts[prevPostIndex] || null;
 const nextPostIndex = currPostIndex + 1;
 const nextPost = collectionPosts[nextPostIndex] || null;
-
 ---
 
 <Layout>
@@ -45,12 +45,20 @@ const nextPost = collectionPosts[nextPostIndex] || null;
     <Header />
 
     <div class="my-8 lg:mx-8 flex flex-col items-center">
-      <a href={`/${post.collection}`} class="inline-link">
-        {collection.title}
-      </a>
-      <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor} text-center`}>
-        {post.data.title}
-      </h1>
+
+      <div class="flex flex-col items-center">
+        <a href={`/${post.collection}`} class="inline-link">
+          {collection.title}
+        </a>
+        <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor} text-center`}>
+          {post.data.title}
+        </h1>
+        <p class="font-bold text-base lg:text-xl text-center mb-4">{post.data.description}</p>
+        <p class="text-sm text-center">Published {formatDate(post.data.publishedOn)}
+          {post.data.updatedOn ? `| Updated ${formatDate(post.data.updatedOn)}` : ''}
+        </p>
+      </div>
+
       <article class="container mt-16 prose lg:prose-lg prose-slate dark:prose-invert">
         <Content />
       </article>

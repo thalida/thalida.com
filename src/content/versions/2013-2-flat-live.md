@@ -9,15 +9,9 @@ coverImageAlt: The original live weather and time version built on PHP
 
 ![Untitled](2013-2-flat-live/Untitled.png)
 
-**The original live weather and time version built on PHP**
-
-**active:**
-
-Mar 2013 → Jan 2014
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2013-2)   [View Live →](https://2013-2.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| March 2013 - January 2014 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-2)  | [View Live →](https://2013-2.v.thalida.com) |
 
 ## Story
 

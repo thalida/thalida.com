@@ -9,15 +9,9 @@ coverImageAlt: A floating card that flips over, displaying live time data based 
 
 ![Untitled](2015-magic-floating-card/Untitled.png)
 
-**A floating card (that flips over) with live time data**
-
-**active:**
-
-Jan 2015 → Aug 2016
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2015)   [View Live →](https://2015.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2015 - August 2016 | [Github →](https://github.com/thalida/thalida.com/tree/v-2015) | [View Live →](https://2015.v.thalida.com) |
 
 ## Story
 

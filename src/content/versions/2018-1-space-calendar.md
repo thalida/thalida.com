@@ -10,15 +10,9 @@ coverImageAlt: "Split-screen v3.1 this time featuring a space scene calendar"
 
 ![Untitled](2018-1-space-calendar/Untitled.png)
 
-**Split-screen v3.1 this time featuring a space scene calendar**
-
-**active:**
-
-Jan 2018 → Aug 2018
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2018-1)   [View Live →](https://2018-1.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2018 - August 2018 | [Github →](https://github.com/thalida/thalida.com/tree/v-2018-1) |  [View Live →](https://2018-1.v.thalida.com) |
 
 ## Story
 

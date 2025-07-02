@@ -9,15 +9,9 @@ coverImageAlt: A screenshot of the Flat Cards website, showcasing a flat card de
 
 ![Untitled](2013-1-flat-cards/Untitled.png)
 
-**A short lived version of my site that featured flat cards, because that's all the rage**
-
-**active:**
-
-Jan 2013 → Mar 2013
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2013-1)   [View Live →](https://2013-1.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2013 - March 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-1) | [View Live →](https://2013-1.v.thalida.com) |
 
 ## Designs
 

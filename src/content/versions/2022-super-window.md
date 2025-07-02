@@ -9,21 +9,9 @@ coverImageAlt: A screenshot of the thalida.com homepage, showcasing a Notion-bac
 
 ![Screen Shot 2022-07-31 at 15.28.17.png](2022-super-window/Screen_Shot_2022-07-31_at_15.28.17.png)
 
-**A Notion-backed site**
-
-**active:**
-
-Jan 2022 → July 2025
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com)   [View Live →](https://thalida.com)
-
-## Resources
-
-[Styleguide](../../../../Styleguide%2024d14e3d46d14406b0a5d147a43f8e70.md)
-
-[C*omponents*](../../../../Components%20f3c355a3d82c4d52b6dcbfe68b89e1e3.md)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2022 - July 2025 | [Github →](https://github.com/thalida/thalida.com/tree/v-2022) | [Live →](https://thalida.com) |
 
 ## 💡Idea
 

@@ -9,15 +9,9 @@ coverImageAlt: A split screen design with a live gradient, showcasing a colorful
 
 ![Untitled](2016-color-split/Untitled.png)
 
-**Split-screen v1: A split screen design with a live gradient**
-
-**active:**
-
-Aug 2016 → Mar 2017
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2016)     [View Live →](https://2016.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| August 2016 - March 2017 | [Github →](https://github.com/thalida/thalida.com/tree/v-2016) | [View Live →](https://2016.v.thalida.com) |
 
 ## Story
 

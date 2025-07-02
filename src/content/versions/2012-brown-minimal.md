@@ -9,15 +9,9 @@ coverImageAlt: Screenshot of the Brown & Minimal design of thalida.com, featurin
 
 ![Untitled](2012-brown-minimal/Untitled.png)
 
-**Oh so very very sepia**
-
-**active:**
-
-Jan 2012 → Jan 2013
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2012)   [View Live →](https://2012.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| January 2012 - January 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2012) |  [View Live →](https://2012.v.thalida.com) |
 
 ## Story
 

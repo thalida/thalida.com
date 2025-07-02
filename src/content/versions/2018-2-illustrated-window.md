@@ -9,15 +9,9 @@ coverImageAlt: Introducing the illustrated live-weather window.
 
 ![Untitled](2018-2-illustrated-window/Untitled.png)
 
-**Introducing the illustrated live-weather window.**
-
-**active:**
-
-Aug 2018 → Aug 2022
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2018-2)   [View Live →](https://2018-2.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| August 2018 - August 2022 | [Github →](https://github.com/thalida/thalida.com/tree/v-2018-2)  | [View Live →](https://2018-2.v.thalida.com) |
 
 ## Story
 

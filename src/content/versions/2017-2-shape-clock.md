@@ -9,15 +9,9 @@ coverImageAlt: "Split-screen v3: Attempting to feature a very-odd-looking shape"
 
 ![Untitled](2017-2-shape-clock/Untitled.png)
 
-**Split-screen v3: Attempting to feature a very-odd-looking shape**
-
-**active:**
-
-Dec 2017 → Jan 2018
-
-**www:**
-
-[Github →](https://github.com/thalida/thalida.com/tree/v-2017-2)   [View Live →](https://2017-2.v.thalida.com)
+| **Year(s)** | **GitHub** | **Link** |
+| ----------- | --------- | -------- |
+| December 2017 - January 2018 | [Github →](https://github.com/thalida/thalida.com/tree/v-2017-2) | [View Live →](https://2017-2.v.thalida.com) |
 
 ## Story
 
