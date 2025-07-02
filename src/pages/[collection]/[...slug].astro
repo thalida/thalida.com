@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from "astro:content";
+import { LinkPreview } from "@astro-community/astro-embed-link-preview";
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../content.config";
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/Header.astro";
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  let paths = [];
+  for (const collection of COLLECTION_CHOICES) {
+    const posts = await getCollection(collection);
+    const collectionPaths = posts.map((post) => ({
+      params: { collection: post.collection, slug: post.id },
+      props: { post },
+    }));
+    paths = paths.concat(collectionPaths);
+  }
+  return paths;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const collection = collectionMeta[post.collection]
+---
+
+<Layout>
+  <div class="h-full p-8">
+
+    <Header />
+
+    <div class="m-8 flex flex-col items-center">
+      <a href={`/${post.collection}`} class="inline-link">
+        {collection.title}
+      </a>
+      <h1 class={`py-8 text-5xl lg:text-7xl font-brand ${collection.headerColor} text-center`}>
+        {post.data.title}
+      </h1>
+      <article class="mt-16 prose lg:prose-lg dark:prose-invert">
+        <Content />
+      </article>
+    </div>
+
+  </div>
+
+</Layout>

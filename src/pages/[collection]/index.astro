@@ -1,0 +1,13 @@
+---
+import { COLLECTION_CHOICES } from "../../content.config";
+
+const params = Astro.params;
+
+export function getStaticPaths() {
+  return COLLECTION_CHOICES.map((collection) => ({
+    params: { collection },
+  }));
+}
+
+return Astro.rewrite(`/${params.collection}/1`);
+---

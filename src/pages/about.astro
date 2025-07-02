@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+
+import meAvatar from "../assets/about/me-avatar.png";
+import meHeadshot from "../assets/about/me-headshot.png";
+import meMemoji from "../assets/about/me-memoji.png";
+import meRainbow from "../assets/about/me-rainbow.png";
+
+---
+
+<Layout>
+  <div class="h-full p-8">
+    <Header />
+
+    <div class="m-8 flex flex-col items-center">
+      <h1 class={`py-8 text-5xl lg:text-7xl font-brand text-center`}>
+        About
+      </h1>
+      <article class="mt-16 prose lg:prose-xl dark:prose-invert">
+        <div class="grid grid-cols-4 gap-8">
+          <Image
+            src={meMemoji}
+            alt="A Memoji of Thalida"
+          />
+          <Image
+            src={meHeadshot}
+            alt="A headshot of Thalida"
+            class="rounded-3xl"
+          />
+          <Image
+            src={meAvatar}
+            alt="A cartoon avatar of Thalida"
+            class="rounded-full"
+          />
+          <Image
+            src={meRainbow}
+            alt="A rainbow themed image of Thalida"
+            class="rounded-3xl"
+          />
+        </div>
+        <h2>Hey, I'm Thalida!</h2>
+        <p>
+          I’m a queer (pronouns they/she) first generation Trinidadian-American Engineer based in New York.
+        </p>
+        <p>
+          Over 14 years ago for my 16th birthday I wanted one thing: a domain of my own. I was lucky enough to have a supportive mother who gifted me thalida.com, and over the years this site has been the place where I learn, grow, and experiment.
+        </p>
+        <p>
+          I use this space to practice and learn, break things and experiment, grow and challenge myself in ways that have fewer consequences than messing around on a domain someone else owns. Here I am able to push myself as an engineer, designer, and writer. Which is all to say: if it’s ever broken, janky, or weird, I’m probably in the process of learning something new, and you’re coming along for the ride with me! ✨
+        </p>
+        <p>
+          If you're interested in connecting:
+        </p>
+        <ul>
+          <li> I'm on <a href="https://www.linkedin.com/in/thalida/" class="inline-link">LinkedIn</a></li>
+          <li> Or, send me an <a href="mailto:hello@thalida.com" class="inline-link">email</a></li>
+        </ul>
+      </article>
+    </div>
+
+  </div>
+</Layout>

@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *, .dark-scene, .dark-scene *));
+@custom-variant loading (&:where(.loading, .loading *));
+
+@theme {
+  --font-sans: Mulish, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-brand: "Bagel Fat One", system-ui;
+}
+
+/* https://www.tints.dev/palette/v1:c3VyZmFjZXxlMmU1ZjF8MTAwfHB8MHwwfDB8MTAwfGE */
+@theme {
+  --color-surface-50: oklch(96.51% 0.008 278.75);
+  --color-surface-100: oklch(92.31% 0.017 274.86);
+  --color-surface-200: oklch(83.83% 0.036 273.21);
+  --color-surface-300: oklch(75.2% 0.056 272.36);
+  --color-surface-400: oklch(66.67% 0.078 270.74);
+  --color-surface-500: oklch(58.08% 0.091 268.72);
+  --color-surface-600: oklch(48.54% 0.077 268.81);
+  --color-surface-700: oklch(39.9% 0.062 267.99);
+  --color-surface-800: oklch(31.27% 0.049 267.49);
+  --color-surface-900: oklch(22.57% 0.036 269.31);
+  --color-surface-950: oklch(17.68% 0.03 270.98);
+}
+
+
+/* https://www.tints.dev/palette/v1:c2Vjb25kYXJ5fDRBQTBGRnw0MDB8cHwwfDB8MHwxMDB8YQ */
+@theme {
+  --color-primary-50: oklch(96.66% 0.016 266.31);
+  --color-primary-100: oklch(92.29% 0.037 263.63);
+  --color-primary-200: oklch(84.49% 0.077 261.92);
+  --color-primary-300: oklch(77.7% 0.114 258.43);
+  --color-primary-400: oklch(69.72% 0.163 253.1);
+  --color-primary-500: oklch(60.39% 0.171 249.96);
+  --color-primary-600: oklch(50.94% 0.144 249.97);
+  --color-primary-700: oklch(41.41% 0.118 250.11);
+  --color-primary-800: oklch(32.79% 0.093 250.06);
+  --color-primary-900: oklch(23.2% 0.066 250.45);
+  --color-primary-950: oklch(17.58% 0.051 251.02);
+}
+
+/* https://www.tints.dev/palette/v1:YWNjZW50fDRBRkZBNXwxMDB8cHwwfDB8MHwxMDB8YQ */
+@theme {
+  --color-secondary-50: oklch(94.7% 0.083 156.56);
+  --color-secondary-100: oklch(88.9% 0.191 156.6);
+  --color-secondary-200: oklch(80.56% 0.193 156.55);
+  --color-secondary-300: oklch(72.15% 0.174 156.42);
+  --color-secondary-400: oklch(63.78% 0.154 156.37);
+  --color-secondary-500: oklch(55.42% 0.133 156.45);
+  --color-secondary-600: oklch(47.03% 0.113 156.26);
+  --color-secondary-700: oklch(38.59% 0.092 156.85);
+  --color-secondary-800: oklch(30.32% 0.073 156.75);
+  --color-secondary-900: oklch(21.8% 0.052 157.03);
+  --color-secondary-950: oklch(17.21% 0.042 156.2);
+}
+
+livewindow-scene {
+  position: relative;
+}
+
+.dark livewindow-scene::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/noise/030.png');
+  background-position: center;
+  background-repeat: repeat;
+  background-size: contain;
+  opacity: 0.2;
+  background-color: #00BEFF;
+  background-blend-mode: color-burn;
+}
+
+a.inline-link,
+a.button-link,
+a.card {
+  @apply ease-in-out duration-500;
+  @apply hover:-rotate-1 hover:scale-105 hover:drop-shadow-2xl;
+}
+a.card {
+  @apply transition-transform;
+}
+a.inline-link {
+  @apply inline-block transition-all;
+  @apply text-primary-600 dark:text-primary-300;
+  @apply hover:text-primary-900 dark:hover:text-primary-100;
+  @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100;
+}
+a.button-link {
+  @apply inline-block transition-all rounded-2xl py-1 px-4;
+  @apply text-primary-600 dark:text-primary-300 border border-primary-600 dark:border-primary-300;
+  @apply hover:text-primary-900 dark:hover:text-primary-100 hover:border-primary-900 dark:hover:border-primary-100;
+  @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100 focus-visible:border-primary-900 dark:focus-visible:border-primary-100;
+}
+
+a.card {}
