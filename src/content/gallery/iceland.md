@@ -7,4 +7,4 @@ coverImageAlt: A breathtaking view of Iceland's natural beauty.
 ---
 
 ![Iceland](./images/iceland_photo.jpg)
-![Iceland Layered Illustration](./images/iceland_layered.jpg)
+![Iceland Layered Illustration](./images/iceland_layered_sketch.jpg)
