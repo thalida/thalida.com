@@ -75,15 +75,25 @@ livewindow-scene {
 }
 
 a.inline-link,
+a.button-link,
 a.card {
-  @apply transition-all ease-in-out duration-500;
+  @apply ease-in-out duration-500;
   @apply hover:-rotate-1 hover:scale-105 hover:drop-shadow-2xl;
 }
+a.card {
+  @apply transition-transform;
+}
 a.inline-link {
-  @apply inline-block;
+  @apply inline-block transition-all;
   @apply text-primary-600 dark:text-primary-300;
   @apply hover:text-primary-900 dark:hover:text-primary-100;
   @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100;
+}
+a.button-link {
+  @apply inline-block transition-all rounded-2xl py-1 px-4;
+  @apply text-primary-600 dark:text-primary-300 border border-primary-600 dark:border-primary-300;
+  @apply hover:text-primary-900 dark:hover:text-primary-100 hover:border-primary-900 dark:hover:border-primary-100;
+  @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100 focus-visible:border-primary-900 dark:focus-visible:border-primary-100;
 }
 
 a.card {}

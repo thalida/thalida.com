@@ -1,0 +1,30 @@
+---
+const { post } = Astro.props;
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.config";
+const collection = collectionMeta[post.collection]
+
+
+function formatDate(date: string) {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(date).toLocaleDateString('en-US', options);
+}
+---
+
+<a
+  href={`/${post.collection}/${post.id}`}
+  class="h-full w-full card col-span-1 flex flex-col justify-between bg-white dark:bg-black rounded-2xl p-4 gap-2"
+>
+  <div class={ `w-full aspect-video flex items-center justify-center ${collection.imageBgColor} rounded-lg overflow-hidden relative` }>
+    {post.data.coverImage && (<Image
+      src={post.data.coverImage}
+      alt={post.data.coverImageAlt}
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />)}
+  </div>
+  <div>
+    <p class="text-lg font-bold">{post.data.title}</p>
+    { post.data.description && (<p class="text-sm">{post.data.description}</p>)}
+  </div>
+  <p class="text-xs opacity-50">{formatDate(post.data.updatedOn || post.data.publishedOn)}</p>
+</a>

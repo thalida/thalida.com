@@ -1,9 +1,10 @@
 ---
 import "../styles/global.css";
+const { bodyColor = "bg-surface-100 dark:bg-surface-900" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="bg-surface-100 dark:bg-surface-900">
+<html lang="en" class={`${bodyColor}`}>
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />

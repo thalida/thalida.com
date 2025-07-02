@@ -101,7 +101,7 @@ export default class SceneClock {
 
     const minSegmentWidth = 20; // Minimum width for the segments
     const maxSegmentWidth = 80;
-    const segmentWidth = Math.min(
+    let segmentWidth = Math.min(
       Math.max(
         this.scene.canvasWidth / 1.5 / numSegments - gap,
         minSegmentWidth
