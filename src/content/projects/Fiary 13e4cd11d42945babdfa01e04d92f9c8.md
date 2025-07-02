@@ -52,7 +52,3 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 ### Paper Sketches
 
 ![Paper.fiary.5.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.5.png)
-
----
-
-🛠 **Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)** — [View this site in Notion →](../../../thalida%20com%20e30e8cc931344e07ad53bf53c3030bf1.md)

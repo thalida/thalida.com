@@ -30,7 +30,3 @@ Experimental site to house ideas and notes, made for me by me. External consumpt
 [thisisalso.me by Thalida Noel](https://dribbble.com/thalida/collections/1034418-thisisalso-me)
 
 [Notes & Todos by Thalida Noel](https://dribbble.com/thalida/collections/967810-Notes-Todos)
-
----
-
-🛠 **Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)** — [View this site in Notion →](../../../thalida%20com%20e30e8cc931344e07ad53bf53c3030bf1.md)

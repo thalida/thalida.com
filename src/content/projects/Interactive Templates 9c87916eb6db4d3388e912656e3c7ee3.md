@@ -24,7 +24,3 @@ Google Docs extension to add proper templates, with fillable fields (a la PDF te
 ### Inspiration
 
 [Variables by Thalida Noel](https://dribbble.com/thalida/collections/904201-Variables)
-
----
-
-🛠 **Built with [Notion](https://www.notion.so/product), [Super](https://super.so/), and [Svelte](https://svelte.dev/)** — [View this site in Notion →](../../../thalida%20com%20e30e8cc931344e07ad53bf53c3030bf1.md)
