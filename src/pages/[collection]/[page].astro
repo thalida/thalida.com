@@ -47,12 +47,12 @@ export async function getStaticPaths({ paginate }) {
       <p class="text-sm opacity-50 mt-4"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> posts </p>
       <div class="flex flex-row items-center justify-between gap-4 mt-4">
         <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
-          <i class="fa-solid fa-arrow-left ml-2"></i>
-          <span>Previous</span>
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Previous</span>
         </a>
-        <a href={page.url.next || '#'} class={page.url.next ? 'button-link ' : 'button-link opacity-20 cursor-default'} aria-label="Next page">
-          <span>Next</span>
-          <i class="fa-solid fa-arrow-right ml-2"></i>
+        <a href={page.url.next || '#'} class={page.url.next ? 'button-link text-right ' : 'button-link opacity-20 cursor-default text-right'} aria-label="Next page">
+          <span class="hidden sm:inline">Next</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
     </div>
@@ -69,14 +69,15 @@ export async function getStaticPaths({ paginate }) {
       <p class="text-sm opacity-50 mt-4"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> posts </p>
       <div class="flex flex-row items-center justify-between gap-4 mt-4">
         <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
-          <i class="fa-solid fa-arrow-left ml-2"></i>
-          <span>Previous</span>
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Previous</span>
         </a>
-        <a href={page.url.next || '#'} class={page.url.next ? 'button-link ' : 'button-link opacity-20 cursor-default'} aria-label="Next page">
-          <span>Next</span>
-          <i class="fa-solid fa-arrow-right ml-2"></i>
+        <a href={page.url.next || '#'} class={page.url.next ? 'button-link text-right ' : 'button-link opacity-20 cursor-default text-right'} aria-label="Next page">
+          <span class="hidden sm:inline">Next</span>
+          <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
     </div>
+
   </div>
 </Layout>
