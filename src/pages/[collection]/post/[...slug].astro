@@ -2,11 +2,11 @@
 import { getCollection, render } from "astro:content";
 import { LinkPreview } from "@astro-community/astro-embed-link-preview";
 import "remark-github-blockquote-alert/alert.css";
-import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../content.config";
-import Layout from "../../layouts/Layout.astro";
-import Header from "../../components/Header.astro";
-import BlogPostCard from "../../components/BlogPostCard.astro";
-import { formatDate } from "../../utils";
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../../content.config";
+import Layout from "../../../layouts/Layout.astro";
+import Header from "../../../components/Header.astro";
+import BlogPostCard from "../../../components/BlogPostCard.astro";
+import { formatDate } from "../../../utils";
 
 // 1. Generate a new path for every collection entry
 export async function getStaticPaths() {

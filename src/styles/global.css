@@ -98,6 +98,11 @@ a.button-link {
   @apply hover:text-primary-900 dark:hover:text-primary-100 hover:border-primary-900 dark:hover:border-primary-100;
   @apply focus-visible:text-primary-900 dark:focus-visible:text-primary-100 focus-visible:border-primary-900 dark:focus-visible:border-primary-100;
 }
+a.button-link.is-selected {
+  @apply bg-primary-600 dark:bg-primary-300;
+  @apply text-primary-50 dark:text-primary-900;
+  @apply border-primary-600 dark:border-primary-300;
+}
 a.card {}
 
 .prose {

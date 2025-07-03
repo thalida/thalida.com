@@ -8,12 +8,9 @@ const collection = collectionMeta[post.collection]
 const isExternal = post.collection === 'links';
 const postUrl = isExternal
   ? post.id
-  : `/${post.collection}/${post.id}`;
+  : `/${post.collection}/post/${post.id}`;
 
  const meta = isExternal ? await parseOpenGraph(postUrl) : null;
-
- console.log('Post URL:', postUrl);
- console.log('Meta:', meta);
 
  const icon = isExternal && meta?.icon
   ? meta.icon

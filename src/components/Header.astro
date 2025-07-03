@@ -67,7 +67,7 @@ import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.
       {collectionOrder.map((collectionName) => {
         const collection = collectionMeta[collectionName];
         return (
-          <a href={`/${collectionName}/1/`} class={`flex flex-col items-center justify-center font-bold text-base lg:text-xl text-secondary-100 mix-blend-color-dodge`}>
+          <a href={`/${collectionName}/`} class={`flex flex-col items-center justify-center font-bold text-base lg:text-xl text-secondary-100 mix-blend-color-dodge`}>
             {collection.title}
           </a>
         );

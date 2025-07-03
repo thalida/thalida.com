@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from "astro:content";
+import { COLLECTION_CHOICES } from "../../../content.config";
+
+const params = Astro.params;
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const collection of COLLECTION_CHOICES) {
+    paths.push({
+      params: { collection, category: "all" },
+    });
+
+    const posts = await getCollection(collection);
+    const categories = new Set(posts.map(post => post.data.category).filter(Boolean));
+    for (const category of categories) {
+      paths.push({
+        params: { collection, category },
+      });
+    }
+  }
+  return paths;
+}
+
+return Astro.rewrite(`/${params.collection}/${params.category}/1`);
+---

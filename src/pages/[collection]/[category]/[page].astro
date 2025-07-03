@@ -1,0 +1,113 @@
+---
+import { getCollection, render } from "astro:content";
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../../content.config";
+import Layout from "../../../layouts/Layout.astro";
+import Header from "../../../components/Header.astro";
+import BlogPostCard from "../../../components/BlogPostCard.astro";
+
+const { page } = Astro.props;
+const params = Astro.params;
+
+const collection = collectionMeta[params.collection]
+const category = params.category || 'all';
+
+const collectionPosts = await getCollection(params.collection);
+let categories = new Set(collectionPosts.map(post => post.data.category).filter(Boolean));
+categories = ["all", ...Array.from(categories).sort()];
+
+export async function getStaticPaths({ paginate }) {
+  let paths = [];
+
+  for (const collection of COLLECTION_CHOICES) {
+    let posts = await getCollection(collection);
+    const categories = new Set(posts.map(post => post.data.category).filter(Boolean));
+
+    posts.sort((a, b) => {
+      const dateA = new Date(a.data.updatedOn || a.data.publishedOn).getTime();
+      const dateB = new Date(b.data.updatedOn || b.data.publishedOn).getTime();
+      return dateB - dateA; // Sort in descending order
+    });
+
+    const paginatedAllPosts = paginate(posts, {
+      params: { collection, category: "all", page: 1 },
+      pageSize: 20,
+    });
+    paths = paths.concat(paginatedAllPosts);
+
+    for (const cat of categories) {
+      const filteredPosts = posts.filter(post => post.data.category === cat);
+      const paginatedCategoryPosts = paginate(filteredPosts, {
+        params: { collection, category: cat, page: 1 },
+        pageSize: 20,
+      });
+      paths = paths.concat(paginatedCategoryPosts);
+    }
+  }
+
+  return paths;
+}
+---
+
+
+<Layout>
+  <div class="p-8">
+
+    <Header />
+
+    <div class={`@container my-8 p-8 flex flex-col gap-4 ${collection.bgColor} rounded-3xl text-center`}>
+      <h1 class={`text-5xl lg:text-7xl font-brand ${collection.headerColor} pb-2 lg:pb-4 mb-2`}>
+        {collection.title}
+      </h1>
+      <p class="text-base lg:text-xl">{collection.description}</p>
+      {categories.length > 1 && (
+        <div class="flex flex-row flex-wrap items-center justify-center gap-2 mt-4">
+          {categories.map((cat) => (
+            <a href={`/${params.collection}/${cat}`} class={`button-link capitalize ${cat === params.category ? 'is-selected' : ''}`} aria-label={`View ${cat} posts`}>
+              {cat}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="my-8">
+      <p class="capitalize">{params.category} {params.collection}</p>
+      <div class="flex flex-row items-center justify-between gap-8">
+        <p class="text-sm opacity-50"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> {params.collection} </p>
+        <div class="flex flex-row items-center justify-between gap-4">
+          <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="hidden sm:inline">Previous</span>
+          </a>
+          <a href={page.url.next || '#'} class={page.url.next ? 'button-link text-right ' : 'button-link opacity-20 cursor-default text-right'} aria-label="Next page">
+            <span class="hidden sm:inline">Next</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+      {
+        page.data.map((post) => (
+        <BlogPostCard post={post} />
+        ))
+      }
+    </div>
+
+    <div class="flex flex-row items-center justify-between my-8 gap-8">
+      <p class="text-sm opacity-50"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> posts </p>
+      <div class="flex flex-row items-center justify-between gap-4">
+        <a href={page.url.prev || '#'} class={page.url.prev ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="hidden sm:inline">Previous</span>
+        </a>
+        <a href={page.url.next || '#'} class={page.url.next ? 'button-link text-right ' : 'button-link opacity-20 cursor-default text-right'} aria-label="Next page">
+          <span class="hidden sm:inline">Next</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</Layout>
