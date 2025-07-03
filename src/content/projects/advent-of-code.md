@@ -4,7 +4,7 @@ description: Repo tracking my participation in Advent of Code.
 publishedOn: 2020-12-18
 updatedOn: 2022-02-18
 tags: [challenge, julia, python]
-coverImage: Advent of Code 5356bc7351a649b7b81e3b11115c7b57/Screen_Shot_2022-02-19_at_18.29.31.png
+coverImage: advent-of-code/Screen_Shot_2022-02-19_at_18.29.31.png
 coverImageAlt: Advent of Code logo with a festive design.
 ---
 
@@ -18,7 +18,7 @@ coverImageAlt: Advent of Code logo with a festive design.
 
 ## 2020
 
-![Screen Shot 2022-02-19 at 18.29.31.png](Advent%20of%20Code%205356bc7351a649b7b81e3b11115c7b57/Screen_Shot_2022-02-19_at_18.29.31.png)
+![Screen Shot 2022-02-19 at 18.29.31.png](advent-of-code/Screen_Shot_2022-02-19_at_18.29.31.png)
 
 [Advent of Code](https://adventofcode.com/2020)
 
@@ -26,7 +26,7 @@ coverImageAlt: Advent of Code logo with a festive design.
 
 ## 2019
 
-![Screen Shot 2022-02-19 at 18.30.29.png](Advent%20of%20Code%205356bc7351a649b7b81e3b11115c7b57/Screen_Shot_2022-02-19_at_18.30.29.png)
+![Screen Shot 2022-02-19 at 18.30.29.png](advent-of-code/Screen_Shot_2022-02-19_at_18.30.29.png)
 
 [Advent of Code](https://adventofcode.com/2019)
 
@@ -34,7 +34,7 @@ coverImageAlt: Advent of Code logo with a festive design.
 
 ## 2018
 
-![Screen Shot 2022-02-19 at 18.32.20.png](Advent%20of%20Code%205356bc7351a649b7b81e3b11115c7b57/Screen_Shot_2022-02-19_at_18.32.20.png)
+![Screen Shot 2022-02-19 at 18.32.20.png](advent-of-code/Screen_Shot_2022-02-19_at_18.32.20.png)
 
 [Advent of Code](https://adventofcode.com/2018)
 

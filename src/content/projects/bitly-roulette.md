@@ -2,14 +2,14 @@
 title: bit.ly roulette
 description: Generate a random http://bit.ly/ url, let the internet surprise you!
 publishedOn: 2017-12-23
-coverImage: bit ly roulette 87e8248316b24a479919f672659df9c4/Screen_Shot_2022-02-19_at_18.53.19.png
+coverImage: bitly-roulette/Screen_Shot_2022-02-19_at_18.53.19.png
 coverImageAlt: A screenshot of the bit.ly roulette interface, showing a random URL.
 tags: [fun, hack, random]
 ---
 
 Take a leap. Visit a random [bit.ly](http://bit.ly) url.
 
-![Screen Shot 2022-02-19 at 18.53.19.png](bit%20ly%20roulette%2087e8248316b24a479919f672659df9c4/Screen_Shot_2022-02-19_at_18.53.19.png)
+![Screen Shot 2022-02-19 at 18.53.19.png](bitly-roulette/Screen_Shot_2022-02-19_at_18.53.19.png)
 
 [Github →](https://github.com/thalida/bitly-roulette)   [Website →](https://thalida.github.io/bitly-roulette/)
 

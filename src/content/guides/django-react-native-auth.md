@@ -70,12 +70,9 @@ INSTALLED_APPS = [
 
 Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below).
 
-<aside>
-⚠️ **Copy & Save `Client secret`**
-
-Before you hit “Save” copy the Client Secret and Client ID and store them in a safe place. You’ll need them later on, and the Client Secret is hashed on save so you’ll be unable to copy it later.
-
-</aside>
+> [!IMPORTANT]
+> **Copy & Save `Client secret`**
+> Before you hit “Save” copy the Client Secret and Client ID and store them in a safe place. You’ll need them later on, and the Client Secret is hashed on save so you’ll be unable to copy it later.
 
 [Setting Up a New Application — drf-social-oauth2 2.1.3 documentation](https://drf-social-oauth2.readthedocs.io/en/latest/application.html)
 
@@ -302,12 +299,9 @@ urlpatterns = [
 
 ---
 
-<aside>
-🎉 **Whew 😮‍💨😌 you’ve completed Part 1! You now have a Django API capable of authenticating users via Google and Microsoft.**
-
-Next up: In Part 2 we setup your React Native App to connect with the Django backend and Google/Microsoft SSO
-
-</aside>
+> [!IMPORTANT]
+> 🎉 **Whew 😮‍💨😌 you’ve completed Part 1! You now have a Django API capable of authenticating users via Google and Microsoft.**
+> Next up: In Part 2 we setup your React Native App to connect with the Django backend and Google/Microsoft SSO
 
 ---
 

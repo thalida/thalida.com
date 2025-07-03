@@ -4,7 +4,7 @@ description: Automated playlist archiving and backups for Spotify.
 publishedOn: 2019-05-12
 updatedOn: 2019-05-12
 tags: [project, design]
-coverImage: Revibed beaafce272a04df795149740fe16a5ad/Tablet.png
+coverImage: revibed/Tablet.png
 coverImageAlt: Automated playlist archiving and backups for Spotify.
 ---
 
@@ -20,10 +20,10 @@ Automated playlist archiving and backups for Spotify.
 
 ### Paper Sketches
 
-![Paper.revibed.3.png](Revibed%20beaafce272a04df795149740fe16a5ad/Paper.revibed.3.png)
+![Paper.revibed.3.png](revibed/Paper.revibed.3.png)
 
-![Paper.revibed.4.png](Revibed%20beaafce272a04df795149740fe16a5ad/Paper.revibed.4.png)
+![Paper.revibed.4.png](revibed/Paper.revibed.4.png)
 
 ### Mockups
 
-![Tablet.png](Revibed%20beaafce272a04df795149740fe16a5ad/Tablet.png)
+![Tablet.png](revibed/Tablet.png)

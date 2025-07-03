@@ -103,3 +103,39 @@ a.card {}
 .prose {
   --tw-prose-hr: oklch(0 0 0 / 0.5);
 }
+
+
+.prose h2 a,
+.prose h2 a:hover,
+.prose h3 a,
+.prose h3 a:hover,
+.prose h4 a,
+.prose h4 a:hover {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  scale: 1;
+}
+
+span.icon-link::before {
+  content: '#';
+  position: absolute;
+  top: 0;
+  left: -25px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+span.icon-link:hover::before,
+h2:hover span.icon-link::before,
+h3:hover span.icon-link::before,
+h4:hover span.icon-link::before {
+  opacity: 1;
+}
+
+h2,
+h3,
+h4 {
+  position: relative;
+}

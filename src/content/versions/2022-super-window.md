@@ -49,11 +49,9 @@ export async function fetchWeather($store) {
 
 ### `Deprecated` Theme Switcher (Day/Night Mode)
 
-<aside>
-⛔ **29 April 2023**
-An update of Super added support for a built-in theme switcher that I’ve started using instead.
-
-</aside>
+> [!NOTE]
+> ⛔ **29 April 2023**
+> An update of Super added support for a built-in theme switcher that I’ve started using instead.
 
 For the first time, I’ve added a day/night mode switcher to my site. Finally in the future! It’s not finalized yet (I still don’t account for user preferences) but otherwise it’s fully functional.
 

@@ -4,13 +4,13 @@ description: Remove the grind from Minecraft with this innovative datapack.
 publishedOn: 2020-12-15
 updatedOn: 2020-12-15
 tags: [minecraft, minecraft datapack, python, sphinx]
-coverImage: Grindless a9fb845d117f42f99e3736c6c2cd0991/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png
+coverImage: grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png
 coverImageAlt: A Minecraft datapack to remove the grind, featuring a button that gives items
 ---
 
 A Minecraft datapack to remove the grind.
 
-![d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png](Grindless%20a9fb845d117f42f99e3736c6c2cd0991/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png)
+![d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png](grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png)
 
 [Github →](https://github.com/thalida/grindless)   [Docs →](http://docs.grindless.builders/)
 

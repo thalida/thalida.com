@@ -31,7 +31,5 @@ I was messing around with the idea of having a background image or pattern, and 
 
 Tested it out on Photoshop, liked the look, and it became part of my final design.
 
-<aside>
-👄 *The page in the background is actually a rough sketch of this site design*
-
-</aside>
+> [!NOTE]
+> 👄 *The page in the background is actually a rough sketch of this site design*

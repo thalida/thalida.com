@@ -13,10 +13,8 @@ coverImageAlt: A fullscreen lowpoly live space scene, featuring a starry backgro
 | ----------- | --------- | -------- |
 | January 2014 - January 2015 | [Github →](https://github.com/thalida/thalida.com/tree/v-2014) | [View Live →](https://2014.v.thalida.com) |
 
-<aside>
-⚠️ I abandoned this design and stuck with my current site of the time.
-
-</aside>
+> [!NOTE]
+> ⚠️ I abandoned this design and stuck with my current site of the time.
 
 ## Story
 

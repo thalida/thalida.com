@@ -4,11 +4,11 @@ description: A chrome plugin which will replace any words you choose with anothe
 publishedOn: 2017-02-17
 updatedOn: 2017-02-17
 tags: [angular, chrome, chrome extension]
-coverImage: WordBird 8f3ebce4bda743e29b9c3a6b4581df98/Untitled.png
+coverImage: wordbird/Untitled.png
 coverImageAlt: A screenshot of the WordBird Chrome extension interface, showing word replacement settings.
 ---
 
-![Untitled](WordBird%208f3ebce4bda743e29b9c3a6b4581df98/Untitled.png)
+![Untitled](wordbird/Untitled.png)
 
 A chrome plugin which will replace any words you choose with another one.
 

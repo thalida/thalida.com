@@ -4,13 +4,13 @@ description: Visualize a Github Repo as a 3D City
 publishedOn: 2020-05-01
 updatedOn: 2022-06-05
 tags: [github, python, threejs, vue]
-coverImage: Code City 73e1fdefbb4d446abfba52eb0dfb04a0/Untitled.png
+coverImage: code-city/Untitled.png
 coverImageAlt: A 3D cityscape representing a Github repository, with buildings and streets
 ---
 
 Visualize a Github Repo as a 3D City.
 
-![Untitled](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Untitled.png)
+![Untitled](code-city/Untitled.png)
 
 [Github →](https://github.com/thalida/codecity)
 
@@ -47,8 +47,8 @@ Visualize a Github Repo as a 3D City.
 
 ### Paper Sketches
 
-![Paper.2020.me.52.png](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Paper.2020.me.52.png)
+![Paper.2020.me.52.png](code-city/Paper.2020.me.52.png)
 
-![Paper.codecity.14.png](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Paper.codecity.14.png)
+![Paper.codecity.14.png](code-city/Paper.codecity.14.png)
 
-![Paper.codecity.18.png](Code%20City%2073e1fdefbb4d446abfba52eb0dfb04a0/Paper.codecity.18.png)
+![Paper.codecity.18.png](code-city/Paper.codecity.18.png)

@@ -71,10 +71,8 @@ Also, I thought it’d be interesting to see what it’d be like to create a sit
 
 Version 1 of my initial design alinged the most with my favorite concept sketches. After creating this version I realised more space was needed for my about text, and version 2 split the about section into two columns.
 
-<aside>
-👄 Shoutout to the missing version 3
-
-</aside>
+> [!NOTE]
+> 👄 Shoutout to the missing version 3
 
 ### Iterations 4 and 5
 

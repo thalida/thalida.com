@@ -27,15 +27,15 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 
 ### Name Exploration
 
-![Paper.fiary.4.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.4.png)
+![Paper.fiary.4.png](fiary/Paper.fiary.4.png)
 
 ### Colors & Icon Exploration
 
-![Paper.fiary.1.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.1.png)
+![Paper.fiary.1.png](fiary/Paper.fiary.1.png)
 
-![Paper.fiary.7.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.7.png)
+![Paper.fiary.7.png](fiary/Paper.fiary.7.png)
 
-![Paper.fiary.8.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.8.png)
+![Paper.fiary.8.png](fiary/Paper.fiary.8.png)
 
 ## 🎨 Design
 
@@ -51,4 +51,4 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 
 ### Paper Sketches
 
-![Paper.fiary.5.png](Fiary%2013e4cd11d42945babdfa01e04d92f9c8/Paper.fiary.5.png)
+![Paper.fiary.5.png](fiary/Paper.fiary.5.png)
