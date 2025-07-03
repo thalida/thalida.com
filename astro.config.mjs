@@ -13,11 +13,23 @@ import { remarkAlert } from "remark-github-blockquote-alert";
 import remarkToc from 'remark-toc'
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+// import astroExpressiveCode from 'astro-expressive-code';
+import expressiveCode from 'astro-expressive-code';
+import { pluginColorChips } from 'expressive-code-color-chips';
+
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://thalida.com',
-  integrations: [partytown(), sitemap(), mdx()],
+  integrations: [
+    partytown(),
+    sitemap(),
+    expressiveCode({
+      themes: ['dracula', 'solarized-light'],
+      plugins: [pluginColorChips],
+    }),
+    mdx()
+  ],
   markdown: {
     remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }]],
     rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],

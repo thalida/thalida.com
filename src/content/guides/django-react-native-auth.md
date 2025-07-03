@@ -13,6 +13,9 @@ tags:
   - Microsoft
 ---
 
+## TOC
+
+
 ## Goal
 
 Allow users to signup to our React Native application using Google or Microsoft. When a user signs up a user account should be created or updated on our Django Application.
@@ -22,6 +25,7 @@ Allow users to signup to our React Native application using Google or Microsoft.
 In Part 1, we’ll setup Django to support social authentication via Google and Microsoft.
 
 In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and our Django API.
+
 
 ---
 
@@ -36,23 +40,11 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 ## 1.1 Install Packages
 
-**Python Social Auth**
-
-Package:  `social-auth-app-django` | Django App Name: `social_django`
-
-[Django Framework — Python Social Auth  documentation](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html)
-
-**Django OAuth Toolkit**
-
-Package: `django-oauth-toolkit`  | Django App Name: `oauth2_provider`
-
-[GitHub - jazzband/django-oauth-toolkit: OAuth2 goodies for the Djangonauts!](https://github.com/jazzband/django-oauth-toolkit)
-
-**DRF Social Auth**
-
-Package and Django App Name: `drf_social_oauth2`
-
-[Usage — drf-social-oauth2 2.1.3 documentation](https://drf-social-oauth2.readthedocs.io/en/latest/installation.html)
+| Package | Django App Name | Documentation |
+| ------- | --------------- | ------------- |
+| `social-auth-app-django` | `social_django` | <https://python-social-auth.readthedocs.io/en/latest/configuration/django.html> |
+| `django-oauth-toolkit` | `oauth2_provider` | <https://github.com/jazzband/django-oauth-toolkit> |
+| `drf_social_oauth2` | `drf_social_oauth2` | <https://drf-social-oauth2.readthedocs.io/en/latest/installation.html> |
 
 Your `INSTALLED_APPS` should now have the following Installed Apps:
 
@@ -110,16 +102,15 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 ### 1.4.1 Create **Application**
 
 1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), select your project and go to:
-APIs & Services → Credentials
-2. Then navigate to Create Credentials → OAuth client ID
-3. Fill in the following settings:
-    1. **Application type:** Web application
-    2. **Name:** API
-    3. **Authorized Javascript origins:**
-        1. https://localhost:<port>
-        2. <your_prod_domain>
-    4. **Authorized redirect URIs:**
-        1. The same as Authorized Javascript origins
+APIs & Services → Credentials → Create Credentials → OAuth client ID
+1. Fill in the following settings:
+   1. **Application type:** Web application
+   2. **Name:** API
+   3. **Authorized Javascript origins:**
+      1. `https://localhost:<port>`
+      2. `<your_prod_domain>`
+   4. **Authorized redirect URIs:**
+      1. (_The same as Authorized Javascript origins_)
 
 ![Screenshot 2023-11-11 at 13.22.17.png](django-react-native-auth/Screenshot_2023-11-11_at_13.22.17.png)
 
@@ -335,7 +326,7 @@ export default function App() {
   // We store the JWT in here
   const [token, setToken] = React.useState<string | null>(null);
 
-	React.useEffect(() => {
+  React.useEffect(() => {
     if (Platform.OS === "web") {
       return;
     }
@@ -366,17 +357,17 @@ export default function App() {
 Navigate to **APIs & Services > Credentials**, and create three new OAuth Clients with the following Application Types and settings:
 
 - **iOS**
-    - Set **Bundle Id** to the value defined in `app.json` `ios.bundleIdentifier`
+  - Set **Bundle Id** to the value defined in `app.json` `ios.bundleIdentifier`
 - **Android**
-    - Set **Package name** to the value defined in `app.json` `android.package`
-    - Get your **SHA-1 certificate fingerprint** from [expo.dev](https://expo.dev/)
-        - In [expo.dev](http://expo.dev) Select your project
-        - Navigate to **Credentials > Android**
-        - Select your package
-        - Use the value defined in `SHA-1 Certificate Fingerprint`
+  - Set **Package name** to the value defined in `app.json` `android.package`
+  - Get your **SHA-1 certificate fingerprint** from [expo.dev](https://expo.dev/)
+    - In [expo.dev](http://expo.dev) Select your project
+    - Navigate to **Credentials > Android**
+    - Select your package
+    - Use the value defined in `SHA-1 Certificate Fingerprint`
 - **Web**
-    - Set Authorized Redirect URLs to your react native web hosts:
-        - e.g. [http://localhost:8081](http://localhost:8081/)
+  - Set Authorized Redirect URLs to your react native web hosts:
+    - e.g. [http://localhost:8081](http://localhost:8081/)
 
 ### 2.3.2  Connect Google OAuth
 

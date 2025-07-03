@@ -109,6 +109,11 @@ a.card {}
   --tw-prose-hr: oklch(0 0 0 / 0.5);
 }
 
+.dark-scene .prose,
+.dark .prose {
+  --tw-prose-hr: oklch(1 0 0 / 0.2);
+}
+
 
 .prose h2 a,
 .prose h2 a:hover,

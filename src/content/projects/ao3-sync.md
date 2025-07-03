@@ -3,7 +3,11 @@ title: AO3 Sync
 description: AO3 Sync is a tool to downlaod your bookmarks from Archive of Our Own (AO3) and save them to your local machine.
 publishedOn: 2024-08-09
 updatedOn: 2024-12-04
+coverImage: ao3-sync/Screenshot 2025-07-03 at 00.51.28.png
+coverImageAlt: AO3 Screenshot
 ---
+
+![AO3 Screenshot](<ao3-sync/Screenshot 2025-07-03 at 00.51.28.png>)
 
 | Links | |
 | ------ | ------- |
