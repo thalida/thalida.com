@@ -25,7 +25,7 @@ export default defineConfig({
     partytown(),
     sitemap(),
     expressiveCode({
-      themes: ['dracula', 'solarized-light'],
+      themes: ['night-owl'],
       plugins: [pluginColorChips],
     }),
     mdx()
