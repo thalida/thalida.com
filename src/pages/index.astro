@@ -188,10 +188,10 @@ interface Props {
 </script>
 
 <Layout>
-  <div class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-4 2xl:grid-rows-4 2xl:grid-cols-5 2xl:min-h-[60rem] 2xl:max-h-[max(60rem,100vh)]">
+  <div class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-4 xl:grid-rows-4 xl:grid-cols-5 xl:min-h-[60rem] xl:max-h-[max(60rem,100vh)]">
 
     <!-- TILE | thalida.com -->
-    <div class="@container/me flex flex-col justify-between relative bg-secondary-200 dark:bg-secondary-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0">
+    <div class="@container/me flex flex-col justify-between relative bg-secondary-200 dark:bg-secondary-900 p-4 rounded-3xl row-span-1 overflow-hidden sm:col-span-2 sm:-order-1 xl:col-span-1 xl:order-0">
       <p class="font-brand text-[15cqi] text-secondary-900 dark:text-secondary-200">thalida.com</p>
 
       <Image
@@ -209,7 +209,7 @@ interface Props {
     </div>
 
     <!-- TILE | live scene -->
-    <div class="pointer-events-none relative flex rounded-3xl h-[70svh] overflow-hidden col-span-1 sm:col-span-4 sm:min-h-[500px] lg:h-[50rem] lg:col-span-3 lg:row-span-4 2xl:h-full">
+    <div class="pointer-events-none relative flex rounded-3xl h-[70svh] overflow-hidden col-span-1 sm:col-span-4 sm:min-h-[500px] lg:h-[50rem] lg:col-span-3 lg:row-span-4 xl:h-full">
       <livewindow-scene
         id="main-window"
         group="main-window"
@@ -357,25 +357,25 @@ interface Props {
 
     <!-- TILE | about me -->
     <div
-      class="flex flex-col justify-between bg-surface-50 dark:bg-surface-950 rounded-3xl row-span-2 overflow-hidden sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0"
+      class="flex flex-col justify-between bg-surface-50 dark:bg-surface-950 rounded-3xl row-span-2 overflow-hidden sm:col-span-2 sm:-order-1 xl:col-span-1 xl:order-0"
     >
       <!-- SUBSECTION | bio and introduction -->
       <div class="flex flex-col gap-2 p-4 bg-white dark:bg-black flex-grow">
         <p class="text-lg font-bold"><span class="text-secondary-500 dark:text-secondary-300" data-group="main-window" data-greeting></span> My name's Thalida, I'm a Product Engineer based in New York.</p>
-        <p>This domain is my homebase on the world wide web: a space to experiment, explore, and catalog my learnings &amp; adventures.</p>
+        <p>This domain is my homebase on the interwebs: a space to experiment, explore, and catalog my learnings &amp; adventures.</p>
         <a href="/about" class="inline-link self-end text-surface-500">about me <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
 
       <!-- SUBSECTION | versions -->
-      <div class="flex flex-col gap-2 p-4">
-        <p>Explore all of the previous versions and experiments of thalida.com!</p>
+      <div class="flex flex-col gap-2 p-4 bg-surface-200 dark:bg-surface-800">
+        <p class="font-bold">Explore the previous versions of thalida.com!</p>
         <a href="/versions" class="inline-link self-end text-surface-500"><span>explore</span> <i class="fa fa-arrow-right text-sm ml-1"></i></a>
       </div>
     </div>
 
     <!-- TILE | social links -->
     <div
-      class="flex flex-col bg-surface-50 dark:bg-surface-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:col-span-2 sm:-order-1 2xl:col-span-1 2xl:order-0"
+      class="flex flex-col bg-surface-50 dark:bg-surface-950 p-4 rounded-3xl row-span-1 gap-2 justify-around sm:col-span-2 sm:-order-1 xl:col-span-1 xl:order-0"
     >
       <a href="https://linkedin.com/in/thalida" target="_blank" class="group flex items-center gap-2 text-primary-600 dark:text-primary-300 hover:text-primary-900 dark:hover:text-primary-100 hover:drop-shadow-2xl  hover:scale-105 transition-all ease-in-out duration-500">
         <span class="inline-block group-hover:-rotate-1">
@@ -405,7 +405,7 @@ interface Props {
   </div>
 
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-8 px-8 pb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 px-8 pb-8">
     {collectionOrder.map((collection) => {
       const collectionData = collectionMeta[collection];
       const mostRecentPost = mostRecentPostsByCollection[collection];
