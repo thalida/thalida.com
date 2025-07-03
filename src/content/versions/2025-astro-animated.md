@@ -6,7 +6,8 @@ tags: [astro, animated-window, thalida.com]
 ---
 
 
-## Styleguide & Components
+<details>
+  <summary>Styleguide & Components</summary>
 
 ### Admonitions
 
@@ -59,3 +60,5 @@ tags: [astro, animated-window, thalida.com]
 > [!CAUTION]
 > Negative potential consequences of an action.
 ```
+
+</details>
