@@ -19,11 +19,13 @@ See list of all templates which can be overridden:
 
 ---
 
+
 ## Create Template File
 
 In your project directory, create a file at this path: `templates/admin/<app_name>/<model>/add_form.html`
 
 For example, if you have an app named `books` and a model named `author`, the path would be: `templates/admin/books/author/add_form.html`
+
 
 ## Extend Template
 
@@ -49,6 +51,7 @@ Next modify specific blocks in the template, for example:
 {{ block.super }}
 {% endblock %}
 ```
+
 
 ## Update Admin Model Class
 

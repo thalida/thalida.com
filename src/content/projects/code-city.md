@@ -14,15 +14,19 @@ coverImageAlt: A 3D cityscape representing a Github repository, with buildings a
 | ------ | ------- |
 | [Github →](https://github.com/thalida/codecity) | |
 
+
 ## ✅ Todos
 
 - [ ]  Buy / Create 3D buildings
 - [ ]  Update site performance
 - [ ]  Take screenshots to update notion build log
 
+
 ## 🧠🌩 Brainstorm
 
+
 ### City Generation
+
 
 #### **BUILDINGS**
 
@@ -34,16 +38,20 @@ coverImageAlt: A 3D cityscape representing a Github repository, with buildings a
 - The style / type of building is based on the type of file
   - eg. a readme could be a library?
 
+
 #### **STREETS**
 
 - Each street is the name of a folder
 - The width of the street is based on the number of files / directories nested in it
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [Code City by Thalida Noel](https://dribbble.com/thalida/collections/2030629-Code-City)
+
 
 ### Paper Sketches
 

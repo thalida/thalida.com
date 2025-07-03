@@ -13,13 +13,16 @@ coverImageAlt: Introducing the illustrated live-weather window.
 | ----------- | --------- | -------- |
 | August 2018 - August 2022 | [Github →](https://github.com/thalida/thalida.com/tree/v-2018-2)  | [View Live →](https://2018-2.v.thalida.com) |
 
+
 ## Story
 
 I wanted to create a super minimal site, using no frontend frameworks, in order to force myself to improve my backend skills with Python and the Flask Framework.
 
 Also, I thought it’d be interesting to see what it’d be like to create a site now without the benefits of scss and other compilers. ­
 
+
 ## Inspiration & Sketching
+
 
 ### Sites I was inspired by (and what I liked about them)
 
@@ -53,6 +56,7 @@ Also, I thought it’d be interesting to see what it’d be like to create a sit
 - Serifs
 - Long List of Posts
 
+
 ### Concept Sketches
 
 ![](2018-2-illustrated-window/sketch.1.jpg)
@@ -61,7 +65,9 @@ Also, I thought it’d be interesting to see what it’d be like to create a sit
 
 ![](2018-2-illustrated-window/sketch.3.jpg)
 
+
 ## Design
+
 
 ### Iterations 1 and 2
 
@@ -74,6 +80,7 @@ Version 1 of my initial design alinged the most with my favorite concept sketche
 > [!NOTE]
 > 👄 Shoutout to the missing version 3
 
+
 ### Iterations 4 and 5
 
 ![](2018-2-illustrated-window/mock.3.png)
@@ -84,7 +91,9 @@ Version 4 changed my list of posts into a grid, once again to provide more space
 
 *Note: As always the transition from static mockup to live site resulted in changes to UI as I was able to fully interact with it and see it with live content.*
 
+
 ## How it Works
+
 
 ### Posts Collection
 
@@ -107,6 +116,7 @@ The meta data above says the Meta Timeline Collection to be the second one shown
 
 There’s a lot more magic✨ happening, and I’m hoping to split PostsCollection out into a separate library with it’s own soon.
 
+
 ### Window
 
 ![](2018-2-illustrated-window/cloudy.gif)
@@ -118,6 +128,7 @@ The weather uses your current locations time and weather data in order to render
 The color of the sky is based on the current time of day for your location, I use the sunrise and sunset time more accurately depict the time of day. The weather data is fetched from [DarkSky](https://darksky.net/poweredby/)‘s api, and I get your current location based on your IP address.
 
 I created all of the illustrations used in the window with [Sketch](https://www.sketchapp.com/).
+
 
 ### Frontend Styles
 

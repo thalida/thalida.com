@@ -14,9 +14,11 @@ coverImageAlt: A screenshot of the Tic-Tac-Toe Cubed game, showing a
 | ------ | ------- |
 | [Github →](https://github.com/thalida/TicTacToeCubed) | [Website →](http://thalida.github.io/tictactoe-cubed/) |
 
+
 ## ✅ ToDo
 
 - [ ]  Remake using svelte
+
 
 ## Iterations
 

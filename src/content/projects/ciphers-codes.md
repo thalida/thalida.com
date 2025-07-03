@@ -13,7 +13,9 @@ coverImageAlt: A screenshot of the Ciphers & Codes interface, showing various ci
 | ------ | ------- |
 | [Github →](https://github.com/thalida/ciphers.codes) | [Website →](https://ciphers.codes/) |
 
+
 ## Supported Ciphers
+
 
 ### Affine
 
@@ -21,11 +23,13 @@ coverImageAlt: A screenshot of the Ciphers & Codes interface, showing various ci
 
 A monoalphabetic substitution cipher. Each letter in the alphabet is mapped to a number, then encrypted/decrypted using a math formula, and finally converted back to a letter. [Learn more](https://ciphers.codes/about/affine)
 
+
 ### Atbash
 
 ![Screen Shot 2022-02-19 at 19.50.18.png](ciphers-codes/Screen_Shot_2022-02-19_at_19.50.18.png)
 
 A simple substitution cipher originally created for the Hebrew alphabet. When used with the English alphabet, this cipher reverses the alphabet. [Learn more](https://ciphers.codes/about/atbash)
+
 
 ### Caesar
 
@@ -33,11 +37,13 @@ A simple substitution cipher originally created for the Hebrew alphabet. When us
 
 A popular substitution cipher, where the alphabet is shifted up or down a specified number of positions. [Learn more](https://ciphers.codes/about/caesar)
 
+
 ### Keyed Substitution
 
 ![Screen Shot 2022-02-19 at 19.53.03.png](ciphers-codes/Screen_Shot_2022-02-19_at_19.53.03.png)
 
 A monoalphabetic substitution cipher, where a keyword placed into beginning of the alphabet, and any duplicated letters are removed. [Learn more](https://ciphers.codes/about/keyed-substitution)
+
 
 ### Masonic
 
@@ -45,11 +51,13 @@ A monoalphabetic substitution cipher, where a keyword placed into beginning of t
 
 A geometric simple substitution cipher which exchanges letters for symbols which are fragments of a grid. [Learn more](https://ciphers.codes/about/masonic)
 
+
 ### Playfair
 
 ![Screen Shot 2022-02-19 at 19.54.51.png](ciphers-codes/Screen_Shot_2022-02-19_at_19.54.51.png)
 
 Encrypts pairs of letters, using a 5x5 grid. [Learn more](https://ciphers.codes/about/playfair)
+
 
 ### Polybius Square
 
@@ -57,11 +65,13 @@ Encrypts pairs of letters, using a 5x5 grid. [Learn more](https://ciphers.codes/
 
 A cipher where each alphanumeric (a-z, 0-9) character is represented by it’s coordinates in a grid. [Learn more](https://ciphers.codes/about/polybius-square)
 
+
 ### Vigenère
 
 ![Screen Shot 2022-02-19 at 19.56.59.png](ciphers-codes/Screen_Shot_2022-02-19_at_19.56.59.png)
 
 A simple polyalphabetic substitution cipher which uses a tableau composed of each of the 26 options of the [Caesar Cipher](https://ciphers.codes/about/caesar). [Learn more](https://ciphers.codes/about/vigenere)
+
 
 ## 🎨 Design
 

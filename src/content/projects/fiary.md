@@ -13,20 +13,25 @@ coverImageAlt: A screenshot of the Fiary logo
 | ------ | ------- |
 | [Github →](https://github.com/thalida/fiary) | |
 
+
 ## Idea
 
 A digital bullet journal. A tool that’s a hybrid of notion + paper.
+
 
 ## Helpful Resources
 
 - [HTML Canvas - Apple Pencil / 3D Touch API](https://codesandbox.io/embed/qr4uq?codemirror=1)
 - [how to draw smooth curve through N points using javascript HTML5 canvas?](https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas)
 
+
 ## Brainstorm
+
 
 ### Name Exploration
 
 ![Paper.fiary.4.png](fiary/Paper.fiary.4.png)
+
 
 ### Colors & Icon Exploration
 
@@ -35,7 +40,9 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 | ![Paper.fiary.1.png](fiary/Paper.fiary.1.png) | ![Paper.fiary.7.png](fiary/Paper.fiary.7.png) |
 | ![Paper.fiary.8.png](fiary/Paper.fiary.8.png) | |
 
+
 ## Design
+
 
 ### Inspiration
 
@@ -43,6 +50,7 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 - [fiary v2 by Thalida Noel](https://dribbble.com/thalida/collections/1601055-fiary-v2)
 - [Notes & Todos by Thalida Noel](https://dribbble.com/thalida/collections/967810-Notes-Todos)
 - [fiary thalida by Thalida Noel](https://dribbble.com/thalida/collections/2146817-fiary-thalida)
+
 
 ### Paper Sketches
 

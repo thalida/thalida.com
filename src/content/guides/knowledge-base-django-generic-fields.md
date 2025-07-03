@@ -13,6 +13,7 @@ tags:
 
 ## How To…
 
+
 ### Create a Generic Field
 
 ```python
@@ -33,6 +34,7 @@ class Message(models.Model):
     )
    ...
 ```
+
 
 ### Limit a Generic Field to specific models
 
@@ -64,6 +66,7 @@ class Message(models.Model):
             models.Index(fields=["author_content_type", "author_object_id"]),
         ]
 ```
+
 
 ### DRF ModelViewSet Create with Generic Field
 

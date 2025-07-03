@@ -18,11 +18,13 @@ Setup a custom admin dashboard in an existing repo, using the templates provided
 
 ---
 
+
 ## Prerequisites
 
 **Install and Setup Django Unfold Admin**
 
 [Unfold - Admin theme for Django](https://unfoldadmin.com/)
+
 
 ## Create Admin Dashboard App
 
@@ -38,17 +40,20 @@ Update `INSTALLED_APPS`, the new app should be added below the unfold apps.
 
 ```bash
 INSTALLED_APPS = [
-	...
-	"admin_dashboard.apps.AdminDashboardConfig",
-	...
+ ...
+ "admin_dashboard.apps.AdminDashboardConfig",
+ ...
 ]
 ```
 
+
 ## Setup Admin Index Template
+
 
 ### Create File
 
 In your Django project folder, create a new file at this path: `templates/admin/index.html`
+
 
 ### Update Template Settings
 
@@ -60,10 +65,11 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         **"DIRS": [BASE_DIR / "templates"],**
         "APP_DIRS": True,
-				...
-		},
+    ...
+  },
 ]
 ```
+
 
 ### Fill in Template
 
@@ -165,9 +171,11 @@ Paste the following into your newly created templates/admin/index.html file :
 {% endblock %}
 ```
 
+
 ## Tailwind CSS
 
 Unfold uses Tailwind under the hood, since we’re creating a custom template, we need to compile the tailwind styles our self.
+
 
 ### **Setup Tailwind Config**
 
@@ -230,6 +238,7 @@ module.exports = {
 };
 ```
 
+
 ### **Run tailwind**
 
 Again, replace `<django_project_dir>` with your project directory.
@@ -237,6 +246,7 @@ Again, replace `<django_project_dir>` with your project directory.
 ```bash
 npx tailwindcss -o <django_project_dir>/admin_dashboard/static/admin_dashboard/css/styles.css --watch --minify
 ```
+
 
 ## Dashboard Context
 
@@ -367,6 +377,7 @@ def dashboard_callback(request, context):
     return context
 ```
 
+
 ## Update Unfold Settings
 
 ```python
@@ -376,6 +387,6 @@ UNFOLD = {
     "STYLES": [
         lambda request: static("admin_dashboard/css/styles.css"),
     ],
-		...
+  ...
 }
 ```

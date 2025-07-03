@@ -12,17 +12,21 @@ coverImageAlt: Automated playlist archiving and backups for Spotify.
 
 Automated playlist archiving and backups for Spotify.
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [revibed by Thalida Noel](https://dribbble.com/thalida/collections/1231164-revibed)
+
 
 ### Paper Sketches
 
 | | |
 | --- | --- |
 | ![Paper.revibed.3.png](revibed/Paper.revibed.3.png) | ![Paper.revibed.4.png](revibed/Paper.revibed.4.png) |
+
 
 ### Mockups
 

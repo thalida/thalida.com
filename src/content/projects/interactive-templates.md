@@ -9,7 +9,9 @@ tags: [chrome, chrome extension]
 
 Google Docs extension to add proper templates, with fillable fields (a la PDF templates)
 
+
 ## 🧠🌩 Brainstorm
+
 
 ### Feature Exploration
 
@@ -19,7 +21,9 @@ Google Docs extension to add proper templates, with fillable fields (a la PDF te
 - Move all templates into this system
 - Map out how this could work
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 

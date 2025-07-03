@@ -13,7 +13,9 @@ coverImageAlt: A screenshot of the Builder's Guide app, showing a Minecraft reci
 | ------ | ------- |
 | [Github →](https://github.com/thalida/builders-guide) |  [Website →](https://builders-guide.app/splash) |
 
+
 ## 🧠🌩 Brainstorm
+
 
 ### Name Exploration
 
@@ -23,11 +25,14 @@ coverImageAlt: A screenshot of the Builder's Guide app, showing a Minecraft reci
 | ![Paper.2020.me.66.png](builders-guide/Paper.2020.me.66.png) | ![Paper.2020.me.65.png](builders-guide/Paper.2020.me.65.png) |
 | ![Paper.2020.me.67.png](builders-guide/Paper.2020.me.67.png) | |
 
+
 ### Color Exploration
 
 ![Paper.2020.me.68.png](builders-guide/Paper.2020.me.68.png)
 
+
 ## 🎨 Design
+
 
 ### Paper Sketches
 
@@ -36,6 +41,7 @@ coverImageAlt: A screenshot of the Builder's Guide app, showing a Minecraft reci
 | ![Paper.2020.me.59.png](builders-guide/Paper.2020.me.59.png) | ![Paper.2020.me.58.png](builders-guide/Paper.2020.me.58.png) |
 | ![Paper.2020.me.60.png](builders-guide/Paper.2020.me.60.png) | ![Paper.2020.me.61.png](builders-guide/Paper.2020.me.61.png) |
 | ![Paper.2020.me.62.png](builders-guide/Paper.2020.me.62.png) | |
+
 
 ### Mockups
 

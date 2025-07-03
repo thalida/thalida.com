@@ -9,7 +9,9 @@ tags: [astro, animated-window, thalida.com]
 <details>
   <summary>Styleguide & Components</summary>
 
+
 ### Admonitions
+
 
 #### Note
 
@@ -21,6 +23,7 @@ tags: [astro, animated-window, thalida.com]
 > Optional information that can help users understand the context or provide additional insights.
 ```
 
+
 #### Tip
 
 > [!TIP]
@@ -30,6 +33,7 @@ tags: [astro, animated-window, thalida.com]
 > [!TIP]
 > Optional information to help a user be more successful.
 ```
+
 
 #### Important
 
@@ -41,6 +45,7 @@ tags: [astro, animated-window, thalida.com]
 > Crucial information necessary for users to succeed.
 ```
 
+
 #### Warning
 
 > [!WARNING]
@@ -50,6 +55,7 @@ tags: [astro, animated-window, thalida.com]
 > [!WARNING]
 > Critical content demanding immediate user attention due to potential risks.
 ```
+
 
 #### Caution
 

@@ -33,7 +33,7 @@ Additional documentation can be found at [docs.devscript.host](https://docs.devs
 ## 📦 Features
 
 - **SSO Support** - Nine (9) different providers, including a generic option, are supported.
-    - _Email/Password registration is also available._
+  - _Email/Password registration is also available._
 - **CLI Integration** - Run your own snippet on the command line (TODO: link to docs on how to set this up)
 - **Advanced search** - Search by title, description, tags, or code content.
 - **Tags** - Organize your snippets with tags
@@ -52,9 +52,9 @@ Additional documentation can be found at [docs.devscript.host](https://docs.devs
 
 1. Clone this repository
 2. Copy the `.env.example` file to `.env` and fill in the required environment variables
-    - Configuration options: https://docs.devscript.host/guides/self-hosting/configuration/
+    - Configuration options: <https://docs.devscript.host/guides/self-hosting/configuration/>
 3. Run `docker compose up` to start the application
-4. Access the application at http://localhost:8000
+4. Access the application at <http://localhost:8000>
 
 ---
 

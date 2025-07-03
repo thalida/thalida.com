@@ -14,10 +14,12 @@ coverImageAlt: A Minecraft datapack to remove the grind, featuring a button that
 | ------ | ------- |
 | [Github →](https://github.com/thalida/grindless) | [Docs →](http://docs.grindless.builders/) |
 
+
 ## ✅ ToDo
 
 - [ ]  Improve performance, the datapack *works* but causes hella lag
 - [ ]  Rate limit it so you can’t spam the button.
+
 
 ## 🧠🌩 Brainstorm
 

@@ -13,13 +13,16 @@ coverImageAlt: A screenshot of the Is Trump Still Fucking President? website, sh
 | ------ | ------- |
 | [Github →](https://github.com/thalida/istrumpstillfuckingpresident) | [Website →](https://thalida.github.io/istrumpstillfuckingpresident/) |
 
+
 ## Ugh. Yes
 
 He's back.
 
+
 ## ~~NOT ANYMORE~~
 
 🎉 🥳 🎉 🥳
+
 
 ## ~~YES~~
 

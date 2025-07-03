@@ -13,13 +13,17 @@ coverImageAlt: A screenshot of the Flat Cards website, showcasing a flat card de
 | ----------- | --------- | -------- |
 | January 2013 - March 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-1) | [View Live →](https://2013-1.v.thalida.com) |
 
+
 ## Designs
+
 
 ### Landing Page
 
 ![Untitled](2013-1-flat-cards/Untitled%201.png)
 
-During this time period I struggled with finding my balance between minimal “clean” pages and content-rich. (something I still struggle with to this day.)
+During this time period I struggled with finding my balance between minimal “clean” pages and content-rich.
+(something I still struggle with to this day.)
+
 
 ### Project View
 
@@ -27,14 +31,18 @@ During this time period I struggled with finding my balance between minimal “c
 
 Intended to be a modal in order for the site to still be considered a “one-pager”.
 
+
 ### About
 
 ![Untitled](2013-1-flat-cards/Untitled%203.png)
 
-The base setup of the about section with bars for various skill levels, the actual implementation took this concept and made it a lot more colorful.
+The base setup of the about section with bars for various skill levels, the actual implementation
+took this concept and made it a lot more colorful.
+
 
 ## Abandoned Iterations
 
 ![Untitled](2013-1-flat-cards/Untitled%204.png)
 
-This folded-shadow look was all the rage for a while, and I created a mockup of what my current site would be if I recreated it using the web-fads of the day.
+This folded-shadow look was all the rage for a while, and I created a mockup of what my current site
+would be if I recreated it using the web-fads of the day.

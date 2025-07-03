@@ -14,16 +14,19 @@ coverImageAlt: A screenshot of the unpack.link website, showing a Twitter thread
 | ------ | ------- |
 | [Github →](https://github.com/thalida/unpack.link) | |
 
+
 ## 💡Idea
 
 Unroll a twitter thread to its original source. Get to the top of a twitter thread, and if that points to another thread go to the top of that one, and if that points to an article find all the sources in the article, and... and.. and...
 
 ![nested_tweets_try4_shorter.gif](unpack-link/nested_tweets_try4_shorter.gif)
 
+
 ## ✅ ToDo
 
 - [ ]  Improve site performance
 - [ ]  Make it obey bot rules
+
 
 ## WIP Demo
 
@@ -32,11 +35,14 @@ Unroll a twitter thread to its original source. Get to the top of a twitter thre
 | ![ex_1.gif](unpack-link/ex_1.gif) | ![ex_2.gif](unpack-link/ex_2.gif) |
 | ![ex_3.gif](unpack-link/ex_3.gif) | ![ex_4.gif](unpack-link/ex_4.gif) |
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [unpack.link by Thalida Noel](https://dribbble.com/thalida/collections/1735010-unpack-link)
+
 
 ### Mockups
 

@@ -13,25 +13,31 @@ coverImageAlt: A split screen design with a live gradient, showcasing a colorful
 | ----------- | --------- | -------- |
 | August 2016 - March 2017 | [Github →](https://github.com/thalida/thalida.com/tree/v-2016) | [View Live →](https://2016.v.thalida.com) |
 
+
 ## Story
 
 After having the floating card design for a while, I wanted to move away from a very simplified site, and create something a bit more complicated. I knew I wanted it to be a one page site, and that I wanted to play around with color again.
+
 
 ## Design
 
 ![](2016-color-split/mock.1.png)
 
+
 ## How it Works
 
 The site was built using [AngularJS](https://angularjs.org/).
+
 
 ### Live Gradient
 
 The gradient and welcome text is based on the current time for the visitor.
 
+
 ### Visits
 
 The salutation is also based on the number of visits, your first visit may say “Welcome”, the next “Hello again”, and it’ll keep changing based on how often you visit.
+
 
 ### Interactive Element
 

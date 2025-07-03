@@ -13,15 +13,19 @@ coverImageAlt: A screenshot of the Listany app, showing a collection of curated 
 | ------ | ------- |
 | [Github ➚](https://github.com/thalida/listany) ||
 
+
 ## 💡Idea
 
 A platform to create lists of links. Think product hunt + uses this.
 
+
 ## 🧠🌩 Brainstorm
+
 
 ### Idea
 
 ![Paper.2020.me.135.png](listany/Paper.2020.me.135.png)
+
 
 ### Name Explorations
 
@@ -31,6 +35,7 @@ A platform to create lists of links. Think product hunt + uses this.
 | ![Paper.2020.me.137.png](listany/Paper.2020.me.137.png) | ![Paper.2020.me.138.png](listany/Paper.2020.me.138.png) |
 | ![Paper.2020.me.139.png](listany/Paper.2020.me.139.png) | |
 
+
 ### Color Exploration
 
 | | |
@@ -39,11 +44,14 @@ A platform to create lists of links. Think product hunt + uses this.
 | ![Paper.2020.me.150.png](listany/Paper.2020.me.150.png) | ![Paper.2020.me.165.png](listany/Paper.2020.me.165.png) |
 | ![Paper.2020.me.155.png](listany/Paper.2020.me.155.png) | ![Paper.2020.me.162.png](listany/Paper.2020.me.162.png) |
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [listany by Thalida Noel](https://dribbble.com/thalida/collections/3029294-listany)
+
 
 ### Paper Sketches
 
@@ -55,6 +63,7 @@ A platform to create lists of links. Think product hunt + uses this.
 | ![Paper.2020.me.148.png](listany/Paper.2020.me.148.png) | ![Paper.2020.me.151.png](listany/Paper.2020.me.151.png) |
 | ![Paper.2020.me.152.png](listany/Paper.2020.me.152.png) | ![Paper.2020.me.154.png](listany/Paper.2020.me.154.png) |
 | ![Paper.2020.me.163.png](listany/Paper.2020.me.163.png) | ![Paper.2020.me.161.png](listany/Paper.2020.me.161.png) |
+
 
 ### Mockups
 

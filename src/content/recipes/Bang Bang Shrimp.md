@@ -9,27 +9,30 @@ tags:
 
 > [!TIP]
 > **Modified version of this recipe:**
-> https://bytherecipes.com/bang-bang-shrimp/
+> <https://bytherecipes.com/bang-bang-shrimp/>
 >
 > Key Changes:
->   - Season flour before breading
->   - Use pepper spices in seasoning
+>
+> - Season flour before breading
+> - Use pepper spices in seasoning
+
 
 ## Ingredients
 
 - 1 lb. Medium sized, raw peeled shrimp
 - Breading:
-    - 1 cup All Purpose Flour
-    - 2 Eggs
-    - 2 cups Panko Bread Crumbs
-    - 2 tbs. Extra Virgin Olive Oil
+  - 1 cup All Purpose Flour
+  - 2 Eggs
+  - 2 cups Panko Bread Crumbs
+  - 2 tbs. Extra Virgin Olive Oil
 - Seasonings:
-    - 3 tsp. Garlic Powder
-    - Salt
-    - 3 tsp. Cayenne (add more to spice taste)
-    - 3 tsp. Smoked Paprika
+  - 3 tsp. Garlic Powder
+  - Salt
+  - 3 tsp. Cayenne (add more to spice taste)
+  - 3 tsp. Smoked Paprika
 - 3 shallow bowls
 - Parchment Paper
+
 
 ## Steps
 
@@ -43,6 +46,7 @@ tags:
     1. (note: I usually bread w/ chop sticks — quick cleanup and no gunked up fork/hands)
 7. Preheat oven to 400F
 8. Bake for 13-15minutes, until shrimp is golden brown
+
 
 ## Optional: Sauce
 

@@ -17,9 +17,11 @@ coverImageAlt: A screenshot of a generated live window
 ## Usage
 
 Embed the image into your HTML or Markdown Document:
+
 ```html
 <img src="https://livewindow-api.onrender.com/api/" />
 ```
+
 
 ### API Options
 
@@ -45,14 +47,14 @@ Embed the image into your HTML or Markdown Document:
   <summary><strong>How do I find my lat, long coordinates?</strong></summary>
 
   You can use this tool to find your coordinates:
-  https://www.latlong.net/convert-address-to-lat-long.html
+  <https://www.latlong.net/convert-address-to-lat-long.html>
 </details>
 
 <details>
   <summary>How do you embed the custom font?</summary>
 
   In order for the custom font to show when the image is downloaded or included in Github Markdown, the font needs to be encoded directly into the styles.
-  Note: You can generate the base 64 encoding for any font here: https://amio.github.io/embedded-google-fonts/
+  Note: You can generate the base 64 encoding for any font here: <https://amio.github.io/embedded-google-fonts/>
 
   ```html
   <svg>
@@ -74,20 +76,26 @@ Embed the image into your HTML or Markdown Document:
 
 </details>
 
+
 ## Ideas, Improvements, and Iterations
+
 - [ ] Support any google font
 - [ ] Support hiding location and/or current weather
 
 
 ## How It's Made
 
+
 ### Frameworks, Tools, and Services
+
 * API Framework: Python [Fast API](https://fastapi.tiangolo.com/)
-* API Docs: [Stoplight Elements](https://github.com/stoplightio/elements)
-* Hosting & Deployment: [Render](https://render.com/)
-* Designed In: [Figma](https://www.figma.com/)
+- API Docs: [Stoplight Elements](https://github.com/stoplightio/elements)
+- Hosting & Deployment: [Render](https://render.com/)
+- Designed In: [Figma](https://www.figma.com/)
+
 
 ### Credits
+
 * [Open Weather Map API](https://openweathermap.org/api): Powers Weather, sunrise, and sunset times
-* [3D Weather Icons](https://ui8.net/msakta/products/weather-animated-icons)
-* [Gradient Abstract Banners](https://www.figma.com/community/file/1063549775352406477/gradient-abstract-banners?searchSessionId=ltw9aro0-lwjp697d2fs)
+- [3D Weather Icons](https://ui8.net/msakta/products/weather-animated-icons)
+- [Gradient Abstract Banners](https://www.figma.com/community/file/1063549775352406477/gradient-abstract-banners?searchSessionId=ltw9aro0-lwjp697d2fs)

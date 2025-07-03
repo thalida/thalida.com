@@ -14,11 +14,14 @@ coverImageAlt: An idle game where you build and maintain hiking trails.
 | ------ | ------- |
 | [Github →](https://github.com/thalida/trailblazer) | |
 
+
 ## 🧠🌩 Brainstorm
+
 
 ### Game Logic
 
 ![Paper.2020.me.12.png](trailblazer/Paper.2020.me.12.png)
+
 
 ### Name & Logo Exploration
 
@@ -27,13 +30,16 @@ coverImageAlt: An idle game where you build and maintain hiking trails.
 | ![Paper.2020.me.16.png](trailblazer/Paper.2020.me.16.png) | ![Paper.2020.me.17.png](trailblazer/Paper.2020.me.17.png) |
 | ![Paper.2020.me.19.png](trailblazer/Paper.2020.me.19.png) | |
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [hiking by Thalida Noel](https://dribbble.com/thalida/collections/1796636-hiking)
 
 [Game by Thalida Noel](https://dribbble.com/thalida/collections/908997-Game)
+
 
 ### Paper Sketches
 

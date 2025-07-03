@@ -20,6 +20,7 @@ tags:
 
 Allow users to signup to our React Native application using Google or Microsoft. When a user signs up a user account should be created or updated on our Django Application.
 
+
 ## Overview
 
 In Part 1, we’ll setup Django to support social authentication via Google and Microsoft.
@@ -29,6 +30,7 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 ---
 
+
 ## Prerequisites
 
 - you have already create a Django App using Django Rest Framework
@@ -36,7 +38,9 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 ---
 
+
 ## Part 1:  Django
+
 
 ### 1.1 Install Packages
 
@@ -58,6 +62,7 @@ INSTALLED_APPS = [
 ]
 ```
 
+
 ### 1.2 Create API Client
 
 Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below).
@@ -67,6 +72,7 @@ Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below
 > Before you hit “Save” copy the Client Secret and Client ID and store them in a safe place. You’ll need them later on, and the Client Secret is hashed on save so you’ll be unable to copy it later.
 
 [Setting Up a New Application — drf-social-oauth2 2.1.3 documentation](https://drf-social-oauth2.readthedocs.io/en/latest/application.html)
+
 
 ### 1.3 Update Social Auth Settings
 
@@ -96,7 +102,9 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
     [https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation](https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation)
 
+
 ### 1.4 Setup Google OAuth in Django
+
 
 #### 1.4.1 Create **Application**
 
@@ -115,6 +123,7 @@ APIs & Services → Credentials → Create Credentials → OAuth client ID
 
 ![Screenshot 2023-11-11 at 13.37.21.png](django-react-native-auth/Screenshot_2023-11-11_at_13.37.21.png)
 
+
 #### 1.4.2 Update Django Settings
 
 Follow the guide here to add support for Google OAuth:
@@ -124,9 +133,11 @@ Follow the guide here to add support for Google OAuth:
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_KEY` value is the `Client ID` of the OAuth2 credential created on Google Cloud Console
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET` value is the `Client Secret` of the OAuth2 credential created on Google Cloud Console
 
+
 ### 1.5 Setup Microsoft OAuth in Django
 
 The settings for Microsoft OAuth are more complicated than setting up for Google. Setup requires overriding one of the serializers (and subsequently a view) provided by DRF Social Auth in order to change a serializer. There may be a better method to do this, but this is what worked for me.
+
 
 #### 1.5.1 Create **Application**
 
@@ -169,6 +180,7 @@ App Registration Page
 
 ![Screenshot 2023-11-11 at 13.58.10.png](django-react-native-auth/Screenshot_2023-11-11_at_13.58.10.png)
 
+
 #### 1.5.2 Update **Django Settings**
 
 In settings.py add `social_core.backends.microsoft.MicrosoftOAuth2` to your `AUTHENTICATION_BACKENDS`
@@ -183,6 +195,7 @@ AUTHENTICATION_BACKENDS = (
 ```
 
 This backend uses [https://graph.microsoft.com/v1.0/me](https://graph.microsoft.com/v1.0/me) to fetch the user data given a `access_token`.
+
 
 #### 1.5.3 Fix Access Token Max Characters Error
 
@@ -295,7 +308,9 @@ urlpatterns = [
 
 ---
 
+
 ## Part 2: React Native
+
 
 ### 2.1 Install Packages
 
@@ -310,6 +325,7 @@ Install [Expo Web Browser](https://docs.expo.dev/versions/latest/sdk/webbrowser/
 Install [axios](https://axios-http.com/)
 
 [Axios](https://axios-http.com/)
+
 
 ### 2.2 Warm Web Browser & Setup State
 
@@ -349,7 +365,9 @@ export default function App() {
 }
 ```
 
+
 ### 2.3  Setup Google OAuth in React Native
+
 
 #### 2.3.1 Update Google Cloud Console
 
@@ -368,6 +386,7 @@ Navigate to **APIs & Services > Credentials**, and create three new OAuth Client
   - Set Authorized Redirect URLs to your react native web hosts:
     - e.g. [http://localhost:8081](http://localhost:8081/)
 
+
 #### 2.3.2  Connect Google OAuth
 
 **Update Imports**
@@ -382,12 +401,12 @@ For `clientId`, `iosClientId`, and `androidClientId`, use the Clients IDs from t
 
 ```tsx
 export default function App() {
-	const [, googleResponse, googlePromptAsync] = Google.useAuthRequest({
-	  clientId: GOOGLE_AUTH_CLIENT_ID_WEB,
-	  iosClientId: GOOGLE_AUTH_CLIENT_ID_IOS,
-	  androidClientId: GOOGLE_AUTH_CLIENT_ID_ANDROID,
-	});
-	...
+ const [, googleResponse, googlePromptAsync] = Google.useAuthRequest({
+   clientId: GOOGLE_AUTH_CLIENT_ID_WEB,
+   iosClientId: GOOGLE_AUTH_CLIENT_ID_IOS,
+   androidClientId: GOOGLE_AUTH_CLIENT_ID_ANDROID,
+ });
+ ...
 }
 ```
 
@@ -398,10 +417,10 @@ Update your template to include a button to trigger the Google Prompt
 ```tsx
 return (
     <SafeAreaView>
-			<Button
-				title="Continue with Google"
-				onPress={googlePromptAsync}
-			/>
+   <Button
+    title="Continue with Google"
+    onPress={googlePromptAsync}
+   />
       <Text>{token}</Text>
     </SafeAreaView>
 );
@@ -411,40 +430,42 @@ return (
 
 When the Google Prompt is successful, get the `access_token`returned by Google, and send it to our Django API backend to convert to a Django Social Auth `access_token`
 
-For `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](django-react-native-auth.md))
+For `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client](django-react-native-auth.md))
 
 Save the token returned by the Django API, this token can be used later on as an `Authorization` header on axios.
 
 ```tsx
 export default function App() {
-	...
-	useEffect(() => {
-	  if (googleResponse?.type !== "success") {
-	    return;
-	  }
+ ...
+ useEffect(() => {
+   if (googleResponse?.type !== "success") {
+     return;
+   }
 
-	  axios
-			.post(
-				"<django-api-host>/auth/convert-token/",
-	      {
-	        grant_type: "convert_token",
-	        backend: "google-oauth2",
-	        client_id: DJANGO_API_CLIENT_ID,
-	        client_secret: DJANGO_API_CLIENT_SECRET,
-	        token: googleResponse.params.access_token,
-	      },
-	      {
-	        headers: { Accept: "application/json" },
-	      },
-	   )
-			.then((djangoAPIResponse) => {
-				setToken(djangoAPIResponse.data.access_token)
-			});
-	}, [googleResponse]);
+   axios
+   .post(
+    "<django-api-host>/auth/convert-token/",
+       {
+         grant_type: "convert_token",
+         backend: "google-oauth2",
+         client_id: DJANGO_API_CLIENT_ID,
+         client_secret: DJANGO_API_CLIENT_SECRET,
+         token: googleResponse.params.access_token,
+       },
+       {
+         headers: { Accept: "application/json" },
+       },
+    )
+   .then((djangoAPIResponse) => {
+    setToken(djangoAPIResponse.data.access_token)
+   });
+ }, [googleResponse]);
 }
 ```
 
+
 ### 2.4 Setup Microsoft OAuth in React Native
+
 
 #### 2.4.1 Update Application in Microsoft Entra Admin Center
 
@@ -453,11 +474,11 @@ Return to the Microsoft Entra Admin Center, and update the Application you creat
 Under the `Authentication` section add new redirect urls for:
 
 - `Single-page application`
-    - Add urls for your react native **web** application (eg. [http://localhost:8081/](http://localhost:8081/auth))
+  - Add urls for your react native **web** application (eg. [http://localhost:8081/](http://localhost:8081/auth))
 - `Mobile and desktop applications`
-    - Add redirect urls for your react native **ios and android** apps using your app scheme (eg. app_scheme://)
-    - You can find your `app_scheme` in `app.json` > `scheme` field.
-    -
+  - Add redirect urls for your react native **ios and android** apps using your app scheme (eg. app_scheme://)
+  - You can find your `app_scheme` in `app.json` > `scheme` field.
+  -
 
 
 #### 2.4.2 Connect Microsoft OAuth
@@ -477,19 +498,19 @@ import {
 
 - Set `MICROSOFT_TENANT_ID` use your Microsoft Tenant ID or `common`
 - Set `MICROSOFT_AUTH_CLIENT_ID` to your Application Client ID
-    - In the Microsoft Entra Admin Center: Select your Application > Overview > Essentials > `Application (client) ID`
+  - In the Microsoft Entra Admin Center: Select your Application > Overview > Essentials > `Application (client) ID`
 
 ```tsx
 export default function App() {
-	...
-	const microsoftDiscovery = useAutoDiscovery(
+ ...
+ const microsoftDiscovery = useAutoDiscovery(
     `https://login.microsoftonline.com/${MICROSOFT_TENANT_ID}/v2.0`,
   );
   const microsoftRedirectUri = makeRedirectUri({
     scheme: undefined,
     path: "auth",
   });
-	const [microsoftRequest, microsoftResponse, microsoftPromptAsync] =
+ const [microsoftRequest, microsoftResponse, microsoftPromptAsync] =
     useAuthRequest(
       {
         clientId: MICROSOFT_AUTH_CLIENT_ID,
@@ -498,7 +519,7 @@ export default function App() {
       },
       microsoftDiscovery,
     );
-	...
+ ...
 }
 ```
 
@@ -509,14 +530,14 @@ Update your template to include a button to trigger the Google Prompt
 ```tsx
 return (
     <SafeAreaView>
-			<Button
-				title="Continue with Google"
-				onPress={googlePromptAsync}
-			/>
-			<Button
-				title="Continue with Microsoft"
-				onPress={microsoftPromptAsync}
-			/>
+   <Button
+    title="Continue with Google"
+    onPress={googlePromptAsync}
+   />
+   <Button
+    title="Continue with Microsoft"
+    onPress={microsoftPromptAsync}
+   />
       <Text>{token}</Text>
     </SafeAreaView>
 );
@@ -524,16 +545,16 @@ return (
 
 **Handle Microsoft Auth Complete**
 
-For Microsoft auth, we need to convert the code returned to an access token, and then pass *that* token along to our Django API.
+For Microsoft auth, we need to convert the code returned to an access token, and then pass _that_ token along to our Django API.
 
-As with Google Auth, for `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client ](django-react-native-auth.md))
+As with Google Auth, for `DJANGO_API_CLIENT_ID` and `DJANGO_API_CLIENT_SECRET` use the values you copied earlier when you Created the Social Auth API Client (see: [1.2 Create API Client](django-react-native-auth.md))
 
 Save the `access_token` returned by the Django API in a state (or store), this token can be used later on as an `Authorization` header on axios.
 
 ```tsx
 export default function App() {
-	...
-	useEffect(() => {
+ ...
+ useEffect(() => {
     if (
       !microsoftRequest ||
       !microsoftDiscovery ||
@@ -542,7 +563,7 @@ export default function App() {
       return;
     }
 
-		exchangeCodeAsync(
+  exchangeCodeAsync(
       {
         clientId: Config.MICROSOFT_AUTH_CLIENT_ID,
         code: microsoftResponse.params.code,
@@ -553,23 +574,23 @@ export default function App() {
       },
       microsoftDiscovery,
     ).then((microsoftExchangeRes) => {
-			axios
-				.post(
-					"<django-api-host>/auth/convert-token/",
-		      {
-		        grant_type: "convert_token",
-		        backend: "microsoft-graph",
-		        client_id: DJANGO_API_CLIENT_ID,
-		        client_secret: DJANGO_API_CLIENT_SECRET,
-		        token: microsoftExchangeRes.accessToken,
-		      },
-		      {
-		        headers: { Accept: "application/json" },
-		      },
-		   )
-				.then((djangoAPIResponse) => {
-					setToken(djangoAPIResponse.data.access_token)
-				});
+   axios
+    .post(
+     "<django-api-host>/auth/convert-token/",
+        {
+          grant_type: "convert_token",
+          backend: "microsoft-graph",
+          client_id: DJANGO_API_CLIENT_ID,
+          client_secret: DJANGO_API_CLIENT_SECRET,
+          token: microsoftExchangeRes.accessToken,
+        },
+        {
+          headers: { Accept: "application/json" },
+        },
+     )
+    .then((djangoAPIResponse) => {
+     setToken(djangoAPIResponse.data.access_token)
+    });
     });
   }, [microsoftResponse]);
 }

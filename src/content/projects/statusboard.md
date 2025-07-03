@@ -9,9 +9,11 @@ coverImageAlt: A screenshot of the Statusboard interface showing service status 
 
 ![Screenshot-2025-07-02 at 22.17.00.png](<statusboard/Screenshot 2025-07-02 at 22.17.00.png>)
 
+
 ## Idea
 
 Statusboard is a monitoring and status reporting tool designed to provide real-time insights into the health and performance of web services. It allows users to track service uptime, performance metrics, and issues, making it easier to maintain service reliability and transparency.
+
 
 ## Mockups
 

@@ -13,11 +13,14 @@ coverImageAlt: A screenshot of the ShapeConnector game, showing a colorful grid 
 | ------ | ------- |
 | [Github →](https://github.com/thalida/ShapeConnector) | [Website →](http://thalida.github.io/shapeconnector/) |
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
 [ShapeConnector 2.0 by Thalida Noel](https://dribbble.com/thalida/collections/601739-ShapeConnector-2-0)
+
 
 ### Mockups
 

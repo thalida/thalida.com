@@ -13,7 +13,9 @@ coverImageAlt: A screenshot of the thisisalso.me website, showing a collection o
 | ------ | ------- |
 | [Github →](https://github.com/thalida/thisisalso.me) |  [Website →](https://thisisalso.me/) |
 
+
 ## 🧠🌩️ Brainstorm
+
 
 ## Screenshots
 
@@ -23,7 +25,9 @@ coverImageAlt: A screenshot of the thisisalso.me website, showing a collection o
 
 ![Screen Shot 2022-02-20 at 18.12.36.png](thisisalsome/Screen_Shot_2022-02-20_at_18.12.36.png)
 
+
 ## 🎨 Design
+
 
 ### Inspiration
 
