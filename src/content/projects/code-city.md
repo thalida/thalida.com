@@ -1,8 +1,8 @@
 ---
 title: Code City
 description: Visualize a Github Repo as a 3D City
-publishedOn: 2020-05-01
-updatedOn: 2022-06-05
+publishedOn: 2021-11-06
+updatedOn: 2024-02-03
 tags: [github, python, threejs, vue]
 coverImage: code-city/Untitled.png
 coverImageAlt: A 3D cityscape representing a Github repository, with buildings and streets
