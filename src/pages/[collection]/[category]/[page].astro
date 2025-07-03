@@ -46,6 +46,11 @@ export async function getStaticPaths({ paginate }) {
 
   return paths;
 }
+
+function categoryDisplay(categoryName) {
+  const parts = categoryName.split('-');
+  return parts.map(part => part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part).join(' ');
+}
 ---
 
 
@@ -62,8 +67,8 @@ export async function getStaticPaths({ paginate }) {
       {categories.length > 1 && (
         <div class="flex flex-row flex-wrap items-center justify-center gap-2 mt-4">
           {categories.map((cat) => (
-            <a href={`/${params.collection}/${cat}`} class={`button-link capitalize ${cat === params.category ? 'is-selected' : ''}`} aria-label={`View ${cat} posts`}>
-              {cat}
+            <a href={`/${params.collection}/${cat}`} class={`button-link ${cat === params.category ? 'is-selected' : ''}`} aria-label={`View ${cat} posts`}>
+              {categoryDisplay(cat)}
             </a>
           ))}
         </div>
@@ -71,7 +76,7 @@ export async function getStaticPaths({ paginate }) {
     </div>
 
     <div class="my-8">
-      <p class="capitalize">{params.category} {params.collection}</p>
+      <p>{categoryDisplay(params.category)} {collection.title}</p>
       <div class="flex flex-row items-center justify-between gap-8">
         <p class="text-sm opacity-50"> Showing <span class="font-bold">{page.start + 1}</span> to <span class="font-bold">{page.end + 1}</span> of <span class="font-bold">{page.total}</span> {params.collection} </p>
         <div class="flex flex-row items-center justify-between gap-4">
