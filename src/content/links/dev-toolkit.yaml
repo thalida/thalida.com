@@ -1,0 +1,308 @@
+- id: https://editorjs.io/
+  title: Editor.js
+  category: dev-toolkit
+  tags:
+    - javascript
+    - editor
+    - wysiwyg
+    - libraries
+  publishedOn: 100
+
+- id: https://tiptap.dev/
+  title: Headless WYSIWYG Text Editor - Tiptap Editor
+  category: dev-toolkit
+  tags:
+    - javascript
+    - editor
+    - wysiwyg
+    - headless
+    - libraries
+  publishedOn: 95
+
+- id: https://www.paulirish.com/2012/box-sizing-border-box-ftw/
+  title: Paul Irish
+  category: dev-toolkit
+  tags:
+    - css
+    - reference
+    - best-practices
+  publishedOn: 90
+
+- id: https://developer.mozilla.org/en-US/docs/Web
+  title: Web technology for developers | MDN
+  category: dev-toolkit
+  tags:
+    - reference
+    - documentation
+    - web-standards
+  publishedOn: 100
+
+- id: https://devhints.io/
+  title: Devhints - TL;DR for developer documentation
+  category: dev-toolkit
+  tags:
+    - reference
+    - cheatsheets
+    - documentation
+  publishedOn: 85
+
+- id: https://fordinteractive.com/tools/emchart/
+  title: EmChart
+  category: dev-toolkit
+  tags:
+    - css
+    - tools
+    - typography
+  publishedOn: 70
+
+- id: https://tailwindcss.com/
+  title: Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.
+  category: dev-toolkit
+  tags:
+    - css
+    - framework
+    - utility-first
+    - libraries
+  publishedOn: 95
+
+- id: https://super.so/
+  title: Super - Build websites with Notion
+  category: dev-toolkit
+  tags:
+    - hosting
+    - notion
+    - website-builder
+  publishedOn: 75
+
+- id: https://storybook.js.org/
+  title: Storybook - UI component explorer for frontend developers
+  category: dev-toolkit
+  tags:
+    - javascript
+    - ui-components
+    - development-tools
+  publishedOn: 90
+
+- id: https://render.com/
+  title: Render
+  category: dev-toolkit
+  tags:
+    - hosting
+    - deployment
+    - cloud
+  publishedOn: 80
+
+- id: https://carbon.now.sh/
+  title: Carbon
+  category: dev-toolkit
+  tags:
+    - code-sharing
+    - screenshots
+    - documentation
+  publishedOn: 85
+
+- id: https://monodraw.helftone.com/
+  title: Monodraw for macOS - Helftone
+  category: dev-toolkit
+  tags:
+    - macOS
+    - ascii-art
+    - documentation
+  publishedOn: 60
+
+- id: https://darknetdiaries.com/
+  title: Darknet Diaries - True stories from the dark side of the Internet.
+  category: dev-toolkit
+  tags:
+    - podcast
+    - cybersecurity
+    - stories
+  publishedOn: 80
+
+- id: https://www.nytimes.com/2020/07/23/podcasts/nice-white-parents-serial.html
+  title: Introducing - Nice White Parents (Published 2020)
+  category: dev-toolkit
+  tags:
+    - podcast
+    - education
+    - social-issues
+  publishedOn: 70
+
+- id: https://www.alieward.com/ologies
+  title: Ologies Episodes - alie ward
+  category: dev-toolkit
+  tags:
+    - podcast
+    - science
+    - education
+  publishedOn: 75
+
+- id: https://open.spotify.com/playlist/7JZcvu9Ngo3p1KiV57SQc7?si=38ac67316671434f
+  title: Coding Playlist 1
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1
+  title: Coding Playlist 2
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717
+  title: Coding Playlist 3
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree
+  title: Todo Tree - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - productivity
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag
+  title: Auto Close Tag - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - html
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag
+  title: Auto Rename Tag - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - html
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
+  title: Better Comments - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - comments
+  publishedOn: 75
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker
+  title: Docker - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - docker
+    - containers
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=sleistner.vscode-fileutils
+  title: File Utils - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - file-management
+  publishedOn: 70
+
+- id: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot
+  title: GitHub Copilot - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - ai
+    - github
+  publishedOn: 95
+
+- id: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens
+  title: GitLens - Git supercharged - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - git
+    - github
+  publishedOn: 90
+
+- id: https://code.visualstudio.com/docs/remote/containers
+  title: Developing inside a Container using Visual Studio Code Remote Development
+  category: dev-toolkit
+  tags:
+    - vscode
+    - remote-development
+    - containers
+    - documentation
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+  title: Remote - Containers - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - remote-development
+    - containers
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh
+  title: Remote - SSH - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - remote-development
+    - ssh
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
+  title: Remote Development - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - remote-development
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=liviuschera.noctis
+  title: Noctis - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - theme
+  publishedOn: 70
+
+- id: https://marketplace.visualstudio.com/items?itemName=dariofuzinato.vue-peek
+  title: Vue Peek - Visual Studio Marketplace
+  category: dev-toolkit
+  tags:
+    - vscode
+    - extension
+    - vue
+    - javascript
+  publishedOn: 75
+
+- id: https://flagsmith.com/
+  title: Flagsmith - Open Source Feature Flag & Remote Config Service
+  category: dev-toolkit
+  tags:
+    - feature-flags
+    - configuration
+    - open-source
+    - tools
+  publishedOn: 80

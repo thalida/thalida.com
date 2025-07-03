@@ -1,0 +1,152 @@
+- id: https://www.flickr.com/photos/wocintechchat/albums
+  title: WOCinTech Chat - Free Stock Photos
+  category: design-toolkit
+  tags:
+    - stock-photos
+    - diversity
+    - tech
+    - photography
+  publishedOn: 100
+
+- id: https://medium.com/@philpl/what-sets-dank-mono-apart-1bbdc1cc3cbd
+  title: What sets Dank Mono apart?
+  category: design-toolkit
+  tags:
+    - fonts
+    - typography
+    - coding-fonts
+  publishedOn: 50
+
+- id: https://www.typography.com/blog/introducing-operator
+  title: Introducing Operator | Fonts by Hoefler&Co.
+  category: design-toolkit
+  tags:
+    - fonts
+    - typography
+    - premium-fonts
+  publishedOn: 50
+
+- id: https://fonts.google.com/specimen/Fira+Code
+  title: Google Fonts - Fira Code
+  category: design-toolkit
+  tags:
+    - fonts
+    - typography
+    - google-fonts
+    - coding-fonts
+  publishedOn: 50
+
+- id: https://budicon.co/
+  title: Budicon - Premium Icon Set Collection
+  category: design-toolkit
+  tags:
+    - icons
+    - premium
+    - design-assets
+  publishedOn: 50
+
+- id: https://flaticons.co/
+  title: Flaticons - Premium Icon Sets
+  category: design-toolkit
+  tags:
+    - icons
+    - premium
+    - design-assets
+  publishedOn: 50
+
+- id: https://iconic.app/
+  title: Iconic - Free Pixel-Perfect Icons
+  category: design-toolkit
+  tags:
+    - icons
+    - free
+    - pixel-perfect
+    - design-assets
+  publishedOn: 50
+
+- id: https://www.notion.vip/icons/
+  title: Notion Icons
+  category: design-toolkit
+  tags:
+    - icons
+    - notion
+    - design-assets
+  publishedOn: 50
+
+- id: https://stubborn.fun/
+  title: Stubborn - Free Illustrations Generator
+  category: design-toolkit
+  tags:
+    - illustrations
+    - generator
+    - free
+    - design-assets
+  publishedOn: 50
+
+- id: https://www.figma.com/community/file/958383439532195363
+  title: Figma Community Kit
+  category: design-toolkit
+  tags:
+    - figma
+    - design-kits
+    - community
+    - ui-kits
+  publishedOn: 50
+
+- id: https://www.figma.com/community/search?model_type=hub_files&q=wireframe
+  title: Figma Wireframe Kits
+  category: design-toolkit
+  tags:
+    - figma
+    - wireframes
+    - design-kits
+    - ui-kits
+  publishedOn: 50
+
+- id: https://meettheipsums.com/
+  title: Meet The Ipsums - Lorem Ipsum Alternatives
+  category: design-toolkit
+  tags:
+    - lorem-ipsum
+    - placeholder-text
+    - content
+  publishedOn: 50
+
+- id: https://www.youtube.com/watch?v=GyVMoejbGFg
+  title: Color & Color Theory Video
+  category: design-toolkit
+  tags:
+    - color-theory
+    - education
+    - youtube
+    - design-principles
+  publishedOn: 50
+
+- id: https://www.pexels.com/
+  title: Pexels - Free Stock Photos
+  category: design-toolkit
+  tags:
+    - stock-photos
+    - free
+    - photography
+  publishedOn: 50
+
+- id: https://tympanus.net/codrops/
+  title: Codrops - Web Design & Development Inspiration
+  category: design-toolkit
+  tags:
+    - inspiration
+    - web-design
+    - tutorials
+    - resources
+  publishedOn: 50
+
+- id: https://mobbin.design/browse/ios/apps
+  title: Mobbin - Mobile App Design Reference Library
+  category: design-toolkit
+  tags:
+    - inspiration
+    - mobile-design
+    - ui-patterns
+    - reference
+  publishedOn: 50

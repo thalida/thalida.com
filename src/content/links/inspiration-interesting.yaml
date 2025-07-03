@@ -1,0 +1,154 @@
+- id: https://abellehayford.com/
+  title: Abelle hayford
+  category: inspiration-and-interesting
+  tags:
+    - personal-website
+    - portfolio
+    - design
+  publishedOn: 50
+
+- id: https://manuelmoreale.com/
+  title: Manu - I write
+  category: inspiration-and-interesting
+  tags:
+    - blog
+    - writing
+    - personal
+  publishedOn: 50
+
+- id: https://www.legacy-bqpc.com/mobile-home
+  title: LEGACY
+  category: inspiration-and-interesting
+  tags:
+    - cool-people
+    - website
+    - design
+  publishedOn: 50
+
+- id: https://www.artstation.com/amalasrosa
+  title: ArtStation - Amala Rosa
+  category: inspiration-and-interesting
+  tags:
+    - cool-people
+    - art
+    - portfolio
+  publishedOn: 50
+
+- id: https://alythuh.com/
+  title: ALYTHUH® Official Site
+  category: inspiration-and-interesting
+  tags:
+    - cool-people
+    - personal-brand
+    - website
+  publishedOn: 50
+
+- id: https://www.mightynetworks.com/
+  title: Mighty Networks | Build Communities, Courses & Memberships
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - community
+    - platform
+  publishedOn: 50
+
+- id: https://www.forem.com/
+  title: Forem - Community for Everyone
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - community
+    - open-source
+  publishedOn: 50
+
+- id: https://www.qovery.com/
+  title: Qovery - The simplest way to deploy your applications on AWS
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - deployment
+    - aws
+    - cloud
+  publishedOn: 50
+
+- id: https://codespace.app/
+  title: Codespace - The code snippet manager you've been waiting for
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - code-management
+    - productivity
+  publishedOn: 50
+
+- id: https://heyday.xyz/
+  title: Heyday - your research helping hand
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - research
+    - productivity
+  publishedOn: 50
+
+- id: https://siftnewstherapy.com/
+  title: Sift - Feel news differently
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - news
+    - mental-health
+  publishedOn: 50
+
+- id: https://slides.com/
+  title: Slides - Create and Share Presentations for Free
+  category: inspiration-and-interesting
+  tags:
+    - cool-products
+    - presentations
+    - tools
+  publishedOn: 50
+
+- id: https://ricostacruz.com/til/#articles
+  title: Today I Learned - web development musings semi-daily
+  category: inspiration-and-interesting
+  tags:
+    - cool-websites
+    - learning
+    - web-development
+  publishedOn: 50
+
+- id: https://makelemonade.wtf/
+  title: Make Lemonade
+  category: inspiration-and-interesting
+  tags:
+    - cool-websites
+    - creative
+    - design
+  publishedOn: 50
+
+- id: https://fuckiwishiknewth.at/
+  title: Fuck I Wish I Knew That
+  category: inspiration-and-interesting
+  tags:
+    - cool-websites
+    - learning
+    - resources
+  publishedOn: 50
+
+- id: https://www.brucira.com/
+  title: Brucira | Strategy, Branding and UX UI Product Design Agency
+  category: inspiration-and-interesting
+  tags:
+    - cool-websites
+    - design-agency
+    - branding
+    - ux-ui
+  publishedOn: 50
+
+- id: https://turnislefthome.com/projects
+  title: Turnislefthome.com | The Work of Timothy J. Reynolds
+  category: inspiration-and-interesting
+  tags:
+    - cool-websites
+    - portfolio
+    - creative
+  publishedOn: 50
