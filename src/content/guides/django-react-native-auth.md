@@ -36,9 +36,9 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 ---
 
-# Part 1:  Django
+## Part 1:  Django
 
-## 1.1 Install Packages
+### 1.1 Install Packages
 
 | Package | Django App Name | Documentation |
 | ------- | --------------- | ------------- |
@@ -48,17 +48,17 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 Your `INSTALLED_APPS` should now have the following Installed Apps:
 
-```python
+```python title="settings.py"
 INSTALLED_APPS = [
-		...
-		"oauth2_provider",
-		"social_django",
-		"drf_social_oauth2",
-		...
+  ...
+  "oauth2_provider",
+  "social_django",
+  "drf_social_oauth2",
+  ...
 ]
 ```
 
-## 1.2 Create API Client
+### 1.2 Create API Client
 
 Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below).
 
@@ -68,11 +68,11 @@ Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below
 
 [Setting Up a New Application — drf-social-oauth2 2.1.3 documentation](https://drf-social-oauth2.readthedocs.io/en/latest/application.html)
 
-## 1.3 Update Social Auth Settings
+### 1.3 Update Social Auth Settings
 
-In [`settings.py`](http://settings.py) add the following options:
+In `settings.py` add the following options:
 
-```python
+```python  title="settings.py"
 ACTIVATE_JWT = True
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
@@ -96,10 +96,9 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
     [https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation](https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation)
 
+### 1.4 Setup Google OAuth in Django
 
-## 1.4 Setup Google OAuth in Django
-
-### 1.4.1 Create **Application**
+#### 1.4.1 Create **Application**
 
 1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), select your project and go to:
 APIs & Services → Credentials → Create Credentials → OAuth client ID
@@ -116,7 +115,7 @@ APIs & Services → Credentials → Create Credentials → OAuth client ID
 
 ![Screenshot 2023-11-11 at 13.37.21.png](django-react-native-auth/Screenshot_2023-11-11_at_13.37.21.png)
 
-### 1.4.2 Update Django Settings
+#### 1.4.2 Update Django Settings
 
 Follow the guide here to add support for Google OAuth:
 
@@ -125,11 +124,11 @@ Follow the guide here to add support for Google OAuth:
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_KEY` value is the `Client ID` of the OAuth2 credential created on Google Cloud Console
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET` value is the `Client Secret` of the OAuth2 credential created on Google Cloud Console
 
-## 1.5 Setup Microsoft OAuth in Django
+### 1.5 Setup Microsoft OAuth in Django
 
 The settings for Microsoft OAuth are more complicated than setting up for Google. Setup requires overriding one of the serializers (and subsequently a view) provided by DRF Social Auth in order to change a serializer. There may be a better method to do this, but this is what worked for me.
 
-### 1.5.1 Create **Application**
+#### 1.5.1 Create **Application**
 
 **Base Application Setup**
 
@@ -170,11 +169,11 @@ App Registration Page
 
 ![Screenshot 2023-11-11 at 13.58.10.png](django-react-native-auth/Screenshot_2023-11-11_at_13.58.10.png)
 
-### 1.5.2 Update **Django Settings**
+#### 1.5.2 Update **Django Settings**
 
 In settings.py add `social_core.backends.microsoft.MicrosoftOAuth2` to your `AUTHENTICATION_BACKENDS`
 
-```python
+```python title="settings.py"
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",
     **"social_core.backends.microsoft.MicrosoftOAuth2",**
@@ -185,7 +184,7 @@ AUTHENTICATION_BACKENDS = (
 
 This backend uses [https://graph.microsoft.com/v1.0/me](https://graph.microsoft.com/v1.0/me) to fetch the user data given a `access_token`.
 
-### 1.5.3 Fix Access Token Max Characters Error
+#### 1.5.3 Fix Access Token Max Characters Error
 
 By default the `drf_social_oauth2` `ConvertTokenSerializer` limits a token to `2000` characters.
 
@@ -193,9 +192,9 @@ This is bad for Microsoft OAuth, as it returns a token larger than 2000 characte
 
 **Override ConvertTokenSerializer**
 
-In my case, I have an app called `authentication` in my project, which houses views and models related to auth (eg. my custom `User` model). Update your app [`views.py`](http://views.py) to have the following:
+In my case, I have an app called `authentication` in my project, which houses views and models related to auth (eg. my custom `User` model). Update your app `views.py` to have the following:
 
-```python
+```python title="views.py"
 from rest_framework import serializers
 from drf_social_oauth2.serializers import ConvertTokenSerializer as BaseConvertTokenSerializer
 from drf_social_oauth2.views import ConvertTokenView as BaseConvertTokenView
@@ -245,7 +244,7 @@ class ConvertTokenView(BaseConvertTokenView):
 
 **Update your application `urls.py`**
 
-```python
+```python title="urls.py"
 from django.urls import include, re_path
 from oauth2_provider.views import AuthorizationView
 from drf_social_oauth2.views import (
@@ -280,11 +279,11 @@ auth_urlpatterns = (
 
 **Update your project `urls.py`**
 
-```python
+```python title="urls.py"
 import authentication.urls
 urlpatterns = [
-		...
-		re_path(r"^auth/", include(authentication.urls.auth_urlpatterns)),
+  ...
+  re_path(r"^auth/", include(authentication.urls.auth_urlpatterns)),
 ]
 ```
 
@@ -296,9 +295,9 @@ urlpatterns = [
 
 ---
 
-# Part 2: React Native
+## Part 2: React Native
 
-## 2.1 Install Packages
+### 2.1 Install Packages
 
 Install [Expo AuthSession](https://docs.expo.dev/versions/latest/sdk/auth-session/)
 
@@ -312,7 +311,7 @@ Install [axios](https://axios-http.com/)
 
 [Axios](https://axios-http.com/)
 
-## 2.2 Warm Web Browser & Setup State
+### 2.2 Warm Web Browser & Setup State
 
 ```tsx
 import * as React from 'react';
@@ -350,9 +349,9 @@ export default function App() {
 }
 ```
 
-## 2.3  Setup Google OAuth in React Native
+### 2.3  Setup Google OAuth in React Native
 
-### 2.3.1 Update Google Cloud Console
+#### 2.3.1 Update Google Cloud Console
 
 Navigate to **APIs & Services > Credentials**, and create three new OAuth Clients with the following Application Types and settings:
 
@@ -369,7 +368,7 @@ Navigate to **APIs & Services > Credentials**, and create three new OAuth Client
   - Set Authorized Redirect URLs to your react native web hosts:
     - e.g. [http://localhost:8081](http://localhost:8081/)
 
-### 2.3.2  Connect Google OAuth
+#### 2.3.2  Connect Google OAuth
 
 **Update Imports**
 
@@ -445,9 +444,9 @@ export default function App() {
 }
 ```
 
-## 2.4 Setup Microsoft OAuth in React Native
+### 2.4 Setup Microsoft OAuth in React Native
 
-### 2.4.1 Update Application in Microsoft Entra Admin Center
+#### 2.4.1 Update Application in Microsoft Entra Admin Center
 
 Return to the Microsoft Entra Admin Center, and update the Application you created earlier.
 
@@ -461,7 +460,7 @@ Under the `Authentication` section add new redirect urls for:
     -
 
 
-### 2.4.2 Connect Microsoft OAuth
+#### 2.4.2 Connect Microsoft OAuth
 
 **Update Imports**
 
