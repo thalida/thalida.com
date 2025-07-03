@@ -24,8 +24,19 @@ export async function parseOpenGraph(pageUrl: string) {
 
 	const getMetaProperty = (prop: string) =>
 		getContent(html.querySelector(`meta[property=${JSON.stringify(prop)}]`));
+
 	const getMetaName = (name: string) =>
 		getContent(html.querySelector(`meta[name=${JSON.stringify(name)}]`));
+
+	const getLinkRel = (rel: string) =>
+		html.querySelector(`link[rel=${JSON.stringify(rel)}]`)?.getAttribute('href');
+
+	const icon = urlOrNull(
+		getLinkRel('apple-touch-icon-precomposed') ||
+		getLinkRel('apple-touch-icon') ||
+		getLinkRel('icon') ||
+		getLinkRel('shortcut icon')
+	);
 
 	const title =
 		getMetaProperty('og:title') || html.querySelector('title')?.textContent;
@@ -49,5 +60,5 @@ export async function parseOpenGraph(pageUrl: string) {
 				html.querySelector("link[rel='canonical']")?.getAttribute('href')
 		) || pageUrl;
 
-	return { title, description, image, imageAlt, url, video, videoType };
+	return { icon, title, description, image, imageAlt, url, video, videoType };
 }

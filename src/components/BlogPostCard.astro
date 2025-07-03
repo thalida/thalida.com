@@ -15,6 +15,10 @@ const postUrl = isExternal
  console.log('Post URL:', postUrl);
  console.log('Meta:', meta);
 
+ const icon = isExternal && meta?.icon
+  ? meta.icon
+  : null;
+
  const coverImage = isExternal && meta?.image
   ? meta.image
   : post.data.coverImage;
@@ -58,7 +62,16 @@ if (description && description.length > 150) {
     )}
   </div>
   <div>
-    <p class="text-lg font-bold">{title}</p>
+    {(icon || title) && (
+      <div class="flex flex-row items-start gap-2 mb-2">
+        {icon && (<img
+          src={icon}
+          alt={collection.name}
+          class="w-6 h-6 rounded-full mt-1"
+        />)}
+        { title && (<p class="text-lg font-bold">{title}</p>)}
+      </div>
+    )}
     { description && (<p class="text-sm">{description}</p>)}
   </div>
   {isExternal ? <p class="text-xs opacity-50">{postUrl}</p> : <p class="text-xs opacity-50">{formatDate(post.data.updatedOn || post.data.publishedOn)}</p>}
