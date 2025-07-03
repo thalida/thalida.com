@@ -66,7 +66,7 @@ const nextPost = collectionPosts[nextPostIndex] || null;
 
       <div class="container grid grid-cols-2 my-8 gap-8 border-t-2 border-surface-200 pt-8">
         <div class="flex flex-col items-start justify-start gap-4">
-          <a href={prevPost ? `/${prevPost.collection}/${prevPost.id}` : "#"} class={prevPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+          <a href={prevPost ? `/${prevPost.collection}/post/${prevPost.id}` : "#"} class={prevPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
             <i class="fa-solid fa-arrow-left"></i>
             <span class="hidden sm:inline">Previous</span>
           </a>
@@ -75,7 +75,7 @@ const nextPost = collectionPosts[nextPostIndex] || null;
           </div>
         </div>
         <div class="flex flex-col items-end justify-start gap-4">
-          <a href={nextPost ? `/${nextPost.collection}/${nextPost.id}` : "#"} class={nextPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
+          <a href={nextPost ? `/${nextPost.collection}/post/${nextPost.id}` : "#"} class={nextPost ? 'button-link ' : 'button-link opacity-20 cursor-default pointer-events-none'} aria-label="Previous page">
             <span class="hidden sm:inline">Next</span>
             <i class="fa-solid fa-arrow-right"></i>
           </a>
