@@ -9,8 +9,16 @@ import { glob, file } from 'astro/loaders';
 export const COLLECTION_CHOICES = ["guides", "links", "projects", "gallery", "recipes", "versions"] as const;
 
 function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
+  let loader;
+
+  if (collectionName === "links") {
+    loader = file("./src/content/links/links.yaml");
+  } else {
+    loader = glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${collectionName}` })
+  }
+
   return defineCollection({
-    loader: glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${collectionName}` }),
+    loader,
     schema: ({ image }) => z.object({
       title: z.string(),
       subtitle: z.string().optional(),
@@ -21,6 +29,7 @@ function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
       publishedOn: z.coerce.date(),
       updatedOn: z.coerce.date().optional(),
       draft: z.boolean().optional(),
+      category: z.string().optional(),
       tags: z.array(z.string()).optional(),
       related: z.array(reference(collectionName)).optional(),
       rating: z.coerce.number().optional(),
@@ -34,7 +43,6 @@ export const collections = COLLECTION_CHOICES.reduce((acc, collectionName) => {
   acc[collectionName] = makeCollection(collectionName);
   return acc;
 }, {} as Record<typeof COLLECTION_CHOICES[number], ReturnType<typeof defineCollection>>);
-
 
 
 export const collectionMeta = {

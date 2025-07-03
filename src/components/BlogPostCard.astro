@@ -2,13 +2,44 @@
 const { post } = Astro.props;
 import { Image } from 'astro:assets';
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.config";
-import { formatDate } from "../utils";
+import { formatDate, parseOpenGraph } from "../utils";
+
 const collection = collectionMeta[post.collection]
+const isExternal = post.collection === 'links';
+const postUrl = isExternal
+  ? post.id
+  : `/${post.collection}/${post.id}`;
+
+ const meta = isExternal ? await parseOpenGraph(postUrl) : null;
+
+ console.log('Post URL:', postUrl);
+ console.log('Meta:', meta);
+
+ const coverImage = isExternal && meta?.image
+  ? meta.image
+  : post.data.coverImage;
+
+const coverImageAlt = isExternal && meta?.imageAlt
+  ? meta.imageAlt
+  : post.data.coverImageAlt;
+
+const title = isExternal && meta?.title
+  ? meta.title
+  : post.data.title || 'Untitled';
+
+let description = isExternal && meta?.description
+  ? meta.description
+  : post.data.description || post.data.summary || '';
+
+if (description && description.length > 150) {
+  description = description.slice(0, 150) + '...';
+}
 ---
 
 <a
-  href={`/${post.collection}/${post.id}`}
+  href={postUrl}
   class="h-full w-full card col-span-1 flex flex-col justify-between bg-white dark:bg-black rounded-2xl p-4 gap-2"
+  target={isExternal ? '_blank' : '_self'}
 >
   <div class={ `w-full aspect-video flex items-center justify-center ${collection.imageBgColor} rounded-lg overflow-hidden relative` }>
     {post.data.coverImage && (<Image
@@ -17,10 +48,18 @@ const collection = collectionMeta[post.collection]
       class="w-full h-full object-cover"
       loading="lazy"
     />)}
+    {meta?.image && !post.data.coverImage && (
+      <img
+        src={meta.image}
+        alt={coverImageAlt}
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    )}
   </div>
   <div>
-    <p class="text-lg font-bold">{post.data.title}</p>
-    { post.data.description && (<p class="text-sm">{post.data.description}</p>)}
+    <p class="text-lg font-bold">{title}</p>
+    { description && (<p class="text-sm">{description}</p>)}
   </div>
-  <p class="text-xs opacity-50">{formatDate(post.data.updatedOn || post.data.publishedOn)}</p>
+  {isExternal ? <p class="text-xs opacity-50">{postUrl}</p> : <p class="text-xs opacity-50">{formatDate(post.data.updatedOn || post.data.publishedOn)}</p>}
 </a>

@@ -1,0 +1,184 @@
+- id: https://numi.app/
+  title: Numi
+  category: productivity
+  tags:
+    - productivity
+    - calculator
+    - macOS
+    - favorites
+  publishedOn: 100
+
+- id: https://www.tatianapoblah.com/
+  title: Tatiana Poblah
+  category: art
+  tags:
+    - art
+    - favorites
+  publishedOn: 100
+
+- id: https://www.realweirdart.com/
+  title: Real Weird Art
+  category: art
+  tags:
+    - art
+    - favorites
+  publishedOn: 100
+
+- id: https://ticktick.com/
+  title: TickTick
+  category: productivity
+  tags:
+    - productivity
+    - task management
+    - mobile
+  publishedOn: 90
+
+- id: https://www.notion.so/
+  title: Notion
+  category: productivity
+  tags:
+    - productivity
+    - collaboration
+    - note-taking
+  publishedOn: 80
+
+- id: https://magnet.crowdcafe.com/
+  title: Magnet
+  category: macOS
+  tags:
+    - productivity
+    - macOS
+    - window management
+  publishedOn: 80
+
+- id: https://www.sharecestudios.com/
+  title: Sharece Studios
+  category: art
+  tags:
+    - art
+  publishedOn: 70
+
+- id: https://www.lgions.com/
+  title: LGIONS
+  category: art
+  tags:
+    - art
+    - design
+  publishedOn: 70
+
+- id: https://hippypotter.bigcartel.com/
+  title: Hippy Potter
+  category: art
+  tags:
+    - art
+    - pottery
+  publishedOn: 60
+
+- id: https://gldeng6rl.com/
+  title: Gldeng6rl
+  category: art
+  tags:
+    - art
+    - design
+  publishedOn: 60
+
+- id: https://pinktofuart.com/
+  title: Pink Tofu Art
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://littlecorvus.storenvy.com/
+  title: Little Corvus
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://www.vashtiharrison.com/shop
+  title: Vashti Harrison
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://popchart.co/
+  title: Pop Chart
+  category: art
+  tags:
+    - art
+    - design
+  publishedOn: 50
+
+- id: https://www.etsy.com/shop/agavnythepigeon
+  title: Agavny the Pigeon
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://www.inprnt.com/gallery/taliaskyles/
+  title: Talia Skyles
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://www.inprnt.com/gallery/titsay/
+  title: Titsay
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://www.inprnt.com/gallery/waneella/
+  title: Waneella
+  category: art
+  tags:
+    - art
+    - illustration
+  publishedOn: 50
+
+- id: https://arhoj.com/
+  title: Arhoj
+  category: art
+  tags:
+    - art
+    - pottery
+    - ceramics
+    - favorites
+  publishedOn: 100
+
+- id: https://www.forestapp.cc/
+  title: Forest
+  category: productivity
+  tags:
+    - productivity
+    - focus
+    - mobile
+  publishedOn: 10
+
+- id: https://nektony.com/mac-app-cleaner
+  title: Mac App Cleaner
+  category: macOS
+  tags:
+    - macOS
+    - cleanup
+    - optimization
+  publishedOn: 1
+
+- id: https://wetransfer.com/paper
+  title: WeTransfer Paper
+  category: productivity
+  tags:
+    - collaboration
+    - whiteboard
+    - brainstorming
+  publishedOn: 0
