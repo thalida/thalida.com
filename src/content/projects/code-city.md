@@ -8,11 +8,11 @@ coverImage: code-city/Untitled.png
 coverImageAlt: A 3D cityscape representing a Github repository, with buildings and streets
 ---
 
-Visualize a Github Repo as a 3D City.
-
 ![Untitled](code-city/Untitled.png)
 
-[Github →](https://github.com/thalida/codecity)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/codecity) | |
 
 ## ✅ Todos
 
@@ -24,17 +24,17 @@ Visualize a Github Repo as a 3D City.
 
 ### City Generation
 
-**BUILDINGS**
+#### **BUILDINGS**
 
 - Buildings age based on the age of the file
-    - eg. A modern building for a new file
-    - eg. A victorian building for a an old file
+  - eg. A modern building for a new file
+  - eg. A victorian building for a an old file
 - Grime / damage on a building based on last modified date
-    - the cleaner the building the most recently the file was updated
+  - the cleaner the building the most recently the file was updated
 - The style / type of building is based on the type of file
-    - eg. a readme could be a library?
+  - eg. a readme could be a library?
 
-**STREETS**
+#### **STREETS**
 
 - Each street is the name of a folder
 - The width of the street is based on the number of files / directories nested in it
@@ -47,8 +47,7 @@ Visualize a Github Repo as a 3D City.
 
 ### Paper Sketches
 
-![Paper.2020.me.52.png](code-city/Paper.2020.me.52.png)
-
-![Paper.codecity.14.png](code-city/Paper.codecity.14.png)
-
-![Paper.codecity.18.png](code-city/Paper.codecity.18.png)
+| | |
+| ------ | ------- |
+| ![Paper.2020.me.52.png](code-city/Paper.2020.me.52.png) | ![Paper.codecity.14.png](code-city/Paper.codecity.14.png) |
+| ![Paper.codecity.18.png](code-city/Paper.codecity.18.png) | |

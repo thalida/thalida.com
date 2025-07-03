@@ -10,6 +10,6 @@ coverImageAlt: A screenshot of the WordBird Chrome extension interface, showing 
 
 ![Untitled](wordbird/Untitled.png)
 
-A chrome plugin which will replace any words you choose with another one.
-
-[Github →](https://github.com/thalida/WordBird)   [Chrome Store →](https://chrome.google.com/webstore/detail/wordbird/phjelaokjghhjogbfmkljhghhnbidfgk?hl=en)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/WordBird) |  [Chrome Store →](https://chrome.google.com/webstore/detail/wordbird/phjelaokjghhjogbfmkljhghhnbidfgk?hl=en) |

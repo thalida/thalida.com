@@ -7,11 +7,11 @@ coverImage: shapeconnector/shapeconnector_teaser2.png
 coverImageAlt: A screenshot of the ShapeConnector game, showing a colorful grid with various shapes
 ---
 
-A puzzle game where the goal is to get from one shape to another in a specified amount of moves.
-
 ![gameplay.gif](shapeconnector/gameplay.gif)
 
-[Github →](https://github.com/thalida/ShapeConnector)   [Website →](http://thalida.github.io/shapeconnector/)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/ShapeConnector) | [Website →](http://thalida.github.io/shapeconnector/) |
 
 ## 🎨 Design
 
@@ -21,12 +21,8 @@ A puzzle game where the goal is to get from one shape to another in a specified 
 
 ### Mockups
 
-![shapeconnector_teaser2.png](shapeconnector/shapeconnector_teaser2.png)
-
-![Freeplay.png](shapeconnector/Freeplay.png)
-
-![Freeplay: Finished.png](shapeconnector/Freeplay_Finished.png)
-
-![Freeplay: Moved too many.png](shapeconnector/Freeplay_Moved_too_many.png)
-
-![Freeplay: Moved.png](shapeconnector/Freeplay_Moved.png)
+| | |
+| ------ | ------- |
+| ![shapeconnector_teaser2.png](shapeconnector/shapeconnector_teaser2.png) | ![Freeplay.png](shapeconnector/Freeplay.png) |
+| ![Freeplay: Finished.png](shapeconnector/Freeplay_Finished.png) | ![Freeplay: Moved too many.png](shapeconnector/Freeplay_Moved_too_many.png) |
+| ![Freeplay: Moved.png](shapeconnector/Freeplay_Moved.png) | |

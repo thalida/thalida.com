@@ -7,11 +7,11 @@ coverImage: mapdo/Untitled.png
 coverImageAlt: Location based todos. Get reminded about a task as soon as you enter a room.
 ---
 
-Location based todos. Get reminded about a task as soon as you enter a room.
-
 ![Untitled](mapdo/Untitled.png)
 
-[Dribbble](https://dribbble.com/thalida/collections/770096-mapdo)
+| Links | |
+| ------ | ------- |
+| [Dribbble](https://dribbble.com/thalida/collections/770096-mapdo) | |
 
 ## 💡Idea
 

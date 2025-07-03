@@ -7,8 +7,6 @@ coverImage: makerfold/makefold.png
 coverImageAlt: A platform for Makers to share their progress, plans, and ideas.
 ---
 
-A platform for Makers to share their progress, plans, and ideas.
-
 ## 🎨 Design
 
 ### Branding

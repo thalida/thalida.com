@@ -8,11 +8,11 @@ coverImage: grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.pn
 coverImageAlt: A Minecraft datapack to remove the grind, featuring a button that gives items
 ---
 
-A Minecraft datapack to remove the grind.
-
 ![d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png](grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png)
 
-[Github →](https://github.com/thalida/grindless)   [Docs →](http://docs.grindless.builders/)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/grindless) | [Docs →](http://docs.grindless.builders/) |
 
 ## ✅ ToDo
 

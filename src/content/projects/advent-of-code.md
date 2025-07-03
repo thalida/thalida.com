@@ -8,13 +8,9 @@ coverImage: advent-of-code/Screen_Shot_2022-02-19_at_18.29.31.png
 coverImageAlt: Advent of Code logo with a festive design.
 ---
 
-## Overview
-
-**Repo tracking my participation in Advent of Code**
-
-[Github →](https://github.com/thalida/adventofcode)
-
-[Advent of Code →](https://adventofcode.com/)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/adventofcode) | [Advent of Code →](https://adventofcode.com/) |
 
 ## 2020
 

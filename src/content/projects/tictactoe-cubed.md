@@ -8,11 +8,11 @@ coverImage: tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png
 coverImageAlt: A screenshot of the Tic-Tac-Toe Cubed game, showing a
 ---
 
-A 9x9 version of the classic game
-
 ![Screen Shot 2022-02-20 at 16.55.40.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png)
 
-[Github →](https://github.com/thalida/TicTacToeCubed)   [Website →](http://thalida.github.io/tictactoe-cubed/)
+| Links | |
+| ------ | ------- |
+| [Github →](https://github.com/thalida/TicTacToeCubed) | [Website →](http://thalida.github.io/tictactoe-cubed/) |
 
 ## ✅ ToDo
 
