@@ -1,0 +1,83 @@
+- id: https://itrevolution.com/the-phoenix-project/
+  title: The Phoenix Project
+  category: books
+  tags:
+    - technology
+    - management
+    - favorites
+  publishedOn: 100
+
+- id: https://www.chimamanda.com/americanah/
+  title: "Americanah - Chimamanda Ngozi Adichie"
+  category: books
+  tags:
+    - fiction
+  publishedOn: 80
+
+- id: https://www.goodreads.com/book/show/34324484-not-even-bones
+  title: "Not Even Bones (Market of Monsters, #1)"
+  category: books
+  tags:
+    - fiction
+  publishedOn: 50
+
+- id: https://www.goodreads.com/book/show
+  title: "Aristotle and Dante Discover the Secrets of the Universe (Aristotle and Dante, #1)"
+  category: books
+  tags:
+    - fiction
+  publishedOn: 80
+
+- id: https://www.goodreads.com/book/show/29243630-children-of-the-new-world
+  title: "Children of the New World"
+  category: books
+  tags:
+    - fiction
+  publishedOn: 50
+
+- id: https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/
+  title: "Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy"
+  category: books
+  tags:
+    - technology
+  publishedOn: 50
+
+- id: https://itrevolution.com/the-phoenix-project/
+  title: "The Phoenix Project: A Novel About IT, DevOps, and Helping Your Business Win"
+  category: books
+  tags:
+    - technology
+    - management
+    - favorites
+  publishedOn: 100
+
+- id: https://www.tablegroup.com/product/dysfunctions/
+  title: "The Five Dysfunctions of a Team: A Leadership Fable"
+  category: books
+  tags:
+    - management
+  publishedOn: 80
+
+- id: https://www.leadingqualitybook.com/
+  title: "Leading Quality: How Great Leaders Deliver High-Quality Software and Accelerate Growth"
+  category: books
+  tags:
+    - technology
+    - management
+  publishedOn: 50
+
+- id: https://www.oreilly.com/library/view/the-managers-path/9781491973882/
+  title: "The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change"
+  category: books
+  tags:
+    - technology
+    - management
+  publishedOn: 80
+
+- id: https://www.juliezhuo.com/book/manager.html
+  title: "The Making of a Manager: What to Do When Everyone Looks to You"
+  category: books
+  tags:
+    - technology
+    - management
+  publishedOn: 80

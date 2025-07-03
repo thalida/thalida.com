@@ -4,76 +4,7 @@ description: A curated collection of interesting sites, products, resources, and
 publishedOn: 2023-10-01
 ---
 
-<aside>
-🥗 **Food**
-
-</aside>
-
-<aside>
-💚 **Faves**
-
-[Callaloo Box - Caribbean condiments, hot sauces, snacks & more](https://callaloobox.com/)
-
-</aside>
-
-[5 Min DIY Bubble Tea Kit | Premium Homemade Bubble Tea in Canada](https://baubleboba.com/)
-
-[Green Houwse Shop | Ivy Leaf Farms](https://www.ivyleaffarms.com/green-houwse-shop?page=2)
-
-[Callaloo Box - Caribbean condiments, hot sauces, snacks & more](https://callaloobox.com/)
-
-<aside>
-📚 **Books**
-
-</aside>
-
-<aside>
-💛 **Faves**
-
-Management / Tech
-
-[The Phoenix Project - Book](https://itrevolution.com/the-phoenix-project/)
-
-</aside>
-
-- **Fiction**
-
-    [Americanah - Chimamanda Ngozi Adichie](https://www.chimamanda.com/americanah/)
-
-    [Not Even Bones (Market of Monsters, #1)](https://www.goodreads.com/book/show/34324484-not-even-bones)
-
-    [Aristotle and Dante Discover the Secrets of the Universe (Aristotle and Dante, #1)](https://www.goodreads.com/book/show/12000020-aristotle-and-dante-discover-the-secrets-of-the-universe)
-
-    [Children of the New World](https://www.goodreads.com/book/show/29243630-children-of-the-new-world)
-
-- **Tech**
-
-    [Weapons of Math Destruction by Cathy O'Neil: 9780553418835 | PenguinRandomHouse.com: Books](https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/)
-
-    [The Phoenix Project - Book](https://itrevolution.com/the-phoenix-project/)
-
-- **Management**
-
-    [Five Dysfunctions Products | The Table Group](https://www.tablegroup.com/product/dysfunctions/)
-
-    [Leading Quality: How Great Leaders Deliver High Quality Software & Accelerate Growth​](https://www.leadingqualitybook.com/)
-
-    [The Manager's Path](https://www.oreilly.com/library/view/the-managers-path/9781491973882/)
-
-    [The Making of a Manager Book by Julie Zhuo](https://www.juliezhuo.com/book/manager.html)
-
-
-<aside>
-👩🏾‍💻 **Developer Toolkit**
-
-</aside>
-
-<aside>
-🧡 **Featured Link**
-
 [Super - Build websites with Notion](https://super.so/)
-
-</aside>
 
 - **Interesting Libraries and Packages**
 
@@ -128,28 +59,6 @@ Management / Tech
     [https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1](https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1)
 
     [https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717](https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717)
-
-- **Rubber Ducky**
-
-    **Help! PWA Cache Issues**
-
-    [VUE | PWA | DISABLE](https://santhoshkumarravi.medium.com/vue-pwa-disable-5463e44b1f7f)
-
-    [How to clear cache of service worker?](https://stackoverflow.com/questions/45467842/how-to-clear-cache-of-service-worker)
-
-    **How to Flexbox**
-
-    [A Complete Guide to Flexbox | CSS-Tricks](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-
-    [Flexbox Froggy](https://flexboxfroggy.com/)
-
-    **Help! Other Stack Overflow Memories**
-
-    [webkit-transform breaks z-index on Safari](https://stackoverflow.com/questions/22621544/webkit-transform-breaks-z-index-on-safari)
-
-    [How to get client's IP address using JavaScript?](https://stackoverflow.com/questions/391979/how-to-get-clients-ip-address-using-javascript)
-
-    [how to draw smooth curve through N points using javascript HTML5 canvas?](https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas#7058606)
 
 - **Visual Studio Code Extensions**
 
@@ -206,8 +115,6 @@ Management / Tech
 
 Free stock photos featuring yours truly, courtesy of WOCinTech Chat
 
-![25772082596_7966bd8338_c.jpg](Links%2049c6531844034e14b442d31e2a1e3ae5/25772082596_7966bd8338_c.jpg)
-
 [WOCinTech Chat](https://www.flickr.com/photos/wocintechchat/albums)
 
 </aside>
@@ -263,21 +170,6 @@ Free stock photos featuring yours truly, courtesy of WOCinTech Chat
     [Codrops](https://tympanus.net/codrops/)
 
     [Mobbin - The world's largest mobile app design reference library](https://mobbin.design/browse/ios/apps)
-
-- **Design Trends**
-  - **2022**
-
-        ![628F8A28-14EB-4319-A350-14674058490D.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/628F8A28-14EB-4319-A350-14674058490D.jpeg)
-
-        [Moss | Where ideas grow](https://mossworkspace.com/)
-
-        ![5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg)
-
-        [Home - Sunroom](https://sunroom.so/)
-
-        ![3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg)
-
-        [Welcome to the world of Volv](https://volvmedia.com/)
 
 
 <aside>
@@ -351,14 +243,3 @@ Free stock photos featuring yours truly, courtesy of WOCinTech Chat
     [Brucira | Strategy, Branding and UX UI Product Design Agency](https://www.brucira.com/)
 
     [Turnislefthome.com | The Work of Timothy J. Reynolds](https://turnislefthome.com/projects)
-
-
----
-
-- 🚫 **404 - Dead Links**
-
-    *These links no longer exist... let’s pour one out for:*
-
-    **Knotten** 🍺
-
-    ![Screen Shot 2022-02-22 at 01.02.06.png](Links%2049c6531844034e14b442d31e2a1e3ae5/Screen_Shot_2022-02-22_at_01.02.06.png)

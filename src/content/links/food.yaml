@@ -1,0 +1,21 @@
+- id: https://callaloobox.com/
+  title: https://callaloobox.com/
+  category: food
+  tags:
+    - favorites
+  publishedOn: 100
+
+- id: https://baubleboba.com/
+  title: https://baubleboba.com/
+  category: food
+  publishedOn: 50
+
+- id: https://www.ivyleaffarms.com/green-houwse-shop?page=2
+  title: https://www.ivyleaffarms.com/green-houwse-shop?page=2
+  category: food
+  publishedOn: 50
+
+- id: https://callaloobox.com/
+  title: https://callaloobox.com/
+  category: food
+  publishedOn: 50
