@@ -1,0 +1,45 @@
+- id: https://numi.app/
+  title: Numi
+  category: productivity
+  tags:
+    - productivity
+    - calculator
+    - macOS
+    - favorites
+  publishedOn: 100
+
+- id: https://ticktick.com/
+  title: TickTick
+  category: productivity
+  tags:
+    - productivity
+    - task management
+    - mobile
+  publishedOn: 90
+
+- id: https://www.notion.so/
+  title: Notion
+  category: productivity
+  tags:
+    - productivity
+    - collaboration
+    - note-taking
+  publishedOn: 80
+
+- id: https://www.forestapp.cc/
+  title: Forest
+  category: productivity
+  tags:
+    - productivity
+    - focus
+    - mobile
+  publishedOn: 10
+
+- id: https://wetransfer.com/paper
+  title: WeTransfer Paper
+  category: productivity
+  tags:
+    - collaboration
+    - whiteboard
+    - brainstorming
+  publishedOn: 0

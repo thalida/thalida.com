@@ -1,4 +1,5 @@
 // 1. Import utilities from `astro:content`
+import { existsSync, promises as fs } from 'node:fs';
 import { defineCollection, reference, z } from 'astro:content';
 
 // 2. Import loader(s)
@@ -8,13 +9,38 @@ import { glob, file } from 'astro/loaders';
 
 export const COLLECTION_CHOICES = ["guides", "links", "projects", "gallery", "recipes", "versions"] as const;
 
-function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
+async function fileGlob({ filename, pattern, base }: { filename: string, pattern: string, base: string }) {
+  const yamlFiles = fs.glob(pattern, { cwd: base });
+  const outputDir = `${base}/dist`
+  const outputPath = `${outputDir}/${filename}`;
+
+  await fs.mkdir(outputDir, { recursive: true });
+
+  let isFirst = true
+  for await (const entry of yamlFiles) {
+    const writeOrAppend = isFirst ? fs.writeFile : fs.appendFile
+    await writeOrAppend(outputPath, `\n${await fs.readFile(`${base}/${entry}`, 'utf-8')}`);
+    isFirst = false
+  }
+
+  return file(outputPath);
+}
+
+async function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
   let loader;
 
+  const base = `./src/content/${collectionName}`;
+
   if (collectionName === "links") {
-    loader = file("./src/content/links/links.yaml");
+    // Combine all yaml files in the links directory into a single collection
+    // This is a special case for the links collection, which uses YAML files instead of markdown
+    loader = await fileGlob({
+      filename: "links.yaml",
+      pattern: "*.yaml",
+      base,
+    });
   } else {
-    loader = glob({ pattern:"**/*.{md,mdx}", base: `./src/content/${collectionName}` })
+    loader = glob({ pattern:"**/*.{md,mdx}", base })
   }
 
   return defineCollection({
@@ -39,10 +65,18 @@ function makeCollection(collectionName: typeof COLLECTION_CHOICES[number]) {
 
 
 // 4. Export a single `collections` object to register your collection(s)
-export const collections = COLLECTION_CHOICES.reduce((acc, collectionName) => {
-  acc[collectionName] = makeCollection(collectionName);
-  return acc;
-}, {} as Record<typeof COLLECTION_CHOICES[number], ReturnType<typeof defineCollection>>);
+
+const collections = {} as Record<typeof COLLECTION_CHOICES[number], ReturnType<typeof defineCollection>>;
+for (const collectionName of COLLECTION_CHOICES) {
+  collections[collectionName] = await makeCollection(collectionName);
+}
+
+export  { collections };
+
+// export const collections = COLLECTION_CHOICES.reduce((acc, collectionName) => {
+//   acc[collectionName] = await makeCollection(collectionName);
+//   return acc;
+// }, {} as Record<typeof COLLECTION_CHOICES[number], ReturnType<typeof defineCollection>>);
 
 
 export const collectionMeta = {

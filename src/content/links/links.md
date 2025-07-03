@@ -6,109 +6,6 @@ publishedOn: 2023-10-01
 
 A curated collection of interesting sites, products, resources, and tools. Everything from [useful apps](https://numi.app/) to [amazing art](https://www.tatianapoblah.com/) to [beautiful self-defense](https://alythuh.com/) products.
 
-<aside>
-📱 **Apps (All Platforms)**
-
-</aside>
-
-<aside>
-❤️ **Faves**
-
-[Paper by WeTransfer | Simple Sketch App](https://wetransfer.com/paper)
-
-</aside>
-
-- **A Better…**
-
-    **Calculator**
-
-    [Beautiful calculator for Mac](https://numi.app/)
-
-    **Uninstaller**
-
-    [App Cleaner & Uninstaller - Remove Apps from Mac Entirely](https://nektony.com/mac-app-cleaner)
-
-    **Window Manager**
-
-    [Magnet](https://magnet.crowdcafe.com/)
-
-- **Focus**
-
-    [Forest - Stay focused, be present](https://www.forestapp.cc/)
-
-    [I Miss My Cafe](https://imissmycafe.com/)
-
-- **Todos & Notes**
-
-    [TickTick](https://ticktick.com/)
-
-    [Paper by WeTransfer | Simple Sketch App](https://wetransfer.com/paper)
-
-    [Notion - One workspace. Every team.](https://www.notion.so/)
-
-- **Weird & Interesting**
-
-    [FREVER - The Future of Expression](https://www.frever.com/)
-
-
-<aside>
-🖼️ **Art**
-
-</aside>
-
-<aside>
-💗 **Faves**
-
-Tatiana Poblah Art
-
-[Buy Women Art Online](https://www.tatianapoblah.com/)
-
-Not Your Grandma’s Embroidery
-
-[CREATE THE CULTURE EMBROIDERY](https://www.createtheculture-embroidery.com/)
-
-</aside>
-
-- **Prints, Photography, and Illustrations**
-
-    [Home | ShotbyMrStory](https://www.shotbymrstory.com/)
-
-    [Sharece Studios](https://sharecestudios.bigcartel.com/)
-
-    [Illustration | Bex Glendining](https://www.lgions.com/)
-
-    [The Art of Hippy Potter](https://hippypotter.bigcartel.com/)
-
-    [gldeng6rl](https://gldeng6rl.com/)
-
-    [Buy Women Art Online](https://www.tatianapoblah.com/)
-
-    [Pinktofu art](https://pinktofuart.com/)
-
-    [Home from little corvus shop](https://littlecorvus.storenvy.com/)
-
-    [Real. Weird. Art.](https://www.realweirdart.com/)
-
-    [Shop | Vashti Harrison](https://www.vashtiharrison.com/shop)
-
-    [Pop Chart | The things you love. Charted.](https://popchart.co/)
-
-    [agavnythepigeon | Etsy](https://www.etsy.com/shop/agavnythepigeon)
-
-    [](https://www.inprnt.com/gallery/taliaskyles/)
-
-    [](https://www.inprnt.com/gallery/titsay/)
-
-    [](https://www.inprnt.com/gallery/waneella/)
-
-- **Embroidery**
-
-    [CREATE THE CULTURE EMBROIDERY](https://www.createtheculture-embroidery.com/)
-
-- **Ceramics**
-
-    [The Studio Arhoj Web Shop](https://arhoj.com/)
-
 
 <aside>
 🛍️ **Products**
@@ -501,7 +398,7 @@ Free stock photos featuring yours truly, courtesy of WOCinTech Chat
     [Mobbin - The world's largest mobile app design reference library](https://mobbin.design/browse/ios/apps)
 
 - **Design Trends**
-    - **2022**
+  - **2022**
 
         ![628F8A28-14EB-4319-A350-14674058490D.jpeg](Links%2049c6531844034e14b442d31e2a1e3ae5/628F8A28-14EB-4319-A350-14674058490D.jpeg)
 
