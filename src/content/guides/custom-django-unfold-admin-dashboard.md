@@ -33,12 +33,12 @@ This new app will house the views and styles we need for our new admin dashboard
 In your terminal run:
 
 ```bash
-python [manage.py](http://manage.py) startapp admin_dashboard
+python manage.py startapp admin_dashboard
 ```
 
 Update `INSTALLED_APPS`, the new app should be added below the unfold apps.
 
-```bash
+```py title="settings.py"
 INSTALLED_APPS = [
  ...
  "admin_dashboard.apps.AdminDashboardConfig",
@@ -75,7 +75,7 @@ TEMPLATES = [
 
 Paste the following into your newly created templates/admin/index.html file :
 
-```html
+```jinja
 {% extends 'unfold/layouts/base_simple.html' %}
 
 {% load i18n unfold %}
@@ -183,7 +183,7 @@ In your root folder, create a new file `tailwind.config.js`
 
 Paste the following contents, and replace `<django_project_dir>` with your project directory.
 
-```html
+```js
 module.exports = {
   content: ["./<django_project_dir>/**/*.{html,py,js}"],
   media: false,
@@ -380,7 +380,7 @@ def dashboard_callback(request, context):
 
 ## Update Unfold Settings
 
-```python
+```python title="settings.py"
 UNFOLD = {
     ...
     "DASHBOARD_CALLBACK": "admin_dashboard.views.dashboard_callback",
