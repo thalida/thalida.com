@@ -5,6 +5,7 @@ publishedOn: 2019-01-06
 tags: [blog, experiment]
 coverImage: maybe-social/Screen_Shot_2022-02-20_at_20.08.10.png
 coverImageAlt: An analysed aggregated feed of my social media activity.
+category: website
 ---
 
 ![Screen Shot 2022-02-20 at 20.08.10.png](maybe-social/Screen_Shot_2022-02-20_at_20.08.10.png)

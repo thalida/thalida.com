@@ -5,6 +5,7 @@ publishedOn: 2016-04-11
 tags: [project, design]
 coverImage: mapdo/Untitled.png
 coverImageAlt: Location based todos. Get reminded about a task as soon as you enter a room.
+category: app
 ---
 
 ![Untitled](mapdo/Untitled.png)

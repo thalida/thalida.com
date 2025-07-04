@@ -3,6 +3,7 @@ title: Interactive Templates
 description: Google Docs extension to add proper templates, with fillable fields (a la PDF templates)
 publishedOn: 2019-10-31
 tags: [chrome, chrome extension]
+category: concept
 ---
 
 ## 💡Idea

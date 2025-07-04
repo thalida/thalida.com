@@ -5,7 +5,8 @@ publishedOn: 2017-12-26
 updatedOn: 2017-12-26
 tags: [game, vue]
 coverImage: tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png
-coverImageAlt: A screenshot of the Tic-Tac-Toe Cubed game, showing a
+coverImageAlt: A screenshot of the Tic-Tac-Toe Cubed game
+category: game
 ---
 
 ![Screen Shot 2022-02-20 at 16.55.40.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png)

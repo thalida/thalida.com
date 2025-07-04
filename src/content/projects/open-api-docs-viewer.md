@@ -5,6 +5,7 @@ publishedOn: 2024-04-19
 updatedOn: 2024-04-21
 coverImage: open-api-docs-viewer/theme-elements-dark-large.png
 coverImageAlt: "Screenshot of OpenAPI Docs Viewer in VSCode with Elements renderer in dark theme."
+category: tool
 ---
 
 ![Overview](https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/overview.gif)

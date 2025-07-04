@@ -5,6 +5,7 @@ publishedOn: 2018-04-04
 tags: [angular, game]
 coverImage: shapeconnector/shapeconnector_teaser2.png
 coverImageAlt: A screenshot of the ShapeConnector game, showing a colorful grid with various shapes
+category: game
 ---
 
 ![gameplay.gif](shapeconnector/gameplay.gif)

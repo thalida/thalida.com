@@ -5,6 +5,7 @@ publishedOn: 2024-03-15
 updatedOn: 2024-03-17
 coverImage: live-window-image-generator/Screenshot 2025-07-02 at 22.04.40.png
 coverImageAlt: A screenshot of a generated live window
+category: tool
 ---
 
 ![Screenshot 2025-07-02 at 22.04.40.png](<live-window-image-generator/Screenshot 2025-07-02 at 22.04.40.png>)
@@ -88,7 +89,8 @@ Embed the image into your HTML or Markdown Document:
 
 ### Frameworks, Tools, and Services
 
-* API Framework: Python [Fast API](https://fastapi.tiangolo.com/)
+- API Framework: Python [Fast API](https://fastapi.tiangolo.com/)
+
 - API Docs: [Stoplight Elements](https://github.com/stoplightio/elements)
 - Hosting & Deployment: [Render](https://render.com/)
 - Designed In: [Figma](https://www.figma.com/)
@@ -96,6 +98,7 @@ Embed the image into your HTML or Markdown Document:
 
 ### Credits
 
-* [Open Weather Map API](https://openweathermap.org/api): Powers Weather, sunrise, and sunset times
+- [Open Weather Map API](https://openweathermap.org/api): Powers Weather, sunrise, and sunset times
+
 - [3D Weather Icons](https://ui8.net/msakta/products/weather-animated-icons)
 - [Gradient Abstract Banners](https://www.figma.com/community/file/1063549775352406477/gradient-abstract-banners?searchSessionId=ltw9aro0-lwjp697d2fs)

@@ -5,6 +5,7 @@ publishedOn: 2017-12-23
 coverImage: bitly-roulette/Screen_Shot_2022-02-19_at_18.53.19.png
 coverImageAlt: A screenshot of the bit.ly roulette interface, showing a random URL.
 tags: [fun, hack, random]
+category: website
 ---
 
 

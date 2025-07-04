@@ -5,6 +5,7 @@ publishedOn: 2024-12-20
 updatedOn: 2024-12-26
 coverImage: statusboard/Screenshot 2025-07-02 at 22.17.00.png
 coverImageAlt: A screenshot of the Statusboard interface showing service status and metrics.
+category: app
 ---
 
 ![Screenshot-2025-07-02 at 22.17.00.png](<statusboard/Screenshot 2025-07-02 at 22.17.00.png>)

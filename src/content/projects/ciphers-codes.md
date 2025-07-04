@@ -5,6 +5,7 @@ publishedOn: 2022-02-19
 tags: [vue]
 coverImage: ciphers-codes/Screen_Shot_2022-02-19_at_19.57.46.png
 coverImageAlt: A screenshot of the Ciphers & Codes interface, showing various cipher options.
+category: website
 ---
 
 ![Screen Shot 2022-02-19 at 19.57.46.png](ciphers-codes/Screen_Shot_2022-02-19_at_19.57.46.png)

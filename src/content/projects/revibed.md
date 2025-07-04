@@ -6,6 +6,7 @@ updatedOn: 2019-05-12
 tags: [project, design]
 coverImage: revibed/Tablet.png
 coverImageAlt: Automated playlist archiving and backups for Spotify.
+category: app
 ---
 
 ## 💡 Idea

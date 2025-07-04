@@ -6,6 +6,7 @@ updatedOn: 2020-10-06
 tags: [python, rabbitmq, scrapper, twitter, vue, web crawler]
 coverImage: unpack-link/Screen_Shot_2019-07-14_at_6.10.06_PM.png
 coverImageAlt: A screenshot of the unpack.link website, showing a Twitter thread and its sources
+category: app
 ---
 
 ![Screen Shot 2019-07-14 at 6.10.06 PM.png](unpack-link/Screen_Shot_2019-07-14_at_6.10.06_PM.png)

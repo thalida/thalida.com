@@ -5,6 +5,7 @@ publishedOn: 2025-03-26
 updatedOn: 2025-03-29
 coverImage: mynn/Screenshot 2025-07-02 at 21.32.09.png
 coverImageAlt: A screenshot of the Mynn app showing the calendar and note-taking interface.
+category: app
 ---
 
 ![Screenshot 2025-07-02 at 21.32.09.png](<mynn/Screenshot 2025-07-02 at 21.32.09.png>)

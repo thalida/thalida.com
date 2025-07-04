@@ -5,6 +5,7 @@ publishedOn: 2021-12-23
 tags: [minecraft, python, vue]
 coverImage: builders-guide/Screen_Shot_2022-02-19_at_19.08.28.png
 coverImageAlt: A screenshot of the Builder's Guide app, showing a Minecraft recipe and resources
+category: website
 ---
 
 ![Screen Shot 2022-02-19 at 19.08.28.png](builders-guide/Screen_Shot_2022-02-19_at_19.08.28.png)

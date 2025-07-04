@@ -5,6 +5,7 @@ publishedOn: 2022-08-13
 tags: [product, python, vue]
 coverImage: fiary/Screenshot 2025-07-02 at 20.55.45.png
 coverImageAlt: A screenshot of the Fiary logo
+category: app
 ---
 
 ![Screenshot 2025-07-02 at 20.55.45.png](fiary/Screenshot%202025-07-02%20at%2020.55.45.png)

@@ -6,6 +6,7 @@ updatedOn: 2022-02-18
 tags: [challenge, julia, python]
 coverImage: advent-of-code/Screen_Shot_2022-02-19_at_18.29.31.png
 coverImageAlt: Advent of Code logo with a festive design.
+category: education
 ---
 
 | Links | |

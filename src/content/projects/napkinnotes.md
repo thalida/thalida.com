@@ -5,6 +5,7 @@ publishedOn: 2024-03-23
 updatedOn: 2024-04-01
 coverImage: napkinnotes/316388682-7c94cbc2-1702-42b5-a7e1-b8e5fbdedb75.gif
 coverImageAlt: A screenshot of the Napkin Notes app showing a note with headings, lists, and math calculations.
+category: app
 ---
 
 ![napkin-notes](https://github.com/thalida/napkinnotes/assets/3401715/7c94cbc2-1702-42b5-a7e1-b8e5fbdedb75)

@@ -5,6 +5,7 @@ publishedOn: 2015-05-11
 tags: [project, design]
 coverImage: makerfold/makefold.png
 coverImageAlt: A platform for Makers to share their progress, plans, and ideas.
+category: app
 ---
 
 ## 🎨 Design

@@ -6,6 +6,7 @@ updatedOn: 2020-03-04
 tags: [canvas, game, vue]
 coverImage: trailblazer/Paper.2020.me.20.png
 coverImageAlt: An idle game where you build and maintain hiking trails.
+category: game
 ---
 
 ![Paper.2020.me.20.png](trailblazer/Paper.2020.me.20.png)

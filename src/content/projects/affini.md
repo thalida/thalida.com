@@ -3,6 +3,7 @@ title: Affini
 description: A resource for managers and employees running Affinity Groups.
 publishedOn: 2019-11-09
 tags: [concept]
+category: concept
 ---
 
 ## 💡 Idea

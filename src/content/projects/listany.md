@@ -5,6 +5,7 @@ publishedOn: 2022-07-18
 tags: [product, python, vue]
 coverImage: listany/Untitled.png
 coverImageAlt: A screenshot of the Listany app, showing a collection of curated links
+category: app
 ---
 
 ![Untitled](listany/Untitled.png)

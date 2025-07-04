@@ -6,6 +6,7 @@ updatedOn: 2020-12-15
 tags: [minecraft, minecraft datapack, python, sphinx]
 coverImage: grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png
 coverImageAlt: A Minecraft datapack to remove the grind, featuring a button that gives items
+category: game
 ---
 
 ![d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png](grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png)

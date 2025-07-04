@@ -6,6 +6,7 @@ updatedOn: 2024-02-03
 tags: [github, python, threejs, vue]
 coverImage: code-city/Untitled.png
 coverImageAlt: A 3D cityscape representing a Github repository, with buildings and streets
+category: app
 ---
 
 ![Untitled](code-city/Untitled.png)

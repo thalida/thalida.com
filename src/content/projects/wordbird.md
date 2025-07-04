@@ -6,6 +6,7 @@ updatedOn: 2017-02-17
 tags: [angular, chrome, chrome extension]
 coverImage: wordbird/Untitled.png
 coverImageAlt: A screenshot of the WordBird Chrome extension interface, showing word replacement settings.
+category: tool
 ---
 
 ![Untitled](wordbird/Untitled.png)

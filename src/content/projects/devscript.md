@@ -5,6 +5,7 @@ publishedOn: 2024-12-30
 updatedOn: 2025-02-01
 coverImage: devscript/themes-split.png
 coverImageAlt: A screenshot of the Devscript interface showing a split theme with dark and light modes.
+category: app
 ---
 
 ![devscript-theme-screenshot](devscript/themes-split.png)
