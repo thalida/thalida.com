@@ -13,7 +13,7 @@ import { remarkAlert } from "remark-github-blockquote-alert";
 import remarkToc from 'remark-toc'
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-// import astroExpressiveCode from 'astro-expressive-code';
+import rehypeWrap from 'rehype-wrap';
 import expressiveCode from 'astro-expressive-code';
 import { pluginColorChips } from 'expressive-code-color-chips';
 
@@ -32,7 +32,11 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }]],
-    rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      [rehypeWrap, { selector: 'table', wrapper: 'div.overflow-auto' }],
+    ],
   },
   vite: {
     plugins: [tailwindcss()],
