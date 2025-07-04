@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 import meAvatar from "../assets/about/me-avatar.png";
 import meHeadshot from "../assets/about/me-headshot.png";
@@ -33,7 +34,7 @@ import meRainbow from "../assets/about/me-rainbow.png";
       },
       "sameAs": [
         "https://github.com/thalida",
-        "https://www.linkedin.com/in/thalida/",
+        "https://linkedin.com/in/thalida/",
       ],
       "knowsAbout": [
         "Product Engineering",
@@ -98,8 +99,8 @@ import meRainbow from "../assets/about/me-rainbow.png";
           If you're interested in connecting:
         </p>
         <ul>
-          <li> I'm on <a href="https://www.linkedin.com/in/thalida/" class="inline-link"><i class="fa-linkedin fa-brands"></i>  LinkedIn</a></li>
-          <li> Follow me on <a href="https://github.com/thalida" class="inline-link"><i class="fa-github fa-brands"></i> Github</a></li>
+          <li> I'm on <a href="https://linkedin.com/in/thalida/" target="_blank" rel="noopener" class="inline-link"><i class="fa-linkedin fa-brands"></i>  LinkedIn</a></li>
+          <li> Follow me on <a href="https://github.com/thalida" target="_blank" rel="noopener" class="inline-link"><i class="fa-github fa-brands"></i> Github</a></li>
           <li> Or, send me an <a href="mailto:hello@thalida.com" class="inline-link"><i class="fa-envelope fa-solid"></i>  email</a></li>
         </ul>
 
@@ -140,5 +141,6 @@ import meRainbow from "../assets/about/me-rainbow.png";
       </article>
     </div>
 
+    <Footer />
   </div>
 </Layout>

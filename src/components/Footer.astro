@@ -1,0 +1,41 @@
+---
+import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../content.config";
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-32 border-t-2 border-surface-100 dark:border-surface-800 flex flex-col items-center justify-center gap-4 xl:flex-row xl:items-start xl:justify-between p-8">
+  <p class="font-bold">© {year}  <span role="img" aria-label="unicorn">🦄</span> Thalida Noel — Creative Technologist</p>
+
+  <div class="flex flex-col items-center justify-center text-center space-y-4">
+    <p>Made with <span role="img" aria-label="red heart">❤️</span> in New York</p>
+
+    <div class="flex flex-row items-center justify-center space-x-4 text-xl">
+      <a href="https://github.com/thalida" target="_blank" rel="noopener" class="inline-link">
+        <i class="fab fa-github"></i>
+        <span class="sr-only">GitHub</span>
+      </a>
+      <a href="https://linkedin.com/in/thalidanoel" target="_blank" rel="noopener" class="inline-link">
+        <i class="fab fa-linkedin"></i>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+      <a href="mailto:hello@thalida.com" class="inline-link">
+        <i class="fas fa-envelope"></i>
+        <span class="sr-only">Email</span>
+      </a>
+    </div>
+  </div>
+
+  <nav class="flex flex-row items-center justify-center space-x-8">
+    {collectionOrder.map((collectionName) => {
+      const collection = collectionMeta[collectionName];
+      return (
+        <a href={`/${collectionName}/`} class="inline-link">
+          {collection.title}
+        </a>
+      );
+    })}
+    <a href={`/about/`} class="inline-link">
+      About
+    </a>
+  </nav>
+</footer>

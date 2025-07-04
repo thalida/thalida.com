@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import { COLLECTION_CHOICES, collectionOrder, collectionMeta } from "../../../content.config";
 import Layout from "../../../layouts/Layout.astro";
 import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
 import BlogPostCard from "../../../components/BlogPostCard.astro";
 
 const { page } = Astro.props;
@@ -113,6 +114,8 @@ function categoryDisplay(categoryName) {
         </a>
       </div>
     </div>
+
+    <Footer />
 
   </div>
 </Layout>
