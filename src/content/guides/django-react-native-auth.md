@@ -11,6 +11,7 @@ tags:
   - OAuth
   - Google
   - Microsoft
+category: django
 ---
 
 ## TOC

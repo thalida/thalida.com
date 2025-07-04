@@ -5,6 +5,7 @@ tags: ["astro"]
 publishedOn: 2025-07-03
 coverImage: how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png
 coverImageAlt: Screenshot of links section of thalida.com
+category: astro
 ---
 
 ![how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png](<how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png>)

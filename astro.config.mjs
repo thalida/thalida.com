@@ -36,6 +36,7 @@ export default defineConfig({
       rehypeSlug,
       rehypeAutolinkHeadings,
       [rehypeWrap, { selector: 'table', wrapper: 'div.overflow-auto' }],
+      [rehypeWrap, { selector: 'video', wrapper: 'div.flex.flex-col.items-center.justify-center' }],
     ],
   },
   vite: {

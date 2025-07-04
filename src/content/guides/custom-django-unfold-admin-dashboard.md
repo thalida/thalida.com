@@ -5,6 +5,7 @@ publishedOn: 2023-11-11T23:18:00Z
 updatedOn: 2023-11-14T02:29:00Z
 coverImage: custom-django-unfold-admin-dashboard/Screenshot_2023-11-12_at_00.13.08.png
 coverImageAlt: Screenshot of the custom Django admin dashboard using Unfold theme, showing a modern and clean interface with various statistics and charts.
+category: django
 tags:
   - Django
   - Django Unfold

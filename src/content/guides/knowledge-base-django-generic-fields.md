@@ -9,6 +9,7 @@ tags:
   - Knowledge Base
   - Django
   - Django Rest Framework
+category: django
 ---
 
 ## How To…

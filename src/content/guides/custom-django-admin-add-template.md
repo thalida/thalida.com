@@ -5,6 +5,7 @@ publishedOn: 2023-11-11T23:45:00Z
 updatedOn: 2023-11-14T02:29:00Z
 coverImage: custom-django-admin-add-template/Screenshot 2025-07-02 at 17.42.10.png
 coverImageAlt: "Custom Django Admin Add Template"
+category: django
 tags:
 - Django
 - Django Unfold

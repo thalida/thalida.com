@@ -4,6 +4,7 @@ description: A collection of design trends and inspirations from various sources
 coverImage: design-trends/628F8A28-14EB-4319-A350-14674058490D.jpeg
 coverImageAlt: A collection of design trends and inspirations from various sources.
 publishedOn: 2022-02-01
+category: design
 ---
 
 ## 2022
