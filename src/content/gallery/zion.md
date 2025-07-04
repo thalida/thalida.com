@@ -10,3 +10,4 @@ coverImageAlt: A stunning collection of Zion National Park's breathtaking landsc
 ![Zion](zion/zion-2.jpg)
 ![zion/IMG_20160905_112309696_HDR.jpg](zion/IMG_20160905_112309696_HDR.jpg)
 ![zion/IMG_20160905_120545187_HDR.jpg](zion/IMG_20160905_120545187_HDR.jpg)
+![zion/Untitled_Artwork.png](zion/Untitled_Artwork.png)
