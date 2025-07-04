@@ -1,6 +1,6 @@
 - id: https://itrevolution.com/the-phoenix-project/
   title: The Phoenix Project
-  category: books
+  category: books-and-media
   tags:
     - technology
     - management
@@ -9,42 +9,42 @@
 
 - id: https://www.chimamanda.com/americanah/
   title: "Americanah - Chimamanda Ngozi Adichie"
-  category: books
+  category: books-and-media
   tags:
     - fiction
   publishedOn: 80
 
 - id: https://www.goodreads.com/book/show/34324484-not-even-bones
   title: "Not Even Bones (Market of Monsters, #1)"
-  category: books
+  category: books-and-media
   tags:
     - fiction
   publishedOn: 50
 
 - id: https://www.goodreads.com/book/show
   title: "Aristotle and Dante Discover the Secrets of the Universe (Aristotle and Dante, #1)"
-  category: books
+  category: books-and-media
   tags:
     - fiction
   publishedOn: 80
 
 - id: https://www.goodreads.com/book/show/29243630-children-of-the-new-world
   title: "Children of the New World"
-  category: books
+  category: books-and-media
   tags:
     - fiction
   publishedOn: 50
 
 - id: https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/
   title: "Weapons of Math Destruction: How Big Data Increases Inequality and Threatens Democracy"
-  category: books
+  category: books-and-media
   tags:
     - technology
   publishedOn: 50
 
 - id: https://itrevolution.com/the-phoenix-project/
   title: "The Phoenix Project: A Novel About IT, DevOps, and Helping Your Business Win"
-  category: books
+  category: books-and-media
   tags:
     - technology
     - management
@@ -53,14 +53,14 @@
 
 - id: https://www.tablegroup.com/product/dysfunctions/
   title: "The Five Dysfunctions of a Team: A Leadership Fable"
-  category: books
+  category: books-and-media
   tags:
     - management
   publishedOn: 80
 
 - id: https://www.leadingqualitybook.com/
   title: "Leading Quality: How Great Leaders Deliver High-Quality Software and Accelerate Growth"
-  category: books
+  category: books-and-media
   tags:
     - technology
     - management
@@ -68,7 +68,7 @@
 
 - id: https://www.oreilly.com/library/view/the-managers-path/9781491973882/
   title: "The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change"
-  category: books
+  category: books-and-media
   tags:
     - technology
     - management
@@ -76,8 +76,54 @@
 
 - id: https://www.juliezhuo.com/book/manager.html
   title: "The Making of a Manager: What to Do When Everyone Looks to You"
-  category: books
+  category: books-and-media
   tags:
     - technology
     - management
   publishedOn: 80
+
+
+- id: https://open.spotify.com/playlist/7JZcvu9Ngo3p1KiV57SQc7?si=38ac67316671434f
+  title: Coding Playlist 1
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1
+  title: Coding Playlist 2
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717
+  title: Coding Playlist 3
+  category: dev-toolkit
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://www.alieward.com/ologies
+  title: Ologies Episodes - alie ward
+  category: dev-toolkit
+  tags:
+    - podcast
+    - science
+    - education
+  publishedOn: 75
+
+- id: https://www.nytimes.com/2020/07/23/podcasts/nice-white-parents-serial.html
+  title: Introducing - Nice White Parents (Published 2020)
+  category: dev-toolkit
+  tags:
+    - podcast
+    - education
+    - social-issues
+  publishedOn: 70

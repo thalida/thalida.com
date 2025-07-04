@@ -12,6 +12,8 @@ import { formatDate } from "../../../utils";
 export async function getStaticPaths() {
   let paths = [];
   for (const collection of COLLECTION_CHOICES) {
+    if (collection === 'links') continue; // Skip links collection for now
+
     const posts = await getCollection(collection);
     const collectionPaths = posts.map((post) => ({
       params: { collection: post.collection, slug: post.id },
