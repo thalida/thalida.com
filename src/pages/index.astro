@@ -188,6 +188,50 @@ interface Props {
 </script>
 
 <Layout>
+  <script type="application/ld+json" slot="head">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Thalida Noel",
+      "alternateName": "thalida",
+      "url": "https://www.thalida.com/about/",
+      "image": "https://www.thalida.com/public/assets/me-headshot.png",
+      "jobTitle": "Product Engineer, Creative Technologist, Engineering Leader",
+      "description": "Queer, first-generation Trinidadian-American engineer and designer based in New York. Passionate about systems, interfaces, and stories.",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Tourus",
+        "url": "https://tourus.io/"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Capitol Technology Unversity",
+        "url": "https://www.captechu.edu/"
+      },
+      "sameAs": [
+        "https://github.com/thalida",
+        "https://www.linkedin.com/in/thalida/",
+      ],
+      "knowsAbout": [
+        "Product Engineering",
+        "Creative Technology",
+        "Engineering Management",
+        "Design Systems",
+        "UX/UI Design",
+        "Web Development",
+        "Native Mobile Development",
+        "Software Architecture",
+        "Cloud Infrastructure",
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "New York",
+        "addressRegion": "NY",
+        "addressCountry": "US"
+      }
+    }
+  </script>
+
   <div class="grid gap-8  p-8 grid-cols-1 sm:grid-cols-4 xl:grid-rows-4 xl:grid-cols-5 xl:min-h-[60rem] xl:max-h-[max(60rem,100vh)]">
 
     <!-- TILE | thalida.com -->

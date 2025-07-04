@@ -40,9 +40,40 @@ const prevPostIndex = currPostIndex - 1;
 const prevPost = collectionPosts[prevPostIndex] || null;
 const nextPostIndex = currPostIndex + 1;
 const nextPost = collectionPosts[nextPostIndex] || null;
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://www.thalida.com/${post.collection}/post/${post.id}`,
+  },
+  "headline": post.data.title,
+  "description": post.data.description,
+  "keywords": post.data.tags ? post.data.tags.join(", ") : "",
+  "articleSection": post.collection,
+  "isPartOf": post.category || "",
+  "author": {
+    "@type": "Person",
+    "name": "Thalida Noel",
+    "url": "https://www.thalida.com/about/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "thalida.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.thalida.com/android-chrome-192x192.png"
+    }
+  },
+  "datePublished": post.data.publishedOn,
+  "dateModified": post.data.updatedOn || post.data.publishedOn,
+})
 ---
 
 <Layout title=`${post.data.title} | ${collection.title}` description=`${post.data.description} | Thalida Noel – Creative Technologist & Internet Explorer`>
+  <script type="application/ld+json" slot="head" set:html={schema}></script>
+
   <div class="h-full p-8">
 
     <Header />

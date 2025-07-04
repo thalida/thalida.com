@@ -49,11 +49,13 @@ const title = titlePart ? `${titlePart} | ${baseTitle}` : baseTitle;
     <meta name="twitter:creator" content="@thalida" />
 
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <slot name="head" />
 
     <Analytics />
     <SpeedInsights />
   </head>
   <body class="text-black dark:text-white">
     <slot />
+    <slot name="body" />
   </body>
 </html>
