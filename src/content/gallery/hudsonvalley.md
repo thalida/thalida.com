@@ -12,6 +12,8 @@ coverImageAlt: A scenic view of the Hudson Valley with mountains and a river.
 ![hudsonvalley/PXL_20250624_003031438.jpg](hudsonvalley/PXL_20250624_003031438.jpg)
 
 
-<video width="320" height="240" controls>
-  <source src="/public/content/gallery/hudsonvalley/IMG_3206.MOV" type="video/mp4">
-</video>
+<div class="flex flex-col items-center justify-center">
+  <video width="320" height="240" controls>
+    <source src="/public/content/gallery/hudsonvalley/IMG_3206.MOV" type="video/mp4">
+  </video>
+</div>

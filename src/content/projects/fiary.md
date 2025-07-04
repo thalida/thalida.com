@@ -15,9 +15,11 @@ category: app
 | [Github →](https://github.com/thalida/fiary) | |
 
 
-<video width="320" height="240" controls>
-  <source src="/public/content/projects/fiary/export_1670527862768.mov" type="video/mp4">
-</video>
+<div class="flex flex-col items-center justify-center">
+  <video width="320" height="240" controls>
+    <source src="/public/content/projects/fiary/export_1670527862768.mov" type="video/mp4">
+  </video>
+</div>
 
 
 ## Idea

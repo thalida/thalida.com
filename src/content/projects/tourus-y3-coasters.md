@@ -17,6 +17,9 @@ and unofficial mascots for company.
 
 I desgined the coasters in Figma, exported them as an SVG, and then engraved them using my laser cutter.
 
-<video width="320" height="240" controls>
-  <source src="/public/content/projects/tourus-y3-coasters/IMG_2899~2.mp4" type="video/mp4">
-</video>
+
+<div class="flex flex-col items-center justify-center">
+  <video width="320" height="240" controls>
+    <source src="/public/content/projects/tourus-y3-coasters/IMG_2899~2.mp4" type="video/mp4">
+  </video>
+</div>

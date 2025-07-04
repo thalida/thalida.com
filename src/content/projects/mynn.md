@@ -20,7 +20,7 @@ category: app
 Mynn is a simple calendar and notes app for MacOS, designed to help users manage their schedules and jot down quick notes. It features a clean interface with a calendar view and a note-taking section, allowing for easy access and organization of daily tasks.
 
 
-## Framwork & Technologies
+## Framework & Technologies
 
 - **SwiftUI**: For building the user interface.
 - **Claude Anthropic**: AI co-pilot for generating code snippets and assisting with development.
