@@ -1,7 +1,7 @@
 ---
 title: "Knowledge Base: Brain Dump"
 description: A catch-all of my self-rubberducky resources and guides
-publishedOn: 2025-07-03
+publishedOn: 2025-07-01
 coverImage: knowledge-base-brain-dump/pexels-eye4dtail-122308.jpg
 coverImageAlt: "Assorted rubber ducks"
 ---
