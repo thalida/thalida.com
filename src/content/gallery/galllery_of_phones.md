@@ -1,7 +1,7 @@
 ---
 title: Gallery of Phones
 description: Illustration
-publishedOn: 2023-10-01
+publishedOn: 2018-10-27
 coverImage: ./images/gallery_of_phones.png
 coverImageAlt: Illustration
 ---
