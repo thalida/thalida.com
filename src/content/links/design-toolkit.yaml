@@ -83,23 +83,13 @@
     - design-assets
   publishedOn: 50
 
-- id: https://www.figma.com/community/file/958383439532195363
-  title: Figma Community Kit
+- id: https://www.figma.com/community
+  title: Figma Community
   category: design-toolkit
   tags:
     - figma
     - design-kits
     - community
-    - ui-kits
-  publishedOn: 50
-
-- id: https://www.figma.com/community/search?model_type=hub_files&q=wireframe
-  title: Figma Wireframe Kits
-  category: design-toolkit
-  tags:
-    - figma
-    - wireframes
-    - design-kits
     - ui-kits
   publishedOn: 50
 

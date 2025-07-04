@@ -45,22 +45,6 @@
     - design
   publishedOn: 60
 
-- id: https://pinktofuart.com/
-  title: Pink Tofu Art
-  category: art
-  tags:
-    - art
-    - illustration
-  publishedOn: 50
-
-- id: https://littlecorvus.storenvy.com/
-  title: Little Corvus
-  category: art
-  tags:
-    - art
-    - illustration
-  publishedOn: 50
-
 - id: https://www.vashtiharrison.com/shop
   title: Vashti Harrison
   category: art
