@@ -2,11 +2,17 @@
 import Analytics from '@vercel/analytics/astro'
 import  SpeedInsights  from "@vercel/speed-insights/astro"
 import "../styles/global.css";
-const { bodyColor = "bg-surface-100 dark:bg-surface-900" } = Astro.props;
+const {
+  title: titlePart,
+  description = "Step into the curious world of Thalida Noel — a creative technologist, storyteller, and digital wanderer building joyful, impactful experiences online. Follow for experiments, thoughts, and a spark of weird magic ✨"
+} = Astro.props;
+
+const baseTitle = "thalida.com";
+const title = titlePart ? `${titlePart} | ${baseTitle}` : baseTitle;
 ---
 
 <!doctype html>
-<html lang="en" class={`${bodyColor}`}>
+<html lang="en" class="bg-surface-100 dark:bg-surface-900">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -22,22 +28,22 @@ const { bodyColor = "bg-surface-100 dark:bg-surface-900" } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <title>thalida.com</title>
-    <meta name="description" content="A personal website of Thalida, a software engineer and designer. Explore my projects, blog posts, and more." />
-    <meta name="keywords" content="Thalida, software engineer, designer, personal website, blog, projects" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Thalida Noel, creative technologist, personal website, portfolio, creative experiments, tech and art, human web, playful design, software meets storytelling, internet culture" />
     <meta name="author" content="Thalida" />
     <meta name="theme-color" content="#1be48c" />
 
     <meta property="og:site_name" content="thalida.com" />
-    <meta property="og:title" content="Thalida's Personal Website" />
-    <meta property="og:description" content="A personal website of Thalida, a software engineer and designer. Explore my projects, blog posts, and more." />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://thalida.com" />
     <meta property="og:image" content="https://www.thalida.com/card-512x512.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Thalida's Personal Website" />
-    <meta name="twitter:description" content="A personal website of Thalida, a software engineer and designer. Explore my projects, blog posts, and more." />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://www.thalida.com/card-512x512.png" />
     <meta name="twitter:site" content="@thalida" />
     <meta name="twitter:creator" content="@thalida" />
