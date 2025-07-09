@@ -5,6 +5,11 @@ export function formatDate(date: string) {
   return new Date(date).toLocaleDateString('en-US', options);
 }
 
+export function categoryDisplay(categoryName: string) {
+  const parts = categoryName.split('-');
+  return parts.map(part => part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part).join(' ');
+}
+
 //  https://github.com/delucis/astro-embed/blob/e5fa7e3018506eff78db1399bf9827c2af5b27ac/packages/astro-embed-link-preview/lib.ts
 
 /** Helper to get the `content` attribute of an element. */
