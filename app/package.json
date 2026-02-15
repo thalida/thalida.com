@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "vite preview --host --outDir dist --port 4321"
   },
   "dependencies": {
     "astro": "^5.10.1",

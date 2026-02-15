@@ -1,63 +1,7 @@
----
-import { getCollection, render } from "astro:content";
-import { COLLECTION_NAMES } from "../content.config";
-
-const allEntries: Array<{
-  id: string;
-  collection: string;
-  title: string;
-  description?: string;
-  Content: any;
-}> = [];
-
-for (const name of COLLECTION_NAMES) {
-  // Links are YAML-based, no markdown body to render
-  if (name === "links") continue;
-
-  const entries = await getCollection(name, ({ data }) => !data.draft);
-
-  for (const entry of entries) {
-    try {
-      const { Content } = await render(entry);
-      allEntries.push({
-        id: entry.id,
-        collection: name,
-        title: entry.data.title,
-        description: entry.data.description,
-        Content,
-      });
-    } catch {
-      allEntries.push({
-        id: entry.id,
-        collection: name,
-        title: entry.data.title,
-        description: entry.data.description,
-        Content: null,
-      });
-    }
-  }
-}
----
-
 <div id="content-viewer">
   <div id="content-welcome">
     <h2>Welcome</h2>
     <p>Click a project in the tree to view it here.</p>
   </div>
-
-  {
-    allEntries.map((item) => (
-      <article
-        class="content-item"
-        data-collection={item.collection}
-        data-id={item.id}
-        hidden
-      >
-        <h2>{item.title}</h2>
-        {item.description && <p><em>{item.description}</em></p>}
-        <hr />
-        {item.Content ? <item.Content /> : <p>Content could not be rendered.</p>}
-      </article>
-    ))
-  }
+  <div id="content-body"></div>
 </div>

@@ -10,6 +10,7 @@ type TreeItem = {
   id: string;
   collection: string;
   title: string;
+  href?: string;
 };
 
 type TreeData = Record<string, { title: string; items: TreeItem[] }>;
@@ -30,6 +31,7 @@ for (const name of COLLECTION_NAMES) {
       id: entry.id,
       collection: name,
       title: entry.data.title,
+      href: entry.data.link,
     })),
   };
 }
@@ -50,6 +52,7 @@ for (const name of COLLECTION_NAMES) {
                 href="#"
                 data-collection={item.collection}
                 data-id={item.id}
+                data-href={item.href}
                 class="tree-link"
               >
                 {item.title}
@@ -63,8 +66,12 @@ for (const name of COLLECTION_NAMES) {
 </nav>
 
 <script>
+  const contentBody = document.getElementById("content-body") as HTMLDivElement;
+  const welcome = document.getElementById("content-welcome") as HTMLDivElement;
+  const cache = new Map<string, string>();
+
   document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
-    link.addEventListener("click", (e) => {
+    link.addEventListener("click", async (e) => {
       e.preventDefault();
 
       document
@@ -74,15 +81,34 @@ for (const name of COLLECTION_NAMES) {
 
       const collection = link.dataset.collection;
       const id = link.dataset.id;
+      if (!collection || !id) return;
 
-      document.querySelectorAll<HTMLElement>(".content-item").forEach((el) => {
-        el.hidden = !(
-          el.dataset.collection === collection && el.dataset.id === id
-        );
-      });
+      // Links have no rendered page -- open externally
+      if (collection === "links") {
+        const url = link.dataset.href;
+        if (url) window.open(url, "_blank", "noopener");
+        return;
+      }
 
-      const welcome = document.getElementById("content-welcome");
-      if (welcome) welcome.hidden = true;
+      welcome.hidden = true;
+      const key = `${collection}/${id}`;
+
+      if (cache.has(key)) {
+        contentBody.innerHTML = cache.get(key)!;
+        return;
+      }
+
+      contentBody.innerHTML = "<p>Loading…</p>";
+
+      try {
+        const res = await fetch(`/content/${key}/`);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const html = await res.text();
+        cache.set(key, html);
+        contentBody.innerHTML = html;
+      } catch {
+        contentBody.innerHTML = "<p>Failed to load content.</p>";
+      }
     });
   });
 </script>
