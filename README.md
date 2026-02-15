@@ -14,85 +14,64 @@ docs/   Design docs and plans
 
 - [Node.js](https://nodejs.org/) (v18+)
 - npm (comes with Node)
+- make (pre-installed on macOS/Linux)
 
-## Local Development
-
-### 1. Install dependencies
+## Quick Start
 
 ```bash
-# From the repo root
-cd app && npm install
-cd ../api && npm install
+make install                            # install deps for app + api
+cp api/.dev.vars.example api/.dev.vars  # configure secrets (see below)
 ```
 
-### 2. Configure environment variables
+Then in two terminals:
 
-**API secrets** (not committed):
+```bash
+make dev-api    # Terminal 1 — API on http://localhost:8787
+make dev-app    # Terminal 2 — App on http://localhost:4321
+```
+
+Run `make` or `make help` to see all available commands.
+
+## Environment Variables
+
+### API secrets (`api/.dev.vars`)
 
 ```bash
 cp api/.dev.vars.example api/.dev.vars
 ```
-
-Open `api/.dev.vars` and fill in:
 
 | Variable | Required | Description |
 |---|---|---|
 | `ADMIN_SECRET` | Yes | Any secret string. Used to log in as the site owner. |
 | `OPENAI_API_KEY` | No | OpenAI API key for chat moderation. Leave blank to skip moderation locally. Free at [platform.openai.com/api-keys](https://platform.openai.com/api-keys). |
 
-**Frontend env** (already set for local dev in `app/.env`):
+### Frontend (`app/.env`)
 
 | Variable | Default | Description |
 |---|---|---|
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Change when using a tunnel or in production. |
+| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make tunnel-api`. |
 
-### 3. Start the servers
+## Log In as the Owner
 
-You need two terminals:
-
-```bash
-# Terminal 1 — API (runs on http://localhost:8787)
-cd api
-npm run dev
-```
-
-```bash
-# Terminal 2 — Frontend (runs on http://localhost:4321)
-cd app
-npm run dev
-```
-
-Open [http://localhost:4321](http://localhost:4321) in your browser.
-
-### 4. Log in as the owner
-
-Visit `http://localhost:4321?admin=YOUR_ADMIN_SECRET` (replacing with the value you set in `.dev.vars`). The token is saved to `localStorage`, so you only need to do this once per browser.
+Visit `http://localhost:4321?admin=YOUR_ADMIN_SECRET` (the value from `api/.dev.vars`). The token is saved to `localStorage`, so you only need to do this once per browser.
 
 ## Testing with Someone Else (Tunnels)
 
-To let someone else connect to your local instance, use [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (free, no account needed):
+Share your local dev environment using [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (free, no account needed). You need three terminals:
 
 ```bash
-# Terminal 3 — Tunnel the API
-npx cloudflared tunnel --url http://localhost:8787
-# Prints a URL like https://some-words.trycloudflare.com
+make dev-api      # Terminal 1 — start the API server
+make tunnel-api   # Terminal 2 — tunnel the API, auto-updates app/.env
+make tunnel-app   # Terminal 3 — builds frontend, starts preview on port 4322, tunnels it
 ```
 
-Copy the tunnel URL and update `app/.env`:
+`make tunnel-api` automatically updates `app/.env` with the tunnel WebSocket URL and restores it to localhost when you Ctrl+C. Share the frontend tunnel URL printed by `make tunnel-app` with your tester.
 
-```
-PUBLIC_CHAT_WS_URL=wss://some-words.trycloudflare.com/ws
-```
+The preview server runs on port 4322 to avoid conflicting with the dev server on 4321.
 
-Restart the frontend (`npm run dev` in `app/`), then tunnel it too:
+## Configuration
 
-```bash
-# Terminal 4 — Tunnel the frontend
-npx cloudflared tunnel --url http://localhost:4321
-# Prints another URL — share this with your tester
-```
-
-Both of you open the frontend tunnel URL, pick different usernames, and chat. When done, Ctrl+C the tunnels and revert `app/.env` back to the localhost default.
+All Astro configuration lives in `app/astro.config.mjs`. Allowed hosts for dev and preview (`*.thalida.com` and `*.trycloudflare.com`) are set via the `--allowed-hosts` flag in `app/package.json` scripts.
 
 ## Production Deployment
 
@@ -111,11 +90,22 @@ npm run deploy
 
 ### Frontend (Cloudflare Pages)
 
-Set the environment variable in your Pages project settings or before building:
-
 ```bash
 cd app
 PUBLIC_CHAT_WS_URL=wss://your-api.workers.dev/ws npm run build
 ```
 
 The `dist/` output can be deployed to Cloudflare Pages (or any static host).
+
+## All Commands
+
+| Command | Description |
+|---|---|
+| `make install` | Install dependencies for both app and api |
+| `make dev-api` | Start the API worker on http://localhost:8787 |
+| `make dev-app` | Start the Astro frontend on http://localhost:4321 |
+| `make build` | Build the frontend |
+| `make preview` | Build and preview the frontend on http://localhost:4322 |
+| `make tunnel-api` | Tunnel the API, auto-update `app/.env` with the WS URL |
+| `make tunnel-app` | Build, preview, and tunnel the frontend |
+| `make clean` | Remove build artifacts |

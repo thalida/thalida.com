@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --allowed-hosts=.thalida.com,.trycloudflare.com",
     "build": "astro build",
-    "preview": "vite preview --host --outDir dist --port 4321"
+    "preview": "astro preview --host --port 4322 --allowed-hosts=.thalida.com,.trycloudflare.com"
   },
   "dependencies": {
     "astro": "^5.10.1",
