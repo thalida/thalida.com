@@ -4,6 +4,7 @@ interface Env {
   CHAT_ROOM: DurableObjectNamespace;
   ADMIN_SECRET: string;
   ALLOWED_ORIGIN: string;
+  OPENAI_API_KEY: string;
 }
 
 function corsHeaders(env: Env, request: Request): Record<string, string> {

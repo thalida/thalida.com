@@ -15,3 +15,4 @@ new_classes = ["ChatRoom"]
 ALLOWED_ORIGIN = "https://thalida.com"
 
 # Set ADMIN_SECRET via `wrangler secret put ADMIN_SECRET`
+# Set OPENAI_API_KEY via `wrangler secret put OPENAI_API_KEY`

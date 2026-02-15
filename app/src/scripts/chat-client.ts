@@ -1,10 +1,20 @@
 type ServerMessage =
   | { type: "history"; messages: ChatMessage[] }
-  | { type: "message"; username: string; text: string; timestamp: number }
+  | {
+      type: "message";
+      id: string;
+      username: string;
+      text: string;
+      timestamp: number;
+    }
   | { type: "status"; ownerOnline: boolean; userCount: number }
-  | { type: "error"; code: string; message: string };
+  | { type: "error"; code: string; message: string }
+  | { type: "remove"; id: string }
+  | { type: "warning"; message: string }
+  | { type: "blocked"; message: string };
 
 interface ChatMessage {
+  id: string;
   username: string;
   text: string;
   timestamp: number;
@@ -21,12 +31,18 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
 const joinForm = document.getElementById("chat-join") as HTMLFormElement;
 const roomSection = document.getElementById("chat-room") as HTMLDivElement;
-const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
-const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
+const usernameInput = document.getElementById(
+  "chat-username",
+) as HTMLInputElement;
+const messagesEl = document.getElementById(
+  "chat-messages",
+) as HTMLDivElement;
 const inputEl = document.getElementById("chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
 const statusEl = document.getElementById("chat-status") as HTMLSpanElement;
-const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
+const userCountEl = document.getElementById(
+  "chat-user-count",
+) as HTMLSpanElement;
 
 function getAdminToken(): string | null {
   const params = new URLSearchParams(window.location.search);
@@ -41,6 +57,7 @@ function getAdminToken(): string | null {
 
 function appendMessage(msg: ChatMessage): void {
   const div = document.createElement("div");
+  div.dataset.msgId = String(msg.id);
   const time = new Date(msg.timestamp).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
@@ -50,8 +67,20 @@ function appendMessage(msg: ChatMessage): void {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
+function appendNotice(text: string): void {
+  const div = document.createElement("div");
+  div.textContent = text;
+  div.style.fontStyle = "italic";
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
 function connect(): void {
-  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+  if (
+    ws &&
+    (ws.readyState === WebSocket.OPEN ||
+      ws.readyState === WebSocket.CONNECTING)
+  ) {
     return;
   }
 
@@ -59,7 +88,10 @@ function connect(): void {
 
   ws.addEventListener("open", () => {
     const token = getAdminToken();
-    const joinMsg: Record<string, string> = { type: "join", username: username! };
+    const joinMsg: Record<string, string> = {
+      type: "join",
+      username: username!,
+    };
     if (token) joinMsg.token = token;
     ws!.send(JSON.stringify(joinMsg));
   });
@@ -74,6 +106,7 @@ function connect(): void {
       }
     } else if (data.type === "message") {
       appendMessage({
+        id: data.id,
         username: data.username,
         text: data.text,
         timestamp: data.timestamp,
@@ -85,7 +118,6 @@ function connect(): void {
       statusEl.dataset.online = String(data.ownerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
     } else if (data.type === "error") {
-      // Server rejected the join -- show the form again with the error
       username = null;
       ws?.close();
       joinForm.hidden = false;
@@ -93,6 +125,16 @@ function connect(): void {
       usernameInput.focus();
       usernameInput.setCustomValidity(data.message);
       usernameInput.reportValidity();
+    } else if (data.type === "remove") {
+      const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
+      if (el) el.remove();
+    } else if (data.type === "warning") {
+      appendNotice(data.message);
+    } else if (data.type === "blocked") {
+      appendNotice(data.message);
+      inputEl.disabled = true;
+      sendBtn.disabled = true;
+      inputEl.placeholder = "You have been blocked.";
     }
   });
 
@@ -125,7 +167,6 @@ function sendMessage(): void {
 const RESERVED_NAMES = ["thalida", "tia"];
 
 function validateUsername(): void {
-  // Force lowercase as the user types
   const pos = usernameInput.selectionStart;
   usernameInput.value = usernameInput.value.toLowerCase();
   usernameInput.setSelectionRange(pos, pos);
@@ -139,22 +180,22 @@ function validateUsername(): void {
 }
 
 function joinChat(): void {
-  // Custom validity must be set before the browser validates on submit
   validateUsername();
 
   username = usernameInput.value.trim().toLowerCase().slice(0, 20);
 
   joinForm.hidden = true;
   roomSection.hidden = false;
+  inputEl.disabled = false;
+  sendBtn.disabled = false;
+  inputEl.placeholder = "Type a message...";
   inputEl.focus();
 
   connect();
 }
 
-// Validate as the user types
 usernameInput.addEventListener("input", validateUsername);
 
-// Always start fresh -- show the join form
 usernameInput.focus();
 
 joinForm.addEventListener("submit", (e) => {
