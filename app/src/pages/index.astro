@@ -1,0 +1,35 @@
+---
+import Chat from "../components/Chat.astro";
+import ProjectTree from "../components/ProjectTree.astro";
+import ContentViewer from "../components/ContentViewer.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>thalida</title>
+    <style>
+      #layout {
+        display: flex;
+        height: 100vh;
+      }
+      #layout > * {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1em;
+        border-right: 1px solid #ccc;
+      }
+      #layout > *:last-child {
+        border-right: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="layout">
+      <Chat />
+      <ProjectTree />
+      <ContentViewer />
+    </div>
+  </body>
+</html>

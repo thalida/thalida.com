@@ -1,0 +1,88 @@
+---
+import { getCollection } from "astro:content";
+import {
+  COLLECTION_NAMES,
+  collectionMeta,
+  type CollectionName,
+} from "../content.config";
+
+type TreeItem = {
+  id: string;
+  collection: string;
+  title: string;
+};
+
+type TreeData = Record<string, { title: string; items: TreeItem[] }>;
+
+const tree: TreeData = {};
+
+for (const name of COLLECTION_NAMES) {
+  const entries = await getCollection(name, ({ data }) => !data.draft);
+  const sorted = entries.sort(
+    (a, b) =>
+      new Date(b.data.publishedOn).getTime() -
+      new Date(a.data.publishedOn).getTime(),
+  );
+
+  tree[name] = {
+    title: collectionMeta[name].title,
+    items: sorted.map((entry) => ({
+      id: entry.id,
+      collection: name,
+      title: entry.data.title,
+    })),
+  };
+}
+---
+
+<nav id="project-tree">
+  <h2>Work</h2>
+  {
+    COLLECTION_NAMES.map((name) => (
+      <details open={name === "projects"}>
+        <summary>
+          {tree[name].title} ({tree[name].items.length})
+        </summary>
+        <ul>
+          {tree[name].items.map((item) => (
+            <li>
+              <a
+                href="#"
+                data-collection={item.collection}
+                data-id={item.id}
+                class="tree-link"
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    ))
+  }
+</nav>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      document
+        .querySelectorAll(".tree-link")
+        .forEach((l) => l.removeAttribute("data-active"));
+      link.setAttribute("data-active", "true");
+
+      const collection = link.dataset.collection;
+      const id = link.dataset.id;
+
+      document.querySelectorAll<HTMLElement>(".content-item").forEach((el) => {
+        el.hidden = !(
+          el.dataset.collection === collection && el.dataset.id === id
+        );
+      });
+
+      const welcome = document.getElementById("content-welcome");
+      if (welcome) welcome.hidden = true;
+    });
+  });
+</script>

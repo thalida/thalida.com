@@ -22,4 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-.vercel
+
+# cloudflare
+.wrangler/
+.dev.vars
+
+# generated content (combined YAML)
+app/.generated/

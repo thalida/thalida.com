@@ -1,0 +1,31 @@
+---
+const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
+---
+
+<aside id="chat-panel">
+  <h2>Chat</h2>
+  <div>
+    <span id="chat-status">connecting...</span>
+    &middot;
+    <span id="chat-user-count">0 users connected</span>
+  </div>
+  <hr />
+  <div
+    id="chat-messages"
+    style="min-height:200px;max-height:60vh;overflow-y:auto;"
+  >
+  </div>
+  <div>
+    <input
+      id="chat-input"
+      type="text"
+      placeholder="Type a message..."
+      autocomplete="off"
+    />
+    <button id="chat-send" type="button">Send</button>
+  </div>
+</aside>
+
+<meta name="chat-ws-url" content={wsUrl} />
+
+<script src="../scripts/chat-client.ts"></script>
