@@ -19,11 +19,15 @@ docs/   Design docs and plans
 ## Quick Start
 
 ```bash
-make install                            # install deps for app + api
-cp api/.dev.vars.example api/.dev.vars  # configure secrets (see below)
+make setup
 ```
 
-Then in two terminals:
+This single command:
+1. Installs dependencies for both `app/` and `api/`
+2. Adds a shell alias so `make` works from any subfolder in the repo
+3. Copies env templates (`api/.dev.vars`, `app/.env`) if they don't already exist
+
+After setup, edit `api/.dev.vars` to add your secrets (see below), then start developing:
 
 ```bash
 make api-dev    # Terminal 1 — API on http://localhost:8787
@@ -35,10 +39,6 @@ Run `make` or `make help` to see all available commands.
 ## Environment Variables
 
 ### API secrets (`api/.dev.vars`)
-
-```bash
-cp api/.dev.vars.example api/.dev.vars
-```
 
 | Variable | Required | Description |
 |---|---|---|
@@ -101,7 +101,9 @@ The `dist/` output can be deployed to Cloudflare Pages (or any static host).
 
 | Command | Description |
 |---|---|
+| `make setup` | Full local setup: install deps, add shell alias, copy env templates |
 | `make install` | Install dependencies for both app and api |
+| `make alias` | Add shell alias so `make` works from any subfolder |
 | `make api-dev` | Start the API worker on http://localhost:8787 |
 | `make app-dev` | Start the Astro frontend on http://localhost:4321 |
 | `make app-build` | Build the frontend |
