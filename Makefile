@@ -1,4 +1,4 @@
-.PHONY: install dev-api dev-app dev build preview tunnel-api tunnel-app tunnel-stop clean
+.PHONY: install api-dev app-dev dev app-build app-preview api-preview clean help
 
 # ─── Setup ────────────────────────────────────────────────────────────
 
@@ -8,43 +8,37 @@ install: ## Install dependencies for both app and api
 
 # ─── Local Development ────────────────────────────────────────────────
 
-dev-api: ## Start the API worker (http://localhost:8787)
+api-dev: ## Start the API worker (http://localhost:8787)
 	cd api && npm run dev
 
-dev-app: ## Start the Astro frontend (http://localhost:4321)
+app-dev: ## Start the Astro frontend (http://localhost:4321)
 	cd app && npm run dev
 
 dev: ## Reminder to start both servers
 	@echo "Run these in separate terminals:"
-	@echo "  make dev-api    → API on http://localhost:8787"
-	@echo "  make dev-app    → App on http://localhost:4321"
+	@echo "  make api-dev    → API on http://localhost:8787"
+	@echo "  make app-dev    → App on http://localhost:4321"
 
-# ─── Build & Preview ─────────────────────────────────────────────────
+# ─── Build ────────────────────────────────────────────────────────────
 
-build: ## Build the frontend
+app-build: ## Build the frontend
 	cd app && npm run build
 
-preview: build ## Build and preview the frontend (http://localhost:4321)
-	cd app && npm run preview
-
-# ─── Tunneling (share local dev with others) ──────────────────────────
+# ─── Preview (tunneled for sharing) ──────────────────────────────────
 # Requires: npx cloudflared (auto-downloaded on first use)
 #
-# Usage (4 terminals):
-#   Terminal 1: make dev-api
-#   Terminal 2: make tunnel-api     (tunnels API, updates app/.env)
-#   Terminal 3: make tunnel-app     (builds with tunnel URL, previews, tunnels frontend)
-#   Terminal 4: share the frontend tunnel URL
+# Usage (3 terminals):
+#   Terminal 1: make api-dev
+#   Terminal 2: make api-preview    (tunnels API, updates app/.env)
+#   Terminal 3: make app-preview    (builds frontend, previews, tunnels it)
 #
-# When done: Ctrl+C each tunnel. tunnel-api auto-restores app/.env to localhost.
+# When done: Ctrl+C each. api-preview auto-restores app/.env to localhost.
 
-tunnel-api: ## Tunnel the API and auto-update app/.env with the tunnel WS URL
+api-preview: ## Tunnel the API and auto-update app/.env with the tunnel WS URL
 	@LOG=$$(mktemp) ; \
 	cleanup() { \
 		kill $$PID 2>/dev/null ; \
 		echo "" ; \
-		echo "PUBLIC_CHAT_WS_URL=ws://localhost:8787/ws" > app/.env.tmp ; \
-		grep -v '^PUBLIC_CHAT_WS_URL=' app/.env >> app/.env.tmp 2>/dev/null ; \
 		printf 'PUBLIC_CHAT_WS_URL=ws://localhost:8787/ws\n' > app/.env.tmp ; \
 		mv app/.env.tmp app/.env ; \
 		echo "Restored app/.env to localhost" ; \
@@ -70,12 +64,12 @@ tunnel-api: ## Tunnel the API and auto-update app/.env with the tunnel WS URL
 	echo "" ; \
 	echo "API tunnel:  $$URL" ; \
 	echo "WS URL:      $$WS_URL" ; \
-	echo "Updated app/.env — now run 'make tunnel-app' in another terminal" ; \
+	echo "Updated app/.env — now run 'make app-preview' in another terminal" ; \
 	echo "Press Ctrl+C to stop (restores app/.env to localhost)" ; \
 	echo "" ; \
 	wait $$PID
 
-tunnel-app: build ## Build frontend with current .env, preview it, and tunnel
+app-preview: app-build ## Build frontend, preview on port 4322, and tunnel
 	@LOG=$$(mktemp) ; \
 	cleanup() { \
 		kill $$TUNNEL_PID 2>/dev/null ; \

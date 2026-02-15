@@ -26,8 +26,8 @@ cp api/.dev.vars.example api/.dev.vars  # configure secrets (see below)
 Then in two terminals:
 
 ```bash
-make dev-api    # Terminal 1 — API on http://localhost:8787
-make dev-app    # Terminal 2 — App on http://localhost:4321
+make api-dev    # Terminal 1 — API on http://localhost:8787
+make app-dev    # Terminal 2 — App on http://localhost:4321
 ```
 
 Run `make` or `make help` to see all available commands.
@@ -49,7 +49,7 @@ cp api/.dev.vars.example api/.dev.vars
 
 | Variable | Default | Description |
 |---|---|---|
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make tunnel-api`. |
+| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make api-preview`. |
 
 ## Log In as the Owner
 
@@ -60,12 +60,12 @@ Visit `http://localhost:4321?admin=YOUR_ADMIN_SECRET` (the value from `api/.dev.
 Share your local dev environment using [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (free, no account needed). You need three terminals:
 
 ```bash
-make dev-api      # Terminal 1 — start the API server
-make tunnel-api   # Terminal 2 — tunnel the API, auto-updates app/.env
-make tunnel-app   # Terminal 3 — builds frontend, starts preview on port 4322, tunnels it
+make api-dev       # Terminal 1 — start the API server
+make api-preview   # Terminal 2 — tunnel the API, auto-updates app/.env
+make app-preview   # Terminal 3 — builds frontend, previews on port 4322, tunnels it
 ```
 
-`make tunnel-api` automatically updates `app/.env` with the tunnel WebSocket URL and restores it to localhost when you Ctrl+C. Share the frontend tunnel URL printed by `make tunnel-app` with your tester.
+`make api-preview` automatically updates `app/.env` with the tunnel WebSocket URL and restores it to localhost when you Ctrl+C. Share the frontend tunnel URL printed by `make app-preview` with your tester.
 
 The preview server runs on port 4322 to avoid conflicting with the dev server on 4321.
 
@@ -102,10 +102,9 @@ The `dist/` output can be deployed to Cloudflare Pages (or any static host).
 | Command | Description |
 |---|---|
 | `make install` | Install dependencies for both app and api |
-| `make dev-api` | Start the API worker on http://localhost:8787 |
-| `make dev-app` | Start the Astro frontend on http://localhost:4321 |
-| `make build` | Build the frontend |
-| `make preview` | Build and preview the frontend on http://localhost:4322 |
-| `make tunnel-api` | Tunnel the API, auto-update `app/.env` with the WS URL |
-| `make tunnel-app` | Build, preview, and tunnel the frontend |
+| `make api-dev` | Start the API worker on http://localhost:8787 |
+| `make app-dev` | Start the Astro frontend on http://localhost:4321 |
+| `make app-build` | Build the frontend |
+| `make api-preview` | Tunnel the API, auto-update `app/.env` with the WS URL |
+| `make app-preview` | Build, preview on port 4322, and tunnel the frontend |
 | `make clean` | Remove build artifacts |
