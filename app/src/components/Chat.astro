@@ -5,24 +5,45 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 <aside id="chat-panel">
   <h2>Chat</h2>
   <div>
-    <span id="chat-status">connecting...</span>
+    <span id="chat-status">offline</span>
     &middot;
     <span id="chat-user-count">0 users connected</span>
   </div>
   <hr />
-  <div
-    id="chat-messages"
-    style="min-height:200px;max-height:60vh;overflow-y:auto;"
-  >
-  </div>
-  <div>
-    <input
-      id="chat-input"
-      type="text"
-      placeholder="Type a message..."
-      autocomplete="off"
-    />
-    <button id="chat-send" type="button">Send</button>
+
+  <form id="chat-join">
+    <label for="chat-username">Pick a display name to join chat:</label>
+    <div>
+      <input
+        id="chat-username"
+        type="text"
+        placeholder="your name..."
+        autocomplete="off"
+        required
+        minlength="2"
+        maxlength="20"
+        pattern="[a-z0-9_\-.]+"
+        title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
+      />
+      <button id="chat-join-btn" type="submit">Join</button>
+    </div>
+  </form>
+
+  <div id="chat-room" hidden>
+    <div
+      id="chat-messages"
+      style="min-height:200px;max-height:60vh;overflow-y:auto;"
+    >
+    </div>
+    <div>
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Type a message..."
+        autocomplete="off"
+      />
+      <button id="chat-send" type="button">Send</button>
+    </div>
   </div>
 </aside>
 

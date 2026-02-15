@@ -16,7 +16,8 @@ type ClientMessage =
 type ServerMessage =
   | { type: "history"; messages: ChatMessage[] }
   | { type: "message"; username: string; text: string; timestamp: number }
-  | { type: "status"; ownerOnline: boolean; userCount: number };
+  | { type: "status"; ownerOnline: boolean; userCount: number }
+  | { type: "error"; code: string; message: string };
 
 const MAX_MESSAGES = 50;
 
@@ -37,34 +38,61 @@ export class ChatRoom implements DurableObject {
     const pair = new WebSocketPair();
     const [client, server] = [pair[0], pair[1]];
 
-    this.state.acceptWebSocket(server);
+    server.accept();
+
+    server.addEventListener("message", (event) => {
+      this.handleMessage(server, event.data);
+    });
+
+    server.addEventListener("close", () => {
+      this.connections.delete(server);
+      this.broadcastStatus();
+    });
+
+    server.addEventListener("error", () => {
+      this.connections.delete(server);
+      this.broadcastStatus();
+    });
 
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  webSocketMessage(ws: WebSocket, rawMessage: string | ArrayBuffer): void {
+  private handleMessage(ws: WebSocket, raw: string | ArrayBuffer): void {
     const data = JSON.parse(
-      typeof rawMessage === "string"
-        ? rawMessage
-        : new TextDecoder().decode(rawMessage),
+      typeof raw === "string" ? raw : new TextDecoder().decode(raw),
     ) as ClientMessage;
 
     if (data.type === "join") {
+      const name = String(data.username ?? "").trim().toLowerCase().slice(0, 20);
+      if (name.length < 2 || !/^[a-z0-9_\-.]+$/.test(name)) {
+        this.send(ws, { type: "error", code: "invalid_username", message: "Username must be 2-20 characters: lowercase letters, numbers, hyphens, underscores, or dots." });
+        return;
+      }
+
       const isOwner =
         typeof data.token === "string" &&
         data.token.length > 0 &&
         data.token === (this.env.ADMIN_SECRET as string);
 
-      const info: ConnectionInfo = {
-        username: data.username,
+      const reserved = ["thalida", "tia"];
+      if (reserved.some((r) => name.includes(r)) && !isOwner) {
+        this.send(ws, { type: "error", code: "reserved_username", message: "That name contains a reserved word." });
+        return;
+      }
+
+      for (const [existingWs, info] of this.connections) {
+        if (info.username === name && existingWs !== ws) {
+          this.send(ws, { type: "error", code: "taken_username", message: "That name is already taken." });
+          return;
+        }
+      }
+
+      this.connections.set(ws, {
+        username: name,
         isOwner,
-      };
-      this.connections.set(ws, info);
+      });
 
-      // Send message history to the new connection
       this.send(ws, { type: "history", messages: this.messages });
-
-      // Broadcast updated status to everyone
       this.broadcastStatus();
       return;
     }
@@ -73,9 +101,12 @@ export class ChatRoom implements DurableObject {
       const info = this.connections.get(ws);
       if (!info) return;
 
+      const text = String(data.text ?? "").trim().slice(0, 500);
+      if (!text) return;
+
       const message: ChatMessage = {
         username: info.username,
-        text: data.text,
+        text,
         timestamp: Date.now(),
       };
 
@@ -91,16 +122,6 @@ export class ChatRoom implements DurableObject {
         timestamp: message.timestamp,
       });
     }
-  }
-
-  webSocketClose(ws: WebSocket): void {
-    this.connections.delete(ws);
-    this.broadcastStatus();
-  }
-
-  webSocketError(ws: WebSocket): void {
-    this.connections.delete(ws);
-    this.broadcastStatus();
   }
 
   private send(ws: WebSocket, message: ServerMessage): void {
