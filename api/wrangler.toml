@@ -1,0 +1,17 @@
+name = "thalida-chat-api"
+main = "src/index.ts"
+compatibility_date = "2025-02-14"
+
+[durable_objects]
+bindings = [
+  { name = "CHAT_ROOM", class_name = "ChatRoom" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["ChatRoom"]
+
+[vars]
+ALLOWED_ORIGIN = "https://thalida.com"
+
+# Set ADMIN_SECRET via `wrangler secret put ADMIN_SECRET`
