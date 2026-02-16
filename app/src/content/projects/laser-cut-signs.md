@@ -15,7 +15,6 @@ category: craft
 This sign was created as a gift for family. It features a custom design, and a wood laser engraving of a local lake.
 I designed the sign, and it was cut and engraved using a laser cutter.
 
-
 ## Craft Room
 
 ![laser-cut-signs/IMG_2761.png](laser-cut-signs/IMG_2761.png)
@@ -24,7 +23,6 @@ This sign hanging above the entrance to my craft room. I created the design, and
 ![laser-cut-signs/IMG_2762.png](laser-cut-signs/IMG_2762.png)
 This sign is hanging above the door inside the craft room itself.
 It serves as a motivational reminder to try to bring my ideas to life.
-
 
 ## The Coffee Shop
 

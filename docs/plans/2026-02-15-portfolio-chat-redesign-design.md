@@ -117,10 +117,12 @@ thalida.com/
 ### WebSocket Protocol (JSON)
 
 Client sends:
+
 - `{type: "join", username: "visitor123", token?: "..."}` -- join with optional auth token
 - `{type: "message", text: "hello"}` -- send a chat message
 
 Server sends:
+
 - `{type: "history", messages: [...]}` -- sent on connect, last ~50 messages
 - `{type: "message", username, text, timestamp}` -- broadcast on new message
 - `{type: "status", ownerOnline: true/false, userCount: N}` -- broadcast on connection changes

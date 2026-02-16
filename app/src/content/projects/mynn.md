@@ -10,21 +10,18 @@ category: app
 
 ![Screenshot 2025-07-02 at 21.32.09.png](<mynn/Screenshot 2025-07-02 at 21.32.09.png>)
 
-| Links | |
-| ------ | ------- |
-| [Github →](https://github.com/thalida/mynn) | |
-
+| Links                                       |     |
+| ------------------------------------------- | --- |
+| [Github →](https://github.com/thalida/mynn) |     |
 
 ## Overview
 
 Mynn is a simple calendar and notes app for MacOS, designed to help users manage their schedules and jot down quick notes. It features a clean interface with a calendar view and a note-taking section, allowing for easy access and organization of daily tasks.
 
-
 ## Framework & Technologies
 
 - **SwiftUI**: For building the user interface.
 - **Claude Anthropic**: AI co-pilot for generating code snippets and assisting with development.
-
 
 ## Features
 
@@ -32,7 +29,6 @@ Mynn is a simple calendar and notes app for MacOS, designed to help users manage
 - **Note-taking**: Users can quickly jot down notes for each day.
 - **Custom Attendees**: Add custom attendees to events
 - **Customizable Appearance**: Users can choose from different themes to personalize the look of the app.
-
 
 ## Screenshots
 

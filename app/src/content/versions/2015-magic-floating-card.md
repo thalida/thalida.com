@@ -9,10 +9,9 @@ coverImageAlt: A floating card that flips over, displaying live time data based 
 
 ![Untitled](2015-magic-floating-card/Untitled.png)
 
-| **Year(s)** | **GitHub** | **Link** |
-| ----------- | --------- | -------- |
+| **Year(s)**                | **GitHub**                                                     | **Link**                                  |
+| -------------------------- | -------------------------------------------------------------- | ----------------------------------------- |
 | January 2015 - August 2016 | [Github →](https://github.com/thalida/thalida.com/tree/v-2015) | [View Live →](https://2015.v.thalida.com) |
-
 
 ## Story
 
@@ -21,11 +20,9 @@ I had two goals for this site:
 1. A try at a super minimal site, that gave just enough information to let the visitor know what I was all about
 2. Create a design with *just* enough components so that I could rebuild the site in a variety of frontend frameworks (as a learning experience)
 
-
 ## Design
 
 ![](2015-magic-floating-card/mock.1.png)
-
 
 ## How it Works
 

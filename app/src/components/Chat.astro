@@ -30,18 +30,9 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   </form>
 
   <div id="chat-room" hidden>
-    <div
-      id="chat-messages"
-      style="min-height:200px;max-height:60vh;overflow-y:auto;"
-    >
-    </div>
+    <div id="chat-messages" style="min-height:200px;max-height:60vh;overflow-y:auto;"></div>
     <div>
-      <input
-        id="chat-input"
-        type="text"
-        placeholder="Type a message..."
-        autocomplete="off"
-      />
+      <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
       <button id="chat-send" type="button">Send</button>
     </div>
   </div>

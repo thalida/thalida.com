@@ -7,7 +7,7 @@ import { COLLECTION_NAMES } from "../../../content.config";
 export async function getStaticPaths() {
   const paths: Array<{
     params: { collection: string; id: string };
-    props: { entry: any };
+    props: { entry: Record<string, unknown> };
   }> = [];
 
   for (const name of COLLECTION_NAMES) {
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-let Content: any = null;
+let Content: ((_props: Record<string, unknown>) => unknown) | null = null;
 try {
   const rendered = await render(entry);
   Content = rendered.Content;
@@ -38,7 +38,13 @@ try {
 
 <article>
   <h2>{entry.data.title}</h2>
-  {entry.data.description && <p><em>{entry.data.description}</em></p>}
+  {
+    entry.data.description && (
+      <p>
+        <em>{entry.data.description}</em>
+      </p>
+    )
+  }
   <hr />
   {Content ? <Content /> : <p>Content could not be rendered.</p>}
 </article>

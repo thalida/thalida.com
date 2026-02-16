@@ -9,20 +9,17 @@ category: misc
 
 ![Assorted rubber ducks](knowledge-base-brain-dump/pexels-eye4dtail-122308.jpg)
 
-
 ## Help! PWA Cache Issues
 
 [VUE | PWA | DISABLE](https://santhoshkumarravi.medium.com/vue-pwa-disable-5463e44b1f7f)
 
 [How to clear cache of service worker?](https://stackoverflow.com/questions/45467842/how-to-clear-cache-of-service-worker)
 
-
 ## How to Flexbox
 
 [A Complete Guide to Flexbox | CSS-Tricks](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 
 [Flexbox Froggy](https://flexboxfroggy.com/)
-
 
 ## Help! Other Stack Overflow Memories
 

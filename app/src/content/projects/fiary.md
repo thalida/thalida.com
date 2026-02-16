@@ -10,10 +10,9 @@ category: app
 
 ![Screenshot 2025-07-02 at 20.55.45.png](fiary/Screenshot%202025-07-02%20at%2020.55.45.png)
 
-| Links | |
-| ------ | ------- |
-| [Github →](https://github.com/thalida/fiary) | |
-
+| Links                                        |     |
+| -------------------------------------------- | --- |
+| [Github →](https://github.com/thalida/fiary) |     |
 
 <div class="flex flex-col items-center justify-center">
   <video width="320" height="240" controls>
@@ -21,36 +20,29 @@ category: app
   </video>
 </div>
 
-
 ## Idea
 
 A digital bullet journal. A tool that’s a hybrid of notion + paper.
-
 
 ## Helpful Resources
 
 - [HTML Canvas - Apple Pencil / 3D Touch API](https://codesandbox.io/embed/qr4uq?codemirror=1)
 - [how to draw smooth curve through N points using javascript HTML5 canvas?](https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas)
 
-
 ## Brainstorm
-
 
 ### Name Exploration
 
 ![Paper.fiary.4.png](fiary/Paper.fiary.4.png)
 
-
 ### Colors & Icon Exploration
 
-| | |
-| ------ | ------- |
+|                                               |                                               |
+| --------------------------------------------- | --------------------------------------------- |
 | ![Paper.fiary.1.png](fiary/Paper.fiary.1.png) | ![Paper.fiary.7.png](fiary/Paper.fiary.7.png) |
-| ![Paper.fiary.8.png](fiary/Paper.fiary.8.png) | |
-
+| ![Paper.fiary.8.png](fiary/Paper.fiary.8.png) |                                               |
 
 ## Design
-
 
 ### Inspiration
 
@@ -58,7 +50,6 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 - [fiary v2 by Thalida Noel](https://dribbble.com/thalida/collections/1601055-fiary-v2)
 - [Notes & Todos by Thalida Noel](https://dribbble.com/thalida/collections/967810-Notes-Todos)
 - [fiary thalida by Thalida Noel](https://dribbble.com/thalida/collections/2146817-fiary-thalida)
-
 
 ### Paper Sketches
 

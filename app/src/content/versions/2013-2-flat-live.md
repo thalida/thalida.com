@@ -9,10 +9,9 @@ coverImageAlt: The original live weather and time version built on PHP
 
 ![Untitled](2013-2-flat-live/Untitled.png)
 
-| **Year(s)** | **GitHub** | **Link** |
-| ----------- | --------- | -------- |
-| March 2013 - January 2014 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-2)  | [View Live →](https://2013-2.v.thalida.com) |
-
+| **Year(s)**               | **GitHub**                                                       | **Link**                                    |
+| ------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
+| March 2013 - January 2014 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-2) | [View Live →](https://2013-2.v.thalida.com) |
 
 ## Story
 
@@ -21,7 +20,6 @@ was dynamic for each visitor. That goal has stuck with me ever since.
 
 It’s very interesting to me how a lot of the designs in 2013 onward stand up to the test of time, and no-one would
 really blink if I showed these concepts around as ideas for the next version of this site.
-
 
 ## Concepts
 
@@ -34,7 +32,6 @@ really blink if I showed these concepts around as ideas for the next version of 
 ![Untitled](2013-2-flat-live/Untitled%204.png)
 
 ![Untitled](2013-2-flat-live/Untitled%205.png)
-
 
 ## “Final” Designs
 

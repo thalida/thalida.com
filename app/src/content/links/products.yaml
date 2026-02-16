@@ -59,7 +59,6 @@
     - tech
   publishedOn: 80
 
-
 - id: https://oakywood.shop/
   title: Oakywood
   category: products
@@ -85,7 +84,6 @@
     - stationery
   publishedOn: 80
 
-
 - id: https://shop.mochithings.com/
   title: MochiThings
   category: products
@@ -101,7 +99,6 @@
     - office
     - organization
   publishedOn: 50
-
 
 - id: https://www.orbitkey.com/
   title: Orbitkey

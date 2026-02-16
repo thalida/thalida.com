@@ -21,9 +21,7 @@ interface ChatMessage {
 }
 
 const WS_URL =
-  document
-    .querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')
-    ?.content?.trim() || "ws://localhost:8787/ws";
+  document.querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')?.content?.trim() || "ws://localhost:8787/ws";
 
 let ws: WebSocket | null = null;
 let username: string | null = null;
@@ -31,18 +29,12 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
 const joinForm = document.getElementById("chat-join") as HTMLFormElement;
 const roomSection = document.getElementById("chat-room") as HTMLDivElement;
-const usernameInput = document.getElementById(
-  "chat-username",
-) as HTMLInputElement;
-const messagesEl = document.getElementById(
-  "chat-messages",
-) as HTMLDivElement;
+const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
+const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
 const inputEl = document.getElementById("chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
 const statusEl = document.getElementById("chat-status") as HTMLSpanElement;
-const userCountEl = document.getElementById(
-  "chat-user-count",
-) as HTMLSpanElement;
+const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
 
 function getAdminToken(): string | null {
   const params = new URLSearchParams(window.location.search);
@@ -76,11 +68,7 @@ function appendNotice(text: string): void {
 }
 
 function connect(): void {
-  if (
-    ws &&
-    (ws.readyState === WebSocket.OPEN ||
-      ws.readyState === WebSocket.CONNECTING)
-  ) {
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
     return;
   }
 
@@ -90,10 +78,10 @@ function connect(): void {
     const token = getAdminToken();
     const joinMsg: Record<string, string> = {
       type: "join",
-      username: username!,
+      username: username ?? "",
     };
     if (token) joinMsg.token = token;
-    ws!.send(JSON.stringify(joinMsg));
+    ws?.send(JSON.stringify(joinMsg));
   });
 
   ws.addEventListener("message", (event) => {
@@ -112,9 +100,7 @@ function connect(): void {
         timestamp: data.timestamp,
       });
     } else if (data.type === "status") {
-      statusEl.textContent = data.ownerOnline
-        ? "thalida is online"
-        : "thalida is offline";
+      statusEl.textContent = data.ownerOnline ? "thalida is online" : "thalida is offline";
       statusEl.dataset.online = String(data.ownerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
     } else if (data.type === "error") {

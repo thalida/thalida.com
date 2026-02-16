@@ -10,23 +10,20 @@ category: game
 
 ![gameplay.gif](shapeconnector/gameplay.gif)
 
-| Links | |
-| ------ | ------- |
+| Links                                                 |                                                       |
+| ----------------------------------------------------- | ----------------------------------------------------- |
 | [Github →](https://github.com/thalida/ShapeConnector) | [Website →](http://thalida.github.io/shapeconnector/) |
 
-
 ## 🎨 Design
-
 
 ### Inspiration
 
 [ShapeConnector 2.0 by Thalida Noel](https://dribbble.com/thalida/collections/601739-ShapeConnector-2-0)
 
-
 ### Mockups
 
-| | |
-| ------ | ------- |
-| ![shapeconnector_teaser2.png](shapeconnector/shapeconnector_teaser2.png) | ![Freeplay.png](shapeconnector/Freeplay.png) |
-| ![Freeplay: Finished.png](shapeconnector/Freeplay_Finished.png) | ![Freeplay: Moved too many.png](shapeconnector/Freeplay_Moved_too_many.png) |
-| ![Freeplay: Moved.png](shapeconnector/Freeplay_Moved.png) | |
+|                                                                          |                                                                             |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| ![shapeconnector_teaser2.png](shapeconnector/shapeconnector_teaser2.png) | ![Freeplay.png](shapeconnector/Freeplay.png)                                |
+| ![Freeplay: Finished.png](shapeconnector/Freeplay_Finished.png)          | ![Freeplay: Moved too many.png](shapeconnector/Freeplay_Moved_too_many.png) |
+| ![Freeplay: Moved.png](shapeconnector/Freeplay_Moved.png)                |                                                                             |

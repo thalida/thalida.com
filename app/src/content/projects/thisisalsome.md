@@ -10,13 +10,11 @@ category: website
 
 ![Screen Shot 2022-02-20 at 18.06.51.png](thisisalsome/Screen_Shot_2022-02-20_at_18.06.51.png)
 
-| Links | |
-| ------ | ------- |
-| [Github →](https://github.com/thalida/thisisalso.me) |  [Website →](https://thisisalso.me/) |
-
+| Links                                                |                                     |
+| ---------------------------------------------------- | ----------------------------------- |
+| [Github →](https://github.com/thalida/thisisalso.me) | [Website →](https://thisisalso.me/) |
 
 ## 🧠🌩️ Brainstorm
-
 
 ## Screenshots
 
@@ -26,9 +24,7 @@ category: website
 
 ![Screen Shot 2022-02-20 at 18.12.36.png](thisisalsome/Screen_Shot_2022-02-20_at_18.12.36.png)
 
-
 ## 🎨 Design
-
 
 ### Inspiration
 

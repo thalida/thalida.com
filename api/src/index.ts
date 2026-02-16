@@ -9,8 +9,7 @@ interface Env {
 
 function corsHeaders(env: Env, request: Request): Record<string, string> {
   const origin = request.headers.get("Origin") ?? "";
-  const allowed =
-    origin === env.ALLOWED_ORIGIN || origin.startsWith("http://localhost");
+  const allowed = origin === env.ALLOWED_ORIGIN || origin.startsWith("http://localhost");
 
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "",
@@ -20,11 +19,7 @@ function corsHeaders(env: Env, request: Request): Record<string, string> {
 }
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    _ctx: ExecutionContext,
-  ): Promise<Response> {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     // Handle CORS preflight

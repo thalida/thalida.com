@@ -9,15 +9,13 @@ coverImageAlt: Screenshot of the Brown & Minimal design of thalida.com, featurin
 
 ![Untitled](2012-brown-minimal/Untitled.png)
 
-| **Year(s)** | **GitHub** | **Link** |
-| ----------- | --------- | -------- |
-| January 2012 - January 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2012) |  [View Live →](https://2012.v.thalida.com) |
-
+| **Year(s)**                 | **GitHub**                                                     | **Link**                                  |
+| --------------------------- | -------------------------------------------------------------- | ----------------------------------------- |
+| January 2012 - January 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2012) | [View Live →](https://2012.v.thalida.com) |
 
 ## Story
 
 Site Design #8 is the oldest existing version of my site. The first seven versions have been lost to history (and [onepagelove](https://onepagelove.com/thalida)).
-
 
 ## **Designs**
 
@@ -25,7 +23,7 @@ Site Design #8 is the oldest existing version of my site. The first seven versio
 
 My first design had a very simple dark background
 
-*I was going through a “brown” phase.*
+_I was going through a “brown” phase._
 
 ![Untitled](2012-brown-minimal/Untitled%202.png)
 
@@ -35,4 +33,4 @@ of a page in my notebook as the background of the site.
 Tested it out on Photoshop, liked the look, and it became part of my final design.
 
 > [!NOTE]
-> 👄 *The page in the background is actually a rough sketch of this site design*
+> 👄 _The page in the background is actually a rough sketch of this site design_

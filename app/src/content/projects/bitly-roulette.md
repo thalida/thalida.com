@@ -8,13 +8,11 @@ tags: [fun, hack, random]
 category: website
 ---
 
-
 ![Screen Shot 2022-02-19 at 18.53.19.png](bitly-roulette/Screen_Shot_2022-02-19_at_18.53.19.png)
 
-| Links | |
-| ------ | ------- |
+| Links                                                 |                                                        |
+| ----------------------------------------------------- | ------------------------------------------------------ |
 | [Github →](https://github.com/thalida/bitly-roulette) | [Website →](https://thalida.github.io/bitly-roulette/) |
-
 
 ## How it Works
 

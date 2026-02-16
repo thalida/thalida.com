@@ -16,7 +16,6 @@ tags:
 > - Season flour before breading
 > - Use pepper spices in seasoning
 
-
 ## Ingredients
 
 - 1 lb. Medium sized, raw peeled shrimp
@@ -33,7 +32,6 @@ tags:
 - 3 shallow bowls
 - Parchment Paper
 
-
 ## Steps
 
 1. Line a baking sheet with parchment paper, set aside
@@ -41,12 +39,11 @@ tags:
 3. In another bowl, beat 2 eggs until frothy
 4. In the third bowl, add panko, season with remaining garlic powder, cayenne, and smoked paprika. Add salt to taste. I usually do maybe a 1/4 tsp (????)
 5. Mix olive oil through out the seasoned panko so it’s fully coated, and no dry pieces remain.
-    1. Add more olive oil as needed, there just be just enough olive oil that the panko is coated, but not swimming
+   1. Add more olive oil as needed, there just be just enough olive oil that the panko is coated, but not swimming
 6. Bread shrimp (seasoned flour → egg → panko mixture), and place on lined baking sheet
-    1. (note: I usually bread w/ chop sticks — quick cleanup and no gunked up fork/hands)
+   1. (note: I usually bread w/ chop sticks — quick cleanup and no gunked up fork/hands)
 7. Preheat oven to 400F
 8. Bake for 13-15minutes, until shrimp is golden brown
-
 
 ## Optional: Sauce
 

@@ -10,14 +10,12 @@ category: app
 
 ![devscript-theme-screenshot](devscript/themes-split.png)
 
-| Links | | |
-| ------ | ------- | ------- |
-| [GitHub →](https://github.com/xtream1101/devscript) | [Website →](https://devscript.host) |  [Docs →](https://docs.devscript.host) |
-
+| Links                                               |                                     |                                       |
+| --------------------------------------------------- | ----------------------------------- | ------------------------------------- |
+| [GitHub →](https://github.com/xtream1101/devscript) | [Website →](https://devscript.host) | [Docs →](https://docs.devscript.host) |
 
 > [!IMPORTANT]
 > This projects was completed by both [xtream1101](https://github.com/xtream1101/) and myself
-
 
 ## ⚡️ Project Overview
 
@@ -29,7 +27,6 @@ or self-host it yourself using the [Quick Start Guide](#-quick-start-guide)
 Additional documentation can be found at [docs.devscript.host](https://docs.devscript.host)
 
 ---
-
 
 ## 📦 Features
 
@@ -45,25 +42,21 @@ Additional documentation can be found at [docs.devscript.host](https://docs.devs
 
 ---
 
-
 ## 🚀 Quick Start Guide
-
 
 ### Running via docker-compose
 
 1. Clone this repository
 2. Copy the `.env.example` file to `.env` and fill in the required environment variables
-    - Configuration options: <https://docs.devscript.host/guides/self-hosting/configuration/>
+   - Configuration options: <https://docs.devscript.host/guides/self-hosting/configuration/>
 3. Run `docker compose up` to start the application
 4. Access the application at <http://localhost:8000>
 
 ---
 
-
 ## 📝 Upcoming features
 
 - VSCode extention to manage snippets directly in the editor
-
 
 ## 💬 Report a Bug or Feature Request
 
@@ -71,11 +64,9 @@ If you encounter any issues or have suggestions for improvements, file a new iss
 
 If you find a security vulnerability, please do not create an issue. Instead, contact the maintainers directly at [security@devscript.host](mailto:security@devscript.host)
 
-
 ## 🛠️ Development
 
 If you would like to contribute to the project, please refer to the [development guide](https://docs.devscript.host/reference/development/).
-
 
 ## 📜 License
 

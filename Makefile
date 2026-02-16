@@ -2,11 +2,17 @@ ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 APP_DIR  := $(ROOT_DIR)app
 API_DIR  := $(ROOT_DIR)api
 
-.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview clean help
+.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check clean help
 
 # ─── Setup ────────────────────────────────────────────────────────────
 
-setup: install alias ## Full local setup: install deps, configure shell alias, copy env templates
+setup: install alias ## Full local setup: install deps, configure shell alias, copy env templates, install hooks
+	@if ! command -v pre-commit >/dev/null 2>&1; then \
+		echo "pre-commit not found, installing via Homebrew..." ; \
+		brew install pre-commit ; \
+	fi
+	@cd $(ROOT_DIR) && pre-commit install
+	@echo "pre-commit hooks installed"
 	@if [ ! -f $(API_DIR)/.dev.vars ]; then \
 		cp $(API_DIR)/.dev.vars.example $(API_DIR)/.dev.vars ; \
 		echo "Created api/.dev.vars from template — edit it to add your secrets" ; \
@@ -22,7 +28,8 @@ setup: install alias ## Full local setup: install deps, configure shell alias, c
 	@echo ""
 	@echo "Setup complete! Run 'make dev' to see how to start the servers."
 
-install: ## Install dependencies for both app and api
+install: ## Install dependencies for root, app, and api
+	cd $(ROOT_DIR) && npm install
 	cd $(APP_DIR) && npm install
 	cd $(API_DIR) && npm install
 
@@ -142,6 +149,22 @@ app-preview: app-build ## Build frontend, preview on port 4322, and tunnel
 	echo "Press Ctrl+C to stop" ; \
 	echo "" ; \
 	wait $$TUNNEL_PID
+
+# ─── Lint & Format ────────────────────────────────────────────────────
+
+lint: ## Run ESLint in both packages
+	cd $(API_DIR) && npm run lint
+	cd $(APP_DIR) && npm run lint
+
+lint-fix: ## Run ESLint --fix in both packages
+	cd $(API_DIR) && npm run lint:fix
+	cd $(APP_DIR) && npm run lint:fix
+
+format: ## Run Prettier --write across the repo
+	cd $(ROOT_DIR) && npx prettier --write .
+
+format-check: ## Run Prettier --check across the repo
+	cd $(ROOT_DIR) && npx prettier --check .
 
 # ─── Utilities ────────────────────────────────────────────────────────
 

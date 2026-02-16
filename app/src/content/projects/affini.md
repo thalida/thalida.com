@@ -10,9 +10,7 @@ category: concept
 
 A resource for managers and employees running Affinity Groups.
 
-
 ## 🧠🌩 Brainstorm
-
 
 ### Feature Exploration
 
@@ -21,9 +19,7 @@ A resource for managers and employees running Affinity Groups.
   - resources to help folks running a group for the first time or looking to start one
 - Help employees advocate for Affinity groups and get on started
 
-
 ## 🎨 Design
-
 
 ### Inspiration
 

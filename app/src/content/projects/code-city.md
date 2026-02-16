@@ -11,23 +11,19 @@ category: app
 
 ![Untitled](code-city/Untitled.png)
 
-| Links | |
-| ------ | ------- |
-| [Github →](https://github.com/thalida/codecity) | |
-
+| Links                                           |     |
+| ----------------------------------------------- | --- |
+| [Github →](https://github.com/thalida/codecity) |     |
 
 ## ✅ Todos
 
-- [ ]  Buy / Create 3D buildings
-- [ ]  Update site performance
-- [ ]  Take screenshots to update notion build log
-
+- [ ] Buy / Create 3D buildings
+- [ ] Update site performance
+- [ ] Take screenshots to update notion build log
 
 ## 🧠🌩 Brainstorm
 
-
 ### City Generation
-
 
 #### **BUILDINGS**
 
@@ -39,24 +35,20 @@ category: app
 - The style / type of building is based on the type of file
   - eg. a readme could be a library?
 
-
 #### **STREETS**
 
 - Each street is the name of a folder
 - The width of the street is based on the number of files / directories nested in it
 
-
 ## 🎨 Design
-
 
 ### Inspiration
 
 [Code City by Thalida Noel](https://dribbble.com/thalida/collections/2030629-Code-City)
 
-
 ### Paper Sketches
 
-| | |
-| ------ | ------- |
-| ![Paper.2020.me.52.png](code-city/Paper.2020.me.52.png) | ![Paper.codecity.14.png](code-city/Paper.codecity.14.png) |
-| ![Paper.codecity.18.png](code-city/Paper.codecity.18.png) | |
+|                                                           |                                                           |
+| --------------------------------------------------------- | --------------------------------------------------------- |
+| ![Paper.2020.me.52.png](code-city/Paper.2020.me.52.png)   | ![Paper.codecity.14.png](code-city/Paper.codecity.14.png) |
+| ![Paper.codecity.18.png](code-city/Paper.codecity.18.png) |                                                           |

@@ -11,16 +11,14 @@ category: game
 
 ![d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png](grindless/d0fe9f07-b737-4067-85ff-0dee6ba08ffa-profile_banner-480.png)
 
-| Links | |
-| ------ | ------- |
+| Links                                            |                                           |
+| ------------------------------------------------ | ----------------------------------------- |
 | [Github →](https://github.com/thalida/grindless) | [Docs →](http://docs.grindless.builders/) |
-
 
 ## ✅ ToDo
 
-- [ ]  Improve performance, the datapack *works* but causes hella lag
-- [ ]  Rate limit it so you can’t spam the button.
-
+- [ ] Improve performance, the datapack _works_ but causes hella lag
+- [ ] Rate limit it so you can’t spam the button.
 
 ## 🧠🌩 Brainstorm
 

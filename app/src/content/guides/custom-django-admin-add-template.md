@@ -7,8 +7,8 @@ coverImage: custom-django-admin-add-template/Screenshot 2025-07-02 at 17.42.10.p
 coverImageAlt: "Custom Django Admin Add Template"
 category: django
 tags:
-- Django
-- Django Unfold
+  - Django
+  - Django Unfold
 ---
 
 ## Overview
@@ -20,22 +20,18 @@ See list of all templates which can be overridden:
 
 ---
 
-
 ## Create Template File
 
 In your project directory, create a file at this path: `templates/admin/<app_name>/<model>/add_form.html`
 
 For example, if you have an app named `books` and a model named `author`, the path would be: `templates/admin/books/author/add_form.html`
 
-
 ## Extend Template
 
 Extend the base admin change_form template, instead of writing an entirely new template.
 
 ```html
-{% extends "admin/change_form.html" %}
-
-{% load i18n %}
+{% extends "admin/change_form.html" %} {% load i18n %}
 ```
 
 If you’re using [unfold](https://unfoldadmin.com/), update load tag to be `{% load i18n **unflold** %}`
@@ -43,16 +39,10 @@ If you’re using [unfold](https://unfoldadmin.com/), update load tag to be `{% 
 Next modify specific blocks in the template, for example:
 
 ```html
-{% extends "admin/change_form.html" %}
-
-{% load i18n unfold %}
-
-{% block field_sets %}
-**<p>Hello World!</p>**
-{{ block.super }}
-{% endblock %}
+{% extends "admin/change_form.html" %} {% load i18n unfold %} {% block field_sets %} **
+<p>Hello World!</p>
+** {{ block.super }} {% endblock %}
 ```
-
 
 ## Update Admin Model Class
 

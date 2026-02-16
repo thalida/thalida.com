@@ -16,11 +16,9 @@ category: django
 
 ## TOC
 
-
 ## Goal
 
 Allow users to signup to our React Native application using Google or Microsoft. When a user signs up a user account should be created or updated on our Django Application.
-
 
 ## Overview
 
@@ -28,9 +26,7 @@ In Part 1, we’ll setup Django to support social authentication via Google and 
 
 In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and our Django API.
 
-
 ---
-
 
 ## Prerequisites
 
@@ -39,17 +35,15 @@ In Part 2, we’ll connect our React Native app to Google and Microsoft SSO and 
 
 ---
 
-
-## Part 1:  Django
-
+## Part 1: Django
 
 ### 1.1 Install Packages
 
-| Package | Django App Name | Documentation |
-| ------- | --------------- | ------------- |
-| `social-auth-app-django` | `social_django` | <https://python-social-auth.readthedocs.io/en/latest/configuration/django.html> |
-| `django-oauth-toolkit` | `oauth2_provider` | <https://github.com/jazzband/django-oauth-toolkit> |
-| `drf_social_oauth2` | `drf_social_oauth2` | <https://drf-social-oauth2.readthedocs.io/en/latest/installation.html> |
+| Package                  | Django App Name     | Documentation                                                                   |
+| ------------------------ | ------------------- | ------------------------------------------------------------------------------- |
+| `social-auth-app-django` | `social_django`     | <https://python-social-auth.readthedocs.io/en/latest/configuration/django.html> |
+| `django-oauth-toolkit`   | `oauth2_provider`   | <https://github.com/jazzband/django-oauth-toolkit>                              |
+| `drf_social_oauth2`      | `drf_social_oauth2` | <https://drf-social-oauth2.readthedocs.io/en/latest/installation.html>          |
 
 Your `INSTALLED_APPS` should now have the following Installed Apps:
 
@@ -63,7 +57,6 @@ INSTALLED_APPS = [
 ]
 ```
 
-
 ### 1.2 Create API Client
 
 Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below).
@@ -74,12 +67,11 @@ Follow the DRF Social Oauth Guide to “Setup a New Application” (linked below
 
 [Setting Up a New Application — drf-social-oauth2 2.1.3 documentation](https://drf-social-oauth2.readthedocs.io/en/latest/application.html)
 
-
 ### 1.3 Update Social Auth Settings
 
 In `settings.py` add the following options:
 
-```python  title="settings.py"
+```python title="settings.py"
 ACTIVATE_JWT = True
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
@@ -87,30 +79,28 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 - `ACTIVATE_JWT`
 
-    Access and refresh tokens will be JWTed
+  Access and refresh tokens will be JWTed
 
-    [https://drf-social-oauth2.readthedocs.io/en/latest/installation.html#installation](https://drf-social-oauth2.readthedocs.io/en/latest/installation.html#installation)
+  [https://drf-social-oauth2.readthedocs.io/en/latest/installation.html#installation](https://drf-social-oauth2.readthedocs.io/en/latest/installation.html#installation)
 
 - `SOCIAL_AUTH_JSONFIELD_ENABLED`
 
-    When using PostgreSQL, it’s recommended to use the built-in JSONB field to store the extracted `extra_data`.
+  When using PostgreSQL, it’s recommended to use the built-in JSONB field to store the extracted `extra_data`.
 
-    [https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#json-field-support](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#json-field-support)
+  [https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#json-field-support](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#json-field-support)
 
 - `SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL`
 
-    If you want to use the full email address as the `username`, define this setting.
+  If you want to use the full email address as the `username`, define this setting.
 
-    [https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation](https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation)
-
+  [https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation](https://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#username-generation)
 
 ### 1.4 Setup Google OAuth in Django
-
 
 #### 1.4.1 Create **Application**
 
 1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), select your project and go to:
-APIs & Services → Credentials → Create Credentials → OAuth client ID
+   APIs & Services → Credentials → Create Credentials → OAuth client ID
 1. Fill in the following settings:
    1. **Application type:** Web application
    2. **Name:** API
@@ -124,7 +114,6 @@ APIs & Services → Credentials → Create Credentials → OAuth client ID
 
 ![Screenshot 2023-11-11 at 13.37.21.png](django-react-native-auth/Screenshot_2023-11-11_at_13.37.21.png)
 
-
 #### 1.4.2 Update Django Settings
 
 Follow the guide here to add support for Google OAuth:
@@ -134,11 +123,9 @@ Follow the guide here to add support for Google OAuth:
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_KEY` value is the `Client ID` of the OAuth2 credential created on Google Cloud Console
 - `SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET` value is the `Client Secret` of the OAuth2 credential created on Google Cloud Console
 
-
 ### 1.5 Setup Microsoft OAuth in Django
 
 The settings for Microsoft OAuth are more complicated than setting up for Google. Setup requires overriding one of the serializers (and subsequently a view) provided by DRF Social Auth in order to change a serializer. There may be a better method to do this, but this is what worked for me.
-
 
 #### 1.5.1 Create **Application**
 
@@ -146,8 +133,8 @@ The settings for Microsoft OAuth are more complicated than setting up for Google
 
 1. In [Microsoft Entra](https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade/quickStartType~/null/sourceType/Microsoft_AAD_IAM) create a new Application
 2. Enter the following settings:
-    1. **Name:** `<app_name>`
-    2. **Supported account types:** Select which types of accounts should be allowed to sign in.
+   1. **Name:** `<app_name>`
+   2. **Supported account types:** Select which types of accounts should be allowed to sign in.
 3. Click **Register**
 
 ![App Registration > New Application](django-react-native-auth/Screenshot_2023-11-11_at_13.36.11.png)
@@ -161,8 +148,8 @@ App Registration Page
 **Update Settings**
 
 1. Navigate to: **Authentication > Add a platform**
-    1. Select **Web**
-    2. Enter your Django server hosts (eg. [`http://localhost:8000`](http://localhost:8000/))
+   1. Select **Web**
+   2. Enter your Django server hosts (eg. [`http://localhost:8000`](http://localhost:8000/))
 2. Under **Implicit grant and hybrid flows** enable both `Access tokens` and `ID tokens`
 3. Under **Advanced settings** enable `Allow public client flows`
 4. **Save**
@@ -173,14 +160,13 @@ App Registration Page
 
 1. Navigate to: **API permissions**
 2. Ensure you have the following permissions on Microsoft Graph:
-    1. `email`
-    2. `offline_access`
-    3. `openid`
-    4. `profile`
-    5. `User.Read`
+   1. `email`
+   2. `offline_access`
+   3. `openid`
+   4. `profile`
+   5. `User.Read`
 
 ![Screenshot 2023-11-11 at 13.58.10.png](django-react-native-auth/Screenshot_2023-11-11_at_13.58.10.png)
-
 
 #### 1.5.2 Update **Django Settings**
 
@@ -196,7 +182,6 @@ AUTHENTICATION_BACKENDS = (
 ```
 
 This backend uses [https://graph.microsoft.com/v1.0/me](https://graph.microsoft.com/v1.0/me) to fetch the user data given a `access_token`.
-
 
 #### 1.5.3 Fix Access Token Max Characters Error
 
@@ -309,9 +294,7 @@ urlpatterns = [
 
 ---
 
-
 ## Part 2: React Native
-
 
 ### 2.1 Install Packages
 
@@ -327,14 +310,13 @@ Install [axios](https://axios-http.com/)
 
 [Axios](https://axios-http.com/)
 
-
 ### 2.2 Warm Web Browser & Setup State
 
 ```tsx
-import * as React from 'react';
+import * as React from "react";
 import axios from "axios";
-import * as WebBrowser from 'expo-web-browser';
-import { Button, Text, SafeAreaView, Platform } from 'react-native';
+import * as WebBrowser from "expo-web-browser";
+import { Button, Text, SafeAreaView, Platform } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -366,9 +348,7 @@ export default function App() {
 }
 ```
 
-
-### 2.3  Setup Google OAuth in React Native
-
+### 2.3 Setup Google OAuth in React Native
 
 #### 2.3.1 Update Google Cloud Console
 
@@ -387,8 +367,7 @@ Navigate to **APIs & Services > Credentials**, and create three new OAuth Client
   - Set Authorized Redirect URLs to your react native web hosts:
     - e.g. [http://localhost:8081](http://localhost:8081/)
 
-
-#### 2.3.2  Connect Google OAuth
+#### 2.3.2 Connect Google OAuth
 
 **Update Imports**
 
@@ -417,13 +396,10 @@ Update your template to include a button to trigger the Google Prompt
 
 ```tsx
 return (
-    <SafeAreaView>
-   <Button
-    title="Continue with Google"
-    onPress={googlePromptAsync}
-   />
-      <Text>{token}</Text>
-    </SafeAreaView>
+  <SafeAreaView>
+    <Button title="Continue with Google" onPress={googlePromptAsync} />
+    <Text>{token}</Text>
+  </SafeAreaView>
 );
 ```
 
@@ -464,9 +440,7 @@ export default function App() {
 }
 ```
 
-
 ### 2.4 Setup Microsoft OAuth in React Native
-
 
 #### 2.4.1 Update Application in Microsoft Entra Admin Center
 
@@ -481,18 +455,12 @@ Under the `Authentication` section add new redirect urls for:
   - You can find your `app_scheme` in `app.json` > `scheme` field.
   -
 
-
 #### 2.4.2 Connect Microsoft OAuth
 
 **Update Imports**
 
 ```jsx
-import {
-  exchangeCodeAsync,
-  makeRedirectUri,
-  useAuthRequest,
-  useAutoDiscovery,
-} from 'expo-auth-session';
+import { exchangeCodeAsync, makeRedirectUri, useAuthRequest, useAutoDiscovery } from "expo-auth-session";
 ```
 
 **Add Microsoft OAuth Support**
@@ -530,17 +498,11 @@ Update your template to include a button to trigger the Google Prompt
 
 ```tsx
 return (
-    <SafeAreaView>
-   <Button
-    title="Continue with Google"
-    onPress={googlePromptAsync}
-   />
-   <Button
-    title="Continue with Microsoft"
-    onPress={microsoftPromptAsync}
-   />
-      <Text>{token}</Text>
-    </SafeAreaView>
+  <SafeAreaView>
+    <Button title="Continue with Google" onPress={googlePromptAsync} />
+    <Button title="Continue with Microsoft" onPress={microsoftPromptAsync} />
+    <Text>{token}</Text>
+  </SafeAreaView>
 );
 ```
 

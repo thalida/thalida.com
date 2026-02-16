@@ -1,0 +1,15 @@
+{
+  "name": "thalida.com",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "npm run lint --prefix app && npm run lint --prefix api",
+    "lint:fix": "npm run lint:fix --prefix app && npm run lint:fix --prefix api",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1"
+  }
+}

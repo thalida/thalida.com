@@ -11,15 +11,13 @@ category: game
 
 ![Screen Shot 2022-02-20 at 16.55.40.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png)
 
-| Links | |
-| ------ | ------- |
+| Links                                                 |                                                        |
+| ----------------------------------------------------- | ------------------------------------------------------ |
 | [Github →](https://github.com/thalida/TicTacToeCubed) | [Website →](http://thalida.github.io/tictactoe-cubed/) |
-
 
 ## ✅ ToDo
 
-- [ ]  Remake using svelte
-
+- [ ] Remake using svelte
 
 ## Iterations
 

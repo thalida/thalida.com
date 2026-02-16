@@ -9,23 +9,19 @@ coverImageAlt: A screenshot of the thalida.com homepage, showcasing a Notion-bac
 
 ![Screen Shot 2022-07-31 at 15.28.17.png](2022-super-window/Screen_Shot_2022-07-31_at_15.28.17.png)
 
-| **Year(s)** | **GitHub** | **Link** |
-| ----------- | --------- | -------- |
+| **Year(s)**              | **GitHub**                                                     | **Link**                      |
+| ------------------------ | -------------------------------------------------------------- | ----------------------------- |
 | January 2022 - July 2025 | [Github →](https://github.com/thalida/thalida.com/tree/v-2022) | [Live →](https://thalida.com) |
-
 
 ## 💡Idea
 
 For the next version of my domain, I wanted a site where I could easily add and edit content, a low-barrier way for me to provide updates on my work. After digging around, I came across [Super](https://super.so) and realized it was exactly what I needed.
 
-
 ## 👩🏾‍💻 Development
-
 
 ### Overview
 
 The site is hosted on Super, pulling content from a notion site. The day/night-mode theme switcher, and the “live” window on the homepage use Svelte. This was my first time developing with Svelte, and I found it perfect for injecting a small javascript component onto the page. My custom theme styles and javascript are deployed and hosted on Vercel (Super supports custom code).
-
 
 ### Live Window
 
@@ -33,24 +29,23 @@ For this iteration of the Live Window, I switched to using the [Open Weather API
 
 ```jsx
 export async function fetchWeather($store) {
- // Partial version of this function, I've removed my caching logic
- await fetchLocation($store);
+  // Partial version of this function, I've removed my caching logic
+  await fetchLocation($store);
 
- const { lat, lng } = $store.location;
- const url = `https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lng}&appid=${OPEN_WEATHER_KEY}`;
- const { data } = await axios.get(url);
- $store.weather.current = {
-   ...data.weather[0],
-   temp: data.main.temp,
- };
- $store.weather.sunrise = data.sys.sunrise * 1000; // convert to milliseconds
- $store.weather.sunset = data.sys.sunset * 1000; // ^^
- $store.weather.lastFetched = Date.now();
- store.set($store);
- isDataFetched.set(true);
+  const { lat, lng } = $store.location;
+  const url = `https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lng}&appid=${OPEN_WEATHER_KEY}`;
+  const { data } = await axios.get(url);
+  $store.weather.current = {
+    ...data.weather[0],
+    temp: data.main.temp,
+  };
+  $store.weather.sunrise = data.sys.sunrise * 1000; // convert to milliseconds
+  $store.weather.sunset = data.sys.sunset * 1000; // ^^
+  $store.weather.lastFetched = Date.now();
+  store.set($store);
+  isDataFetched.set(true);
 }
 ```
-
 
 ### `Deprecated` Theme Switcher (Day/Night Mode)
 
@@ -64,11 +59,9 @@ For the first time, I’ve added a day/night mode switcher to my site. Finally i
 
 You can checkout the code and fork this theme switcher on codpen! [https://codepen.io/thalida/pen/XWEVVaj](https://codepen.io/thalida/pen/XWEVVaj)
 
-*This theme switcher is a fork of [https://codepen.io/sandeshsapkota/pen/xxVmMpe](https://codepen.io/sandeshsapkota/pen/xxVmMpe).*
-
+_This theme switcher is a fork of [https://codepen.io/sandeshsapkota/pen/xxVmMpe](https://codepen.io/sandeshsapkota/pen/xxVmMpe)._
 
 ## 🎨 Design
-
 
 ### Inspiration
 
@@ -77,7 +70,6 @@ You can checkout the code and fork this theme switcher on codpen! [https://codep
 [thalida 2020 v2 by Thalida Noel](https://dribbble.com/thalida/collections/2130994-thalida-2020-v2)
 
 [thalida 2020 by Thalida Noel](https://dribbble.com/thalida/collections/1686189-thalida-2020)
-
 
 ### Paper Sketches
 

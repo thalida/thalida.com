@@ -3,21 +3,11 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { defineCollection, z } from "astro:content";
 import { glob, file } from "astro/loaders";
 
-export const COLLECTION_NAMES = [
-  "projects",
-  "guides",
-  "gallery",
-  "links",
-  "recipes",
-  "versions",
-] as const;
+export const COLLECTION_NAMES = ["projects", "guides", "gallery", "links", "recipes", "versions"] as const;
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 
-export const collectionMeta: Record<
-  CollectionName,
-  { title: string; description: string }
-> = {
+export const collectionMeta: Record<CollectionName, { title: string; description: string }> = {
   projects: {
     title: "Projects",
     description: "Personal and professional projects, crafts, and experiments.",
@@ -44,15 +34,7 @@ export const collectionMeta: Record<
   },
 };
 
-async function combineYamlFiles({
-  filename,
-  pattern,
-  base,
-}: {
-  filename: string;
-  pattern: string;
-  base: string;
-}) {
+async function combineYamlFiles({ filename, pattern, base }: { filename: string; pattern: string; base: string }) {
   const yamlFiles = fs.glob(pattern, { cwd: base });
   // Write combined file outside src/content/ to avoid triggering Astro's file watcher loop
   const outputDir = `.generated`;

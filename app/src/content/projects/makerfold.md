@@ -10,13 +10,11 @@ category: app
 
 ## 🎨 Design
 
-
 ### Branding
 
 ![All Large Icons.png](makerfold/All_Large_Icons.png)
 
 ![Maker + Fold.png](makerfold/Maker__Fold.png)
-
 
 ### Mockups
 

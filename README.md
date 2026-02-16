@@ -23,6 +23,7 @@ make setup
 ```
 
 This single command:
+
 1. Installs dependencies for both `app/` and `api/`
 2. Adds a shell alias so `make` works from any subfolder in the repo
 3. Copies env templates (`api/.dev.vars`, `app/.env`) if they don't already exist
@@ -40,15 +41,15 @@ Run `make` or `make help` to see all available commands.
 
 ### API secrets (`api/.dev.vars`)
 
-| Variable | Required | Description |
-|---|---|---|
-| `ADMIN_SECRET` | Yes | Any secret string. Used to log in as the site owner. |
-| `OPENAI_API_KEY` | No | OpenAI API key for chat moderation. Leave blank to skip moderation locally. Free at [platform.openai.com/api-keys](https://platform.openai.com/api-keys). |
+| Variable         | Required | Description                                                                                                                                               |
+| ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ADMIN_SECRET`   | Yes      | Any secret string. Used to log in as the site owner.                                                                                                      |
+| `OPENAI_API_KEY` | No       | OpenAI API key for chat moderation. Leave blank to skip moderation locally. Free at [platform.openai.com/api-keys](https://platform.openai.com/api-keys). |
 
 ### Frontend (`app/.env`)
 
-| Variable | Default | Description |
-|---|---|---|
+| Variable             | Default                  | Description                                                         |
+| -------------------- | ------------------------ | ------------------------------------------------------------------- |
 | `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make api-preview`. |
 
 ## Log In as the Owner
@@ -99,14 +100,14 @@ The `dist/` output can be deployed to Cloudflare Pages (or any static host).
 
 ## All Commands
 
-| Command | Description |
-|---|---|
-| `make setup` | Full local setup: install deps, add shell alias, copy env templates |
-| `make install` | Install dependencies for both app and api |
-| `make alias` | Add shell alias so `make` works from any subfolder |
-| `make api-dev` | Start the API worker on http://localhost:8787 |
-| `make app-dev` | Start the Astro frontend on http://localhost:4321 |
-| `make app-build` | Build the frontend |
-| `make api-preview` | Tunnel the API, auto-update `app/.env` with the WS URL |
-| `make app-preview` | Build, preview on port 4322, and tunnel the frontend |
-| `make clean` | Remove build artifacts |
+| Command            | Description                                                         |
+| ------------------ | ------------------------------------------------------------------- |
+| `make setup`       | Full local setup: install deps, add shell alias, copy env templates |
+| `make install`     | Install dependencies for both app and api                           |
+| `make alias`       | Add shell alias so `make` works from any subfolder                  |
+| `make api-dev`     | Start the API worker on http://localhost:8787                       |
+| `make app-dev`     | Start the Astro frontend on http://localhost:4321                   |
+| `make app-build`   | Build the frontend                                                  |
+| `make api-preview` | Tunnel the API, auto-update `app/.env` with the WS URL              |
+| `make app-preview` | Build, preview on port 4322, and tunnel the frontend                |
+| `make clean`       | Remove build artifacts                                              |

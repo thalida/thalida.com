@@ -16,8 +16,8 @@ The following images are part of that stockphoto collection, which can be found 
 
 As a result of this photoshoot, I have been featured in various articles, blog posts, and marketing materials.
 
-|  |  |
-|---------|---------|
+|                                                            |                                                            |
+| ---------------------------------------------------------- | ---------------------------------------------------------- |
 | ![Stock Photo](./stockphotos/21909358844_18da9ec8e6_o.jpg) | ![Stock Photo](./stockphotos/21910900553_e8984858c2_o.jpg) |
 | ![Stock Photo](./stockphotos/22344392878_53a0d70eb7_o.jpg) | ![Stock Photo](./stockphotos/22543493511_0ba6a83b35_o.jpg) |
 | ![Stock Photo](./stockphotos/25167658624_116b21f635_o.jpg) | ![Stock Photo](./stockphotos/25171523343_4073eed049_o.jpg) |
@@ -31,4 +31,4 @@ As a result of this photoshoot, I have been featured in various articles, blog p
 | ![Stock Photo](./stockphotos/25703055851_2a3d6c2481_o.jpg) | ![Stock Photo](./stockphotos/25703056681_bc93293096_o.jpg) |
 | ![Stock Photo](./stockphotos/25703211181_b55d432ef1_o.jpg) | ![Stock Photo](./stockphotos/25772082016_bc3e30e38a_o.jpg) |
 | ![Stock Photo](./stockphotos/25772082596_8f1eef34d2_o.jpg) | ![Stock Photo](./stockphotos/25772186816_7ffd403874_o.jpg) |
-| ![Stock Photo](./stockphotos/25798309375_c1e9268793_o.jpg) | |
+| ![Stock Photo](./stockphotos/25798309375_c1e9268793_o.jpg) |                                                            |

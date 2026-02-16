@@ -9,10 +9,9 @@ coverImageAlt: Introducing the illustrated live-weather window.
 
 ![Untitled](2018-2-illustrated-window/Untitled.png)
 
-| **Year(s)** | **GitHub** | **Link** |
-| ----------- | --------- | -------- |
-| August 2018 - August 2022 | [Github →](https://github.com/thalida/thalida.com/tree/v-2018-2)  | [View Live →](https://2018-2.v.thalida.com) |
-
+| **Year(s)**               | **GitHub**                                                       | **Link**                                    |
+| ------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
+| August 2018 - August 2022 | [Github →](https://github.com/thalida/thalida.com/tree/v-2018-2) | [View Live →](https://2018-2.v.thalida.com) |
 
 ## Story
 
@@ -20,9 +19,7 @@ I wanted to create a super minimal site, using no frontend frameworks, in order 
 
 Also, I thought it’d be interesting to see what it’d be like to create a site now without the benefits of scss and other compilers. ­
 
-
 ## Inspiration & Sketching
-
 
 ### Sites I was inspired by (and what I liked about them)
 
@@ -56,7 +53,6 @@ Also, I thought it’d be interesting to see what it’d be like to create a sit
 - Serifs
 - Long List of Posts
 
-
 ### Concept Sketches
 
 ![](2018-2-illustrated-window/sketch.1.jpg)
@@ -65,9 +61,7 @@ Also, I thought it’d be interesting to see what it’d be like to create a sit
 
 ![](2018-2-illustrated-window/sketch.3.jpg)
 
-
 ## Design
-
 
 ### Iterations 1 and 2
 
@@ -80,7 +74,6 @@ Version 1 of my initial design alinged the most with my favorite concept sketche
 > [!NOTE]
 > 👄 Shoutout to the missing version 3
 
-
 ### Iterations 4 and 5
 
 ![](2018-2-illustrated-window/mock.3.png)
@@ -89,11 +82,9 @@ Version 1 of my initial design alinged the most with my favorite concept sketche
 
 Version 4 changed my list of posts into a grid, once again to provide more space for a growing list of posts, and I also added link and post hover styles. (The missing version 3 was very similar to version 4 without link styles.) Version 5 introduced the concept of collections of posts, each with their own title and summary.
 
-*Note: As always the transition from static mockup to live site resulted in changes to UI as I was able to fully interact with it and see it with live content.*
-
+_Note: As always the transition from static mockup to live site resulted in changes to UI as I was able to fully interact with it and see it with live content._
 
 ## How it Works
-
 
 ### Posts Collection
 
@@ -116,7 +107,6 @@ The meta data above says the Meta Timeline Collection to be the second one shown
 
 There’s a lot more magic✨ happening, and I’m hoping to split PostsCollection out into a separate library with it’s own soon.
 
-
 ### Window
 
 ![](2018-2-illustrated-window/cloudy.gif)
@@ -128,7 +118,6 @@ The weather uses your current locations time and weather data in order to render
 The color of the sky is based on the current time of day for your location, I use the sunrise and sunset time more accurately depict the time of day. The weather data is fetched from [DarkSky](https://darksky.net/poweredby/)‘s api, and I get your current location based on your IP address.
 
 I created all of the illustrations used in the window with [Sketch](https://www.sketchapp.com/).
-
 
 ### Frontend Styles
 
@@ -142,37 +131,37 @@ Snippet of the css used for styling the lines under the window label:
 
 ```scss
 .**window__label__colors** .**google-home__color** {
-  **display**: **block**;
-  **position**: **absolute**;
-  **top**: **0rem**;
-  **left**: calc(**50%** - **0.3rem**);
-  **margin**: **0**;
-  **opacity**: **0**;
-  -webkit-**animation-delay**: **500ms**;
-          **animation-delay**: **500ms**;
-  -webkit-**animation-duration**: **600ms**;
-          **animation-duration**: **600ms**;
-  -webkit-**animation-fill-mode**: **forwards**;
-          **animation-fill-mode**: **forwards**;
-  -webkit-**animation-iteration-count**: **1**;
-          **animation-iteration-count**: **1**;
-  -webkit-**animation-timing-function**: **linear**;
-          **animation-timing-function**: **linear**;
+  **display**: * * block * *;
+  **position**: * * absolute * *;
+  **top**: * * 0rem * *;
+  **left**: calc(* * 50% * * - * * 0.3rem * *);
+  **margin**: * * 0 * *;
+  **opacity**: * * 0 * *;
+  -webkit-**animation-delay**: * * 500ms * *;
+  **animation-delay**: * * 500ms * *;
+  -webkit-**animation-duration**: * * 600ms * *;
+  **animation-duration**: * * 600ms * *;
+  -webkit-**animation-fill-mode**: * * forwards * *;
+  **animation-fill-mode**: * * forwards * *;
+  -webkit-**animation-iteration-count**: * * 1 * *;
+  **animation-iteration-count**: * * 1 * *;
+  -webkit-**animation-timing-function**: * * linear * *;
+  **animation-timing-function**: * * linear * *;
 }
-  .**window__label__colors** .**google-home__color**.**google-home__color--blue** {
-      -webkit-**animation-name**: **animation**-label-color--blue;
-              **animation-name**: **animation**-label-color--blue;
-  }
-  .**window__label__colors** .**google-home__color**.**google-home__color--purple** {
-      -webkit-**animation-name**: **animation**-label-color--purple;
-              **animation-name**: **animation**-label-color--purple;
-  }
-  .**window__label__colors** .**google-home__color**.**google-home__color--green** {
-      -webkit-**animation-name**: **animation**-label-color--green;
-              **animation-name**: **animation**-label-color--green;
-  }
-  .**window__label__colors** .**google-home__color**.**google-home__color--pink** {
-      -webkit-**animation-name**: **animation**-label-color--pink;
-              **animation-name**: **animation**-label-color--pink;
-  }
+.**window__label__colors** .**google-home__color**.**google-home__color--blue** {
+  -webkit-**animation-name**: * * animation * * -label-color--blue;
+  **animation-name**: * * animation * * -label-color--blue;
+}
+.**window__label__colors** .**google-home__color**.**google-home__color--purple** {
+  -webkit-**animation-name**: * * animation * * -label-color--purple;
+  **animation-name**: * * animation * * -label-color--purple;
+}
+.**window__label__colors** .**google-home__color**.**google-home__color--green** {
+  -webkit-**animation-name**: * * animation * * -label-color--green;
+  **animation-name**: * * animation * * -label-color--green;
+}
+.**window__label__colors** .**google-home__color**.**google-home__color--pink** {
+  -webkit-**animation-name**: * * animation * * -label-color--pink;
+  **animation-name**: * * animation * * -label-color--pink;
+}
 ```

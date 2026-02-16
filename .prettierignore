@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.generated/
+.astro/
+.wrangler/
+package-lock.json

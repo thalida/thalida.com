@@ -10,25 +10,24 @@ category: tool
 
 ![Overview](https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/overview.gif)
 
-| Links | |
-| ------ | ------- |
+| Links                                                      |                                                                                                  |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | [Github →](https://github.com/thalida/openapi-docs-viewer) | [Marketplace →](https://marketplace.visualstudio.com/items?itemName=thalida.openapi-docs-viewer) |
-
 
 ## Features
 
 Enter any OpenAPI schema URL and view the documentation in a VSCode tab. You can customize the schema renderer and theme.
-
 
 ### Supported Renderers
 
 <details>
   <summary><strong>Elements (Default)</strong></summary>
 
-  Build beautiful, interactive API Docs with embeddable React or Web Components, powered by OpenAPI and Markdown.
-  <https://github.com/stoplightio/elements>
+Build beautiful, interactive API Docs with embeddable React or Web Components, powered by OpenAPI and Markdown.
+<https://github.com/stoplightio/elements>
 
-  **Preview**
+**Preview**
+
   <table>
     <tr>
       <td><strong>Theme</strong></td>
@@ -50,10 +49,11 @@ Enter any OpenAPI schema URL and view the documentation in a VSCode tab. You can
 <details>
   <summary><strong>RapiDoc</strong></summary>
 
-  Custom Element for Open-API spec viewing
-  <https://github.com/rapi-doc/RapiDoc>
+Custom Element for Open-API spec viewing
+<https://github.com/rapi-doc/RapiDoc>
 
-  **Preview**
+**Preview**
+
   <table>
     <tr>
       <td><strong>Theme</strong></td>
@@ -75,10 +75,11 @@ Enter any OpenAPI schema URL and view the documentation in a VSCode tab. You can
 <details>
   <summary><strong>ReDoc</strong></summary>
 
-  OpenAPI/Swagger-generated API Reference Documentation
-  <https://github.com/Redocly/redoc>
+OpenAPI/Swagger-generated API Reference Documentation
+<https://github.com/Redocly/redoc>
 
-  **Preview**
+**Preview**
+
   <table>
     <tr>
       <td><strong>Theme</strong></td>
@@ -100,10 +101,11 @@ Enter any OpenAPI schema URL and view the documentation in a VSCode tab. You can
 <details>
   <summary><strong>Swagger</strong></summary>
 
-  Swagger UI is a collection of HTML, JavaScript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API.
-  <https://github.com/swagger-api/swagger-ui>
+Swagger UI is a collection of HTML, JavaScript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API.
+<https://github.com/swagger-api/swagger-ui>
 
-  **Preview**
+**Preview**
+
   <table>
     <tr>
       <td><strong>Theme</strong></td>
@@ -123,14 +125,12 @@ Enter any OpenAPI schema URL and view the documentation in a VSCode tab. You can
   </table>
 </details>
 
-
 ### Themes
 
 **Supported Themes**: `system`, `light`, `dark`
 **Default Theme**: `system`
 
 By default, the extension will use the system theme. System theme adopts the color scheme of the current VSCode theme. If you want to override the system theme, you can set the `openapi-docs-viewer.defaultTheme` setting to `dark` or `light`.
-
 
 ### Layout
 
@@ -139,11 +139,10 @@ By default, the extension will use the system theme. System theme adopts the col
 
 By default, the extension will use the responsive layout. If you want to override the layout, you can set the `openapi-docs-viewer.defaultLayout` setting to `mobile` or `desktop`.
 
-
 ## Extension Settings
 
 This extension contributes the following settings:
 
-* `openapi-docs-viewer.defaultRenderer`: Set the default theme for the OpenAPI viewer, default is `elements`.
-* `openapi-docs-viewer.defaultTheme`: Set the default color scheme, default is `system`.
-* `openapi-docs-viewer.defaultLayout`: Set the default layout, default is `responsive`.
+- `openapi-docs-viewer.defaultRenderer`: Set the default theme for the OpenAPI viewer, default is `elements`.
+- `openapi-docs-viewer.defaultTheme`: Set the default color scheme, default is `system`.
+- `openapi-docs-viewer.defaultLayout`: Set the default layout, default is `responsive`.

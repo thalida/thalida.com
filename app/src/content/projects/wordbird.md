@@ -11,6 +11,6 @@ category: tool
 
 ![Untitled](wordbird/Untitled.png)
 
-| Links | |
-| ------ | ------- |
-| [Github →](https://github.com/thalida/WordBird) |  [Chrome Store →](https://chrome.google.com/webstore/detail/wordbird/phjelaokjghhjogbfmkljhghhnbidfgk?hl=en) |
+| Links                                           |                                                                                                             |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [Github →](https://github.com/thalida/WordBird) | [Chrome Store →](https://chrome.google.com/webstore/detail/wordbird/phjelaokjghhjogbfmkljhghhnbidfgk?hl=en) |
