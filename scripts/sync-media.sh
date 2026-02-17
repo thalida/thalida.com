@@ -44,7 +44,7 @@ upload() {
   local key="$2"
   local ct
   ct="$(get_content_type "$file")"
-  npx wrangler r2 object put "$BUCKET/$key" --file="$file" --content-type="$ct" > /dev/null 2>&1
+  npx wrangler r2 object put "$BUCKET/$key" --file="$file" --content-type="$ct" --remote 2>&1 | tail -1
 }
 
 echo "Syncing media to R2 bucket: $BUCKET (prefix: $PREFIX)"

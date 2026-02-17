@@ -7,12 +7,17 @@ on:
   pull_request_target:
     types: [closed]
 
+# Cloudflare Pages auto-deploy must be paused in the dashboard.
+# This workflow handles media sync → frontend build → deploy in order.
+
 jobs:
-  # ── Sync media to R2 on every push ────────────────────────────────
+  # ── Sync media to R2 ─────────────────────────────────────────────
   sync-media:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     name: Sync media to R2
     runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.branch.outputs.name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +42,37 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: bash scripts/sync-media.sh --prefix "${{ steps.branch.outputs.name }}"
+
+  # ── Deploy frontend to Cloudflare Pages (after media sync) ───────
+  deploy-pages:
+    needs: [sync-media]
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: app
+        env:
+          PUBLIC_R2_BASE_URL: ${{ vars.R2_PUBLIC_URL }}
+          CF_PAGES_BRANCH: ${{ needs.sync-media.outputs.branch }}
+        run: npm run build:pages
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: app
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ needs.sync-media.outputs.branch }}
 
   # ── Deploy API Worker (preview) on PRs with api/ changes ─────────
   deploy-api-preview:
@@ -73,7 +109,7 @@ jobs:
           workingDirectory: api
           command: deploy --env preview
 
-  # ── Deploy API Worker (production) on push to main with api/ changes
+  # ── Deploy API Worker (production) on push to main ───────────────
   deploy-api-production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Deploy API (production)

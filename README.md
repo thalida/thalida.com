@@ -119,11 +119,14 @@ All Astro configuration lives in `app/astro.config.mjs`. Allowed hosts for dev a
 
 ### Automatic (via GitHub)
 
-Every push and PR is handled automatically:
+Every push and PR is handled automatically by GitHub Actions:
 
-- **Media**: A GitHub Action syncs media to R2 under `{branch}/content/...` on every push. On PR merge, the branch prefix is auto-deleted.
-- **Frontend**: Cloudflare Pages deploys on every push to `main` (production) and creates a preview URL for every PR.
-- **API Worker**: A GitHub Action deploys to production on push to `main` (if `api/` changed) and to a preview environment on PRs.
+1. **Media sync**: Uploads media to R2 under `{branch}/content/...`
+2. **Frontend build + deploy**: After media sync completes, builds the Astro app and deploys to Cloudflare Pages via `wrangler pages deploy`
+3. **API Worker**: Deploys to production on push to `main` (if `api/` changed) and to a preview environment on PRs
+4. **Cleanup**: On PR merge, the merged branch's R2 media prefix is auto-deleted
+
+Cloudflare Pages auto-deploy must be **paused** in the dashboard since GitHub Actions handles the build and deploy.
 
 Preview frontends talk to a shared preview API Worker (`thalida-chat-api-preview`).
 
@@ -146,14 +149,23 @@ Connect the repo to Cloudflare Pages via the dashboard:
      - `PUBLIC_R2_BASE_URL` = `https://pub-xxxx.r2.dev` (same R2 public URL)
 5. Under Build watch paths, add include path: `app/**` (avoids rebuilding when only `api/` changes)
 
-### Required GitHub Secrets
+### Required GitHub Secrets and Variables
 
 Set these in your repo settings under Settings > Secrets and variables > Actions:
+
+**Secrets:**
 
 | Secret                  | Description                                             |
 | ----------------------- | ------------------------------------------------------- |
 | `CLOUDFLARE_API_TOKEN`  | API token with Workers and Pages edit permissions       |
 | `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID (found in the dashboard URL) |
+
+**Variables:**
+
+| Variable                   | Description                                                           |
+| -------------------------- | --------------------------------------------------------------------- |
+| `R2_PUBLIC_URL`            | R2 public URL (e.g., `https://pub-xxxx.r2.dev`)                       |
+| `CLOUDFLARE_PAGES_PROJECT` | Cloudflare Pages project name (found in the Pages dashboard overview) |
 
 ### One-time setup: Production Worker secrets
 

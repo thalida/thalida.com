@@ -35,7 +35,7 @@ echo ""
 
 # List all objects under the prefix and delete them one by one
 # wrangler r2 object list outputs JSON; extract keys with a simple parser
-KEYS=$(npx wrangler r2 object list "$BUCKET" --prefix "$PREFIX/" 2>/dev/null \
+KEYS=$(npx wrangler r2 object list "$BUCKET" --prefix "$PREFIX/" --remote 2>/dev/null \
   | grep -o '"key":"[^"]*"' \
   | sed 's/"key":"//;s/"$//' || true)
 
@@ -51,7 +51,7 @@ echo "Found $TOTAL objects to delete"
 echo "$KEYS" | while IFS= read -r key; do
   COUNT=$((COUNT + 1))
   printf "  [%d/%d] Deleting %s " "$COUNT" "$TOTAL" "$key"
-  if npx wrangler r2 object delete "$BUCKET/$key" > /dev/null 2>&1; then
+  if npx wrangler r2 object delete "$BUCKET/$key" --remote > /dev/null 2>&1; then
     echo "ok"
   else
     echo "FAILED"
