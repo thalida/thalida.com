@@ -2,7 +2,7 @@ ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 APP_DIR  := $(ROOT_DIR)app
 API_DIR  := $(ROOT_DIR)api
 
-.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check deploy api-deploy-prod api-deploy-preview api-secrets-prod api-secrets-preview clean help
+.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check deploy api-deploy-prod api-deploy-preview api-secrets-prod api-secrets-preview media-sync media-cleanup clean help
 
 # ─── Setup ────────────────────────────────────────────────────────────
 
@@ -183,6 +183,15 @@ api-secrets-prod: ## Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY
 
 api-secrets-preview: ## Set preview Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)
 	cd $(API_DIR) && npx wrangler secret put ADMIN_SECRET --env preview && npx wrangler secret put OPENAI_API_KEY --env preview
+
+# ─── Media ───────────────────────────────────────────────────────────
+
+media-sync: ## Sync media to R2 (uses current git branch as prefix)
+	bash $(ROOT_DIR)scripts/sync-media.sh --prefix "$$(git -C $(ROOT_DIR) rev-parse --abbrev-ref HEAD)"
+
+media-cleanup: ## Delete a branch's media from R2 (usage: make media-cleanup BRANCH=my-branch)
+	@if [ -z "$(BRANCH)" ]; then echo "Usage: make media-cleanup BRANCH=branch-name"; exit 1; fi
+	bash $(ROOT_DIR)scripts/cleanup-r2-prefix.sh --prefix "$(BRANCH)"
 
 # ─── Utilities ────────────────────────────────────────────────────────
 

@@ -48,9 +48,10 @@ Run `make` or `make help` to see all available commands.
 
 ### Frontend (`app/.env`)
 
-| Variable             | Default                  | Description                                                         |
-| -------------------- | ------------------------ | ------------------------------------------------------------------- |
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make api-preview`. |
+| Variable             | Default                  | Description                                                                                |
+| -------------------- | ------------------------ | ------------------------------------------------------------------------------------------ |
+| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make api-preview`.                        |
+| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media. Empty = local files. Set in Cloudflare Pages for deployed builds. |
 
 ## Log In as the Owner
 
@@ -70,6 +71,46 @@ make app-preview   # Terminal 3 — builds frontend, previews on port 4322, tunn
 
 The preview server runs on port 4322 to avoid conflicting with the dev server on 4321.
 
+## Media (Cloudflare R2)
+
+Images, videos, and large GIFs are hosted on Cloudflare R2 instead of being bundled in the Cloudflare Pages build (which has a 25 MiB per-file limit).
+
+- **Local dev**: Media is served from local files with Astro image optimization. No R2 needed.
+- **Deployed builds**: `PUBLIC_R2_BASE_URL` + `CF_PAGES_BRANCH` are used to construct R2 URLs at build time.
+
+### How it works
+
+Media is stored in R2 under branch-based prefixes:
+
+```
+thalida-media/
+  main/content/gallery/hudsonvalley/IMAG1094.jpg      (production)
+  v-2026/content/gallery/hudsonvalley/IMAG1094.jpg    (feature branch)
+```
+
+- **On every push**, a GitHub Action syncs media to R2 under `{branch}/content/...`
+- **On PR merge**, a GitHub Action deletes the merged branch's R2 prefix (auto-cleanup)
+- **Cloudflare Pages** uses `CF_PAGES_BRANCH` (a built-in env var) to resolve the correct prefix at build time
+
+### Manual sync and cleanup
+
+```bash
+make media-sync                     # Sync media using current git branch as prefix
+make media-cleanup BRANCH=v-2026    # Delete a branch's media from R2
+```
+
+### One-time setup: R2 bucket
+
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/) > R2 Object Storage > Create bucket
+2. Name it `thalida-media`
+3. Enable **Public Development URL** (Settings > Public Development URL)
+4. Copy the public URL (e.g., `https://pub-xxxx.r2.dev`)
+5. Set `PUBLIC_R2_BASE_URL` to that URL in Cloudflare Pages env vars (same value for both Production and Preview)
+
+### Cloudflare Pages build command
+
+Use `npm run build:pages` as the build command in Cloudflare Pages (instead of `npm run build`). This cleans up large media from the build output after Astro finishes, avoiding the 25 MiB file limit.
+
 ## Configuration
 
 All Astro configuration lives in `app/astro.config.mjs`. Allowed hosts for dev and preview (`*.thalida.com` and `*.trycloudflare.com`) are set via the `--allowed-hosts` flag in `app/package.json` scripts.
@@ -80,8 +121,9 @@ All Astro configuration lives in `app/astro.config.mjs`. Allowed hosts for dev a
 
 Every push and PR is handled automatically:
 
+- **Media**: A GitHub Action syncs media to R2 under `{branch}/content/...` on every push. On PR merge, the branch prefix is auto-deleted.
 - **Frontend**: Cloudflare Pages deploys on every push to `main` (production) and creates a preview URL for every PR.
-- **API Worker**: A GitHub Action deploys to production on push to `main` and to a preview environment on PRs.
+- **API Worker**: A GitHub Action deploys to production on push to `main` (if `api/` changed) and to a preview environment on PRs.
 
 Preview frontends talk to a shared preview API Worker (`thalida-chat-api-preview`).
 
@@ -93,11 +135,15 @@ Connect the repo to Cloudflare Pages via the dashboard:
 2. Select the `thalida.com` repo, set production branch to `main`
 3. Configure the build:
    - **Root directory**: `app`
-   - **Build command**: `npm run build`
+   - **Build command**: `npm run build:pages`
    - **Build output directory**: `dist`
 4. Set environment variables (Settings > Environment Variables):
-   - **Production**: `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api.<your-subdomain>.workers.dev/ws`
-   - **Preview**: `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api-preview.<your-subdomain>.workers.dev/ws`
+   - **Production**:
+     - `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api.<your-subdomain>.workers.dev/ws`
+     - `PUBLIC_R2_BASE_URL` = `https://pub-xxxx.r2.dev` (your R2 public URL)
+   - **Preview**:
+     - `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api-preview.<your-subdomain>.workers.dev/ws`
+     - `PUBLIC_R2_BASE_URL` = `https://pub-xxxx.r2.dev` (same R2 public URL)
 5. Under Build watch paths, add include path: `app/**` (avoids rebuilding when only `api/` changes)
 
 ### Required GitHub Secrets
@@ -153,4 +199,6 @@ The frontend deploys automatically via Cloudflare Pages when you push. No manual
 | `make api-deploy-preview`  | Deploy API Worker to preview environment                            |
 | `make api-secrets-prod`    | Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)        |
 | `make api-secrets-preview` | Set preview Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)           |
+| `make media-sync`          | Sync media to R2 using current git branch as prefix                 |
+| `make media-cleanup`       | Delete a branch's media from R2 (`BRANCH=name`)                     |
 | `make clean`               | Remove build artifacts                                              |

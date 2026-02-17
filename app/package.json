@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev --allowed-hosts=.thalida.com,.trycloudflare.com",
     "build": "astro build",
+    "build:pages": "astro build && rm -rf dist/content",
     "preview": "astro preview --host --port 4322 --allowed-hosts=.thalida.com,.trycloudflare.com",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -14,6 +15,7 @@
   },
   "dependencies": {
     "astro": "^5.10.1",
+    "unist-util-visit": "^5.1.0",
     "yaml": "^2.8.2"
   },
   "devDependencies": {
