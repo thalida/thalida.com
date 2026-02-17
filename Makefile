@@ -2,7 +2,7 @@ ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 APP_DIR  := $(ROOT_DIR)app
 API_DIR  := $(ROOT_DIR)api
 
-.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check clean help
+.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check deploy api-deploy-prod api-deploy-preview api-secrets-prod api-secrets-preview clean help
 
 # ─── Setup ────────────────────────────────────────────────────────────
 
@@ -166,12 +166,30 @@ format: ## Run Prettier --write across the repo
 format-check: ## Run Prettier --check across the repo
 	cd $(ROOT_DIR) && npx prettier --check .
 
+# ─── Deploy ──────────────────────────────────────────────────────────
+
+api-deploy-prod: ## Deploy the API Worker to production
+	cd $(API_DIR) && npx wrangler deploy --env=""
+
+api-deploy-preview: ## Deploy the API Worker to the preview environment
+	cd $(API_DIR) && npx wrangler deploy --env preview
+
+deploy: api-deploy-prod ## Deploy everything to production (Pages auto-deploys via git)
+	@echo ""
+	@echo "API deployed. Frontend deploys automatically via Cloudflare Pages on push."
+
+api-secrets-prod: ## Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)
+	cd $(API_DIR) && npx wrangler secret put ADMIN_SECRET --env="" && npx wrangler secret put OPENAI_API_KEY --env=""
+
+api-secrets-preview: ## Set preview Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)
+	cd $(API_DIR) && npx wrangler secret put ADMIN_SECRET --env preview && npx wrangler secret put OPENAI_API_KEY --env preview
+
 # ─── Utilities ────────────────────────────────────────────────────────
 
 clean: ## Remove build artifacts
 	rm -rf $(APP_DIR)/dist $(APP_DIR)/.astro $(APP_DIR)/.generated
 
 help: ## Show this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}'
 
 .DEFAULT_GOAL := help

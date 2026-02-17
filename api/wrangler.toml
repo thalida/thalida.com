@@ -9,10 +9,30 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_classes = ["ChatRoom"]
+new_sqlite_classes = ["ChatRoom"]
 
 [vars]
 ALLOWED_ORIGIN = "https://thalida.com"
 
 # Set ADMIN_SECRET via `wrangler secret put ADMIN_SECRET`
 # Set OPENAI_API_KEY via `wrangler secret put OPENAI_API_KEY`
+
+# ─── Preview environment (deployed via GitHub Actions on PRs) ─────────
+[env.preview]
+name = "thalida-chat-api-preview"
+
+[env.preview.vars]
+ALLOWED_ORIGIN = "*"
+
+[env.preview.durable_objects]
+bindings = [
+  { name = "CHAT_ROOM", class_name = "ChatRoom" }
+]
+
+[[env.preview.migrations]]
+tag = "v1"
+new_sqlite_classes = ["ChatRoom"]
+
+# Set preview secrets once:
+#   wrangler secret put ADMIN_SECRET --env preview
+#   wrangler secret put OPENAI_API_KEY --env preview

@@ -74,40 +74,83 @@ The preview server runs on port 4322 to avoid conflicting with the dev server on
 
 All Astro configuration lives in `app/astro.config.mjs`. Allowed hosts for dev and preview (`*.thalida.com` and `*.trycloudflare.com`) are set via the `--allowed-hosts` flag in `app/package.json` scripts.
 
-## Production Deployment
+## Deployment
 
-### API (Cloudflare Worker)
+### Automatic (via GitHub)
+
+Every push and PR is handled automatically:
+
+- **Frontend**: Cloudflare Pages deploys on every push to `main` (production) and creates a preview URL for every PR.
+- **API Worker**: A GitHub Action deploys to production on push to `main` and to a preview environment on PRs.
+
+Preview frontends talk to a shared preview API Worker (`thalida-chat-api-preview`).
+
+### One-time setup: Cloudflare Pages
+
+Connect the repo to Cloudflare Pages via the dashboard:
+
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/) > Workers and Pages > Create > Pages > Connect to Git
+2. Select the `thalida.com` repo, set production branch to `main`
+3. Configure the build:
+   - **Root directory**: `app`
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+4. Set environment variables (Settings > Environment Variables):
+   - **Production**: `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api.<your-subdomain>.workers.dev/ws`
+   - **Preview**: `PUBLIC_CHAT_WS_URL` = `wss://thalida-chat-api-preview.<your-subdomain>.workers.dev/ws`
+5. Under Build watch paths, add include path: `app/**` (avoids rebuilding when only `api/` changes)
+
+### Required GitHub Secrets
+
+Set these in your repo settings under Settings > Secrets and variables > Actions:
+
+| Secret                  | Description                                             |
+| ----------------------- | ------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | API token with Workers and Pages edit permissions       |
+| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID (found in the dashboard URL) |
+
+### One-time setup: Production Worker secrets
 
 ```bash
-cd api
-
-# Set secrets (one-time)
-npx wrangler secret put ADMIN_SECRET
-npx wrangler secret put OPENAI_API_KEY
-
-# Deploy
-npm run deploy
+make api-secrets-prod     # Prompts for ADMIN_SECRET and OPENAI_API_KEY
+make api-deploy-prod      # Deploy the production Worker
 ```
 
-### Frontend (Cloudflare Pages)
+### One-time setup: Preview Worker secrets
 
 ```bash
-cd app
-PUBLIC_CHAT_WS_URL=wss://your-api.workers.dev/ws npm run build
+make api-secrets-preview  # Prompts for ADMIN_SECRET and OPENAI_API_KEY (preview)
+make api-deploy-preview   # Deploy the preview Worker
 ```
 
-The `dist/` output can be deployed to Cloudflare Pages (or any static host).
+### Manual deployment
+
+```bash
+make deploy               # Deploy API Worker to production (alias for api-deploy-prod)
+make api-deploy-preview   # Deploy API Worker to preview environment
+```
+
+The frontend deploys automatically via Cloudflare Pages when you push. No manual step needed.
 
 ## All Commands
 
-| Command            | Description                                                         |
-| ------------------ | ------------------------------------------------------------------- |
-| `make setup`       | Full local setup: install deps, add shell alias, copy env templates |
-| `make install`     | Install dependencies for both app and api                           |
-| `make alias`       | Add shell alias so `make` works from any subfolder                  |
-| `make api-dev`     | Start the API worker on http://localhost:8787                       |
-| `make app-dev`     | Start the Astro frontend on http://localhost:4321                   |
-| `make app-build`   | Build the frontend                                                  |
-| `make api-preview` | Tunnel the API, auto-update `app/.env` with the WS URL              |
-| `make app-preview` | Build, preview on port 4322, and tunnel the frontend                |
-| `make clean`       | Remove build artifacts                                              |
+| Command                    | Description                                                         |
+| -------------------------- | ------------------------------------------------------------------- |
+| `make setup`               | Full local setup: install deps, add shell alias, copy env templates |
+| `make install`             | Install dependencies for root, app, and api                         |
+| `make alias`               | Add shell alias so `make` works from any subfolder                  |
+| `make api-dev`             | Start the API worker on http://localhost:8787                       |
+| `make app-dev`             | Start the Astro frontend on http://localhost:4321                   |
+| `make app-build`           | Build the frontend                                                  |
+| `make api-preview`         | Tunnel the API, auto-update `app/.env` with the WS URL              |
+| `make app-preview`         | Build, preview on port 4322, and tunnel the frontend                |
+| `make lint`                | Run ESLint in both packages                                         |
+| `make lint-fix`            | Run ESLint --fix in both packages                                   |
+| `make format`              | Run Prettier --write across the repo                                |
+| `make format-check`        | Run Prettier --check across the repo                                |
+| `make deploy`              | Deploy API Worker to production (alias)                             |
+| `make api-deploy-prod`     | Deploy API Worker to production                                     |
+| `make api-deploy-preview`  | Deploy API Worker to preview environment                            |
+| `make api-secrets-prod`    | Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)        |
+| `make api-secrets-preview` | Set preview Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)           |
+| `make clean`               | Remove build artifacts                                              |
