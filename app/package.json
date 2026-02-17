@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev --allowed-hosts=.thalida.com,.trycloudflare.com",
     "build": "astro build",
-    "build:pages": "astro build && rm -rf dist/content",
+    "build:pages": "astro build && find dist/content -type f ! -name '*.html' -delete 2>/dev/null; find dist/content -type d -empty -delete 2>/dev/null; true",
     "preview": "astro preview --host --port 4322 --allowed-hosts=.thalida.com,.trycloudflare.com",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

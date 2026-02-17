@@ -174,9 +174,9 @@ api-deploy-prod: ## Deploy the API Worker to production
 api-deploy-preview: ## Deploy the API Worker to the preview environment
 	cd $(API_DIR) && npx wrangler deploy --env preview
 
-deploy: api-deploy-prod ## Deploy everything to production (Pages auto-deploys via git)
+deploy: api-deploy-prod ## Deploy API Worker to production (frontend deploys via GitHub Actions)
 	@echo ""
-	@echo "API deployed. Frontend deploys automatically via Cloudflare Pages on push."
+	@echo "API deployed. Frontend deploys via GitHub Actions on push."
 
 api-secrets-prod: ## Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)
 	cd $(API_DIR) && npx wrangler secret put ADMIN_SECRET --env="" && npx wrangler secret put OPENAI_API_KEY --env=""

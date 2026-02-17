@@ -109,7 +109,7 @@ make media-cleanup BRANCH=v-2026    # Delete a branch's media from R2
 
 ### Cloudflare Pages build command
 
-Use `npm run build:pages` as the build command in Cloudflare Pages (instead of `npm run build`). This cleans up large media from the build output after Astro finishes, avoiding the 25 MiB file limit.
+Use `npm run build:pages` as the build command (instead of `npm run build`). This removes large media files from the build output after Astro finishes (avoiding the 25 MiB per-file Cloudflare Pages limit) while preserving the HTML content partials needed for the project tree viewer.
 
 ## Configuration
 
@@ -188,7 +188,7 @@ make deploy               # Deploy API Worker to production (alias for api-deplo
 make api-deploy-preview   # Deploy API Worker to preview environment
 ```
 
-The frontend deploys automatically via Cloudflare Pages when you push. No manual step needed.
+The frontend deploys automatically via GitHub Actions on push. No manual step needed.
 
 ## All Commands
 
@@ -206,7 +206,7 @@ The frontend deploys automatically via Cloudflare Pages when you push. No manual
 | `make lint-fix`            | Run ESLint --fix in both packages                                   |
 | `make format`              | Run Prettier --write across the repo                                |
 | `make format-check`        | Run Prettier --check across the repo                                |
-| `make deploy`              | Deploy API Worker to production (alias)                             |
+| `make deploy`              | Deploy API Worker to production (frontend via GitHub Actions)       |
 | `make api-deploy-prod`     | Deploy API Worker to production                                     |
 | `make api-deploy-preview`  | Deploy API Worker to preview environment                            |
 | `make api-secrets-prod`    | Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)        |
