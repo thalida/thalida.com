@@ -2,12 +2,70 @@ const contentBody = document.getElementById("content-body") as HTMLDivElement;
 const welcome = document.getElementById("content-welcome") as HTMLDivElement;
 const cache = new Map<string, string>();
 
-document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
-  link.addEventListener("click", async (e) => {
-    e.preventDefault();
+async function loadContent(key: string) {
+  welcome.hidden = true;
 
-    document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+  if (cache.has(key)) {
+    contentBody.innerHTML = cache.get(key) ?? "";
+    return;
+  }
+
+  contentBody.innerHTML = "<p>Loading…</p>";
+
+  try {
+    const res = await fetch(`/content/${key}/`);
+    if (!res.ok) throw new Error(`${res.status}`);
+    const html = await res.text();
+    cache.set(key, html);
+    contentBody.innerHTML = html;
+  } catch {
+    contentBody.innerHTML = "<p>Failed to load content.</p>";
+  }
+}
+
+function setActiveLink(collection: string, id: string) {
+  document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+  const link = document.querySelector<HTMLAnchorElement>(
+    `.tree-link[data-collection="${collection}"][data-id="${id}"]`,
+  );
+  if (link) {
     link.setAttribute("data-active", "true");
+
+    const details = link.closest("details");
+    if (details) details.open = true;
+  }
+}
+
+function showWelcome() {
+  welcome.hidden = false;
+  contentBody.innerHTML = "";
+  document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+}
+
+const ROUTABLE_COLLECTIONS = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
+
+function parseRoute(path: string): { collection: string; id: string } | null {
+  const match = path.match(/^\/([^/]+)\/(.+?)\/?\s*$/);
+  if (!match) return null;
+  const [, collection, id] = match;
+  if (!ROUTABLE_COLLECTIONS.has(collection)) return null;
+  return { collection, id };
+}
+
+async function navigateFromPath() {
+  const route = parseRoute(window.location.pathname);
+  if (!route) {
+    showWelcome();
+    return;
+  }
+
+  setActiveLink(route.collection, route.id);
+  await loadContent(`${route.collection}/${route.id}`);
+}
+
+document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
 
     const collection = link.dataset.collection;
     const id = link.dataset.id;
@@ -20,24 +78,12 @@ document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
       return;
     }
 
-    welcome.hidden = true;
-    const key = `${collection}/${id}`;
-
-    if (cache.has(key)) {
-      contentBody.innerHTML = cache.get(key) ?? "";
-      return;
-    }
-
-    contentBody.innerHTML = "<p>Loading…</p>";
-
-    try {
-      const res = await fetch(`/content/${key}/`);
-      if (!res.ok) throw new Error(`${res.status}`);
-      const html = await res.text();
-      cache.set(key, html);
-      contentBody.innerHTML = html;
-    } catch {
-      contentBody.innerHTML = "<p>Failed to load content.</p>";
-    }
+    const path = `/${collection}/${id}`;
+    history.pushState(null, "", path);
+    navigateFromPath();
   });
 });
+
+window.addEventListener("popstate", () => navigateFromPath());
+
+navigateFromPath();

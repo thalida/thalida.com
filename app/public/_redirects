@@ -1,0 +1,7 @@
+# Serve index.html for client-side routes (collection/id paths).
+# The /content/* partials are static files and are served as-is.
+/projects/*  /index.html  200
+/guides/*    /index.html  200
+/gallery/*   /index.html  200
+/recipes/*   /index.html  200
+/versions/*  /index.html  200
