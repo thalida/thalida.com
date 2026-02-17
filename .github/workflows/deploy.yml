@@ -35,7 +35,14 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "name=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
-            echo "diff_base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+            BEFORE="${{ github.event.before }}"
+            if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+              # Subsequent push to PR — only diff the new commits
+              echo "diff_base=$BEFORE" >> "$GITHUB_OUTPUT"
+            else
+              # PR just opened — diff everything against the base branch
+              echo "diff_base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+            fi
           else
             BEFORE="${{ github.event.before }}"
             echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
