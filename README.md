@@ -14,28 +14,28 @@ docs/   Design docs and plans
 
 - [Node.js](https://nodejs.org/) (v18+)
 - npm (comes with Node)
-- make (pre-installed on macOS/Linux)
+- [just](https://github.com/casey/just#installation) command runner
 
 ## Quick Start
 
 ```bash
-make setup
+just setup
 ```
 
 This single command:
 
 1. Installs dependencies for both `app/` and `api/`
-2. Adds a shell alias so `make` works from any subfolder in the repo
-3. Copies env templates (`api/.dev.vars`, `app/.env.development`) if they don't already exist
+2. Copies env templates (`api/.dev.vars`, `app/.env.development`) if they don't already exist
+3. Installs pre-commit hooks
 
 After setup, edit `api/.dev.vars` to add your secrets (see below), then start developing:
 
 ```bash
-make api-dev    # Terminal 1 — API on http://localhost:8787
-make app-dev    # Terminal 2 — App on http://localhost:4321
+just api::serve    # Terminal 1 — API on http://localhost:8787
+just app::serve    # Terminal 2 — App on http://localhost:4321
 ```
 
-Run `make` or `make help` to see all available commands.
+Run `just` to see all available commands.
 
 ## Environment Variables
 
@@ -48,10 +48,10 @@ Run `make` or `make help` to see all available commands.
 
 ### Frontend (`app/.env.development`)
 
-| Variable             | Default                  | Description                                                                                         |
-| -------------------- | ------------------------ | --------------------------------------------------------------------------------------------------- |
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Tunnel URL auto-written to `.env.production` by `make api-preview`. |
-| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media. Empty = local files. Set in Cloudflare Pages for deployed builds.          |
+| Variable             | Default                  | Description                                                                                                      |
+| -------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Tunnel URL auto-written to `.env.production` by `just api::serve --env preview`. |
+| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media. Empty = local files. Set in Cloudflare Pages for deployed builds.                       |
 
 ## Log In as the Owner
 
@@ -62,12 +62,12 @@ Visit `http://localhost:4321?admin=YOUR_ADMIN_SECRET` (the value from `api/.dev.
 Share your local dev environment using [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (free, no account needed). You need three terminals:
 
 ```bash
-make api-dev       # Terminal 1 — start the API server
-make api-preview   # Terminal 2 — tunnel the API, auto-updates app/.env
-make app-preview   # Terminal 3 — builds frontend, previews on port 4322, tunnels it
+just api::serve                # Terminal 1 — start the API server
+just api::serve --env preview  # Terminal 2 — tunnel the API, auto-updates app/.env
+just app::serve --env preview  # Terminal 3 — builds frontend, previews on port 4322, tunnels it
 ```
 
-`make api-preview` writes the tunnel WebSocket URL to `app/.env.production` (used by `astro build`) and removes it on Ctrl+C. Your `app/.env.development` (used by `astro dev`) is never touched. Share the frontend tunnel URL printed by `make app-preview` with your tester.
+`just api::serve --env preview` writes the tunnel WebSocket URL to `app/.env.production` (used by `astro build`) and removes it on Ctrl+C. Your `app/.env.development` (used by `astro dev`) is never touched. Share the frontend tunnel URL printed by `just app::serve --env preview` with your tester.
 
 The preview server runs on port 4322 to avoid conflicting with the dev server on 4321.
 
@@ -95,8 +95,8 @@ thalida-media/
 ### Manual sync and cleanup
 
 ```bash
-make media-sync                     # Sync media using current git branch as prefix
-make media-cleanup BRANCH=v-2026    # Delete a branch's media from R2
+just media::sync                  # Sync media using current git branch as prefix
+just media::cleanup --branch v-2026   # Delete a branch's media from R2
 ```
 
 ### One-time setup: R2 bucket
@@ -170,47 +170,50 @@ Set these in your repo settings under Settings > Secrets and variables > Actions
 ### One-time setup: Production Worker secrets
 
 ```bash
-make api-secrets-prod     # Prompts for ADMIN_SECRET and OPENAI_API_KEY
-make api-deploy-prod      # Deploy the production Worker
+just api::secrets --env prod     # Prompts for ADMIN_SECRET and OPENAI_API_KEY
+just api::deploy --env prod      # Deploy the production Worker
 ```
 
 ### One-time setup: Preview Worker secrets
 
 ```bash
-make api-secrets-preview  # Prompts for ADMIN_SECRET and OPENAI_API_KEY (preview)
-make api-deploy-preview   # Deploy the preview Worker
+just api::secrets --env preview  # Prompts for ADMIN_SECRET and OPENAI_API_KEY (preview)
+just api::deploy --env preview   # Deploy the preview Worker
 ```
 
 ### Manual deployment
 
 ```bash
-make deploy               # Deploy API Worker to production (alias for api-deploy-prod)
-make api-deploy-preview   # Deploy API Worker to preview environment
+just api::deploy --env prod      # Deploy API Worker to production
+just api::deploy --env preview   # Deploy API Worker to preview environment
 ```
 
 The frontend deploys automatically via GitHub Actions on push. No manual step needed.
 
 ## All Commands
 
-| Command                    | Description                                                         |
-| -------------------------- | ------------------------------------------------------------------- |
-| `make setup`               | Full local setup: install deps, add shell alias, copy env templates |
-| `make install`             | Install dependencies for root, app, and api                         |
-| `make alias`               | Add shell alias so `make` works from any subfolder                  |
-| `make api-dev`             | Start the API worker on http://localhost:8787                       |
-| `make app-dev`             | Start the Astro frontend on http://localhost:4321                   |
-| `make app-build`           | Build the frontend                                                  |
-| `make api-preview`         | Tunnel the API, write WS URL to `app/.env.production`               |
-| `make app-preview`         | Build, preview on port 4322, and tunnel the frontend                |
-| `make lint`                | Run ESLint in both packages                                         |
-| `make lint-fix`            | Run ESLint --fix in both packages                                   |
-| `make format`              | Run Prettier --write across the repo                                |
-| `make format-check`        | Run Prettier --check across the repo                                |
-| `make deploy`              | Deploy API Worker to production (frontend via GitHub Actions)       |
-| `make api-deploy-prod`     | Deploy API Worker to production                                     |
-| `make api-deploy-preview`  | Deploy API Worker to preview environment                            |
-| `make api-secrets-prod`    | Set production Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)        |
-| `make api-secrets-preview` | Set preview Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)           |
-| `make media-sync`          | Sync media to R2 using current git branch as prefix                 |
-| `make media-cleanup`       | Delete a branch's media from R2 (`BRANCH=name`)                     |
-| `make clean`               | Remove build artifacts                                              |
+Run `just` to see this list interactively.
+
+| Command                            | Description                                           |
+| ---------------------------------- | ----------------------------------------------------- |
+| `just setup`                       | Full local setup: install deps, copy env templates    |
+| `just install`                     | Install dependencies for root, app, and api           |
+| `just test`                        | Run all tests                                         |
+| `just lint`                        | Run ESLint in both packages                           |
+| `just lint --fix`                  | Run ESLint --fix in both packages                     |
+| `just format`                      | Run Prettier --write across the repo                  |
+| `just format --check`              | Run Prettier --check across the repo                  |
+| `just clean`                       | Remove build artifacts                                |
+| `just api::serve`                  | Start the API worker on http://localhost:8787         |
+| `just api::serve --env preview`    | Tunnel the API, write WS URL to `app/.env.production` |
+| `just api::test`                   | Run API tests                                         |
+| `just api::deploy --env <env>`     | Deploy API Worker (`prod` or `preview`)               |
+| `just api::secrets --env <env>`    | Set Worker secrets (`prod` or `preview`)              |
+| `just app::serve`                  | Start the Astro frontend on http://localhost:4321     |
+| `just app::serve --env preview`    | Build, preview on port 4322, and tunnel the frontend  |
+| `just app::test`                   | Run app tests                                         |
+| `just app::build`                  | Build the frontend                                    |
+| `just app::build-pages`            | Build for Cloudflare Pages (strips large media)       |
+| `just app::deploy`                 | Deploy to Cloudflare Pages (used by CI)               |
+| `just media::sync`                 | Sync media to R2 using current git branch as prefix   |
+| `just media::cleanup --branch <b>` | Delete a branch's media from R2                       |

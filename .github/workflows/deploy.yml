@@ -27,6 +27,8 @@ jobs:
         with:
           node-version: 22
 
+      - uses: extractions/setup-just@v2
+
       - name: Install wrangler
         run: npm install -g wrangler
 
@@ -37,16 +39,13 @@ jobs:
             echo "name=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
             BEFORE="${{ github.event.before }}"
             if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-              # Subsequent push to PR — only diff the new commits
               echo "diff_base=$BEFORE" >> "$GITHUB_OUTPUT"
             else
-              # PR just opened — diff everything against the base branch
               echo "diff_base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
             fi
           else
             BEFORE="${{ github.event.before }}"
             echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-            # All zeros means first push to this branch — do a full sync
             if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
               echo "diff_base=" >> "$GITHUB_OUTPUT"
             else
@@ -63,7 +62,7 @@ jobs:
           if [ -n "${{ steps.branch.outputs.diff_base }}" ]; then
             ARGS="$ARGS --diff-base ${{ steps.branch.outputs.diff_base }}"
           fi
-          bash scripts/sync-media.sh $ARGS
+          just media::sync $ARGS
 
   # ── Deploy frontend to Cloudflare Pages (after media sync) ───────
   deploy-pages:
@@ -77,24 +76,26 @@ jobs:
         with:
           node-version: 22
 
+      - uses: extractions/setup-just@v2
+
       - name: Install dependencies
         working-directory: app
         run: npm ci
 
+      - name: Install wrangler
+        run: npm install -g wrangler
+
       - name: Build frontend
-        working-directory: app
         env:
           PUBLIC_R2_BASE_URL: ${{ vars.R2_PUBLIC_URL }}
           CF_PAGES_BRANCH: ${{ needs.sync-media.outputs.branch }}
-        run: npm run build:pages
+        run: just app::build-pages
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: app
-          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ needs.sync-media.outputs.branch }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: just app::deploy --branch "${{ needs.sync-media.outputs.branch }}" --project "${{ vars.CLOUDFLARE_PAGES_PROJECT }}"
 
   # ── Deploy API Worker (preview) on PRs with api/ changes ─────────
   deploy-api-preview:
@@ -107,6 +108,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - uses: extractions/setup-just@v2
 
       - name: Check for api changes
         id: changes
@@ -124,12 +127,10 @@ jobs:
 
       - name: Deploy Worker (preview)
         if: steps.changes.outputs.api == 'true'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: api
-          command: deploy --env preview
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: just api::deploy --env preview
 
   # ── Deploy API Worker (production) on push to main ───────────────
   deploy-api-production:
@@ -144,6 +145,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - uses: extractions/setup-just@v2
 
       - name: Check for api changes
         id: changes
@@ -161,12 +164,10 @@ jobs:
 
       - name: Deploy Worker (production)
         if: steps.changes.outputs.api == 'true'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: api
-          command: deploy --env=""
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: just api::deploy --env prod
 
   # ── Cleanup R2 branch prefix when PR is merged ───────────────────
   cleanup-media:
@@ -180,6 +181,8 @@ jobs:
         with:
           node-version: 22
 
+      - uses: extractions/setup-just@v2
+
       - name: Install wrangler
         run: npm install -g wrangler
 
@@ -187,4 +190,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: bash scripts/cleanup-r2-prefix.sh --prefix "${{ github.event.pull_request.head.ref }}"
+        run: just media::cleanup --branch "${{ github.event.pull_request.head.ref }}"
