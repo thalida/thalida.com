@@ -11,15 +11,33 @@ import type {
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
 import { MAX_MESSAGES, MAX_WARNINGS, RESERVED_NAMES } from "./config";
 
+const BLOCKED_IPS_KEY = "blockedIps";
+
 export class ChatRoom implements DurableObject {
   private messages: ChatMessage[] = [];
   private connections: Map<WebSocket, ConnectionInfo> = new Map();
   private spectators: Set<WebSocket> = new Set();
+  private ipBySocket: Map<WebSocket, string> = new Map();
+  private blockedIps: Set<string> = new Set();
+  private blockedIpsLoaded = false;
 
   constructor(
     private state: DurableObjectState,
     private env: Record<string, unknown>,
   ) {}
+
+  private async loadBlockedIps(): Promise<void> {
+    if (this.blockedIpsLoaded) return;
+    const stored = await this.state.storage.get<string[]>(BLOCKED_IPS_KEY);
+    if (stored) {
+      for (const ip of stored) this.blockedIps.add(ip);
+    }
+    this.blockedIpsLoaded = true;
+  }
+
+  private async persistBlockedIps(): Promise<void> {
+    await this.state.storage.put(BLOCKED_IPS_KEY, [...this.blockedIps]);
+  }
 
   // ── Public API ───────────────────────────────────────────────────────
 
@@ -28,10 +46,24 @@ export class ChatRoom implements DurableObject {
       return new Response("Expected WebSocket", { status: 426 });
     }
 
-    const pair = new WebSocketPair();
-    const [client, server] = [pair[0], pair[1]];
+    await this.loadBlockedIps();
+
+    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+    const [client, server] = Object.values(new WebSocketPair());
 
     server.accept();
+
+    if (this.blockedIps.has(ip)) {
+      this.sendBlocked(
+        server,
+        SERVER_ERROR_CODE.MODERATION_BLOCKED,
+        "You have been blocked due to repeated violations.",
+      );
+      server.close(1008, "blocked");
+      return new Response(null, { status: 101, webSocket: client });
+    }
+
+    this.ipBySocket.set(server, ip);
     this.spectators.add(server);
     this.sendStatus(server);
 
@@ -100,6 +132,7 @@ export class ChatRoom implements DurableObject {
 
     this.spectators.delete(ws);
     this.connections.set(ws, {
+      ip: this.ipBySocket.get(ws) ?? "unknown",
       username: name,
       isOwner,
       warnings: 0,
@@ -128,6 +161,12 @@ export class ChatRoom implements DurableObject {
       .slice(0, 500);
     if (!text) return;
 
+    const unblockMatch = text.match(/^\/unblock\s+(.+)$/);
+    if (unblockMatch) {
+      this.handleUnblock(ws, unblockMatch[1].trim());
+      return;
+    }
+
     const message: ChatMessage = {
       type: SERVER_MESSAGE_TYPE.MESSAGE,
       id: uuidv7(),
@@ -146,6 +185,20 @@ export class ChatRoom implements DurableObject {
     this.moderate(message, ws).catch((err) => {
       console.error("[moderation] unexpected error:", err);
     });
+  }
+
+  private handleUnblock(ws: WebSocket, ip: string): void {
+    const info = this.connections.get(ws);
+    if (!info?.isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can unblock users.");
+      return;
+    }
+
+    this.blockedIps.delete(ip);
+    this.persistBlockedIps().catch((err) => {
+      console.error("[unblock] failed to persist unblock:", err);
+    });
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip });
   }
 
   // ── Moderation ───────────────────────────────────────────────────────
@@ -177,6 +230,10 @@ export class ChatRoom implements DurableObject {
 
     if (info.warnings >= MAX_WARNINGS) {
       info.isBlocked = true;
+      this.blockedIps.add(info.ip);
+      this.persistBlockedIps().catch((err) => {
+        console.error("[block] failed to persist blocked IP:", err);
+      });
       this.sendBlocked(
         ws,
         SERVER_ERROR_CODE.MODERATION_BLOCKED,
@@ -240,6 +297,7 @@ export class ChatRoom implements DurableObject {
   // ── Connection Helpers ───────────────────────────────────────────────
 
   private removeConnection(ws: WebSocket): void {
+    this.ipBySocket.delete(ws);
     this.spectators.delete(ws);
     this.connections.delete(ws);
     this.broadcastStatus();

@@ -9,6 +9,7 @@ const SERVER_MESSAGE_TYPE = {
   ERROR: "error",
   WARNING: "warning",
   BLOCKED: "blocked",
+  UNBLOCKED: "unblocked",
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
@@ -28,7 +29,8 @@ type ServerMessage =
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
   | { type: "warning"; code: string; message: string }
-  | { type: "blocked"; code: string; message: string };
+  | { type: "blocked"; code: string; message: string }
+  | { type: "unblocked"; ip: string };
 
 interface ChatMessage {
   id: string;
@@ -159,6 +161,8 @@ function connect(): void {
       inputEl.disabled = true;
       sendBtn.disabled = true;
       inputEl.placeholder = "You have been blocked.";
+    } else if (data.type === SERVER_MESSAGE_TYPE.UNBLOCKED) {
+      appendNotice(`Unblocked IP: ${data.ip}`);
     }
   });
 

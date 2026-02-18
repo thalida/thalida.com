@@ -5,9 +5,9 @@ import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../
 
 // ── helpers ──────────────────────────────────────────────────────────
 
-async function openWs(): Promise<WebSocket> {
+async function openWs(ip = "127.0.0.1"): Promise<WebSocket> {
   const resp = await SELF.fetch("https://fake-host/ws", {
-    headers: { Upgrade: "websocket" },
+    headers: { Upgrade: "websocket", "CF-Connecting-IP": ip },
   });
   const ws = resp.webSocket;
   if (!ws) throw new Error("No WebSocket returned");
@@ -31,13 +31,16 @@ async function flush(): Promise<void> {
   await new Promise((r) => setTimeout(r, 50));
 }
 
-async function connectAndJoin(username: string, token?: string): Promise<{ ws: WebSocket; msgs: ServerMessage[] }> {
-  const ws = await openWs();
+async function connectAndJoin(
+  username: string,
+  options?: { token?: string; ip?: string },
+): Promise<{ ws: WebSocket; msgs: ServerMessage[] }> {
+  const ws = await openWs(options?.ip);
   const msgs = collect(ws);
   await flush();
 
   const data: Record<string, unknown> = { username };
-  if (token) data.token = token;
+  if (options?.token) data.token = options.token;
   send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data });
   await flush();
   return { ws, msgs };
@@ -109,7 +112,7 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("owner joins with valid ADMIN_SECRET token", async () => {
-      const { ws, msgs } = await connectAndJoin("thalida", "test-admin-secret");
+      const { ws, msgs } = await connectAndJoin("thalida", { token: "test-admin-secret" });
 
       const status = [...msgs].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
       expect(status).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline: true });
@@ -269,6 +272,60 @@ describe("ChatRoom Durable Object", () => {
 
       sender.close();
       other.close();
+    });
+  });
+
+  // ── IP Blocking ─────────────────────────────────────────────────
+
+  describe("IP blocking", () => {
+    it("admin can unblock an IP via /unblock command", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+        ip: "10.0.0.1",
+      });
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      await flush();
+
+      const unblocked = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.UNBLOCKED);
+      expect(unblocked).toMatchObject({ type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip: "10.0.0.50" });
+
+      adminWs.close();
+    });
+
+    it("non-owner /unblock command returns unauthorized error", async () => {
+      const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
+      msgs.length = 0;
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      await flush();
+
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.ERROR,
+        code: SERVER_ERROR_CODE.UNAUTHORIZED,
+      });
+
+      ws.close();
+    });
+
+    it("/unblock command is not broadcast as a chat message", async () => {
+      const { ws: adminWs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+        ip: "10.0.0.1",
+      });
+      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin("viewer", { ip: "10.0.0.2" });
+      otherMsgs.length = 0;
+
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      await flush();
+
+      const chatMsgs = otherMsgs.filter((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(chatMsgs).toHaveLength(0);
+
+      adminWs.close();
+      otherWs.close();
     });
   });
 

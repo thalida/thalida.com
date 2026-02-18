@@ -9,6 +9,7 @@ export interface ChatMessage {
 }
 
 export interface ConnectionInfo {
+  ip: string;
   username: string;
   isOwner: boolean;
   warnings: number;
@@ -41,6 +42,7 @@ export const SERVER_MESSAGE_TYPE = {
   ERROR: "error",
   WARNING: "warning",
   BLOCKED: "blocked",
+  UNBLOCKED: "unblocked",
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
@@ -63,6 +65,7 @@ export const SERVER_ERROR_CODE = {
   TAKEN_USERNAME: "taken_username",
   MODERATION_WARNING: "moderation_warning",
   MODERATION_BLOCKED: "moderation_blocked",
+  UNAUTHORIZED: "unauthorized",
 } as const;
 
 export type ServerErrorCode = (typeof SERVER_ERROR_CODE)[keyof typeof SERVER_ERROR_CODE];
@@ -97,9 +100,16 @@ export type ServerBroadcast =
   | ServerBroadcastHistoryMessage
   | ServerBroadcastRemoveMessage;
 
+// ── Server → Client: Admin Responses ─────────────────────────────────
+
+export interface ServerUnblockedMessage {
+  type: "unblocked";
+  ip: string;
+}
+
 // ── Combined Server Message ─────────────────────────────────────────
 
-export type ServerMessage = ServerErrorResponse | ServerBroadcast | ChatMessage;
+export type ServerMessage = ServerErrorResponse | ServerBroadcast | ServerUnblockedMessage | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────
 
