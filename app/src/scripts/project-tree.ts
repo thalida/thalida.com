@@ -42,15 +42,7 @@ function showWelcome() {
   document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
 }
 
-const ROUTABLE_COLLECTIONS = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
-
-function parseRoute(path: string): { collection: string; id: string } | null {
-  const match = path.match(/^\/([^/]+)\/(.+?)\/?\s*$/);
-  if (!match) return null;
-  const [, collection, id] = match;
-  if (!ROUTABLE_COLLECTIONS.has(collection)) return null;
-  return { collection, id };
-}
+import { parseRoute } from "./routing-utils";
 
 async function navigateFromPath() {
   const route = parseRoute(window.location.pathname);

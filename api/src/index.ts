@@ -9,7 +9,7 @@ interface Env {
 
 function corsHeaders(env: Env, request: Request): Record<string, string> {
   const origin = request.headers.get("Origin") ?? "";
-  const allowed = origin === env.ALLOWED_ORIGIN || origin.startsWith("http://localhost");
+  const allowed = origin === env.ALLOWED_ORIGIN || /^http:\/\/localhost(:\d+)?$/.test(origin);
 
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "",

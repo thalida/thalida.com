@@ -26,7 +26,7 @@ This single command:
 
 1. Installs dependencies for both `app/` and `api/`
 2. Adds a shell alias so `make` works from any subfolder in the repo
-3. Copies env templates (`api/.dev.vars`, `app/.env`) if they don't already exist
+3. Copies env templates (`api/.dev.vars`, `app/.env.development`) if they don't already exist
 
 After setup, edit `api/.dev.vars` to add your secrets (see below), then start developing:
 
@@ -46,12 +46,12 @@ Run `make` or `make help` to see all available commands.
 | `ADMIN_SECRET`   | Yes      | Any secret string. Used to log in as the site owner.                                                                                                      |
 | `OPENAI_API_KEY` | No       | OpenAI API key for chat moderation. Leave blank to skip moderation locally. Free at [platform.openai.com/api-keys](https://platform.openai.com/api-keys). |
 
-### Frontend (`app/.env`)
+### Frontend (`app/.env.development`)
 
-| Variable             | Default                  | Description                                                                                |
-| -------------------- | ------------------------ | ------------------------------------------------------------------------------------------ |
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Auto-updated by `make api-preview`.                        |
-| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media. Empty = local files. Set in Cloudflare Pages for deployed builds. |
+| Variable             | Default                  | Description                                                                                         |
+| -------------------- | ------------------------ | --------------------------------------------------------------------------------------------------- |
+| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API. Tunnel URL auto-written to `.env.production` by `make api-preview`. |
+| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media. Empty = local files. Set in Cloudflare Pages for deployed builds.          |
 
 ## Log In as the Owner
 
@@ -67,7 +67,7 @@ make api-preview   # Terminal 2 — tunnel the API, auto-updates app/.env
 make app-preview   # Terminal 3 — builds frontend, previews on port 4322, tunnels it
 ```
 
-`make api-preview` automatically updates `app/.env` with the tunnel WebSocket URL and restores it to localhost when you Ctrl+C. Share the frontend tunnel URL printed by `make app-preview` with your tester.
+`make api-preview` writes the tunnel WebSocket URL to `app/.env.production` (used by `astro build`) and removes it on Ctrl+C. Your `app/.env.development` (used by `astro dev`) is never touched. Share the frontend tunnel URL printed by `make app-preview` with your tester.
 
 The preview server runs on port 4322 to avoid conflicting with the dev server on 4321.
 
@@ -200,7 +200,7 @@ The frontend deploys automatically via GitHub Actions on push. No manual step ne
 | `make api-dev`             | Start the API worker on http://localhost:8787                       |
 | `make app-dev`             | Start the Astro frontend on http://localhost:4321                   |
 | `make app-build`           | Build the frontend                                                  |
-| `make api-preview`         | Tunnel the API, auto-update `app/.env` with the WS URL              |
+| `make api-preview`         | Tunnel the API, write WS URL to `app/.env.production`               |
 | `make app-preview`         | Build, preview on port 4322, and tunnel the frontend                |
 | `make lint`                | Run ESLint in both packages                                         |
 | `make lint-fix`            | Run ESLint --fix in both packages                                   |

@@ -1,3 +1,5 @@
+import { generateRandomUsername, validateUsername } from "./chat-utils";
+
 type ServerMessage =
   | { type: "history"; messages: ChatMessage[] }
   | {
@@ -20,20 +22,24 @@ interface ChatMessage {
   timestamp: number;
 }
 
+const MAX_AUTO_RETRIES = 5;
+
 const WS_URL =
   document.querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')?.content?.trim() || "ws://localhost:8787/ws";
 
 let ws: WebSocket | null = null;
 let username: string | null = null;
+let autoRetries = 0;
+let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
-const joinForm = document.getElementById("chat-join") as HTMLFormElement;
-const roomSection = document.getElementById("chat-room") as HTMLDivElement;
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
+const renameBtn = document.getElementById("chat-rename-btn") as HTMLButtonElement;
 const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
 const inputEl = document.getElementById("chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
-const statusEl = document.getElementById("chat-status") as HTMLSpanElement;
+const connectionStatusEl = document.getElementById("chat-connection-status") as HTMLSpanElement;
+const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
 
 function getAdminToken(): string | null {
@@ -67,21 +73,29 @@ function appendNotice(text: string): void {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
+function sendJoin(): void {
+  if (!ws || ws.readyState !== WebSocket.OPEN || !username) return;
+
+  const token = getAdminToken();
+  const joinMsg: Record<string, string> = {
+    type: "join",
+    username,
+  };
+  if (token) joinMsg.token = token;
+  ws.send(JSON.stringify(joinMsg));
+}
+
 function connect(): void {
   if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
     return;
   }
 
+  connectionStatusEl.textContent = "connecting...";
   ws = new WebSocket(WS_URL);
 
   ws.addEventListener("open", () => {
-    const token = getAdminToken();
-    const joinMsg: Record<string, string> = {
-      type: "join",
-      username: username ?? "",
-    };
-    if (token) joinMsg.token = token;
-    ws?.send(JSON.stringify(joinMsg));
+    connectionStatusEl.textContent = "online";
+    sendJoin();
   });
 
   ws.addEventListener("message", (event) => {
@@ -100,17 +114,28 @@ function connect(): void {
         timestamp: data.timestamp,
       });
     } else if (data.type === "status") {
-      statusEl.textContent = data.ownerOnline ? "thalida is online" : "thalida is offline";
-      statusEl.dataset.online = String(data.ownerOnline);
+      ownerStatusEl.textContent = data.ownerOnline ? "thalida: online" : "thalida: offline";
+      ownerStatusEl.dataset.online = String(data.ownerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
     } else if (data.type === "error") {
-      username = null;
-      ws?.close();
-      joinForm.hidden = false;
-      roomSection.hidden = true;
+      if (pendingRename) {
+        pendingRename = false;
+        usernameInput.setCustomValidity(data.message);
+        usernameInput.reportValidity();
+        usernameInput.value = username ?? "";
+        return;
+      }
+
+      if (autoRetries < MAX_AUTO_RETRIES) {
+        autoRetries++;
+        username = generateRandomUsername();
+        usernameInput.value = username;
+        sendJoin();
+        return;
+      }
+
+      appendNotice("Could not auto-join. Please change your username and try saving.");
       usernameInput.focus();
-      usernameInput.setCustomValidity(data.message);
-      usernameInput.reportValidity();
     } else if (data.type === "remove") {
       const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
       if (el) el.remove();
@@ -125,7 +150,7 @@ function connect(): void {
   });
 
   ws.addEventListener("close", () => {
-    statusEl.textContent = "disconnected";
+    connectionStatusEl.textContent = "reconnecting...";
     scheduleReconnect();
   });
 
@@ -150,45 +175,45 @@ function sendMessage(): void {
   inputEl.value = "";
 }
 
-const RESERVED_NAMES = ["thalida", "tia"];
-
-function validateUsername(): void {
+function validateUsernameInput(): boolean {
   const pos = usernameInput.selectionStart;
   usernameInput.value = usernameInput.value.toLowerCase();
   usernameInput.setSelectionRange(pos, pos);
 
-  const name = usernameInput.value.trim();
-  if (RESERVED_NAMES.some((r) => name.includes(r))) {
-    usernameInput.setCustomValidity("That name contains a reserved word.");
-  } else {
-    usernameInput.setCustomValidity("");
+  const result = validateUsername(usernameInput.value.trim());
+
+  usernameInput.setCustomValidity(result.error ?? "");
+  return result.valid;
+}
+
+function changeUsername(): void {
+  if (!validateUsernameInput()) {
+    usernameInput.reportValidity();
+    return;
   }
+
+  const newName = usernameInput.value.trim().toLowerCase().slice(0, 20);
+  if (newName === username) return;
+
+  pendingRename = true;
+  username = newName;
+  sendJoin();
 }
 
-function joinChat(): void {
-  validateUsername();
-
-  username = usernameInput.value.trim().toLowerCase().slice(0, 20);
-
-  joinForm.hidden = true;
-  roomSection.hidden = false;
-  inputEl.disabled = false;
-  sendBtn.disabled = false;
-  inputEl.placeholder = "Type a message...";
-  inputEl.focus();
-
-  connect();
-}
-
-usernameInput.addEventListener("input", validateUsername);
-
-usernameInput.focus();
-
-joinForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  joinChat();
+usernameInput.addEventListener("input", () => validateUsernameInput());
+usernameInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    changeUsername();
+  }
 });
+renameBtn.addEventListener("click", changeUsername);
+
 sendBtn.addEventListener("click", sendMessage);
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
+
+username = generateRandomUsername();
+usernameInput.value = username;
+connect();

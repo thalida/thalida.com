@@ -2,7 +2,7 @@ ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 APP_DIR  := $(ROOT_DIR)app
 API_DIR  := $(ROOT_DIR)api
 
-.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview lint lint-fix format format-check deploy api-deploy-prod api-deploy-preview api-secrets-prod api-secrets-preview media-sync media-cleanup clean help
+.PHONY: setup install alias api-dev app-dev dev app-build app-preview api-preview test test-api test-app lint lint-fix format format-check deploy api-deploy-prod api-deploy-preview api-secrets-prod api-secrets-preview media-sync media-cleanup clean help
 
 # ─── Setup ────────────────────────────────────────────────────────────
 
@@ -19,11 +19,11 @@ setup: install alias ## Full local setup: install deps, configure shell alias, c
 	else \
 		echo "api/.dev.vars already exists, skipping" ; \
 	fi
-	@if [ ! -f $(APP_DIR)/.env ]; then \
-		cp $(APP_DIR)/.env.example $(APP_DIR)/.env ; \
-		echo "Created app/.env from template" ; \
+	@if [ ! -f $(APP_DIR)/.env.development ]; then \
+		cp $(APP_DIR)/.env.example $(APP_DIR)/.env.development ; \
+		echo "Created app/.env.development from template" ; \
 	else \
-		echo "app/.env already exists, skipping" ; \
+		echo "app/.env.development already exists, skipping" ; \
 	fi
 	@echo ""
 	@echo "Setup complete! Run 'make dev' to see how to start the servers."
@@ -89,9 +89,8 @@ api-preview: ## Tunnel the API and auto-update app/.env with the tunnel WS URL
 	cleanup() { \
 		kill $$PID 2>/dev/null ; \
 		echo "" ; \
-		printf 'PUBLIC_CHAT_WS_URL=ws://localhost:8787/ws\n' > $(APP_DIR)/.env.tmp ; \
-		mv $(APP_DIR)/.env.tmp $(APP_DIR)/.env ; \
-		echo "Restored app/.env to localhost" ; \
+		rm -f $(APP_DIR)/.env.production ; \
+		echo "Removed app/.env.production" ; \
 		rm -f $$LOG ; \
 	} ; \
 	trap cleanup EXIT INT TERM ; \
@@ -110,12 +109,12 @@ api-preview: ## Tunnel the API and auto-update app/.env with the tunnel WS URL
 		exit 1 ; \
 	fi ; \
 	WS_URL="wss://$${URL#https://}/ws" ; \
-	echo "PUBLIC_CHAT_WS_URL=$$WS_URL" > $(APP_DIR)/.env ; \
+	echo "PUBLIC_CHAT_WS_URL=$$WS_URL" > $(APP_DIR)/.env.production ; \
 	echo "" ; \
 	echo "API tunnel:  $$URL" ; \
 	echo "WS URL:      $$WS_URL" ; \
-	echo "Updated app/.env — now run 'make app-preview' in another terminal" ; \
-	echo "Press Ctrl+C to stop (restores app/.env to localhost)" ; \
+	echo "Written to app/.env.production — now run 'make app-preview' in another terminal" ; \
+	echo "Press Ctrl+C to stop (removes app/.env.production)" ; \
 	echo "" ; \
 	wait $$PID
 
@@ -149,6 +148,16 @@ app-preview: app-build ## Build frontend, preview on port 4322, and tunnel
 	echo "Press Ctrl+C to stop" ; \
 	echo "" ; \
 	wait $$TUNNEL_PID
+
+# ─── Test ─────────────────────────────────────────────────────────────
+
+test: test-api test-app ## Run all tests
+
+test-api: ## Run API tests
+	cd $(API_DIR) && npm test
+
+test-app: ## Run app tests
+	cd $(APP_DIR) && npm test
 
 # ─── Lint & Format ────────────────────────────────────────────────────
 

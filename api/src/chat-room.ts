@@ -37,6 +37,7 @@ const MAX_WARNINGS = 3;
 export class ChatRoom implements DurableObject {
   private messages: ChatMessage[] = [];
   private connections: Map<WebSocket, ConnectionInfo> = new Map();
+  private spectators: Set<WebSocket> = new Set();
 
   constructor(
     private state: DurableObjectState,
@@ -52,17 +53,21 @@ export class ChatRoom implements DurableObject {
     const [client, server] = [pair[0], pair[1]];
 
     server.accept();
+    this.spectators.add(server);
+    this.sendCurrentStatus(server);
 
     server.addEventListener("message", (event) => {
       this.handleMessage(server, event.data);
     });
 
     server.addEventListener("close", () => {
+      this.spectators.delete(server);
       this.connections.delete(server);
       this.broadcastStatus();
     });
 
     server.addEventListener("error", () => {
+      this.spectators.delete(server);
       this.connections.delete(server);
       this.broadcastStatus();
     });
@@ -71,7 +76,13 @@ export class ChatRoom implements DurableObject {
   }
 
   private handleMessage(ws: WebSocket, raw: string | ArrayBuffer): void {
-    const data = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw)) as ClientMessage;
+    let data: ClientMessage;
+    try {
+      data = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw)) as ClientMessage;
+    } catch {
+      this.send(ws, { type: "error", code: "invalid_message", message: "Invalid JSON." });
+      return;
+    }
 
     if (data.type === "join") {
       const name = String(data.username ?? "")
@@ -111,6 +122,7 @@ export class ChatRoom implements DurableObject {
         }
       }
 
+      this.spectators.delete(ws);
       this.connections.set(ws, {
         username: name,
         isOwner,
@@ -265,6 +277,7 @@ export class ChatRoom implements DurableObject {
     try {
       ws.send(JSON.stringify(message));
     } catch {
+      this.spectators.delete(ws);
       this.connections.delete(ws);
     }
   }
@@ -275,7 +288,7 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private broadcastStatus(): void {
+  private getStatusMessage(): ServerMessage {
     let ownerOnline = false;
     for (const info of this.connections.values()) {
       if (info.isOwner) {
@@ -283,11 +296,20 @@ export class ChatRoom implements DurableObject {
         break;
       }
     }
+    return { type: "status", ownerOnline, userCount: this.connections.size };
+  }
 
-    this.broadcast({
-      type: "status",
-      ownerOnline,
-      userCount: this.connections.size,
-    });
+  private sendCurrentStatus(ws: WebSocket): void {
+    this.send(ws, this.getStatusMessage());
+  }
+
+  private broadcastStatus(): void {
+    const msg = this.getStatusMessage();
+    for (const ws of this.connections.keys()) {
+      this.send(ws, msg);
+    }
+    for (const ws of this.spectators) {
+      this.send(ws, msg);
+    }
   }
 }

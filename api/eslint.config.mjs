@@ -11,7 +11,7 @@ export default defineConfig(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ["*.mjs"],
+          allowDefaultProject: ["*.mjs", "vitest.config.ts"],
         },
         tsconfigRootDir: import.meta.dirname,
       },
