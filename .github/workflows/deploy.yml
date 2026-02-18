@@ -87,7 +87,8 @@ jobs:
 
       - name: Build frontend
         env:
-          PUBLIC_R2_BASE_URL: ${{ vars.R2_PUBLIC_URL }}
+          PUBLIC_R2_BASE_URL: ${{ vars.PUBLIC_R2_BASE_URL }}
+          PUBLIC_CHAT_WS_URL: ${{ github.event_name == 'push' && vars.PUBLIC_CHAT_WS_URL || vars.PUBLIC_CHAT_WS_URL_PREVIEW }}
           CF_PAGES_BRANCH: ${{ needs.sync-media.outputs.branch }}
         run: just app::build-pages
 

@@ -162,10 +162,12 @@ Set these in your repo settings under Settings > Secrets and variables > Actions
 
 **Variables:**
 
-| Variable                   | Description                                                           |
-| -------------------------- | --------------------------------------------------------------------- |
-| `R2_PUBLIC_URL`            | R2 public URL (e.g., `https://pub-xxxx.r2.dev`)                       |
-| `CLOUDFLARE_PAGES_PROJECT` | Cloudflare Pages project name (found in the Pages dashboard overview) |
+| Variable                     | Description                                                                            |
+| ---------------------------- | -------------------------------------------------------------------------------------- |
+| `PUBLIC_R2_BASE_URL`         | R2 public URL (e.g., `https://pub-xxxx.r2.dev`)                                        |
+| `CLOUDFLARE_PAGES_PROJECT`   | Cloudflare Pages project name (found in the Pages dashboard overview)                  |
+| `PUBLIC_CHAT_WS_URL`         | Production chat WebSocket URL (e.g., `wss://thalida-chat-api.xxx.workers.dev/ws`)      |
+| `PUBLIC_CHAT_WS_URL_PREVIEW` | Preview chat WebSocket URL (e.g., `wss://thalida-chat-api-preview.xxx.workers.dev/ws`) |
 
 ### One-time setup: Production Worker secrets
 
