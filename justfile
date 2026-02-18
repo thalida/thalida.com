@@ -1,8 +1,8 @@
 set unstable
 
-mod api
-mod app
-mod media
+mod api 'just/api.just'
+mod app 'just/app.just'
+mod media 'just/media.just'
 
 [private]
 default:

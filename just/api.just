@@ -1,7 +1,7 @@
 set unstable
-set working-directory := 'api'
+set working-directory := '../api'
 
-app_dir := justfile_directory() / "app"
+app_dir := justfile_directory() / ".." / "app"
 
 # ─── Serve ────────────────────────────────────────────────────────────
 

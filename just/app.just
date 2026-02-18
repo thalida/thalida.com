@@ -1,5 +1,5 @@
 set unstable
-set working-directory := 'app'
+set working-directory := '../app'
 
 # ─── Serve ────────────────────────────────────────────────────────────
 
