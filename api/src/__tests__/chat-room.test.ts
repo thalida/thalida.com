@@ -1,16 +1,9 @@
 import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
+import type { ServerMessage } from "../types";
+import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../types";
 
 // ── helpers ──────────────────────────────────────────────────────────
-
-type ServerMessage =
-  | { type: "history"; messages: Array<{ id: string; username: string; text: string; timestamp: number }> }
-  | { type: "message"; id: string; username: string; text: string; timestamp: number }
-  | { type: "status"; ownerOnline: boolean; userCount: number }
-  | { type: "error"; code: string; message: string }
-  | { type: "remove"; id: string }
-  | { type: "warning"; message: string }
-  | { type: "blocked"; message: string };
 
 async function openWs(): Promise<WebSocket> {
   const resp = await SELF.fetch("https://fake-host/ws", {
@@ -43,9 +36,9 @@ async function connectAndJoin(username: string, token?: string): Promise<{ ws: W
   const msgs = collect(ws);
   await flush();
 
-  const joinMsg: Record<string, unknown> = { type: "join", username };
-  if (token) joinMsg.token = token;
-  send(ws, joinMsg);
+  const data: Record<string, unknown> = { username };
+  if (token) data.token = token;
+  send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data });
   await flush();
   return { ws, msgs };
 }
@@ -61,22 +54,22 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      const status = msgs.find((m) => m.type === "status");
+      const status = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
       expect(status).toBeDefined();
-      expect(status).toMatchObject({ type: "status", userCount: expect.any(Number) });
+      expect(status).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, userCount: expect.any(Number) });
       ws.close();
     });
 
     it("join with valid username returns history + status", async () => {
       const { ws, msgs } = await connectAndJoin("red-fox");
 
-      const history = msgs.find((m) => m.type === "history");
+      const history = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
-      if (history && history.type === "history") {
+      if (history && history.type === SERVER_MESSAGE_TYPE.HISTORY) {
         expect(Array.isArray(history.messages)).toBe(true);
       }
 
-      const status = msgs.find((m) => m.type === "status");
+      const status = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
       expect(status).toBeDefined();
 
       ws.close();
@@ -89,13 +82,13 @@ describe("ChatRoom Durable Object", () => {
       msgs1.length = 0;
       msgs2.length = 0;
 
-      send(ws1, { type: "message", text: "hello from alpha" });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "hello from alpha" } });
       await flush();
 
-      const msg1 = msgs1.find((m) => m.type === "message");
-      const msg2 = msgs2.find((m) => m.type === "message");
-      expect(msg1).toMatchObject({ type: "message", username: "alpha", text: "hello from alpha" });
-      expect(msg2).toMatchObject({ type: "message", username: "alpha", text: "hello from alpha" });
+      const msg1 = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msg2 = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg1).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "alpha", text: "hello from alpha" });
+      expect(msg2).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "alpha", text: "hello from alpha" });
 
       ws1.close();
       ws2.close();
@@ -105,11 +98,11 @@ describe("ChatRoom Durable Object", () => {
       const { ws: ws1, msgs: msgs1 } = await connectAndJoin("user-one");
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin("user-two");
 
-      const status1 = [...msgs1].reverse().find((m) => m.type === "status");
-      const status2 = [...msgs2].reverse().find((m) => m.type === "status");
+      const status1 = [...msgs1].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
+      const status2 = [...msgs2].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
 
-      expect(status1).toMatchObject({ type: "status", userCount: 2 });
-      expect(status2).toMatchObject({ type: "status", userCount: 2 });
+      expect(status1).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, userCount: 2 });
+      expect(status2).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, userCount: 2 });
 
       ws1.close();
       ws2.close();
@@ -118,8 +111,8 @@ describe("ChatRoom Durable Object", () => {
     it("owner joins with valid ADMIN_SECRET token", async () => {
       const { ws, msgs } = await connectAndJoin("thalida", "test-admin-secret");
 
-      const status = [...msgs].reverse().find((m) => m.type === "status");
-      expect(status).toMatchObject({ type: "status", ownerOnline: true });
+      const status = [...msgs].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
+      expect(status).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline: true });
 
       ws.close();
     });
@@ -128,15 +121,15 @@ describe("ChatRoom Durable Object", () => {
       const { ws } = await connectAndJoin("spammer");
 
       for (let i = 0; i < 55; i++) {
-        send(ws, { type: "message", text: `msg-${i}` });
+        send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: `msg-${i}` } });
       }
       await flush();
 
       // Connect a new user and check history
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin("reader");
-      const history = msgs2.find((m) => m.type === "history");
+      const history = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
-      if (history && history.type === "history") {
+      if (history && history.type === SERVER_MESSAGE_TYPE.HISTORY) {
         expect(history.messages.length).toBeLessThanOrEqual(50);
         expect(history.messages[0].text).not.toBe("msg-0");
       }
@@ -153,8 +146,8 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
       await flush();
 
-      const status = msgs1.find((m) => m.type === "status");
-      expect(status).toMatchObject({ type: "status", userCount: 1 });
+      const status = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
+      expect(status).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, userCount: 1 });
 
       ws1.close();
     });
@@ -171,12 +164,12 @@ describe("ChatRoom Durable Object", () => {
       msgs2.length = 0;
 
       const xssPayload = '<script>alert("xss")</script>';
-      send(ws1, { type: "message", text: xssPayload });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: xssPayload } });
       await flush();
 
-      const received = msgs2.find((m) => m.type === "message");
+      const received = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
       expect(received).toBeDefined();
-      if (received?.type === "message") {
+      if (received?.type === SERVER_MESSAGE_TYPE.MESSAGE) {
         expect(received.text).toBe(xssPayload);
       }
 
@@ -189,11 +182,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: '<img onerror=alert(1) src="x">' });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: '<img onerror=alert(1) src="x">' } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "invalid_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
 
       ws.close();
     });
@@ -203,7 +196,7 @@ describe("ChatRoom Durable Object", () => {
       const _msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "imposter", token: "wrong-secret" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "imposter", token: "wrong-secret" } });
       await flush();
 
       // Should not be able to use reserved name as non-owner
@@ -211,11 +204,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs2 = collect(ws2);
       await flush();
 
-      send(ws2, { type: "join", username: "thalida", token: "wrong-secret" });
+      send(ws2, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida", token: "wrong-secret" } });
       await flush();
 
-      const error = msgs2.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "reserved_username" });
+      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
 
       ws.close();
       ws2.close();
@@ -226,11 +219,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "thalida", token: "" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida", token: "" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "reserved_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
 
       ws.close();
     });
@@ -243,12 +236,12 @@ describe("ChatRoom Durable Object", () => {
       msgs2.length = 0;
 
       const longText = "a".repeat(600);
-      send(ws1, { type: "message", text: longText });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: longText } });
       await flush();
 
-      const received = msgs2.find((m) => m.type === "message");
+      const received = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
       expect(received).toBeDefined();
-      if (received?.type === "message") {
+      if (received?.type === SERVER_MESSAGE_TYPE.MESSAGE) {
         expect(received.text.length).toBeLessThanOrEqual(500);
       }
 
@@ -268,11 +261,11 @@ describe("ChatRoom Durable Object", () => {
       // The actual blocking mechanism is covered by the moderation logic.
 
       senderMsgs.length = 0;
-      send(sender, { type: "message", text: "normal message" });
+      send(sender, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "normal message" } });
       await flush();
 
-      const msg = senderMsgs.find((m) => m.type === "message");
-      expect(msg).toMatchObject({ type: "message", text: "normal message" });
+      const msg = senderMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, text: "normal message" });
 
       sender.close();
       other.close();
@@ -287,11 +280,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "thalida" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "reserved_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
 
       ws.close();
     });
@@ -301,11 +294,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "tia-lover" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "tia-lover" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "reserved_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
 
       ws.close();
     });
@@ -315,11 +308,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "x" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "x" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "invalid_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
 
       ws.close();
     });
@@ -329,11 +322,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "has spaces" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "has spaces" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "invalid_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
 
       ws.close();
     });
@@ -343,11 +336,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: "join", username: "user@#$!" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "user@#$!" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "invalid_username" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
 
       ws.close();
     });
@@ -359,11 +352,11 @@ describe("ChatRoom Durable Object", () => {
       const msgs2 = collect(ws2);
       await flush();
 
-      send(ws2, { type: "join", username: "unique-name" });
+      send(ws2, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "unique-name" } });
       await flush();
 
-      const error = msgs2.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "taken_username" });
+      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.TAKEN_USERNAME });
 
       ws1.close();
       ws2.close();
@@ -376,11 +369,11 @@ describe("ChatRoom Durable Object", () => {
       msgs1.length = 0;
       msgs2.length = 0;
 
-      send(ws1, { type: "message", text: "" });
-      send(ws1, { type: "message", text: "   " });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "" } });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "   " } });
       await flush();
 
-      const messages = msgs2.filter((m) => m.type === "message");
+      const messages = msgs2.filter((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
       expect(messages).toHaveLength(0);
 
       ws1.close();
@@ -395,10 +388,10 @@ describe("ChatRoom Durable Object", () => {
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin("observer");
       msgs2.length = 0;
 
-      send(ws1, { type: "message", text: "ghost message" });
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "ghost message" } });
       await flush();
 
-      const messages = msgs2.filter((m) => m.type === "message");
+      const messages = msgs2.filter((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
       expect(messages).toHaveLength(0);
 
       ws1.close();
@@ -412,15 +405,15 @@ describe("ChatRoom Durable Object", () => {
       ws.send("this is not json {{{");
       await flush();
 
-      const error = msgs.find((m) => m.type === "error");
-      expect(error).toMatchObject({ type: "error", code: "invalid_message" });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_MESSAGE });
 
       // The connection should still be alive and usable
-      send(ws, { type: "message", text: "still here" });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "still here" } });
       await flush();
 
-      const msg = msgs.find((m) => m.type === "message");
-      expect(msg).toMatchObject({ type: "message", text: "still here" });
+      const msg = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, text: "still here" });
 
       ws.close();
     });

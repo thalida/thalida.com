@@ -1,0 +1,66 @@
+import type { Env, AuthRequest, ApiResponse, ApiErrorResponse, ApiConfigResponse } from "./types";
+import { RESERVED_NAMES } from "./config";
+
+function _corsHeaders(env: Env, request: Request): Record<string, string> {
+  const origin = request.headers.get("Origin") ?? "";
+  const allowed = origin === env.ALLOWED_ORIGIN || /^http:\/\/localhost(:\d+)?$/.test(origin);
+
+  return {
+    "Access-Control-Allow-Origin": allowed ? origin : "",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+}
+
+function _jsonResponse(
+  body: ApiResponse | ApiErrorResponse,
+  status: number,
+  headers: Record<string, string>,
+): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...headers, "Content-Type": "application/json" },
+  });
+}
+
+export function handleCors(env: Env, request: Request): Response {
+  return new Response(null, {
+    status: 204,
+    headers: _corsHeaders(env, request),
+  });
+}
+
+export async function handleWebSocket(env: Env, request: Request): Promise<Response> {
+  if (request.headers.get("Upgrade") !== "websocket") {
+    return new Response("Expected WebSocket upgrade", { status: 426 });
+  }
+
+  const roomId = env.CHAT_ROOM.idFromName("global");
+  const room = env.CHAT_ROOM.get(roomId);
+  return room.fetch(request);
+}
+
+export async function handleAuth(env: Env, request: Request): Promise<Response> {
+  const headers = _corsHeaders(env, request);
+
+  try {
+    const body = (await request.json()) as AuthRequest;
+
+    if (body.token === env.ADMIN_SECRET) {
+      return _jsonResponse({ ok: true }, 200, headers);
+    }
+
+    return _jsonResponse({ ok: false }, 401, headers);
+  } catch {
+    return _jsonResponse({ ok: false, error: "Invalid request" }, 400, headers);
+  }
+}
+
+export function handleConfig(env: Env, request: Request): Response {
+  const body: ApiConfigResponse = { ok: true, reservedNames: RESERVED_NAMES };
+  return _jsonResponse(body, 200, _corsHeaders(env, request));
+}
+
+export function handleHealthCheck(env: Env, request: Request): Response {
+  return _jsonResponse({ ok: true }, 200, _corsHeaders(env, request));
+}

@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { generateRandomUsername, validateUsername, COLORS, ANIMALS } from "../chat-utils";
+import { describe, it, expect, beforeAll } from "vitest";
+import { generateRandomUsername, validateUsername, setReservedNames, COLORS, ANIMALS } from "../chat-utils";
 
 describe("generateRandomUsername", () => {
   it("returns a string in color-animal format", () => {
@@ -27,6 +27,10 @@ describe("generateRandomUsername", () => {
 });
 
 describe("validateUsername", () => {
+  beforeAll(() => {
+    setReservedNames(["thalida", "tia"]);
+  });
+
   describe("accepts valid usernames", () => {
     it.each(["red-fox", "user.1", "ab", "test_user", "a-b.c_d", "hello123", "xx"])("accepts '%s'", (name) => {
       expect(validateUsername(name)).toEqual({ valid: true });

@@ -8,7 +8,7 @@ describe("Worker routing", () => {
     it("GET / returns 200 health check", async () => {
       const resp = await SELF.fetch("https://fake-host/");
       expect(resp.status).toBe(200);
-      expect(await resp.text()).toBe("ok");
+      expect(await resp.json()).toEqual({ ok: true });
     });
 
     // WebSocket upgrade (GET /ws -> 101) is tested extensively in

@@ -1,4 +1,19 @@
-import { generateRandomUsername, validateUsername } from "./chat-utils";
+import { generateRandomUsername, validateUsername, setReservedNames } from "./chat-utils";
+
+const CLIENT_MESSAGE_TYPE = {
+  JOIN: "join",
+  MESSAGE: "message",
+} as const;
+
+const SERVER_MESSAGE_TYPE = {
+  ERROR: "error",
+  WARNING: "warning",
+  BLOCKED: "blocked",
+  STATUS: "status",
+  HISTORY: "history",
+  REMOVE: "remove",
+  MESSAGE: "message",
+} as const;
 
 type ServerMessage =
   | { type: "history"; messages: ChatMessage[] }
@@ -9,11 +24,11 @@ type ServerMessage =
       text: string;
       timestamp: number;
     }
-  | { type: "status"; ownerOnline: boolean; userCount: number }
+  | { type: "status"; isOwnerOnline: boolean; userCount: number }
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
-  | { type: "warning"; message: string }
-  | { type: "blocked"; message: string };
+  | { type: "warning"; code: string; message: string }
+  | { type: "blocked"; code: string; message: string };
 
 interface ChatMessage {
   id: string;
@@ -26,6 +41,7 @@ const MAX_AUTO_RETRIES = 5;
 
 const WS_URL =
   document.querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')?.content?.trim() || "ws://localhost:8787/ws";
+const API_BASE = WS_URL.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
 
 let ws: WebSocket | null = null;
 let username: string | null = null;
@@ -77,12 +93,9 @@ function sendJoin(): void {
   if (!ws || ws.readyState !== WebSocket.OPEN || !username) return;
 
   const token = getAdminToken();
-  const joinMsg: Record<string, string> = {
-    type: "join",
-    username,
-  };
-  if (token) joinMsg.token = token;
-  ws.send(JSON.stringify(joinMsg));
+  const data: Record<string, string> = { username };
+  if (token) data.token = token;
+  ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.JOIN, data }));
 }
 
 function connect(): void {
@@ -101,23 +114,23 @@ function connect(): void {
   ws.addEventListener("message", (event) => {
     const data = JSON.parse(event.data) as ServerMessage;
 
-    if (data.type === "history") {
+    if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
       messagesEl.innerHTML = "";
       for (const msg of data.messages) {
         appendMessage(msg);
       }
-    } else if (data.type === "message") {
+    } else if (data.type === SERVER_MESSAGE_TYPE.MESSAGE) {
       appendMessage({
         id: data.id,
         username: data.username,
         text: data.text,
         timestamp: data.timestamp,
       });
-    } else if (data.type === "status") {
-      ownerStatusEl.textContent = data.ownerOnline ? "thalida: online" : "thalida: offline";
-      ownerStatusEl.dataset.online = String(data.ownerOnline);
+    } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
+      ownerStatusEl.textContent = data.isOwnerOnline ? "thalida: online" : "thalida: offline";
+      ownerStatusEl.dataset.online = String(data.isOwnerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
-    } else if (data.type === "error") {
+    } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
       if (pendingRename) {
         pendingRename = false;
         usernameInput.setCustomValidity(data.message);
@@ -136,12 +149,12 @@ function connect(): void {
 
       appendNotice("Could not auto-join. Please change your username and try saving.");
       usernameInput.focus();
-    } else if (data.type === "remove") {
+    } else if (data.type === SERVER_MESSAGE_TYPE.REMOVE) {
       const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
       if (el) el.remove();
-    } else if (data.type === "warning") {
+    } else if (data.type === SERVER_MESSAGE_TYPE.WARNING) {
       appendNotice(data.message);
-    } else if (data.type === "blocked") {
+    } else if (data.type === SERVER_MESSAGE_TYPE.BLOCKED) {
       appendNotice(data.message);
       inputEl.disabled = true;
       sendBtn.disabled = true;
@@ -171,7 +184,7 @@ function sendMessage(): void {
   const text = inputEl.value.trim();
   if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-  ws.send(JSON.stringify({ type: "message", text }));
+  ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text } }));
   inputEl.value = "";
 }
 
@@ -214,6 +227,20 @@ inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
 
-username = generateRandomUsername();
-usernameInput.value = username;
-connect();
+async function fetchConfig(): Promise<void> {
+  try {
+    const resp = await fetch(`${API_BASE}/config`);
+    const data = (await resp.json()) as { ok: boolean; reservedNames?: string[] };
+    if (data.ok && Array.isArray(data.reservedNames)) {
+      setReservedNames(data.reservedNames);
+    }
+  } catch {
+    console.warn("[chat] failed to fetch config, reserved name validation will be skipped client-side");
+  }
+}
+
+fetchConfig().then(() => {
+  username = generateRandomUsername();
+  usernameInput.value = username;
+  connect();
+});

@@ -69,7 +69,15 @@ export const ANIMALS = [
   "wren",
 ];
 
-export const RESERVED_NAMES = ["thalida", "tia"];
+let reservedNames: string[] = [];
+
+export function setReservedNames(names: string[]): void {
+  reservedNames = names;
+}
+
+export function getReservedNames(): string[] {
+  return reservedNames;
+}
 
 export function generateRandomUsername(): string {
   const color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -93,7 +101,7 @@ export function validateUsername(name: string): UsernameValidation {
     return { valid: false, error: "Only lowercase letters, numbers, hyphens, underscores, and dots." };
   }
 
-  if (RESERVED_NAMES.some((r) => trimmed.includes(r))) {
+  if (reservedNames.some((r) => trimmed.includes(r))) {
     return { valid: false, error: "That name contains a reserved word." };
   }
 

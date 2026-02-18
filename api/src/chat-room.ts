@@ -1,38 +1,15 @@
-interface ChatMessage {
-  id: string;
-  username: string;
-  text: string;
-  timestamp: number;
-}
-
-interface ConnectionInfo {
-  username: string;
-  isOwner: boolean;
-  warnings: number;
-  blocked: boolean;
-}
-
-type ClientMessage = { type: "join"; username: string; token?: string } | { type: "message"; text: string };
-
-type ServerMessage =
-  | { type: "history"; messages: ChatMessage[] }
-  | {
-      type: "message";
-      id: string;
-      username: string;
-      text: string;
-      timestamp: number;
-    }
-  | { type: "status"; ownerOnline: boolean; userCount: number }
-  | { type: "error"; code: string; message: string }
-  | { type: "remove"; id: string }
-  | { type: "warning"; message: string }
-  | { type: "blocked"; message: string };
-
 import { v7 as uuidv7 } from "uuid";
-
-const MAX_MESSAGES = 50;
-const MAX_WARNINGS = 3;
+import type {
+  ChatMessage,
+  ClientChatData,
+  ClientJoinData,
+  ClientMessage,
+  ConnectionInfo,
+  ServerErrorCode,
+  ServerMessage,
+} from "./types";
+import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
+import { MAX_MESSAGES, MAX_WARNINGS, RESERVED_NAMES } from "./config";
 
 export class ChatRoom implements DurableObject {
   private messages: ChatMessage[] = [];
@@ -44,6 +21,8 @@ export class ChatRoom implements DurableObject {
     private env: Record<string, unknown>,
   ) {}
 
+  // ── Public API ───────────────────────────────────────────────────────
+
   async fetch(request: Request): Promise<Response> {
     if (request.headers.get("Upgrade") !== "websocket") {
       return new Response("Expected WebSocket", { status: 426 });
@@ -54,177 +33,162 @@ export class ChatRoom implements DurableObject {
 
     server.accept();
     this.spectators.add(server);
-    this.sendCurrentStatus(server);
+    this.sendStatus(server);
 
     server.addEventListener("message", (event) => {
       this.handleMessage(server, event.data);
     });
 
     server.addEventListener("close", () => {
-      this.spectators.delete(server);
-      this.connections.delete(server);
-      this.broadcastStatus();
+      this.removeConnection(server);
     });
 
     server.addEventListener("error", () => {
-      this.spectators.delete(server);
-      this.connections.delete(server);
-      this.broadcastStatus();
+      this.removeConnection(server);
     });
 
     return new Response(null, { status: 101, webSocket: client });
   }
 
+  // ── Message Handlers ─────────────────────────────────────────────────
+
   private handleMessage(ws: WebSocket, raw: string | ArrayBuffer): void {
-    let data: ClientMessage;
+    let msg: ClientMessage;
     try {
-      data = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw)) as ClientMessage;
+      msg = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw)) as ClientMessage;
     } catch {
-      this.send(ws, { type: "error", code: "invalid_message", message: "Invalid JSON." });
+      this.sendError(ws, SERVER_ERROR_CODE.INVALID_MESSAGE, "Invalid JSON.");
       return;
     }
 
-    if (data.type === "join") {
-      const name = String(data.username ?? "")
-        .trim()
-        .toLowerCase()
-        .slice(0, 20);
-      if (name.length < 2 || !/^[a-z0-9_\-.]+$/.test(name)) {
-        this.send(ws, {
-          type: "error",
-          code: "invalid_username",
-          message: "Username must be 2-20 characters: lowercase letters, numbers, hyphens, underscores, or dots.",
-        });
-        return;
-      }
-
-      const isOwner =
-        typeof data.token === "string" && data.token.length > 0 && data.token === (this.env.ADMIN_SECRET as string);
-
-      const reserved = ["thalida", "tia"];
-      if (reserved.some((r) => name.includes(r)) && !isOwner) {
-        this.send(ws, {
-          type: "error",
-          code: "reserved_username",
-          message: "That name contains a reserved word.",
-        });
-        return;
-      }
-
-      for (const [existingWs, info] of this.connections) {
-        if (info.username === name && existingWs !== ws) {
-          this.send(ws, {
-            type: "error",
-            code: "taken_username",
-            message: "That name is already taken.",
-          });
-          return;
-        }
-      }
-
-      this.spectators.delete(ws);
-      this.connections.set(ws, {
-        username: name,
-        isOwner,
-        warnings: 0,
-        blocked: false,
-      });
-
-      this.send(ws, { type: "history", messages: this.messages });
-      this.broadcastStatus();
-      return;
-    }
-
-    if (data.type === "message") {
-      const info = this.connections.get(ws);
-      if (!info) return;
-
-      if (info.blocked) {
-        this.send(ws, {
-          type: "blocked",
-          message: "You have been blocked from sending messages due to repeated violations.",
-        });
-        return;
-      }
-
-      const text = String(data.text ?? "")
-        .trim()
-        .slice(0, 500);
-      if (!text) return;
-
-      const message: ChatMessage = {
-        id: uuidv7(),
-        username: info.username,
-        text,
-        timestamp: Date.now(),
-      };
-
-      this.messages.push(message);
-      if (this.messages.length > MAX_MESSAGES) {
-        this.messages.shift();
-      }
-
-      this.broadcast({
-        type: "message",
-        id: message.id,
-        username: message.username,
-        text: message.text,
-        timestamp: message.timestamp,
-      });
-
-      this.moderate(message, ws, info).catch((err) => {
-        console.error("[moderation] unexpected error:", err);
-      });
+    switch (msg.type) {
+      case CLIENT_MESSAGE_TYPE.JOIN:
+        this.handleJoin(ws, msg.data);
+        break;
+      case CLIENT_MESSAGE_TYPE.MESSAGE:
+        this.handleChatMessage(ws, msg.data);
+        break;
     }
   }
 
-  private async moderate(message: ChatMessage, senderWs: WebSocket, senderInfo: ConnectionInfo): Promise<void> {
+  private handleJoin(ws: WebSocket, { username, token }: ClientJoinData): void {
+    const name = String(username ?? "")
+      .trim()
+      .toLowerCase();
+    if (!/^[a-z0-9_\-.]{2,20}$/.test(name)) {
+      this.sendError(
+        ws,
+        SERVER_ERROR_CODE.INVALID_USERNAME,
+        "Username must be 2-20 characters: lowercase letters, numbers, hyphens, underscores, or dots.",
+      );
+      return;
+    }
+
+    const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
+
+    if (RESERVED_NAMES.some((r) => name.includes(r)) && !isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
+      return;
+    }
+
+    for (const [existingWs, info] of this.connections) {
+      if (info.username === name && existingWs !== ws) {
+        this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
+        return;
+      }
+    }
+
+    this.spectators.delete(ws);
+    this.connections.set(ws, {
+      username: name,
+      isOwner,
+      warnings: 0,
+      isBlocked: false,
+    });
+
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.HISTORY, messages: this.messages });
+    this.broadcastStatus();
+  }
+
+  private handleChatMessage(ws: WebSocket, { text: rawText }: ClientChatData): void {
+    const info = this.connections.get(ws);
+    if (!info) return;
+
+    if (info.isBlocked) {
+      this.sendBlocked(
+        ws,
+        SERVER_ERROR_CODE.MODERATION_BLOCKED,
+        "You have been blocked from sending messages due to repeated violations.",
+      );
+      return;
+    }
+
+    const text = String(rawText ?? "")
+      .trim()
+      .slice(0, 500);
+    if (!text) return;
+
+    const message: ChatMessage = {
+      type: SERVER_MESSAGE_TYPE.MESSAGE,
+      id: uuidv7(),
+      username: info.username,
+      text,
+      timestamp: Date.now(),
+    };
+
+    this.messages.push(message);
+    if (this.messages.length > MAX_MESSAGES) {
+      this.messages.shift();
+    }
+
+    this.broadcast(message);
+
+    this.moderate(message, ws).catch((err) => {
+      console.error("[moderation] unexpected error:", err);
+    });
+  }
+
+  // ── Moderation ───────────────────────────────────────────────────────
+
+  private async moderate(message: ChatMessage, senderWs: WebSocket): Promise<void> {
     const apiKey = this.env.OPENAI_API_KEY as string | undefined;
     if (!apiKey) {
       console.warn("[moderation] skipped: OPENAI_API_KEY not set");
       return;
     }
 
-    console.log(`[moderation] checking message ${message.id}: "${message.text}"`);
-
     const result = await this.callModerationAPI(apiKey, message.text);
     if (!result) return;
 
     const flagged = result.flagged ?? false;
-    const categories = result.categories;
-    console.log(
-      `[moderation] result for ${message.id}: flagged=${flagged}`,
-      categories
-        ? `categories=${JSON.stringify(
-            Object.entries(categories)
-              .filter(([, v]) => v)
-              .map(([k]) => k),
-          )}`
-        : "",
-    );
-
     if (!flagged) return;
 
-    console.log(`[moderation] removing message ${message.id} from ${senderInfo.username}`);
-
     this.messages = this.messages.filter((m) => m.id !== message.id);
-    this.broadcast({ type: "remove", id: message.id });
+    this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id: message.id });
 
-    senderInfo.warnings++;
-    console.log(`[moderation] ${senderInfo.username} now has ${senderInfo.warnings}/${MAX_WARNINGS} warnings`);
+    this.addWarning(senderWs);
+  }
 
-    if (senderInfo.warnings >= MAX_WARNINGS) {
-      senderInfo.blocked = true;
-      this.send(senderWs, {
-        type: "blocked",
-        message: "You have been blocked from sending messages due to repeated violations.",
-      });
+  private addWarning(ws: WebSocket): void {
+    const info = this.connections.get(ws);
+    if (!info) return;
+
+    info.warnings++;
+
+    if (info.warnings >= MAX_WARNINGS) {
+      info.isBlocked = true;
+      this.sendBlocked(
+        ws,
+        SERVER_ERROR_CODE.MODERATION_BLOCKED,
+        "You have been blocked from sending messages due to repeated violations.",
+      );
     } else {
-      const remaining = MAX_WARNINGS - senderInfo.warnings;
-      this.send(senderWs, {
-        type: "warning",
-        message: `Your message was removed for violating community guidelines. ${remaining} warning${remaining !== 1 ? "s" : ""} remaining before you are blocked.`,
-      });
+      const remaining = MAX_WARNINGS - info.warnings;
+      this.sendWarning(
+        ws,
+        SERVER_ERROR_CODE.MODERATION_WARNING,
+        `Your message was removed for violating community guidelines. ${remaining} warning${remaining !== 1 ? "s" : ""} remaining before you are blocked.`,
+      );
     }
   }
 
@@ -273,6 +237,16 @@ export class ChatRoom implements DurableObject {
     return null;
   }
 
+  // ── Connection Helpers ───────────────────────────────────────────────
+
+  private removeConnection(ws: WebSocket): void {
+    this.spectators.delete(ws);
+    this.connections.delete(ws);
+    this.broadcastStatus();
+  }
+
+  // ── Send Helpers (single socket) ─────────────────────────────────────
+
   private send(ws: WebSocket, message: ServerMessage): void {
     try {
       ws.send(JSON.stringify(message));
@@ -282,34 +256,47 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private broadcast(message: ServerMessage): void {
+  private sendError(ws: WebSocket, code: ServerErrorCode, message: string): void {
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.ERROR, code, message });
+  }
+
+  private sendWarning(ws: WebSocket, code: ServerErrorCode, message: string): void {
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.WARNING, code, message });
+  }
+
+  private sendBlocked(ws: WebSocket, code: ServerErrorCode, message: string): void {
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.BLOCKED, code, message });
+  }
+
+  private sendStatus(ws: WebSocket): void {
+    this.send(ws, this.buildStatusMessage());
+  }
+
+  // ── Broadcast Helpers (all sockets) ──────────────────────────────────
+
+  private broadcast(message: ServerMessage, includeSpectators = false): void {
     for (const ws of this.connections.keys()) {
       this.send(ws, message);
     }
-  }
-
-  private getStatusMessage(): ServerMessage {
-    let ownerOnline = false;
-    for (const info of this.connections.values()) {
-      if (info.isOwner) {
-        ownerOnline = true;
-        break;
+    if (includeSpectators) {
+      for (const ws of this.spectators) {
+        this.send(ws, message);
       }
     }
-    return { type: "status", ownerOnline, userCount: this.connections.size };
-  }
-
-  private sendCurrentStatus(ws: WebSocket): void {
-    this.send(ws, this.getStatusMessage());
   }
 
   private broadcastStatus(): void {
-    const msg = this.getStatusMessage();
-    for (const ws of this.connections.keys()) {
-      this.send(ws, msg);
+    this.broadcast(this.buildStatusMessage(), true);
+  }
+
+  private buildStatusMessage(): ServerMessage {
+    let isOwnerOnline = false;
+    for (const info of this.connections.values()) {
+      if (info.isOwner) {
+        isOwnerOnline = true;
+        break;
+      }
     }
-    for (const ws of this.spectators) {
-      this.send(ws, msg);
-    }
+    return { type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline, userCount: this.connections.size };
   }
 }
