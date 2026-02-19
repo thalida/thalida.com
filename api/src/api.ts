@@ -3,7 +3,10 @@ import { ADMIN_USERNAME } from "./config";
 
 function _corsHeaders(env: Env, request: Request): Record<string, string> {
   const origin = request.headers.get("Origin") ?? "";
-  const allowed = origin === env.ALLOWED_ORIGIN || /^http:\/\/localhost(:\d+)?$/.test(origin);
+  const allowed =
+    origin === env.ALLOWED_ORIGIN ||
+    /^https:\/\/[\w-]+\.thalida-com\.pages\.dev$/.test(origin) ||
+    /^http:\/\/localhost(:\d+)?$/.test(origin);
 
   return {
     "Access-Control-Allow-Origin": allowed ? origin : "",

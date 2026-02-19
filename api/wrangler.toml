@@ -22,7 +22,7 @@ ALLOWED_ORIGIN = "https://thalida.com"
 name = "thalida-chat-api-preview"
 
 [env.preview.vars]
-ALLOWED_ORIGIN = "*"
+ALLOWED_ORIGIN = "https://thalida.com"
 
 [env.preview.durable_objects]
 bindings = [
