@@ -40,13 +40,179 @@ import ContentViewer from "../components/ContentViewer.astro";
         flex: 0 0 25%;
         border-right: none;
       }
+
+      /* -- Mobile toolbar & drawers -- */
+
+      #mobile-toolbar {
+        display: none;
+      }
+
+      #drawer-backdrop {
+        display: none;
+      }
+
+      @media (max-width: 639px) {
+        #mobile-toolbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 48px;
+          padding: 0 12px;
+          background: #f0f0f0;
+          border-bottom: 1px solid #ccc;
+          z-index: 200;
+        }
+
+        #mobile-toolbar button {
+          background: none;
+          border: none;
+          padding: 8px;
+          cursor: pointer;
+          color: #333;
+        }
+
+        #mobile-title {
+          font-weight: 600;
+          font-size: 16px;
+          color: #333;
+        }
+
+        #layout {
+          padding-top: 48px;
+        }
+
+        #project-tree,
+        #chat-panel {
+          position: fixed;
+          top: 48px;
+          width: 80vw;
+          height: calc(100vh - 48px);
+          background: #f0f0f0;
+          z-index: 150;
+          transition: transform 0.25s ease;
+          border-right: none;
+        }
+
+        #project-tree {
+          left: 0;
+          flex: none;
+          transform: translateX(-100%);
+          border-right: 1px solid #ccc;
+        }
+
+        #project-tree.open {
+          transform: translateX(0);
+        }
+
+        #chat-panel {
+          right: 0;
+          left: auto;
+          flex: none;
+          transform: translateX(100%);
+          border-left: 1px solid #ccc;
+        }
+
+        #chat-panel.open {
+          transform: translateX(0);
+        }
+
+        #content-viewer {
+          flex: 1 1 100%;
+        }
+
+        #drawer-backdrop {
+          display: none;
+          position: fixed;
+          top: 48px;
+          left: 0;
+          width: 100%;
+          height: calc(100vh - 48px);
+          background: rgba(0, 0, 0, 0.4);
+          z-index: 100;
+        }
+
+        #drawer-backdrop.visible {
+          display: block;
+        }
+      }
     </style>
   </head>
   <body>
+    <div id="mobile-toolbar">
+      <button id="mobile-menu-btn" type="button" aria-label="Open projects">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <span id="mobile-title">thalida</span>
+      <button id="mobile-chat-btn" type="button" aria-label="Open chat">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="drawer-backdrop"></div>
     <div id="layout">
       <ProjectTree />
       <ContentViewer />
       <Chat />
     </div>
+    <script>
+      const menuBtn = document.getElementById("mobile-menu-btn")!;
+      const chatBtn = document.getElementById("mobile-chat-btn")!;
+      const projectTree = document.getElementById("project-tree")!;
+      const chatPanel = document.getElementById("chat-panel")!;
+      const backdrop = document.getElementById("drawer-backdrop")!;
+
+      function closeAll() {
+        projectTree.classList.remove("open");
+        chatPanel.classList.remove("open");
+        backdrop.classList.remove("visible");
+      }
+
+      menuBtn.addEventListener("click", () => {
+        const willOpen = !projectTree.classList.contains("open");
+        closeAll();
+        if (willOpen) {
+          projectTree.classList.add("open");
+          backdrop.classList.add("visible");
+        }
+      });
+
+      chatBtn.addEventListener("click", () => {
+        const willOpen = !chatPanel.classList.contains("open");
+        closeAll();
+        if (willOpen) {
+          chatPanel.classList.add("open");
+          backdrop.classList.add("visible");
+        }
+      });
+
+      backdrop.addEventListener("click", closeAll);
+    </script>
   </body>
 </html>
