@@ -1,0 +1,60 @@
+---
+const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
+const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>login &middot; thalida</title>
+  </head>
+  <body>
+    <h1>Admin Login</h1>
+    <form id="admin-form">
+      <label for="admin-secret">Admin secret</label>
+      <input id="admin-secret" type="password" autocomplete="current-password" required />
+      <button type="submit">Log in</button>
+      <p id="admin-error" hidden></p>
+    </form>
+    <p><a href="/">&larr; back to chat</a></p>
+
+    <script is:inline define:vars={{ apiBase }}>
+      const form = document.getElementById("admin-form");
+      const input = document.getElementById("admin-secret");
+      const errorEl = document.getElementById("admin-error");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const secret = input.value.trim();
+        if (!secret) return;
+
+        errorEl.hidden = true;
+        form.querySelector("button").disabled = true;
+
+        try {
+          const resp = await fetch(`${apiBase}/auth`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: secret }),
+          });
+          const result = await resp.json();
+          if (!result.ok) {
+            errorEl.textContent = "Invalid admin secret.";
+            errorEl.hidden = false;
+            return;
+          }
+        } catch {
+          errorEl.textContent = "Could not reach the API. Is the server running?";
+          errorEl.hidden = false;
+          return;
+        } finally {
+          form.querySelector("button").disabled = false;
+        }
+
+        localStorage.setItem("admin_token", secret);
+        window.location.href = "/";
+      });
+    </script>
+  </body>
+</html>

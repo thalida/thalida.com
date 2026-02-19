@@ -1,0 +1,19 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>logging out&hellip; &middot; thalida</title>
+  </head>
+  <body>
+    <p>Logging out&hellip;</p>
+
+    <script is:inline>
+      localStorage.removeItem("admin_token");
+      window.location.href = "/";
+    </script>
+
+    <noscript>
+      <p>JavaScript is required to log out. <a href="/">Go back</a>.</p>
+    </noscript>
+  </body>
+</html>

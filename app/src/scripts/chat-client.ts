@@ -62,7 +62,7 @@ const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
 const connectionStatusEl = document.getElementById("chat-connection-status") as HTMLSpanElement;
 const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
-const adminBtn = document.getElementById("chat-admin-btn") as HTMLButtonElement;
+const adminLink = document.getElementById("chat-admin-link") as HTMLAnchorElement;
 
 function getAdminToken(): string | null {
   return localStorage.getItem("admin_token");
@@ -119,7 +119,7 @@ function connect(): void {
       usernameInput.value = data.username;
       usernameInput.readOnly = isOwner;
       renameBtn.disabled = isOwner;
-      updateAdminBtn();
+      updateAdminUI();
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
       messagesEl.innerHTML = "";
       for (const msg of data.messages) {
@@ -230,60 +230,17 @@ usernameInput.addEventListener("keydown", (e) => {
 });
 renameBtn.addEventListener("click", changeUsername);
 
-function updateAdminBtn(): void {
-  adminBtn.textContent = isOwner ? "admin logout" : "admin login";
-}
-
-function reconnect(): void {
-  if (ws) {
-    ws.close();
-    ws = null;
-  }
-  if (reconnectTimer) {
-    clearTimeout(reconnectTimer);
-    reconnectTimer = null;
-  }
-  connect();
-}
-
-adminBtn.addEventListener("click", async () => {
+function updateAdminUI(): void {
   if (isOwner) {
-    localStorage.removeItem("admin_token");
-    isOwner = false;
-    username = generateRandomUsername();
-    usernameInput.value = username;
-    usernameInput.readOnly = false;
-    renameBtn.disabled = false;
-    updateAdminBtn();
-    reconnect();
-    return;
+    adminLink.href = "/logout";
+    adminLink.textContent = "admin logout";
+  } else {
+    adminLink.href = "/login";
+    adminLink.textContent = "admin login";
   }
+}
 
-  const secret = prompt("Enter admin secret:");
-  if (!secret) return;
-
-  try {
-    const resp = await fetch(`${API_BASE}/auth`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token: secret }),
-    });
-    const result = (await resp.json()) as { ok: boolean };
-    if (!result.ok) {
-      alert("Invalid admin secret.");
-      return;
-    }
-  } catch {
-    alert("Could not verify admin secret. Please try again.");
-    return;
-  }
-
-  localStorage.setItem("admin_token", secret);
-  username = "thalida";
-  reconnect();
-});
-
-updateAdminBtn();
+updateAdminUI();
 
 sendBtn.addEventListener("click", sendMessage);
 inputEl.addEventListener("keydown", (e) => {
