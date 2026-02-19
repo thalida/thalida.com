@@ -89,6 +89,8 @@ jobs:
         env:
           PUBLIC_R2_BASE_URL: ${{ vars.PUBLIC_R2_BASE_URL }}
           PUBLIC_CHAT_WS_URL: ${{ github.event_name == 'push' && vars.PUBLIC_CHAT_WS_URL || vars.PUBLIC_CHAT_WS_URL_PREVIEW }}
+          PUBLIC_OPENWEATHER_KEY: ${{ secrets.PUBLIC_OPENWEATHER_KEY }}
+          PUBLIC_IPREGISTRY_KEY: ${{ secrets.PUBLIC_IPREGISTRY_KEY }}
           CF_PAGES_BRANCH: ${{ needs.sync-media.outputs.branch }}
         run: just app::build-pages
 
