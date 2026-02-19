@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { generateRandomUsername, validateUsername, setReservedNames, COLORS, ANIMALS } from "../chat-utils";
+import { generateRandomUsername, validateUsername, setAdminUsername, COLORS, ANIMALS } from "../chat-utils";
 
 describe("generateRandomUsername", () => {
   it("returns a string in color-animal format", () => {
@@ -28,7 +28,7 @@ describe("generateRandomUsername", () => {
 
 describe("validateUsername", () => {
   beforeAll(() => {
-    setReservedNames(["thalida", "tia"]);
+    setAdminUsername("testadmin");
   });
 
   describe("accepts valid usernames", () => {
@@ -37,27 +37,21 @@ describe("validateUsername", () => {
     });
   });
 
-  describe("rejects reserved names", () => {
-    it("rejects 'thalida' as username", () => {
-      const result = validateUsername("thalida");
+  describe("rejects admin username", () => {
+    it("rejects exact admin username", () => {
+      const result = validateUsername("testadmin");
       expect(result.valid).toBe(false);
       expect(result.error).toContain("reserved");
     });
 
-    it("rejects 'tia' as username", () => {
-      const result = validateUsername("tia");
+    it("rejects admin username as substring", () => {
+      const result = validateUsername("nottestadmin");
       expect(result.valid).toBe(false);
       expect(result.error).toContain("reserved");
     });
 
-    it("rejects 'tia-lover' (reserved word as substring)", () => {
-      const result = validateUsername("tia-lover");
-      expect(result.valid).toBe(false);
-      expect(result.error).toContain("reserved");
-    });
-
-    it("rejects 'nothalida' (reserved word as substring)", () => {
-      const result = validateUsername("nothalida");
+    it("rejects admin username embedded in name", () => {
+      const result = validateUsername("x-testadmin-x");
       expect(result.valid).toBe(false);
       expect(result.error).toContain("reserved");
     });

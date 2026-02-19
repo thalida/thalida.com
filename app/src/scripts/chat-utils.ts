@@ -69,14 +69,10 @@ export const ANIMALS = [
   "wren",
 ];
 
-let reservedNames: string[] = [];
+let _adminUsername: string | null = null;
 
-export function setReservedNames(names: string[]): void {
-  reservedNames = names;
-}
-
-export function getReservedNames(): string[] {
-  return reservedNames;
+export function setAdminUsername(name: string): void {
+  _adminUsername = name;
 }
 
 export function generateRandomUsername(): string {
@@ -101,7 +97,7 @@ export function validateUsername(name: string): UsernameValidation {
     return { valid: false, error: "Only lowercase letters, numbers, hyphens, underscores, and dots." };
   }
 
-  if (reservedNames.some((r) => trimmed.includes(r))) {
+  if (_adminUsername && trimmed.includes(_adminUsername)) {
     return { valid: false, error: "That name contains a reserved word." };
   }
 

@@ -9,7 +9,7 @@ import type {
   ServerMessage,
 } from "./types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
-import { MAX_MESSAGES, MAX_WARNINGS, RESERVED_NAMES } from "./config";
+import { ADMIN_USERNAME, MAX_MESSAGES, MAX_WARNINGS } from "./config";
 
 const BLOCKED_IPS_KEY = "blockedIps";
 
@@ -107,7 +107,7 @@ export class ChatRoom implements DurableObject {
     const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
 
     const name = isOwner
-      ? "thalida"
+      ? ADMIN_USERNAME
       : String(username ?? "")
           .trim()
           .toLowerCase();
@@ -121,7 +121,7 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    if (RESERVED_NAMES.some((r) => name.includes(r)) && !isOwner) {
+    if (name.includes(ADMIN_USERNAME) && !isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
       return;
     }

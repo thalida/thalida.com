@@ -138,16 +138,6 @@ export interface AuthRequest {
   token?: string;
 }
 
-export interface ApiResponse {
-  ok: boolean;
-}
-
-export interface ApiErrorResponse extends ApiResponse {
-  ok: false;
-  error: string;
-}
-
-export interface ApiConfigResponse extends ApiResponse {
-  ok: true;
-  reservedNames: string[];
+export interface ApiConfigResponse {
+  adminUsername: string;
 }
