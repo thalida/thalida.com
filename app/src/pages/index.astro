@@ -9,30 +9,44 @@ import ContentViewer from "../components/ContentViewer.astro";
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>thalida</title>
-    <style>
+    <style is:global>
+      * {
+        box-sizing: border-box;
+      }
       body {
+        margin: 0;
         background: #f0f0f0;
       }
       #layout {
         display: flex;
         height: 100vh;
+        width: 100vw;
       }
-      #layout > * {
-        flex: 1;
+      #project-tree,
+      #content-viewer,
+      #chat-panel {
         overflow-y: auto;
+        overflow-x: hidden;
         padding: 1em;
         border-right: 1px solid #ccc;
       }
-      #layout > *:last-child {
+      #project-tree {
+        flex: 0 0 25%;
+      }
+      #content-viewer {
+        flex: 1 1 50%;
+      }
+      #chat-panel {
+        flex: 0 0 25%;
         border-right: none;
       }
     </style>
   </head>
   <body>
     <div id="layout">
-      <Chat />
       <ProjectTree />
       <ContentViewer />
+      <Chat />
     </div>
   </body>
 </html>
