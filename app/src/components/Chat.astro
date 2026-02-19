@@ -5,26 +5,26 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 <aside id="chat-panel">
   <h2>Chat</h2>
   <div>
-    <span id="chat-connection-status">offline</span>
-    &middot;
-    <span id="chat-owner-status">thalida: offline</span>
+    <span id="chat-owner-status">offline</span>
     &middot;
     <span id="chat-user-count">0 users connected</span>
   </div>
   <hr />
 
   <div id="chat-username-bar">
-    <label for="chat-username">chatting as:</label>
-    <input
-      id="chat-username"
-      type="text"
-      autocomplete="off"
-      minlength="2"
-      maxlength="20"
-      pattern="[a-z0-9_\-.]+"
-      title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
-    />
-    <button id="chat-rename-btn" type="button">save</button>
+    <span id="chat-rename-controls">
+      <label for="chat-username">chatting as:</label>
+      <input
+        id="chat-username"
+        type="text"
+        autocomplete="off"
+        minlength="2"
+        maxlength="20"
+        pattern="[a-z0-9_\-.]+"
+        title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
+      />
+      <button id="chat-rename-btn" type="button">save</button>
+    </span>
     <a id="chat-admin-link" href="/login">admin login</a>
   </div>
 

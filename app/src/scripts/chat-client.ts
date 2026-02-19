@@ -1,4 +1,4 @@
-import { generateRandomUsername, validateUsername, setReservedNames } from "./chat-utils";
+import { generateRandomUsername, validateUsername, setAdminUsername } from "./chat-utils";
 
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
@@ -49,6 +49,7 @@ const API_BASE = WS_URL.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
 
 let ws: WebSocket | null = null;
 let username: string | null = null;
+let adminUsername: string | null = null;
 let isOwner = false;
 let autoRetries = 0;
 let pendingRename = false;
@@ -56,10 +57,10 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
 const renameBtn = document.getElementById("chat-rename-btn") as HTMLButtonElement;
+const renameControls = document.getElementById("chat-rename-controls") as HTMLSpanElement;
 const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
 const inputEl = document.getElementById("chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
-const connectionStatusEl = document.getElementById("chat-connection-status") as HTMLSpanElement;
 const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
 const adminLink = document.getElementById("chat-admin-link") as HTMLAnchorElement;
@@ -102,11 +103,9 @@ function connect(): void {
     return;
   }
 
-  connectionStatusEl.textContent = "connecting...";
   ws = new WebSocket(WS_URL);
 
   ws.addEventListener("open", () => {
-    connectionStatusEl.textContent = "online";
     sendJoin();
   });
 
@@ -117,8 +116,7 @@ function connect(): void {
       isOwner = data.isOwner;
       username = data.username;
       usernameInput.value = data.username;
-      usernameInput.readOnly = isOwner;
-      renameBtn.disabled = isOwner;
+      renameControls.hidden = isOwner;
       updateAdminUI();
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
       messagesEl.innerHTML = "";
@@ -133,7 +131,8 @@ function connect(): void {
         timestamp: data.timestamp,
       });
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
-      ownerStatusEl.textContent = data.isOwnerOnline ? "thalida: online" : "thalida: offline";
+      const ownerLabel = adminUsername ?? "owner";
+      ownerStatusEl.textContent = data.isOwnerOnline ? `${ownerLabel}: online` : `${ownerLabel}: offline`;
       ownerStatusEl.dataset.online = String(data.isOwnerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
@@ -171,7 +170,6 @@ function connect(): void {
   });
 
   ws.addEventListener("close", () => {
-    connectionStatusEl.textContent = "reconnecting...";
     scheduleReconnect();
   });
 
@@ -233,7 +231,7 @@ renameBtn.addEventListener("click", changeUsername);
 function updateAdminUI(): void {
   if (isOwner) {
     adminLink.href = "/logout";
-    adminLink.textContent = "admin logout";
+    adminLink.textContent = "logout";
   } else {
     adminLink.href = "/login";
     adminLink.textContent = "admin login";
@@ -250,9 +248,12 @@ inputEl.addEventListener("keydown", (e) => {
 async function fetchConfig(): Promise<void> {
   try {
     const resp = await fetch(`${API_BASE}/config`);
-    const data = (await resp.json()) as { ok: boolean; reservedNames?: string[] };
-    if (data.ok && Array.isArray(data.reservedNames)) {
-      setReservedNames(data.reservedNames);
+    if (!resp.ok) return;
+    const data = (await resp.json()) as { adminUsername?: string };
+    if (data.adminUsername) {
+      adminUsername = data.adminUsername;
+      setAdminUsername(adminUsername);
+      ownerStatusEl.textContent = `${adminUsername}: offline`;
     }
   } catch {
     console.warn("[chat] failed to fetch config, reserved name validation will be skipped client-side");

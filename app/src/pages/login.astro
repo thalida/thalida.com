@@ -38,8 +38,7 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token: secret }),
           });
-          const result = await resp.json();
-          if (!result.ok) {
+          if (!resp.ok) {
             errorEl.textContent = "Invalid admin secret.";
             errorEl.hidden = false;
             return;
