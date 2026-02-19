@@ -32,9 +32,11 @@ import ContentViewer from "../components/ContentViewer.astro";
       }
       #project-tree {
         flex: 0 0 25%;
+        max-width: 320px;
       }
       #content-viewer {
-        flex: 1 1 50%;
+        flex: 1 1 0%;
+        min-width: 0;
       }
       #content-body img,
       #content-body video {
@@ -43,6 +45,7 @@ import ContentViewer from "../components/ContentViewer.astro";
       }
       #chat-panel {
         flex: 0 0 25%;
+        max-width: 320px;
         border-right: none;
       }
 
