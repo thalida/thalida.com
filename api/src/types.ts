@@ -43,6 +43,7 @@ export const SERVER_MESSAGE_TYPE = {
   WARNING: "warning",
   BLOCKED: "blocked",
   UNBLOCKED: "unblocked",
+  JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
@@ -100,6 +101,14 @@ export type ServerBroadcast =
   | ServerBroadcastHistoryMessage
   | ServerBroadcastRemoveMessage;
 
+// ── Server → Client: Join Acknowledgment ─────────────────────────────
+
+export interface ServerJoinedMessage {
+  type: "joined";
+  isOwner: boolean;
+  username: string;
+}
+
 // ── Server → Client: Admin Responses ─────────────────────────────────
 
 export interface ServerUnblockedMessage {
@@ -109,7 +118,12 @@ export interface ServerUnblockedMessage {
 
 // ── Combined Server Message ─────────────────────────────────────────
 
-export type ServerMessage = ServerErrorResponse | ServerBroadcast | ServerUnblockedMessage | ChatMessage;
+export type ServerMessage =
+  | ServerErrorResponse
+  | ServerBroadcast
+  | ServerJoinedMessage
+  | ServerUnblockedMessage
+  | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────
 

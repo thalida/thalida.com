@@ -2,7 +2,7 @@
 # .dev.vars is gitignored and used by Wrangler for local development.
 
 # Secret used to authenticate as the site owner (thalida).
-# Pick any string. Log in by visiting http://localhost:4321?admin=YOUR_SECRET
+# Pick any string. Log in via the "admin login" button in the chat panel.
 ADMIN_SECRET=
 
 # OpenAI API key for chat content moderation (free Moderation API).

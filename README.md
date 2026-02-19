@@ -55,7 +55,7 @@ Run `just` to see all available commands.
 
 ## Log In as the Owner
 
-Visit `http://localhost:4321?admin=YOUR_ADMIN_SECRET` (the value from `api/.dev.vars`). The token is saved to `localStorage`, so you only need to do this once per browser.
+Click the **admin login** button in the chat panel and enter the `ADMIN_SECRET` value from `api/.dev.vars`. The token is validated against the API, saved to `localStorage`, and the chat reconnects as the owner (username "thalida"). You only need to do this once per browser -- click **admin logout** to clear it.
 
 ## Testing with Someone Else (Tunnels)
 

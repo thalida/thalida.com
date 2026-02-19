@@ -63,8 +63,11 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("join with valid username returns history + status", async () => {
+    it("join with valid username returns joined + history + status", async () => {
       const { ws, msgs } = await connectAndJoin("red-fox");
+
+      const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false, username: "red-fox" });
 
       const history = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
@@ -111,13 +114,47 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
-    it("owner joins with valid ADMIN_SECRET token", async () => {
-      const { ws, msgs } = await connectAndJoin("thalida", { token: "test-admin-secret" });
+    it("owner joins with valid ADMIN_SECRET token and receives joined message", async () => {
+      const { ws, msgs } = await connectAndJoin("anything", { token: "test-admin-secret" });
+
+      const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
 
       const status = [...msgs].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
       expect(status).toMatchObject({ type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline: true });
 
       ws.close();
+    });
+
+    it("owner username is forced to 'thalida' regardless of input", async () => {
+      const { ws, msgs } = await connectAndJoin("some-other-name", { token: "test-admin-secret" });
+
+      const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
+
+      // Messages sent by this owner appear as "thalida"
+      msgs.length = 0;
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "hello" } });
+      await flush();
+
+      const msg = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "thalida" });
+
+      ws.close();
+    });
+
+    it("multiple owner sessions can share the 'thalida' username", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("thalida", { token: "test-admin-secret" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("thalida", { token: "test-admin-secret" });
+
+      const joined1 = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined1).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
+
+      const joined2 = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined2).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
+
+      ws1.close();
+      ws2.close();
     });
 
     it("message buffer caps at 50", async () => {

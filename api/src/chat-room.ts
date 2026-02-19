@@ -104,9 +104,14 @@ export class ChatRoom implements DurableObject {
   }
 
   private handleJoin(ws: WebSocket, { username, token }: ClientJoinData): void {
-    const name = String(username ?? "")
-      .trim()
-      .toLowerCase();
+    const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
+
+    const name = isOwner
+      ? "thalida"
+      : String(username ?? "")
+          .trim()
+          .toLowerCase();
+
     if (!/^[a-z0-9_\-.]{2,20}$/.test(name)) {
       this.sendError(
         ws,
@@ -116,15 +121,13 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
-
     if (RESERVED_NAMES.some((r) => name.includes(r)) && !isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
       return;
     }
 
     for (const [existingWs, info] of this.connections) {
-      if (info.username === name && existingWs !== ws) {
+      if (info.username === name && existingWs !== ws && !(isOwner && info.isOwner)) {
         this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
         return;
       }
@@ -139,6 +142,7 @@ export class ChatRoom implements DurableObject {
       isBlocked: false,
     });
 
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.HISTORY, messages: this.messages });
     this.broadcastStatus();
   }
