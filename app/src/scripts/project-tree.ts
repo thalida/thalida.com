@@ -1,9 +1,11 @@
 const contentBody = document.getElementById("content-body") as HTMLDivElement;
 const welcome = document.getElementById("content-welcome") as HTMLDivElement;
+const closeBtn = document.getElementById("content-close") as HTMLButtonElement;
 const cache = new Map<string, string>();
 
 async function loadContent(key: string) {
   welcome.hidden = true;
+  closeBtn.hidden = false;
 
   if (cache.has(key)) {
     contentBody.innerHTML = cache.get(key) ?? "";
@@ -38,6 +40,7 @@ function setActiveLink(collection: string, id: string) {
 
 function showWelcome() {
   welcome.hidden = false;
+  closeBtn.hidden = true;
   contentBody.innerHTML = "";
   document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
 }
@@ -74,6 +77,11 @@ document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
     history.pushState(null, "", path);
     navigateFromPath();
   });
+});
+
+closeBtn.addEventListener("click", () => {
+  history.pushState(null, "", "/");
+  showWelcome();
 });
 
 window.addEventListener("popstate", () => navigateFromPath());

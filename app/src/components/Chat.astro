@@ -3,7 +3,10 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 ---
 
 <aside id="chat-panel">
-  <h2>Chat</h2>
+  <div id="chat-header">
+    <h2>Chat</h2>
+    <a id="chat-admin-link" href="/login">admin login</a>
+  </div>
   <div>
     <span id="chat-owner-status">offline</span>
     &middot;
@@ -11,25 +14,23 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   </div>
   <hr />
 
-  <div id="chat-username-bar">
-    <span id="chat-rename-controls">
-      <label for="chat-username">chatting as:</label>
-      <input
-        id="chat-username"
-        type="text"
-        autocomplete="off"
-        minlength="2"
-        maxlength="20"
-        pattern="[a-z0-9_\-.]+"
-        title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
-      />
-      <button id="chat-rename-btn" type="button">save</button>
-    </span>
-    <a id="chat-admin-link" href="/login">admin login</a>
-  </div>
-
   <div id="chat-room">
     <div id="chat-messages" style="min-height:200px;max-height:60vh;overflow-y:auto;"></div>
+    <div id="chat-username-bar">
+      <span id="chat-rename-controls">
+        <label for="chat-username">chatting as:</label>
+        <input
+          id="chat-username"
+          type="text"
+          autocomplete="off"
+          minlength="2"
+          maxlength="20"
+          pattern="[a-z0-9_\-.]+"
+          title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
+        />
+        <button id="chat-rename-btn" type="button">save</button>
+      </span>
+    </div>
     <div>
       <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />
       <button id="chat-send" type="button">Send</button>
