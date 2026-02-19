@@ -508,7 +508,7 @@ class LiveWindowElement extends HTMLElement {
     if (!this.weatherTextEl) return;
     const c = this.state.weather.current;
     if (c) {
-      this.weatherTextEl.textContent = `It\u2019s ${Math.round(c.temp)}${this.tempSymbol} and ${c.main}`;
+      this.weatherTextEl.textContent = `It\u2019s ${Math.round(c.temp)}${this.tempSymbol} with ${c.description}`;
       this.weatherTextEl.hidden = this.hasAttribute("hide-weather-text");
     } else {
       this.weatherTextEl.hidden = true;
