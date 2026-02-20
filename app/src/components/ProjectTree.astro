@@ -3,12 +3,21 @@ import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 
+interface Props {
+  activePage?: string;
+  activeCollection?: string;
+  activeId?: string;
+}
+
+const { activePage, activeCollection, activeId } = Astro.props;
+
 type TreeItem = {
   id: string;
   collection: string;
   title: string;
   href?: string;
   description?: string;
+  tags?: string[];
   publishedOn: Date;
   coverImageSrc?: string;
   coverImageAlt?: string;
@@ -38,6 +47,7 @@ for (const name of COLLECTION_NAMES) {
       title: entry.data.title,
       href: entry.data.link,
       description: entry.data.description,
+      tags: entry.data.tags,
       publishedOn: entry.data.publishedOn,
       coverImageSrc,
       coverImageAlt: entry.data.coverImageAlt,
@@ -56,10 +66,12 @@ function formatDate(date: Date): string {
 ---
 
 <nav id="project-tree">
-  <h2>Work</h2>
+  <h2><a href="/" class="tree-heading-link">Work</a></h2>
   <ul class="tree-list">
     <li>
-      <a href="#" data-page="about" class="tree-link tree-link--page">About</a>
+      <a href="/about" class="tree-link tree-link--page" data-active={activePage === "about" ? "true" : undefined}
+        >About</a
+      >
     </li>
   </ul>
   {
@@ -67,24 +79,26 @@ function formatDate(date: Date): string {
       name === "links" ? (
         <ul class="tree-list">
           <li>
-            <a href="#" data-page="links" class="tree-link tree-link--page">
+            <a
+              href="/links"
+              class="tree-link tree-link--page"
+              data-active={activePage === "links" ? "true" : undefined}
+            >
               Links ({tree[name].items.length})
             </a>
           </li>
         </ul>
       ) : (
-        <details open={name === "projects"}>
+        <details open={name === "projects" || activeCollection === name}>
           <summary>
             {tree[name].title} ({tree[name].items.length})
           </summary>
           <div class="tree-cards">
             {tree[name].items.map((item) => (
               <a
-                href="#"
-                data-collection={item.collection}
-                data-id={item.id}
-                data-href={item.href}
+                href={`/${item.collection}/${item.id}`}
                 class="tree-link tree-card"
+                data-active={activeCollection === item.collection && activeId === item.id ? "true" : undefined}
               >
                 {item.coverImageSrc && (
                   <img
@@ -120,6 +134,11 @@ function formatDate(date: Date): string {
     margin: 0 0 0.75em;
     font-size: 1.1em;
     letter-spacing: 0.02em;
+  }
+
+  .tree-heading-link {
+    text-decoration: none;
+    color: inherit;
   }
 
   .tree-list {
@@ -242,5 +261,3 @@ function formatDate(date: Date): string {
     text-overflow: ellipsis;
   }
 </style>
-
-<script src="../scripts/project-tree.ts"></script>

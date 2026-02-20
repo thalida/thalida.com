@@ -120,11 +120,6 @@ function appendMessage(msg: ChatMessage): void {
     const link = document.createElement("a");
     link.href = `/${msg.context.collection}/${msg.context.id}`;
     link.textContent = msg.context.title;
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      history.pushState(null, "", link.href);
-      window.dispatchEvent(new PopStateEvent("popstate"));
-    });
     contextLine.appendChild(label);
     contextLine.appendChild(link);
     div.appendChild(contextLine);
@@ -324,13 +319,20 @@ function updatePlaceholder(): void {
   }
 }
 
-function updateContext(detail: MessageContext | null): void {
-  if (detail) {
-    currentContext = { collection: detail.collection, id: detail.id, title: detail.title };
-    const pageOption = contextSelect.querySelector<HTMLOptionElement>('option[value="page"]');
-    if (pageOption) pageOption.textContent = detail.title;
-    contextSelect.value = "page";
-    contextEl.hidden = false;
+function readPageContext(): void {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="page-context"]');
+  if (meta?.content) {
+    try {
+      const ctx = JSON.parse(meta.content) as MessageContext;
+      currentContext = ctx;
+      const pageOption = contextSelect.querySelector<HTMLOptionElement>('option[value="page"]');
+      if (pageOption) pageOption.textContent = ctx.title;
+      contextSelect.value = "page";
+      contextEl.hidden = false;
+    } catch {
+      currentContext = null;
+      contextEl.hidden = true;
+    }
   } else {
     currentContext = null;
     contextEl.hidden = true;
@@ -340,9 +342,8 @@ function updateContext(detail: MessageContext | null): void {
 
 contextSelect.addEventListener("change", updatePlaceholder);
 
-window.addEventListener("route-changed", ((e: CustomEvent<MessageContext | null>) => {
-  updateContext(e.detail);
-}) as EventListener);
+readPageContext();
+document.addEventListener("astro:after-swap", readPageContext);
 
 async function fetchConfig(): Promise<void> {
   try {

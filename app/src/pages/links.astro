@@ -1,7 +1,7 @@
 ---
-export const partial = true;
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { collectionMeta } from "../content.config";
 
 const entries = await getCollection("links", ({ data }) => !data.draft);
 
@@ -41,39 +41,49 @@ function faviconUrl(siteUrl: string): string {
 }
 ---
 
-<article>
-  <h2>Links</h2>
-  <p><em>Curated resources, tools, and websites.</em></p>
-  <hr />
+<BaseLayout
+  title="links · thalida"
+  activePage="links"
+  pageContext={{
+    collection: "page",
+    id: "links",
+    title: `Links (${entries.length})`,
+  }}
+>
+  <article>
+    <h2>Links</h2>
+    <p><em>{collectionMeta.links.description}</em></p>
+    <hr />
 
-  {
-    [...grouped.entries()].map(([category, items]) => (
-      <details class="link-group" open>
-        <summary>
-          {formatCategory(category)} ({items.length})
-        </summary>
-        <div class="link-grid">
-          {items.map((item) => (
-            <a href={item.id} target="_blank" rel="noopener" class="link-card">
-              <img class="link-card__icon" src={faviconUrl(item.id)} alt="" loading="lazy" width="32" height="32" />
-              <div class="link-card__body">
-                <span class="link-card__title">{item.data.title}</span>
-                <span class="link-card__url">{formatHostname(item.id)}</span>
-                {item.data.tags && item.data.tags.length > 0 && (
-                  <div class="link-card__tags">
-                    {item.data.tags.map((tag: string) => (
-                      <span class="link-card__tag">{tag}</span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </a>
-          ))}
-        </div>
-      </details>
-    ))
-  }
-</article>
+    {
+      [...grouped.entries()].map(([category, items]) => (
+        <details class="link-group" open>
+          <summary>
+            {formatCategory(category)} ({items.length})
+          </summary>
+          <div class="link-grid">
+            {items.map((item) => (
+              <a href={item.id} target="_blank" rel="noopener" class="link-card">
+                <img class="link-card__icon" src={faviconUrl(item.id)} alt="" loading="lazy" width="32" height="32" />
+                <div class="link-card__body">
+                  <span class="link-card__title">{item.data.title}</span>
+                  <span class="link-card__url">{formatHostname(item.id)}</span>
+                  {item.data.tags && item.data.tags.length > 0 && (
+                    <div class="link-card__tags">
+                      {item.data.tags.map((tag: string) => (
+                        <span class="link-card__tag">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </a>
+            ))}
+          </div>
+        </details>
+      ))
+    }
+  </article>
+</BaseLayout>
 
 <style is:inline>
   .link-group {

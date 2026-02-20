@@ -1,0 +1,63 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { COLLECTION_NAMES, type CollectionName } from "../../content.config";
+
+type AnyEntry = CollectionEntry<CollectionName>;
+
+export async function getStaticPaths() {
+  const routable = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
+  const paths: Array<{
+    params: { collection: string; id: string };
+    props: { entry: AnyEntry };
+  }> = [];
+
+  for (const name of COLLECTION_NAMES) {
+    if (!routable.has(name)) continue;
+
+    const entries = await getCollection(name, ({ data }) => !data.draft);
+    for (const entry of entries) {
+      paths.push({
+        params: { collection: name, id: entry.id },
+        props: { entry },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { collection, id } = Astro.params;
+const { entry } = Astro.props;
+
+let Content: AstroComponentFactory | null = null;
+try {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+} catch {
+  // Content could not be rendered
+}
+
+const pageTitle = entry.data.title as string;
+---
+
+<BaseLayout
+  title={`${pageTitle} · thalida`}
+  activeCollection={collection}
+  activeId={id}
+  pageContext={{ collection: collection!, id: id!, title: pageTitle }}
+>
+  <article>
+    <h2>{pageTitle}</h2>
+    {
+      entry.data.description && (
+        <p>
+          <em>{entry.data.description}</em>
+        </p>
+      )
+    }
+    <hr />
+    {Content ? <Content /> : <p>Content could not be rendered.</p>}
+  </article>
+</BaseLayout>

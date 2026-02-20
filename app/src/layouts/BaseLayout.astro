@@ -1,0 +1,258 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Chat from "../components/Chat.astro";
+import ProjectTree from "../components/ProjectTree.astro";
+
+interface Props {
+  title?: string;
+  activePage?: string;
+  activeCollection?: string;
+  activeId?: string;
+  pageContext?: {
+    collection: string;
+    id: string;
+    title: string;
+  } | null;
+}
+
+const { title = "thalida", activePage, activeCollection, activeId, pageContext = null } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <ClientRouter />
+    {pageContext && <meta name="page-context" content={JSON.stringify(pageContext)} />}
+    <style is:global>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f0f0f0;
+      }
+      #layout {
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+      }
+      #project-tree,
+      #content-viewer,
+      #chat-panel {
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 1em;
+        border-right: 1px solid #ccc;
+      }
+      #project-tree {
+        flex: 0 0 25%;
+        max-width: 320px;
+      }
+      #content-viewer {
+        flex: 1 1 0%;
+        min-width: 0;
+      }
+      #content-viewer img,
+      #content-viewer video {
+        max-width: 100%;
+        height: auto;
+      }
+      #chat-panel {
+        flex: 0 0 25%;
+        max-width: 320px;
+        border-right: none;
+      }
+
+      /* -- Mobile toolbar & drawers -- */
+
+      #mobile-toolbar {
+        display: none;
+      }
+
+      #drawer-backdrop {
+        display: none;
+      }
+
+      @media (max-width: 639px) {
+        #mobile-toolbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 48px;
+          padding: 0 12px;
+          background: #f0f0f0;
+          border-bottom: 1px solid #ccc;
+          z-index: 200;
+        }
+
+        #mobile-toolbar button {
+          background: none;
+          border: none;
+          padding: 8px;
+          cursor: pointer;
+          color: #333;
+        }
+
+        #mobile-title {
+          font-weight: 600;
+          font-size: 16px;
+          color: #333;
+        }
+
+        #layout {
+          padding-top: 48px;
+        }
+
+        #project-tree,
+        #chat-panel {
+          position: fixed;
+          top: 48px;
+          width: 80vw;
+          height: calc(100vh - 48px);
+          background: #f0f0f0;
+          z-index: 150;
+          transition: transform 0.25s ease;
+          border-right: none;
+        }
+
+        #project-tree {
+          left: 0;
+          flex: none;
+          transform: translateX(-100%);
+          border-right: 1px solid #ccc;
+        }
+
+        #project-tree.open {
+          transform: translateX(0);
+        }
+
+        #chat-panel {
+          right: 0;
+          left: auto;
+          flex: none;
+          transform: translateX(100%);
+          border-left: 1px solid #ccc;
+        }
+
+        #chat-panel.open {
+          transform: translateX(0);
+        }
+
+        #content-viewer {
+          flex: 1 1 100%;
+        }
+
+        #drawer-backdrop {
+          display: none;
+          position: fixed;
+          top: 48px;
+          left: 0;
+          width: 100%;
+          height: calc(100vh - 48px);
+          background: rgba(0, 0, 0, 0.4);
+          z-index: 100;
+        }
+
+        #drawer-backdrop.visible {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mobile-toolbar">
+      <button id="mobile-menu-btn" type="button" aria-label="Open projects">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <span id="mobile-title">thalida</span>
+      <button id="mobile-chat-btn" type="button" aria-label="Open chat">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="drawer-backdrop"></div>
+    <div id="layout">
+      <ProjectTree activePage={activePage} activeCollection={activeCollection} activeId={activeId} />
+      <div id="content-viewer">
+        <slot />
+      </div>
+      <Chat />
+    </div>
+    <script>
+      function initDrawers() {
+        const menuBtn = document.getElementById("mobile-menu-btn")!;
+        const chatBtn = document.getElementById("mobile-chat-btn")!;
+        const projectTree = document.getElementById("project-tree")!;
+        const chatPanel = document.getElementById("chat-panel")!;
+        const backdrop = document.getElementById("drawer-backdrop")!;
+
+        function closeAll() {
+          projectTree.classList.remove("open");
+          chatPanel.classList.remove("open");
+          backdrop.classList.remove("visible");
+        }
+
+        menuBtn.addEventListener("click", () => {
+          const willOpen = !projectTree.classList.contains("open");
+          closeAll();
+          if (willOpen) {
+            projectTree.classList.add("open");
+            backdrop.classList.add("visible");
+          }
+        });
+
+        chatBtn.addEventListener("click", () => {
+          const willOpen = !chatPanel.classList.contains("open");
+          closeAll();
+          if (willOpen) {
+            chatPanel.classList.add("open");
+            backdrop.classList.add("visible");
+          }
+        });
+
+        backdrop.addEventListener("click", closeAll);
+      }
+
+      document.addEventListener("astro:page-load", initDrawers);
+
+      let savedTreeScroll = 0;
+      document.addEventListener("astro:before-swap", () => {
+        const tree = document.getElementById("project-tree");
+        if (tree) savedTreeScroll = tree.scrollTop;
+      });
+      document.addEventListener("astro:after-swap", () => {
+        const tree = document.getElementById("project-tree");
+        if (tree) tree.scrollTop = savedTreeScroll;
+      });
+    </script>
+  </body>
+</html>

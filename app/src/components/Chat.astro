@@ -2,7 +2,7 @@
 const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 ---
 
-<aside id="chat-panel">
+<aside id="chat-panel" transition:persist="chat">
   <div id="chat-header">
     <h2>Chat</h2>
     <a id="chat-admin-link" href="/login">admin login</a>
