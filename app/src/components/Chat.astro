@@ -30,6 +30,13 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         />
         <button id="chat-rename-btn" type="button">save</button>
       </span>
+      <span id="chat-context" hidden>
+        about
+        <select id="chat-context-select">
+          <option value="page"></option>
+          <option value="general">general</option>
+        </select>
+      </span>
     </div>
     <div>
       <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off" />

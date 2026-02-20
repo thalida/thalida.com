@@ -197,7 +197,7 @@ export class ChatRoom implements DurableObject {
     this.broadcastStatus();
   }
 
-  private handleChatMessage(ws: WebSocket, { text: rawText }: ClientChatData): void {
+  private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
     const info = this.connections.get(ws);
     if (!info) return;
 
@@ -227,6 +227,7 @@ export class ChatRoom implements DurableObject {
       username: info.username,
       text,
       timestamp: Date.now(),
+      ...(context?.collection && context?.id && context?.title ? { context } : {}),
     };
 
     this.messages.push(message);

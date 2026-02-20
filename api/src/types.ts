@@ -1,11 +1,18 @@
 // ── Data Types ──────────────────────────────────────────────────────
 
+export interface MessageContext {
+  collection: string;
+  id: string;
+  title: string;
+}
+
 export interface ChatMessage {
   type: "message";
   id: string;
   username: string;
   text: string;
   timestamp: number;
+  context?: MessageContext;
 }
 
 export interface ConnectionInfo {
@@ -33,6 +40,7 @@ export interface ClientJoinData {
 
 export interface ClientChatData {
   text: string;
+  context?: MessageContext;
 }
 
 export type ClientMessage = { type: "join"; data: ClientJoinData } | { type: "message"; data: ClientChatData };

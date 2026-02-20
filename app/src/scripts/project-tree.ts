@@ -36,6 +36,9 @@ function setActiveLink(collection: string, id: string) {
     const details = link.closest("details");
     if (details) details.open = true;
   }
+
+  const title = link?.textContent?.trim() ?? id;
+  window.dispatchEvent(new CustomEvent("route-changed", { detail: { collection, id, title } }));
 }
 
 function showWelcome() {
@@ -43,6 +46,7 @@ function showWelcome() {
   closeBtn.hidden = true;
   contentBody.innerHTML = "";
   document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+  window.dispatchEvent(new CustomEvent("route-changed", { detail: null }));
 }
 
 import { parseRoute } from "./routing-utils";

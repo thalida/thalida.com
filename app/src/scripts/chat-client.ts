@@ -17,6 +17,12 @@ const SERVER_MESSAGE_TYPE = {
   MESSAGE: "message",
 } as const;
 
+interface MessageContext {
+  collection: string;
+  id: string;
+  title: string;
+}
+
 type ServerMessage =
   | { type: "history"; messages: ChatMessage[] }
   | {
@@ -25,6 +31,7 @@ type ServerMessage =
       username: string;
       text: string;
       timestamp: number;
+      context?: MessageContext;
     }
   | { type: "joined"; isOwner: boolean; username: string }
   | { type: "status"; isOwnerOnline: boolean; userCount: number }
@@ -39,6 +46,7 @@ interface ChatMessage {
   username: string;
   text: string;
   timestamp: number;
+  context?: MessageContext;
 }
 
 const MAX_AUTO_RETRIES = 5;
@@ -58,6 +66,7 @@ let isOwner = false;
 let autoRetries = 0;
 let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let currentContext: MessageContext | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
 const renameBtn = document.getElementById("chat-rename-btn") as HTMLButtonElement;
@@ -68,6 +77,8 @@ const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
 const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
 const adminLink = document.getElementById("chat-admin-link") as HTMLAnchorElement;
+const contextEl = document.getElementById("chat-context") as HTMLSpanElement;
+const contextSelect = document.getElementById("chat-context-select") as HTMLSelectElement;
 
 function getAdminToken(): string | null {
   return localStorage.getItem("admin_token");
@@ -100,7 +111,29 @@ function appendMessage(msg: ChatMessage): void {
     hour: "2-digit",
     minute: "2-digit",
   });
-  div.textContent = `[${time}] ${msg.username}: ${msg.text}`;
+
+  if (msg.context) {
+    const contextLine = document.createElement("div");
+    contextLine.style.fontSize = "0.85em";
+    contextLine.style.opacity = "0.7";
+    const label = document.createTextNode("on: ");
+    const link = document.createElement("a");
+    link.href = `/${msg.context.collection}/${msg.context.id}`;
+    link.textContent = msg.context.title;
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      history.pushState(null, "", link.href);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+    contextLine.appendChild(label);
+    contextLine.appendChild(link);
+    div.appendChild(contextLine);
+  }
+
+  const messageLine = document.createElement("div");
+  messageLine.textContent = `[${time}] ${msg.username}: ${msg.text}`;
+  div.appendChild(messageLine);
+
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
@@ -155,6 +188,7 @@ function connect(): void {
         username: data.username,
         text: data.text,
         timestamp: data.timestamp,
+        context: data.context,
       });
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
       const ownerLabel = adminUsername ?? "owner";
@@ -224,7 +258,10 @@ function sendMessage(): void {
   const text = inputEl.value.trim();
   if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-  ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text } }));
+  const data: { text: string; context?: MessageContext } = { text };
+  if (currentContext && contextSelect.value === "page") data.context = currentContext;
+
+  ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.MESSAGE, data }));
   inputEl.value = "";
 }
 
@@ -278,6 +315,34 @@ sendBtn.addEventListener("click", sendMessage);
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
+
+function updatePlaceholder(): void {
+  if (currentContext && contextSelect.value === "page") {
+    inputEl.placeholder = `Message about ${currentContext.title}...`;
+  } else {
+    inputEl.placeholder = "Type a message...";
+  }
+}
+
+function updateContext(detail: MessageContext | null): void {
+  if (detail) {
+    currentContext = { collection: detail.collection, id: detail.id, title: detail.title };
+    const pageOption = contextSelect.querySelector<HTMLOptionElement>('option[value="page"]');
+    if (pageOption) pageOption.textContent = detail.title;
+    contextSelect.value = "page";
+    contextEl.hidden = false;
+  } else {
+    currentContext = null;
+    contextEl.hidden = true;
+  }
+  updatePlaceholder();
+}
+
+contextSelect.addEventListener("change", updatePlaceholder);
+
+window.addEventListener("route-changed", ((e: CustomEvent<MessageContext | null>) => {
+  updateContext(e.detail);
+}) as EventListener);
 
 async function fetchConfig(): Promise<void> {
   try {
