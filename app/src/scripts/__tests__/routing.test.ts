@@ -46,6 +46,18 @@ describe("parseRoute", () => {
     expect(result).toEqual({ collection: "projects", id: "foo" });
   });
 
+  it("parses /about as a standalone page", () => {
+    expect(parseRoute("/about")).toEqual({ page: "about" });
+  });
+
+  it("parses /about/ with trailing slash", () => {
+    expect(parseRoute("/about/")).toEqual({ page: "about" });
+  });
+
+  it("returns null for unknown standalone pages", () => {
+    expect(parseRoute("/nope")).toBeNull();
+  });
+
   it("parses all routable collections", () => {
     for (const collection of ROUTABLE_COLLECTIONS) {
       expect(parseRoute(`/${collection}/test-item`)).toEqual({

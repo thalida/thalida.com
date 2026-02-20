@@ -1,0 +1,70 @@
+---
+export const partial = true;
+
+import { Image } from "astro:assets";
+import meMemoji from "../../assets/about/me-memoji.png";
+import meHeadshot from "../../assets/about/me-headshot.png";
+import meAvatar from "../../assets/about/me-avatar.png";
+import meRainbow from "../../assets/about/me-rainbow.png";
+---
+
+<article>
+  <h2>About</h2>
+  <hr />
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:1.5rem;">
+    <Image src={meMemoji} alt="A Memoji of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
+    <Image src={meHeadshot} alt="A headshot of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
+    <Image src={meAvatar} alt="A cartoon avatar of Thalida" style="width:100%;height:auto;border-radius:50%;" />
+    <Image src={meRainbow} alt="A rainbow themed image of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
+  </div>
+
+  <h3>Hey, I'm Thalida!</h3>
+  <p>I'm a queer (pronouns they/she) first generation Trinidadian-American Engineer based in New York.</p>
+  <p>
+    Over 14 years ago for my 16th birthday I wanted one thing: a domain of my own. I was lucky enough to have a
+    supportive mother who gifted me thalida.com, and over the years this site has been the place where I learn, grow,
+    and experiment.
+  </p>
+  <p>
+    I use this space to practice and learn, break things and experiment, grow and challenge myself in ways that have
+    fewer consequences than messing around on a domain someone else owns. Here I am able to push myself as an engineer,
+    designer, and writer. Which is all to say: if it's ever broken, janky, or weird, I'm probably in the process of
+    learning something new, and you're coming along for the ride with me! ✨
+  </p>
+  <p>If you're interested in connecting:</p>
+  <ul>
+    <li><a href="https://linkedin.com/in/thalida/" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li><a href="https://github.com/thalida" target="_blank" rel="noopener">Github</a></li>
+    <li><a href="mailto:hello@thalida.com">Email</a></li>
+  </ul>
+
+  <hr />
+
+  <h3>Career History</h3>
+  <p>
+    I have over 10 years of experience in the tech industry, working in various roles from Product Engineering to
+    Engineering Management. My journey has taken me through startups, large corporations, and everything in between.
+  </p>
+  <ul>
+    <li>Currently, I'm an Engineering Manager at Zapier on the MCP Team!</li>
+    <li>
+      Previously, I was Co-Founder and CTO of <a href="https://tourus.io">Tourus</a>, a VC-backed mobile-first AI,
+      automation, and communication suite for property managers and leasing agents
+    </li>
+    <li>
+      Back in the day, I've worked at <a href="https://webflow.com/">Webflow</a>, <a href="https://www.etsy.com">Etsy</a
+      >, and <a href="https://www.okcupid.com/">OkCupid</a> as a Lead Engineer and Senior Engineering Manager
+    </li>
+    <li>I also have experience in design and product management</li>
+  </ul>
+
+  <hr />
+
+  <h3>About this site</h3>
+  <p>
+    This site is built with <a href="https://astro.build">Astro</a> and hosted on <a href="https://pages.cloudflare.com"
+      >Cloudflare Pages</a
+    >.
+  </p>
+</article>

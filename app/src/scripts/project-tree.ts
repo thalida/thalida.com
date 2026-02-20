@@ -25,8 +25,12 @@ async function loadContent(key: string) {
   }
 }
 
-function setActiveLink(collection: string, id: string) {
+function clearActiveLinks() {
   document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+}
+
+function setActiveLink(collection: string, id: string) {
+  clearActiveLinks();
   const link = document.querySelector<HTMLAnchorElement>(
     `.tree-link[data-collection="${collection}"][data-id="${id}"]`,
   );
@@ -41,11 +45,20 @@ function setActiveLink(collection: string, id: string) {
   window.dispatchEvent(new CustomEvent("route-changed", { detail: { collection, id, title } }));
 }
 
+function setActivePageLink(page: string) {
+  clearActiveLinks();
+  const link = document.querySelector<HTMLAnchorElement>(`.tree-link[data-page="${page}"]`);
+  if (link) link.setAttribute("data-active", "true");
+
+  const title = link?.textContent?.trim() ?? page;
+  window.dispatchEvent(new CustomEvent("route-changed", { detail: { page, title } }));
+}
+
 function showWelcome() {
   welcome.hidden = false;
   closeBtn.hidden = true;
   contentBody.innerHTML = "";
-  document.querySelectorAll(".tree-link").forEach((l) => l.removeAttribute("data-active"));
+  clearActiveLinks();
   window.dispatchEvent(new CustomEvent("route-changed", { detail: null }));
 }
 
@@ -58,6 +71,12 @@ async function navigateFromPath() {
     return;
   }
 
+  if ("page" in route) {
+    setActivePageLink(route.page);
+    await loadContent(route.page);
+    return;
+  }
+
   setActiveLink(route.collection, route.id);
   await loadContent(`${route.collection}/${route.id}`);
 }
@@ -66,11 +85,17 @@ document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
   link.addEventListener("click", (e) => {
     e.preventDefault();
 
+    const page = link.dataset.page;
+    if (page) {
+      history.pushState(null, "", `/${page}`);
+      navigateFromPath();
+      return;
+    }
+
     const collection = link.dataset.collection;
     const id = link.dataset.id;
     if (!collection || !id) return;
 
-    // Links have no rendered page -- open externally
     if (collection === "links") {
       const url = link.dataset.href;
       if (url) window.open(url, "_blank", "noopener");

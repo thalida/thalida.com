@@ -33,6 +33,11 @@ for (const name of COLLECTION_NAMES) {
 
 <nav id="project-tree">
   <h2>Work</h2>
+  <ul>
+    <li>
+      <a href="#" data-page="about" class="tree-link tree-link--page">About</a>
+    </li>
+  </ul>
   {
     COLLECTION_NAMES.map((name) => (
       <details open={name === "projects"}>
