@@ -25,6 +25,20 @@ type TreeItem = {
 
 type TreeData = Record<string, { title: string; items: TreeItem[] }>;
 
+type SidebarEntry =
+  | { type: "page"; page: string; label: string }
+  | { type: "collection"; collection: string; defaultOpen?: boolean };
+
+const SIDEBAR_ORDER: SidebarEntry[] = [
+  { type: "page", page: "about", label: "About" },
+  { type: "collection", collection: "projects", defaultOpen: true },
+  { type: "collection", collection: "guides" },
+  { type: "collection", collection: "gallery" },
+  { type: "collection", collection: "recipes" },
+  { type: "collection", collection: "versions" },
+  { type: "page", page: "links", label: "Links" },
+];
+
 const tree: TreeData = {};
 
 for (const name of COLLECTION_NAMES) {
@@ -67,34 +81,27 @@ function formatDate(date: Date): string {
 
 <nav id="project-tree">
   <h2><a href="/" class="tree-heading-link">Work</a></h2>
-  <ul class="tree-list">
-    <li>
-      <a href="/about" class="tree-link tree-link--page" data-active={activePage === "about" ? "true" : undefined}
-        >About</a
-      >
-    </li>
-  </ul>
   {
-    COLLECTION_NAMES.map((name) =>
-      name === "links" ? (
+    SIDEBAR_ORDER.map((entry) =>
+      entry.type === "page" ? (
         <ul class="tree-list">
           <li>
             <a
-              href="/links"
+              href={`/${entry.page}`}
               class="tree-link tree-link--page"
-              data-active={activePage === "links" ? "true" : undefined}
+              data-active={activePage === entry.page ? "true" : undefined}
             >
-              Links ({tree[name].items.length})
+              {tree[entry.page] ? `${entry.label} (${tree[entry.page].items.length})` : entry.label}
             </a>
           </li>
         </ul>
       ) : (
-        <details open={name === "projects" || activeCollection === name}>
+        <details open={entry.defaultOpen || activeCollection === entry.collection}>
           <summary>
-            {tree[name].title} ({tree[name].items.length})
+            {tree[entry.collection].title} ({tree[entry.collection].items.length})
           </summary>
           <div class="tree-cards">
-            {tree[name].items.map((item) => (
+            {tree[entry.collection].items.map((item) => (
               <a
                 href={`/${item.collection}/${item.id}`}
                 class="tree-link tree-card"
