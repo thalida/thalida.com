@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 
 type TreeItem = {
@@ -7,6 +8,10 @@ type TreeItem = {
   collection: string;
   title: string;
   href?: string;
+  description?: string;
+  publishedOn: Date;
+  coverImageSrc?: string;
+  coverImageAlt?: string;
 };
 
 type TreeData = Record<string, { title: string; items: TreeItem[] }>;
@@ -19,43 +24,223 @@ for (const name of COLLECTION_NAMES) {
     (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
   );
 
-  tree[name] = {
-    title: collectionMeta[name].title,
-    items: sorted.map((entry) => ({
+  const items: TreeItem[] = [];
+  for (const entry of sorted) {
+    let coverImageSrc: string | undefined;
+    if (entry.data.coverImage) {
+      const optimized = await getImage({ src: entry.data.coverImage, width: 400 });
+      coverImageSrc = optimized.src;
+    }
+
+    items.push({
       id: entry.id,
       collection: name,
       title: entry.data.title,
       href: entry.data.link,
-    })),
+      description: entry.data.description,
+      publishedOn: entry.data.publishedOn,
+      coverImageSrc,
+      coverImageAlt: entry.data.coverImageAlt,
+    });
+  }
+
+  tree[name] = {
+    title: collectionMeta[name].title,
+    items,
   };
+}
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", { year: "numeric", month: "short" });
 }
 ---
 
 <nav id="project-tree">
   <h2>Work</h2>
-  <ul>
+  <ul class="tree-list">
     <li>
       <a href="#" data-page="about" class="tree-link tree-link--page">About</a>
     </li>
   </ul>
   {
-    COLLECTION_NAMES.map((name) => (
-      <details open={name === "projects"}>
-        <summary>
-          {tree[name].title} ({tree[name].items.length})
-        </summary>
-        <ul>
-          {tree[name].items.map((item) => (
-            <li>
-              <a href="#" data-collection={item.collection} data-id={item.id} data-href={item.href} class="tree-link">
-                {item.title}
-              </a>
-            </li>
-          ))}
+    COLLECTION_NAMES.map((name) =>
+      name === "links" ? (
+        <ul class="tree-list">
+          <li>
+            <a href="#" data-page="links" class="tree-link tree-link--page">
+              Links ({tree[name].items.length})
+            </a>
+          </li>
         </ul>
-      </details>
-    ))
+      ) : (
+        <details open={name === "projects"}>
+          <summary>
+            {tree[name].title} ({tree[name].items.length})
+          </summary>
+          <div class="tree-cards">
+            {tree[name].items.map((item) => (
+              <a
+                href="#"
+                data-collection={item.collection}
+                data-id={item.id}
+                data-href={item.href}
+                class="tree-link tree-card"
+              >
+                {item.coverImageSrc && (
+                  <img
+                    class="tree-card__image"
+                    src={item.coverImageSrc}
+                    alt={item.coverImageAlt ?? item.title}
+                    loading="lazy"
+                  />
+                )}
+                <div class="tree-card__body">
+                  <span class="tree-card__title">{item.title}</span>
+                  {item.description && <span class="tree-card__desc">{item.description}</span>}
+                  <span class="tree-card__date">{formatDate(item.publishedOn)}</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </details>
+      ),
+    )
   }
 </nav>
+
+<style>
+  #project-tree {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  #project-tree h2 {
+    margin: 0 0 0.75em;
+    font-size: 1.1em;
+    letter-spacing: 0.02em;
+  }
+
+  .tree-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75em;
+  }
+
+  .tree-link--page {
+    display: block;
+    padding: 0.5em 0.6em;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+
+  .tree-link--page:hover,
+  .tree-link--page[data-active] {
+    background: #e4e4e4;
+  }
+
+  details {
+    margin-bottom: 0.5em;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #666;
+    padding: 0.4em 0;
+    user-select: none;
+  }
+
+  .tree-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.4em 0;
+  }
+
+  .tree-card {
+    display: flex;
+    flex-direction: row;
+    gap: 0.6em;
+    padding: 0.5em;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      box-shadow 0.15s;
+    overflow: hidden;
+  }
+
+  .tree-card:hover {
+    background: #fafafa;
+    border-color: #ccc;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .tree-card[data-active] {
+    background: #eef2ff;
+    border-color: #a5b4fc;
+    box-shadow: 0 0 0 1px #a5b4fc;
+  }
+
+  .tree-card__image {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #eee;
+  }
+
+  .tree-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .tree-card__title {
+    font-size: 0.82em;
+    font-weight: 600;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .tree-card__desc {
+    font-size: 0.72em;
+    color: #777;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .tree-card__date,
+  .tree-card__url {
+    font-size: 0.68em;
+    color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
 
 <script src="../scripts/project-tree.ts"></script>

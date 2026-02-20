@@ -1,6 +1,6 @@
 export const ROUTABLE_COLLECTIONS = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
 
-export const STANDALONE_PAGES = new Set(["about"]);
+export const STANDALONE_PAGES = new Set(["about", "links"]);
 
 export function parseRoute(path: string): { collection: string; id: string } | { page: string } | null {
   const trimmed = path.replace(/\/?\s*$/, "");

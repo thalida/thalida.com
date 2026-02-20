@@ -96,12 +96,6 @@ document.querySelectorAll<HTMLAnchorElement>(".tree-link").forEach((link) => {
     const id = link.dataset.id;
     if (!collection || !id) return;
 
-    if (collection === "links") {
-      const url = link.dataset.href;
-      if (url) window.open(url, "_blank", "noopener");
-      return;
-    }
-
     const path = `/${collection}/${id}`;
     history.pushState(null, "", path);
     navigateFromPath();
