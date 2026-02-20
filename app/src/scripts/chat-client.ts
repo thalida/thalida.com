@@ -47,8 +47,12 @@ const WS_URL =
   document.querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')?.content?.trim() || "ws://localhost:8787/ws";
 const API_BASE = WS_URL.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
 
+const LS_USERNAME_KEY = "chat_username";
+const LS_CLIENT_ID_KEY = "chat_client_id";
+
 let ws: WebSocket | null = null;
 let username: string | null = null;
+let clientId: string | null = null;
 let adminUsername: string | null = null;
 let isOwner = false;
 let autoRetries = 0;
@@ -67,6 +71,26 @@ const adminLink = document.getElementById("chat-admin-link") as HTMLAnchorElemen
 
 function getAdminToken(): string | null {
   return localStorage.getItem("admin_token");
+}
+
+function loadIdentity(): void {
+  clientId = localStorage.getItem(LS_CLIENT_ID_KEY);
+  if (!clientId) {
+    clientId = crypto.randomUUID();
+    localStorage.setItem(LS_CLIENT_ID_KEY, clientId);
+  }
+  username = localStorage.getItem(LS_USERNAME_KEY);
+}
+
+function saveUsername(name: string): void {
+  localStorage.setItem(LS_USERNAME_KEY, name);
+}
+
+function clearIdentity(): void {
+  localStorage.removeItem(LS_USERNAME_KEY);
+  localStorage.removeItem(LS_CLIENT_ID_KEY);
+  clientId = crypto.randomUUID();
+  localStorage.setItem(LS_CLIENT_ID_KEY, clientId);
 }
 
 function appendMessage(msg: ChatMessage): void {
@@ -95,6 +119,7 @@ function sendJoin(): void {
   const token = getAdminToken();
   const data: Record<string, string> = { username };
   if (token) data.token = token;
+  if (clientId) data.clientId = clientId;
   ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.JOIN, data }));
 }
 
@@ -116,6 +141,7 @@ function connect(): void {
       isOwner = data.isOwner;
       username = data.username;
       usernameInput.value = data.username;
+      saveUsername(data.username);
       renameControls.hidden = isOwner;
       updateAdminUI();
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
@@ -136,6 +162,14 @@ function connect(): void {
       ownerStatusEl.dataset.online = String(data.isOwnerOnline);
       userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
+      if (data.code === "expired_username") {
+        clearIdentity();
+        username = generateRandomUsername();
+        usernameInput.value = username;
+        sendJoin();
+        return;
+      }
+
       if (pendingRename) {
         pendingRename = false;
         usernameInput.setCustomValidity(data.message);
@@ -261,7 +295,10 @@ async function fetchConfig(): Promise<void> {
 }
 
 fetchConfig().then(() => {
-  username = generateRandomUsername();
+  loadIdentity();
+  if (!username) {
+    username = generateRandomUsername();
+  }
   usernameInput.value = username;
   connect();
 });

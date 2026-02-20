@@ -28,6 +28,7 @@ export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT
 export interface ClientJoinData {
   username: string;
   token?: string;
+  clientId?: string;
 }
 
 export interface ClientChatData {
@@ -64,6 +65,7 @@ export const SERVER_ERROR_CODE = {
   INVALID_USERNAME: "invalid_username",
   RESERVED_USERNAME: "reserved_username",
   TAKEN_USERNAME: "taken_username",
+  EXPIRED_USERNAME: "expired_username",
   MODERATION_WARNING: "moderation_warning",
   MODERATION_BLOCKED: "moderation_blocked",
   UNAUTHORIZED: "unauthorized",

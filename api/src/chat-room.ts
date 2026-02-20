@@ -9,9 +9,15 @@ import type {
   ServerMessage,
 } from "./types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
-import { ADMIN_USERNAME, MAX_MESSAGES, MAX_WARNINGS } from "./config";
+import { ADMIN_USERNAME, MAX_MESSAGES, MAX_WARNINGS, RESERVATION_DURATION_MS } from "./config";
 
 const BLOCKED_IPS_KEY = "blockedIps";
+const RESERVATION_PREFIX = "reservation:";
+
+interface UsernameReservation {
+  clientId: string;
+  lastSeen: number;
+}
 
 export class ChatRoom implements DurableObject {
   private messages: ChatMessage[] = [];
@@ -39,6 +45,31 @@ export class ChatRoom implements DurableObject {
     await this.state.storage.put(BLOCKED_IPS_KEY, [...this.blockedIps]);
   }
 
+  private async getReservation(username: string): Promise<UsernameReservation | undefined> {
+    return this.state.storage.get<UsernameReservation>(`${RESERVATION_PREFIX}${username}`);
+  }
+
+  private async upsertReservation(username: string, clientId: string): Promise<void> {
+    await this.state.storage.put<UsernameReservation>(`${RESERVATION_PREFIX}${username}`, {
+      clientId,
+      lastSeen: Date.now(),
+    });
+  }
+
+  private async cleanupExpiredReservations(): Promise<void> {
+    const all = await this.state.storage.list<UsernameReservation>({ prefix: RESERVATION_PREFIX });
+    const now = Date.now();
+    const expired: string[] = [];
+    for (const [key, value] of all) {
+      if (now - value.lastSeen > RESERVATION_DURATION_MS) {
+        expired.push(key);
+      }
+    }
+    if (expired.length > 0) {
+      await this.state.storage.delete(expired);
+    }
+  }
+
   // ── Public API ───────────────────────────────────────────────────────
 
   async fetch(request: Request): Promise<Response> {
@@ -47,6 +78,9 @@ export class ChatRoom implements DurableObject {
     }
 
     await this.loadBlockedIps();
+    this.cleanupExpiredReservations().catch((err) => {
+      console.error("[reservations] cleanup error:", err);
+    });
 
     const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const [client, server] = Object.values(new WebSocketPair());
@@ -103,7 +137,7 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private handleJoin(ws: WebSocket, { username, token }: ClientJoinData): void {
+  private async handleJoin(ws: WebSocket, { username, token, clientId }: ClientJoinData): Promise<void> {
     const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
 
     const name = isOwner
@@ -131,6 +165,22 @@ export class ChatRoom implements DurableObject {
         this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
         return;
       }
+    }
+
+    if (!isOwner && clientId) {
+      const reservation = await this.getReservation(name);
+      if (reservation) {
+        const expired = Date.now() - reservation.lastSeen > RESERVATION_DURATION_MS;
+        if (reservation.clientId === clientId && expired) {
+          this.sendError(ws, SERVER_ERROR_CODE.EXPIRED_USERNAME, "Your reserved username has expired.");
+          return;
+        }
+        if (reservation.clientId !== clientId && !expired) {
+          this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
+          return;
+        }
+      }
+      await this.upsertReservation(name, clientId);
     }
 
     this.spectators.delete(ws);
