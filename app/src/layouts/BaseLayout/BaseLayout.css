@@ -93,7 +93,8 @@ body {
     position: fixed;
     top: 48px;
     width: 80vw;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 48px); /* fallback */
+    height: calc(100svh - 48px); /* iOS Safari: stable viewport height */
     background: #f0f0f0;
     z-index: 150;
     transition: transform 0.25s ease;
@@ -133,7 +134,8 @@ body {
     top: 48px;
     left: 0;
     width: 100%;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 48px); /* fallback */
+    height: calc(100svh - 48px); /* iOS Safari: stable viewport height */
     background: rgba(0, 0, 0, 0.4);
     z-index: 100;
   }
