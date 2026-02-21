@@ -383,12 +383,12 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("reserved word 'tia' as substring in username returns error", async () => {
+    it("username containing admin name as substring returns error", async () => {
       const ws = await openWs();
       const msgs = collect(ws);
       await flush();
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "tia-lover" } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida-fan" } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);

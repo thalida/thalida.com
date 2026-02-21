@@ -8,7 +8,7 @@ describe("Worker routing", () => {
     it("GET / returns 200 health check", async () => {
       const resp = await SELF.fetch("https://fake-host/");
       expect(resp.status).toBe(200);
-      expect(await resp.json()).toEqual({ ok: true });
+      expect(await resp.json()).toEqual({});
     });
 
     // WebSocket upgrade (GET /ws -> 101) is tested extensively in
@@ -22,7 +22,7 @@ describe("Worker routing", () => {
       });
       expect(resp.status).toBe(200);
       const body = await resp.json();
-      expect(body).toEqual({ ok: true });
+      expect(body).toEqual({});
     });
 
     it("OPTIONS preflight returns 204 with CORS headers", async () => {
@@ -46,7 +46,7 @@ describe("Worker routing", () => {
       });
       expect(resp.status).toBe(401);
       const body = await resp.json();
-      expect(body).toEqual({ ok: false });
+      expect(body).toEqual({});
     });
 
     it("POST /auth with malformed JSON returns 400", async () => {
