@@ -49,6 +49,7 @@ let savedNavScroll = 0;
 document.addEventListener("astro:before-swap", () => {
   const nav = document.getElementById("site-nav");
   if (nav) savedNavScroll = nav.scrollTop;
+  document.body.style.overflow = "";
 });
 document.addEventListener("astro:after-swap", () => {
   const nav = document.getElementById("site-nav");
