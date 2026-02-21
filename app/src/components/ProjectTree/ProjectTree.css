@@ -118,4 +118,8 @@
   .nav-search-trigger {
     display: none;
   }
+
+  #site-nav h2 {
+    display: none;
+  }
 }
