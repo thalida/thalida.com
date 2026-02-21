@@ -139,7 +139,7 @@ export class ChatRoom implements DurableObject {
   }
 
   private async handleJoin(ws: WebSocket, { username, token, clientId }: ClientJoinData): Promise<void> {
-    const isOwner = typeof token === "string" && token.length > 0 && token === (this.env.ADMIN_SECRET as string);
+    const isOwner = typeof token === "string" && token.length > 0 && token === this.env.ADMIN_SECRET;
 
     const name = isOwner
       ? ADMIN_USERNAME
