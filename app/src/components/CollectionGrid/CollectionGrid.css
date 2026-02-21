@@ -64,8 +64,8 @@
 
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5em;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75em;
 }
 
 .items-grid--masonry {
@@ -186,9 +186,9 @@
   text-overflow: ellipsis;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   .items-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 
   .items-grid--masonry {

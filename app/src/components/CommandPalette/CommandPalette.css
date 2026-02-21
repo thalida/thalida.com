@@ -225,7 +225,7 @@
   color: #999;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   .cp-overlay--open {
     padding-top: 0;
     align-items: flex-start;

@@ -6,7 +6,7 @@
     sans-serif;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   #site-nav {
     position: relative;
   }
@@ -114,7 +114,7 @@
   color: #6d28d9;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 767px) {
   .nav-search-trigger {
     display: none;
   }
