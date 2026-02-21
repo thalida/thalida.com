@@ -10,7 +10,15 @@ import type {
   ServerMessage,
 } from "./types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
-import { ADMIN_USERNAME, MAX_MESSAGES, MAX_WARNINGS, RESERVATION_DURATION_MS } from "./config";
+import {
+  ADMIN_USERNAME,
+  MAX_MESSAGE_LENGTH,
+  MAX_MESSAGES,
+  MAX_USERNAME_LENGTH,
+  MAX_WARNINGS,
+  MIN_USERNAME_LENGTH,
+  RESERVATION_DURATION_MS,
+} from "./config";
 
 const BLOCKED_IPS_KEY = "blockedIps";
 const RESERVATION_PREFIX = "reservation:";
@@ -147,11 +155,12 @@ export class ChatRoom implements DurableObject {
           .trim()
           .toLowerCase();
 
-    if (!/^[a-z0-9_\-.]{2,20}$/.test(name)) {
+    const usernamePattern = new RegExp(`^[a-z0-9_\\-.]{${MIN_USERNAME_LENGTH},${MAX_USERNAME_LENGTH}}$`);
+    if (!usernamePattern.test(name)) {
       this.sendError(
         ws,
         SERVER_ERROR_CODE.INVALID_USERNAME,
-        "Username must be 2-20 characters: lowercase letters, numbers, hyphens, underscores, or dots.",
+        `Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters: lowercase letters, numbers, hyphens, underscores, or dots.`,
       );
       return;
     }
@@ -216,7 +225,7 @@ export class ChatRoom implements DurableObject {
 
     const text = String(rawText ?? "")
       .trim()
-      .slice(0, 500);
+      .slice(0, MAX_MESSAGE_LENGTH);
     if (!text) return;
 
     const unblockMatch = text.match(/^\/unblock\s+(.+)$/);
