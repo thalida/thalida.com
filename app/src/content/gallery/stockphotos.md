@@ -3,6 +3,7 @@ title: Stockphotos
 description: My photos from the WOC in Tech Chat Stockphoto shoot.
 publishedOn: 2015-10-27
 updatedOn: 2016-03-13
+category: photography
 coverImage: stockphotos/25677324952_36b5b13289_o.jpg
 coverImageAlt: Thalida sitting reading a python book
 ---
@@ -16,8 +17,8 @@ The following images are part of that stockphoto collection, which can be found 
 
 As a result of this photoshoot, I have been featured in various articles, blog posts, and marketing materials.
 
-|                                                            |                                                            |
-| ---------------------------------------------------------- | ---------------------------------------------------------- |
+|   |   |
+| - | - |
 | ![Stock Photo](./stockphotos/21909358844_18da9ec8e6_o.jpg) | ![Stock Photo](./stockphotos/21910900553_e8984858c2_o.jpg) |
 | ![Stock Photo](./stockphotos/22344392878_53a0d70eb7_o.jpg) | ![Stock Photo](./stockphotos/22543493511_0ba6a83b35_o.jpg) |
 | ![Stock Photo](./stockphotos/25167658624_116b21f635_o.jpg) | ![Stock Photo](./stockphotos/25171523343_4073eed049_o.jpg) |

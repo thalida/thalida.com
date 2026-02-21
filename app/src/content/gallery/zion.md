@@ -2,6 +2,7 @@
 title: Zion National Park
 description: A stunning collection of Zion National Park's breathtaking landscapes.
 publishedOn: 2016-09-06
+category: photography
 coverImage: zion/zion.jpg
 coverImageAlt: A stunning collection of Zion National Park's breathtaking landscapes.
 ---

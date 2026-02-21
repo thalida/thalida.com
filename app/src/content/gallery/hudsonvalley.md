@@ -3,6 +3,7 @@ title: Hudson Valley
 description: A collection of images showcasing the beauty of the Hudson Valley region.
 publishedOn: 2020-10-01
 updatedOn: 2025-07-02
+category: photography
 coverImage: hudsonvalley/IMAG1094.jpg
 coverImageAlt: A scenic view of the Hudson Valley with mountains and a river.
 ---

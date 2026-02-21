@@ -2,6 +2,7 @@
 title: Iceland
 description: A breathtaking view of Iceland's natural beauty.
 publishedOn: 2019-08-30
+category: photography
 coverImage: iceland/iceland_photo.jpg
 coverImageAlt: A breathtaking view of Iceland's natural beauty.
 ---
