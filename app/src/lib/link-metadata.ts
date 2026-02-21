@@ -21,6 +21,19 @@ export function getFaviconUrl(url: string): string {
   }
 }
 
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'")
+    .replace(/&nbsp;/gi, " ")
+    .trim();
+}
+
 function parseMetadata(html: string): Pick<LinkMetadata, "metaTitle" | "metaDescription"> {
   const ogTitle =
     html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)?.[1] ??
@@ -36,9 +49,12 @@ function parseMetadata(html: string): Pick<LinkMetadata, "metaTitle" | "metaDesc
     html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1] ??
     html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i)?.[1];
 
+  const rawTitle = ogTitle ?? titleTag;
+  const rawDesc = ogDesc ?? metaDesc;
+
   return {
-    metaTitle: ogTitle ?? titleTag,
-    metaDescription: ogDesc ?? metaDesc,
+    metaTitle: rawTitle ? decodeHtmlEntities(rawTitle) : undefined,
+    metaDescription: rawDesc ? decodeHtmlEntities(rawDesc) : undefined,
   };
 }
 
