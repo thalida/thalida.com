@@ -1,5 +1,6 @@
 import { v7 as uuidv7 } from "uuid";
 import type {
+  Env,
   ChatMessage,
   ClientChatData,
   ClientJoinData,
@@ -29,7 +30,7 @@ export class ChatRoom implements DurableObject {
 
   constructor(
     private state: DurableObjectState,
-    private env: Record<string, unknown>,
+    private env: Env,
   ) {}
 
   private async loadBlockedIps(): Promise<void> {
@@ -262,7 +263,7 @@ export class ChatRoom implements DurableObject {
   // ── Moderation ───────────────────────────────────────────────────────
 
   private async moderate(message: ChatMessage, senderWs: WebSocket): Promise<void> {
-    const apiKey = this.env.OPENAI_API_KEY as string | undefined;
+    const apiKey = this.env.OPENAI_API_KEY;
     if (!apiKey) {
       console.warn("[moderation] skipped: OPENAI_API_KEY not set");
       return;
