@@ -12,6 +12,12 @@
   }
 }
 
+@media (max-width: 639px) {
+  .nav-search-trigger {
+    display: none;
+  }
+}
+
 /* ---- Heading ---- */
 #site-nav h2 {
   margin: 0 0 0.75em;
