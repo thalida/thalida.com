@@ -19,14 +19,7 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
         <span id="cp-collection-chip-label"></span>
         <button type="button" id="cp-collection-chip-clear" aria-label="Clear collection filter">&times;</button>
       </div>
-      <input
-        type="text"
-        id="cp-input"
-        class="cp-input"
-        placeholder="Search…"
-        autocomplete="off"
-        spellcheck="false"
-      />
+      <input type="text" id="cp-input" class="cp-input" placeholder="Search…" autocomplete="off" spellcheck="false" />
     </div>
     <div class="cp-results" id="cp-results"></div>
     <div class="cp-footer">
@@ -45,28 +38,39 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
   function initCommandPalette() {
     const overlay = document.getElementById("command-palette");
     const backdrop = overlay?.querySelector(".cp-backdrop");
+    const dialog = overlay?.querySelector(".cp-dialog");
     const input = document.getElementById("cp-input");
     const resultsContainer = document.getElementById("cp-results");
     const collectionChip = document.getElementById("cp-collection-chip");
     const chipLabel = document.getElementById("cp-collection-chip-label");
     const chipClear = document.getElementById("cp-collection-chip-clear");
 
-    if (!overlay || !input || !resultsContainer || !collectionChip || !chipLabel || !chipClear || !backdrop) return;
+    if (!overlay || !backdrop || !dialog || !input || !resultsContainer || !collectionChip || !chipLabel || !chipClear)
+      return;
 
     const data = window.__cpData;
-
     let activeCollection = null;
     let selectedIndex = -1;
 
-    function open(collection) {
-      activeCollection = collection ?? null;
+    function getActiveCollectionFromPage() {
+      const tree = document.getElementById("project-tree");
+      const col = tree?.dataset?.activeCollection;
+      return col && col.length > 0 ? col : null;
+    }
+
+    function open() {
+      activeCollection = getActiveCollectionFromPage();
+
       if (activeCollection && data.sidebarData[activeCollection]) {
         chipLabel.textContent = data.sidebarData[activeCollection].title;
         collectionChip.hidden = false;
       } else {
         collectionChip.hidden = true;
+        activeCollection = null;
       }
+
       input.value = "";
+      selectedIndex = -1;
       overlay.setAttribute("aria-hidden", "false");
       overlay.classList.add("cp-overlay--open");
       input.focus();
@@ -76,17 +80,22 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
     function close() {
       overlay.setAttribute("aria-hidden", "true");
       overlay.classList.remove("cp-overlay--open");
-      activeCollection = null;
       input.value = "";
       selectedIndex = -1;
     }
 
-    function getFiltered(query) {
-      let pool = activeCollection
-        ? data.allItems.filter((item) => item.collection === activeCollection)
-        : data.allItems;
+    function isOpen() {
+      return overlay.classList.contains("cp-overlay--open");
+    }
 
-      if (!query.trim()) return pool.slice(0, 20);
+    function getFiltered(query) {
+      let pool = data.allItems;
+
+      if (activeCollection) {
+        pool = pool.filter((item) => item.collection === activeCollection);
+      }
+
+      if (!query.trim()) return pool.slice(0, 15);
 
       const q = query.toLowerCase();
       return pool
@@ -98,7 +107,7 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
             (item.category ?? "").toLowerCase().includes(q)
           );
         })
-        .slice(0, 20);
+        .slice(0, 15);
     }
 
     function renderResults(query) {
@@ -110,13 +119,28 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
         return;
       }
 
+      function renderTags(tags) {
+        if (!tags || tags.length === 0) return "";
+        const displayTags = tags.slice(0, 2);
+        const extra = tags.length > 2 ? `<span class="cp-row__tag">+${tags.length - 2}</span>` : "";
+        return `<div class="cp-row__tags">${displayTags.map((t) => `<span class="cp-row__tag">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
+      }
+
       if (activeCollection) {
         resultsContainer.innerHTML = filtered
           .map(
             (item, i) =>
-              `<a href="/${item.collection}/${item.id}" class="cp-result" data-index="${i}">
-                <span class="cp-result__title">${escapeHtml(item.title)}</span>
-                <span class="cp-result__meta">${formatDateClient(item.publishedOn)}</span>
+              `<a href="/${item.collection}/${item.id}" class="cp-row" data-index="${i}">
+                ${
+                  item.coverImageSrc
+                    ? `<img class="cp-row__img" src="${item.coverImageSrc}" alt="" />`
+                    : `<div class="cp-row__img cp-row__img--empty">${escapeHtml(item.title.charAt(0))}</div>`
+                }
+                <div class="cp-row__content">
+                  <span class="cp-row__title">${escapeHtml(item.title)}</span>
+                  ${renderTags(item.tags)}
+                </div>
+                <span class="cp-row__meta">${formatDateClient(item.publishedOn)}</span>
               </a>`,
           )
           .join("");
@@ -131,9 +155,17 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
           const title = items[0]?.collectionTitle ?? col;
           html += `<div class="cp-group-label">${escapeHtml(title)}</div>`;
           for (const item of items) {
-            html += `<a href="/${item.collection}/${item.id}" class="cp-result" data-index="${idx}">
-              <span class="cp-result__title">${escapeHtml(item.title)}</span>
-              <span class="cp-result__meta">${formatDateClient(item.publishedOn)}</span>
+            html += `<a href="/${item.collection}/${item.id}" class="cp-row" data-index="${idx}">
+              ${
+                item.coverImageSrc
+                  ? `<img class="cp-row__img" src="${item.coverImageSrc}" alt="" />`
+                  : `<div class="cp-row__img cp-row__img--empty">${escapeHtml(item.title.charAt(0))}</div>`
+              }
+              <div class="cp-row__content">
+                <span class="cp-row__title">${escapeHtml(item.title)}</span>
+                ${renderTags(item.tags)}
+              </div>
+              <span class="cp-row__meta">${formatDateClient(item.publishedOn)}</span>
             </a>`;
             idx++;
           }
@@ -143,9 +175,9 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
     }
 
     function updateSelection() {
-      const items = resultsContainer.querySelectorAll(".cp-result");
+      const items = resultsContainer.querySelectorAll(".cp-row");
       items.forEach((el, i) => {
-        el.classList.toggle("cp-result--selected", i === selectedIndex);
+        el.classList.toggle("cp-row--selected", i === selectedIndex);
         if (i === selectedIndex) el.scrollIntoView({ block: "nearest" });
       });
     }
@@ -158,10 +190,11 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
       return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
     }
 
+    // Input handlers
     input.addEventListener("input", () => renderResults(input.value));
 
     input.addEventListener("keydown", (e) => {
-      const items = resultsContainer.querySelectorAll(".cp-result");
+      const items = resultsContainer.querySelectorAll(".cp-row");
       if (e.key === "ArrowDown") {
         e.preventDefault();
         selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
@@ -179,8 +212,10 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
       }
     });
 
+    // Close on backdrop click
     backdrop.addEventListener("click", close);
 
+    // Clear collection filter
     chipClear.addEventListener("click", () => {
       activeCollection = null;
       collectionChip.hidden = true;
@@ -188,10 +223,11 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
       renderResults(input.value);
     });
 
+    // Global keyboard shortcut (Cmd+K / Ctrl+K)
     document.addEventListener("keydown", (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
-        if (overlay.classList.contains("cp-overlay--open")) {
+        if (isOpen()) {
           close();
         } else {
           open();
@@ -199,20 +235,31 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
       }
     });
 
-    document.querySelectorAll("[data-open-palette]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const col = btn.dataset.paletteCollection;
-        open(col || undefined);
+    // Sidebar search button click
+    const sidebarSearchBtn = document.getElementById("sidebar-search-btn");
+    if (sidebarSearchBtn) {
+      sidebarSearchBtn.addEventListener("click", () => {
+        if (!isOpen()) {
+          open();
+        }
       });
-    });
+    }
 
-    document.addEventListener("open-command-palette", () => open());
+    // Mobile search button click
+    const mobileSearchBtn = document.getElementById("mobile-search-btn");
+    if (mobileSearchBtn) {
+      mobileSearchBtn.addEventListener("click", () => {
+        if (!isOpen()) {
+          open();
+        }
+      });
+    }
   }
 
   document.addEventListener("astro:page-load", initCommandPalette);
 </script>
 
-<style>
+<style is:global>
   .cp-overlay {
     display: none;
     position: fixed;
@@ -227,13 +274,14 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 20vh;
+    padding-top: 12vh;
   }
 
   .cp-backdrop {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
   }
 
   .cp-dialog {
@@ -242,9 +290,14 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
     max-width: 520px;
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.05),
+      0 16px 40px rgba(0, 0, 0, 0.16);
     overflow: hidden;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
     display: flex;
     flex-direction: column;
     max-height: 60vh;
@@ -254,129 +307,204 @@ const allItems = Object.values(sidebarData).flatMap((col) =>
     display: flex;
     align-items: center;
     gap: 0.5em;
-    padding: 0.75em;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
   }
 
   .cp-filter-chip {
     display: inline-flex;
     align-items: center;
-    gap: 0.3em;
-    padding: 0.2em 0.5em;
+    gap: 4px;
+    padding: 3px 10px;
     background: #eef2ff;
-    border: 1px solid #a5b4fc;
-    border-radius: 6px;
-    font-size: 0.8em;
+    border: 1px solid #c7d2fe;
+    border-radius: 5px;
+    font-size: 13px;
     color: #4338ca;
     white-space: nowrap;
+    font-weight: 500;
   }
 
   .cp-filter-chip button {
     background: none;
     border: none;
-    color: #4338ca;
+    color: #6366f1;
     cursor: pointer;
-    font-size: 1.1em;
-    padding: 0 0.1em;
+    font-size: 14px;
+    padding: 0;
     line-height: 1;
+    margin-left: 2px;
+  }
+
+  .cp-filter-chip button:hover {
+    color: #4338ca;
   }
 
   .cp-input {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 1em;
-    padding: 0.3em 0;
+    font-size: 15px;
+    padding: 2px 0;
     font-family: inherit;
     background: transparent;
+    color: #111;
+  }
+
+  .cp-input::placeholder {
+    color: #aaa;
   }
 
   .cp-results {
     overflow-y: auto;
     flex: 1;
-    padding: 0.4em 0;
+    padding: 8px;
   }
 
   .cp-group-label {
-    padding: 0.5em 0.75em 0.25em;
-    font-size: 0.72em;
+    padding: 12px 8px 6px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     color: #999;
   }
 
-  .cp-result {
+  .cp-group-label:first-child {
+    padding-top: 4px;
+  }
+
+  .cp-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5em 0.75em;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 6px;
     text-decoration: none;
     color: #333;
     cursor: pointer;
-    transition: background 0.1s;
+    transition: background 0.08s;
   }
 
-  .cp-result:hover,
-  .cp-result--selected {
+  .cp-row:hover {
     background: #f5f5f5;
   }
 
-  .cp-result--selected {
+  .cp-row--selected {
     background: #eef2ff;
   }
 
-  .cp-result__title {
-    font-size: 0.9em;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .cp-row__img {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #e5e5e5;
   }
 
-  .cp-result__meta {
-    font-size: 0.75em;
-    color: #999;
+  .cp-row__img--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .cp-row__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .cp-row__title {
+    font-size: 14px;
+    font-weight: 450;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #222;
+  }
+
+  .cp-row--selected .cp-row__title {
+    color: #4338ca;
+  }
+
+  .cp-row__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .cp-row__tag {
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #f0f0f0;
+    font-size: 11px;
+    color: #777;
+    text-transform: capitalize;
+  }
+
+  .cp-row--selected .cp-row__tag {
+    background: #e0e7ff;
+    color: #4338ca;
+  }
+
+  .cp-row__meta {
+    font-size: 12px;
+    color: #aaa;
     flex-shrink: 0;
-    margin-left: 0.5em;
   }
 
   .cp-empty {
-    padding: 1.5em;
+    padding: 32px 16px;
     text-align: center;
     color: #999;
-    font-size: 0.9em;
+    font-size: 14px;
   }
 
   .cp-footer {
     display: flex;
-    gap: 1em;
-    padding: 0.5em 0.75em;
-    border-top: 1px solid #e0e0e0;
-    font-size: 0.72em;
-    color: #999;
+    gap: 16px;
+    padding: 8px 16px;
+    border-top: 1px solid #eee;
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  .cp-footer span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .cp-footer kbd {
-    font-size: 0.9em;
-    padding: 0.1em 0.3em;
-    border: 1px solid #ddd;
+    font-size: 11px;
+    padding: 1px 5px;
+    border: 1px solid #e0e0e0;
     border-radius: 3px;
-    background: #f5f5f5;
+    background: #fafafa;
     font-family: inherit;
+    color: #999;
   }
 
   @media (max-width: 639px) {
     .cp-overlay--open {
       padding-top: 0;
-      align-items: stretch;
+      align-items: flex-start;
     }
 
     .cp-dialog {
       max-width: 100%;
-      max-height: 100%;
       border-radius: 0;
-      height: 100%;
+      max-height: 50vh;
+      margin-top: 48px;
     }
 
     .cp-footer {

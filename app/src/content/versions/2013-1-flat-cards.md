@@ -2,6 +2,7 @@
 title: "2013: Flat Cards"
 description: A short lived version of my site that featured flat cards, because that's all the rage
 publishedOn: 2013-01-01
+category: "2013"
 tags: [php]
 coverImage: 2013-1-flat-cards/Untitled.png
 coverImageAlt: A screenshot of the Flat Cards website, showcasing a flat card design with a clean, minimal aesthetic.
@@ -9,11 +10,13 @@ coverImageAlt: A screenshot of the Flat Cards website, showcasing a flat card de
 
 ![Untitled](2013-1-flat-cards/Untitled.png)
 
-| **Year(s)**               | **GitHub**                                                       | **Link**                                    |
-| ------------------------- | ---------------------------------------------------------------- | ------------------------------------------- |
-| January 2013 - March 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2013-1) | [View Live →](https://2013-1.v.thalida.com) |
+| Year | GitHub | Link |
+| ---- | ------ | ---- |
+| Jan 2013 - Mar 2013 | [Github](https://github.com/thalida/thalida.com/tree/v-2013-1) | [Live](https://2013-1.v.thalida.com) |
+
 
 ## Designs
+
 
 ### Landing Page
 
@@ -22,11 +25,13 @@ coverImageAlt: A screenshot of the Flat Cards website, showcasing a flat card de
 During this time period I struggled with finding my balance between minimal “clean” pages and content-rich.
 (something I still struggle with to this day.)
 
+
 ### Project View
 
 ![Untitled](2013-1-flat-cards/Untitled%202.png)
 
 Intended to be a modal in order for the site to still be considered a “one-pager”.
+
 
 ### About
 
@@ -34,6 +39,7 @@ Intended to be a modal in order for the site to still be considered a “one-pag
 
 The base setup of the about section with bars for various skill levels, the actual implementation
 took this concept and made it a lot more colorful.
+
 
 ## Abandoned Iterations
 

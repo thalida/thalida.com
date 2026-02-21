@@ -48,16 +48,104 @@ const pageTitle = entry.data.title as string;
   activeId={id}
   pageContext={{ collection: collection!, id: id!, title: pageTitle }}
 >
-  <article>
-    <h2>{pageTitle}</h2>
-    {
-      entry.data.description && (
-        <p>
-          <em>{entry.data.description}</em>
-        </p>
-      )
-    }
+  <article class="post-page">
+    <header class="post-header">
+      <h1>{pageTitle}</h1>
+      {entry.data.description && <p class="post-description">{entry.data.description}</p>}
+      <div class="post-meta">
+        {
+          entry.data.publishedOn && (
+            <time class="post-date">
+              {new Date(entry.data.publishedOn).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </time>
+          )
+        }
+      </div>
+    </header>
     <hr />
-    {Content ? <Content /> : <p>Content could not be rendered.</p>}
+    <div class="post-content">
+      {Content ? <Content /> : <p>Content could not be rendered.</p>}
+    </div>
   </article>
 </BaseLayout>
+
+<style>
+  .post-page {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    max-width: 800px;
+  }
+
+  .post-header {
+    margin-bottom: 1.5em;
+  }
+
+  .post-header h1 {
+    margin: 0 0 0.25em;
+    font-size: 2em;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.2;
+  }
+
+  .post-description {
+    margin: 0 0 0.75em;
+    font-size: 1.1em;
+    color: #666;
+    font-style: italic;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75em;
+  }
+
+  .post-date {
+    font-size: 0.9em;
+    color: #888;
+  }
+
+  .post-content {
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .post-content :global(h2),
+  .post-content :global(h3),
+  .post-content :global(h4) {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: #222;
+  }
+
+  .post-content :global(p) {
+    margin: 0 0 1em;
+  }
+
+  .post-content :global(pre) {
+    background: #f5f5f5;
+    padding: 1em;
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+
+  .post-content :global(code) {
+    font-size: 0.9em;
+  }
+
+  .post-content :global(a) {
+    color: #4338ca;
+  }
+
+  .post-content :global(img) {
+    border-radius: 8px;
+  }
+</style>

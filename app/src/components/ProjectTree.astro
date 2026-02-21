@@ -1,5 +1,6 @@
 ---
-import { getSidebarData, SIDEBAR_ORDER, formatDate, type SidebarCollection } from "../lib/sidebar-data";
+import { SIDEBAR_ORDER } from "../lib/sidebar-data";
+import { getSidebarData } from "../lib/sidebar-data";
 
 interface Props {
   activePage?: string;
@@ -7,159 +8,59 @@ interface Props {
   activeId?: string;
 }
 
-const { activePage, activeCollection, activeId } = Astro.props;
+const { activePage, activeCollection, activeId: _activeId } = Astro.props;
 const sidebarData = await getSidebarData();
 ---
 
-<nav id="project-tree" aria-label="Main navigation">
-  <!-- Level 1: Overview -->
-  <div
-    class="sidebar-level sidebar-level--1 sidebar-level--active"
-    id="sidebar-level-1"
-    role="region"
-    aria-label="Collections overview"
-  >
-    <h2><a href="/" class="sidebar-heading-link">Work</a></h2>
+<nav id="project-tree" aria-label="Main navigation" data-active-collection={activeCollection || ""}>
+  <h2><a href="/" class="sidebar-heading-link">Work</a></h2>
 
-    <button class="sidebar-search-trigger" type="button" data-open-palette>
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="11" cy="11" r="8"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
-      <span>Search…</span>
-      <kbd>⌘K</kbd>
-    </button>
+  <button class="sidebar-search-trigger" type="button" id="sidebar-search-btn">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span>Search…</span>
+    <kbd class="sidebar-search-shortcut">⌘K</kbd>
+  </button>
 
-    <ul class="sidebar-nav">
-      {
-        SIDEBAR_ORDER.map((entry) =>
-          entry.type === "page" ? (
-            <li>
-              <a
-                href={`/${entry.page}`}
-                class="sidebar-row sidebar-row--page"
-                data-active={activePage === entry.page ? "true" : undefined}
-              >
-                {entry.label}
-              </a>
-            </li>
-          ) : sidebarData[entry.collection] ? (
-            <li>
-              <button
-                class="sidebar-row sidebar-row--collection"
-                type="button"
-                data-collection={entry.collection}
-                data-active={activeCollection === entry.collection ? "true" : undefined}
-                aria-expanded={activeCollection === entry.collection ? "true" : "false"}
-                aria-controls={`sidebar-level-2-${entry.collection}`}
-              >
-                <span class="sidebar-row__label">{sidebarData[entry.collection].title}</span>
-                <span class="sidebar-row__count">{sidebarData[entry.collection].items.length}</span>
-              </button>
-            </li>
-          ) : null,
-        )
-      }
-    </ul>
-  </div>
-
-  <!-- Level 2: One per collection -->
-  {
-    Object.values(sidebarData).map((col: SidebarCollection) => (
-      <div
-        class="sidebar-level sidebar-level--2"
-        id={`sidebar-level-2-${col.name}`}
-        data-collection={col.name}
-        role="region"
-        aria-label={`${col.title} items`}
-      >
-        <button class="sidebar-back" type="button" data-back>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-          {col.title}
-        </button>
-
-        <button class="sidebar-search-trigger" type="button" data-open-palette data-palette-collection={col.name}>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <span>Filter {col.title.toLowerCase()}…</span>
-        </button>
-
-        {(col.allTags.length > 0 || col.allCategories.length > 0) && (
-          <div class="sidebar-chips" data-chips-for={col.name}>
-            <button class="sidebar-chip sidebar-chip--active" type="button" data-tag="all">
-              All
-            </button>
-            {col.allCategories.map((cat) => (
-              <button class="sidebar-chip" type="button" data-tag={cat}>
-                {cat}
-              </button>
-            ))}
-            {col.allTags.map((tag) => (
-              <button class="sidebar-chip" type="button" data-tag={tag}>
-                {tag}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <ul class="sidebar-items" data-items-for={col.name}>
-          {col.items.map((item) => (
-            <li data-item-tags={JSON.stringify([...(item.tags ?? []), item.category].filter(Boolean))}>
-              <a
-                href={`/${item.collection}/${item.id}`}
-                class="sidebar-item"
-                data-active={activeCollection === item.collection && activeId === item.id ? "true" : undefined}
-              >
-                {item.coverImageSrc && (
-                  <img
-                    class="sidebar-item__image"
-                    src={item.coverImageSrc}
-                    alt={item.coverImageAlt ?? item.title}
-                    loading="lazy"
-                  />
-                )}
-                <div class="sidebar-item__body">
-                  <span class="sidebar-item__title">{item.title}</span>
-                  <span class="sidebar-item__date">{formatDate(item.publishedOn)}</span>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))
-  }
+  <ul class="sidebar-nav">
+    {
+      SIDEBAR_ORDER.map((entry) =>
+        entry.type === "page" ? (
+          <li>
+            <a
+              href={`/${entry.page}`}
+              class="sidebar-row sidebar-row--page"
+              data-active={activePage === entry.page ? "true" : undefined}
+            >
+              {entry.label}
+            </a>
+          </li>
+        ) : sidebarData[entry.collection] ? (
+          <li>
+            <a
+              href={`/${entry.collection}`}
+              class="sidebar-row sidebar-row--collection"
+              data-active={activeCollection === entry.collection ? "true" : undefined}
+            >
+              <span class="sidebar-row__label">{sidebarData[entry.collection].title}</span>
+              <span class="sidebar-row__count">{sidebarData[entry.collection].items.length}</span>
+            </a>
+          </li>
+        ) : null,
+      )
+    }
+  </ul>
 </nav>
 
 <script>
@@ -167,113 +68,12 @@ const sidebarData = await getSidebarData();
     const tree = document.getElementById("project-tree");
     if (!tree) return;
 
-    const level1 = document.getElementById("sidebar-level-1");
-    if (!level1) return;
-
-    function showLevel1() {
-      const activeLevel2 = tree.querySelector(".sidebar-level--2.sidebar-level--active");
-      if (activeLevel2) activeLevel2.classList.remove("sidebar-level--active");
-      level1.classList.add("sidebar-level--active");
-      tree.dataset.level = "1";
-
-      // Update aria-expanded on all collection buttons
-      tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
-        btn.setAttribute("aria-expanded", "false");
-      });
-
-      // Focus the active collection button or the first one
-      const activeBtn =
-        level1.querySelector(".sidebar-row--collection[data-active]") ||
-        level1.querySelector(".sidebar-row--collection");
-      activeBtn?.focus();
-    }
-
-    function showLevel2(collection) {
-      const target = document.getElementById(`sidebar-level-2-${collection}`);
-      if (!target) return;
-      level1.classList.remove("sidebar-level--active");
-      const prev = tree.querySelector(".sidebar-level--2.sidebar-level--active");
-      if (prev) prev.classList.remove("sidebar-level--active");
-      target.classList.add("sidebar-level--active");
-      tree.dataset.level = "2";
-
-      // Update aria-expanded on collection buttons
-      tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
-        btn.setAttribute("aria-expanded", btn.dataset.collection === collection ? "true" : "false");
-      });
-
-      // Focus the back button in the new level
-      target.querySelector(".sidebar-back")?.focus();
-    }
-
-    // Collection row clicks → go to level 2
-    tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const col = btn.dataset.collection;
-        if (col) showLevel2(col);
-      });
-    });
-
-    // Back buttons → go to level 1
-    tree.querySelectorAll("[data-back]").forEach((btn) => {
-      btn.addEventListener("click", showLevel1);
-    });
-
-    // Tag chip filtering
-    tree.querySelectorAll(".sidebar-chips").forEach((chipsContainer) => {
-      const col = chipsContainer.dataset.chipsFor;
-      if (!col) return;
-      const itemsList = tree.querySelector(`[data-items-for="${col}"]`);
-      if (!itemsList) return;
-
-      chipsContainer.addEventListener("click", (e) => {
-        const chip = e.target.closest(".sidebar-chip");
-        if (!chip) return;
-
-        const tag = chip.dataset.tag;
-        if (!tag) return;
-
-        if (tag === "all") {
-          chipsContainer.querySelectorAll(".sidebar-chip").forEach((c) => c.classList.remove("sidebar-chip--active"));
-          chip.classList.add("sidebar-chip--active");
-        } else {
-          const allChip = chipsContainer.querySelector('[data-tag="all"]');
-          if (allChip) allChip.classList.remove("sidebar-chip--active");
-          chip.classList.toggle("sidebar-chip--active");
-          if (!chipsContainer.querySelector(".sidebar-chip--active")) {
-            if (allChip) allChip.classList.add("sidebar-chip--active");
-          }
-        }
-
-        const activeTags = new Set();
-        chipsContainer.querySelectorAll(".sidebar-chip--active").forEach((c) => {
-          if (c.dataset.tag && c.dataset.tag !== "all") activeTags.add(c.dataset.tag);
-        });
-        const allChip = chipsContainer.querySelector('[data-tag="all"]');
-        const showAll = activeTags.size === 0 || (allChip && allChip.classList.contains("sidebar-chip--active"));
-
-        itemsList.querySelectorAll(":scope > li").forEach((li) => {
-          const itemTags = JSON.parse(li.dataset.itemTags || "[]");
-          if (showAll || itemTags.some((t) => activeTags.has(t))) {
-            li.style.display = "";
-          } else {
-            li.style.display = "none";
-          }
-        });
-      });
-    });
-
-    // If we're on a collection page, auto-open level 2
-    const activeCollBtn = tree.querySelector('.sidebar-row--collection[data-active="true"]');
-    if (activeCollBtn && activeCollBtn.dataset.collection) {
-      showLevel2(activeCollBtn.dataset.collection);
-    }
-
     // Platform detection for keyboard shortcut hint
     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-    tree.querySelectorAll(".sidebar-search-trigger kbd").forEach((kbd) => {
-      kbd.textContent = isMac ? "⌘K" : "Ctrl+K";
-    });
+    const shortcutHint = tree.querySelector(".sidebar-search-shortcut");
+    if (shortcutHint) {
+      shortcutHint.textContent = isMac ? "⌘K" : "Ctrl+K";
+    }
   }
 
   document.addEventListener("astro:page-load", initSidebar);
@@ -287,17 +87,6 @@ const sidebarData = await getSidebarData();
       -apple-system,
       sans-serif;
     position: relative;
-    overflow: hidden;
-  }
-
-  .sidebar-level {
-    display: none;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .sidebar-level--active {
-    display: flex;
   }
 
   /* ---- Heading ---- */
@@ -326,6 +115,7 @@ const sidebarData = await getSidebarData();
     color: #999;
     font-size: 0.85em;
     cursor: pointer;
+    font-family: inherit;
     transition:
       border-color 0.15s,
       box-shadow 0.15s;
@@ -341,7 +131,7 @@ const sidebarData = await getSidebarData();
     text-align: left;
   }
 
-  .sidebar-search-trigger kbd {
+  .sidebar-search-shortcut {
     font-size: 0.8em;
     padding: 0.15em 0.4em;
     border: 1px solid #ddd;
@@ -351,7 +141,7 @@ const sidebarData = await getSidebarData();
     font-family: inherit;
   }
 
-  /* ---- Navigation list (Level 1) ---- */
+  /* ---- Navigation list ---- */
   .sidebar-nav {
     list-style: none;
     padding: 0;
@@ -372,10 +162,6 @@ const sidebarData = await getSidebarData();
     font-weight: 500;
     font-size: 0.9em;
     transition: background 0.15s;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-family: inherit;
   }
 
   .sidebar-row:hover {
@@ -403,121 +189,5 @@ const sidebarData = await getSidebarData();
   .sidebar-row[data-active] .sidebar-row__count {
     background: #ddd6fe;
     color: #6d28d9;
-  }
-
-  /* ---- Back button (Level 2) ---- */
-  .sidebar-back {
-    display: flex;
-    align-items: center;
-    gap: 0.3em;
-    background: none;
-    border: none;
-    padding: 0.4em 0;
-    margin-bottom: 0.5em;
-    font-size: 1em;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-  .sidebar-back:hover {
-    color: #4338ca;
-  }
-
-  /* ---- Filter chips ---- */
-  .sidebar-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35em;
-    margin-bottom: 0.75em;
-  }
-
-  .sidebar-chip {
-    padding: 0.25em 0.6em;
-    border-radius: 12px;
-    border: 1px solid #e0e0e0;
-    background: #fff;
-    font-size: 0.75em;
-    color: #666;
-    cursor: pointer;
-    font-family: inherit;
-    transition:
-      background 0.15s,
-      border-color 0.15s,
-      color 0.15s;
-    text-transform: capitalize;
-  }
-
-  .sidebar-chip:hover {
-    border-color: #ccc;
-    background: #f5f5f5;
-  }
-
-  .sidebar-chip--active {
-    background: #eef2ff;
-    border-color: #a5b4fc;
-    color: #4338ca;
-  }
-
-  /* ---- Item list (Level 2) ---- */
-  .sidebar-items {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    overflow-y: auto;
-    flex: 1;
-  }
-
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.6em;
-    padding: 0.45em 0.5em;
-    border-radius: 6px;
-    text-decoration: none;
-    color: #333;
-    transition: background 0.15s;
-  }
-
-  .sidebar-item:hover {
-    background: #e4e4e4;
-  }
-
-  .sidebar-item[data-active] {
-    background: #eef2ff;
-    border-left: 3px solid #a5b4fc;
-  }
-
-  .sidebar-item__image {
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    object-fit: cover;
-    flex-shrink: 0;
-    background: #eee;
-  }
-
-  .sidebar-item__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-    min-width: 0;
-  }
-
-  .sidebar-item__title {
-    font-size: 0.85em;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .sidebar-item__date {
-    font-size: 0.72em;
-    color: #999;
   }
 </style>

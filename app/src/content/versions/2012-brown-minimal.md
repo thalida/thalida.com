@@ -2,6 +2,7 @@
 title: "2012: Brown & Mini­mal"
 description: Oh so very very sepia
 publishedOn: 2012-01-01
+category: "2012"
 tags: [php]
 coverImage: 2012-brown-minimal/Untitled.png
 coverImageAlt: Screenshot of the Brown & Minimal design of thalida.com, featuring a sepia-toned background and minimalistic layout.
@@ -9,13 +10,15 @@ coverImageAlt: Screenshot of the Brown & Minimal design of thalida.com, featurin
 
 ![Untitled](2012-brown-minimal/Untitled.png)
 
-| **Year(s)**                 | **GitHub**                                                     | **Link**                                  |
-| --------------------------- | -------------------------------------------------------------- | ----------------------------------------- |
-| January 2012 - January 2013 | [Github →](https://github.com/thalida/thalida.com/tree/v-2012) | [View Live →](https://2012.v.thalida.com) |
+| Year | GitHub | Link |
+| ---- | ------ | ---- |
+| Jan 2012 - Jan 2013 | [Github](https://github.com/thalida/thalida.com/tree/v-2012) | [Live](https://2012.v.thalida.com) |
+
 
 ## Story
 
 Site Design #8 is the oldest existing version of my site. The first seven versions have been lost to history (and [onepagelove](https://onepagelove.com/thalida)).
+
 
 ## **Designs**
 

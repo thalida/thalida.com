@@ -266,12 +266,10 @@ const { title = "thalida", activePage, activeCollection, activeId, pageContext =
 
         backdrop.addEventListener("click", closeAll);
 
+        // Mobile search button closes drawers (CommandPalette handles opening itself)
         const searchBtn = document.getElementById("mobile-search-btn");
         if (searchBtn) {
-          searchBtn.addEventListener("click", () => {
-            closeAll();
-            document.dispatchEvent(new CustomEvent("open-command-palette"));
-          });
+          searchBtn.addEventListener("click", closeAll);
         }
       }
 
