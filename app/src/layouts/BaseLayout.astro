@@ -38,7 +38,7 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
         height: 100vh;
         width: 100vw;
       }
-      #project-tree,
+      #site-nav,
       #content-viewer,
       #chat-panel {
         overflow-y: auto;
@@ -46,7 +46,7 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
         padding: 1em;
         border-right: 1px solid #ccc;
       }
-      #project-tree {
+      #site-nav {
         flex: 0 0 25%;
         max-width: 320px;
       }
@@ -115,7 +115,7 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
           padding-top: 48px;
         }
 
-        #project-tree,
+        #site-nav,
         #chat-panel {
           position: fixed;
           top: 48px;
@@ -127,14 +127,14 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
           border-right: none;
         }
 
-        #project-tree {
+        #site-nav {
           left: 0;
           flex: none;
           transform: translateX(-100%);
           border-right: 1px solid #ccc;
         }
 
-        #project-tree.open {
+        #site-nav.open {
           transform: translateX(0);
         }
 
@@ -235,21 +235,21 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
       function initDrawers() {
         const menuBtn = document.getElementById("mobile-menu-btn")!;
         const chatBtn = document.getElementById("mobile-chat-btn")!;
-        const projectTree = document.getElementById("project-tree")!;
+        const siteNav = document.getElementById("site-nav")!;
         const chatPanel = document.getElementById("chat-panel")!;
         const backdrop = document.getElementById("drawer-backdrop")!;
 
         function closeAll() {
-          projectTree.classList.remove("open");
+          siteNav.classList.remove("open");
           chatPanel.classList.remove("open");
           backdrop.classList.remove("visible");
         }
 
         menuBtn.addEventListener("click", () => {
-          const willOpen = !projectTree.classList.contains("open");
+          const willOpen = !siteNav.classList.contains("open");
           closeAll();
           if (willOpen) {
-            projectTree.classList.add("open");
+            siteNav.classList.add("open");
             backdrop.classList.add("visible");
           }
         });
@@ -274,14 +274,14 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
 
       document.addEventListener("astro:page-load", initDrawers);
 
-      let savedTreeScroll = 0;
+      let savedNavScroll = 0;
       document.addEventListener("astro:before-swap", () => {
-        const tree = document.getElementById("project-tree");
-        if (tree) savedTreeScroll = tree.scrollTop;
+        const nav = document.getElementById("site-nav");
+        if (nav) savedNavScroll = nav.scrollTop;
       });
       document.addEventListener("astro:after-swap", () => {
-        const tree = document.getElementById("project-tree");
-        if (tree) tree.scrollTop = savedTreeScroll;
+        const nav = document.getElementById("site-nav");
+        if (nav) nav.scrollTop = savedNavScroll;
       });
     </script>
   </body>

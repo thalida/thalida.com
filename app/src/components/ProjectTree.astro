@@ -11,10 +11,10 @@ const { activePage, activeCollection } = Astro.props;
 const navData = await getNavData();
 ---
 
-<nav id="project-tree" aria-label="Main navigation" data-active-collection={activeCollection || ""}>
-  <h2><a href="/" class="sidebar-heading-link">Work</a></h2>
+<nav id="site-nav" aria-label="Main navigation" data-active-collection={activeCollection || ""}>
+  <h2><a href="/" class="nav-heading-link">Work</a></h2>
 
-  <button class="sidebar-search-trigger" type="button" id="sidebar-search-btn">
+  <button class="nav-search-trigger" type="button" id="nav-search-btn">
     <svg
       width="16"
       height="16"
@@ -29,17 +29,17 @@ const navData = await getNavData();
       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
     </svg>
     <span>Search…</span>
-    <kbd class="sidebar-search-shortcut">⌘K</kbd>
+    <kbd class="nav-search-shortcut">⌘K</kbd>
   </button>
 
-  <ul class="sidebar-nav">
+  <ul class="nav-list">
     {
       NAV_ORDER.map((entry) =>
         entry.type === "page" ? (
           <li>
             <a
               href={`/${entry.page}`}
-              class="sidebar-row sidebar-row--page"
+              class="nav-row nav-row--page"
               data-active={activePage === entry.page ? "true" : undefined}
             >
               {entry.label}
@@ -49,11 +49,11 @@ const navData = await getNavData();
           <li>
             <a
               href={`/${entry.collection}`}
-              class="sidebar-row sidebar-row--collection"
+              class="nav-row nav-row--collection"
               data-active={activeCollection === entry.collection ? "true" : undefined}
             >
-              <span class="sidebar-row__label">{navData[entry.collection].title}</span>
-              <span class="sidebar-row__count">{navData[entry.collection].items.length}</span>
+              <span class="nav-row__label">{navData[entry.collection].title}</span>
+              <span class="nav-row__count">{navData[entry.collection].items.length}</span>
             </a>
           </li>
         ) : null,
@@ -63,24 +63,24 @@ const navData = await getNavData();
 </nav>
 
 <script>
-  function initSidebar() {
-    const tree = document.getElementById("project-tree");
-    if (!tree) return;
+  function initNav() {
+    const siteNav = document.getElementById("site-nav");
+    if (!siteNav) return;
 
     // Platform detection for keyboard shortcut hint
     const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-    const shortcutHint = tree.querySelector(".sidebar-search-shortcut");
+    const shortcutHint = siteNav.querySelector(".nav-search-shortcut");
     if (shortcutHint) {
       shortcutHint.textContent = isMac ? "⌘K" : "Ctrl+K";
     }
   }
 
-  document.addEventListener("astro:page-load", initSidebar);
+  document.addEventListener("astro:page-load", initNav);
 </script>
 
 <style>
   /* ---- Layout ---- */
-  #project-tree {
+  #site-nav {
     font-family:
       system-ui,
       -apple-system,
@@ -89,19 +89,19 @@ const navData = await getNavData();
   }
 
   /* ---- Heading ---- */
-  #project-tree h2 {
+  #site-nav h2 {
     margin: 0 0 0.75em;
     font-size: 1.1em;
     letter-spacing: 0.02em;
   }
 
-  .sidebar-heading-link {
+  .nav-heading-link {
     text-decoration: none;
     color: inherit;
   }
 
   /* ---- Search trigger ---- */
-  .sidebar-search-trigger {
+  .nav-search-trigger {
     display: flex;
     align-items: center;
     gap: 0.5em;
@@ -120,17 +120,17 @@ const navData = await getNavData();
       box-shadow 0.15s;
   }
 
-  .sidebar-search-trigger:hover {
+  .nav-search-trigger:hover {
     border-color: #ccc;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   }
 
-  .sidebar-search-trigger span {
+  .nav-search-trigger span {
     flex: 1;
     text-align: left;
   }
 
-  .sidebar-search-shortcut {
+  .nav-search-shortcut {
     font-size: 0.8em;
     padding: 0.15em 0.4em;
     border: 1px solid #ddd;
@@ -141,7 +141,7 @@ const navData = await getNavData();
   }
 
   /* ---- Navigation list ---- */
-  .sidebar-nav {
+  .nav-list {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -150,7 +150,7 @@ const navData = await getNavData();
     gap: 2px;
   }
 
-  .sidebar-row {
+  .nav-row {
     display: flex;
     align-items: center;
     width: 100%;
@@ -163,20 +163,20 @@ const navData = await getNavData();
     transition: background 0.15s;
   }
 
-  .sidebar-row:hover {
+  .nav-row:hover {
     background: #e4e4e4;
   }
 
-  .sidebar-row[data-active] {
+  .nav-row[data-active] {
     background: #eef2ff;
     color: #4338ca;
   }
 
-  .sidebar-row--collection {
+  .nav-row--collection {
     justify-content: space-between;
   }
 
-  .sidebar-row__count {
+  .nav-row__count {
     font-size: 0.8em;
     color: #999;
     font-weight: 400;
@@ -185,7 +185,7 @@ const navData = await getNavData();
     border-radius: 10px;
   }
 
-  .sidebar-row[data-active] .sidebar-row__count {
+  .nav-row[data-active] .nav-row__count {
     background: #ddd6fe;
     color: #6d28d9;
   }

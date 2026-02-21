@@ -77,8 +77,8 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     let selectedIndex = -1;
 
     function getActiveCollectionFromPage() {
-      const tree = document.getElementById("project-tree");
-      const col = tree?.dataset?.activeCollection;
+      const nav = document.getElementById("site-nav");
+      const col = nav?.dataset?.activeCollection;
       return col && col.length > 0 ? col : null;
     }
 
@@ -253,9 +253,9 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     });
 
     // Sidebar search button click
-    const sidebarSearchBtn = document.getElementById("sidebar-search-btn");
-    if (sidebarSearchBtn) {
-      sidebarSearchBtn.addEventListener("click", () => {
+    const navSearchBtn = document.getElementById("nav-search-btn");
+    if (navSearchBtn) {
+      navSearchBtn.addEventListener("click", () => {
         if (!isOpen()) {
           open();
         }
