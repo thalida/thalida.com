@@ -11,9 +11,14 @@ const { activePage, activeCollection, activeId } = Astro.props;
 const sidebarData = await getSidebarData();
 ---
 
-<nav id="project-tree">
+<nav id="project-tree" aria-label="Main navigation">
   <!-- Level 1: Overview -->
-  <div class="sidebar-level sidebar-level--1 sidebar-level--active" id="sidebar-level-1">
+  <div
+    class="sidebar-level sidebar-level--1 sidebar-level--active"
+    id="sidebar-level-1"
+    role="region"
+    aria-label="Collections overview"
+  >
     <h2><a href="/" class="sidebar-heading-link">Work</a></h2>
 
     <button class="sidebar-search-trigger" type="button" data-open-palette>
@@ -54,6 +59,8 @@ const sidebarData = await getSidebarData();
                 type="button"
                 data-collection={entry.collection}
                 data-active={activeCollection === entry.collection ? "true" : undefined}
+                aria-expanded={activeCollection === entry.collection ? "true" : "false"}
+                aria-controls={`sidebar-level-2-${entry.collection}`}
               >
                 <span class="sidebar-row__label">{sidebarData[entry.collection].title}</span>
                 <span class="sidebar-row__count">{sidebarData[entry.collection].items.length}</span>
@@ -68,7 +75,13 @@ const sidebarData = await getSidebarData();
   <!-- Level 2: One per collection -->
   {
     Object.values(sidebarData).map((col: SidebarCollection) => (
-      <div class="sidebar-level sidebar-level--2" id={`sidebar-level-2-${col.name}`} data-collection={col.name}>
+      <div
+        class="sidebar-level sidebar-level--2"
+        id={`sidebar-level-2-${col.name}`}
+        data-collection={col.name}
+        role="region"
+        aria-label={`${col.title} items`}
+      >
         <button class="sidebar-back" type="button" data-back>
           <svg
             width="16"
@@ -162,6 +175,17 @@ const sidebarData = await getSidebarData();
       if (activeLevel2) activeLevel2.classList.remove("sidebar-level--active");
       level1.classList.add("sidebar-level--active");
       tree.dataset.level = "1";
+
+      // Update aria-expanded on all collection buttons
+      tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
+        btn.setAttribute("aria-expanded", "false");
+      });
+
+      // Focus the active collection button or the first one
+      const activeBtn =
+        level1.querySelector(".sidebar-row--collection[data-active]") ||
+        level1.querySelector(".sidebar-row--collection");
+      activeBtn?.focus();
     }
 
     function showLevel2(collection) {
@@ -172,6 +196,14 @@ const sidebarData = await getSidebarData();
       if (prev) prev.classList.remove("sidebar-level--active");
       target.classList.add("sidebar-level--active");
       tree.dataset.level = "2";
+
+      // Update aria-expanded on collection buttons
+      tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
+        btn.setAttribute("aria-expanded", btn.dataset.collection === collection ? "true" : "false");
+      });
+
+      // Focus the back button in the new level
+      target.querySelector(".sidebar-back")?.focus();
     }
 
     // Collection row clicks → go to level 2
@@ -236,6 +268,12 @@ const sidebarData = await getSidebarData();
     if (activeCollBtn && activeCollBtn.dataset.collection) {
       showLevel2(activeCollBtn.dataset.collection);
     }
+
+    // Platform detection for keyboard shortcut hint
+    const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    tree.querySelectorAll(".sidebar-search-trigger kbd").forEach((kbd) => {
+      kbd.textContent = isMac ? "⌘K" : "Ctrl+K";
+    });
   }
 
   document.addEventListener("astro:page-load", initSidebar);
