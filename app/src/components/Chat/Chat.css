@@ -1,0 +1,107 @@
+#chat-panel {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+#chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 0.25em;
+}
+
+#chat-header h2 {
+  margin: 0;
+  font-size: 1.1em;
+  letter-spacing: 0.02em;
+}
+
+#chat-admin-link {
+  font-size: 0.8em;
+  color: #999;
+  text-decoration: none;
+}
+
+#chat-admin-link:hover {
+  color: #333;
+}
+
+#chat-owner-status,
+#chat-user-count {
+  font-size: 0.8em;
+  color: #666;
+}
+
+#chat-room {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  flex: 1;
+}
+
+#chat-messages {
+  flex: 1;
+  font-size: 0.85em;
+}
+
+#chat-username-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  font-size: 0.8em;
+  color: #666;
+}
+
+#chat-username-bar label {
+  font-size: inherit;
+}
+
+#chat-username {
+  width: 100%;
+  padding: 0.3em 0.5em;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+#chat-rename-btn {
+  padding: 0.3em 0.6em;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fff;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+#chat-input {
+  width: 100%;
+  padding: 0.4em 0.6em;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.85em;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+#chat-send {
+  width: 100%;
+  padding: 0.4em;
+  margin-top: 0.25em;
+  border: none;
+  border-radius: 6px;
+  background: #4338ca;
+  color: #fff;
+  font-size: 0.85em;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#chat-send:hover {
+  background: #3730a3;
+}
