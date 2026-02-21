@@ -31,6 +31,7 @@ export type NavCollection = {
 export type NavEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
 
 export const NAV_ORDER: NavEntry[] = [
+  { type: "page", page: "", label: "Home" },
   { type: "page", page: "about", label: "About" },
   { type: "collection", collection: "projects" },
   { type: "collection", collection: "guides" },
