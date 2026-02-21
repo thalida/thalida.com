@@ -1,7 +1,5 @@
 ---
-import { getCollection } from "astro:content";
-import { getImage } from "astro:assets";
-import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import { getSidebarData, SIDEBAR_ORDER, formatDate, type SidebarCollection } from "../lib/sidebar-data";
 
 interface Props {
   activePage?: string;
@@ -10,261 +8,478 @@ interface Props {
 }
 
 const { activePage, activeCollection, activeId } = Astro.props;
-
-type TreeItem = {
-  id: string;
-  collection: string;
-  title: string;
-  href?: string;
-  description?: string;
-  tags?: string[];
-  publishedOn: Date;
-  coverImageSrc?: string;
-  coverImageAlt?: string;
-};
-
-type TreeData = Record<string, { title: string; items: TreeItem[] }>;
-
-type SidebarEntry =
-  | { type: "page"; page: string; label: string }
-  | { type: "collection"; collection: string; defaultOpen?: boolean };
-
-const SIDEBAR_ORDER: SidebarEntry[] = [
-  { type: "page", page: "about", label: "About" },
-  { type: "collection", collection: "projects" },
-  { type: "collection", collection: "guides" },
-  { type: "collection", collection: "gallery" },
-  { type: "collection", collection: "recipes" },
-  { type: "collection", collection: "versions" },
-  { type: "page", page: "links", label: "Links" },
-];
-
-const tree: TreeData = {};
-
-for (const name of COLLECTION_NAMES) {
-  const entries = await getCollection(name, ({ data }) => !data.draft);
-  const sorted = entries.sort(
-    (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
-  );
-
-  const items: TreeItem[] = [];
-  for (const entry of sorted) {
-    let coverImageSrc: string | undefined;
-    if (entry.data.coverImage) {
-      const optimized = await getImage({ src: entry.data.coverImage, width: 400 });
-      coverImageSrc = optimized.src;
-    }
-
-    items.push({
-      id: entry.id,
-      collection: name,
-      title: entry.data.title,
-      href: entry.data.link,
-      description: entry.data.description,
-      tags: entry.data.tags,
-      publishedOn: entry.data.publishedOn,
-      coverImageSrc,
-      coverImageAlt: entry.data.coverImageAlt,
-    });
-  }
-
-  tree[name] = {
-    title: collectionMeta[name].title,
-    items,
-  };
-}
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "short" });
-}
+const sidebarData = await getSidebarData();
 ---
 
 <nav id="project-tree">
-  <h2><a href="/" class="tree-heading-link">Work</a></h2>
+  <!-- Level 1: Overview -->
+  <div class="sidebar-level sidebar-level--1 sidebar-level--active" id="sidebar-level-1">
+    <h2><a href="/" class="sidebar-heading-link">Work</a></h2>
+
+    <button class="sidebar-search-trigger" type="button" data-open-palette>
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <span>Search…</span>
+      <kbd>⌘K</kbd>
+    </button>
+
+    <ul class="sidebar-nav">
+      {
+        SIDEBAR_ORDER.map((entry) =>
+          entry.type === "page" ? (
+            <li>
+              <a
+                href={`/${entry.page}`}
+                class="sidebar-row sidebar-row--page"
+                data-active={activePage === entry.page ? "true" : undefined}
+              >
+                {entry.label}
+              </a>
+            </li>
+          ) : sidebarData[entry.collection] ? (
+            <li>
+              <button
+                class="sidebar-row sidebar-row--collection"
+                type="button"
+                data-collection={entry.collection}
+                data-active={activeCollection === entry.collection ? "true" : undefined}
+              >
+                <span class="sidebar-row__label">{sidebarData[entry.collection].title}</span>
+                <span class="sidebar-row__count">{sidebarData[entry.collection].items.length}</span>
+              </button>
+            </li>
+          ) : null,
+        )
+      }
+    </ul>
+  </div>
+
+  <!-- Level 2: One per collection -->
   {
-    SIDEBAR_ORDER.map((entry) =>
-      entry.type === "page" ? (
-        <ul class="tree-list">
-          <li>
-            <a
-              href={`/${entry.page}`}
-              class="tree-link tree-link--page"
-              data-active={activePage === entry.page ? "true" : undefined}
-            >
-              {tree[entry.page] ? `${entry.label} (${tree[entry.page].items.length})` : entry.label}
-            </a>
-          </li>
-        </ul>
-      ) : (
-        <details open={entry.defaultOpen || activeCollection === entry.collection}>
-          <summary>
-            {tree[entry.collection].title} ({tree[entry.collection].items.length})
-          </summary>
-          <div class="tree-cards">
-            {tree[entry.collection].items.map((item) => (
+    Object.values(sidebarData).map((col: SidebarCollection) => (
+      <div class="sidebar-level sidebar-level--2" id={`sidebar-level-2-${col.name}`} data-collection={col.name}>
+        <button class="sidebar-back" type="button" data-back>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          {col.title}
+        </button>
+
+        <button class="sidebar-search-trigger" type="button" data-open-palette data-palette-collection={col.name}>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <span>Filter {col.title.toLowerCase()}…</span>
+        </button>
+
+        {(col.allTags.length > 0 || col.allCategories.length > 0) && (
+          <div class="sidebar-chips" data-chips-for={col.name}>
+            <button class="sidebar-chip sidebar-chip--active" type="button" data-tag="all">
+              All
+            </button>
+            {col.allCategories.map((cat) => (
+              <button class="sidebar-chip" type="button" data-tag={cat}>
+                {cat}
+              </button>
+            ))}
+            {col.allTags.map((tag) => (
+              <button class="sidebar-chip" type="button" data-tag={tag}>
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <ul class="sidebar-items" data-items-for={col.name}>
+          {col.items.map((item) => (
+            <li data-item-tags={JSON.stringify([...(item.tags ?? []), item.category].filter(Boolean))}>
               <a
                 href={`/${item.collection}/${item.id}`}
-                class="tree-link tree-card"
+                class="sidebar-item"
                 data-active={activeCollection === item.collection && activeId === item.id ? "true" : undefined}
               >
                 {item.coverImageSrc && (
                   <img
-                    class="tree-card__image"
+                    class="sidebar-item__image"
                     src={item.coverImageSrc}
                     alt={item.coverImageAlt ?? item.title}
                     loading="lazy"
                   />
                 )}
-                <div class="tree-card__body">
-                  <span class="tree-card__title">{item.title}</span>
-                  {item.description && <span class="tree-card__desc">{item.description}</span>}
-                  <span class="tree-card__date">{formatDate(item.publishedOn)}</span>
+                <div class="sidebar-item__body">
+                  <span class="sidebar-item__title">{item.title}</span>
+                  <span class="sidebar-item__date">{formatDate(item.publishedOn)}</span>
                 </div>
               </a>
-            ))}
-          </div>
-        </details>
-      ),
-    )
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
   }
 </nav>
 
+<script>
+  function initSidebar() {
+    const tree = document.getElementById("project-tree");
+    if (!tree) return;
+
+    const level1 = document.getElementById("sidebar-level-1");
+    if (!level1) return;
+
+    function showLevel1() {
+      const activeLevel2 = tree.querySelector(".sidebar-level--2.sidebar-level--active");
+      if (activeLevel2) activeLevel2.classList.remove("sidebar-level--active");
+      level1.classList.add("sidebar-level--active");
+      tree.dataset.level = "1";
+    }
+
+    function showLevel2(collection) {
+      const target = document.getElementById(`sidebar-level-2-${collection}`);
+      if (!target) return;
+      level1.classList.remove("sidebar-level--active");
+      const prev = tree.querySelector(".sidebar-level--2.sidebar-level--active");
+      if (prev) prev.classList.remove("sidebar-level--active");
+      target.classList.add("sidebar-level--active");
+      tree.dataset.level = "2";
+    }
+
+    // Collection row clicks → go to level 2
+    tree.querySelectorAll(".sidebar-row--collection").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const col = btn.dataset.collection;
+        if (col) showLevel2(col);
+      });
+    });
+
+    // Back buttons → go to level 1
+    tree.querySelectorAll("[data-back]").forEach((btn) => {
+      btn.addEventListener("click", showLevel1);
+    });
+
+    // Tag chip filtering
+    tree.querySelectorAll(".sidebar-chips").forEach((chipsContainer) => {
+      const col = chipsContainer.dataset.chipsFor;
+      if (!col) return;
+      const itemsList = tree.querySelector(`[data-items-for="${col}"]`);
+      if (!itemsList) return;
+
+      chipsContainer.addEventListener("click", (e) => {
+        const chip = e.target.closest(".sidebar-chip");
+        if (!chip) return;
+
+        const tag = chip.dataset.tag;
+        if (!tag) return;
+
+        if (tag === "all") {
+          chipsContainer.querySelectorAll(".sidebar-chip").forEach((c) => c.classList.remove("sidebar-chip--active"));
+          chip.classList.add("sidebar-chip--active");
+        } else {
+          const allChip = chipsContainer.querySelector('[data-tag="all"]');
+          if (allChip) allChip.classList.remove("sidebar-chip--active");
+          chip.classList.toggle("sidebar-chip--active");
+          if (!chipsContainer.querySelector(".sidebar-chip--active")) {
+            if (allChip) allChip.classList.add("sidebar-chip--active");
+          }
+        }
+
+        const activeTags = new Set();
+        chipsContainer.querySelectorAll(".sidebar-chip--active").forEach((c) => {
+          if (c.dataset.tag && c.dataset.tag !== "all") activeTags.add(c.dataset.tag);
+        });
+        const allChip = chipsContainer.querySelector('[data-tag="all"]');
+        const showAll = activeTags.size === 0 || (allChip && allChip.classList.contains("sidebar-chip--active"));
+
+        itemsList.querySelectorAll(":scope > li").forEach((li) => {
+          const itemTags = JSON.parse(li.dataset.itemTags || "[]");
+          if (showAll || itemTags.some((t) => activeTags.has(t))) {
+            li.style.display = "";
+          } else {
+            li.style.display = "none";
+          }
+        });
+      });
+    });
+
+    // If we're on a collection page, auto-open level 2
+    const activeCollBtn = tree.querySelector('.sidebar-row--collection[data-active="true"]');
+    if (activeCollBtn && activeCollBtn.dataset.collection) {
+      showLevel2(activeCollBtn.dataset.collection);
+    }
+  }
+
+  document.addEventListener("astro:page-load", initSidebar);
+</script>
+
 <style>
+  /* ---- Layout ---- */
   #project-tree {
     font-family:
       system-ui,
       -apple-system,
       sans-serif;
+    position: relative;
+    overflow: hidden;
   }
 
+  .sidebar-level {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .sidebar-level--active {
+    display: flex;
+  }
+
+  /* ---- Heading ---- */
   #project-tree h2 {
     margin: 0 0 0.75em;
     font-size: 1.1em;
     letter-spacing: 0.02em;
   }
 
-  .tree-heading-link {
+  .sidebar-heading-link {
     text-decoration: none;
     color: inherit;
   }
 
-  .tree-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 0.75em;
+  /* ---- Search trigger ---- */
+  .sidebar-search-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    width: 100%;
+    padding: 0.5em 0.6em;
+    margin-bottom: 0.75em;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    color: #999;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
   }
 
-  .tree-link--page {
-    display: block;
+  .sidebar-search-trigger:hover {
+    border-color: #ccc;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .sidebar-search-trigger span {
+    flex: 1;
+    text-align: left;
+  }
+
+  .sidebar-search-trigger kbd {
+    font-size: 0.8em;
+    padding: 0.15em 0.4em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f5f5f5;
+    color: #999;
+    font-family: inherit;
+  }
+
+  /* ---- Navigation list (Level 1) ---- */
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sidebar-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
     padding: 0.5em 0.6em;
     border-radius: 6px;
     text-decoration: none;
     color: #333;
     font-weight: 500;
+    font-size: 0.9em;
     transition: background 0.15s;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
   }
 
-  .tree-link--page:hover,
-  .tree-link--page[data-active] {
+  .sidebar-row:hover {
     background: #e4e4e4;
   }
 
-  details {
+  .sidebar-row[data-active] {
+    background: #eef2ff;
+    color: #4338ca;
+  }
+
+  .sidebar-row--collection {
+    justify-content: space-between;
+  }
+
+  .sidebar-row__count {
+    font-size: 0.8em;
+    color: #999;
+    font-weight: 400;
+    background: #f0f0f0;
+    padding: 0.1em 0.5em;
+    border-radius: 10px;
+  }
+
+  .sidebar-row[data-active] .sidebar-row__count {
+    background: #ddd6fe;
+    color: #6d28d9;
+  }
+
+  /* ---- Back button (Level 2) ---- */
+  .sidebar-back {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    background: none;
+    border: none;
+    padding: 0.4em 0;
     margin-bottom: 0.5em;
-  }
-
-  summary {
-    cursor: pointer;
+    font-size: 1em;
     font-weight: 600;
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: #666;
-    padding: 0.4em 0;
-    user-select: none;
-  }
-
-  .tree-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    padding: 0.4em 0;
-  }
-
-  .tree-card {
-    display: flex;
-    flex-direction: row;
-    gap: 0.6em;
-    padding: 0.5em;
-    border-radius: 8px;
-    text-decoration: none;
     color: #333;
-    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .sidebar-back:hover {
+    color: #4338ca;
+  }
+
+  /* ---- Filter chips ---- */
+  .sidebar-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35em;
+    margin-bottom: 0.75em;
+  }
+
+  .sidebar-chip {
+    padding: 0.25em 0.6em;
+    border-radius: 12px;
     border: 1px solid #e0e0e0;
+    background: #fff;
+    font-size: 0.75em;
+    color: #666;
+    cursor: pointer;
+    font-family: inherit;
     transition:
       background 0.15s,
       border-color 0.15s,
-      box-shadow 0.15s;
-    overflow: hidden;
+      color 0.15s;
+    text-transform: capitalize;
   }
 
-  .tree-card:hover {
-    background: #fafafa;
+  .sidebar-chip:hover {
     border-color: #ccc;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    background: #f5f5f5;
   }
 
-  .tree-card[data-active] {
+  .sidebar-chip--active {
     background: #eef2ff;
     border-color: #a5b4fc;
-    box-shadow: 0 0 0 1px #a5b4fc;
+    color: #4338ca;
   }
 
-  .tree-card__image {
-    width: 56px;
-    height: 56px;
+  /* ---- Item list (Level 2) ---- */
+  .sidebar-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.45em 0.5em;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    transition: background 0.15s;
+  }
+
+  .sidebar-item:hover {
+    background: #e4e4e4;
+  }
+
+  .sidebar-item[data-active] {
+    background: #eef2ff;
+    border-left: 3px solid #a5b4fc;
+  }
+
+  .sidebar-item__image {
+    width: 40px;
+    height: 40px;
     border-radius: 6px;
     object-fit: cover;
     flex-shrink: 0;
     background: #eee;
   }
 
-  .tree-card__body {
+  .sidebar-item__body {
     display: flex;
     flex-direction: column;
-    gap: 0.15em;
+    gap: 0.1em;
     min-width: 0;
-    justify-content: center;
   }
 
-  .tree-card__title {
-    font-size: 0.82em;
-    font-weight: 600;
-    line-height: 1.25;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .tree-card__desc {
-    font-size: 0.72em;
-    color: #777;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-
-  .tree-card__date,
-  .tree-card__url {
-    font-size: 0.68em;
-    color: #999;
+  .sidebar-item__title {
+    font-size: 0.85em;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .sidebar-item__date {
+    font-size: 0.72em;
+    color: #999;
   }
 </style>
