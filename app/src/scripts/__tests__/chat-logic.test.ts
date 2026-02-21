@@ -5,7 +5,7 @@ import {
   setAdminUsername,
   COLORS,
   ANIMALS,
-} from "../../components/Chat/chat-utils";
+} from "@components/Chat/chat-utils";
 
 describe("generateRandomUsername", () => {
   it("returns a string in color-animal format", () => {
