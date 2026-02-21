@@ -32,15 +32,13 @@ export const SIDEBAR_ORDER: SidebarEntry[] = [
   { type: "collection", collection: "gallery" },
   { type: "collection", collection: "recipes" },
   { type: "collection", collection: "versions" },
-  { type: "page", page: "links", label: "Links" },
+  { type: "collection", collection: "links" },
 ];
 
 export async function getSidebarData(): Promise<Record<string, SidebarCollection>> {
   const data: Record<string, SidebarCollection> = {};
 
   for (const name of COLLECTION_NAMES) {
-    if (name === "links") continue; // links are not navigable in the sidebar
-
     const entries = await getCollection(name, ({ data }) => !data.draft);
     const sorted = entries.sort(
       (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
@@ -88,4 +86,9 @@ export async function getSidebarData(): Promise<Record<string, SidebarCollection
 
 export function formatDate(isoString: string): string {
   return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+}
+
+export function categoryDisplay(categoryName: string): string {
+  const parts = categoryName.split("-");
+  return parts.map((part) => (part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part)).join(" ");
 }

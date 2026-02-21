@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getSidebarData, formatDate, type SidebarCollection } from "../../lib/sidebar-data";
+import { getSidebarData, formatDate, categoryDisplay, type SidebarCollection } from "../../lib/sidebar-data";
 import { type CollectionName } from "../../content.config";
 
 export async function getStaticPaths() {
-  const collections: CollectionName[] = ["projects", "guides", "gallery", "recipes", "versions"];
+  const collections: CollectionName[] = ["projects", "guides", "gallery", "links", "recipes", "versions"];
   const sidebarData = await getSidebarData();
 
   const paths: { params: { collection: string; category: string } }[] = [];
@@ -40,11 +40,11 @@ if (filteredItems.length === 0) {
 }
 ---
 
-<BaseLayout title={`${category} · ${title} · thalida`} activeCollection={collection}>
+<BaseLayout title={`${categoryDisplay(category)} · ${title} · thalida`} activeCollection={collection}>
   <div class="collection-page">
     <header class="collection-header">
       <h1>{title}</h1>
-      <p class="collection-count">{filteredItems.length} {category} items</p>
+      <p class="collection-count">{filteredItems.length} {categoryDisplay(category)} items</p>
     </header>
 
     {
@@ -59,7 +59,7 @@ if (filteredItems.length === 0) {
                 href={`/${collection}/${encodeURIComponent(cat)}`}
                 class:list={["filter-chip", { "filter-chip--active": cat === category }]}
               >
-                {cat}
+                {categoryDisplay(cat)}
               </a>
             ))}
           </div>
@@ -69,29 +69,38 @@ if (filteredItems.length === 0) {
 
     <div class="items-grid">
       {
-        filteredItems.map((item) => (
-          <a href={`/${item.collection}/${item.id}`} class="item-card">
-            {item.coverImageSrc ? (
-              <div class="item-card__image-wrapper">
-                <img
-                  class="item-card__image"
-                  src={item.coverImageSrc}
-                  alt={item.coverImageAlt ?? item.title}
-                  loading="lazy"
-                />
+        filteredItems.map((item) => {
+          const isExternal = item.collection === "links";
+          const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+          return (
+            <a
+              href={href}
+              class="item-card"
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener" : undefined}
+            >
+              {item.coverImageSrc ? (
+                <div class="item-card__image-wrapper">
+                  <img
+                    class="item-card__image"
+                    src={item.coverImageSrc}
+                    alt={item.coverImageAlt ?? item.title}
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div class="item-card__image-wrapper item-card__image-wrapper--empty">
+                  <span class="item-card__placeholder">{item.title.charAt(0)}</span>
+                </div>
+              )}
+              <div class="item-card__body">
+                <h3 class="item-card__title">{item.title}</h3>
+                {!isExternal && <p class="item-card__date">{formatDate(item.publishedOn)}</p>}
+                {item.description && <p class="item-card__description">{item.description}</p>}
               </div>
-            ) : (
-              <div class="item-card__image-wrapper item-card__image-wrapper--empty">
-                <span class="item-card__placeholder">{item.title.charAt(0)}</span>
-              </div>
-            )}
-            <div class="item-card__body">
-              <h3 class="item-card__title">{item.title}</h3>
-              <p class="item-card__date">{formatDate(item.publishedOn)}</p>
-              {item.description && <p class="item-card__description">{item.description}</p>}
-            </div>
-          </a>
-        ))
+            </a>
+          );
+        })
       }
     </div>
   </div>
