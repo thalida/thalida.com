@@ -8,7 +8,6 @@ interface Props {
   title?: string;
   activePage?: string;
   activeCollection?: string;
-  activeId?: string;
   pageContext?: {
     collection: string;
     id: string;
@@ -16,7 +15,7 @@ interface Props {
   } | null;
 }
 
-const { title = "thalida", activePage, activeCollection, activeId, pageContext = null } = Astro.props;
+const { title = "thalida", activePage, activeCollection, pageContext = null } = Astro.props;
 ---
 
 <html lang="en">
@@ -225,7 +224,7 @@ const { title = "thalida", activePage, activeCollection, activeId, pageContext =
     </div>
     <div id="drawer-backdrop"></div>
     <div id="layout">
-      <ProjectTree activePage={activePage} activeCollection={activeCollection} activeId={activeId} />
+      <ProjectTree activePage={activePage} activeCollection={activeCollection} />
       <div id="content-viewer">
         <slot />
       </div>

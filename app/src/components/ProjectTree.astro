@@ -5,10 +5,9 @@ import { getSidebarData } from "../lib/sidebar-data";
 interface Props {
   activePage?: string;
   activeCollection?: string;
-  activeId?: string;
 }
 
-const { activePage, activeCollection, activeId: _activeId } = Astro.props;
+const { activePage, activeCollection } = Astro.props;
 const sidebarData = await getSidebarData();
 ---
 
