@@ -1,6 +1,7 @@
 import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import { getLinkMetadataMap, getFaviconUrl } from "./link-metadata";
 
 export type SidebarItem = {
   id: string;
@@ -13,6 +14,8 @@ export type SidebarItem = {
   publishedOn: string; // ISO string for JSON serialization
   coverImageSrc?: string;
   coverImageAlt?: string;
+  faviconUrl?: string;
+  metaDescription?: string;
 };
 
 export type SidebarCollection = {
@@ -38,6 +41,10 @@ export const SIDEBAR_ORDER: SidebarEntry[] = [
 export async function getSidebarData(): Promise<Record<string, SidebarCollection>> {
   const data: Record<string, SidebarCollection> = {};
 
+  const linkEntries = await getCollection("links", ({ data }) => !data.draft);
+  const linkUrls = linkEntries.map((e) => e.id);
+  const linkMetadataMap = await getLinkMetadataMap(linkUrls);
+
   for (const name of COLLECTION_NAMES) {
     const entries = await getCollection(name, ({ data }) => !data.draft);
     const sorted = entries.sort(
@@ -58,10 +65,13 @@ export async function getSidebarData(): Promise<Record<string, SidebarCollection
       if (entry.data.tags) entry.data.tags.forEach((t: string) => tagsSet.add(t));
       if (entry.data.category) categoriesSet.add(entry.data.category);
 
+      const isLink = name === "links";
+      const linkMeta = isLink ? linkMetadataMap[entry.id] : undefined;
+
       items.push({
         id: entry.id,
         collection: name,
-        title: entry.data.title,
+        title: (isLink && linkMeta?.metaTitle) || entry.data.title,
         href: entry.data.link,
         description: entry.data.description,
         tags: entry.data.tags,
@@ -69,6 +79,8 @@ export async function getSidebarData(): Promise<Record<string, SidebarCollection
         publishedOn: entry.data.publishedOn.toISOString(),
         coverImageSrc,
         coverImageAlt: entry.data.coverImageAlt,
+        faviconUrl: isLink ? getFaviconUrl(entry.id) : undefined,
+        metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
       });
     }
 

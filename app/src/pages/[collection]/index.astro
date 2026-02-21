@@ -51,13 +51,38 @@ const { title, items, allCategories } = collectionData;
         items.map((item) => {
           const isExternal = item.collection === "links";
           const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+          if (isExternal) {
+            const displayUrl = (() => {
+              try {
+                return new URL(item.id).hostname.replace(/^www\./, "");
+              } catch {
+                return item.id;
+              }
+            })();
+            return (
+              <a href={href} class="item-card item-card--link" target="_blank" rel="noopener">
+                <div class="item-card__body">
+                  <div class="item-card__link-title">
+                    {item.faviconUrl && (
+                      <img
+                        class="item-card__favicon"
+                        src={item.faviconUrl}
+                        alt=""
+                        width="16"
+                        height="16"
+                        loading="lazy"
+                      />
+                    )}
+                    <h3 class="item-card__title">{item.title}</h3>
+                  </div>
+                  <p class="item-card__url">{displayUrl}</p>
+                  {item.metaDescription && <p class="item-card__description">{item.metaDescription}</p>}
+                </div>
+              </a>
+            );
+          }
           return (
-            <a
-              href={href}
-              class="item-card"
-              target={isExternal ? "_blank" : undefined}
-              rel={isExternal ? "noopener" : undefined}
-            >
+            <a href={href} class="item-card">
               {item.coverImageSrc ? (
                 <div class="item-card__image-wrapper">
                   <img
@@ -74,7 +99,7 @@ const { title, items, allCategories } = collectionData;
               )}
               <div class="item-card__body">
                 <h3 class="item-card__title">{item.title}</h3>
-                {!isExternal && <p class="item-card__date">{formatDate(item.publishedOn)}</p>}
+                <p class="item-card__date">{formatDate(item.publishedOn)}</p>
                 {item.description && <p class="item-card__description">{item.description}</p>}
               </div>
             </a>
@@ -239,6 +264,28 @@ const { title, items, allCategories } = collectionData;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .item-card__link-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .item-card__favicon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+  }
+
+  .item-card__url {
+    margin: 0;
+    font-size: 0.78em;
+    color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   @media (max-width: 639px) {
