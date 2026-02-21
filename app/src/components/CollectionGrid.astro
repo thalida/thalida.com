@@ -1,0 +1,292 @@
+---
+import { formatDate, categoryDisplay, type NavItem } from "../lib/nav-data";
+
+interface Props {
+  collection: string;
+  title: string;
+  subtitle: string;
+  items: NavItem[];
+  allCategories: string[];
+  activeCategory?: string;
+}
+
+const { collection, title, subtitle, items, allCategories, activeCategory } = Astro.props;
+---
+
+<div class="collection-page">
+  <header class="collection-header">
+    <h1>{title}</h1>
+    <p class="collection-count">{subtitle}</p>
+  </header>
+
+  {
+    allCategories.length > 0 && (
+      <div class="filter-section">
+        <div class="filter-chips">
+          <a href={`/${collection}`} class:list={["filter-chip", { "filter-chip--active": !activeCategory }]}>
+            All
+          </a>
+          {allCategories.map((cat) => (
+            <a
+              href={`/${collection}/${encodeURIComponent(cat)}`}
+              class:list={["filter-chip", { "filter-chip--active": activeCategory === cat }]}
+            >
+              {categoryDisplay(cat)}
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <div class="items-grid">
+    {
+      items.map((item) => {
+        const isExternal = item.collection === "links";
+        const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+        if (isExternal) {
+          const displayUrl = (() => {
+            try {
+              return new URL(item.id).hostname.replace(/^www\./, "");
+            } catch {
+              return item.id;
+            }
+          })();
+          return (
+            <a href={href} class="item-card" target="_blank" rel="noopener">
+              <div class="item-card__body">
+                <div class="item-card__link-title">
+                  {item.faviconUrl && (
+                    <img
+                      class="item-card__favicon"
+                      src={item.faviconUrl}
+                      alt=""
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                    />
+                  )}
+                  <h3 class="item-card__title">{item.title}</h3>
+                </div>
+                <p class="item-card__url">{displayUrl}</p>
+                {item.metaDescription && <p class="item-card__description">{item.metaDescription}</p>}
+              </div>
+            </a>
+          );
+        }
+        return (
+          <a href={href} class="item-card">
+            {item.coverImageSrc ? (
+              <div class="item-card__image-wrapper">
+                <img
+                  class="item-card__image"
+                  src={item.coverImageSrc}
+                  alt={item.coverImageAlt ?? item.title}
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div class="item-card__image-wrapper item-card__image-wrapper--empty">
+                <span class="item-card__placeholder">{item.title.charAt(0)}</span>
+              </div>
+            )}
+            <div class="item-card__body">
+              <h3 class="item-card__title">{item.title}</h3>
+              <p class="item-card__date">{formatDate(item.publishedOn)}</p>
+              {item.description && <p class="item-card__description">{item.description}</p>}
+            </div>
+          </a>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .collection-page {
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .collection-header {
+    margin-bottom: 1.5em;
+  }
+
+  .collection-header h1 {
+    margin: 0 0 0.25em;
+    font-size: 1.75em;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .collection-count {
+    margin: 0;
+    font-size: 0.9em;
+    color: #666;
+  }
+
+  .filter-section {
+    margin-bottom: 1.5em;
+  }
+
+  .filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+
+  .filter-chip {
+    padding: 0.4em 0.8em;
+    border-radius: 16px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+    font-size: 0.85em;
+    color: #666;
+    cursor: pointer;
+    font-family: inherit;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+    text-transform: capitalize;
+    text-decoration: none;
+  }
+
+  .filter-chip:hover {
+    border-color: #ccc;
+    background: #f5f5f5;
+  }
+
+  .filter-chip--active {
+    background: #eef2ff;
+    border-color: #a5b4fc;
+    color: #4338ca;
+  }
+
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5em;
+  }
+
+  .item-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid #e0e0e0;
+    transition:
+      transform 0.15s,
+      box-shadow 0.15s,
+      border-color 0.15s;
+  }
+
+  .item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #ccc;
+  }
+
+  .item-card__image-wrapper {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+
+  .item-card__image-wrapper--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .item-card__placeholder {
+    font-size: 3em;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+  }
+
+  .item-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .item-card:hover .item-card__image {
+    transform: scale(1.03);
+  }
+
+  .item-card__body {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35em;
+    flex: 1;
+  }
+
+  .item-card__title {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.3;
+  }
+
+  .item-card__date {
+    margin: 0;
+    font-size: 0.8em;
+    color: #999;
+  }
+
+  .item-card__description {
+    margin: 0.25em 0 0;
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .item-card__link-title {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+
+  .item-card__favicon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+  }
+
+  .item-card__url {
+    margin: 0;
+    font-size: 0.78em;
+    color: #999;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 639px) {
+    .items-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .item-card__image-wrapper {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>
