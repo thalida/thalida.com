@@ -1,0 +1,386 @@
+---
+import { getSidebarData } from "../lib/sidebar-data";
+
+const sidebarData = await getSidebarData();
+
+const allItems = Object.values(sidebarData).flatMap((col) =>
+  col.items.map((item) => ({
+    ...item,
+    collectionTitle: col.title,
+  })),
+);
+---
+
+<div id="command-palette" class="cp-overlay" aria-hidden="true">
+  <div class="cp-backdrop"></div>
+  <div class="cp-dialog" role="dialog" aria-label="Search content">
+    <div class="cp-header">
+      <div class="cp-filter-chip" id="cp-collection-chip" hidden>
+        <span id="cp-collection-chip-label"></span>
+        <button type="button" id="cp-collection-chip-clear" aria-label="Clear collection filter">&times;</button>
+      </div>
+      <input
+        type="text"
+        id="cp-input"
+        class="cp-input"
+        placeholder="Search…"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </div>
+    <div class="cp-results" id="cp-results"></div>
+    <div class="cp-footer">
+      <span><kbd>&uarr;&darr;</kbd> navigate</span>
+      <span><kbd>&crarr;</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ allItems, sidebarData }}>
+  window.__cpData = { allItems, sidebarData };
+</script>
+
+<script>
+  function initCommandPalette() {
+    const overlay = document.getElementById("command-palette");
+    const backdrop = overlay?.querySelector(".cp-backdrop");
+    const input = document.getElementById("cp-input");
+    const resultsContainer = document.getElementById("cp-results");
+    const collectionChip = document.getElementById("cp-collection-chip");
+    const chipLabel = document.getElementById("cp-collection-chip-label");
+    const chipClear = document.getElementById("cp-collection-chip-clear");
+
+    if (!overlay || !input || !resultsContainer || !collectionChip || !chipLabel || !chipClear || !backdrop) return;
+
+    const data = window.__cpData;
+
+    let activeCollection = null;
+    let selectedIndex = -1;
+
+    function open(collection) {
+      activeCollection = collection ?? null;
+      if (activeCollection && data.sidebarData[activeCollection]) {
+        chipLabel.textContent = data.sidebarData[activeCollection].title;
+        collectionChip.hidden = false;
+      } else {
+        collectionChip.hidden = true;
+      }
+      input.value = "";
+      overlay.setAttribute("aria-hidden", "false");
+      overlay.classList.add("cp-overlay--open");
+      input.focus();
+      renderResults("");
+    }
+
+    function close() {
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.classList.remove("cp-overlay--open");
+      activeCollection = null;
+      input.value = "";
+      selectedIndex = -1;
+    }
+
+    function getFiltered(query) {
+      let pool = activeCollection
+        ? data.allItems.filter((item) => item.collection === activeCollection)
+        : data.allItems;
+
+      if (!query.trim()) return pool.slice(0, 20);
+
+      const q = query.toLowerCase();
+      return pool
+        .filter((item) => {
+          return (
+            item.title.toLowerCase().includes(q) ||
+            (item.description ?? "").toLowerCase().includes(q) ||
+            (item.tags ?? []).some((t) => t.toLowerCase().includes(q)) ||
+            (item.category ?? "").toLowerCase().includes(q)
+          );
+        })
+        .slice(0, 20);
+    }
+
+    function renderResults(query) {
+      const filtered = getFiltered(query);
+      selectedIndex = -1;
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = '<div class="cp-empty">No results found</div>';
+        return;
+      }
+
+      if (activeCollection) {
+        resultsContainer.innerHTML = filtered
+          .map(
+            (item, i) =>
+              `<a href="/${item.collection}/${item.id}" class="cp-result" data-index="${i}">
+                <span class="cp-result__title">${escapeHtml(item.title)}</span>
+                <span class="cp-result__meta">${formatDateClient(item.publishedOn)}</span>
+              </a>`,
+          )
+          .join("");
+      } else {
+        const grouped = {};
+        for (const item of filtered) {
+          (grouped[item.collection] ??= []).push(item);
+        }
+        let idx = 0;
+        let html = "";
+        for (const [col, items] of Object.entries(grouped)) {
+          const title = items[0]?.collectionTitle ?? col;
+          html += `<div class="cp-group-label">${escapeHtml(title)}</div>`;
+          for (const item of items) {
+            html += `<a href="/${item.collection}/${item.id}" class="cp-result" data-index="${idx}">
+              <span class="cp-result__title">${escapeHtml(item.title)}</span>
+              <span class="cp-result__meta">${formatDateClient(item.publishedOn)}</span>
+            </a>`;
+            idx++;
+          }
+        }
+        resultsContainer.innerHTML = html;
+      }
+    }
+
+    function updateSelection() {
+      const items = resultsContainer.querySelectorAll(".cp-result");
+      items.forEach((el, i) => {
+        el.classList.toggle("cp-result--selected", i === selectedIndex);
+        if (i === selectedIndex) el.scrollIntoView({ block: "nearest" });
+      });
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function formatDateClient(iso) {
+      return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+    }
+
+    input.addEventListener("input", () => renderResults(input.value));
+
+    input.addEventListener("keydown", (e) => {
+      const items = resultsContainer.querySelectorAll(".cp-result");
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+        updateSelection();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+      } else if (e.key === "Enter" && selectedIndex >= 0 && items[selectedIndex]) {
+        e.preventDefault();
+        close();
+        items[selectedIndex].click();
+      } else if (e.key === "Escape") {
+        close();
+      }
+    });
+
+    backdrop.addEventListener("click", close);
+
+    chipClear.addEventListener("click", () => {
+      activeCollection = null;
+      collectionChip.hidden = true;
+      input.focus();
+      renderResults(input.value);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (overlay.classList.contains("cp-overlay--open")) {
+          close();
+        } else {
+          open();
+        }
+      }
+    });
+
+    document.querySelectorAll("[data-open-palette]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const col = btn.dataset.paletteCollection;
+        open(col || undefined);
+      });
+    });
+
+    document.addEventListener("open-command-palette", () => open());
+  }
+
+  document.addEventListener("astro:page-load", initCommandPalette);
+</script>
+
+<style>
+  .cp-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  .cp-overlay--open {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20vh;
+  }
+
+  .cp-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .cp-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    max-height: 60vh;
+  }
+
+  .cp-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.75em;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .cp-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    padding: 0.2em 0.5em;
+    background: #eef2ff;
+    border: 1px solid #a5b4fc;
+    border-radius: 6px;
+    font-size: 0.8em;
+    color: #4338ca;
+    white-space: nowrap;
+  }
+
+  .cp-filter-chip button {
+    background: none;
+    border: none;
+    color: #4338ca;
+    cursor: pointer;
+    font-size: 1.1em;
+    padding: 0 0.1em;
+    line-height: 1;
+  }
+
+  .cp-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    padding: 0.3em 0;
+    font-family: inherit;
+    background: transparent;
+  }
+
+  .cp-results {
+    overflow-y: auto;
+    flex: 1;
+    padding: 0.4em 0;
+  }
+
+  .cp-group-label {
+    padding: 0.5em 0.75em 0.25em;
+    font-size: 0.72em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #999;
+  }
+
+  .cp-result {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+
+  .cp-result:hover,
+  .cp-result--selected {
+    background: #f5f5f5;
+  }
+
+  .cp-result--selected {
+    background: #eef2ff;
+  }
+
+  .cp-result__title {
+    font-size: 0.9em;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cp-result__meta {
+    font-size: 0.75em;
+    color: #999;
+    flex-shrink: 0;
+    margin-left: 0.5em;
+  }
+
+  .cp-empty {
+    padding: 1.5em;
+    text-align: center;
+    color: #999;
+    font-size: 0.9em;
+  }
+
+  .cp-footer {
+    display: flex;
+    gap: 1em;
+    padding: 0.5em 0.75em;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.72em;
+    color: #999;
+  }
+
+  .cp-footer kbd {
+    font-size: 0.9em;
+    padding: 0.1em 0.3em;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #f5f5f5;
+    font-family: inherit;
+  }
+
+  @media (max-width: 639px) {
+    .cp-overlay--open {
+      padding-top: 0;
+      align-items: stretch;
+    }
+
+    .cp-dialog {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 0;
+      height: 100%;
+    }
+
+    .cp-footer {
+      display: none;
+    }
+  }
+</style>
