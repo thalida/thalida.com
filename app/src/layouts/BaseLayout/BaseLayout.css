@@ -7,7 +7,8 @@ body {
 }
 #layout {
   display: flex;
-  height: 100vh;
+  height: 100vh; /* fallback */
+  height: 100svh; /* iOS Safari: stable viewport height */
   width: 100vw;
 }
 #site-nav,
