@@ -344,7 +344,7 @@ class LiveWindowElement extends HTMLElement {
   }
 
   private isSameDate(a: Date, b: Date): boolean {
-    return a.getDate() === b.getDate();
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
 
   private getRealisticColor(now: number): RGB {
