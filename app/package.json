@@ -17,10 +17,12 @@
   },
   "dependencies": {
     "astro": "^5.10.1",
+    "he": "^1.2.0",
     "unist-util-visit": "^5.1.0",
     "yaml": "^2.8.2"
   },
   "devDependencies": {
+    "@types/he": "^1.2.3",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.6.0",

@@ -1,4 +1,5 @@
 import { promises as fs } from "node:fs";
+import he from "he";
 
 const CACHE_PATH = ".generated/link-metadata.json";
 const FETCH_TIMEOUT_MS = 3000;
@@ -21,19 +22,6 @@ export function getFaviconUrl(url: string): string {
   }
 }
 
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&apos;/gi, "'")
-    .replace(/&nbsp;/gi, " ")
-    .trim();
-}
-
 function parseMetadata(html: string): Pick<LinkMetadata, "metaTitle" | "metaDescription"> {
   const ogTitle =
     html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)?.[1] ??
@@ -53,8 +41,8 @@ function parseMetadata(html: string): Pick<LinkMetadata, "metaTitle" | "metaDesc
   const rawDesc = ogDesc ?? metaDesc;
 
   return {
-    metaTitle: rawTitle ? decodeHtmlEntities(rawTitle) : undefined,
-    metaDescription: rawDesc ? decodeHtmlEntities(rawDesc) : undefined,
+    metaTitle: rawTitle ? he.decode(rawTitle).trim() : undefined,
+    metaDescription: rawDesc ? he.decode(rawDesc).trim() : undefined,
   };
 }
 
