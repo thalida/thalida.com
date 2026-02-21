@@ -14,7 +14,7 @@ describe("Worker routing", () => {
     // WebSocket upgrade (GET /ws -> 101) is tested extensively in
     // chat-room.test.ts via the connectAndJoin/openWs helpers.
 
-    it("POST /auth with correct token returns { ok: true }", async () => {
+    it("POST /auth with correct token returns 200 with empty body", async () => {
       const resp = await SELF.fetch("https://fake-host/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
