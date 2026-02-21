@@ -21,6 +21,7 @@ export interface ConnectionInfo {
   isOwner: boolean;
   warnings: number;
   isBlocked: boolean;
+  clientId?: string;
 }
 
 // ── Client → Server ─────────────────────────────────────────────────

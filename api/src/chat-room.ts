@@ -162,6 +162,8 @@ export class ChatRoom implements DurableObject {
 
     for (const [existingWs, info] of this.connections) {
       if (info.username === name && existingWs !== ws && !(isOwner && info.isOwner)) {
+        // Allow the same clientId to reuse their username across multiple tabs
+        if (clientId && info.clientId === clientId) continue;
         this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
         return;
       }
@@ -190,6 +192,7 @@ export class ChatRoom implements DurableObject {
       isOwner,
       warnings: 0,
       isBlocked: false,
+      clientId: clientId ?? undefined,
     });
 
     this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name });
@@ -404,12 +407,13 @@ export class ChatRoom implements DurableObject {
 
   private buildStatusMessage(): ServerMessage {
     let isOwnerOnline = false;
+    const uniqueClients = new Set<string>();
     for (const info of this.connections.values()) {
-      if (info.isOwner) {
-        isOwnerOnline = true;
-        break;
-      }
+      if (info.isOwner) isOwnerOnline = true;
+      // Deduplicate by clientId (multiple tabs share the same clientId);
+      // fall back to ip+username for connections without one (e.g. owner)
+      uniqueClients.add(info.clientId ?? `${info.ip}:${info.username}`);
     }
-    return { type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline, userCount: this.connections.size };
+    return { type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline, userCount: uniqueClients.size };
   }
 }
