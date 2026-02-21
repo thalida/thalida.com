@@ -4,7 +4,12 @@
     system-ui,
     -apple-system,
     sans-serif;
-  position: relative;
+}
+
+@media (min-width: 640px) {
+  #site-nav {
+    position: relative;
+  }
 }
 
 /* ---- Heading ---- */
