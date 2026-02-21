@@ -16,7 +16,7 @@ import meRainbow from "@assets/about/me-rainbow.png";
     <h2>About</h2>
     <hr />
 
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin-bottom:1.5rem;">
+    <div class="about-photos">
       <Image src={meMemoji} alt="A Memoji of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
       <Image src={meHeadshot} alt="A headshot of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
       <Image src={meAvatar} alt="A cartoon avatar of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
@@ -78,3 +78,18 @@ import meRainbow from "@assets/about/me-rainbow.png";
     </p>
   </article>
 </BaseLayout>
+
+<style>
+  .about-photos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 639px) {
+    .about-photos {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
