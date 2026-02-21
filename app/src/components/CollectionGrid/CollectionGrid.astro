@@ -39,7 +39,7 @@ const { collection, title, subtitle, items, allCategories, activeCategory } = As
     )
   }
 
-  <div class="items-grid">
+  <div class:list={["items-grid", { "items-grid--masonry": collection === "links" }]}>
     {
       items.map((item) => {
         const isExternal = item.collection === "links";

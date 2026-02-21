@@ -68,6 +68,17 @@
   gap: 1.5em;
 }
 
+.items-grid--masonry {
+  display: block;
+  columns: 3 200px;
+  column-gap: 1.5em;
+}
+
+.items-grid--masonry .item-card {
+  break-inside: avoid;
+  margin-bottom: 1.5em;
+}
+
 .item-card {
   display: flex;
   flex-direction: column;
@@ -178,6 +189,10 @@
 @media (max-width: 639px) {
   .items-grid {
     grid-template-columns: 1fr;
+  }
+
+  .items-grid--masonry {
+    columns: 1;
   }
 
   .item-card__image-wrapper {
