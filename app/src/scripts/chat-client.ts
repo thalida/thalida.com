@@ -1,5 +1,7 @@
 import { generateRandomUsername, validateUsername, setAdminUsername, LS_ADMIN_TOKEN_KEY } from "./chat-utils";
 
+const RECONNECT_DELAY_MS = 3000;
+
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
   MESSAGE: "message",
@@ -246,7 +248,7 @@ function scheduleReconnect(): void {
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
     connect();
-  }, 3000);
+  }, RECONNECT_DELAY_MS);
 }
 
 function sendMessage(): void {

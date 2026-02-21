@@ -3,6 +3,8 @@ import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import { getLinkMetadataMap, getFaviconUrl } from "./link-metadata";
 
+const COVER_IMAGE_WIDTH = 400;
+
 export type NavItem = {
   id: string;
   collection: string;
@@ -58,7 +60,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
     for (const entry of sorted) {
       let coverImageSrc: string | undefined;
       if (entry.data.coverImage) {
-        const optimized = await getImage({ src: entry.data.coverImage, width: 400 });
+        const optimized = await getImage({ src: entry.data.coverImage, width: COVER_IMAGE_WIDTH });
         coverImageSrc = optimized.src;
       }
 

@@ -63,6 +63,8 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     }
   }
 
+  const MAX_PALETTE_RESULTS = 15;
+
   function initCommandPalette() {
     const overlay = document.getElementById("command-palette")!;
     const backdrop = overlay.querySelector(".cp-backdrop")!;
@@ -122,7 +124,7 @@ const collections = Object.entries(navData).map(([key, col]) => ({
         pool = pool.filter((item: SearchItem) => item.collection === activeCollection);
       }
 
-      if (!query.trim()) return pool.slice(0, 15);
+      if (!query.trim()) return pool.slice(0, MAX_PALETTE_RESULTS);
 
       const q = query.toLowerCase();
       return pool
@@ -134,7 +136,7 @@ const collections = Object.entries(navData).map(([key, col]) => ({
             (item.category ?? "").toLowerCase().includes(q)
           );
         })
-        .slice(0, 15);
+        .slice(0, MAX_PALETTE_RESULTS);
     }
 
     function renderResults(query: string) {
