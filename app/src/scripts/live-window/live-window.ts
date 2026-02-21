@@ -636,9 +636,7 @@ class LiveWindowElement extends HTMLElement {
   private shouldFetchWeather(): boolean {
     if (!this.state.weather.lastFetched) return true;
     if (this.state.weather.units !== this.resolvedUnits) return true;
-    const fetchedDate = new Date(this.state.weather.lastFetched).getDate();
-    const todayDate = new Date().getDate();
-    if (fetchedDate !== todayDate) return true;
+    if (!this.isSameDate(new Date(this.state.weather.lastFetched), new Date())) return true;
     return Date.now() - this.state.weather.lastFetched >= WEATHER_RATE_LIMIT;
   }
 
