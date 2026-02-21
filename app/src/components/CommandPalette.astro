@@ -1,16 +1,16 @@
 ---
-import { getSidebarData } from "../lib/sidebar-data";
+import { getNavData } from "../lib/nav-data";
 
-const sidebarData = await getSidebarData();
+const navData = await getNavData();
 
-const allItems = Object.values(sidebarData).flatMap((col) =>
+const allItems = Object.values(navData).flatMap((col) =>
   col.items.map((item) => ({
     ...item,
     collectionTitle: col.title,
   })),
 );
 
-const collections = Object.entries(sidebarData).map(([key, col]) => ({
+const collections = Object.entries(navData).map(([key, col]) => ({
   key,
   title: col.title,
 }));
@@ -35,8 +35,8 @@ const collections = Object.entries(sidebarData).map(([key, col]) => ({
   </div>
 </div>
 
-<script define:vars={{ allItems, sidebarData }}>
-  window.__cpData = { allItems, sidebarData };
+<script define:vars={{ allItems, navData }}>
+  window.__cpData = { allItems, navData };
 </script>
 
 <script>
@@ -52,14 +52,14 @@ const collections = Object.entries(sidebarData).map(([key, col]) => ({
     publishedOn: string;
   }
 
-  interface SidebarCollectionData {
+  interface NavCollectionData {
     title: string;
     items: SearchItem[];
   }
 
   declare global {
     interface Window {
-      __cpData: { allItems: SearchItem[]; sidebarData: Record<string, SidebarCollectionData> };
+      __cpData: { allItems: SearchItem[]; navData: Record<string, NavCollectionData> };
     }
   }
 
@@ -85,7 +85,7 @@ const collections = Object.entries(sidebarData).map(([key, col]) => ({
     function open() {
       const pageCollection = getActiveCollectionFromPage();
 
-      if (pageCollection && data.sidebarData[pageCollection]) {
+      if (pageCollection && data.navData[pageCollection]) {
         collectionSelect.value = pageCollection;
       } else {
         collectionSelect.value = "";

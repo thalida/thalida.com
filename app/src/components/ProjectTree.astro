@@ -1,6 +1,6 @@
 ---
-import { SIDEBAR_ORDER } from "../lib/sidebar-data";
-import { getSidebarData } from "../lib/sidebar-data";
+import { NAV_ORDER } from "../lib/nav-data";
+import { getNavData } from "../lib/nav-data";
 
 interface Props {
   activePage?: string;
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { activePage, activeCollection } = Astro.props;
-const sidebarData = await getSidebarData();
+const navData = await getNavData();
 ---
 
 <nav id="project-tree" aria-label="Main navigation" data-active-collection={activeCollection || ""}>
@@ -34,7 +34,7 @@ const sidebarData = await getSidebarData();
 
   <ul class="sidebar-nav">
     {
-      SIDEBAR_ORDER.map((entry) =>
+      NAV_ORDER.map((entry) =>
         entry.type === "page" ? (
           <li>
             <a
@@ -45,15 +45,15 @@ const sidebarData = await getSidebarData();
               {entry.label}
             </a>
           </li>
-        ) : sidebarData[entry.collection] ? (
+        ) : navData[entry.collection] ? (
           <li>
             <a
               href={`/${entry.collection}`}
               class="sidebar-row sidebar-row--collection"
               data-active={activeCollection === entry.collection ? "true" : undefined}
             >
-              <span class="sidebar-row__label">{sidebarData[entry.collection].title}</span>
-              <span class="sidebar-row__count">{sidebarData[entry.collection].items.length}</span>
+              <span class="sidebar-row__label">{navData[entry.collection].title}</span>
+              <span class="sidebar-row__count">{navData[entry.collection].items.length}</span>
             </a>
           </li>
         ) : null,

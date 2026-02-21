@@ -3,7 +3,7 @@ import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import { getLinkMetadataMap, getFaviconUrl } from "./link-metadata";
 
-export type SidebarItem = {
+export type NavItem = {
   id: string;
   collection: string;
   title: string;
@@ -18,17 +18,17 @@ export type SidebarItem = {
   metaDescription?: string;
 };
 
-export type SidebarCollection = {
+export type NavCollection = {
   name: string;
   title: string;
-  items: SidebarItem[];
+  items: NavItem[];
   allTags: string[];
   allCategories: string[];
 };
 
-export type SidebarEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
+export type NavEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
 
-export const SIDEBAR_ORDER: SidebarEntry[] = [
+export const NAV_ORDER: NavEntry[] = [
   { type: "page", page: "about", label: "About" },
   { type: "collection", collection: "projects" },
   { type: "collection", collection: "guides" },
@@ -38,8 +38,8 @@ export const SIDEBAR_ORDER: SidebarEntry[] = [
   { type: "collection", collection: "links" },
 ];
 
-export async function getSidebarData(): Promise<Record<string, SidebarCollection>> {
-  const data: Record<string, SidebarCollection> = {};
+export async function getNavData(): Promise<Record<string, NavCollection>> {
+  const data: Record<string, NavCollection> = {};
 
   const linkEntries = await getCollection("links", ({ data }) => !data.draft);
   const linkUrls = linkEntries.map((e) => e.id);
@@ -53,7 +53,7 @@ export async function getSidebarData(): Promise<Record<string, SidebarCollection
 
     const tagsSet = new Set<string>();
     const categoriesSet = new Set<string>();
-    const items: SidebarItem[] = [];
+    const items: NavItem[] = [];
 
     for (const entry of sorted) {
       let coverImageSrc: string | undefined;

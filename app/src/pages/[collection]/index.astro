@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getSidebarData, formatDate, categoryDisplay, type SidebarCollection } from "../../lib/sidebar-data";
+import { getNavData, formatDate, categoryDisplay, type NavCollection } from "../../lib/nav-data";
 import { COLLECTION_NAMES, type CollectionName } from "../../content.config";
 
 export async function getStaticPaths() {
@@ -10,8 +10,8 @@ export async function getStaticPaths() {
 }
 
 const { collection } = Astro.params as { collection: CollectionName };
-const sidebarData = await getSidebarData();
-const collectionData: SidebarCollection | undefined = sidebarData[collection];
+const navData = await getNavData();
+const collectionData: NavCollection | undefined = navData[collection];
 
 if (!collectionData) {
   return Astro.redirect("/404");
