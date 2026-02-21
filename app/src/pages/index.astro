@@ -5,7 +5,7 @@ const openweatherKey = import.meta.env.PUBLIC_OPENWEATHER_KEY || "";
 const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
 ---
 
-<BaseLayout>
+<BaseLayout activePage="">
   <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="light"></live-window>
   <h2>Welcome</h2>
   <p>Click a project in the tree to view it here.</p>
