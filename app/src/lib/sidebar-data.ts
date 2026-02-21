@@ -77,7 +77,7 @@ export async function getSidebarData(): Promise<Record<string, SidebarCollection
       title: collectionMeta[name].title,
       items,
       allTags: [...tagsSet].sort(),
-      allCategories: [...categoriesSet].sort(),
+      allCategories: [...categoriesSet].sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b))),
     };
   }
 
