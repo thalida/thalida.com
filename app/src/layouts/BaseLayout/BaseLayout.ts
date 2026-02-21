@@ -11,6 +11,7 @@ function initDrawers() {
     siteNav.classList.remove("open");
     chatPanel.classList.remove("open");
     backdrop.classList.remove("visible");
+    document.body.style.overflow = "";
   }
 
   menuBtn.addEventListener("click", () => {
@@ -19,6 +20,7 @@ function initDrawers() {
     if (willOpen) {
       siteNav.classList.add("open");
       backdrop.classList.add("visible");
+      document.body.style.overflow = "hidden";
     }
   });
 
@@ -28,6 +30,7 @@ function initDrawers() {
     if (willOpen) {
       chatPanel.classList.add("open");
       backdrop.classList.add("visible");
+      document.body.style.overflow = "hidden";
     }
   });
 
