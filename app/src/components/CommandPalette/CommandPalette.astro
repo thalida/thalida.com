@@ -1,0 +1,43 @@
+---
+import { getNavData } from "../../lib/nav-data";
+import "./CommandPalette.css";
+
+const navData = await getNavData();
+
+const allItems = Object.values(navData).flatMap((col) =>
+  col.items.map((item) => ({
+    ...item,
+    collectionTitle: col.title,
+  })),
+);
+
+const collections = Object.entries(navData).map(([key, col]) => ({
+  key,
+  title: col.title,
+}));
+---
+
+<div id="command-palette" class="cp-overlay" aria-hidden="true">
+  <div class="cp-backdrop"></div>
+  <div class="cp-dialog" role="dialog" aria-label="Search content">
+    <div class="cp-header">
+      <select id="cp-collection-select" class="cp-select">
+        <option value="">All</option>
+        {collections.map((col) => <option value={col.key}>{col.title}</option>)}
+      </select>
+      <input type="text" id="cp-input" class="cp-input" placeholder="Search…" autocomplete="off" spellcheck="false" />
+    </div>
+    <div class="cp-results" id="cp-results"></div>
+    <div class="cp-footer">
+      <span><kbd>&uarr;&darr;</kbd> navigate</span>
+      <span><kbd>&crarr;</kbd> open</span>
+      <span><kbd>esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ allItems, navData }}>
+  window.__cpData = { allItems, navData };
+</script>
+
+<script src="./CommandPalette.ts"></script>

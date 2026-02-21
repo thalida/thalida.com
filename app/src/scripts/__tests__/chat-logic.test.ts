@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { generateRandomUsername, validateUsername, setAdminUsername, COLORS, ANIMALS } from "../chat-utils";
+import {
+  generateRandomUsername,
+  validateUsername,
+  setAdminUsername,
+  COLORS,
+  ANIMALS,
+} from "../../components/Chat/chat-utils";
 
 describe("generateRandomUsername", () => {
   it("returns a string in color-animal format", () => {

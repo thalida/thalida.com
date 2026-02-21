@@ -1,0 +1,107 @@
+---
+import { formatDate, categoryDisplay, type NavItem } from "../../lib/nav-data";
+
+interface Props {
+  collection: string;
+  title: string;
+  subtitle: string;
+  items: NavItem[];
+  allCategories: string[];
+  activeCategory?: string;
+}
+
+const { collection, title, subtitle, items, allCategories, activeCategory } = Astro.props;
+---
+
+<div class="collection-page">
+  <header class="collection-header">
+    <h1>{title}</h1>
+    <p class="collection-count">{subtitle}</p>
+  </header>
+
+  {
+    allCategories.length > 0 && (
+      <div class="filter-section">
+        <div class="filter-chips">
+          <a href={`/${collection}`} class:list={["filter-chip", { "filter-chip--active": !activeCategory }]}>
+            All
+          </a>
+          {allCategories.map((cat) => (
+            <a
+              href={`/${collection}/${encodeURIComponent(cat)}`}
+              class:list={["filter-chip", { "filter-chip--active": activeCategory === cat }]}
+            >
+              {categoryDisplay(cat)}
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <div class="items-grid">
+    {
+      items.map((item) => {
+        const isExternal = item.collection === "links";
+        const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+        if (isExternal) {
+          const displayUrl = (() => {
+            try {
+              return new URL(item.id).hostname.replace(/^www\./, "");
+            } catch {
+              return item.id;
+            }
+          })();
+          return (
+            <a href={href} class="item-card" target="_blank" rel="noopener">
+              <div class="item-card__body">
+                <div class="item-card__link-title">
+                  {item.faviconUrl && (
+                    <img
+                      class="item-card__favicon"
+                      src={item.faviconUrl}
+                      alt=""
+                      width="16"
+                      height="16"
+                      loading="lazy"
+                    />
+                  )}
+                  <h3 class="item-card__title">{item.title}</h3>
+                </div>
+                <p class="item-card__url">{displayUrl}</p>
+                {item.metaDescription && <p class="item-card__description">{item.metaDescription}</p>}
+              </div>
+            </a>
+          );
+        }
+        return (
+          <a href={href} class="item-card">
+            {item.coverImageSrc ? (
+              <div class="item-card__image-wrapper">
+                <img
+                  class="item-card__image"
+                  src={item.coverImageSrc}
+                  alt={item.coverImageAlt ?? item.title}
+                  loading="lazy"
+                />
+              </div>
+            ) : (
+              <div class="item-card__image-wrapper item-card__image-wrapper--empty">
+                <span class="item-card__placeholder">{item.title.charAt(0)}</span>
+              </div>
+            )}
+            <div class="item-card__body">
+              <h3 class="item-card__title">{item.title}</h3>
+              <p class="item-card__date">{formatDate(item.publishedOn)}</p>
+              {item.description && <p class="item-card__description">{item.description}</p>}
+            </div>
+          </a>
+        );
+      })
+    }
+  </div>
+</div>
+
+<style>
+  @import "./CollectionGrid.css";
+</style>
