@@ -68,7 +68,9 @@ const navData = await getNavData();
     if (!siteNav) return;
 
     // Platform detection for keyboard shortcut hint
-    const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+    const platform =
+      (navigator as Navigator & { userAgentData?: { platform: string } }).userAgentData?.platform ?? navigator.platform;
+    const isMac = platform.toUpperCase().includes("MAC");
     const shortcutHint = siteNav.querySelector(".nav-search-shortcut");
     if (shortcutHint) {
       shortcutHint.textContent = isMac ? "⌘K" : "Ctrl+K";
