@@ -1,12 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getSidebarData, formatDate, categoryDisplay, type SidebarCollection } from "../../lib/sidebar-data";
-import { type CollectionName } from "../../content.config";
+import { COLLECTION_NAMES, type CollectionName } from "../../content.config";
 
 export async function getStaticPaths() {
-  const collections: CollectionName[] = ["projects", "guides", "gallery", "links", "recipes", "versions"];
-
-  return collections.map((collection) => ({
+  return COLLECTION_NAMES.map((collection) => ({
     params: { collection },
   }));
 }
