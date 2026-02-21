@@ -64,7 +64,7 @@
 
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(max(200px, 24%), 320px));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 320px));
   gap: 1.5em;
 }
 
