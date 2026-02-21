@@ -1,4 +1,4 @@
-import { generateRandomUsername, validateUsername, setAdminUsername } from "./chat-utils";
+import { generateRandomUsername, validateUsername, setAdminUsername, LS_ADMIN_TOKEN_KEY } from "./chat-utils";
 
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
@@ -81,7 +81,7 @@ const contextEl = document.getElementById("chat-context") as HTMLSpanElement;
 const contextSelect = document.getElementById("chat-context-select") as HTMLSelectElement;
 
 function getAdminToken(): string | null {
-  return localStorage.getItem("admin_token");
+  return localStorage.getItem(LS_ADMIN_TOKEN_KEY);
 }
 
 function loadIdentity(): void {

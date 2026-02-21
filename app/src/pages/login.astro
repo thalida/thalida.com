@@ -1,5 +1,6 @@
 ---
 const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
+const LS_ADMIN_TOKEN_KEY = "admin_token";
 const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
 ---
 
@@ -19,7 +20,7 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
     </form>
     <p><a href="/">&larr; back to chat</a></p>
 
-    <script is:inline define:vars={{ apiBase }}>
+    <script is:inline define:vars={{ apiBase, LS_ADMIN_TOKEN_KEY }}>
       const form = document.getElementById("admin-form");
       const input = document.getElementById("admin-secret");
       const errorEl = document.getElementById("admin-error");
@@ -51,7 +52,7 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
           form.querySelector("button").disabled = false;
         }
 
-        localStorage.setItem("admin_token", secret);
+        localStorage.setItem(LS_ADMIN_TOKEN_KEY, secret);
         window.location.href = "/";
       });
     </script>
