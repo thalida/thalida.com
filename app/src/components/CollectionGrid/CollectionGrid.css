@@ -188,7 +188,7 @@
 
 @media (max-width: 639px) {
   .items-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 
   .items-grid--masonry {
