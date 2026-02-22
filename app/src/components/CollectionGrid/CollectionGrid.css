@@ -135,7 +135,7 @@
 }
 
 .item-card__gallery-image {
-  @apply w-full h-full object-cover transition-transform duration-500;
+  @apply w-full h-full object-cover object-center transition-transform duration-500;
 }
 
 .item-card--gallery:hover .item-card__gallery-image {
