@@ -15,6 +15,22 @@
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Space Grotesk", sans-serif;
   --font-body: "IBM Plex Mono", monospace;
+
+  --text-2xs: 0.65rem;
+  --text-display: clamp(2.5rem, 6vw, 4rem);
+  --text-display-lg: clamp(2.5rem, 6vw, 4.8rem);
+  --text-display-sm: clamp(2rem, 5vw, 3rem);
+  --text-subtitle: clamp(1rem, 2vw, 1.4rem);
+
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.01em;
+  --tracking-nav: 0.05em;
+  --tracking-eyebrow: 0.08em;
+
+  --leading-display: 0.95;
+
+  --spacing-card-image: 96px;
+  --spacing-flag-image: 64px;
 }
 
 * {

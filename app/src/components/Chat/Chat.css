@@ -42,7 +42,7 @@
 }
 
 #chat-username {
-  @apply w-full py-1.5 px-2 border border-border rounded-md text-xs font-body bg-midnight text-text;
+  @apply w-full py-2 px-3 border border-border rounded-md text-sm font-body bg-midnight text-text;
 }
 
 #chat-username:focus {
@@ -50,7 +50,7 @@
 }
 
 #chat-rename-btn {
-  @apply py-1.5 px-2.5 border border-teal rounded-md bg-transparent text-xs cursor-pointer text-teal font-body;
+  @apply py-2 px-3 border border-teal rounded-md bg-transparent text-xs cursor-pointer text-teal font-body;
 }
 
 #chat-rename-btn:hover {
@@ -58,7 +58,7 @@
 }
 
 #chat-input {
-  @apply w-full py-2 px-2.5 border border-border rounded-md text-sm font-body bg-midnight text-text;
+  @apply w-full py-2 px-3 border border-border rounded-md text-sm font-body bg-midnight text-text;
 }
 
 #chat-input:focus {

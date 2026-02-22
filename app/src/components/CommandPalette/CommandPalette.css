@@ -21,7 +21,7 @@
 }
 
 .cp-select {
-  @apply py-1.5 px-2.5 border border-border rounded-md text-xs font-body bg-midnight text-text cursor-pointer outline-none min-w-25;
+  @apply py-2 px-3 border border-border rounded-md text-xs font-body bg-midnight text-text cursor-pointer outline-none min-w-24;
 }
 
 .cp-select:hover {
@@ -45,7 +45,7 @@
 }
 
 .cp-group-label {
-  @apply py-3 px-2 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted;
+  @apply py-3 px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted;
 }
 
 .cp-group-label:first-child {
@@ -53,7 +53,7 @@
 }
 
 .cp-row {
-  @apply flex items-center justify-between gap-3 py-2 px-2.5 rounded-md no-underline text-muted cursor-pointer transition-colors;
+  @apply flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted cursor-pointer transition-colors;
 }
 
 .cp-row:hover {
@@ -80,7 +80,7 @@
 }
 
 .cp-row__content {
-  @apply flex-1 min-w-0 flex flex-col gap-0.5;
+  @apply flex-1 min-w-0 flex flex-col gap-1;
 }
 
 .cp-row__title {
@@ -96,7 +96,7 @@
 }
 
 .cp-row__tag {
-  @apply py-0.5 px-1.5 bg-transparent border border-teal text-[11px] text-teal capitalize rounded;
+  @apply py-0.5 px-2 bg-transparent border border-teal text-xs text-teal capitalize rounded;
 }
 
 .cp-row--selected .cp-row__tag {
@@ -112,7 +112,7 @@
 }
 
 .cp-footer {
-  @apply flex gap-4 py-2 px-4 border-t border-border text-[11px] text-muted;
+  @apply flex gap-4 py-2 px-4 border-t border-border text-xs text-muted;
 }
 
 .cp-footer span {
@@ -120,7 +120,7 @@
 }
 
 .cp-footer kbd {
-  @apply text-[11px] py-0.5 px-1.5 border border-border rounded-sm bg-midnight font-body text-muted;
+  @apply text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted;
 }
 
 @media (max-width: 767px) {

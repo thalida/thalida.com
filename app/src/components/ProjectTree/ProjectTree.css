@@ -22,7 +22,7 @@
 
 /* ---- Search trigger ---- */
 .nav-search-trigger {
-  @apply flex items-center gap-2 w-full py-2 px-2.5 mb-3 border border-border rounded-lg bg-surface text-muted text-sm cursor-pointer font-body transition-colors;
+  @apply flex items-center gap-2 w-full py-2 px-3 mb-3 border border-border rounded-lg bg-surface text-muted text-sm cursor-pointer font-body transition-colors;
 }
 
 .nav-search-trigger:hover {
@@ -34,7 +34,7 @@
 }
 
 .nav-search-shortcut {
-  @apply text-xs py-0.5 px-1.5 border border-border rounded bg-surface-active text-muted font-body;
+  @apply text-xs py-0.5 px-2 border border-border rounded bg-surface-active text-muted font-body;
 }
 
 /* ---- Nav container (surface card) ---- */
@@ -54,7 +54,7 @@
 
 /* ---- Nav row ---- */
 .nav-row {
-  @apply flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-[0.8rem] tracking-[0.04em] py-2 px-3 rounded-md;
+  @apply flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-nav py-2 px-3 rounded-md;
 }
 
 .nav-row:hover {

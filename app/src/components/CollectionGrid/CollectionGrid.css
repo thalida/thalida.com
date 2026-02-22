@@ -11,11 +11,11 @@
 }
 
 .collection-hero h1 {
-  @apply m-0 mb-3 font-display font-bold text-neon text-[clamp(2.5rem,6vw,4rem)] tracking-[-0.04em] leading-[0.95];
+  @apply m-0 mb-3 font-display font-bold text-neon text-display tracking-display leading-display;
 }
 
 .collection-subtitle {
-  @apply m-0 font-heading font-semibold text-teal text-[0.9rem] tracking-tight;
+  @apply m-0 font-heading font-semibold text-teal text-sm tracking-tight;
 }
 
 /* ---- Filter tags ---- */
@@ -29,7 +29,7 @@
 }
 
 .filter-tag {
-  @apply bg-transparent border border-teal text-teal cursor-pointer font-body transition-colors no-underline capitalize text-[0.7rem] rounded-sm py-1 px-2.5 tracking-wide;
+  @apply bg-transparent border border-teal text-teal cursor-pointer font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide;
 }
 
 .filter-tag:hover {
@@ -73,7 +73,7 @@
 }
 
 .item-card__image-wrapper {
-  @apply overflow-hidden bg-midnight border-b border-border h-[90px] rounded-t-sm;
+  @apply overflow-hidden bg-midnight border-b border-border h-card-image rounded-t-sm;
 }
 
 .item-card__image-wrapper--color {
@@ -89,11 +89,11 @@
 }
 
 .item-card--stacked .item-card__body {
-  @apply flex flex-col gap-1 p-5;
+  @apply flex flex-col gap-1 p-3;
 }
 
 .item-card__meta {
-  @apply m-0 font-body uppercase text-neon font-semibold text-[0.65rem] tracking-[0.08em];
+  @apply m-0 font-body uppercase text-neon font-semibold text-2xs tracking-eyebrow;
 }
 
 .item-card--stacked .item-card__title {
@@ -111,17 +111,17 @@
 }
 
 .item-tag {
-  @apply bg-transparent border border-teal text-teal capitalize text-[0.65rem] rounded-sm py-0.5 px-1.5 tracking-wide;
+  @apply bg-transparent border border-teal text-teal capitalize text-2xs rounded-sm py-0.5 px-2 tracking-wide;
 }
 
 /* ---- Link card (compact, favicon inline with title) ---- */
 
 .item-card--link {
-  @apply flex flex-col gap-0.5 py-3 px-4;
+  @apply flex flex-col gap-1 p-3;
 }
 
 .item-card--link .item-card__meta {
-  @apply m-0 text-muted flex items-center gap-1 text-[0.65rem] normal-case;
+  @apply m-0 text-muted flex items-center gap-1 text-2xs normal-case;
 }
 
 .item-card__external-icon {
@@ -129,7 +129,7 @@
 }
 
 .item-card--link .item-card__title {
-  @apply m-0 font-heading font-bold text-text leading-snug flex items-center gap-1.5 text-[0.95rem];
+  @apply m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base;
 }
 
 .item-card__favicon {
@@ -137,21 +137,21 @@
 }
 
 .item-card__favicon-placeholder {
-  @apply shrink-0 font-display font-bold uppercase text-[0.7rem] w-4 text-center;
+  @apply shrink-0 font-display font-bold uppercase text-xs w-4 text-center;
 }
 
 .item-card--link .item-card__description {
-  @apply text-[0.7rem];
+  @apply text-xs;
 }
 
 /* ---- Flag card (horizontal with image box — recipes) ---- */
 
 .item-card--flag {
-  @apply flex flex-row items-center p-3 gap-3.5;
+  @apply flex flex-row items-center p-3 gap-4;
 }
 
 .item-card__flag-image {
-  @apply shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden w-[68px] h-[68px] rounded-sm;
+  @apply shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden w-flag-image h-flag-image rounded-sm;
 }
 
 .item-card__flag-image .item-card__image {
@@ -163,15 +163,15 @@
 }
 
 .item-card--flag .item-card__body {
-  @apply flex-1 min-w-0 flex flex-col gap-0.5;
+  @apply flex-1 min-w-0 flex flex-col gap-1;
 }
 
 .item-card--flag .item-card__title {
-  @apply m-0 font-heading font-bold text-text leading-snug text-[0.95rem];
+  @apply m-0 font-heading font-bold text-text leading-snug text-base;
 }
 
 .item-card--flag .item-card__description {
-  @apply text-[0.7rem];
+  @apply text-xs;
 }
 
 @media (min-width: 1536px) {
