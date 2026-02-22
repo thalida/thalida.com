@@ -11,16 +11,11 @@
 }
 
 .collection-hero h1 {
-  @apply m-0 mb-3 font-display font-bold text-neon;
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  letter-spacing: -0.04em;
-  line-height: 0.95;
+  @apply m-0 mb-3 font-display font-bold text-neon text-[clamp(2.5rem,6vw,4rem)] tracking-[-0.04em] leading-[0.95];
 }
 
 .collection-subtitle {
-  @apply m-0 font-heading font-semibold text-teal;
-  font-size: 0.9rem;
-  letter-spacing: -0.01em;
+  @apply m-0 font-heading font-semibold text-teal text-[0.9rem] tracking-tight;
 }
 
 /* ---- Filter tags ---- */
@@ -34,11 +29,7 @@
 }
 
 .filter-tag {
-  @apply bg-transparent border border-teal text-teal cursor-pointer font-body transition-colors no-underline capitalize;
-  font-size: 0.7rem;
-  border-radius: 4px;
-  padding: 0.3rem 0.6rem;
-  letter-spacing: 0.06em;
+  @apply bg-transparent border border-teal text-teal cursor-pointer font-body transition-colors no-underline capitalize text-[0.7rem] rounded-sm py-1 px-2.5 tracking-wide;
 }
 
 .filter-tag:hover {
@@ -52,32 +43,27 @@
 /* ---- Card Grid ---- */
 
 .items-grid {
-  @apply grid gap-4;
-  grid-template-columns: repeat(2, 1fr);
+  @apply grid gap-4 grid-cols-2;
 }
 
 /* Masonry mode: JS adds this class after computing row spans */
 .items-grid.masonry-ready {
+  @apply gap-x-4 gap-y-0;
   grid-auto-rows: 10px;
-  column-gap: 1rem;
-  row-gap: 0;
-  gap: 0 1rem;
 }
 
 .items-grid.masonry-ready > .item-card {
-  margin-bottom: 1rem;
+  @apply mb-4;
 }
 
 /* ---- Shared card base ---- */
 
 .item-card {
-  @apply bg-surface border border-border no-underline text-inherit transition-all;
-  border-radius: 8px;
+  @apply bg-surface border border-border no-underline text-inherit transition-all rounded-lg;
 }
 
 .item-card:hover {
-  @apply -translate-y-0.5 border-muted/40;
-  box-shadow: 0 8px 24px rgba(57, 255, 20, 0.06);
+  @apply -translate-y-0.5 border-muted/40 shadow-[0_8px_24px_rgba(57,255,20,0.06)];
 }
 
 /* ---- Stacked card (vertical with cover image) ---- */
@@ -87,9 +73,7 @@
 }
 
 .item-card__image-wrapper {
-  @apply overflow-hidden bg-midnight border-b border-border;
-  height: 90px;
-  border-radius: 4px 4px 0 0;
+  @apply overflow-hidden bg-midnight border-b border-border h-[90px] rounded-t-sm;
 }
 
 .item-card__image-wrapper--color {
@@ -105,28 +89,19 @@
 }
 
 .item-card--stacked .item-card__body {
-  @apply flex flex-col gap-1;
-  padding: 1.25rem;
+  @apply flex flex-col gap-1 p-5;
 }
 
 .item-card__meta {
-  @apply m-0 font-body uppercase text-neon font-semibold;
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  @apply m-0 font-body uppercase text-neon font-semibold text-[0.65rem] tracking-[0.08em];
 }
 
 .item-card--stacked .item-card__title {
-  @apply m-0 font-heading font-bold text-text leading-snug;
-  font-size: 1rem;
+  @apply m-0 font-heading font-bold text-text leading-snug text-base;
 }
 
 .item-card__description {
-  @apply m-0 font-body text-muted leading-relaxed;
-  font-size: 0.75rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  @apply m-0 font-body text-muted leading-relaxed text-xs line-clamp-2;
 }
 
 /* ---- Item tags ---- */
@@ -136,24 +111,17 @@
 }
 
 .item-tag {
-  @apply bg-transparent border border-teal text-teal capitalize;
-  font-size: 0.65rem;
-  border-radius: 4px;
-  padding: 0.15rem 0.4rem;
-  letter-spacing: 0.06em;
+  @apply bg-transparent border border-teal text-teal capitalize text-[0.65rem] rounded-sm py-0.5 px-1.5 tracking-wide;
 }
 
 /* ---- Link card (compact, favicon inline with title) ---- */
 
 .item-card--link {
-  @apply flex flex-col gap-0.5;
-  padding: 0.75rem 1rem;
+  @apply flex flex-col gap-0.5 py-3 px-4;
 }
 
 .item-card--link .item-card__meta {
-  @apply m-0 text-muted flex items-center gap-1;
-  font-size: 0.65rem;
-  text-transform: none;
+  @apply m-0 text-muted flex items-center gap-1 text-[0.65rem] normal-case;
 }
 
 .item-card__external-icon {
@@ -161,40 +129,29 @@
 }
 
 .item-card--link .item-card__title {
-  @apply m-0 font-heading font-bold text-text leading-snug flex items-center gap-1.5;
-  font-size: 0.95rem;
+  @apply m-0 font-heading font-bold text-text leading-snug flex items-center gap-1.5 text-[0.95rem];
 }
 
 .item-card__favicon {
-  @apply shrink-0 inline-block;
-  border-radius: 3px;
-  vertical-align: middle;
+  @apply shrink-0 inline-block rounded-sm align-middle;
 }
 
 .item-card__favicon-placeholder {
-  @apply shrink-0 font-display font-bold uppercase;
-  font-size: 0.7rem;
-  width: 16px;
-  text-align: center;
+  @apply shrink-0 font-display font-bold uppercase text-[0.7rem] w-4 text-center;
 }
 
 .item-card--link .item-card__description {
-  font-size: 0.7rem;
+  @apply text-[0.7rem];
 }
 
 /* ---- Flag card (horizontal with image box — recipes) ---- */
 
 .item-card--flag {
-  @apply flex flex-row items-center;
-  padding: 0.75rem;
-  gap: 0.875rem;
+  @apply flex flex-row items-center p-3 gap-3.5;
 }
 
 .item-card__flag-image {
-  @apply shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden;
-  width: 68px;
-  height: 68px;
-  border-radius: 4px;
+  @apply shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden w-[68px] h-[68px] rounded-sm;
 }
 
 .item-card__flag-image .item-card__image {
@@ -202,8 +159,7 @@
 }
 
 .item-card__placeholder {
-  @apply font-display font-bold uppercase;
-  font-size: 1.6rem;
+  @apply font-display font-bold uppercase text-2xl;
 }
 
 .item-card--flag .item-card__body {
@@ -211,27 +167,26 @@
 }
 
 .item-card--flag .item-card__title {
-  @apply m-0 font-heading font-bold text-text leading-snug;
-  font-size: 0.95rem;
+  @apply m-0 font-heading font-bold text-text leading-snug text-[0.95rem];
 }
 
 .item-card--flag .item-card__description {
-  font-size: 0.7rem;
+  @apply text-[0.7rem];
 }
 
 @media (min-width: 1536px) {
   .items-grid {
-    grid-template-columns: repeat(3, 1fr);
+    @apply grid-cols-3;
   }
 }
 
 @media (max-width: 639px) {
   .items-grid {
-    grid-template-columns: 1fr;
+    @apply grid-cols-1;
   }
 
   .items-grid.masonry-ready {
+    @apply gap-4;
     grid-auto-rows: auto;
-    gap: 1rem;
   }
 }

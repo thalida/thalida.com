@@ -29,21 +29,15 @@ const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
   }
 
   .home-hero__title {
-    @apply m-0 font-display font-bold text-neon;
-    font-size: clamp(2.5rem, 6vw, 4.8rem);
-    letter-spacing: -0.035em;
-    line-height: 1;
+    @apply m-0 font-display font-bold text-neon text-[clamp(2.5rem,6vw,4.8rem)] tracking-[-0.035em] leading-none;
   }
 
   .home-hero__subtitle {
-    @apply m-0 mt-3 font-heading text-teal;
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    letter-spacing: -0.01em;
+    @apply m-0 mt-3 font-heading text-teal text-[clamp(1rem,2vw,1.4rem)] tracking-[-0.01em];
   }
 
   .home-hero__body {
-    @apply m-0 mt-4 font-body text-muted leading-relaxed max-w-lg;
-    font-size: 0.9rem;
+    @apply m-0 mt-4 font-body text-muted leading-relaxed max-w-lg text-[0.9rem];
   }
 
   .home-hero__tags {
@@ -51,11 +45,7 @@ const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
   }
 
   .home-hero__tag {
-    @apply bg-transparent border border-teal text-teal no-underline capitalize font-body transition-colors;
-    font-size: 0.7rem;
-    border-radius: 4px;
-    padding: 0.3rem 0.6rem;
-    letter-spacing: 0.06em;
+    @apply bg-transparent border border-teal text-teal no-underline capitalize font-body transition-colors text-[0.7rem] rounded py-1 px-2.5 tracking-[0.06em];
   }
 
   .home-hero__tag:hover {

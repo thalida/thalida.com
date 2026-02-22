@@ -66,9 +66,7 @@
 }
 
 #chat-send {
-  @apply w-full py-2 mt-1 border-none text-midnight text-sm cursor-pointer font-heading font-bold;
-  border-radius: 6px;
-  background: #39ff14;
+  @apply w-full py-2 mt-1 border-none text-midnight text-sm cursor-pointer font-heading font-bold rounded-md bg-neon;
 }
 
 #chat-send:hover {

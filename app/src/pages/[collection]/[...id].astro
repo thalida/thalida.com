@@ -84,15 +84,11 @@ const pageTitle = entry.data.title as string;
   }
 
   .post-header h1 {
-    @apply m-0 mb-3 font-display font-bold text-neon;
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    @apply m-0 mb-3 font-display font-bold text-neon text-[clamp(2.5rem,6vw,4rem)] tracking-[-0.04em] leading-[0.95];
   }
 
   .post-description {
-    @apply m-0 mb-3 font-heading font-semibold text-teal;
-    font-size: 1rem;
+    @apply m-0 mb-3 font-heading font-semibold text-teal text-base;
   }
 
   .post-meta {

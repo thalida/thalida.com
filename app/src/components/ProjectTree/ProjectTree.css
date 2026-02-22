@@ -49,20 +49,12 @@
 
 /* ---- Nav dot ---- */
 .nav-dot {
-  @apply shrink-0;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
+  @apply shrink-0 w-1.25 h-1.25 rounded-full bg-current;
 }
 
 /* ---- Nav row ---- */
 .nav-row {
-  @apply flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors;
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  padding: 0.5rem 0.75rem;
-  border-radius: 5px;
+  @apply flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-[0.8rem] tracking-[0.04em] py-2 px-3 rounded-md;
 }
 
 .nav-row:hover {

@@ -44,7 +44,7 @@ hr {
 /* ---- Gradient text utility ---- */
 
 .gradient-text {
-  background: linear-gradient(135deg, #39ff14 0%, #00e5a0 100%);
+  background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -53,8 +53,7 @@ hr {
 /* ---- Three-column layout ---- */
 
 #layout {
-  @apply flex w-screen;
-  height: 100svh;
+  @apply flex w-screen h-svh;
 }
 
 #site-nav,
@@ -64,11 +63,11 @@ hr {
 }
 
 #site-nav {
-  @apply shrink-0 grow-0 basis-1/4 max-w-80 border-r border-border p-3;
+  @apply shrink-0 grow-0 basis-1/4 max-w-80 p-3;
 }
 
 #content-viewer {
-  @apply grow shrink basis-0 min-w-0 p-6;
+  @apply grow shrink basis-0 min-w-0 py-6 pl-3 pr-6;
 }
 
 #content-viewer img,
@@ -113,29 +112,23 @@ hr {
 
   #site-nav,
   #chat-panel {
-    @apply fixed top-12 w-[80vw] bg-midnight z-[150] border-none;
-    height: calc(100svh - 48px);
-    transition: transform 0.25s ease;
+    @apply fixed top-12 w-[80vw] bg-midnight z-[150] border-none h-[calc(100svh-48px)] transition-transform duration-300 ease-in-out;
   }
 
   #site-nav {
-    @apply left-0 border-r border-border;
-    flex: none;
-    transform: translateX(-100%);
+    @apply left-0 flex-none -translate-x-full;
   }
 
   #site-nav.open {
-    transform: translateX(0);
+    @apply translate-x-0;
   }
 
   #chat-panel {
-    @apply right-0 left-auto border-l border-border;
-    flex: none;
-    transform: translateX(100%);
+    @apply right-0 left-auto border-l border-border flex-none translate-x-full;
   }
 
   #chat-panel.open {
-    transform: translateX(0);
+    @apply translate-x-0;
   }
 
   #content-viewer {
@@ -143,10 +136,7 @@ hr {
   }
 
   #drawer-backdrop {
-    @apply hidden fixed top-12 left-0 w-full z-[100];
-    height: calc(100svh - 48px);
-    background: rgba(3, 10, 18, 0.7);
-    backdrop-filter: blur(2px);
+    @apply hidden fixed top-12 left-0 w-full z-[100] h-[calc(100svh-48px)] bg-midnight/70 backdrop-blur-[2px];
   }
 
   #drawer-backdrop.visible {

@@ -5,21 +5,15 @@
 }
 
 .cp-overlay--open {
-  @apply flex items-start justify-center;
-  padding-top: 12vh;
+  @apply flex items-start justify-center pt-[12vh];
 }
 
 .cp-backdrop {
-  @apply absolute inset-0;
-  background: rgba(3, 10, 18, 0.7);
-  backdrop-filter: blur(4px);
+  @apply absolute inset-0 bg-midnight/70 backdrop-blur-sm;
 }
 
 .cp-dialog {
-  @apply relative w-full max-w-lg bg-surface rounded-lg overflow-hidden font-body flex flex-col max-h-[60vh];
-  box-shadow:
-    0 0 0 1px theme(--color-border),
-    0 16px 40px rgba(0, 0, 0, 0.4);
+  @apply relative w-full max-w-lg bg-surface rounded-lg overflow-hidden font-body flex flex-col max-h-[60vh] shadow-[0_0_0_1px_theme(--color-border),0_16px_40px_rgba(0,0,0,0.4)];
 }
 
 .cp-header {
@@ -35,8 +29,7 @@
 }
 
 .cp-select:focus {
-  @apply border-teal;
-  box-shadow: 0 0 0 2px rgba(0, 229, 160, 0.2);
+  @apply border-teal ring-2 ring-teal/20;
 }
 
 .cp-input {
@@ -80,7 +73,7 @@
 }
 
 .cp-row__img--empty span {
-  background: linear-gradient(135deg, #39ff14 0%, #00e5a0 100%);
+  background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -103,8 +96,7 @@
 }
 
 .cp-row__tag {
-  @apply py-0.5 px-1.5 bg-transparent border border-teal text-[11px] text-teal capitalize;
-  border-radius: 4px;
+  @apply py-0.5 px-1.5 bg-transparent border border-teal text-[11px] text-teal capitalize rounded;
 }
 
 .cp-row--selected .cp-row__tag {
