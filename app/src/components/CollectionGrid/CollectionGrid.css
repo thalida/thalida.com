@@ -118,6 +118,46 @@
   @apply bg-transparent border border-teal text-teal capitalize text-2xs rounded-sm py-0.5 px-2 tracking-wide;
 }
 
+/* ---- Gallery grid (uniform, no masonry) ---- */
+
+.items-grid--gallery {
+  @apply grid-cols-2 gap-4;
+}
+
+/* ---- Gallery card (image-dominant with overlay) ---- */
+
+.item-card--gallery {
+  @apply overflow-hidden rounded-lg flex flex-col max-h-80;
+}
+
+.item-card__gallery-image-wrapper {
+  @apply overflow-hidden flex-1;
+}
+
+.item-card__gallery-image {
+  @apply w-full h-full object-cover transition-transform duration-500;
+}
+
+.item-card--gallery:hover .item-card__gallery-image {
+  @apply scale-105;
+}
+
+.item-card__gallery-placeholder {
+  @apply w-full h-full aspect-4/3;
+}
+
+.item-card__gallery-body {
+  @apply p-3 flex flex-col gap-0.5;
+}
+
+.item-card__gallery-title {
+  @apply m-0 font-heading font-bold text-text text-sm leading-snug;
+}
+
+.item-card__gallery-category {
+  @apply font-body uppercase text-neon font-semibold text-2xs tracking-widest;
+}
+
 /* ---- Link card (compact, favicon inline with title) ---- */
 
 .item-card--link {

@@ -14,7 +14,9 @@ interface Props {
 const { collection, title, subtitle, itemCount, items, allCategories, activeCategory } = Astro.props;
 
 const FLAG_COLLECTIONS = new Set(["recipes", "links"]);
+const GALLERY_COLLECTIONS = new Set(["gallery"]);
 const useFlag = FLAG_COLLECTIONS.has(collection);
+const useGallery = GALLERY_COLLECTIONS.has(collection);
 
 /* On-theme placeholder colors for stacked cards without images */
 const PLACEHOLDER_COLORS = [
@@ -77,7 +79,7 @@ function tileSvg(title: string): string {
     )
   }
 
-  <div class="items-grid">
+  <div class:list={["items-grid", { "items-grid--gallery": useGallery }]}>
     {
       items.map((item) => {
         const isExternal = item.collection === "links";
@@ -147,6 +149,35 @@ function tileSvg(title: string): string {
               <div class="item-card__body">
                 <h3 class="item-card__title">{item.title}</h3>
                 {item.description && <p class="item-card__description">{item.description}</p>}
+              </div>
+            </a>
+          );
+        }
+
+        if (useGallery) {
+          /* ---- Gallery card (image-dominant with text overlay) ---- */
+          const placeholderColor = pickColor(item.title);
+
+          return (
+            <a href={href} class="item-card item-card--gallery">
+              <div class="item-card__gallery-image-wrapper">
+                {item.coverImageSrc ? (
+                  <img
+                    class="item-card__gallery-image"
+                    src={item.coverImageSrc}
+                    alt={item.coverImageAlt ?? item.title}
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class="item-card__gallery-placeholder"
+                    style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
+                  />
+                )}
+              </div>
+              <div class="item-card__gallery-body">
+                <h3 class="item-card__gallery-title">{item.title}</h3>
+                {item.category && <span class="item-card__gallery-category">{categoryDisplay(item.category)}</span>}
               </div>
             </a>
           );
