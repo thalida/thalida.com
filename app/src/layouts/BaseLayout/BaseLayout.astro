@@ -3,7 +3,6 @@ import { ClientRouter } from "astro:transitions";
 import Chat from "@components/Chat/Chat.astro";
 import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
 import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
-import NeonCursor from "@components/NeonCursor/NeonCursor.astro";
 import "./BaseLayout.css";
 
 interface Props {
@@ -94,7 +93,6 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
       <Chat />
     </div>
     <CommandPalette />
-    <NeonCursor />
     <script src="./BaseLayout.ts"></script>
   </body>
 </html>
