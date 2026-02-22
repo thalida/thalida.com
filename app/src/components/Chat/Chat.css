@@ -50,7 +50,7 @@
 }
 
 #chat-rename-btn {
-  @apply py-2 px-3 border border-teal rounded-md bg-transparent text-xs cursor-pointer text-teal font-body;
+  @apply py-2 px-3 border border-teal rounded-md bg-transparent text-xs text-teal font-body;
 }
 
 #chat-rename-btn:hover {
@@ -66,7 +66,7 @@
 }
 
 #chat-send {
-  @apply w-full py-2 mt-1 border-none text-midnight text-sm cursor-pointer font-heading font-bold rounded-md bg-neon;
+  @apply w-full py-2 mt-1 border-none text-midnight text-sm font-heading font-bold rounded-md bg-neon;
 }
 
 #chat-send:hover {

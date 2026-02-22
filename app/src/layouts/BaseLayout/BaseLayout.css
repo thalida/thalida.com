@@ -54,6 +54,103 @@ hr {
   @apply bg-neon text-midnight;
 }
 
+/* ---- Custom cursors ---- */
+
+* {
+  cursor:
+    url("/cursors/default.svg") 6 1,
+    default;
+}
+
+a,
+a *,
+button,
+button *,
+select,
+[role="button"],
+[role="button"] *,
+.cursor-pointer,
+.cursor-pointer *,
+[class*="cursor-pointer"],
+[class*="cursor-pointer"] * {
+  cursor:
+    url("/cursors/pointer.svg") 6 0,
+    pointer;
+}
+
+input,
+textarea,
+[contenteditable="true"] {
+  cursor:
+    url("/cursors/text.svg") 10 10,
+    text;
+}
+
+[disabled],
+:disabled,
+.cursor-not-allowed,
+[class*="cursor-not-allowed"] {
+  cursor:
+    url("/cursors/not-allowed.svg") 10 10,
+    not-allowed;
+}
+
+.cursor-grab,
+[class*="cursor-grab"]:not([class*="cursor-grabbing"]) {
+  cursor:
+    url("/cursors/grab.svg") 10 10,
+    grab;
+}
+
+.cursor-grabbing,
+[class*="cursor-grabbing"] {
+  cursor:
+    url("/cursors/grabbing.svg") 10 10,
+    grabbing;
+}
+
+.cursor-move,
+[class*="cursor-move"] {
+  cursor:
+    url("/cursors/move.svg") 10 10,
+    move;
+}
+
+.cursor-crosshair,
+[class*="cursor-crosshair"] {
+  cursor:
+    url("/cursors/crosshair.svg") 10 10,
+    crosshair;
+}
+
+.cursor-col-resize,
+[class*="cursor-col-resize"] {
+  cursor:
+    url("/cursors/col-resize.svg") 10 10,
+    col-resize;
+}
+
+.cursor-row-resize,
+[class*="cursor-row-resize"] {
+  cursor:
+    url("/cursors/row-resize.svg") 10 10,
+    row-resize;
+}
+
+.cursor-zoom-in,
+[class*="cursor-zoom-in"] {
+  cursor:
+    url("/cursors/zoom-in.svg") 10 10,
+    zoom-in;
+}
+
+.cursor-zoom-out,
+[class*="cursor-zoom-out"] {
+  cursor:
+    url("/cursors/zoom-out.svg") 10 10,
+    zoom-out;
+}
+
 /* ---- Gradient text utility ---- */
 
 .gradient-text {
@@ -108,7 +205,7 @@ hr {
   }
 
   #mobile-toolbar button {
-    @apply bg-transparent border-none p-2 cursor-pointer text-muted hover:text-neon;
+    @apply bg-transparent border-none p-2 text-muted hover:text-neon;
   }
 
   #mobile-title {

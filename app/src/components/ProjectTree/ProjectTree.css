@@ -22,7 +22,7 @@
 
 /* ---- Search trigger ---- */
 .nav-search-trigger {
-  @apply flex items-center gap-2 w-full py-2 px-3 mb-3 border border-border rounded-lg bg-surface text-muted text-sm cursor-pointer font-body transition-colors;
+  @apply flex items-center gap-2 w-full py-2 px-3 mb-3 border border-border rounded-lg bg-surface text-muted text-sm font-body transition-colors;
 }
 
 .nav-search-trigger:hover {

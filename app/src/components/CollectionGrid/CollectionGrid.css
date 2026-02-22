@@ -33,7 +33,7 @@
 }
 
 .filter-tag {
-  @apply bg-transparent border border-teal text-teal cursor-pointer font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide;
+  @apply bg-transparent border border-teal text-teal font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide;
 }
 
 .filter-tag:hover {

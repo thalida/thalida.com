@@ -21,7 +21,7 @@
 }
 
 .cp-select {
-  @apply py-2 px-3 border border-border rounded-md text-xs font-body bg-midnight text-text cursor-pointer outline-none min-w-24;
+  @apply py-2 px-3 border border-border rounded-md text-xs font-body bg-midnight text-text outline-none min-w-24;
 }
 
 .cp-select:hover {
@@ -53,7 +53,7 @@
 }
 
 .cp-row {
-  @apply flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted cursor-pointer transition-colors;
+  @apply flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors;
 }
 
 .cp-row:hover {

@@ -1,0 +1,118 @@
+---
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+---
+
+<BaseLayout title="Cursor Test" activePage="cursor-test">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <h1 style="font-family: var(--font-display); font-size: 2rem; color: var(--color-neon); margin-bottom: 2rem;">
+      Custom Cursor Test
+    </h1>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+      <!-- Default -->
+      <div style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center;">
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">default</p>
+        <p style="color: var(--color-text);">Hover here for default cursor</p>
+      </div>
+
+      <!-- Pointer -->
+      <div style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center;">
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">pointer</p>
+        <a href="#" onclick="return false" style="color: var(--color-teal); font-size: 1rem;">Hover this link</a>
+        <br /><br />
+        <button
+          type="button"
+          style="padding: 0.5rem 1rem; background: var(--color-neon); color: var(--color-midnight); border: none; border-radius: 0.25rem; font-family: var(--font-heading); font-weight: bold;"
+        >
+          Or this button
+        </button>
+      </div>
+
+      <!-- Text -->
+      <div style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center;">
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">text</p>
+        <input
+          type="text"
+          placeholder="Click to type..."
+          style="padding: 0.5rem; background: var(--color-midnight); border: 1px solid var(--color-border); border-radius: 0.25rem; color: var(--color-text); font-family: var(--font-body); width: 80%;"
+        />
+      </div>
+
+      <!-- Not Allowed -->
+      <div style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center;">
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">not-allowed</p>
+        <button
+          type="button"
+          disabled
+          style="padding: 0.5rem 1rem; background: var(--color-surface); color: var(--color-muted); border: 1px solid var(--color-border); border-radius: 0.25rem; font-family: var(--font-body);"
+        >
+          Disabled button
+        </button>
+      </div>
+
+      <!-- Grab -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/grab.svg') 10 10, grab;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">grab</p>
+        <p style="color: var(--color-text);">Drag me (grab cursor)</p>
+      </div>
+
+      <!-- Grabbing -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/grabbing.svg') 10 10, grabbing;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">grabbing</p>
+        <p style="color: var(--color-text);">Currently dragging</p>
+      </div>
+
+      <!-- Move -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/move.svg') 10 10, move;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">move</p>
+        <p style="color: var(--color-text);">Move cursor</p>
+      </div>
+
+      <!-- Crosshair -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/crosshair.svg') 10 10, crosshair;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">crosshair</p>
+        <p style="color: var(--color-text);">Precision select</p>
+      </div>
+
+      <!-- Col Resize -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/col-resize.svg') 10 10, col-resize;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">col-resize</p>
+        <p style="color: var(--color-text);">Resize column</p>
+      </div>
+
+      <!-- Row Resize -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/row-resize.svg') 10 10, row-resize;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">row-resize</p>
+        <p style="color: var(--color-text);">Resize row</p>
+      </div>
+
+      <!-- Zoom In -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/zoom-in.svg') 10 10, zoom-in;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">zoom-in</p>
+        <p style="color: var(--color-text);">Zoom in</p>
+      </div>
+
+      <!-- Zoom Out -->
+      <div
+        style="padding: 2rem; border: 1px solid var(--color-border); border-radius: 0.5rem; text-align: center; cursor: url('/cursors/zoom-out.svg') 10 10, zoom-out;"
+      >
+        <p style="color: var(--color-muted); font-size: 0.75rem; margin-bottom: 0.5rem;">zoom-out</p>
+        <p style="color: var(--color-text);">Zoom out</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
