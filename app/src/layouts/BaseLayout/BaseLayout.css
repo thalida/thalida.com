@@ -22,15 +22,12 @@
   --text-display-sm: clamp(2rem, 5vw, 3rem);
   --text-subtitle: clamp(1rem, 2vw, 1.4rem);
 
-  --tracking-display: -0.04em;
-  --tracking-heading: -0.01em;
-  --tracking-nav: 0.05em;
-  --tracking-eyebrow: 0.08em;
-
   --leading-display: 0.95;
 
-  --spacing-card-image: 96px;
-  --spacing-flag-image: 64px;
+  --spacing-mobile-panel: calc(100svh - 48px);
+
+  --shadow-card-hover: 0 8px 24px rgba(57, 255, 20, 0.06);
+  --shadow-dialog: 0 0 0 1px var(--color-border), 0 16px 40px rgba(0, 0, 0, 0.4);
 }
 
 * {
@@ -107,7 +104,7 @@ hr {
 
 @media (max-width: 767px) {
   #mobile-toolbar {
-    @apply flex items-center justify-between fixed top-0 left-0 w-full h-12 px-3 bg-surface border-b border-border z-[200];
+    @apply flex items-center justify-between fixed top-0 left-0 w-full h-12 px-3 bg-surface border-b border-border z-60;
   }
 
   #mobile-toolbar button {
@@ -128,7 +125,7 @@ hr {
 
   #site-nav,
   #chat-panel {
-    @apply fixed top-12 w-[80vw] bg-midnight z-[150] border-none h-[calc(100svh-48px)] transition-transform duration-300 ease-in-out;
+    @apply fixed top-12 w-4/5 bg-midnight z-50 border-none h-mobile-panel transition-transform duration-300 ease-in-out;
   }
 
   #site-nav {
@@ -152,7 +149,7 @@ hr {
   }
 
   #drawer-backdrop {
-    @apply hidden fixed top-12 left-0 w-full z-[100] h-[calc(100svh-48px)] bg-midnight/70 backdrop-blur-[2px];
+    @apply hidden fixed top-12 left-0 w-full z-40 h-mobile-panel bg-midnight/70 backdrop-blur-xs;
   }
 
   #drawer-backdrop.visible {

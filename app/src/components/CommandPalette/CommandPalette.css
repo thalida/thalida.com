@@ -5,7 +5,7 @@
 }
 
 .cp-overlay--open {
-  @apply flex items-start justify-center pt-[12vh];
+  @apply flex items-center justify-center;
 }
 
 .cp-backdrop {
@@ -13,7 +13,7 @@
 }
 
 .cp-dialog {
-  @apply relative w-full max-w-lg bg-surface rounded-lg overflow-hidden font-body flex flex-col max-h-[60vh] shadow-[0_0_0_1px_theme(--color-border),0_16px_40px_rgba(0,0,0,0.4)];
+  @apply relative w-full max-w-lg bg-surface rounded-lg overflow-hidden font-body flex flex-col max-h-3/5 shadow-dialog;
 }
 
 .cp-header {
@@ -125,11 +125,11 @@
 
 @media (max-width: 767px) {
   .cp-overlay--open {
-    @apply pt-0 items-start;
+    @apply items-start;
   }
 
   .cp-dialog {
-    @apply max-w-full rounded-none max-h-[50vh] mt-12;
+    @apply max-w-full rounded-none max-h-1/2 mt-12;
   }
 
   .cp-footer {
