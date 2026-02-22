@@ -136,16 +136,12 @@ const pageTitle = entry.data.title as string;
     @apply text-teal;
   }
 
-  .post-content :global(pre) {
-    @apply bg-surface border border-border;
+  .post-content :global(.expressive-code) {
+    @apply my-6;
   }
 
-  .post-content :global(pre) :global(code) {
-    @apply border-none bg-transparent p-0;
-  }
-
-  .post-content :global(code) {
-    @apply font-body bg-surface border border-border;
+  .post-content :global(code:not(pre code)) {
+    @apply font-body bg-surface border border-border text-teal px-1.5 py-0.5 rounded text-xs;
   }
 
   .post-content :global(a) {
