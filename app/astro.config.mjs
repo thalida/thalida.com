@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import astroExpressiveCode from "astro-expressive-code";
 import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
 import rehypeR2Media from "./src/plugins/rehype-r2-media.mjs";
 
@@ -11,6 +12,26 @@ const mediaBaseUrl = r2BaseUrl ? `${r2BaseUrl}/${mediaBranch}` : "";
 
 export default defineConfig({
   site: "https://thalida.com",
+  integrations: [
+    astroExpressiveCode({
+      themes: ["houston"],
+      styleOverrides: {
+        codeBackground: "#0d1f2d",
+        borderColor: "#152535",
+        borderRadius: "0.375rem",
+        codeFontFamily: "'IBM Plex Mono', monospace",
+        frames: {
+          editorActiveTabBackground: "#0d1f2d",
+          editorActiveTabForeground: "#e8f0f8",
+          editorTabBarBackground: "#030a12",
+          editorTabBarBorderBottom: "#152535",
+          terminalBackground: "#0d1f2d",
+          terminalTitlebarBackground: "#030a12",
+          terminalTitlebarBorderBottom: "#152535",
+        },
+      },
+    }),
+  ],
   markdown: {
     remarkPlugins: [[remarkR2Media, { baseUrl: mediaBaseUrl }]],
     rehypePlugins: [[rehypeR2Media, { baseUrl: mediaBaseUrl }]],
