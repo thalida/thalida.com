@@ -78,16 +78,6 @@ import STYLES_URL from "./live-window.css?url";
 // ---------------------------------------------------------------------------
 
 class LiveWindowElement extends HTMLElement {
-  static {
-    if (!document.querySelector("link[data-live-window-font]")) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://fonts.googleapis.com/css2?family=Squada+One&display=swap";
-      link.setAttribute("data-live-window-font", "");
-      document.head.appendChild(link);
-    }
-  }
-
   static observedAttributes = [
     "openweather-key",
     "ipregistry-key",
@@ -137,6 +127,14 @@ class LiveWindowElement extends HTMLElement {
   // -- Lifecycle ------------------------------------------------------------
 
   connectedCallback() {
+    if (!document.querySelector("link[data-live-window-font]")) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=Squada+One&display=swap";
+      link.setAttribute("data-live-window-font", "");
+      document.head.appendChild(link);
+    }
+
     if (!this.shadow.querySelector(".scene")) {
       this.buildDOM();
     }
