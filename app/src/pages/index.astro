@@ -6,15 +6,19 @@ const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
 ---
 
 <BaseLayout activePage="">
-  <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
-  <div class="home-hero">
-    <h1 class="home-hero__title">Work &amp; Play</h1>
-    <p class="home-hero__subtitle">A creative's catalog</p>
-    <p class="home-hero__body">Designer, developer, maker of things. Browse my projects, guides, gallery, and more.</p>
-    <div class="home-hero__tags">
-      <a href="/projects" class="home-hero__tag">Projects</a>
-      <a href="/guides" class="home-hero__tag">Guides</a>
-      <a href="/gallery" class="home-hero__tag">Gallery</a>
+  <div class="home-content">
+    <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
+    <div class="home-hero">
+      <h1 class="home-hero__title">Work &amp; Play</h1>
+      <p class="home-hero__subtitle">A creative's catalog</p>
+      <p class="home-hero__body">
+        Designer, developer, maker of things. Browse my projects, guides, gallery, and more.
+      </p>
+      <div class="home-hero__tags">
+        <a href="/projects" class="home-hero__tag">Projects</a>
+        <a href="/guides" class="home-hero__tag">Guides</a>
+        <a href="/gallery" class="home-hero__tag">Gallery</a>
+      </div>
     </div>
   </div>
 </BaseLayout>
@@ -23,6 +27,18 @@ const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
 
 <style>
   @reference "../layouts/BaseLayout/BaseLayout.css";
+
+  live-window {
+    --window-color: #030a12;
+    --blinds-color: #030a12;
+    --clock-text-color: #39ff14;
+    --weather-text-font: "Space Grotesk", sans-serif;
+    --weather-text-color: var(--color-text);
+  }
+
+  .home-content {
+    @apply flex flex-col items-center text-center;
+  }
 
   .home-hero {
     @apply mt-8;
