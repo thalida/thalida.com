@@ -79,11 +79,11 @@ hr {
 }
 
 #site-nav {
-  @apply shrink-0 grow-0 basis-1/4 max-w-80 p-3;
+  @apply shrink-0 grow-0 basis-1/4 max-w-80 py-3 pl-3 pr-0;
 }
 
 #content-viewer {
-  @apply grow shrink basis-0 min-w-0 py-6 pl-3 pr-6;
+  @apply grow shrink basis-0 min-w-0 py-6 px-6;
 }
 
 #content-viewer img,

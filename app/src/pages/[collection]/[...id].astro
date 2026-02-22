@@ -49,6 +49,17 @@ const pageTitle = entry.data.title as string;
 >
   <article class="post-page">
     <header class="post-header">
+      <p class="post-breadcrumb">
+        <a href={`/${collection}`}>{collection}</a>
+        {
+          entry.data.category && (
+            <span>
+              {" "}
+              / <a href={`/${collection}/${entry.data.category}`}>{entry.data.category}</a>
+            </span>
+          )
+        }
+      </p>
       <h1>{pageTitle}</h1>
       {entry.data.description && <p class="post-description">{entry.data.description}</p>}
       <div class="post-meta">
@@ -76,7 +87,19 @@ const pageTitle = entry.data.title as string;
   @reference "../../layouts/BaseLayout/BaseLayout.css";
 
   .post-page {
-    @apply font-body max-w-3xl;
+    @apply font-body max-w-3xl mx-auto;
+  }
+
+  .post-breadcrumb {
+    @apply m-0 mb-3 font-body uppercase text-neon font-semibold text-2xs tracking-eyebrow;
+  }
+
+  .post-breadcrumb a {
+    @apply text-neon no-underline;
+  }
+
+  .post-breadcrumb a:hover {
+    @apply text-teal;
   }
 
   .post-header {
