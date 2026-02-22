@@ -1,113 +1,127 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --color-midnight: #030a12;
+  --color-surface: #0d1f2d;
+  --color-neon: #39ff14;
+  --color-teal: #00e5a0;
+  --color-text: #e8f0f8;
+  --color-muted: #7a9ab5;
+  --color-border: #152535;
+  --color-surface-active: #0a1826;
+
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Mono", monospace;
+}
 
 * {
-  box-sizing: border-box;
+  @apply box-border;
 }
+
 body {
-  margin: 0;
-  background: #f0f0f0;
+  @apply m-0 bg-midnight text-text font-body text-sm leading-relaxed;
 }
+
+a {
+  @apply text-teal;
+}
+
+a:hover {
+  @apply text-neon;
+}
+
+hr {
+  @apply border-none border-t border-border my-6;
+}
+
+::selection {
+  @apply bg-neon text-midnight;
+}
+
+/* ---- Gradient text utility ---- */
+
+.gradient-text {
+  background: linear-gradient(135deg, #39ff14 0%, #00e5a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---- Three-column layout ---- */
+
 #layout {
-  display: flex;
-  height: 100vh; /* fallback */
-  height: 100svh; /* iOS Safari: stable viewport height */
-  width: 100vw;
+  @apply flex w-screen;
+  height: 100svh;
 }
+
 #site-nav,
 #content-viewer,
 #chat-panel {
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 1em;
-  border-right: 1px solid #ccc;
+  @apply overflow-y-auto overflow-x-hidden;
 }
+
 #site-nav {
-  flex: 0 0 25%;
-  max-width: 320px;
+  @apply shrink-0 grow-0 basis-1/4 max-w-80 border-r border-border p-3;
 }
+
 #content-viewer {
-  flex: 1 1 0%;
-  min-width: 0;
+  @apply grow shrink basis-0 min-w-0 p-6;
 }
+
 #content-viewer img,
 #content-viewer video {
-  max-width: 100%;
-  height: auto;
-}
-#chat-panel {
-  flex: 0 0 25%;
-  max-width: 320px;
-  border-right: none;
+  @apply max-w-full h-auto;
 }
 
-/* -- Mobile toolbar & drawers -- */
+#chat-panel {
+  @apply shrink-0 grow-0 basis-1/4 max-w-80 border-l border-border p-4;
+}
+
+/* ---- Mobile toolbar & drawers ---- */
 
 #mobile-toolbar {
-  display: none;
+  @apply hidden;
 }
 
 #drawer-backdrop {
-  display: none;
+  @apply hidden;
 }
 
 @media (max-width: 767px) {
   #mobile-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 48px;
-    padding: 0 12px;
-    background: #f0f0f0;
-    border-bottom: 1px solid #ccc;
-    z-index: 200;
+    @apply flex items-center justify-between fixed top-0 left-0 w-full h-12 px-3 bg-surface border-b border-border z-[200];
   }
 
   #mobile-toolbar button {
-    background: none;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    color: #333;
+    @apply bg-transparent border-none p-2 cursor-pointer text-muted hover:text-neon;
   }
 
   #mobile-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: #333;
+    @apply font-display font-bold text-base text-neon;
   }
 
   #mobile-toolbar-right {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+    @apply flex items-center gap-1;
   }
 
   #layout {
-    padding-top: 48px;
+    @apply pt-12;
   }
 
   #site-nav,
   #chat-panel {
-    position: fixed;
-    top: 48px;
-    width: 80vw;
-    height: calc(100vh - 48px); /* fallback */
-    height: calc(100svh - 48px); /* iOS Safari: stable viewport height */
-    background: #f0f0f0;
-    z-index: 150;
+    @apply fixed top-12 w-[80vw] bg-midnight z-[150] border-none;
+    height: calc(100svh - 48px);
     transition: transform 0.25s ease;
-    border-right: none;
   }
 
   #site-nav {
-    left: 0;
+    @apply left-0 border-r border-border;
     flex: none;
     transform: translateX(-100%);
-    border-right: 1px solid #ccc;
   }
 
   #site-nav.open {
@@ -115,11 +129,9 @@ body {
   }
 
   #chat-panel {
-    right: 0;
-    left: auto;
+    @apply right-0 left-auto border-l border-border;
     flex: none;
     transform: translateX(100%);
-    border-left: 1px solid #ccc;
   }
 
   #chat-panel.open {
@@ -127,22 +139,17 @@ body {
   }
 
   #content-viewer {
-    flex: 1 1 100%;
+    @apply grow shrink basis-full;
   }
 
   #drawer-backdrop {
-    display: none;
-    position: fixed;
-    top: 48px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 48px); /* fallback */
-    height: calc(100svh - 48px); /* iOS Safari: stable viewport height */
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 100;
+    @apply hidden fixed top-12 left-0 w-full z-[100];
+    height: calc(100svh - 48px);
+    background: rgba(3, 10, 18, 0.7);
+    backdrop-filter: blur(2px);
   }
 
   #drawer-backdrop.visible {
-    display: block;
+    @apply block;
   }
 }

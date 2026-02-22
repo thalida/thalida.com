@@ -1,107 +1,76 @@
+@reference "../../layouts/BaseLayout/BaseLayout.css";
+
 #chat-panel {
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
+  @apply font-body flex flex-col gap-2;
 }
 
 #chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 0 0.25em;
+  @apply flex items-center justify-between m-0 mb-1;
 }
 
 #chat-header h2 {
-  margin: 0;
-  font-size: 1.1em;
-  letter-spacing: 0.02em;
+  @apply m-0 font-heading text-base font-semibold text-teal tracking-tight;
 }
 
 #chat-admin-link {
-  font-size: 0.8em;
-  color: #999;
-  text-decoration: none;
+  @apply text-xs text-muted no-underline;
 }
 
 #chat-admin-link:hover {
-  color: #333;
+  @apply text-teal;
 }
 
 #chat-owner-status,
 #chat-user-count {
-  font-size: 0.8em;
-  color: #666;
+  @apply text-xs text-muted;
 }
 
 #chat-room {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  flex: 1;
+  @apply flex flex-col gap-2 flex-1;
 }
 
 #chat-messages {
-  flex: 1;
-  font-size: 0.85em;
+  @apply flex-1 text-sm text-text;
 }
 
 #chat-username-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25em;
-  font-size: 0.8em;
-  color: #666;
+  @apply flex flex-col gap-1 text-xs text-muted;
 }
 
 #chat-username-bar label {
-  font-size: inherit;
+  @apply text-inherit;
 }
 
 #chat-username {
-  width: 100%;
-  padding: 0.3em 0.5em;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: inherit;
-  font-family: inherit;
+  @apply w-full py-1.5 px-2 border border-border rounded-md text-xs font-body bg-midnight text-text;
+}
+
+#chat-username:focus {
+  @apply outline-none border-teal;
 }
 
 #chat-rename-btn {
-  padding: 0.3em 0.6em;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  background: #fff;
-  font-size: inherit;
-  cursor: pointer;
+  @apply py-1.5 px-2.5 border border-teal rounded-md bg-transparent text-xs cursor-pointer text-teal font-body;
+}
+
+#chat-rename-btn:hover {
+  @apply bg-teal/10;
 }
 
 #chat-input {
-  width: 100%;
-  padding: 0.4em 0.6em;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 0.85em;
-  font-family: inherit;
-  box-sizing: border-box;
+  @apply w-full py-2 px-2.5 border border-border rounded-md text-sm font-body bg-midnight text-text;
+}
+
+#chat-input:focus {
+  @apply outline-none border-teal;
 }
 
 #chat-send {
-  width: 100%;
-  padding: 0.4em;
-  margin-top: 0.25em;
-  border: none;
+  @apply w-full py-2 mt-1 border-none text-midnight text-sm cursor-pointer font-heading font-bold;
   border-radius: 6px;
-  background: #4338ca;
-  color: #fff;
-  font-size: 0.85em;
-  cursor: pointer;
-  font-family: inherit;
+  background: #39ff14;
 }
 
 #chat-send:hover {
-  background: #3730a3;
+  @apply bg-teal;
 }

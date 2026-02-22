@@ -6,9 +6,59 @@ const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
 ---
 
 <BaseLayout activePage="">
-  <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="light"></live-window>
-  <h2>Welcome</h2>
-  <p>Click a project in the tree to view it here.</p>
+  <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
+  <div class="home-hero">
+    <h1 class="home-hero__title">Work &amp; Play</h1>
+    <p class="home-hero__subtitle">A creative's catalog</p>
+    <p class="home-hero__body">Designer, developer, maker of things. Browse my projects, guides, gallery, and more.</p>
+    <div class="home-hero__tags">
+      <a href="/projects" class="home-hero__tag">Projects</a>
+      <a href="/guides" class="home-hero__tag">Guides</a>
+      <a href="/gallery" class="home-hero__tag">Gallery</a>
+    </div>
+  </div>
 </BaseLayout>
 
 <script src="../scripts/live-window/live-window.ts"></script>
+
+<style>
+  @reference "../layouts/BaseLayout/BaseLayout.css";
+
+  .home-hero {
+    @apply mt-8;
+  }
+
+  .home-hero__title {
+    @apply m-0 font-display font-bold text-neon;
+    font-size: clamp(2.5rem, 6vw, 4.8rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .home-hero__subtitle {
+    @apply m-0 mt-3 font-heading text-teal;
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    letter-spacing: -0.01em;
+  }
+
+  .home-hero__body {
+    @apply m-0 mt-4 font-body text-muted leading-relaxed max-w-lg;
+    font-size: 0.9rem;
+  }
+
+  .home-hero__tags {
+    @apply flex flex-wrap gap-2 mt-6;
+  }
+
+  .home-hero__tag {
+    @apply bg-transparent border border-teal text-teal no-underline capitalize font-body transition-colors;
+    font-size: 0.7rem;
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    letter-spacing: 0.06em;
+  }
+
+  .home-hero__tag:hover {
+    @apply bg-teal/10 text-teal;
+  }
+</style>

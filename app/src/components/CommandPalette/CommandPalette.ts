@@ -125,7 +125,7 @@ function initCommandPalette() {
           ${
             item.coverImageSrc
               ? `<img class="cp-row__img" src="${item.coverImageSrc}" alt="" />`
-              : `<div class="cp-row__img cp-row__img--empty">${escapeHtml(item.title.charAt(0))}</div>`
+              : `<div class="cp-row__img cp-row__img--empty"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
           }
           <div class="cp-row__content">
             <span class="cp-row__title">${escapeHtml(item.title)}</span>

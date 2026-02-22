@@ -1,5 +1,5 @@
 ---
-import { formatDate, categoryDisplay, type NavItem } from "@lib/nav-data";
+import { categoryDisplay, type NavItem } from "@lib/nav-data";
 
 interface Props {
   collection: string;
@@ -11,25 +11,61 @@ interface Props {
 }
 
 const { collection, title, subtitle, items, allCategories, activeCategory } = Astro.props;
+
+const FLAG_COLLECTIONS = new Set(["recipes", "links"]);
+const useFlag = FLAG_COLLECTIONS.has(collection);
+
+/* On-theme placeholder colors for stacked cards without images */
+const PLACEHOLDER_COLORS = [
+  "#39FF14" /* neon green */,
+  "#00E5A0" /* teal */,
+  "#00D4AA" /* mint */,
+  "#0A8F6F" /* deep teal */,
+  "#2B9F4B" /* forest green */,
+  "#1CB5A0" /* sea green */,
+];
+
+function pickColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return PLACEHOLDER_COLORS[Math.abs(hash) % PLACEHOLDER_COLORS.length];
+}
+
+function tileSvg(title: string): string {
+  const label = title.toUpperCase() + " ";
+  const escaped = label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const charW = 6.8;
+  const w = Math.ceil(label.length * charW);
+  const h = 34;
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
+    `<text x="0" y="12" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
+    `<text x="${Math.round(w / 2)}" y="29" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
+    `<text x="${Math.round(-w / 2)}" y="29" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
+    `</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
 ---
 
 <div class="collection-page">
-  <header class="collection-header">
+  <header class="collection-hero">
     <h1>{title}</h1>
-    <p class="collection-count">{subtitle}</p>
+    <p class="collection-subtitle">{subtitle}</p>
   </header>
 
   {
     allCategories.length > 0 && (
       <div class="filter-section">
-        <div class="filter-chips">
-          <a href={`/${collection}`} class:list={["filter-chip", { "filter-chip--active": !activeCategory }]}>
+        <div class="filter-tags">
+          <a href={`/${collection}`} class:list={["filter-tag", { "filter-tag--active": !activeCategory }]}>
             All
           </a>
           {allCategories.map((cat) => (
             <a
               href={`/${collection}/${encodeURIComponent(cat)}`}
-              class:list={["filter-chip", { "filter-chip--active": activeCategory === cat }]}
+              class:list={["filter-tag", { "filter-tag--active": activeCategory === cat }]}
             >
               {categoryDisplay(cat)}
             </a>
@@ -39,12 +75,14 @@ const { collection, title, subtitle, items, allCategories, activeCategory } = As
     )
   }
 
-  <div class:list={["items-grid", { "items-grid--masonry": collection === "links" }]}>
+  <div class="items-grid">
     {
       items.map((item) => {
         const isExternal = item.collection === "links";
         const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+
         if (isExternal) {
+          /* ---- Link card (compact flag with inline favicon) ---- */
           const displayUrl = (() => {
             try {
               return new URL(item.id).hostname.replace(/^www\./, "");
@@ -52,30 +90,78 @@ const { collection, title, subtitle, items, allCategories, activeCategory } = As
               return item.id;
             }
           })();
+
           return (
-            <a href={href} class="item-card" target="_blank" rel="noopener">
+            <a href={href} class="item-card item-card--link" target="_blank" rel="noopener">
+              <p class="item-card__meta">
+                {displayUrl}
+                <svg
+                  class="item-card__external-icon"
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </p>
+              <h3 class="item-card__title">
+                {item.faviconUrl ? (
+                  <img class="item-card__favicon" src={item.faviconUrl} alt="" width="16" height="16" loading="lazy" />
+                ) : (
+                  <span class="item-card__favicon-placeholder gradient-text">{item.title.charAt(0)}</span>
+                )}
+                {item.title}
+              </h3>
+              {(item.description || item.metaDescription) && (
+                <p class="item-card__description">{item.description || item.metaDescription}</p>
+              )}
+            </a>
+          );
+        }
+
+        if (useFlag) {
+          /* ---- Flag card (horizontal with image box — recipes) ---- */
+          return (
+            <a href={href} class="item-card item-card--flag">
+              <div class="item-card__flag-image">
+                {item.coverImageSrc ? (
+                  <img
+                    class="item-card__image"
+                    src={item.coverImageSrc}
+                    alt={item.coverImageAlt ?? item.title}
+                    loading="lazy"
+                  />
+                ) : (
+                  <span class="item-card__placeholder gradient-text">{item.title.charAt(0)}</span>
+                )}
+              </div>
               <div class="item-card__body">
-                <div class="item-card__link-title">
-                  {item.faviconUrl && (
-                    <img
-                      class="item-card__favicon"
-                      src={item.faviconUrl}
-                      alt=""
-                      width="16"
-                      height="16"
-                      loading="lazy"
-                    />
-                  )}
-                  <h3 class="item-card__title">{item.title}</h3>
-                </div>
-                <p class="item-card__url">{displayUrl}</p>
-                {item.metaDescription && <p class="item-card__description">{item.metaDescription}</p>}
+                <h3 class="item-card__title">{item.title}</h3>
+                {item.description && <p class="item-card__description">{item.description}</p>}
               </div>
             </a>
           );
         }
+
+        /* ---- Stacked card (vertical) ---- */
+        const eyebrow = [
+          item.category ? categoryDisplay(item.category) : null,
+          item.publishedOn ? new Date(item.publishedOn).getFullYear() : null,
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+        const placeholderColor = pickColor(item.title);
+
         return (
-          <a href={href} class="item-card">
+          <a href={href} class="item-card item-card--stacked">
             {item.coverImageSrc ? (
               <div class="item-card__image-wrapper">
                 <img
@@ -86,14 +172,22 @@ const { collection, title, subtitle, items, allCategories, activeCategory } = As
                 />
               </div>
             ) : (
-              <div class="item-card__image-wrapper item-card__image-wrapper--empty">
-                <span class="item-card__placeholder">{item.title.charAt(0)}</span>
-              </div>
+              <div
+                class="item-card__image-wrapper item-card__image-wrapper--color"
+                style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
+              />
             )}
             <div class="item-card__body">
+              {eyebrow && <p class="item-card__meta">{eyebrow}</p>}
               <h3 class="item-card__title">{item.title}</h3>
-              <p class="item-card__date">{formatDate(item.publishedOn)}</p>
               {item.description && <p class="item-card__description">{item.description}</p>}
+              {item.tags && item.tags.length > 0 && (
+                <div class="item-tags">
+                  {item.tags.slice(0, 3).map((tag) => (
+                    <span class="item-tag">{tag}</span>
+                  ))}
+                </div>
+              )}
             </div>
           </a>
         );
@@ -102,6 +196,72 @@ const { collection, title, subtitle, items, allCategories, activeCategory } = As
   </div>
 </div>
 
+<script>
+  const ROW_PX = 10;
+
+  function layoutMasonry() {
+    const grid = document.querySelector(".items-grid") as HTMLElement | null;
+    if (!grid) return;
+
+    // On single-column (mobile), disable masonry
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(" ").length;
+    if (cols <= 1) {
+      grid.classList.remove("masonry-ready");
+      for (const card of grid.children) {
+        (card as HTMLElement).style.gridRowEnd = "";
+      }
+      return;
+    }
+
+    // Step 1: Reset to natural layout for measurement
+    grid.classList.remove("masonry-ready");
+    grid.style.alignItems = "start";
+    for (const card of grid.children) {
+      (card as HTMLElement).style.gridRowEnd = "";
+    }
+
+    // Force reflow so cards shrink to natural content height
+    void grid.offsetHeight;
+
+    // Step 2: Measure natural heights, compute spans
+    const spans: number[] = [];
+    for (const card of grid.children) {
+      const height = (card as HTMLElement).getBoundingClientRect().height;
+      // +1 row for the margin-bottom gap
+      spans.push(Math.ceil(height / ROW_PX) + 1);
+    }
+
+    // Step 3: Apply masonry mode and spans
+    grid.style.alignItems = "";
+    grid.classList.add("masonry-ready");
+    Array.from(grid.children).forEach((card, i) => {
+      (card as HTMLElement).style.gridRowEnd = `span ${spans[i]}`;
+    });
+  }
+
+  function initMasonry() {
+    layoutMasonry();
+
+    // Re-layout after images load
+    document.querySelectorAll(".items-grid img").forEach((img) => {
+      if (!(img as HTMLImageElement).complete) {
+        img.addEventListener("load", layoutMasonry, { once: true });
+      }
+    });
+  }
+
+  // Run on every page navigation (View Transitions)
+  document.addEventListener("astro:page-load", initMasonry);
+
+  // Re-layout on resize
+  let resizeTimer: ReturnType<typeof setTimeout>;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layoutMasonry, 100);
+  });
+</script>
+
 <style>
+  /* force HMR recompile — editorial titles + smaller subtitle */
   @import "./CollectionGrid.css";
 </style>

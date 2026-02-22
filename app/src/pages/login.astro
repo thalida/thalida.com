@@ -10,15 +10,31 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>login &middot; thalida</title>
   </head>
-  <body>
-    <h1>Admin Login</h1>
-    <form id="admin-form">
-      <label for="admin-secret">Admin secret</label>
-      <input id="admin-secret" type="password" autocomplete="current-password" required />
-      <button type="submit">Log in</button>
-      <p id="admin-error" hidden></p>
-    </form>
-    <p><a href="/">&larr; back to chat</a></p>
+  <body
+    style="margin:0;background:#030A12;color:#E8F0F8;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;"
+  >
+    <div style="max-width:360px;width:100%;padding:2rem;">
+      <h1 style="font-family:'Bricolage Grotesque',sans-serif;color:#39FF14;font-size:1.5rem;margin:0 0 1.5rem;">
+        Admin Login
+      </h1>
+      <form id="admin-form" style="display:flex;flex-direction:column;gap:0.75rem;">
+        <label for="admin-secret" style="font-size:0.8rem;color:#7A9AB5;">Admin secret</label>
+        <input
+          id="admin-secret"
+          type="password"
+          autocomplete="current-password"
+          required
+          style="padding:0.6rem 0.75rem;border:1px solid #152535;border-radius:6px;background:#0D1F2D;color:#E8F0F8;font-family:inherit;font-size:0.9rem;"
+        />
+        <button
+          type="submit"
+          style="padding:0.6rem 1.25rem;border:none;border-radius:6px;background:#39FF14;color:#030A12;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;"
+          >Log in</button
+        >
+        <p id="admin-error" hidden style="color:#ff4444;font-size:0.85rem;margin:0;"></p>
+      </form>
+      <p style="margin-top:1.5rem;"><a href="/" style="color:#00E5A0;font-size:0.85rem;">&larr; back to chat</a></p>
+    </div>
 
     <script is:inline define:vars={{ apiBase, LS_ADMIN_TOKEN_KEY }}>
       const form = document.getElementById("admin-form");

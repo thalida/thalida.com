@@ -12,19 +12,15 @@ import meRainbow from "@assets/about/me-rainbow.png";
   activePage="about"
   pageContext={{ collection: "page", id: "about", title: "About" }}
 >
-  <article>
+  <article class="about-page">
     <h2>About</h2>
     <hr />
 
     <div class="about-photos">
-      <Image src={meMemoji} alt="A Memoji of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
-      <Image src={meHeadshot} alt="A headshot of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
-      <Image src={meAvatar} alt="A cartoon avatar of Thalida" style="width:100%;height:auto;border-radius:1rem;" />
-      <Image
-        src={meRainbow}
-        alt="A rainbow themed image of Thalida"
-        style="width:100%;height:auto;border-radius:1rem;"
-      />
+      <Image src={meMemoji} alt="A Memoji of Thalida" class="about-photo" />
+      <Image src={meHeadshot} alt="A headshot of Thalida" class="about-photo" />
+      <Image src={meAvatar} alt="A cartoon avatar of Thalida" class="about-photo" />
+      <Image src={meRainbow} alt="A rainbow themed image of Thalida" class="about-photo" />
     </div>
 
     <h3>Hey, I'm Thalida!</h3>
@@ -80,16 +76,51 @@ import meRainbow from "@assets/about/me-rainbow.png";
 </BaseLayout>
 
 <style>
+  @reference "../layouts/BaseLayout/BaseLayout.css";
+
+  .about-page {
+    @apply font-body max-w-3xl;
+  }
+
+  .about-page h2 {
+    @apply m-0 mb-2 font-display font-bold text-neon;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .about-page h3 {
+    @apply font-heading text-xl font-semibold text-teal mt-6 mb-2;
+    letter-spacing: -0.01em;
+  }
+
+  .about-page p {
+    @apply text-text mb-4 leading-relaxed;
+  }
+
+  .about-page ul {
+    @apply text-text mb-4 pl-5 list-disc;
+  }
+
+  .about-page li {
+    @apply mb-2 leading-relaxed;
+  }
+
+  .about-page a {
+    @apply text-teal hover:text-neon;
+  }
+
+  .about-photo {
+    @apply w-full h-auto border border-border rounded-lg;
+  }
+
   .about-photos {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    @apply grid grid-cols-4 gap-2 mb-6;
   }
 
   @media (max-width: 767px) {
     .about-photos {
-      grid-template-columns: repeat(2, 1fr);
+      @apply grid-cols-2;
     }
   }
 </style>

@@ -66,85 +66,74 @@ const pageTitle = entry.data.title as string;
       </div>
     </header>
     <hr />
-    <div class="post-content">
+    <div class="post-content prose prose-invert prose-sm max-w-none">
       {Content ? <Content /> : <p>Content could not be rendered.</p>}
     </div>
   </article>
 </BaseLayout>
 
 <style>
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+
   .post-page {
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
-    max-width: 800px;
+    @apply font-body max-w-3xl;
   }
 
   .post-header {
-    margin-bottom: 1.5em;
+    @apply mb-6;
   }
 
   .post-header h1 {
-    margin: 0 0 0.25em;
-    font-size: 2em;
-    font-weight: 700;
-    color: #222;
-    line-height: 1.2;
+    @apply m-0 mb-3 font-display font-bold text-neon;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    letter-spacing: -0.04em;
+    line-height: 0.95;
   }
 
   .post-description {
-    margin: 0 0 0.75em;
-    font-size: 1.1em;
-    color: #666;
-    font-style: italic;
+    @apply m-0 mb-3 font-heading font-semibold text-teal;
+    font-size: 1rem;
   }
 
   .post-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75em;
+    @apply flex flex-wrap items-center gap-3;
   }
 
   .post-date {
-    font-size: 0.9em;
-    color: #888;
+    @apply text-sm text-muted;
   }
 
   .post-content {
-    line-height: 1.7;
-    color: #333;
+    @apply text-text font-body;
   }
 
   .post-content :global(h2),
   .post-content :global(h3),
   .post-content :global(h4) {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    color: #222;
+    @apply font-heading text-text;
   }
 
-  .post-content :global(p) {
-    margin: 0 0 1em;
+  .post-content :global(h2) {
+    @apply text-teal;
   }
 
   .post-content :global(pre) {
-    background: #f5f5f5;
-    padding: 1em;
-    border-radius: 6px;
-    overflow-x: auto;
+    @apply bg-surface border border-border;
+  }
+
+  .post-content :global(pre) :global(code) {
+    @apply border-none bg-transparent p-0;
   }
 
   .post-content :global(code) {
-    font-size: 0.9em;
+    @apply font-body bg-surface border border-border;
   }
 
   .post-content :global(a) {
-    color: #4338ca;
+    @apply text-teal hover:text-neon;
   }
 
   .post-content :global(img) {
-    border-radius: 8px;
+    @apply rounded-lg;
   }
 </style>

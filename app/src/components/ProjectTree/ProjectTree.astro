@@ -31,38 +31,43 @@ const navData = await getNavData();
     <kbd class="nav-search-shortcut">⌘K</kbd>
   </button>
 
-  <ul class="nav-list">
-    {
-      NAV_ORDER.map((entry) =>
-        entry.type === "page" ? (
-          <li>
-            <a
-              href={`/${entry.page}`}
-              class="nav-row nav-row--page"
-              data-active={activePage === entry.page ? "true" : undefined}
-            >
-              {entry.label}
-            </a>
-          </li>
-        ) : navData[entry.collection] ? (
-          <li>
-            <a
-              href={`/${entry.collection}`}
-              class="nav-row nav-row--collection"
-              data-active={activeCollection === entry.collection ? "true" : undefined}
-            >
-              <span class="nav-row__label">{navData[entry.collection].title}</span>
-              <span class="nav-row__count">{navData[entry.collection].items.length}</span>
-            </a>
-          </li>
-        ) : null,
-      )
-    }
-  </ul>
+  <div class="nav-container">
+    <ul class="nav-list">
+      {
+        NAV_ORDER.map((entry) =>
+          entry.type === "page" ? (
+            <li>
+              <a
+                href={`/${entry.page}`}
+                class="nav-row nav-row--page"
+                data-active={activePage === entry.page ? "true" : undefined}
+              >
+                <span class="nav-dot" />
+                {entry.label}
+              </a>
+            </li>
+          ) : navData[entry.collection] ? (
+            <li>
+              <a
+                href={`/${entry.collection}`}
+                class="nav-row nav-row--collection"
+                data-active={activeCollection === entry.collection ? "true" : undefined}
+              >
+                <span class="nav-dot" />
+                <span class="nav-row__label">{navData[entry.collection].title}</span>
+                <span class="nav-row__count">{navData[entry.collection].items.length}</span>
+              </a>
+            </li>
+          ) : null,
+        )
+      }
+    </ul>
+  </div>
 </nav>
 
 <script src="./ProjectTree.ts"></script>
 
 <style>
+  /* force HMR recompile */
   @import "./ProjectTree.css";
 </style>
