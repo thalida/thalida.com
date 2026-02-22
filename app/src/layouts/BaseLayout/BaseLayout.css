@@ -54,6 +54,13 @@ hr {
   @apply bg-neon text-midnight;
 }
 
+/* ---- Custom cursor (neon glow) ---- */
+
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
 /* ---- Gradient text utility ---- */
 
 .gradient-text {
