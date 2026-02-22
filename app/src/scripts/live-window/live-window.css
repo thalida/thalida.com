@@ -11,6 +11,7 @@
   --window-clock-bg: #1a1a2e;
   --window-sky-color-default: #0e1a3a;
   --color-text-red: #e74c3c;
+  --clock-text-color: var(--color-text-red);
   --weather-text-color: #1a1a2e;
   --primary-font: system-ui, -apple-system, sans-serif;
   --clock-font: "Squada One", sans-serif;
@@ -569,7 +570,7 @@
   border-radius: 8px;
   font-size: 24px;
   font-family: var(--clock-font);
-  color: var(--color-text-red);
+  color: var(--clock-text-color);
   background: var(--window-clock-bg);
 }
 
@@ -622,7 +623,7 @@
 .clock-ampm .ampm-am.active,
 .clock-ampm .ampm-pm.active {
   opacity: 1;
-  color: var(--color-text-red);
+  color: var(--clock-text-color);
 }
 
 /* ---- Weather text ---- */
