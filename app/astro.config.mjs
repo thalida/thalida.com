@@ -1,5 +1,6 @@
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
 import rehypeR2Media from "./src/plugins/rehype-r2-media.mjs";
 
@@ -13,5 +14,8 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [[remarkR2Media, { baseUrl: mediaBaseUrl }]],
     rehypePlugins: [[rehypeR2Media, { baseUrl: mediaBaseUrl }]],
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
 });

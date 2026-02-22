@@ -16,8 +16,10 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.2.0",
     "astro": "^5.10.1",
     "he": "^1.2.0",
+    "tailwindcss": "^4.2.0",
     "unist-util-visit": "^5.1.0",
     "yaml": "^2.8.2"
   },
