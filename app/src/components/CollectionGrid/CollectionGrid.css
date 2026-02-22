@@ -7,7 +7,7 @@
 /* ---- Collection hero ---- */
 
 .collection-hero {
-  @apply mb-8;
+  @apply mb-6;
 }
 
 .collection-hero h1 {
@@ -15,7 +15,11 @@
 }
 
 .collection-subtitle {
-  @apply m-0 font-heading font-semibold text-teal text-sm tracking-tight;
+  @apply m-0 mb-3 font-heading font-semibold text-teal text-subtitle tracking-heading;
+}
+
+.collection-count {
+  @apply m-0 font-body text-muted text-sm;
 }
 
 /* ---- Filter tags ---- */

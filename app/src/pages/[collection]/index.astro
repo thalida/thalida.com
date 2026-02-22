@@ -2,7 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
 import { getNavData, type NavCollection } from "@lib/nav-data";
-import { COLLECTION_NAMES, type CollectionName } from "../../content.config";
+import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "../../content.config";
 
 export async function getStaticPaths() {
   return COLLECTION_NAMES.map((collection) => ({
@@ -25,7 +25,8 @@ const { title, items, allCategories } = collectionData;
   <CollectionGrid
     collection={collection}
     title={title}
-    subtitle={`${items.length} items`}
+    subtitle={collectionMeta[collection].description}
+    itemCount={items.length}
     items={items}
     allCategories={allCategories}
   />

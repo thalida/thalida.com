@@ -5,12 +5,13 @@ interface Props {
   collection: string;
   title: string;
   subtitle: string;
+  itemCount: number;
   items: NavItem[];
   allCategories: string[];
   activeCategory?: string;
 }
 
-const { collection, title, subtitle, items, allCategories, activeCategory } = Astro.props;
+const { collection, title, subtitle, itemCount, items, allCategories, activeCategory } = Astro.props;
 
 const FLAG_COLLECTIONS = new Set(["recipes", "links"]);
 const useFlag = FLAG_COLLECTIONS.has(collection);
@@ -53,6 +54,7 @@ function tileSvg(title: string): string {
   <header class="collection-hero">
     <h1>{title}</h1>
     <p class="collection-subtitle">{subtitle}</p>
+    <p class="collection-count">{itemCount} items</p>
   </header>
 
   {
@@ -262,6 +264,6 @@ function tileSvg(title: string): string {
 </script>
 
 <style>
-  /* force HMR recompile — editorial titles + smaller subtitle */
+  /* force HMR recompile — subtitle + count styling */
   @import "./CollectionGrid.css";
 </style>
