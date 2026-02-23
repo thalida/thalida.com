@@ -5,7 +5,7 @@
 }
 
 .cp-overlay--open {
-  @apply flex items-center justify-center;
+  @apply flex items-start md:items-center justify-center;
 }
 
 .cp-backdrop {
@@ -13,7 +13,7 @@
 }
 
 .cp-dialog {
-  @apply relative w-full max-w-lg bg-surface rounded-lg overflow-hidden font-body flex flex-col max-h-3/5 shadow-dialog;
+  @apply relative w-full max-w-full mt-12 rounded-none md:max-w-lg md:mt-0 md:rounded-lg bg-surface overflow-hidden font-body flex flex-col max-h-1/2 md:max-h-3/5 shadow-dialog;
 }
 
 .cp-header {
@@ -112,7 +112,7 @@
 }
 
 .cp-footer {
-  @apply flex gap-4 py-2 px-4 border-t border-border text-xs text-muted;
+  @apply hidden md:flex gap-4 py-2 px-4 border-t border-border text-xs text-muted;
 }
 
 .cp-footer span {
@@ -121,18 +121,4 @@
 
 .cp-footer kbd {
   @apply text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted;
-}
-
-@media (max-width: 767px) {
-  .cp-overlay--open {
-    @apply items-start;
-  }
-
-  .cp-dialog {
-    @apply max-w-full rounded-none max-h-1/2 mt-12;
-  }
-
-  .cp-footer {
-    @apply hidden;
-  }
 }
