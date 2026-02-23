@@ -187,9 +187,7 @@ textarea,
   @apply max-w-full h-auto;
 }
 
-#chat-panel {
-  @apply hidden md:flex md:shrink-0 md:grow-0 md:basis-1/4 md:max-w-80 md:border-l md:border-border md:p-4;
-}
+/* #chat-panel responsive styles are in Chat.css to avoid cascade conflicts */
 
 /* ---- Mobile toolbar & drawers ---- */
 

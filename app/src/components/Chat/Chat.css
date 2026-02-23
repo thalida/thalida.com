@@ -1,7 +1,7 @@
 @reference "../../layouts/BaseLayout/BaseLayout.css";
 
 #chat-panel {
-  @apply font-body flex-col gap-2;
+  @apply hidden md:flex md:flex-col md:shrink-0 md:grow-0 md:basis-1/4 md:max-w-80 md:border-l md:border-border md:p-4 font-body gap-2;
 }
 
 #chat-header {
