@@ -208,7 +208,11 @@ textarea,
 }
 
 #mobile-about-link {
-  @apply font-body text-sm text-muted no-underline hover:text-teal;
+  @apply font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors;
+}
+
+#tablet-search-btn {
+  @apply bg-transparent border-none p-1 text-muted hover:text-neon transition-colors;
 }
 
 #tablet-nav {

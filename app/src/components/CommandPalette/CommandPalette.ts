@@ -225,10 +225,10 @@ function initCommandPalette() {
     });
   }
 
-  // Mobile search button click
-  const mobileSearchBtn = document.getElementById("mobile-search-btn");
-  if (mobileSearchBtn) {
-    mobileSearchBtn.addEventListener("click", () => {
+  // Tablet search button click
+  const tabletSearchBtn = document.getElementById("tablet-search-btn");
+  if (tabletSearchBtn) {
+    tabletSearchBtn.addEventListener("click", () => {
       if (!isOpen()) {
         open();
       }
