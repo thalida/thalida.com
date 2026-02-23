@@ -1,6 +1,5 @@
 ---
 import { NAV_ORDER, getNavData } from "@lib/nav-data";
-import SpotifyPlayer from "@components/SpotifyPlayer/SpotifyPlayer.astro";
 
 interface Props {
   activePage?: string;
@@ -64,8 +63,6 @@ const navData = await getNavData();
       }
     </ul>
   </div>
-
-  <SpotifyPlayer />
 </nav>
 
 <script src="./ProjectTree.ts"></script>

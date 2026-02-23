@@ -2,7 +2,7 @@
 
 /* ---- Layout ---- */
 #site-nav {
-  @apply font-body flex flex-col;
+  @apply font-body;
 }
 
 @media (min-width: 768px) {

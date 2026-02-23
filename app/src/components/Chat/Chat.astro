@@ -1,4 +1,5 @@
 ---
+import SpotifyPlayer from "@components/SpotifyPlayer/SpotifyPlayer.astro";
 const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 ---
 
@@ -43,6 +44,8 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
       <button id="chat-send" type="button">Send</button>
     </div>
   </div>
+
+  <SpotifyPlayer />
 </aside>
 
 <meta name="chat-ws-url" content={wsUrl} />
