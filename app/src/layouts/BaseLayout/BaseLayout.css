@@ -203,10 +203,6 @@ textarea,
   @apply font-display font-bold text-base text-neon no-underline;
 }
 
-#mobile-toolbar-right {
-  @apply flex items-center gap-2;
-}
-
 #mobile-about-link {
   @apply font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors;
 }
