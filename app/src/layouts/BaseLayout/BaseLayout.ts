@@ -1,50 +1,76 @@
-function initDrawers() {
+function initResponsiveUI() {
   const menuBtn = document.getElementById("mobile-menu-btn");
+  const searchBtn = document.getElementById("mobile-search-btn");
   const chatBtn = document.getElementById("mobile-chat-btn");
-  const siteNav = document.getElementById("site-nav");
-  const chatPanel = document.getElementById("chat-panel");
-  const backdrop = document.getElementById("drawer-backdrop");
+  const navPanel = document.getElementById("nav-panel");
+  const navBackdrop = document.getElementById("nav-backdrop");
+  const chatFab = document.getElementById("mobile-chat-fab");
+  const chatOverlay = document.getElementById("chat-overlay");
+  const chatOverlayClose = document.getElementById("chat-overlay-close");
+  const chatOverlayBackdrop = document.getElementById("chat-overlay-backdrop");
 
-  if (!menuBtn || !chatBtn || !siteNav || !chatPanel || !backdrop) return;
-
-  function closeAll() {
-    siteNav.classList.remove("open");
-    chatPanel.classList.remove("open");
-    backdrop.classList.remove("visible");
+  function closeNav() {
+    navPanel?.classList.remove("open");
+    navBackdrop?.classList.remove("visible");
     document.body.style.overflow = "";
   }
 
-  menuBtn.addEventListener("click", () => {
-    const willOpen = !siteNav.classList.contains("open");
-    closeAll();
-    if (willOpen) {
-      siteNav.classList.add("open");
-      backdrop.classList.add("visible");
-      document.body.style.overflow = "hidden";
-    }
-  });
-
-  chatBtn.addEventListener("click", () => {
-    const willOpen = !chatPanel.classList.contains("open");
-    closeAll();
-    if (willOpen) {
-      chatPanel.classList.add("open");
-      backdrop.classList.add("visible");
-      document.body.style.overflow = "hidden";
-    }
-  });
-
-  backdrop.addEventListener("click", closeAll);
-
-  // Mobile search button closes drawers (CommandPalette handles opening itself)
-  const searchBtn = document.getElementById("mobile-search-btn");
-  if (searchBtn) {
-    searchBtn.addEventListener("click", closeAll);
+  function closeChat() {
+    chatOverlay?.classList.remove("open");
+    chatOverlayBackdrop?.classList.remove("visible");
+    document.body.style.overflow = "";
   }
+
+  function closeAll() {
+    closeNav();
+    closeChat();
+  }
+
+  // Nav slide-down panel toggle
+  menuBtn?.addEventListener("click", () => {
+    const willOpen = !navPanel?.classList.contains("open");
+    closeAll();
+    if (willOpen) {
+      navPanel?.classList.add("open");
+      navBackdrop?.classList.add("visible");
+      document.body.style.overflow = "hidden";
+    }
+  });
+
+  navBackdrop?.addEventListener("click", closeNav);
+
+  // Close nav when a nav link is clicked
+  navPanel?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeNav);
+  });
+
+  // Mobile chat overlay toggle (toolbar button)
+  chatBtn?.addEventListener("click", () => {
+    closeNav();
+    chatOverlay?.classList.add("open");
+    chatOverlayBackdrop?.classList.add("visible");
+    document.body.style.overflow = "hidden";
+  });
+
+  // Mobile chat FAB
+  chatFab?.addEventListener("click", () => {
+    closeNav();
+    chatOverlay?.classList.add("open");
+    chatOverlayBackdrop?.classList.add("visible");
+    document.body.style.overflow = "hidden";
+  });
+
+  // Close chat overlay
+  chatOverlayClose?.addEventListener("click", closeChat);
+  chatOverlayBackdrop?.addEventListener("click", closeChat);
+
+  // Search button closes everything (CommandPalette handles opening itself)
+  searchBtn?.addEventListener("click", closeAll);
 }
 
-document.addEventListener("astro:page-load", initDrawers);
+document.addEventListener("astro:page-load", initResponsiveUI);
 
+// Preserve nav scroll across View Transitions
 let savedNavScroll = 0;
 document.addEventListener("astro:before-swap", () => {
   const nav = document.getElementById("site-nav");
