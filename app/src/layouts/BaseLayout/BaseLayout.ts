@@ -73,6 +73,12 @@ function initResponsiveUI() {
   const chatOverlayClose = document.getElementById("chat-overlay-close");
   chatOverlayClose?.addEventListener("click", closeChat);
   chatOverlayBackdrop?.addEventListener("click", closeChat);
+
+  // Move chat back to sidebar when resizing past lg breakpoint
+  const lgQuery = window.matchMedia("(min-width: 1024px)");
+  lgQuery.addEventListener("change", (e) => {
+    if (e.matches) closeChat();
+  });
 }
 
 document.addEventListener("astro:page-load", initResponsiveUI);
