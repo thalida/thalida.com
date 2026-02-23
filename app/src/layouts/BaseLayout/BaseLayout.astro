@@ -38,7 +38,7 @@ const navData = await getNavData();
   <body>
     <div id="mobile-toolbar">
       <a href="/" id="mobile-title">thalida</a>
-      <nav id="tablet-nav" class="hidden md:flex lg:hidden" aria-label="Navigation">
+      <nav id="tablet-nav" class="hidden sm:flex xl:hidden" aria-label="Navigation">
         {
           NAV_ORDER.map((entry) =>
             entry.type === "page" ? (
@@ -76,12 +76,11 @@ const navData = await getNavData();
           </svg>
         </button>
       </nav>
-      <div id="mobile-toolbar-right" class="flex items-center gap-2 md:hidden">
-        <a href="/about" id="mobile-about-link">about</a>
+      <div id="mobile-toolbar-right" class="flex items-center gap-2 sm:hidden">
         <button id="mobile-menu-btn" type="button" aria-label="Open navigation">
           <svg
-            width="24"
-            height="24"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -96,9 +95,9 @@ const navData = await getNavData();
         </button>
       </div>
     </div>
-    <div id="nav-backdrop" class="md:hidden"></div>
-    <div id="chat-overlay-backdrop" class="md:hidden"></div>
-    <div id="nav-panel" class="md:hidden">
+    <div id="nav-backdrop" class="sm:hidden"></div>
+    <div id="chat-overlay-backdrop" class="lg:hidden"></div>
+    <div id="nav-panel" class="sm:hidden">
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
     </div>
     <div id="layout">
@@ -122,22 +121,7 @@ const navData = await getNavData();
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
       </svg>
     </button>
-    <div id="chat-overlay" class="md:hidden">
-      <button id="chat-overlay-close" type="button" aria-label="Close chat">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+    <div id="chat-overlay" class="lg:hidden">
       <div id="chat-overlay-content"></div>
     </div>
     <CommandPalette />

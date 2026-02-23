@@ -1,7 +1,7 @@
 @reference "../../layouts/BaseLayout/BaseLayout.css";
 
 #chat-panel {
-  @apply hidden md:flex md:flex-col md:shrink-0 md:grow-0 md:basis-1/4 md:max-w-80 md:border-l md:border-border md:p-4 font-body gap-2;
+  @apply hidden lg:flex lg:flex-col lg:shrink-0 lg:grow-0 lg:basis-1/4 lg:max-w-80 lg:border-l lg:border-border lg:p-4 font-body gap-2;
 }
 
 #chat-header {
@@ -18,6 +18,10 @@
 
 #chat-admin-link:hover {
   @apply text-teal;
+}
+
+#chat-overlay-close {
+  @apply hidden;
 }
 
 #chat-owner-status,

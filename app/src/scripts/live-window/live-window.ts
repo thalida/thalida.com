@@ -371,7 +371,9 @@ class LiveWindowElement extends HTMLElement {
       phaseEndTime = eod.getTime();
 
       if (!this.isSameDate(new Date(phaseStartTime), eod)) {
-        phaseStartTime += 24 * 60 * 60 * 1000;
+        // Sunrise/sunset data is from a previous day and we're past midnight.
+        // Return deep night color until fresh weather data is fetched.
+        return TIME_COLORS[0];
       }
     } else {
       colorPhase = TIME_COLORS.slice(SUNRISE_COLOR_IDX, SUNSET_COLOR_IDX + 1);
