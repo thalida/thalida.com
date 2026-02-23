@@ -161,7 +161,7 @@ textarea,
 /* ---- Three-column layout ---- */
 
 #layout {
-  @apply flex flex-col lg:flex-row w-screen h-svh;
+  @apply flex flex-col md:flex-row w-screen h-svh;
 }
 
 #site-nav,
@@ -206,7 +206,7 @@ textarea,
 }
 
 #nav-backdrop {
-  @apply hidden fixed top-12 left-0 w-full h-full z-40 bg-midnight/70 backdrop-blur-xs lg:hidden;
+  @apply hidden fixed top-12 left-0 w-full h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs lg:hidden;
 }
 
 #nav-backdrop.visible {
