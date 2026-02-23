@@ -195,14 +195,7 @@ const siteAge = new Date().getFullYear() - 2007;
 
   /* ── Featured Projects ── */
   .home-projects {
-    @apply grid gap-4;
-    grid-template-columns: 1fr;
-  }
-
-  @media (min-width: 768px) {
-    .home-projects {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
   }
 
   .home-project-card {
