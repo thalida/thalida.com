@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Chat from "@components/Chat/Chat.astro";
 import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
 import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
+import { NAV_ORDER, getNavData } from "@lib/nav-data";
 import "./BaseLayout.css";
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const { title = "thalida", activePage, activeCollection, pageContext = null } = Astro.props;
+const navData = await getNavData();
 ---
 
 <html lang="en">
@@ -35,7 +37,7 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
   </head>
   <body>
     <div id="mobile-toolbar">
-      <button id="mobile-menu-btn" type="button" aria-label="Open projects">
+      <button id="mobile-menu-btn" class="md:hidden" type="button" aria-label="Open navigation">
         <svg
           width="24"
           height="24"
@@ -52,11 +54,34 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
         </svg>
       </button>
       <a href="/" id="mobile-title">thalida</a>
-      <a href="/about" id="mobile-about-link">about</a>
+      <nav id="tablet-nav" class="hidden md:flex lg:hidden" aria-label="Navigation">
+        {
+          NAV_ORDER.map((entry) =>
+            entry.type === "page" ? (
+              <a
+                href={`/${entry.page}`}
+                class="tablet-nav-link"
+                data-active={activePage === entry.page ? "true" : undefined}
+              >
+                {entry.label}
+              </a>
+            ) : navData[entry.collection] ? (
+              <a
+                href={`/${entry.collection}`}
+                class="tablet-nav-link"
+                data-active={activeCollection === entry.collection ? "true" : undefined}
+              >
+                {navData[entry.collection].title}
+              </a>
+            ) : null,
+          )
+        }
+      </nav>
+      <a href="/about" id="mobile-about-link" class="md:hidden">about</a>
     </div>
-    <div id="nav-backdrop" class="lg:hidden"></div>
+    <div id="nav-backdrop" class="md:hidden"></div>
     <div id="chat-overlay-backdrop" class="md:hidden"></div>
-    <div id="nav-panel" class="lg:hidden">
+    <div id="nav-panel" class="md:hidden">
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
     </div>
     <div id="layout">

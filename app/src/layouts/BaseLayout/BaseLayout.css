@@ -207,8 +207,20 @@ textarea,
   @apply font-body text-sm text-muted no-underline hover:text-teal;
 }
 
+#tablet-nav {
+  @apply items-center gap-1 overflow-x-auto;
+}
+
+.tablet-nav-link {
+  @apply font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors;
+}
+
+.tablet-nav-link[data-active] {
+  @apply text-teal;
+}
+
 #nav-backdrop {
-  @apply hidden fixed top-12 left-0 w-full h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs lg:hidden;
+  @apply hidden fixed top-12 left-0 w-full h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs md:hidden;
 }
 
 #nav-backdrop.visible {
@@ -224,7 +236,7 @@ textarea,
 }
 
 #nav-panel {
-  @apply fixed top-12 left-0 w-full max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-full transition-transform duration-300 ease-in-out lg:hidden;
+  @apply fixed top-12 left-0 w-full max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-full transition-transform duration-300 ease-in-out md:hidden;
 }
 
 #nav-panel.open {
