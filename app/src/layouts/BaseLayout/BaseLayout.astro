@@ -68,7 +68,7 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <button id="mobile-chat-btn" type="button" aria-label="Open chat">
+        <button id="mobile-chat-btn" class="md:hidden" type="button" aria-label="Open chat">
           <svg
             width="24"
             height="24"
@@ -84,13 +84,49 @@ const { title = "thalida", activePage, activeCollection, pageContext = null } = 
         </button>
       </div>
     </div>
-    <div id="drawer-backdrop"></div>
+    <div id="nav-backdrop" class="lg:hidden"></div>
+    <div id="chat-overlay-backdrop" class="md:hidden"></div>
+    <div id="nav-panel" class="lg:hidden">
+      <ProjectTree activePage={activePage} activeCollection={activeCollection} />
+    </div>
     <div id="layout">
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
       <div id="content-viewer">
         <slot />
       </div>
       <Chat />
+    </div>
+    <button id="mobile-chat-fab" type="button" aria-label="Open chat">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+    </button>
+    <div id="chat-overlay" class="md:hidden">
+      <button id="chat-overlay-close" type="button" aria-label="Close chat">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div id="chat-overlay-content"></div>
     </div>
     <CommandPalette />
     <script src="./BaseLayout.ts"></script>
