@@ -21,16 +21,8 @@ const siteAge = new Date().getFullYear() - 2007;
   <section class="home-hero" aria-label="Introduction">
     <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
     <div class="home-hero__text">
-      <h1 class="home-hero__title">Hey, I'm Thalida.</h1>
-      <p class="home-hero__body">
-        I've been building things on the internet since 2007 — from quirky side projects to engineering teams. Designer,
-        developer, maker of things<span class="home-hero__cursor">|</span>
-      </p>
-      <div class="home-hero__nav">
-        <a href="/projects" class="home-hero__pill">Projects</a>
-        <a href="/gallery" class="home-hero__pill">Gallery</a>
-        <a href="/about" class="home-hero__pill">About</a>
-      </div>
+      <h1 class="home-hero__title"><span id="greeting">Hey</span>, I'm Thalida.</h1>
+      <p class="home-hero__body">Making weird and wonderful things on the internet since 2007.</p>
     </div>
   </section>
 
@@ -101,6 +93,28 @@ const siteAge = new Date().getFullYear() - 2007;
 
 <script src="../scripts/live-window/live-window.ts"></script>
 
+<script>
+  function updateGreeting() {
+    const hour = new Date().getHours();
+    let greeting;
+    if (hour < 3) greeting = "Hey Night Owl";
+    else if (hour < 7) greeting = "Hey Early Bird";
+    else if (hour < 12) greeting = "Good Morning";
+    else if (hour < 17) greeting = "Good Afternoon";
+    else if (hour < 21) greeting = "Good Evening";
+    else greeting = "Good Night";
+
+    const el = document.getElementById("greeting");
+    if (el) el.textContent = greeting;
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    updateGreeting();
+    const lw = document.querySelector("live-window");
+    if (lw) lw.addEventListener("live-window:clock-update", updateGreeting);
+  });
+</script>
+
 <style>
   @reference "../layouts/BaseLayout/BaseLayout.css";
 
@@ -108,7 +122,7 @@ const siteAge = new Date().getFullYear() - 2007;
   live-window {
     --window-color: var(--color-midnight);
     --blinds-color: var(--color-midnight);
-    --clock-text-color: #39ff14;
+    --clock-text-color: #e74c3c;
     --weather-text-font: "Space Grotesk", sans-serif;
     --weather-text-color: var(--color-text);
   }
@@ -116,12 +130,6 @@ const siteAge = new Date().getFullYear() - 2007;
   /* ── Hero ── */
   .home-hero {
     @apply flex flex-col items-center text-center gap-8;
-  }
-
-  @media (min-width: 768px) {
-    .home-hero {
-      @apply flex-row text-left items-start gap-10;
-    }
   }
 
   .home-hero__text {
@@ -133,36 +141,7 @@ const siteAge = new Date().getFullYear() - 2007;
   }
 
   .home-hero__body {
-    @apply m-0 mt-4 font-body text-muted leading-relaxed text-sm;
-  }
-
-  .home-hero__cursor {
-    @apply text-neon;
-    animation: blink 1s step-end infinite;
-  }
-
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .home-hero__nav {
-    @apply flex flex-wrap gap-2 mt-6;
-  }
-
-  @media (min-width: 768px) {
-    .home-hero__nav {
-      @apply justify-start;
-    }
-  }
-
-  .home-hero__pill {
-    @apply bg-transparent border border-teal text-teal no-underline font-body transition-colors text-xs rounded py-1 px-3 tracking-wider;
-  }
-
-  .home-hero__pill:hover {
-    @apply bg-teal/10 text-teal;
+    @apply m-0 mt-4 font-heading text-muted leading-relaxed text-subtitle tracking-tight;
   }
 
   /* ── Shared section header ── */

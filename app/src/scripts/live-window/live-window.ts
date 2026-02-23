@@ -329,6 +329,8 @@ class LiveWindowElement extends HTMLElement {
         this.ampmPmEl.classList.toggle("active", isPm);
       }
     }
+
+    this.dispatchEvent(new CustomEvent("live-window:clock-update", { detail: { hour: raw, minute: m } }));
   }
 
   // -- Sky colour gradient --------------------------------------------------
@@ -692,6 +694,8 @@ class LiveWindowElement extends HTMLElement {
       this.renderWeatherEffects();
       this.updateWeatherText();
       this.updateGradient();
+
+      this.dispatchEvent(new CustomEvent("live-window:weather-update", { detail: { weather: this.state.weather } }));
     } catch {
       /* silently degrade */
     }

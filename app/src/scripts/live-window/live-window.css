@@ -571,6 +571,9 @@
   font-size: 24px;
   font-family: var(--clock-font);
   color: var(--clock-text-color);
+  text-shadow:
+    0 0 6px color-mix(in srgb, var(--clock-text-color) 50%, transparent),
+    0 0 14px color-mix(in srgb, var(--clock-text-color) 20%, transparent);
   background: var(--window-clock-bg);
 }
 
