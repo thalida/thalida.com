@@ -173,7 +173,7 @@ textarea,
 }
 
 #site-nav {
-  @apply shrink-0 grow-0 basis-1/4 max-w-80 py-3 pl-3 pr-0;
+  @apply shrink-0 grow-0 basis-1/5 max-w-64 py-3 pl-3 pr-0;
 }
 
 #content-viewer {
