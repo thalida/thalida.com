@@ -12,11 +12,13 @@ const featuredProjects = navData.projects.items.filter((p) => p.coverImageSrc).s
 
 // Timeline: all versions sorted chronologically (oldest first)
 const versions = [...navData.versions.items].reverse();
+const latestYear = versions.at(-1)?.category || "";
+const siteAge = new Date().getFullYear() - 2007;
 ---
 
 <BaseLayout activePage="">
   {/* ── Hero ── */}
-  <section class="home-hero">
+  <section class="home-hero" aria-label="Introduction">
     <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
     <div class="home-hero__text">
       <h1 class="home-hero__title">Hey, I'm Thalida.</h1>
@@ -33,7 +35,7 @@ const versions = [...navData.versions.items].reverse();
   </section>
 
   {/* ── Featured Projects ── */}
-  <section class="home-section">
+  <section class="home-section" aria-label="Selected work">
     <div class="home-section__header">
       <span class="home-section__label">SELECTED WORK</span>
       <hr class="home-section__rule" />
@@ -61,19 +63,19 @@ const versions = [...navData.versions.items].reverse();
   </section>
 
   {/* ── Site Timeline ── */}
-  <section class="home-section">
+  <section class="home-section" aria-label="Site timeline">
     <div class="home-section__header">
-      <span class="home-section__label">18 YEARS OF THALIDA.COM</span>
+      <span class="home-section__label">{siteAge} YEARS OF THALIDA.COM</span>
       <hr class="home-section__rule" />
       <a href="/versions" class="home-section__link">view all &rarr;</a>
     </div>
-    <div class="home-timeline">
+    <div class="home-timeline" role="region" aria-label="Site version timeline" tabindex="0">
       <div class="home-timeline__track">
         {
           versions.map((version) => {
             const year = version.category || "";
             const name = version.title.replace(/^\d{4}:\s*/, "");
-            const isCurrent = year === "2025";
+            const isCurrent = year === latestYear;
             return (
               <a
                 href={`/versions/${version.id}`}
@@ -104,8 +106,8 @@ const versions = [...navData.versions.items].reverse();
 
   /* ── Live-window overrides ── */
   live-window {
-    --window-color: #030a12;
-    --blinds-color: #030a12;
+    --window-color: var(--color-midnight);
+    --blinds-color: var(--color-midnight);
     --clock-text-color: #39ff14;
     --weather-text-font: "Space Grotesk", sans-serif;
     --weather-text-color: var(--color-text);
