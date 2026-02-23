@@ -505,6 +505,16 @@ class LiveWindowElement extends HTMLElement {
       }
       html += "</div>";
     }
+    if (has("snow")) {
+      html += '<div class="snow-sill">';
+      html += '<div class="snow-mound snow-mound-1"></div>';
+      html += '<div class="snow-mound snow-mound-2"></div>';
+      html += '<div class="snow-mound snow-mound-3"></div>';
+      html += '<div class="snow-mound snow-mound-4"></div>';
+      html += '<div class="snow-mound snow-mound-5"></div>';
+      html += '<div class="snow-mound snow-mound-6"></div>';
+      html += "</div>";
+    }
     this.weatherEl.innerHTML = html;
   }
 

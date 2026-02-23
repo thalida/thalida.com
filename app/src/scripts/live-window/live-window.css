@@ -474,6 +474,66 @@
   border-radius: 50%;
 }
 
+/* Snow accumulation */
+
+.snow-sill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.snow-mound {
+  position: absolute;
+  bottom: 0;
+  background: #fff;
+}
+
+.snow-mound-1 {
+  left: -2%;
+  width: 12%;
+  height: 5px;
+  border-radius: 90% 30% 0 0;
+}
+
+.snow-mound-2 {
+  left: 8%;
+  width: 15%;
+  height: 7px;
+  border-radius: 25% 80% 0 0;
+}
+
+.snow-mound-3 {
+  left: 20%;
+  width: 10%;
+  height: 4px;
+  border-radius: 70% 50% 0 0;
+}
+
+.snow-mound-4 {
+  left: 35%;
+  width: 14%;
+  height: 6px;
+  border-radius: 40% 90% 0 0;
+}
+
+.snow-mound-5 {
+  right: 18%;
+  width: 11%;
+  height: 5px;
+  border-radius: 85% 20% 0 0;
+}
+
+.snow-mound-6 {
+  right: 2%;
+  width: 16%;
+  height: 7px;
+  border-radius: 30% 75% 0 0;
+}
+
 /* ---- Blinds ---- */
 
 .blinds {
