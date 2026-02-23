@@ -21,7 +21,7 @@ const siteAge = new Date().getFullYear() - 2007;
   <section class="home-hero" aria-label="Introduction">
     <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
     <div class="home-hero__text">
-      <h1 class="home-hero__title"><span id="greeting">Hey</span>, I'm Thalida.</h1>
+      <h1 class="home-hero__title"><span id="greeting">Hey</span>, I'm&nbsp;Thalida.</h1>
       <p class="home-hero__body">Making weird and wonderful things on the internet since 2007.</p>
     </div>
   </section>
@@ -31,7 +31,14 @@ const siteAge = new Date().getFullYear() - 2007;
     <div class="home-section__header">
       <span class="home-section__label">SELECTED WORK</span>
       <hr class="home-section__rule" />
-      <a href="/projects" class="home-section__link">view all &rarr;</a>
+      <a href="/projects" class="home-section__link"
+        >view all <svg class="home-section__arrow" viewBox="0 0 320 512" aria-hidden="true"
+          ><path
+            fill="currentColor"
+            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+          ></path></svg
+        ></a
+      >
     </div>
     <div class="home-projects">
       {
@@ -59,7 +66,14 @@ const siteAge = new Date().getFullYear() - 2007;
     <div class="home-section__header">
       <span class="home-section__label">{siteAge} YEARS OF THALIDA.COM</span>
       <hr class="home-section__rule" />
-      <a href="/versions" class="home-section__link">view all &rarr;</a>
+      <a href="/versions" class="home-section__link"
+        >view all <svg class="home-section__arrow" viewBox="0 0 320 512" aria-hidden="true"
+          ><path
+            fill="currentColor"
+            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
+          ></path></svg
+        ></a
+      >
     </div>
     <div class="home-timeline" role="region" aria-label="Site version timeline" tabindex="0">
       <div class="home-timeline__track">
@@ -162,11 +176,17 @@ const siteAge = new Date().getFullYear() - 2007;
   }
 
   .home-section__link {
-    @apply font-body text-2xs text-teal no-underline whitespace-nowrap tracking-wider;
+    @apply font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1;
   }
 
   .home-section__link:hover {
     @apply text-neon;
+  }
+
+  .home-section__arrow {
+    @apply inline-block;
+    width: 0.55em;
+    height: 0.55em;
   }
 
   /* ── Featured Projects ── */

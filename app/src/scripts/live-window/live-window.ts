@@ -492,10 +492,14 @@ class LiveWindowElement extends HTMLElement {
     }
     if (showDroplets) {
       html += '<div class="droplets">';
-      for (let i = 0; i < 6; i++) {
-        html += `<div class="droplet-row droplet-row-${i + 1}">`;
-        for (let j = 0; j < 6; j++) {
-          html += `<div class="droplet droplet-${j + 1}"></div>`;
+      for (let h = 0; h < 2; h++) {
+        html += '<div class="droplets-half">';
+        for (let i = 0; i < 6; i++) {
+          html += `<div class="droplet-row droplet-row-${i + 1}">`;
+          for (let j = 0; j < 6; j++) {
+            html += `<div class="droplet droplet-${j + 1}"></div>`;
+          }
+          html += "</div>";
         }
         html += "</div>";
       }

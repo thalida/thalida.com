@@ -226,21 +226,31 @@
 .weather .droplets {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: space-evenly;
+  position: absolute;
+  left: -25%;
+  top: -100%;
   width: 150%;
-  height: 150%;
-  transform: rotateZ(-45deg) translate(0%, -50%);
+  height: 300%;
+  transform: rotateZ(-45deg) translate(0%, -48%);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-name: precipitate;
 }
 
+.weather .droplets-half {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  width: 100%;
+  flex: 0 0 50%;
+}
+
 @keyframes precipitate {
   0% {
-    transform: rotateZ(-45deg) translate(0%, -50%);
+    transform: rotateZ(-45deg) translate(0%, -48%);
   }
   100% {
-    transform: rotateZ(-45deg) translate(0%, 43%);
+    transform: rotateZ(-45deg) translate(0%, 2%);
   }
 }
 
