@@ -47,7 +47,7 @@
 /* ---- Card Grid ---- */
 
 .items-grid {
-  @apply grid gap-4 grid-cols-2;
+  @apply grid gap-4 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3;
 }
 
 /* Masonry mode: JS adds this class after computing row spans */
@@ -216,21 +216,4 @@
 
 .item-card--flag .item-card__description {
   @apply text-xs;
-}
-
-@media (min-width: 1536px) {
-  .items-grid {
-    @apply grid-cols-3;
-  }
-}
-
-@media (max-width: 639px) {
-  .items-grid {
-    @apply grid-cols-1;
-  }
-
-  .items-grid.masonry-ready {
-    @apply gap-4;
-    grid-auto-rows: auto;
-  }
 }
