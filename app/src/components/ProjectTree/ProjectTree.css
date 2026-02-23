@@ -2,13 +2,7 @@
 
 /* ---- Layout ---- */
 #site-nav {
-  @apply font-body;
-}
-
-@media (min-width: 768px) {
-  #site-nav {
-    @apply relative;
-  }
+  @apply font-body relative;
 }
 
 /* ---- Heading (brand) ---- */
@@ -75,14 +69,4 @@
 
 .nav-row[data-active] .nav-row__count {
   @apply bg-teal/15 text-teal;
-}
-
-@media (max-width: 767px) {
-  .nav-search-trigger {
-    @apply hidden;
-  }
-
-  #site-nav h2 {
-    @apply hidden;
-  }
 }
