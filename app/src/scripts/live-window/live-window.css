@@ -647,9 +647,11 @@
 
 .current-weather-text {
   font-family: var(--weather-text-font, var(--primary-font));
-  font-size: 18px;
+  font-size: var(--weather-text-size, 18px);
   width: var(--live-window-width);
   text-align: center;
-  margin: 30px 0;
+  margin: var(--weather-text-margin, 30px 0);
   color: var(--weather-text-color);
+  text-transform: var(--weather-text-transform, none);
+  letter-spacing: var(--weather-text-letter-spacing, normal);
 }
