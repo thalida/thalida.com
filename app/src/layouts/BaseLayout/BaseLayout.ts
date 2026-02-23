@@ -1,7 +1,6 @@
 function initResponsiveUI() {
   const menuBtn = document.getElementById("mobile-menu-btn");
   const searchBtn = document.getElementById("mobile-search-btn");
-  const chatBtn = document.getElementById("mobile-chat-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
   const chatPanel = document.getElementById("chat-panel");
@@ -68,9 +67,6 @@ function initResponsiveUI() {
     chatOverlayBackdrop?.classList.add("visible");
     document.body.style.overflow = "hidden";
   }
-
-  // Mobile chat overlay toggle (toolbar button)
-  chatBtn?.addEventListener("click", openChat);
 
   // Mobile chat FAB
   chatFab?.addEventListener("click", openChat);
