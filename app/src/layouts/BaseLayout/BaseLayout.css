@@ -203,10 +203,6 @@ textarea,
   @apply font-display font-bold text-base text-neon;
 }
 
-#mobile-toolbar-right {
-  @apply flex items-center gap-1;
-}
-
 #nav-backdrop {
   @apply hidden fixed top-12 left-0 w-full h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs lg:hidden;
 }

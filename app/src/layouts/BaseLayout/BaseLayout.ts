@@ -1,6 +1,5 @@
 function initResponsiveUI() {
   const menuBtn = document.getElementById("mobile-menu-btn");
-  const searchBtn = document.getElementById("mobile-search-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
   const chatPanel = document.getElementById("chat-panel");
@@ -74,9 +73,6 @@ function initResponsiveUI() {
   // Close chat overlay
   chatOverlayClose?.addEventListener("click", closeChat);
   chatOverlayBackdrop?.addEventListener("click", closeChat);
-
-  // Search button closes everything (CommandPalette handles opening itself)
-  searchBtn?.addEventListener("click", closeAll);
 }
 
 document.addEventListener("astro:page-load", initResponsiveUI);
