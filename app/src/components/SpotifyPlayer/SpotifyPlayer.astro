@@ -1,0 +1,20 @@
+---
+import { SPOTIFY_PLAYLIST_ID } from "@lib/site-config";
+---
+
+<div class="spotify-player" transition:persist="spotify-player">
+  <iframe
+    title="Spotify playlist"
+    src={`https://open.spotify.com/embed/playlist/${SPOTIFY_PLAYLIST_ID}?theme=0&utm_source=generator`}
+    width="100%"
+    height="80"
+    allow="encrypted-media"
+    loading="lazy"
+    style="border:0; border-radius:12px;"></iframe>
+</div>
+
+<style>
+  .spotify-player {
+    @apply mt-auto pt-3;
+  }
+</style>
