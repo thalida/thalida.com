@@ -4,10 +4,12 @@ function initResponsiveUI() {
   const chatBtn = document.getElementById("mobile-chat-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
+  const chatPanel = document.getElementById("chat-panel");
   const chatFab = document.getElementById("mobile-chat-fab");
   const chatOverlay = document.getElementById("chat-overlay");
   const chatOverlayClose = document.getElementById("chat-overlay-close");
   const chatOverlayBackdrop = document.getElementById("chat-overlay-backdrop");
+  const chatOverlayContent = document.getElementById("chat-overlay-content");
 
   function closeNav() {
     navPanel?.classList.remove("open");
@@ -15,9 +17,24 @@ function initResponsiveUI() {
     document.body.style.overflow = "";
   }
 
+  function moveChatToOverlay() {
+    if (!chatPanel || !chatOverlayContent) return;
+    while (chatPanel.firstChild) {
+      chatOverlayContent.appendChild(chatPanel.firstChild);
+    }
+  }
+
+  function moveChatBack() {
+    if (!chatPanel || !chatOverlayContent) return;
+    while (chatOverlayContent.firstChild) {
+      chatPanel.appendChild(chatOverlayContent.firstChild);
+    }
+  }
+
   function closeChat() {
     chatOverlay?.classList.remove("open");
     chatOverlayBackdrop?.classList.remove("visible");
+    moveChatBack();
     document.body.style.overflow = "";
   }
 
@@ -44,21 +61,19 @@ function initResponsiveUI() {
     link.addEventListener("click", closeNav);
   });
 
-  // Mobile chat overlay toggle (toolbar button)
-  chatBtn?.addEventListener("click", () => {
+  function openChat() {
     closeNav();
+    moveChatToOverlay();
     chatOverlay?.classList.add("open");
     chatOverlayBackdrop?.classList.add("visible");
     document.body.style.overflow = "hidden";
-  });
+  }
+
+  // Mobile chat overlay toggle (toolbar button)
+  chatBtn?.addEventListener("click", openChat);
 
   // Mobile chat FAB
-  chatFab?.addEventListener("click", () => {
-    closeNav();
-    chatOverlay?.classList.add("open");
-    chatOverlayBackdrop?.classList.add("visible");
-    document.body.style.overflow = "hidden";
-  });
+  chatFab?.addEventListener("click", openChat);
 
   // Close chat overlay
   chatOverlayClose?.addEventListener("click", closeChat);

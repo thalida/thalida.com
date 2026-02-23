@@ -174,6 +174,10 @@ textarea,
   @apply hidden lg:block lg:shrink-0 lg:grow-0 lg:basis-1/5 lg:max-w-64 lg:py-3 lg:pl-3 lg:pr-0;
 }
 
+#nav-panel #site-nav {
+  @apply block p-3;
+}
+
 #content-viewer {
   @apply grow shrink basis-0 min-w-0 pt-16 pb-4 px-4 sm:px-6 sm:pb-6 lg:pt-6 lg:pb-6;
 }
