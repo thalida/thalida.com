@@ -276,6 +276,7 @@ function validateUsernameInput(): boolean {
 }
 
 function changeUsername(): void {
+  if (isOwner) return;
   if (!validateUsernameInput()) {
     usernameInput.reportValidity();
     return;
@@ -315,6 +316,9 @@ function updateAdminUI(): void {
       link.textContent = "login";
     }
   }
+
+  usernameInput.readOnly = isOwner;
+  usernameInput.tabIndex = isOwner ? -1 : 0;
 }
 
 updateAdminUI();

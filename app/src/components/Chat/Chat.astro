@@ -83,4 +83,8 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   #chat-username:focus {
     border-bottom-color: var(--color-teal);
   }
+  #chat-username:read-only {
+    border-bottom: none;
+    cursor: default;
+  }
 </style>
