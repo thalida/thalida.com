@@ -3,6 +3,7 @@ import { type NavItem } from "@lib/nav-data";
 import Card from "@components/Card/Card.astro";
 import type { CardVariant } from "@components/Card/Card.astro";
 import CategoryFilter from "@components/CategoryFilter/CategoryFilter.astro";
+import Pagination from "@components/Pagination/Pagination.astro";
 
 interface Props {
   collection: string;
@@ -12,9 +13,25 @@ interface Props {
   items: NavItem[];
   allCategories: string[];
   activeCategory?: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  currentPage?: number;
+  lastPage?: number;
 }
 
-const { collection, title, subtitle, itemCount, items, allCategories, activeCategory } = Astro.props;
+const {
+  collection,
+  title,
+  subtitle,
+  itemCount,
+  items,
+  allCategories,
+  activeCategory,
+  prevUrl,
+  nextUrl,
+  currentPage,
+  lastPage,
+} = Astro.props;
 
 const LINK_COLLECTIONS = new Set(["links"]);
 const FLAG_COLLECTIONS = new Set(["recipes"]);
@@ -45,6 +62,8 @@ const useGallery = GALLERY_COLLECTIONS.has(collection);
   >
     {items.map((item) => <Card variant={variant} item={item} />)}
   </div>
+
+  <Pagination prevUrl={prevUrl} nextUrl={nextUrl} currentPage={currentPage ?? 1} lastPage={lastPage ?? 1} />
 </div>
 
 <script>
