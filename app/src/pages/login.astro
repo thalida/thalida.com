@@ -28,7 +28,7 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
         />
         <button
           type="submit"
-          style="padding:0.6rem 1.25rem;border:none;border-radius:6px;background:#39FF14;color:#030A12;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;"
+          style="padding:0.6rem 1.25rem;border:none;border-radius:6px;background:#00E5A0;color:#030A12;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;"
           >Log in</button
         >
         <p id="js-admin-error" hidden style="color:#ff4444;font-size:0.85rem;margin:0;"></p>
@@ -56,7 +56,7 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
             body: JSON.stringify({ token: secret }),
           });
           if (!resp.ok) {
-            errorEl.textContent = "Invalid admin secret.";
+            errorEl.textContent = "Invalid password.";
             errorEl.hidden = false;
             return;
           }
