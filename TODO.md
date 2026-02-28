@@ -12,3 +12,5 @@
 - [x] ask for all things to be componentized
 - [x] muted style tags on cards
 - [x] show date on all cards (month + year)
+- [ ] window coloring
+- [ ] date on the right
