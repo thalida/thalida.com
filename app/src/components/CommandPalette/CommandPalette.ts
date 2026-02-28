@@ -31,8 +31,8 @@ function initCommandPalette() {
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
-  const backdrop = overlay.querySelector(".cp-backdrop");
-  const dialog = overlay.querySelector(".cp-dialog");
+  const backdrop = document.getElementById("cp-backdrop");
+  const dialog = document.getElementById("cp-dialog");
 
   if (!backdrop || !dialog) return;
 
@@ -106,32 +106,35 @@ function initCommandPalette() {
     selectedIndex = -1;
 
     if (filtered.length === 0) {
-      resultsContainer.innerHTML = '<div class="cp-empty">No results found</div>';
+      resultsContainer.innerHTML = '<div class="py-8 px-4 text-center text-muted text-sm">No results found</div>';
       return;
     }
 
     function renderTags(tags: string[]) {
       if (!tags || tags.length === 0) return "";
       const displayTags = tags.slice(0, 2);
-      const extra = tags.length > 2 ? `<span class="cp-row__tag">+${tags.length - 2}</span>` : "";
-      return `<div class="cp-row__tags">${displayTags.map((t) => `<span class="cp-row__tag">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
+      const extra =
+        tags.length > 2
+          ? `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-teal text-xs text-teal capitalize rounded">+${tags.length - 2}</span>`
+          : "";
+      return `<div class="flex flex-wrap gap-1">${displayTags.map((t) => `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-teal text-xs text-teal capitalize rounded">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
     }
 
     function renderItem(item: SearchItem, idx: number) {
       const isExternal = item.collection === "links";
       const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
       const target = isExternal ? ' target="_blank" rel="noopener"' : "";
-      return `<a href="${href}"${target} class="cp-row" data-index="${idx}">
+      return `<a href="${href}"${target} class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
           ${
             item.coverImageSrc
-              ? `<img class="cp-row__img" src="${item.coverImageSrc}" alt="" />`
-              : `<div class="cp-row__img cp-row__img--empty"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
+              ? `<img class="w-8 h-8 rounded object-cover shrink-0 bg-midnight" src="${item.coverImageSrc}" alt="" />`
+              : `<div class="cp-row__img--empty w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center text-xs font-semibold uppercase font-display border border-border"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
           }
-          <div class="cp-row__content">
-            <span class="cp-row__title">${escapeHtml(item.title)}</span>
+          <div class="flex-1 min-w-0 flex flex-col gap-1">
+            <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
             ${renderTags(item.tags ?? [])}
           </div>
-          ${!isExternal ? `<span class="cp-row__meta">${formatDateClient(item.publishedOn)}</span>` : ""}
+          ${!isExternal ? `<span class="text-xs text-muted shrink-0">${formatDateClient(item.publishedOn)}</span>` : ""}
         </a>`;
     }
 
@@ -146,7 +149,7 @@ function initCommandPalette() {
       let html = "";
       for (const [col, items] of Object.entries(grouped)) {
         const title = items[0]?.collectionTitle ?? col;
-        html += `<div class="cp-group-label">${escapeHtml(title)}</div>`;
+        html += `<div class="cp-group-label py-3 px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted">${escapeHtml(title)}</div>`;
         for (const item of items) {
           html += renderItem(item, idx);
           idx++;
@@ -225,8 +228,8 @@ function initCommandPalette() {
     });
   }
 
-  // Tablet search button click
-  const tabletSearchBtn = document.getElementById("tablet-search-btn");
+  // Toolbar search button click
+  const tabletSearchBtn = document.getElementById("toolbar-search-btn");
   if (tabletSearchBtn) {
     tabletSearchBtn.addEventListener("click", () => {
       if (!isOpen()) {

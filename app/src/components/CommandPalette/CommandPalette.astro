@@ -1,6 +1,5 @@
 ---
 import { getNavData } from "@lib/nav-data";
-import "./CommandPalette.css";
 
 const navData = await getNavData();
 
@@ -17,24 +16,86 @@ const collections = Object.entries(navData).map(([key, col]) => ({
 }));
 ---
 
-<div id="command-palette" class="cp-overlay" aria-hidden="true">
-  <div class="cp-backdrop"></div>
-  <div class="cp-dialog" role="dialog" aria-label="Search content">
-    <div class="cp-header">
-      <select id="cp-collection-select" class="cp-select">
+<div id="command-palette" class="hidden fixed top-0 left-0 w-full h-full z-1000" aria-hidden="true">
+  <div id="cp-backdrop" class="absolute inset-0 bg-midnight/70 backdrop-blur-sm"></div>
+  <div
+    id="cp-dialog"
+    class="relative w-full max-w-full mt-12 rounded-none md:max-w-lg md:mt-0 md:rounded-lg bg-surface overflow-hidden font-body flex flex-col max-h-1/2 md:max-h-3/5 shadow-dialog"
+    role="dialog"
+    aria-label="Search content"
+  >
+    <div class="flex items-center gap-2 py-3 px-4 border-b border-border">
+      <select
+        id="cp-collection-select"
+        class="py-2 px-3 border border-border rounded-md text-xs font-body bg-midnight text-text outline-none min-w-24 hover:border-muted/50 focus:border-teal focus:ring-2 focus:ring-teal/20"
+      >
         <option value="">All</option>
         {collections.map((col) => <option value={col.key}>{col.title}</option>)}
       </select>
-      <input type="text" id="cp-input" class="cp-input" placeholder="Search…" autocomplete="off" spellcheck="false" />
+      <input
+        type="text"
+        id="cp-input"
+        class="cp-input flex-1 border-none outline-none text-sm py-0.5 font-body bg-transparent text-text"
+        placeholder="Search…"
+        autocomplete="off"
+        spellcheck="false"
+      />
     </div>
-    <div class="cp-results" id="cp-results"></div>
-    <div class="cp-footer">
-      <span><kbd>&uarr;&darr;</kbd> navigate</span>
-      <span><kbd>&crarr;</kbd> open</span>
-      <span><kbd>esc</kbd> close</span>
+    <div class="overflow-y-auto flex-1 p-2" id="cp-results"></div>
+    <div class="hidden md:flex gap-4 py-2 px-4 border-t border-border text-xs text-muted">
+      <span class="flex items-center gap-1"
+        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted"
+          >&uarr;&darr;</kbd
+        > navigate</span
+      >
+      <span class="flex items-center gap-1"
+        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">&crarr;</kbd> open</span
+      >
+      <span class="flex items-center gap-1"
+        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">esc</kbd> close</span
+      >
     </div>
   </div>
 </div>
+
+<style>
+  #command-palette.cp-overlay--open {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  @media (min-width: 768px) {
+    #command-palette.cp-overlay--open {
+      align-items: center;
+    }
+  }
+  .cp-input::placeholder {
+    color: color-mix(in srgb, var(--color-muted) 60%, transparent);
+  }
+</style>
+<style is:global>
+  #cp-results .cp-group-label:first-child {
+    padding-top: 0.25rem;
+  }
+  #cp-results .cp-row--selected {
+    background-color: var(--color-surface-active);
+    color: var(--color-teal);
+  }
+  #cp-results .cp-row--selected .cp-row__title {
+    color: var(--color-teal);
+  }
+  #cp-results .cp-row--selected .cp-row__tag {
+    background-color: color-mix(in srgb, var(--color-teal) 10%, transparent);
+    border-color: var(--color-teal);
+    color: var(--color-teal);
+  }
+  #cp-results .cp-row__img--empty span {
+    background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+</style>
 
 <script define:vars={{ allItems, navData }}>
   window.__cpData = { allItems, navData };
