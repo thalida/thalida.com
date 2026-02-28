@@ -57,6 +57,7 @@ function initCommandPalette() {
     input.value = "";
     selectedIndex = -1;
     overlay.setAttribute("aria-hidden", "false");
+    overlay.classList.remove("hidden");
     overlay.classList.add("cp-overlay--open");
     input.focus();
     renderResults("");
@@ -65,6 +66,7 @@ function initCommandPalette() {
   function close() {
     overlay.setAttribute("aria-hidden", "true");
     overlay.classList.remove("cp-overlay--open");
+    overlay.classList.add("hidden");
     input.value = "";
     selectedIndex = -1;
   }
@@ -218,15 +220,14 @@ function initCommandPalette() {
     }
   });
 
-  // Sidebar search button click
-  const navSearchBtn = document.getElementById("js-nav-search-btn");
-  if (navSearchBtn) {
-    navSearchBtn.addEventListener("click", () => {
+  // Sidebar search button click (multiple instances due to responsive layout)
+  document.querySelectorAll("#js-nav-search-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
       if (!isOpen()) {
         open();
       }
     });
-  }
+  });
 
   // Toolbar search button click
   const tabletSearchBtn = document.getElementById("toolbar-search-btn");

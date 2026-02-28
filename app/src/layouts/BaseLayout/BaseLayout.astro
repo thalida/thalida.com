@@ -69,6 +69,26 @@ const navData = await getNavData();
           )
         }
         <button
+          id="toolbar-search-btn"
+          class="bg-transparent border-none p-2 text-muted hover:text-neon"
+          type="button"
+          aria-label="Search"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <button
           id="js-toolbar-menu-btn"
           class="bg-transparent border-none p-2 text-muted hover:text-neon"
           type="button"
@@ -99,7 +119,7 @@ const navData = await getNavData();
     <div id="chat-overlay-backdrop" class="hidden fixed inset-0 z-40 bg-midnight/70 backdrop-blur-xs lg:hidden"></div>
     <div
       id="nav-panel"
-      class="fixed top-12 left-0 right-0 lg:right-80 max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-[calc(100%+4px)] transition-[translate] duration-300 ease-in-out xl:hidden"
+      class="fixed top-12 left-0 right-0 lg:right-80 max-h-[calc(100svh-3rem)] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-[calc(100%+4px)] transition-[translate] duration-300 ease-in-out xl:hidden"
     >
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
     </div>

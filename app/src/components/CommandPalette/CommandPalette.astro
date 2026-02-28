@@ -16,11 +16,11 @@ const collections = Object.entries(navData).map(([key, col]) => ({
 }));
 ---
 
-<div id="command-palette" class="hidden fixed top-0 left-0 w-full h-full z-1000" aria-hidden="true">
+<div id="command-palette" class="hidden fixed inset-0 z-1000 overflow-hidden" aria-hidden="true">
   <div id="js-cp-backdrop" class="absolute inset-0 bg-midnight/70 backdrop-blur-sm"></div>
   <div
     id="js-cp-dialog"
-    class="relative w-full max-w-full mt-12 rounded-none md:max-w-lg md:mt-0 md:rounded-lg bg-surface overflow-hidden font-body flex flex-col max-h-1/2 md:max-h-3/5 shadow-dialog"
+    class="relative w-full bg-surface overflow-hidden font-body flex flex-col shadow-dialog"
     role="dialog"
     aria-label="Search content"
   >
@@ -61,12 +61,18 @@ const collections = Object.entries(navData).map(([key, col]) => ({
 <style>
   #command-palette.cp-overlay--open {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
   }
+  #js-cp-dialog {
+    max-width: calc(100% - 2rem);
+    border-radius: 0.5rem;
+    max-height: calc(100svh - 6rem);
+  }
   @media (min-width: 768px) {
-    #command-palette.cp-overlay--open {
-      align-items: center;
+    #js-cp-dialog {
+      max-width: 32rem;
+      max-height: 60%;
     }
   }
   .cp-input::placeholder {
