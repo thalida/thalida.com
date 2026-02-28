@@ -22,6 +22,7 @@
   align-items: center;
   gap: 0.4rem;
   font-weight: 600;
+  line-height: 1.25;
   color: var(--alert-color, var(--color-muted));
   margin-top: 0;
   margin-bottom: 0.5rem;
