@@ -5,9 +5,8 @@ import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
 import { getNavData, type NavItem } from "@lib/nav-data";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "../../content.config";
 
-const PAGE_SIZE = 50;
-
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const PAGE_SIZE = 50;
   const navData = await getNavData();
   const pages = COLLECTION_NAMES.flatMap((collection) => {
     const collectionData = navData[collection];
