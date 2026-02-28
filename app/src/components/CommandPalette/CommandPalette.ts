@@ -8,6 +8,7 @@ interface SearchItem {
   category?: string;
   coverImageSrc?: string;
   publishedOn: string;
+  faviconUrl?: string;
 }
 
 interface NavCollectionData {
@@ -23,6 +24,23 @@ declare global {
 
 const MAX_PALETTE_RESULTS = 15;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Pagefind has no published type declarations
+let pagefind: any = null;
+
+async function loadPagefind() {
+  if (pagefind) return pagefind;
+  try {
+    // Use string concatenation to prevent Vite/Rollup from resolving this at build time.
+    // Pagefind assets are generated post-build by astro-pagefind.
+    const path = "/pagefind/pagefind.js";
+    pagefind = await import(/* @vite-ignore */ path);
+    await pagefind.init();
+  } catch {
+    pagefind = null;
+  }
+  return pagefind;
+}
+
 function initCommandPalette() {
   const overlay = document.getElementById("command-palette");
   const input = document.getElementById("js-cp-input") as HTMLInputElement | null;
@@ -37,6 +55,10 @@ function initCommandPalette() {
   if (!backdrop || !dialog) return;
 
   const data = window.__cpData;
+  const itemLookup = new Map<string, SearchItem>();
+  for (const item of data.allItems) {
+    itemLookup.set(`${item.collection}/${item.id}`, item);
+  }
   let selectedIndex = -1;
 
   function getActiveCollectionFromPage() {
@@ -79,7 +101,19 @@ function initCommandPalette() {
     return collectionSelect.value || null;
   }
 
-  function getFiltered(query: string) {
+  function stringMatch(pool: SearchItem[], query: string): SearchItem[] {
+    const q = query.toLowerCase();
+    return pool.filter((item: SearchItem) => {
+      return (
+        item.title.toLowerCase().includes(q) ||
+        (item.description ?? "").toLowerCase().includes(q) ||
+        (item.tags ?? []).some((t: string) => t.toLowerCase().includes(q)) ||
+        (item.category ?? "").toLowerCase().includes(q)
+      );
+    });
+  }
+
+  async function getFiltered(query: string): Promise<SearchItem[]> {
     let pool = data.allItems;
     const activeCollection = getActiveCollection();
 
@@ -89,21 +123,113 @@ function initCommandPalette() {
 
     if (!query.trim()) return pool.slice(0, MAX_PALETTE_RESULTS);
 
-    const q = query.toLowerCase();
-    return pool
-      .filter((item: SearchItem) => {
-        return (
-          item.title.toLowerCase().includes(q) ||
-          (item.description ?? "").toLowerCase().includes(q) ||
-          (item.tags ?? []).some((t: string) => t.toLowerCase().includes(q)) ||
-          (item.category ?? "").toLowerCase().includes(q)
-        );
-      })
-      .slice(0, MAX_PALETTE_RESULTS);
+    const pf = await loadPagefind();
+
+    if (!pf) {
+      // Pagefind unavailable — fall back to string matching for everything
+      return stringMatch(pool, query).slice(0, MAX_PALETTE_RESULTS);
+    }
+
+    // Pagefind search for content pages (not links)
+    const pfResults: SearchItem[] = [];
+    try {
+      const search = await pf.search(query);
+      for (const result of search.results) {
+        const resultData = await result.data();
+        const collection = resultData.meta?.collection;
+        const itemId = resultData.meta?.itemId;
+        if (!collection || !itemId) continue;
+        if (activeCollection && collection !== activeCollection) continue;
+        const item = itemLookup.get(`${collection}/${itemId}`);
+        if (item) pfResults.push(item);
+        if (pfResults.length >= MAX_PALETTE_RESULTS) break;
+      }
+    } catch {
+      // Pagefind search failed — fall back to string matching
+      return stringMatch(pool, query).slice(0, MAX_PALETTE_RESULTS);
+    }
+
+    // String matching for links (Pagefind can't index them — no detail pages)
+    const linksPool = pool.filter((item: SearchItem) => item.collection === "links");
+    const linkMatches = stringMatch(linksPool, query);
+
+    // Merge: Pagefind results first (ranked by relevance), then link matches
+    const seen = new Set<string>(pfResults.map((item) => `${item.collection}/${item.id}`));
+    const merged = [...pfResults];
+    for (const item of linkMatches) {
+      const key = `${item.collection}/${item.id}`;
+      if (!seen.has(key)) {
+        merged.push(item);
+        seen.add(key);
+      }
+      if (merged.length >= MAX_PALETTE_RESULTS) break;
+    }
+
+    return merged.slice(0, MAX_PALETTE_RESULTS);
   }
 
-  function renderResults(query: string) {
-    const filtered = getFiltered(query);
+  function renderItem(item: SearchItem, idx: number, showCollection: boolean) {
+    const isExternal = item.collection === "links";
+    const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+    const target = isExternal ? ' target="_blank" rel="noopener"' : "";
+
+    const collectionLabel = showCollection ? escapeHtml(item.collectionTitle) : "";
+    const catDisplay = item.category
+      ? item.category
+          .split("-")
+          .map((p: string) => (p !== "and" ? p.charAt(0).toUpperCase() + p.slice(1) : p))
+          .join(" ")
+      : "";
+
+    let metaLine = "";
+    if (showCollection && catDisplay) {
+      metaLine = `<span class="text-2xs text-muted">${collectionLabel} <span class="text-muted/50">·</span> <span class="text-neon">${escapeHtml(catDisplay)}</span></span>`;
+    } else if (showCollection) {
+      metaLine = `<span class="text-2xs text-muted">${collectionLabel}</span>`;
+    } else if (catDisplay) {
+      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${escapeHtml(catDisplay)}</span>`;
+    }
+
+    if (isExternal) {
+      const domain = (() => {
+        try {
+          return new URL(item.id).hostname.replace(/^www\./, "");
+        } catch {
+          return item.id;
+        }
+      })();
+      const favicon = item.faviconUrl
+        ? `<img class="w-4 h-4 rounded-sm shrink-0" src="${item.faviconUrl}" alt="" />`
+        : `<div class="w-4 h-4 rounded-sm shrink-0 bg-midnight flex items-center justify-center text-2xs font-semibold uppercase font-display border border-border"><span class="cp-row__initial">${escapeHtml(item.title.charAt(0))}</span></div>`;
+
+      return `<a href="${href}"${target} class="cp-row flex items-center gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
+        <div class="w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center border border-border">
+          ${favicon}
+        </div>
+        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+          ${metaLine ? `<div>${metaLine}</div>` : ""}
+          <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
+          <span class="cp-row__domain text-2xs text-muted flex items-center gap-1">${escapeHtml(domain)} <svg class="text-muted opacity-60" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
+        </div>
+      </a>`;
+    }
+
+    return `<a href="${href}"${target} class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
+      ${
+        item.coverImageSrc
+          ? `<img class="w-8 h-8 rounded object-cover shrink-0 bg-midnight" src="${item.coverImageSrc}" alt="" />`
+          : `<div class="cp-row__img--empty w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center text-xs font-semibold uppercase font-display border border-border"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
+      }
+      <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+        ${metaLine ? `<div>${metaLine}</div>` : ""}
+        <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
+      </div>
+      <span class="text-xs text-muted shrink-0">${formatDateClient(item.publishedOn)}</span>
+    </a>`;
+  }
+
+  async function renderResults(query: string) {
+    const filtered = await getFiltered(query);
     const activeCollection = getActiveCollection();
     selectedIndex = -1;
 
@@ -112,53 +238,10 @@ function initCommandPalette() {
       return;
     }
 
-    function renderTags(tags: string[]) {
-      if (!tags || tags.length === 0) return "";
-      const displayTags = tags.slice(0, 2);
-      const extra =
-        tags.length > 2
-          ? `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-muted text-xs text-muted capitalize rounded">+${tags.length - 2}</span>`
-          : "";
-      return `<div class="flex flex-wrap gap-1">${displayTags.map((t) => `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-muted text-xs text-muted capitalize rounded">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
-    }
-
-    function renderItem(item: SearchItem, idx: number) {
-      const isExternal = item.collection === "links";
-      const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
-      const target = isExternal ? ' target="_blank" rel="noopener"' : "";
-      return `<a href="${href}"${target} class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
-          ${
-            item.coverImageSrc
-              ? `<img class="w-8 h-8 rounded object-cover shrink-0 bg-midnight" src="${item.coverImageSrc}" alt="" />`
-              : `<div class="cp-row__img--empty w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center text-xs font-semibold uppercase font-display border border-border"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
-          }
-          <div class="flex-1 min-w-0 flex flex-col gap-1">
-            <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
-            ${renderTags(item.tags ?? [])}
-          </div>
-          ${!isExternal ? `<span class="text-xs text-muted shrink-0">${formatDateClient(item.publishedOn)}</span>` : ""}
-        </a>`;
-    }
-
-    if (activeCollection) {
-      resultsContainer.innerHTML = filtered.map((item: SearchItem, i: number) => renderItem(item, i)).join("");
-    } else {
-      const grouped: Record<string, SearchItem[]> = {};
-      for (const item of filtered) {
-        (grouped[item.collection] ??= []).push(item);
-      }
-      let idx = 0;
-      let html = "";
-      for (const [col, items] of Object.entries(grouped)) {
-        const title = items[0]?.collectionTitle ?? col;
-        html += `<div class="cp-group-label py-3 px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-muted">${escapeHtml(title)}</div>`;
-        for (const item of items) {
-          html += renderItem(item, idx);
-          idx++;
-        }
-      }
-      resultsContainer.innerHTML = html;
-    }
+    const showCollection = !activeCollection;
+    resultsContainer.innerHTML = filtered
+      .map((item: SearchItem, i: number) => renderItem(item, i, showCollection))
+      .join("");
   }
 
   function updateSelection() {

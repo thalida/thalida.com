@@ -80,9 +80,6 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   }
 </style>
 <style is:global>
-  #cp-results .cp-group-label:first-child {
-    padding-top: 0.25rem;
-  }
   #cp-results .cp-row--selected {
     background-color: var(--color-surface-active);
     color: #ffffff;
@@ -90,12 +87,13 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   #cp-results .cp-row--selected .cp-row__title {
     color: #ffffff;
   }
-  #cp-results .cp-row--selected .cp-row__tag {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: #ffffff;
-    color: #ffffff;
-  }
   #cp-results .cp-row__img--empty span {
+    background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  #cp-results .cp-row__initial {
     background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
