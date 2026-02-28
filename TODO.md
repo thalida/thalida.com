@@ -7,7 +7,7 @@
 - [-] spotify embed bg color
 - [x] project links selected color
 - [x] tags selected color
-- [ ] chat message styling
+- [x] chat message styling
 - [x] make tags into component
 - [x] ask for all things to be componentized
 - [x] muted style tags on cards
