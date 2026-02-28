@@ -1,0 +1,190 @@
+---
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import { getNavData } from "@lib/nav-data";
+import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import Card from "@components/Card/Card.astro";
+import SectionHeader from "@components/SectionHeader/SectionHeader.astro";
+
+const openweatherKey = import.meta.env.PUBLIC_OPENWEATHER_KEY || "";
+const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
+
+const navData = await getNavData();
+
+// Collections to feature on homepage (exclude versions - shown as timeline)
+const featuredCollections = COLLECTION_NAMES.filter((name) => name !== "versions");
+
+// Timeline: all versions sorted chronologically (oldest first)
+const versions = [...navData.versions.items].reverse();
+const latestYear = versions.at(-1)?.category || "";
+const siteAge = new Date().getFullYear() - 2007;
+---
+
+<BaseLayout activePage="">
+  {/* ── Hero ── */}
+  <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
+    <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
+    <div class="max-w-xl">
+      <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
+        <span id="js-greeting">Hey</span>, I'm&nbsp;Thalida
+      </h1>
+      <p class="m-0 mt-4 font-heading font-semibold text-text text-subtitle tracking-tight">
+        Building for the web since 2007
+      </p>
+      <p class="m-0 mt-4 font-body text-sm text-text leading-relaxed">
+        I lead engineering teams by day and break my own website by night. This domain has been mine since I was 16 — a
+        place to experiment, tinker, and catalog what I learn along the way.
+        <a href="/about" class="text-teal hover:text-neon no-underline ml-1">More about me &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+  {/* ── Collection Sections ── */}
+  {
+    featuredCollections.map((collectionName) => {
+      const collection = navData[collectionName];
+      const items = collection.items.slice(0, 3);
+      if (items.length === 0) return null;
+      return (
+        <section class="mt-16" aria-label={collection.title}>
+          <SectionHeader label={collection.title.toUpperCase()} href={`/${collectionName}`} />
+          <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <Card variant={collectionMeta[collectionName].cardVariant} item={item} />
+            ))}
+          </div>
+        </section>
+      );
+    })
+  }
+
+  {/* ── Site Timeline ── */}
+  <section class="mt-16" aria-label="Site timeline">
+    <SectionHeader label={`${siteAge} YEARS OF THALIDA.COM`} href="/versions" />
+    <div class="home-timeline relative overflow-x-auto" role="region" aria-label="Site version timeline" tabindex="0">
+      <div class="home-timeline__track flex gap-6 pb-4 relative" style="min-width:max-content">
+        {
+          versions.map((version) => {
+            const year = version.category || "";
+            const name = version.title.replace(/^\d{4}:\s*/, "");
+            const isCurrent = year === latestYear;
+            return (
+              <a
+                href={`/versions/${version.id}`}
+                class:list={[
+                  "group flex flex-col items-center no-underline relative",
+                  { "home-timeline__item--current": isCurrent },
+                ]}
+                style="flex:0 0 auto;width:130px"
+              >
+                <div class="home-timeline__thumb w-25 h-17.5 rounded overflow-hidden bg-surface border border-border relative z-10 group-hover:border-teal">
+                  {version.coverImageSrc ? (
+                    <img
+                      class="block w-full h-full object-cover"
+                      src={version.coverImageSrc}
+                      alt={version.coverImageAlt ?? version.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="w-full h-full bg-surface" />
+                  )}
+                </div>
+                <span class="font-body text-2xs text-text mt-2 font-medium group-hover:text-teal">{year}</span>
+                <span class="home-timeline__name font-body text-muted mt-0.5 text-center leading-tight">{name}</span>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script src="../scripts/live-window/live-window.ts"></script>
+
+<script>
+  function updateGreeting() {
+    const hour = new Date().getHours();
+    let greeting;
+    if (hour < 3) greeting = "Hey Night Owl";
+    else if (hour < 7) greeting = "Hey Early Bird";
+    else if (hour < 12) greeting = "Good Morning";
+    else if (hour < 17) greeting = "Good Afternoon";
+    else if (hour < 21) greeting = "Good Evening";
+    else greeting = "Good Night";
+
+    const el = document.getElementById("js-greeting");
+    if (el) el.textContent = greeting;
+  }
+
+  function updateTimelineShadows() {
+    const el = document.querySelector(".home-timeline") as HTMLElement | null;
+    if (!el) return;
+    const atStart = el.scrollLeft <= 1;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+    el.dataset.atStart = String(atStart);
+    el.dataset.atEnd = String(atEnd);
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    updateGreeting();
+    const lw = document.querySelector("live-window");
+    if (lw) lw.addEventListener("live-window:clock-update", updateGreeting);
+
+    const timeline = document.querySelector(".home-timeline");
+    if (timeline) {
+      updateTimelineShadows();
+      timeline.addEventListener("scroll", updateTimelineShadows, { passive: true });
+    }
+  });
+</script>
+
+<style>
+  @reference "../layouts/BaseLayout/BaseLayout.css";
+
+  /* Web component custom properties */
+  live-window {
+    --window-color: var(--color-midnight);
+    --blinds-color: var(--color-midnight);
+    --clock-text-color: #e74c3c;
+    --weather-text-font: "Space Grotesk", sans-serif;
+    --weather-text-color: var(--color-teal);
+    --weather-text-margin: 12px 0;
+    --weather-text-size: 14px;
+    --weather-text-transform: uppercase;
+    --weather-text-letter-spacing: 0.08em;
+  }
+
+  /* Timeline: horizontal scroll */
+  .home-timeline {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Timeline: dynamic scroll shadows */
+  .home-timeline[data-at-start="true"][data-at-end="false"] {
+    mask-image: linear-gradient(to right, black, black 96%, transparent);
+  }
+  .home-timeline[data-at-start="false"][data-at-end="true"] {
+    mask-image: linear-gradient(to right, transparent, black 4%, black);
+  }
+  .home-timeline[data-at-start="false"][data-at-end="false"] {
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  }
+
+  /* Timeline: track line pseudo-element */
+  .home-timeline__track::before {
+    content: "";
+    @apply absolute left-0 right-0 border-t border-border;
+    top: 35px;
+  }
+
+  /* Timeline: current version glow */
+  .home-timeline__item--current .home-timeline__thumb {
+    @apply border-neon;
+    box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+  }
+
+  /* Timeline: name font size */
+  .home-timeline__name {
+    font-size: 0.65rem;
+  }
+</style>

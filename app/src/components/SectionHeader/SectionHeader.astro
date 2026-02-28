@@ -1,0 +1,25 @@
+---
+interface Props {
+  label: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { label, href, linkLabel = "view all" } = Astro.props;
+---
+
+<div class="flex items-center gap-3 mb-6">
+  <span class="font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap">{label}</span>
+  <hr class="grow border-t border-border my-0" />
+  {
+    href && (
+      <a
+        href={href}
+        class="font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1 hover:text-neon"
+      >
+        {linkLabel}
+        <i class="fa-solid fa-chevron-right" style="font-size:0.55em" aria-hidden="true" />
+      </a>
+    )
+  }
+</div>

@@ -1,0 +1,218 @@
+---
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
+import CardTags from "@components/Card/CardTags.astro";
+
+type AnyEntry = CollectionEntry<CollectionName>;
+
+export async function getStaticPaths() {
+  const routable = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
+  const paths: Array<{
+    params: { collection: string; id: string };
+    props: { entry: AnyEntry };
+  }> = [];
+
+  for (const name of COLLECTION_NAMES) {
+    if (!routable.has(name)) continue;
+
+    const entries = await getCollection(name, ({ data }) => !data.draft);
+    for (const entry of entries) {
+      paths.push({
+        params: { collection: name, id: entry.id },
+        props: { entry },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { collection, id } = Astro.params;
+const { entry } = Astro.props;
+
+let Content: AstroComponentFactory | null = null;
+let recipeJsonLd: string | null = null;
+try {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+
+  if (collection === "recipes") {
+    const { ingredients, instructionSections } = rendered.remarkPluginFrontmatter?.recipeData ?? {};
+
+    // Google says: don't repeat recipeCategory or recipeCuisine in keywords
+    const excludeFromKeywords = new Set(
+      [entry.data.category, entry.data.recipeCuisine].filter(Boolean).map((s: string) => s.toLowerCase()),
+    );
+    const keywords = entry.data.tags?.filter((t: string) => !excludeFromKeywords.has(t.toLowerCase())).join(", ");
+
+    // Map instruction sections → HowToSection (named) or flat HowToStep (unnamed)
+    const sections = instructionSections ?? [];
+    const hasNamedSections = sections.some((s: { name: string | null }) => s.name !== null);
+    const recipeInstructions = hasNamedSections
+      ? sections.map((s: { name: string | null; steps: string[] }) => ({
+          "@type": "HowToSection",
+          name: s.name,
+          itemListElement: s.steps.map((text: string) => ({ "@type": "HowToStep", text })),
+        }))
+      : sections.flatMap((s: { steps: string[] }) => s.steps.map((text: string) => ({ "@type": "HowToStep", text })));
+
+    recipeJsonLd = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      name: entry.data.title,
+      author: { "@type": "Person", name: "thalida", url: "https://thalida.com" },
+      description: entry.data.description,
+      datePublished: entry.data.publishedOn?.toISOString().split("T")[0],
+      dateModified: entry.data.updatedOn?.toISOString().split("T")[0],
+      recipeCategory: entry.data.category,
+      recipeCuisine: entry.data.recipeCuisine,
+      keywords,
+      prepTime: entry.data.prepTime,
+      cookTime: entry.data.cookTime,
+      totalTime: entry.data.totalTime,
+      recipeYield: entry.data.recipeYield,
+      nutrition: entry.data.calories ? { "@type": "NutritionInformation", calories: entry.data.calories } : undefined,
+      recipeIngredient: ingredients ?? [],
+      recipeInstructions,
+    });
+  }
+} catch {
+  // Content could not be rendered
+}
+
+const pageTitle = entry.data.title as string;
+
+/** Convert ISO 8601 duration (e.g. "PT1H30M") to human-readable text. */
+function formatDuration(iso?: string): string | null {
+  if (!iso) return null;
+  const match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return iso;
+  const [, h, m, s] = match;
+  const parts: string[] = [];
+  if (h) parts.push(`${h} hr`);
+  if (m) parts.push(`${m} min`);
+  if (s) parts.push(`${s} sec`);
+  return parts.join(" ") || null;
+}
+
+const recipeMeta =
+  collection === "recipes"
+    ? [
+        { label: "Yield", value: entry.data.recipeYield },
+        { label: "Prep", value: formatDuration(entry.data.prepTime) },
+        { label: "Cook", value: formatDuration(entry.data.cookTime) },
+        { label: "Total", value: formatDuration(entry.data.totalTime) },
+      ].filter((item) => item.value)
+    : [];
+---
+
+<BaseLayout title={`${pageTitle} · thalida`} activeCollection={collection}>
+  {recipeJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={recipeJsonLd} />}
+  <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
+    <meta data-pagefind-meta={`collection:${collection}`} />
+    <meta data-pagefind-meta={`category:${entry.data.category || ""}`} />
+    <meta data-pagefind-meta={`itemId:${id}`} />
+    <meta data-pagefind-meta={`tags:${(entry.data.tags || []).join(",")}`} />
+    <header class="mb-6">
+      <div class="flex items-center gap-2 mb-2 font-body uppercase text-2xs tracking-widest">
+        <p class="m-0 font-semibold">
+          <a class="text-teal no-underline hover:text-neon" href={`/${collection}`}>{collection}</a>
+          {
+            entry.data.category && (
+              <span>
+                {" "}
+                /{" "}
+                <a class="text-teal no-underline hover:text-neon" href={`/${collection}/${entry.data.category}`}>
+                  {entry.data.category}
+                </a>
+              </span>
+            )
+          }
+        </p>
+        {
+          entry.data.publishedOn && (
+            <>
+              <span class="text-muted/40">·</span>
+              <time class="text-muted/60">
+                {new Date(entry.data.publishedOn).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
+            </>
+          )
+        }
+      </div>
+      <h1 class="page-title mb-1">
+        {pageTitle}
+      </h1>
+      {
+        entry.data.description && (
+          <p class="m-0 mb-2 font-heading font-semibold text-text text-subtitle tracking-tight">
+            {entry.data.description}
+          </p>
+        )
+      }
+      <CardTags tags={entry.data.tags} max={Infinity} />
+      {
+        recipeMeta.length > 0 && (
+          <div class="recipe-meta flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs font-body text-muted">
+            {recipeMeta.map(({ label, value }) => (
+              <span>
+                <span class="font-semibold text-text">{label}</span> {value}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+    <hr />
+    <div class="post-content prose prose-invert prose-sm max-w-none text-text font-body">
+      {Content ? <Content /> : <p>Content could not be rendered.</p>}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  @reference "../../../layouts/BaseLayout/BaseLayout.css";
+
+  .post-content :global(h2),
+  .post-content :global(h3),
+  .post-content :global(h4) {
+    @apply font-heading text-text;
+  }
+  .post-content :global(.heading-anchor) {
+    opacity: 0;
+    margin-left: 0.35rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-weight: 400;
+    transition: opacity 0.15s;
+  }
+  .post-content :global(h2:hover .heading-anchor),
+  .post-content :global(h3:hover .heading-anchor),
+  .post-content :global(h4:hover .heading-anchor) {
+    opacity: 1;
+  }
+  .post-content :global(h2) {
+    @apply text-text;
+  }
+  .post-content :global(.expressive-code) {
+    @apply my-6;
+  }
+  .post-content :global(code:not(pre code)) {
+    @apply font-body bg-surface border border-border text-teal px-1.5 py-0.5 rounded text-xs;
+  }
+  .post-content :global(a) {
+    @apply text-teal hover:text-neon no-underline;
+  }
+  .post-content :global(img),
+  .post-content :global(video) {
+    max-width: 100%;
+    height: auto;
+    @apply rounded-lg;
+  }
+</style>

@@ -1,9 +1,15 @@
 {
-  "[markdown]": {
-      "editor.formatOnSave": true,
-      "editor.formatOnPaste": true
-  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
     "source.fixAll.markdownlint": "explicit"
   },
+  "[markdown]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  }
 }

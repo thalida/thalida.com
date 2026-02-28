@@ -1,0 +1,85 @@
+---
+import { NAV_ORDER, getNavData } from "@lib/nav-data";
+import SpotifyPlayer from "@components/SpotifyPlayer/SpotifyPlayer.astro";
+import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
+
+interface Props {
+  activePage?: string;
+  activeCollection?: string;
+}
+
+const { activePage, activeCollection } = Astro.props;
+const navData = await getNavData();
+---
+
+<nav
+  id="site-nav"
+  class="font-body relative xl:flex xl:flex-col min-h-full overflow-y-auto overflow-x-hidden hidden xl:shrink-0 xl:grow-0 xl:basis-1/5 xl:max-w-64 xl:py-3 xl:pl-3 xl:pr-0"
+  aria-label="Main navigation"
+  data-active-collection={activeCollection || ""}
+>
+  <h2 class="hidden xl:block m-0 mb-3 font-display text-xl font-bold text-neon">
+    <a href="/" class="no-underline text-neon">thalida</a>
+  </h2>
+
+  <button
+    class="hidden xl:flex items-center gap-2 w-full py-2 px-3 mb-3 border border-border rounded-lg bg-surface text-muted text-sm font-body transition-colors hover:border-muted/50"
+    type="button"
+    id="js-nav-search-btn"
+  >
+    <SearchIcon class="text-sm" />
+    <span class="flex-1 text-left">Search…</span>
+    <kbd class="text-xs py-0.5 px-2 border border-border rounded bg-surface-active text-muted font-body">⌘K</kbd>
+  </button>
+
+  <div class="bg-surface border border-border rounded-lg p-3">
+    <ul class="list-none p-0 m-0 flex flex-col gap-0.5">
+      {
+        NAV_ORDER.map((entry) =>
+          entry.type === "page" ? (
+            <li>
+              <a
+                href={`/${entry.page}`}
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-white!"
+                data-active={activePage === entry.page ? "true" : undefined}
+              >
+                {entry.label}
+              </a>
+            </li>
+          ) : navData[entry.collection] ? (
+            <li>
+              <a
+                href={`/${entry.collection}`}
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-white!"
+                data-active={activeCollection === entry.collection ? "true" : undefined}
+              >
+                <span class="flex-1">{navData[entry.collection].title}</span>
+                <span class="text-xs font-normal bg-midnight py-0.5 px-2 rounded-full text-muted group-data-active:bg-white/15 group-data-active:text-white">
+                  {navData[entry.collection].items.length}
+                </span>
+              </a>
+            </li>
+          ) : null,
+        )
+      }
+    </ul>
+  </div>
+
+  <a
+    id="js-admin-link"
+    href="/login"
+    class="block w-full text-center text-xs text-muted! no-underline mt-2 hover:text-text! transition-colors">login</a
+  >
+
+  <SpotifyPlayer />
+</nav>
+
+<script src="./ProjectTree.ts"></script>
+
+<style>
+  :global(#nav-panel) #site-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+  }
+</style>

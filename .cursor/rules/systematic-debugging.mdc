@@ -1,0 +1,31 @@
+---
+description: Enforce systematic debugging before proposing fixes for any bug or unexpected behavior
+alwaysApply: true
+---
+
+# Systematic Debugging
+
+When the user reports a bug, unexpected behavior, or any issue:
+
+## Do NOT jump to fixes
+
+- Never propose or implement a fix without first understanding the root cause.
+- Never assume what the problem is based on a brief description.
+
+## Ask clarifying questions interactively
+
+Use the AskQuestion tool to gather information ONE question at a time, in a conversational manner:
+
+1. **Reproduce**: Ask what environment, steps to reproduce, and what they expected vs what happened.
+2. **Narrow scope**: Ask targeted follow-ups based on their answers to isolate the issue.
+3. **Confirm understanding**: Restate the problem back to them before investigating code.
+
+## Then investigate
+
+- Trace the data flow through the relevant code path.
+- Gather evidence (logs, state, network) before forming a hypothesis.
+- State your hypothesis clearly and get confirmation before implementing a fix.
+
+## Key principle
+
+Treat debugging like a conversation, not a monologue. The user has context you don't — ask for it.

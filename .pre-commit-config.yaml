@@ -1,0 +1,34 @@
+repos:
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: npx prettier --write --ignore-unknown
+        language: system
+        files: \.(js|jsx|ts|tsx|mjs|css|json|yaml|yml|astro)$
+
+      - id: eslint-api
+        name: eslint (api)
+        entry: npx --prefix api eslint --config api/eslint.config.mjs --fix
+        language: system
+        files: ^api/.*\.(ts|mjs)$
+
+      - id: eslint-app
+        name: eslint (app)
+        entry: npx --prefix app eslint --config app/eslint.config.mjs --fix
+        language: system
+        files: ^app/.*\.(ts|mjs|astro)$
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.43.0
+    hooks:
+      - id: markdownlint
+        args: ["-f"]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-merge-conflict
+      - id: mixed-line-ending

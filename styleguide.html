@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>thalida.com — Brand Style Exploration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Unbounded:wght@400;700;900&family=Outfit:wght@400;500;600;700&family=DM+Mono:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=Oxanium:wght@400;600;700&family=Orbitron:wght@400;600;700;900&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg: #F8F7F4;
+      --page-text: #1A1A1A;
+      --section-gap: 6rem;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--page-bg);
+      color: var(--page-text);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* ─── Page Header ─────────────────────────────────────── */
+    .page-header {
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      border-bottom: 1px solid #E0DDD8;
+      margin-bottom: var(--section-gap);
+    }
+    .page-header .label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 1rem;
+    }
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+    .page-header p {
+      font-size: 1rem;
+      color: #777;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    .nav-pills a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      border: 1px solid #D0CCC6;
+      color: #555;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-pills a:hover { background: #1A1A1A; color: #fff; border-color: #1A1A1A; }
+
+    /* ─── Option Wrapper ───────────────────────────────────── */
+    .option {
+      max-width: 1200px;
+      margin: 0 auto var(--section-gap);
+      padding: 0 2rem;
+    }
+
+    .option-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid currentColor;
+    }
+    .option-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 0.35rem;
+    }
+    .option-header-text h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .option-header-text p {
+      font-size: 1rem;
+      opacity: 0.65;
+      max-width: 600px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 767px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      border-radius: 12px;
+      padding: 1.75rem;
+      border: 1px solid;
+    }
+    .card-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.5;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ─── Color Swatches ──────────────────────────────────── */
+    .swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .swatch {
+      flex: 1;
+      min-width: 80px;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      line-height: 1.4;
+      position: relative;
+      overflow: hidden;
+    }
+    .swatch .swatch-name {
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    .swatch .swatch-hex {
+      opacity: 0.6;
+    }
+
+    /* ─── Wireframe ───────────────────────────────────────── */
+    .wireframe {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid;
+    }
+    .wf-browser-chrome {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 6px;
+      border-bottom: 1px solid;
+    }
+    .wf-dot { width: 10px; height: 10px; border-radius: 50%; opacity: 0.4; }
+    .wf-url-bar {
+      flex: 1;
+      height: 18px;
+      border-radius: 4px;
+      opacity: 0.15;
+      margin: 0 12px;
+    }
+    .wf-body {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 380px;
+    }
+    .wf-sidebar {
+      border-right: 1px solid;
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .wf-nav-logo {
+      height: 28px;
+      border-radius: 4px;
+      opacity: 0.5;
+      margin-bottom: 0.5rem;
+    }
+    .wf-nav-item {
+      height: 16px;
+      border-radius: 4px;
+      opacity: 0.18;
+    }
+    .wf-nav-item.active { opacity: 0.45; }
+    .wf-main {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .wf-hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .wf-h1 { height: 40px; border-radius: 4px; opacity: 0.6; width: 80%; }
+    .wf-h1-2 { height: 40px; border-radius: 4px; opacity: 0.6; width: 55%; }
+    .wf-body-line { height: 10px; border-radius: 3px; opacity: 0.2; }
+    .wf-body-line.short { width: 65%; }
+    .wf-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .wf-card {
+      aspect-ratio: 3/2;
+      border-radius: 8px;
+      opacity: 0.2;
+    }
+    .wf-badge {
+      display: inline-block;
+      height: 22px;
+      width: 80px;
+      border-radius: 100px;
+      opacity: 0.25;
+      margin-top: 0.25rem;
+    }
+    .wf-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    /* ─── TYPE SPECIMEN ──────────────────────────────────── */
+    .type-specimen {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .type-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid;
+      border-color: inherit;
+    }
+    .type-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .type-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      opacity: 0.4;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ─── COMPONENT PREVIEW ──────────────────────────────── */
+    .component-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .component-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.4;
+      margin-bottom: 0.6rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       OPTION A — DARK EDITORIAL
+    ═══════════════════════════════════════════════════════ */
+
+    .opt-a { --a-bg: #0D0C0A; --a-surface: #161410; --a-border: #2A2520; --a-text: #F2EDE4; --a-muted: #7A7268; --a-accent: #E8A020; --a-accent-dim: #3D2A06; }
+
+    #option-a .option-header { border-color: #E8A020; color: #0D0C0A; }
+    #option-a .option-badge { background: #E8A020; color: #0D0C0A; }
+    #option-a .option-header-text h2 { font-family: 'Playfair Display', serif; }
+
+    /* A: Color card */
+    #option-a .card { background: #fff; border-color: #E8DDD0; }
+    #option-a .swatch.a-bg { background: #0D0C0A; color: #F2EDE4; }
+    #option-a .swatch.a-surface { background: #161410; color: #F2EDE4; }
+    #option-a .swatch.a-accent { background: #E8A020; color: #0D0C0A; }
+    #option-a .swatch.a-text { background: #F2EDE4; color: #0D0C0A; border: 1px solid #DDD; }
+    #option-a .swatch.a-muted { background: #7A7268; color: #F2EDE4; }
+    #option-a .swatch.a-dim { background: #3D2A06; color: #E8A020; }
+
+    /* A: Wireframe */
+    #option-a .wireframe { background: #0D0C0A; border-color: #2A2520; }
+    #option-a .wf-browser-chrome { background: #161410; border-color: #2A2520; }
+    #option-a .wf-dot { background: #E8A020; }
+    #option-a .wf-url-bar { background: #F2EDE4; }
+    #option-a .wf-sidebar { background: #0D0C0A; border-color: #2A2520; }
+    #option-a .wf-nav-logo { background: #E8A020; }
+    #option-a .wf-nav-item { background: #F2EDE4; }
+    #option-a .wf-nav-item.active { background: #E8A020; }
+    #option-a .wf-h1, #option-a .wf-h1-2 { background: #F2EDE4; }
+    #option-a .wf-body-line { background: #F2EDE4; }
+    #option-a .wf-card { background: #E8A020; }
+    #option-a .wf-badge { background: #E8A020; }
+
+    /* A: Type */
+    #option-a .type-card { background: #0D0C0A; border-color: #2A2520; color: #F2EDE4; }
+    #option-a .type-row { border-color: #2A2520; }
+    #option-a .type-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #F2EDE4;
+    }
+    #option-a .type-h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-style: italic;
+      font-weight: 400;
+      color: #E8A020;
+    }
+    #option-a .type-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #B8B0A4;
+    }
+    #option-a .type-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      color: #E8A020;
+      letter-spacing: 0.06em;
+    }
+
+    /* A: Components */
+    #option-a .comp-card { background: #0D0C0A; border-color: #2A2520; color: #F2EDE4; }
+    .btn-a-primary {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.75rem 1.75rem;
+      background: #E8A020;
+      color: #0D0C0A;
+      border: none;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+    .btn-a-ghost {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 400;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      color: #F2EDE4;
+      border: 1px solid #2A2520;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+    .tag-a {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 3px;
+      background: #3D2A06;
+      color: #E8A020;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nav-a {
+      display: flex;
+      gap: 0.25rem;
+      background: #161410;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #2A2520;
+    }
+    .nav-a-item {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      padding: 0.45rem 0.85rem;
+      border-radius: 5px;
+      color: #7A7268;
+      cursor: pointer;
+    }
+    .nav-a-item.active {
+      background: #3D2A06;
+      color: #E8A020;
+    }
+    .card-a-preview {
+      background: #161410;
+      border: 1px solid #2A2520;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .card-a-preview .card-a-img {
+      width: 100%;
+      height: 100px;
+      background: #3D2A06;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-a-preview .card-a-img span {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: #E8A020;
+      opacity: 0.6;
+    }
+    .card-a-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #F2EDE4;
+      margin-bottom: 0.4rem;
+    }
+    .card-a-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: #7A7268;
+      line-height: 1.5;
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       OPTION B — MONOCHROME POP
+    ═══════════════════════════════════════════════════════ */
+
+    #option-b .option-header { border-color: #FF5C00; color: #0A0A0A; }
+    #option-b .option-badge { background: #FF5C00; color: #fff; }
+    #option-b .option-header-text h2 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.04em; }
+
+    #option-b .card { background: #fff; border-color: #E8E4E0; }
+    #option-b .swatch.b-white { background: #FFFFFF; color: #0A0A0A; border: 1px solid #E0E0E0; }
+    #option-b .swatch.b-off { background: #F4F2EE; color: #0A0A0A; }
+    #option-b .swatch.b-black { background: #0A0A0A; color: #FFFFFF; }
+    #option-b .swatch.b-ink { background: #2C2C2C; color: #FFFFFF; }
+    #option-b .swatch.b-accent { background: #FF5C00; color: #fff; }
+    #option-b .swatch.b-accent-light { background: #FFF0E8; color: #FF5C00; }
+
+    #option-b .wireframe { background: #F4F2EE; border-color: #DEDAD4; }
+    #option-b .wf-browser-chrome { background: #FFFFFF; border-color: #E8E4E0; }
+    #option-b .wf-dot { background: #FF5C00; }
+    #option-b .wf-url-bar { background: #0A0A0A; }
+    #option-b .wf-sidebar { background: #0A0A0A; border-color: #222; }
+    #option-b .wf-nav-logo { background: #FF5C00; }
+    #option-b .wf-nav-item { background: #fff; }
+    #option-b .wf-nav-item.active { background: #FF5C00; }
+    #option-b .wf-main { background: #F4F2EE; }
+    #option-b .wf-h1, #option-b .wf-h1-2 { background: #0A0A0A; }
+    #option-b .wf-body-line { background: #0A0A0A; }
+    #option-b .wf-card { background: #fff; opacity: 1; border: 1px solid #DEDAD4; border-radius: 8px; }
+    #option-b .wf-badge { background: #FF5C00; opacity: 1; }
+
+    #option-b .type-card { background: #F4F2EE; border-color: #DEDAD4; color: #0A0A0A; }
+    #option-b .type-row { border-color: #DEDAD4; }
+    #option-b .type-h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      color: #0A0A0A;
+    }
+    #option-b .type-h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: #FF5C00;
+    }
+    #option-b .type-body {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.65;
+      color: #4A4A4A;
+    }
+    #option-b .type-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: #888;
+      letter-spacing: 0.04em;
+    }
+
+    #option-b .comp-card { background: #F4F2EE; border-color: #DEDAD4; color: #0A0A0A; }
+    .btn-b-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      background: #0A0A0A;
+      color: #fff;
+      border: 2px solid #0A0A0A;
+      border-radius: 0;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+    }
+    .btn-b-accent {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      background: #FF5C00;
+      color: #fff;
+      border: 2px solid #FF5C00;
+      border-radius: 0;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+    }
+    .tag-b {
+      display: inline-block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 0;
+      background: #FFF0E8;
+      color: #FF5C00;
+      letter-spacing: -0.01em;
+      border: 1px solid #FFDCC8;
+    }
+    .nav-b {
+      display: flex;
+      gap: 0;
+      background: #0A0A0A;
+      padding: 0.75rem 1rem;
+      border-radius: 0;
+    }
+    .nav-b-item {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      color: #888;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .nav-b-item.active {
+      color: #FF5C00;
+      border-bottom-color: #FF5C00;
+    }
+    .card-b-preview {
+      background: #FFFFFF;
+      border: 1px solid #E8E4E0;
+      border-radius: 0;
+      padding: 1.25rem;
+      border-left: 3px solid #FF5C00;
+    }
+    .card-b-img {
+      width: 100%;
+      height: 90px;
+      background: #F4F2EE;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-b-img span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #E8E4E0;
+      letter-spacing: -0.05em;
+    }
+    .card-b-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0A0A0A;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+    }
+    .card-b-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: #888;
+      line-height: 1.5;
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       OPTION C — NEON PLAYGROUND
+    ═══════════════════════════════════════════════════════ */
+
+    #option-c .option-header { border-color: #00E5A0; color: #030A12; }
+    #option-c .option-badge { background: #00E5A0; color: #030A12; }
+    #option-c .option-header-text h2 { font-family: 'Syne', sans-serif; letter-spacing: -0.02em; }
+
+    #option-c .card { background: #fff; border-color: #E0ECE6; }
+    #option-c .swatch.c-bg { background: #030A12; color: #E8F0F8; }
+    #option-c .swatch.c-surface { background: #0D1F2D; color: #E8F0F8; }
+    #option-c .swatch.c-amber { background: #FFAB00; color: #030A12; }
+    #option-c .swatch.c-teal { background: #00E5A0; color: #030A12; }
+    #option-c .swatch.c-text { background: #E8F0F8; color: #030A12; border: 1px solid #CDD8E0; }
+    #option-c .swatch.c-muted { background: #3A5068; color: #E8F0F8; }
+
+    #option-c .wireframe { background: #030A12; border-color: #0D1F2D; }
+    #option-c .wf-browser-chrome { background: #0D1F2D; border-color: #152535; }
+    #option-c .wf-dot:nth-child(1) { background: #FFAB00; }
+    #option-c .wf-dot:nth-child(2) { background: #00E5A0; }
+    #option-c .wf-dot:nth-child(3) { background: #E8F0F8; opacity: 0.3; }
+    #option-c .wf-url-bar { background: #00E5A0; }
+    #option-c .wf-sidebar { background: #030A12; border-color: #0D1F2D; }
+    #option-c .wf-nav-logo { background: #FFAB00; }
+    #option-c .wf-nav-item { background: #E8F0F8; }
+    #option-c .wf-nav-item.active { background: #00E5A0; opacity: 1; }
+    #option-c .wf-h1 { background: #FFAB00; }
+    #option-c .wf-h1-2 { background: #E8F0F8; }
+    #option-c .wf-body-line { background: #E8F0F8; }
+    #option-c .wf-card:nth-child(1) { background: #FFAB00; opacity: 0.6; }
+    #option-c .wf-card:nth-child(2) { background: #00E5A0; opacity: 0.4; }
+    #option-c .wf-card:nth-child(3) { background: #E8F0F8; opacity: 0.2; }
+    #option-c .wf-badge { background: #00E5A0; opacity: 0.9; }
+
+    #option-c .type-card { background: #030A12; border-color: #0D1F2D; color: #E8F0F8; }
+    #option-c .type-row { border-color: #0D1F2D; }
+    #option-c .type-h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      color: #FFAB00;
+    }
+    #option-c .type-h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 600;
+      letter-spacing: 0;
+      color: #00E5A0;
+    }
+    #option-c .type-body {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: #8BAFC8;
+    }
+    #option-c .type-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: #3A5068;
+      letter-spacing: 0.04em;
+    }
+
+    #option-c .comp-card { background: #030A12; border-color: #0D1F2D; color: #E8F0F8; }
+    .btn-c-primary {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      background: #FFAB00;
+      color: #030A12;
+      border: none;
+      border-radius: 6px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+    }
+    .btn-c-ghost {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      color: #00E5A0;
+      border: 1px solid #00E5A0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tag-c {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      background: transparent;
+      color: #00E5A0;
+      border: 1px solid #00E5A0;
+      letter-spacing: 0.06em;
+    }
+    .nav-c {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      background: #0D1F2D;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #152535;
+    }
+    .nav-c-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.5rem 0.75rem;
+      border-radius: 5px;
+      color: #3A5068;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-c-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .nav-c-item.active {
+      background: #0A1826;
+      color: #00E5A0;
+    }
+    .card-c-preview {
+      background: #0D1F2D;
+      border: 1px solid #152535;
+      border-radius: 8px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-c-preview::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #FFAB00, #00E5A0);
+    }
+    .card-c-img {
+      width: 100%;
+      height: 90px;
+      background: #030A12;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #152535;
+    }
+    .card-c-img span {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFAB00, #00E5A0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-c-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #E8F0F8;
+      margin-bottom: 0.4rem;
+    }
+    .card-c-desc {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: #3A5068;
+      line-height: 1.6;
+    }
+
+    /* ─── Divider ─────────────────────────────────────────── */
+    .section-divider {
+      max-width: 1200px;
+      margin: 0 auto 6rem;
+      padding: 0 2rem;
+      border-top: 1px solid #E0DDD8;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    .page-footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid #E0DDD8;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: #AAA;
+      letter-spacing: 0.08em;
+    }
+
+    .flex-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .flex-col { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    /* ═══════════════════════════════════════════════════════
+       OPTION D — CORPUS DIGITALIS
+       Palette: emerald-black void · electric emerald · deep
+       teal · muted violet serif · green-tinted parchment
+    ═══════════════════════════════════════════════════════ */
+
+    #option-d .option-header { border-color: #00E87A; color: #060E09; }
+    #option-d .option-badge { background: #00E87A; color: #060E09; font-family: 'IBM Plex Mono', monospace; }
+    #option-d .option-header-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    /* D: Color card */
+    #option-d .card { background: #fff; border-color: #C8EDD8; }
+    #option-d .swatches { display: grid; grid-template-columns: repeat(4, 1fr); }
+    #option-d .swatch.d-void     { background: #060E09; color: #E4F5EC; }
+    #option-d .swatch.d-tomb     { background: #091A0F; color: #E4F5EC; }
+    #option-d .swatch.d-emerald  { background: #00E87A; color: #060E09; }
+    #option-d .swatch.d-teal     { background: #00C9B1; color: #060E09; }
+    #option-d .swatch.d-parchment { background: #E4F5EC; color: #060E09; border: 1px solid #AADDC0; }
+    #option-d .swatch.d-body     { background: #60B080; color: #060E09; }
+    #option-d .swatch.d-nav      { background: #4E9668; color: #060E09; }
+
+    /* D: Wireframe */
+    #option-d .wireframe {
+      background: #060E09;
+      border-color: #0F2A18;
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,232,122,0.03) 3px, rgba(0,232,122,0.03) 4px
+      );
+    }
+    #option-d .wf-browser-chrome { background: #091A0F; border-color: #0F2A18; }
+    #option-d .wf-dot:nth-child(1) { background: #00E87A; opacity: 1; }
+    #option-d .wf-dot:nth-child(2) { background: #00C9B1; opacity: 0.8; }
+    #option-d .wf-dot:nth-child(3) { background: #1E4A30; opacity: 1; }
+    #option-d .wf-url-bar { background: #00E87A; opacity: 0.25; }
+    #option-d .wf-sidebar { background: #060E09; border-color: #0F2A18; }
+    #option-d .wf-nav-logo { background: #00E87A; opacity: 0.8; border-radius: 0; }
+    #option-d .wf-nav-item { background: #E4F5EC; border-radius: 0; }
+    #option-d .wf-nav-item.active { background: #00E87A; opacity: 1; border-radius: 0; }
+    #option-d .wf-h1 { background: #00E87A; border-radius: 0; height: 48px; }
+    #option-d .wf-h1-2 { background: #00C9B1; border-radius: 0; height: 32px; opacity: 0.5; }
+    #option-d .wf-body-line { background: #E4F5EC; border-radius: 0; }
+    #option-d .wf-card:nth-child(1) { background: #0F2A18; border-radius: 0; opacity: 1; border: 1px solid #00E87A; }
+    #option-d .wf-card:nth-child(2) { background: #0F2A18; border-radius: 0; opacity: 1; border: 1px solid #00C9B1; }
+    #option-d .wf-card:nth-child(3) { background: #0F2A18; border-radius: 0; opacity: 1; border: 1px solid #1E4A30; }
+    #option-d .wf-badge { background: transparent; border: 1px solid #00E87A; border-radius: 0; opacity: 1; }
+
+    /* D: Type */
+    #option-d .type-card { background: #060E09; border-color: #0F2A18; color: #E4F5EC; }
+    #option-d .type-row { border-color: #0F2A18; }
+    #option-d .type-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      color: #00E87A;
+      text-shadow: 0 0 40px rgba(0,232,122,0.45);
+    }
+    #option-d .type-h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2.1rem);
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      color: #00C9B1;
+    }
+    #option-d .type-body {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: #60B080;
+    }
+    #option-d .type-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: #00C9B1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* D: Components */
+    #option-d .comp-card { background: #060E09; border-color: #0F2A18; color: #E4F5EC; }
+
+    .btn-d-primary {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-style: normal;
+      font-weight: 500;
+      padding: 0.65rem 1.75rem;
+      background: #00E87A;
+      color: #060E09;
+      border: none;
+      border-radius: 0;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 22px rgba(0,232,122,0.35);
+    }
+    .btn-d-ghost {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 400;
+      padding: 0.65rem 1.5rem;
+      background: transparent;
+      color: #00C9B1;
+      border: 1px solid #00C9B1;
+      border-radius: 0;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .tag-d {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      padding: 0.28rem 0.6rem;
+      border-radius: 0;
+      background: transparent;
+      color: #00E87A;
+      border: 1px solid #00E87A;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .nav-d {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      background: #091A0F;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #0F2A18;
+    }
+    .nav-d-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.5rem 0.75rem;
+      border-radius: 5px;
+      color: #4E9668;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-d-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .nav-d-item.active {
+      background: #060E09;
+      color: #00E87A;
+      text-shadow: 0 0 12px rgba(0,232,122,0.4);
+    }
+    .card-d-preview {
+      background: #091A0F;
+      border: 1px solid #0F2A18;
+      border-radius: 0;
+      padding: 0.6rem;
+      position: relative;
+    }
+    .card-d-img {
+      width: 100%;
+      height: 90px;
+      background: #060E09;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #0F2A18;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-d-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,232,122,0.04) 3px, rgba(0,232,122,0.04) 4px
+      );
+    }
+    .card-d-img span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-style: italic;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00E87A, #00C9B1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(0,232,122,0.6));
+      position: relative;
+      z-index: 1;
+    }
+    .card-d-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      font-style: normal;
+      font-weight: 500;
+      color: #E4F5EC;
+      margin-bottom: 0.4rem;
+    }
+    .card-d-desc {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: #60B080;
+      line-height: 1.7;
+    }
+
+    /* ─── Font Explorer (Option E) ───────────────────────── */
+    .font-explore-card {
+      background: #030A12;
+      border: 1px solid #0D1F2D;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 0;
+    }
+    .font-explore-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+      padding: 1.75rem;
+      border-bottom: 1px solid #0D1F2D;
+      align-items: center;
+    }
+    .font-explore-item:last-child { border-bottom: none; }
+    .font-explore-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      line-height: 1.7;
+      letter-spacing: 0.05em;
+    }
+    .font-explore-display-label {
+      display: block;
+      color: #39FF14;
+      font-weight: 500;
+    }
+    .font-explore-heading-label {
+      display: block;
+      color: #7A9AB5;
+    }
+    .font-explore-sample { display: flex; flex-direction: column; gap: 0.4rem; }
+    .fe-display {
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #E8F0F8;
+    }
+    .fe-heading {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #00E5A0;
+      line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       OPTION E — NEON PLAYGROUND II
+       Same palette as C, display font swapped to Space Grotesk
+    ═══════════════════════════════════════════════════════ */
+
+    #option-e { outline: 2px solid #39FF14; outline-offset: 1rem; border-radius: 4px; }
+    #option-e .option-header { border-color: #39FF14; color: #030A12; }
+    #option-e .option-badge { background: #39FF14; color: #030A12; }
+    #option-e .option-header-text h2 { font-family: 'Bricolage Grotesque', sans-serif; letter-spacing: -0.03em; }
+    .chosen-badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 0.35rem;
+      background: transparent;
+      border: 1px solid #39FF14;
+      color: #39FF14;
+    }
+
+    #option-e .card { background: #fff; border-color: #E0ECE6; }
+    #option-e .swatch.e-bg { background: #030A12; color: #E8F0F8; }
+    #option-e .swatch.e-surface { background: #0D1F2D; color: #E8F0F8; }
+    #option-e .swatch.e-amber { background: #39FF14; color: #030A12; }
+    #option-e .swatch.e-teal { background: #00E5A0; color: #030A12; }
+    #option-e .swatch.e-text { background: #E8F0F8; color: #030A12; border: 1px solid #CDD8E0; }
+    #option-e .swatch.e-muted { background: #7A9AB5; color: #030A12; }
+
+    #option-e .wireframe { background: #030A12; border-color: #0D1F2D; }
+    #option-e .wf-browser-chrome { background: #0D1F2D; border-color: #152535; }
+    #option-e .wf-dot:nth-child(1) { background: #39FF14; }
+    #option-e .wf-dot:nth-child(2) { background: #00E5A0; }
+    #option-e .wf-dot:nth-child(3) { background: #E8F0F8; opacity: 0.3; }
+    #option-e .wf-url-bar { background: #00E5A0; }
+    #option-e .wf-sidebar { background: #030A12; border-color: #0D1F2D; }
+    #option-e .wf-nav-logo { background: #39FF14; }
+    #option-e .wf-nav-item { background: #E8F0F8; }
+    #option-e .wf-nav-item.active { background: #00E5A0; opacity: 1; }
+    #option-e .wf-h1 { background: #39FF14; }
+    #option-e .wf-h1-2 { background: #E8F0F8; }
+    #option-e .wf-body-line { background: #E8F0F8; }
+    #option-e .wf-card:nth-child(1) { background: #39FF14; opacity: 0.6; }
+    #option-e .wf-card:nth-child(2) { background: #00E5A0; opacity: 0.4; }
+    #option-e .wf-card:nth-child(3) { background: #E8F0F8; opacity: 0.2; }
+    #option-e .wf-badge { background: #00E5A0; opacity: 0.9; }
+
+    #option-e .type-card { background: #030A12; border-color: #0D1F2D; color: #E8F0F8; }
+    #option-e .type-row { border-color: #0D1F2D; }
+    #option-e .type-h1 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.035em;
+      color: #39FF14;
+    }
+    #option-e .type-h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #00E5A0;
+    }
+    #option-e .type-body {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.7;
+      color: #8BAFC8;
+    }
+    #option-e .type-mono {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.78rem;
+      color: #7A9AB5;
+      letter-spacing: 0.04em;
+    }
+
+    #option-e .comp-card { background: #030A12; border-color: #0D1F2D; color: #E8F0F8; }
+    .btn-e-primary {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0.75rem 1.75rem;
+      background: #39FF14;
+      color: #030A12;
+      border: none;
+      border-radius: 6px;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+    }
+    .btn-e-ghost {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 1.75rem;
+      background: transparent;
+      color: #00E5A0;
+      border: 1px solid #00E5A0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tag-e {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 4px;
+      background: transparent;
+      color: #00E5A0;
+      border: 1px solid #00E5A0;
+      letter-spacing: 0.06em;
+    }
+    .nav-e {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      background: #0D1F2D;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #152535;
+    }
+    .nav-e-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 400;
+      padding: 0.5rem 0.75rem;
+      border-radius: 5px;
+      color: #7A9AB5;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-e-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .nav-e-item.active {
+      background: #0A1826;
+      color: #00E5A0;
+    }
+    .card-e-preview {
+      background: #0D1F2D;
+      border: 1px solid #152535;
+      border-radius: 8px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-e-img {
+      width: 100%;
+      height: 90px;
+      background: #030A12;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #152535;
+    }
+    .card-e-img span {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #39FF14, #00E5A0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-e-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #E8F0F8;
+      margin-bottom: 0.4rem;
+    }
+    .card-e-desc {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: #7A9AB5;
+      line-height: 1.6;
+    }
+    .card-e-flag {
+      background: #0D1F2D;
+      border: 1px solid #152535;
+      border-radius: 8px;
+      padding: 0.75rem;
+      display: flex;
+      gap: 0.875rem;
+      align-items: center;
+    }
+    .card-e-flag-img {
+      flex-shrink: 0;
+      width: 68px;
+      height: 68px;
+      background: #030A12;
+      border-radius: 4px;
+      border: 1px solid #152535;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-e-flag-img span {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #39FF14, #00E5A0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-e-flag-body { flex: 1; min-width: 0; }
+    .card-e-flag-meta {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: #39FF14;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+    .card-e-flag-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #E8F0F8;
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-e-flag-desc {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: #7A9AB5;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-e-flag-tags {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+    .flag-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- ───────────── PAGE HEADER ───────────── -->
+  <header class="page-header">
+    <p class="label">thalida.com · Brand Exploration · 2026</p>
+    <h1>Style &amp; Theme Options</h1>
+    <p>Four distinct directions for the site's visual identity. Each explores a different mood, color palette, and typographic voice.</p>
+    <nav class="nav-pills">
+      <a href="#option-a">A — Dark Editorial</a>
+      <a href="#option-b">B — Monochrome Pop</a>
+      <a href="#option-c">C — Neon Playground</a>
+      <a href="#option-d">D — Corpus Digitalis</a>
+      <a href="#option-e">E — Neon Playground II ✓</a>
+    </nav>
+  </header>
+
+
+  <!-- ═══════════════════════════════════════
+       OPTION A — DARK EDITORIAL
+  ════════════════════════════════════════ -->
+  <section class="option" id="option-a">
+
+    <div class="option-header">
+      <span class="option-badge">Option A</span>
+      <div class="option-header-text">
+        <h2>Dark Editorial</h2>
+        <p>Ink-black canvas with warm amber light. Feels like a beautifully printed design magazine — luxurious, considered, and quietly confident.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Colors -->
+      <div class="card">
+        <p class="card-label">Color Palette</p>
+        <div class="swatches">
+          <div class="swatch a-bg">
+            <span class="swatch-name">Base</span>
+            <span class="swatch-hex">#0D0C0A</span>
+          </div>
+          <div class="swatch a-surface">
+            <span class="swatch-name">Surface</span>
+            <span class="swatch-hex">#161410</span>
+          </div>
+          <div class="swatch a-accent">
+            <span class="swatch-name">Amber</span>
+            <span class="swatch-hex">#E8A020</span>
+          </div>
+          <div class="swatch a-text">
+            <span class="swatch-name">Text</span>
+            <span class="swatch-hex">#F2EDE4</span>
+          </div>
+          <div class="swatch a-muted">
+            <span class="swatch-name">Muted</span>
+            <span class="swatch-hex">#7A7268</span>
+          </div>
+          <div class="swatch a-dim">
+            <span class="swatch-name">Dim</span>
+            <span class="swatch-hex">#3D2A06</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card type-card">
+        <p class="card-label">Typography</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <span class="type-meta">Display — Playfair Display 900</span>
+            <span class="type-h1">Work &amp; Play</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Heading — Playfair Display Italic 400</span>
+            <span class="type-h2">A creative's catalog</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Body — Inter Light 300</span>
+            <span class="type-body">Designer, developer, maker of things. Building at the intersection of craft and code.</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Label — IBM Plex Mono 400</span>
+            <span class="type-mono">projects · writing · about</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="card comp-card">
+        <p class="card-label">UI Components</p>
+        <div class="component-grid">
+          <div>
+            <p class="component-label">Navigation</p>
+            <div class="nav-a">
+              <div class="nav-a-item active">Projects</div>
+              <div class="nav-a-item">Writing</div>
+              <div class="nav-a-item">About</div>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Buttons</p>
+            <div class="flex-row">
+              <button class="btn-a-primary">View Work</button>
+              <button class="btn-a-ghost">Get in Touch</button>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Tags &amp; Labels</p>
+            <div class="flex-row">
+              <span class="tag-a">Design</span>
+              <span class="tag-a">Dev</span>
+              <span class="tag-a">2026</span>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Project Card</p>
+            <div class="card-a-preview">
+              <div class="card-a-img"><span>T.</span></div>
+              <p class="card-a-title">Project Name</p>
+              <p class="card-a-desc">A short description of the work and what makes it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Wireframe -->
+    <div class="card" style="padding: 1.25rem;">
+      <p class="card-label">Page Layout Wireframe</p>
+      <div class="wireframe">
+        <div class="wf-browser-chrome">
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-url-bar"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-sidebar">
+            <div class="wf-nav-logo"></div>
+            <div class="wf-nav-item active" style="width:70%"></div>
+            <div class="wf-nav-item" style="width:60%"></div>
+            <div class="wf-nav-item" style="width:50%"></div>
+            <div class="wf-nav-item" style="width:65%"></div>
+            <div style="flex:1"></div>
+            <div class="wf-nav-item" style="width:55%;opacity:0.12"></div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div style="height:8px;"></div>
+              <div class="wf-body-line" style="width:90%"></div>
+              <div class="wf-body-line" style="width:75%"></div>
+              <div class="wf-tags">
+                <div class="wf-badge" style="width:60px"></div>
+                <div class="wf-badge" style="width:70px"></div>
+                <div class="wf-badge" style="width:50px"></div>
+              </div>
+            </div>
+            <div class="wf-card-grid">
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════
+       OPTION B — MONOCHROME POP
+  ════════════════════════════════════════ -->
+  <section class="option" id="option-b">
+
+    <div class="option-header">
+      <span class="option-badge">Option B</span>
+      <div class="option-header-text">
+        <h2>Monochrome Pop</h2>
+        <p>Clean white-and-ink canvas with a single electric orange accent. Swiss editorial precision with expressive personality. Like a zine designed by a systems thinker.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Colors -->
+      <div class="card">
+        <p class="card-label">Color Palette</p>
+        <div class="swatches">
+          <div class="swatch b-white">
+            <span class="swatch-name">White</span>
+            <span class="swatch-hex">#FFFFFF</span>
+          </div>
+          <div class="swatch b-off">
+            <span class="swatch-name">Off-white</span>
+            <span class="swatch-hex">#F4F2EE</span>
+          </div>
+          <div class="swatch b-ink">
+            <span class="swatch-name">Ink</span>
+            <span class="swatch-hex">#2C2C2C</span>
+          </div>
+          <div class="swatch b-black">
+            <span class="swatch-name">Black</span>
+            <span class="swatch-hex">#0A0A0A</span>
+          </div>
+          <div class="swatch b-accent">
+            <span class="swatch-name">Orange</span>
+            <span class="swatch-hex">#FF5C00</span>
+          </div>
+          <div class="swatch b-accent-light">
+            <span class="swatch-name">Tint</span>
+            <span class="swatch-hex">#FFF0E8</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card type-card">
+        <p class="card-label">Typography</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <span class="type-meta">Display — Space Grotesk 700</span>
+            <span class="type-h1">Work &amp; Play</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Heading — Space Grotesk 600</span>
+            <span class="type-h2">A creative's catalog</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Body — DM Sans 400</span>
+            <span class="type-body">Designer, developer, maker of things. Building at the intersection of craft and code.</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Label — IBM Plex Mono 400</span>
+            <span class="type-mono">projects · writing · about</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="card comp-card">
+        <p class="card-label">UI Components</p>
+        <div class="component-grid">
+          <div>
+            <p class="component-label">Navigation</p>
+            <div class="nav-b">
+              <div class="nav-b-item active">Projects</div>
+              <div class="nav-b-item">Writing</div>
+              <div class="nav-b-item">About</div>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Buttons</p>
+            <div class="flex-row">
+              <button class="btn-b-primary">View Work</button>
+              <button class="btn-b-accent">Get in Touch</button>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Tags &amp; Labels</p>
+            <div class="flex-row">
+              <span class="tag-b">Design</span>
+              <span class="tag-b">Dev</span>
+              <span class="tag-b">2026</span>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Project Card</p>
+            <div class="card-b-preview">
+              <div class="card-b-img"><span>T.</span></div>
+              <p class="card-b-title">Project Name</p>
+              <p class="card-b-desc">A short description of the work and what makes it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Wireframe -->
+    <div class="card" style="padding: 1.25rem;">
+      <p class="card-label">Page Layout Wireframe</p>
+      <div class="wireframe">
+        <div class="wf-browser-chrome">
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-url-bar"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-sidebar">
+            <div class="wf-nav-logo"></div>
+            <div class="wf-nav-item active" style="width:70%"></div>
+            <div class="wf-nav-item" style="width:60%"></div>
+            <div class="wf-nav-item" style="width:50%"></div>
+            <div class="wf-nav-item" style="width:65%"></div>
+            <div style="flex:1"></div>
+            <div class="wf-nav-item" style="width:55%;opacity:0.12"></div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div style="height:8px;"></div>
+              <div class="wf-body-line" style="width:90%"></div>
+              <div class="wf-body-line" style="width:75%"></div>
+              <div class="wf-tags">
+                <div class="wf-badge" style="width:60px"></div>
+                <div class="wf-badge" style="width:70px"></div>
+                <div class="wf-badge" style="width:50px"></div>
+              </div>
+            </div>
+            <div class="wf-card-grid">
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════
+       OPTION C — NEON PLAYGROUND
+  ════════════════════════════════════════ -->
+  <section class="option" id="option-c">
+
+    <div class="option-header">
+      <span class="option-badge">Option C</span>
+      <div class="option-header-text">
+        <h2>Neon Playground</h2>
+        <p>Deep midnight base with amber warmth and teal electricity. Bold, experimental, developer-artsy. Feels like you built it, broke it, and made it beautiful — on purpose.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Colors -->
+      <div class="card">
+        <p class="card-label">Color Palette</p>
+        <div class="swatches">
+          <div class="swatch c-bg">
+            <span class="swatch-name">Midnight</span>
+            <span class="swatch-hex">#030A12</span>
+          </div>
+          <div class="swatch c-surface">
+            <span class="swatch-name">Surface</span>
+            <span class="swatch-hex">#0D1F2D</span>
+          </div>
+          <div class="swatch c-amber">
+            <span class="swatch-name">Amber</span>
+            <span class="swatch-hex">#FFAB00</span>
+          </div>
+          <div class="swatch c-teal">
+            <span class="swatch-name">Teal</span>
+            <span class="swatch-hex">#00E5A0</span>
+          </div>
+          <div class="swatch c-text">
+            <span class="swatch-name">Text</span>
+            <span class="swatch-hex">#E8F0F8</span>
+          </div>
+          <div class="swatch c-muted">
+            <span class="swatch-name">Muted</span>
+            <span class="swatch-hex">#3A5068</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card type-card">
+        <p class="card-label">Typography</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <span class="type-meta">Display — Syne 800</span>
+            <span class="type-h1">Work &amp; Play</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Heading — Syne 600</span>
+            <span class="type-h2">A creative's catalog</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Body — IBM Plex Mono 400</span>
+            <span class="type-body">Designer, developer, maker of things. Building at the intersection of craft and code.</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Label — IBM Plex Mono 300</span>
+            <span class="type-mono">projects · writing · about</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="card comp-card">
+        <p class="card-label">UI Components</p>
+        <div class="component-grid">
+          <div>
+            <p class="component-label">Navigation</p>
+            <div class="nav-c">
+              <div class="nav-c-item active"><span class="dot"></span>Projects</div>
+              <div class="nav-c-item"><span class="dot"></span>Writing</div>
+              <div class="nav-c-item"><span class="dot"></span>About</div>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Buttons</p>
+            <div class="flex-row">
+              <button class="btn-c-primary">View Work</button>
+              <button class="btn-c-ghost">Get in Touch</button>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Tags &amp; Labels</p>
+            <div class="flex-row">
+              <span class="tag-c">Design</span>
+              <span class="tag-c">Dev</span>
+              <span class="tag-c">2026</span>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Project Card</p>
+            <div class="card-c-preview">
+              <div class="card-c-img"><span>T.</span></div>
+              <p class="card-c-title">Project Name</p>
+              <p class="card-c-desc">A short description of the work and what makes it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Wireframe -->
+    <div class="card" style="padding: 1.25rem;">
+      <p class="card-label">Page Layout Wireframe</p>
+      <div class="wireframe">
+        <div class="wf-browser-chrome">
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-url-bar"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-sidebar">
+            <div class="wf-nav-logo"></div>
+            <div class="wf-nav-item active" style="width:70%"></div>
+            <div class="wf-nav-item" style="width:60%"></div>
+            <div class="wf-nav-item" style="width:50%"></div>
+            <div class="wf-nav-item" style="width:65%"></div>
+            <div style="flex:1"></div>
+            <div class="wf-nav-item" style="width:55%;opacity:0.12"></div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div style="height:8px;"></div>
+              <div class="wf-body-line" style="width:90%"></div>
+              <div class="wf-body-line" style="width:75%"></div>
+              <div class="wf-tags">
+                <div class="wf-badge" style="width:60px"></div>
+                <div class="wf-badge" style="width:70px"></div>
+                <div class="wf-badge" style="width:50px"></div>
+              </div>
+            </div>
+            <div class="wf-card-grid">
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════
+       OPTION D — CORPUS DIGITALIS
+  ════════════════════════════════════════ -->
+  <section class="option" id="option-d">
+
+    <div class="option-header">
+      <span class="option-badge">Option D</span>
+      <div class="option-header-text">
+        <h2>Corpus Digitalis</h2>
+        <p>Void-purple darkness, electric violet neon, old-world serif meet cold terminal mono. A scholar's research terminal in a flooded server room, 2047. Dark academia meets cyberpunk — not despite the decay, because of it.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Colors -->
+      <div class="card">
+        <p class="card-label">Color Palette</p>
+        <div class="swatches">
+          <div class="swatch d-void">
+            <span class="swatch-name">Void</span>
+            <span class="swatch-hex">#060E09</span>
+          </div>
+          <div class="swatch d-tomb">
+            <span class="swatch-name">Tomb</span>
+            <span class="swatch-hex">#091A0F</span>
+          </div>
+          <div class="swatch d-emerald">
+            <span class="swatch-name">Emerald</span>
+            <span class="swatch-hex">#00E87A</span>
+          </div>
+          <div class="swatch d-teal">
+            <span class="swatch-name">Deep Teal</span>
+            <span class="swatch-hex">#00C9B1</span>
+          </div>
+          <div class="swatch d-parchment">
+            <span class="swatch-name">Parchment</span>
+            <span class="swatch-hex">#E4F5EC</span>
+          </div>
+          <div class="swatch d-body">
+            <span class="swatch-name">Fern</span>
+            <span class="swatch-hex">#60B080</span>
+          </div>
+          <div class="swatch d-nav">
+            <span class="swatch-name">Moss</span>
+            <span class="swatch-hex">#4E9668</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card type-card">
+        <p class="card-label">Typography</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <span class="type-meta">Display — Playfair Display 900 Italic</span>
+            <span class="type-h1">Work &amp; Play</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Heading — Cormorant Garamond 300 Italic</span>
+            <span class="type-h2">A creative's catalog</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Body — IBM Plex Mono 400</span>
+            <span class="type-body">designer. developer. maker of things. building at the intersection of craft and code.</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Label — IBM Plex Mono 400 · Phosphor</span>
+            <span class="type-mono">projects · writing · about</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="card comp-card">
+        <p class="card-label">UI Components</p>
+        <div class="component-grid">
+          <div>
+            <p class="component-label">Navigation</p>
+            <div class="nav-d">
+              <div class="nav-d-item active"><span class="dot"></span>Projects</div>
+              <div class="nav-d-item"><span class="dot"></span>Writing</div>
+              <div class="nav-d-item"><span class="dot"></span>About</div>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Buttons</p>
+            <div class="flex-row">
+              <button class="btn-d-primary">View Work</button>
+              <button class="btn-d-ghost">Get in Touch</button>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Tags &amp; Labels</p>
+            <div class="flex-row">
+              <span class="tag-d">Design</span>
+              <span class="tag-d">Dev</span>
+              <span class="tag-d">2047</span>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Project Card</p>
+            <div class="card-d-preview">
+              <div class="card-d-img"><span>T.</span></div>
+              <p class="card-d-title">Project Name</p>
+              <p class="card-d-desc">// a short description of the work<br>// and what makes it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Wireframe -->
+    <div class="card" style="padding: 1.25rem;">
+      <p class="card-label">Page Layout Wireframe</p>
+      <div class="wireframe">
+        <div class="wf-browser-chrome">
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-url-bar"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-sidebar">
+            <div class="wf-nav-logo"></div>
+            <div class="wf-nav-item active" style="width:70%"></div>
+            <div class="wf-nav-item" style="width:60%"></div>
+            <div class="wf-nav-item" style="width:50%"></div>
+            <div class="wf-nav-item" style="width:65%"></div>
+            <div style="flex:1"></div>
+            <div class="wf-nav-item" style="width:55%;opacity:0.12"></div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div style="height:8px;"></div>
+              <div class="wf-body-line" style="width:90%"></div>
+              <div class="wf-body-line" style="width:75%"></div>
+              <div class="wf-tags">
+                <div class="wf-badge" style="width:60px"></div>
+                <div class="wf-badge" style="width:70px"></div>
+                <div class="wf-badge" style="width:50px"></div>
+              </div>
+            </div>
+            <div class="wf-card-grid">
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="section-divider"></div>
+
+
+  <!-- ═══════════════════════════════════════
+       OPTION E — NEON PLAYGROUND II
+  ════════════════════════════════════════ -->
+  <section class="option" id="option-e">
+
+    <div class="option-header">
+      <div class="flex-col" style="gap:0.4rem;">
+        <span class="option-badge">Option E</span>
+        <span class="chosen-badge">✓ Chosen</span>
+      </div>
+      <div class="option-header-text">
+        <h2>Neon Playground II</h2>
+        <p>Same midnight palette and neon energy as Option C — amber warmth, teal electricity — but with Space Grotesk's geometric weight replacing Syne. Tighter, grounded, slightly more systematic.</p>
+      </div>
+    </div>
+
+    <div class="grid-3">
+
+      <!-- Colors -->
+      <div class="card">
+        <p class="card-label">Color Palette</p>
+        <div class="swatches">
+          <div class="swatch e-bg">
+            <span class="swatch-name">Midnight</span>
+            <span class="swatch-hex">#030A12</span>
+          </div>
+          <div class="swatch e-surface">
+            <span class="swatch-name">Surface</span>
+            <span class="swatch-hex">#0D1F2D</span>
+          </div>
+          <div class="swatch e-amber">
+            <span class="swatch-name">Neon Green</span>
+            <span class="swatch-hex">#39FF14</span>
+          </div>
+          <div class="swatch e-teal">
+            <span class="swatch-name">Teal</span>
+            <span class="swatch-hex">#00E5A0</span>
+          </div>
+          <div class="swatch e-text">
+            <span class="swatch-name">Text</span>
+            <span class="swatch-hex">#E8F0F8</span>
+          </div>
+          <div class="swatch e-muted">
+            <span class="swatch-name">Muted</span>
+            <span class="swatch-hex">#7A9AB5</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card type-card">
+        <p class="card-label">Typography</p>
+        <div class="type-specimen">
+          <div class="type-row">
+            <span class="type-meta">Display — Bricolage Grotesque 700</span>
+            <span class="type-h1">Work &amp; Play</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Heading — Space Grotesk 600</span>
+            <span class="type-h2">A creative's catalog</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Body — IBM Plex Mono 400</span>
+            <span class="type-body">Designer, developer, maker of things. Building at the intersection of craft and code.</span>
+          </div>
+          <div class="type-row">
+            <span class="type-meta">Label — IBM Plex Mono 400</span>
+            <span class="type-mono">projects · writing · about</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="card comp-card">
+        <p class="card-label">UI Components</p>
+        <div class="component-grid">
+          <div>
+            <p class="component-label">Navigation</p>
+            <div class="nav-e">
+              <div class="nav-e-item active"><span class="dot"></span>Projects</div>
+              <div class="nav-e-item"><span class="dot"></span>Writing</div>
+              <div class="nav-e-item"><span class="dot"></span>About</div>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Buttons</p>
+            <div class="flex-row">
+              <button class="btn-e-primary">View Work</button>
+              <button class="btn-e-ghost">Get in Touch</button>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Tags &amp; Labels</p>
+            <div class="flex-row">
+              <span class="tag-e">Design</span>
+              <span class="tag-e">Dev</span>
+              <span class="tag-e">2026</span>
+            </div>
+          </div>
+          <div>
+            <p class="component-label">Project Card</p>
+            <div class="card-e-preview">
+              <div class="card-e-img"><span>T.</span></div>
+              <p class="card-e-title">Project Name</p>
+              <p class="card-e-desc">A short description of the work and what makes it interesting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- Flag Card -->
+    <div class="card comp-card" style="margin-top: 1.5rem;">
+      <p class="card-label">Project Card — Flag Layout</p>
+      <div class="flag-list">
+
+        <div class="card-e-flag">
+          <div class="card-e-flag-img"><span>T.</span></div>
+          <div class="card-e-flag-body">
+            <p class="card-e-flag-meta">Design · 2026</p>
+            <p class="card-e-flag-title">Project Name</p>
+            <p class="card-e-flag-desc">A short description of the work and what makes it interesting to the world.</p>
+          </div>
+        </div>
+
+        <div class="card-e-flag">
+          <div class="card-e-flag-img"><span>T.</span></div>
+          <div class="card-e-flag-body">
+            <p class="card-e-flag-meta">Dev · 2025</p>
+            <p class="card-e-flag-title">Another Project</p>
+            <p class="card-e-flag-desc">Building something at the intersection of craft and code, with care.</p>
+          </div>
+        </div>
+
+        <div class="card-e-flag">
+          <div class="card-e-flag-img"><span>T.</span></div>
+          <div class="card-e-flag-body">
+            <p class="card-e-flag-meta">Writing · 2024</p>
+            <p class="card-e-flag-title">A Third Thing</p>
+            <p class="card-e-flag-desc">Thoughts on systems, aesthetics, and the spaces where they overlap.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Wireframe -->
+    <div class="card" style="padding: 1.25rem;">
+      <p class="card-label">Page Layout Wireframe</p>
+      <div class="wireframe">
+        <div class="wf-browser-chrome">
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-dot"></div>
+          <div class="wf-url-bar"></div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-sidebar">
+            <div class="wf-nav-logo"></div>
+            <div class="wf-nav-item active" style="width:70%"></div>
+            <div class="wf-nav-item" style="width:60%"></div>
+            <div class="wf-nav-item" style="width:50%"></div>
+            <div class="wf-nav-item" style="width:65%"></div>
+            <div style="flex:1"></div>
+            <div class="wf-nav-item" style="width:55%;opacity:0.12"></div>
+          </div>
+          <div class="wf-main">
+            <div class="wf-hero-text">
+              <div class="wf-h1"></div>
+              <div class="wf-h1-2"></div>
+              <div style="height:8px;"></div>
+              <div class="wf-body-line" style="width:90%"></div>
+              <div class="wf-body-line" style="width:75%"></div>
+              <div class="wf-tags">
+                <div class="wf-badge" style="width:60px"></div>
+                <div class="wf-badge" style="width:70px"></div>
+                <div class="wf-badge" style="width:50px"></div>
+              </div>
+            </div>
+            <div class="wf-card-grid">
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+              <div class="wf-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Font Explorer -->
+    <div class="card" style="padding: 1.25rem; margin-top: 1.5rem;">
+      <p class="card-label">Display Font Alternatives</p>
+      <div class="font-explore-card">
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Unbounded 700</span>
+            <span class="font-explore-heading-label">+ DM Mono 400</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Unbounded',sans-serif;letter-spacing:-0.03em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'DM Mono',monospace;font-weight:400;">A creative's catalog</span>
+          </div>
+        </div>
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Chakra Petch 700</span>
+            <span class="font-explore-heading-label">+ IBM Plex Mono 400</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Chakra Petch',sans-serif;font-weight:700;letter-spacing:-0.01em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'IBM Plex Mono',monospace;font-weight:400;">A creative's catalog</span>
+          </div>
+        </div>
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Outfit 700</span>
+            <span class="font-explore-heading-label">+ IBM Plex Mono 400</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Outfit',sans-serif;letter-spacing:-0.03em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'IBM Plex Mono',monospace;font-weight:400;">A creative's catalog</span>
+          </div>
+        </div>
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Oxanium 700</span>
+            <span class="font-explore-heading-label">+ DM Mono 400</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Oxanium',sans-serif;font-weight:700;letter-spacing:-0.01em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'DM Mono',monospace;font-weight:400;">A creative's catalog</span>
+          </div>
+        </div>
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Orbitron 700</span>
+            <span class="font-explore-heading-label">+ Space Grotesk 500</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:-0.01em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'Space Grotesk',sans-serif;font-weight:500;letter-spacing:-0.01em;">A creative's catalog</span>
+          </div>
+        </div>
+
+        <div class="font-explore-item">
+          <div class="font-explore-meta">
+            <span class="font-explore-display-label">Bricolage Grotesque 700</span>
+            <span class="font-explore-heading-label">+ Space Mono 400</span>
+          </div>
+          <div class="font-explore-sample">
+            <span class="fe-display" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-0.03em;">Work &amp; Play</span>
+            <span class="fe-heading" style="font-family:'Space Mono',monospace;font-weight:400;">A creative's catalog</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="page-footer">
+    thalida.com · style exploration · temporary file · delete when done
+  </footer>
+
+</body>
+</html>

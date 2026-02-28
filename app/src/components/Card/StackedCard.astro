@@ -1,0 +1,46 @@
+---
+import type { NavItem } from "@lib/nav-data";
+import { formatDate, isValidDate } from "@lib/nav-data";
+import CardCategory from "./CardCategory.astro";
+import CardCover from "./CardCover.astro";
+import CardTags from "./CardTags.astro";
+
+interface Props {
+  item: NavItem;
+}
+
+const { item } = Astro.props;
+
+const href = `/${item.collection}/post/${item.id}`;
+---
+
+<a href={href} class="group item-card flex flex-col overflow-hidden">
+  <div class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm">
+    <CardCover
+      src={item.coverImageSrc}
+      alt={item.coverImageAlt ?? item.title}
+      title={item.title}
+      imgClass="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      placeholderClass="w-full h-full relative"
+    />
+  </div>
+  <div class="flex flex-col gap-1 p-3 flex-1">
+    <div class="flex items-center gap-2">
+      <CardCategory category={item.category} />
+      {
+        isValidDate(item.publishedOn) && (
+          <span class="text-muted/40 text-2xs ml-auto">{formatDate(item.publishedOn)}</span>
+        )
+      }
+    </div>
+    <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
+    {
+      item.description && (
+        <p class="m-0 font-body text-muted leading-relaxed text-xs line-clamp-2">{item.description}</p>
+      )
+    }
+    <div class="mt-auto pt-2">
+      <CardTags tags={item.tags} />
+    </div>
+  </div>
+</a>

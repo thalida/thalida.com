@@ -1,0 +1,20 @@
+---
+import type { NavItem } from "@lib/nav-data";
+import type { CardVariant } from "../../content.config";
+import StackedCard from "./StackedCard.astro";
+import LinkCard from "./LinkCard.astro";
+import CompactCard from "./CompactCard.astro";
+import GalleryCard from "./GalleryCard.astro";
+
+interface Props {
+  variant?: CardVariant;
+  item: NavItem;
+}
+
+const { variant = "stacked", item } = Astro.props;
+---
+
+{variant === "link" && <LinkCard item={item} />}
+{variant === "compact" && <CompactCard item={item} />}
+{variant === "gallery" && <GalleryCard item={item} />}
+{variant === "stacked" && <StackedCard item={item} />}

@@ -1,0 +1,12 @@
+---
+import { COLLECTION_NAMES } from "@/content.config";
+
+export function getStaticPaths() {
+  return COLLECTION_NAMES.map((name) => ({
+    params: { collection: name },
+  }));
+}
+
+const { collection } = Astro.params;
+return Astro.redirect(`/${collection}/`);
+---

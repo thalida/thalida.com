@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --color-midnight: #030a12;
+  --color-surface: #0d1f2d;
+  --color-neon: #39ff14;
+  --color-teal: #00e5a0;
+  --color-text: #e8f0f8;
+  --color-muted: #7a9ab5;
+  --color-border: #152535;
+  --color-surface-active: #0a1826;
+
+  --font-display: "Bricolage Grotesque", sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Mono", monospace;
+
+  --text-2xs: 0.65rem;
+  --text-display: clamp(2.5rem, 6vw, 4rem);
+  --text-display-lg: clamp(2.5rem, 6vw, 4.8rem);
+  --text-display-sm: clamp(2rem, 5vw, 3rem);
+  --text-subtitle: clamp(1rem, 2vw, 1.4rem);
+
+  --leading-display: 0.95;
+
+  --shadow-card-hover: 0 8px 24px rgba(57, 255, 20, 0.06);
+  --shadow-dialog: 0 0 0 1px var(--color-border), 0 16px 40px rgba(0, 0, 0, 0.4);
+}

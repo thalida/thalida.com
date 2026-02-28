@@ -1,0 +1,26 @@
+---
+import { pickColor, tileSvg } from "./card-utils";
+
+interface Props {
+  src?: string;
+  alt: string;
+  title: string;
+  imgClass?: string;
+  placeholderClass?: string;
+}
+
+const { src, alt, title, imgClass = "w-full h-full object-cover", placeholderClass = "w-full h-full" } = Astro.props;
+
+const placeholderColor = pickColor(title);
+---
+
+{
+  src ? (
+    <img class={imgClass} src={src} alt={alt} loading="lazy" />
+  ) : (
+    <div
+      class={placeholderClass}
+      style={`background-color: ${placeholderColor}; background-image: ${tileSvg(title)}; background-repeat: repeat;`}
+    />
+  )
+}

@@ -1,0 +1,150 @@
+---
+import { ClientRouter } from "astro:transitions";
+import Chat from "@components/Chat/Chat.astro";
+import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
+import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
+import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
+import { TOOLBAR_NAV_ORDER, getNavData } from "@lib/nav-data";
+import "./BaseLayout.css";
+
+interface Props {
+  title?: string;
+  activePage?: string;
+  activeCollection?: string;
+}
+
+const { title = "thalida", activePage, activeCollection } = Astro.props;
+const navData = await getNavData();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body>
+    <div
+      class="flex items-center justify-between fixed top-0 left-0 right-0 lg:right-80 h-12 px-3 bg-surface border-b border-border z-60 xl:hidden"
+    >
+      <a href="/" class="font-display font-bold text-base text-neon no-underline">thalida</a>
+      <nav class="flex xl:hidden items-center gap-1 overflow-x-auto" aria-label="Navigation">
+        {
+          TOOLBAR_NAV_ORDER.map((entry) =>
+            entry.type === "page" ? (
+              <a
+                href={`/${entry.page}`}
+                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-white"
+                data-active={activePage === entry.page ? "true" : undefined}
+              >
+                {entry.label}
+              </a>
+            ) : navData[entry.collection] ? (
+              <a
+                href={`/${entry.collection}`}
+                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-white"
+                data-active={activeCollection === entry.collection ? "true" : undefined}
+              >
+                {navData[entry.collection].title}
+              </a>
+            ) : null,
+          )
+        }
+        <button
+          id="toolbar-search-btn"
+          class="bg-transparent border-none p-2 text-muted hover:text-neon"
+          type="button"
+          aria-label="Search"
+        >
+          <SearchIcon class="text-sm" />
+        </button>
+        <button
+          id="js-toolbar-menu-btn"
+          class="bg-transparent border-none p-2 text-muted hover:text-neon"
+          type="button"
+          aria-label="Open navigation"
+        >
+          <i class="fa-solid fa-bars" aria-hidden="true"></i>
+        </button>
+      </nav>
+    </div>
+    <div
+      id="nav-backdrop"
+      class="hidden fixed top-12 left-0 right-0 lg:right-80 h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs xl:hidden"
+    >
+    </div>
+    <div id="chat-overlay-backdrop" class="hidden fixed inset-0 z-40 bg-midnight/70 backdrop-blur-xs lg:hidden"></div>
+    <div
+      id="nav-panel"
+      class="fixed top-12 left-0 right-0 lg:right-80 max-h-[calc(100svh-3rem)] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-[calc(100%+4px)] transition-[translate] duration-300 ease-in-out xl:hidden"
+    >
+      <ProjectTree activePage={activePage} activeCollection={activeCollection} />
+    </div>
+    <div class="flex flex-col lg:flex-row w-screen h-svh">
+      <ProjectTree activePage={activePage} activeCollection={activeCollection} />
+      <div
+        class="grow shrink basis-0 min-w-0 pt-16 pb-4 px-4 sm:px-6 sm:pb-6 xl:pt-6 xl:pb-6 overflow-y-auto overflow-x-hidden"
+      >
+        <slot />
+      </div>
+      <Chat />
+    </div>
+    <button
+      id="js-mobile-chat-fab"
+      class="fixed bottom-4 right-4 z-30 w-12 h-12 rounded-full bg-teal text-midnight flex items-center justify-center shadow-lg lg:hidden hover:bg-neon"
+      type="button"
+      aria-label="Open chat"
+    >
+      <i class="fa-regular fa-comment text-xl" aria-hidden="true"></i>
+    </button>
+    <div
+      id="chat-overlay"
+      class="fixed bottom-0 left-0 w-full h-[85vh] bg-midnight border-t border-border z-50 translate-y-full transition-[translate] duration-300 ease-in-out lg:hidden flex flex-col px-4 pt-2 pb-4"
+    >
+      <div id="js-chat-overlay-content" class="flex flex-col flex-1 min-h-0 font-body gap-2"></div>
+    </div>
+    <CommandPalette />
+    <script src="./BaseLayout.ts"></script>
+  </body>
+</html>
+
+<style is:global>
+  #nav-backdrop.visible,
+  #chat-overlay-backdrop.visible {
+    display: block;
+  }
+
+  #nav-panel.open {
+    translate: 0;
+  }
+
+  #chat-overlay.open {
+    translate: 0;
+  }
+
+  #chat-overlay #chat-overlay-close {
+    display: block;
+    background: transparent;
+    border: none;
+    padding: 0.25rem;
+    color: var(--color-muted);
+  }
+
+  #chat-overlay #chat-overlay-close:hover {
+    color: var(--color-neon);
+  }
+</style>

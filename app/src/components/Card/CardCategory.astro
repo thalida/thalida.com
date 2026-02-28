@@ -1,0 +1,15 @@
+---
+import { categoryDisplay } from "./card-utils";
+
+interface Props {
+  category?: string;
+}
+
+const { category } = Astro.props;
+---
+
+{
+  category && (
+    <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">{categoryDisplay(category)}</p>
+  )
+}

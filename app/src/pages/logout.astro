@@ -1,0 +1,36 @@
+---
+const LS_ADMIN_TOKEN_KEY = "admin_token";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>logging out&hellip; &middot; thalida</title>
+  </head>
+  <body>
+    <p>Logging out&hellip;</p>
+
+    <script is:inline define:vars={{ LS_ADMIN_TOKEN_KEY }}>
+      localStorage.removeItem(LS_ADMIN_TOKEN_KEY);
+      window.location.href = "/";
+    </script>
+
+    <noscript>
+      <p>JavaScript is required to log out. <a href="/">Go back</a>.</p>
+    </noscript>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    background: #030a12;
+    color: #e8f0f8;
+    font-family: "IBM Plex Mono", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+</style>
