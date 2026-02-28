@@ -43,11 +43,10 @@ const navData = await getNavData();
   </head>
   <body>
     <div
-      id="toolbar"
       class="flex items-center justify-between fixed top-0 left-0 right-0 lg:right-80 h-12 px-3 bg-surface border-b border-border z-60 xl:hidden"
     >
-      <a href="/" id="toolbar-title" class="font-display font-bold text-base text-neon no-underline">thalida</a>
-      <nav id="toolbar-nav" class="flex xl:hidden items-center gap-1 overflow-x-auto" aria-label="Navigation">
+      <a href="/" class="font-display font-bold text-base text-neon no-underline">thalida</a>
+      <nav class="flex xl:hidden items-center gap-1 overflow-x-auto" aria-label="Navigation">
         {
           TOOLBAR_NAV_ORDER.map((entry) =>
             entry.type === "page" ? (
@@ -70,7 +69,7 @@ const navData = await getNavData();
           )
         }
         <button
-          id="toolbar-menu-btn"
+          id="js-toolbar-menu-btn"
           class="bg-transparent border-none p-2 text-muted hover:text-neon"
           type="button"
           aria-label="Open navigation"
@@ -104,7 +103,7 @@ const navData = await getNavData();
     >
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
     </div>
-    <div id="layout" class="flex flex-col lg:flex-row w-screen h-svh">
+    <div class="flex flex-col lg:flex-row w-screen h-svh">
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
       <div
         id="content-viewer"
@@ -115,7 +114,7 @@ const navData = await getNavData();
       <Chat />
     </div>
     <button
-      id="mobile-chat-fab"
+      id="js-mobile-chat-fab"
       class="fixed bottom-4 right-4 z-30 w-12 h-12 rounded-full bg-neon text-midnight flex items-center justify-center shadow-lg lg:hidden hover:bg-teal"
       type="button"
       aria-label="Open chat"
@@ -137,7 +136,7 @@ const navData = await getNavData();
       id="chat-overlay"
       class="fixed bottom-0 left-0 w-full h-[85vh] bg-midnight border-t border-border z-50 translate-y-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col px-4 pt-2 pb-4"
     >
-      <div id="chat-overlay-content" class="flex flex-col flex-1 min-h-0 font-body gap-2"></div>
+      <div id="js-chat-overlay-content" class="flex flex-col flex-1 min-h-0 font-body gap-2"></div>
     </div>
     <CommandPalette />
     <script src="./BaseLayout.ts"></script>

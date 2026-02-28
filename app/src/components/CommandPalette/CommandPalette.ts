@@ -25,14 +25,14 @@ const MAX_PALETTE_RESULTS = 15;
 
 function initCommandPalette() {
   const overlay = document.getElementById("command-palette");
-  const input = document.getElementById("cp-input") as HTMLInputElement | null;
+  const input = document.getElementById("js-cp-input") as HTMLInputElement | null;
   const resultsContainer = document.getElementById("cp-results");
-  const collectionSelect = document.getElementById("cp-collection-select") as HTMLSelectElement | null;
+  const collectionSelect = document.getElementById("js-cp-collection-select") as HTMLSelectElement | null;
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
-  const backdrop = document.getElementById("cp-backdrop");
-  const dialog = document.getElementById("cp-dialog");
+  const backdrop = document.getElementById("js-cp-backdrop");
+  const dialog = document.getElementById("js-cp-dialog");
 
   if (!backdrop || !dialog) return;
 
@@ -219,7 +219,7 @@ function initCommandPalette() {
   });
 
   // Sidebar search button click
-  const navSearchBtn = document.getElementById("nav-search-btn");
+  const navSearchBtn = document.getElementById("js-nav-search-btn");
   if (navSearchBtn) {
     navSearchBtn.addEventListener("click", () => {
       if (!isOpen()) {

@@ -22,7 +22,7 @@ const siteAge = new Date().getFullYear() - 2007;
     <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
     <div class="max-w-lg">
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
-        <span id="greeting">Hey</span>, I'm&nbsp;Thalida.
+        <span id="js-greeting">Hey</span>, I'm&nbsp;Thalida.
       </h1>
       <p class="m-0 mt-4 font-heading text-muted leading-relaxed text-subtitle tracking-tight">
         Making weird and wonderful things on the internet since 2007.
@@ -145,7 +145,7 @@ const siteAge = new Date().getFullYear() - 2007;
     else if (hour < 21) greeting = "Good Evening";
     else greeting = "Good Night";
 
-    const el = document.getElementById("greeting");
+    const el = document.getElementById("js-greeting");
     if (el) el.textContent = greeting;
   }
 

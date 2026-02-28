@@ -1,12 +1,12 @@
 function initResponsiveUI() {
-  const menuBtn = document.getElementById("toolbar-menu-btn");
+  const menuBtn = document.getElementById("js-toolbar-menu-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
-  const chatPanel = document.getElementById("chat-panel");
-  const chatFab = document.getElementById("mobile-chat-fab");
+  const chatPanel = document.getElementById("js-chat-panel");
+  const chatFab = document.getElementById("js-mobile-chat-fab");
   const chatOverlay = document.getElementById("chat-overlay");
   const chatOverlayBackdrop = document.getElementById("chat-overlay-backdrop");
-  const chatOverlayContent = document.getElementById("chat-overlay-content");
+  const chatOverlayContent = document.getElementById("js-chat-overlay-content");
 
   function closeNav() {
     navPanel?.classList.remove("open");

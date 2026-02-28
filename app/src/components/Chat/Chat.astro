@@ -3,17 +3,18 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 ---
 
 <aside
-  id="chat-panel"
+  id="js-chat-panel"
   class="hidden lg:flex lg:flex-col lg:border-l lg:border-border lg:p-4 font-body gap-1 overflow-y-auto overflow-x-hidden lg:shrink-0 lg:grow-0 lg:w-80 lg:min-w-80"
   transition:persist="chat"
 >
-  <div id="chat-header" class="flex flex-col gap-0.5 m-0">
-    <div id="chat-header-top" class="flex items-center gap-1.5">
+  <div class="flex flex-col gap-0.5 m-0">
+    <div class="flex items-center gap-1.5">
       <h2 class="m-0 font-heading text-base font-semibold text-teal tracking-tight">Chat</h2>
-      <span id="chat-status-dot" class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"
-      ></span>
-      <span id="chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
-      <span id="chat-user-count" class="text-xs text-muted" title="0 viewers"
+      <span
+        id="js-chat-status-dot"
+        class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"></span>
+      <span id="js-chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
+      <span id="js-chat-user-count" class="text-xs text-muted" title="0 viewers"
         ><i class="fa-solid fa-eye"></i> 0 viewers</span
       >
       <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
@@ -32,7 +33,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         </svg>
       </button>
     </div>
-    <div id="chat-username-bar" class="flex items-center gap-1.5">
+    <div class="flex items-center gap-1.5">
       <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted"
         >chatting as</label
       >
@@ -49,25 +50,25 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
     </div>
   </div>
 
-  <div id="chat-room" class="flex flex-col gap-2 flex-1 min-h-0">
-    <div id="chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
-    <span id="chat-context" hidden>
+  <div class="flex flex-col gap-2 flex-1 min-h-0">
+    <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
+    <span id="js-chat-context" hidden>
       about
-      <select id="chat-context-select">
+      <select id="js-chat-context-select">
         <option value="page"></option>
         <option value="general">general</option>
       </select>
     </span>
-    <div id="chat-input-bar" class="flex items-center gap-1">
+    <div class="flex items-center gap-1">
       <input
-        id="chat-input"
+        id="js-chat-input"
         class="flex-1 py-2 px-3 border border-border rounded-md text-sm font-body bg-midnight text-text min-w-0 focus:outline-none focus:border-teal"
         type="text"
         placeholder="Type a message..."
         autocomplete="off"
       />
       <button
-        id="chat-send"
+        id="js-chat-send"
         class="p-2 border-none bg-transparent text-muted text-sm hover:text-neon transition-colors"
         type="button"><i class="fa-solid fa-paper-plane"></i></button
       >

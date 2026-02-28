@@ -71,14 +71,14 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let currentContext: MessageContext | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
-const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
-const inputEl = document.getElementById("chat-input") as HTMLInputElement;
-const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
-const statusDotEl = document.getElementById("chat-status-dot") as HTMLSpanElement;
-const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
-const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
-const contextEl = document.getElementById("chat-context") as HTMLSpanElement;
-const contextSelect = document.getElementById("chat-context-select") as HTMLSelectElement;
+const messagesEl = document.getElementById("js-chat-messages") as HTMLDivElement;
+const inputEl = document.getElementById("js-chat-input") as HTMLInputElement;
+const sendBtn = document.getElementById("js-chat-send") as HTMLButtonElement;
+const statusDotEl = document.getElementById("js-chat-status-dot") as HTMLSpanElement;
+const ownerStatusEl = document.getElementById("js-chat-owner-status") as HTMLSpanElement;
+const userCountEl = document.getElementById("js-chat-user-count") as HTMLSpanElement;
+const contextEl = document.getElementById("js-chat-context") as HTMLSpanElement;
+const contextSelect = document.getElementById("js-chat-context-select") as HTMLSelectElement;
 
 function getAdminToken(): string | null {
   return localStorage.getItem(LS_ADMIN_TOKEN_KEY);
@@ -303,7 +303,7 @@ usernameInput.addEventListener("blur", () => {
 });
 
 function updateAdminUI(): void {
-  const adminLinks = document.querySelectorAll<HTMLAnchorElement>("#admin-link");
+  const adminLinks = document.querySelectorAll<HTMLAnchorElement>("#js-admin-link");
   for (const link of adminLinks) {
     if (isOwner) {
       link.href = "/logout";
