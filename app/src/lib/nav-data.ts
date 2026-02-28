@@ -33,12 +33,7 @@ export type NavEntry = { type: "page"; page: string; label: string } | { type: "
 export const NAV_ORDER: NavEntry[] = [
   { type: "page", page: "", label: "Home" },
   { type: "page", page: "about", label: "About" },
-  { type: "collection", collection: "projects" },
-  { type: "collection", collection: "guides" },
-  { type: "collection", collection: "gallery" },
-  { type: "collection", collection: "recipes" },
-  { type: "collection", collection: "versions" },
-  { type: "collection", collection: "links" },
+  ...COLLECTION_NAMES.map((name) => ({ type: "collection" as const, collection: name })),
 ];
 
 export const TOOLBAR_NAV_ORDER: NavEntry[] = [

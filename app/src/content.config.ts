@@ -3,7 +3,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { defineCollection, z } from "astro:content";
 import { glob, file } from "astro/loaders";
 
-export const COLLECTION_NAMES = ["projects", "guides", "gallery", "links", "recipes", "versions"] as const;
+export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links"] as const;
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 

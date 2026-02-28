@@ -183,9 +183,9 @@ function initCommandPalette() {
 
     let metaLine = "";
     if (showCollection && catDisplay) {
-      metaLine = `<span class="text-2xs text-muted">${collectionLabel} <span class="text-muted/50">·</span> <span class="text-neon">${escapeHtml(catDisplay)}</span></span>`;
+      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${collectionLabel} <span class="text-muted/50">/</span> ${escapeHtml(catDisplay)}</span>`;
     } else if (showCollection) {
-      metaLine = `<span class="text-2xs text-muted">${collectionLabel}</span>`;
+      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${collectionLabel}</span>`;
     } else if (catDisplay) {
       metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${escapeHtml(catDisplay)}</span>`;
     }
