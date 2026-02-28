@@ -16,5 +16,5 @@
 - [x] date on the right
 - [ ] proper recipe formatting
 - [ ] remove "recipe" tag
-- [ ] fix "tip" in md
-- [ ] add extended md w/ custom items like callouts
+- [x] fix "tip" in md
+- [x] add extended md w/ custom items like callouts
