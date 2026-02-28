@@ -12,105 +12,75 @@ import meRainbow from "@assets/about/me-rainbow.png";
   activePage="about"
   pageContext={{ collection: "page", id: "about", title: "About" }}
 >
-  <article class="about-page">
-    <h2>About</h2>
+  <article class="font-body max-w-3xl mx-auto">
+    <h2 class="m-0 mb-2 font-display font-bold text-neon text-display-sm tracking-tighter leading-none">About</h2>
     <hr />
 
-    <div class="about-photos">
-      <Image src={meMemoji} alt="A Memoji of Thalida" class="about-photo" />
-      <Image src={meHeadshot} alt="A headshot of Thalida" class="about-photo" />
-      <Image src={meAvatar} alt="A cartoon avatar of Thalida" class="about-photo" />
-      <Image src={meRainbow} alt="A rainbow themed image of Thalida" class="about-photo" />
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+      <Image src={meMemoji} alt="A Memoji of Thalida" class="w-full h-auto border border-border rounded-lg" />
+      <Image src={meHeadshot} alt="A headshot of Thalida" class="w-full h-auto border border-border rounded-lg" />
+      <Image src={meAvatar} alt="A cartoon avatar of Thalida" class="w-full h-auto border border-border rounded-lg" />
+      <Image
+        src={meRainbow}
+        alt="A rainbow themed image of Thalida"
+        class="w-full h-auto border border-border rounded-lg"
+      />
     </div>
 
-    <h3>Hey, I'm Thalida!</h3>
-    <p>I'm a queer (pronouns they/she) first generation Trinidadian-American Engineer based in New York.</p>
-    <p>
+    <h3 class="font-heading text-xl font-semibold text-teal mt-6 mb-2 tracking-tight">Hey, I'm Thalida!</h3>
+    <p class="text-text mb-4 leading-relaxed">
+      I'm a queer (pronouns they/she) first generation Trinidadian-American Engineer based in New York.
+    </p>
+    <p class="text-text mb-4 leading-relaxed">
       Over 14 years ago for my 16th birthday I wanted one thing: a domain of my own. I was lucky enough to have a
       supportive mother who gifted me thalida.com, and over the years this site has been the place where I learn, grow,
       and experiment.
     </p>
-    <p>
+    <p class="text-text mb-4 leading-relaxed">
       I use this space to practice and learn, break things and experiment, grow and challenge myself in ways that have
       fewer consequences than messing around on a domain someone else owns. Here I am able to push myself as an
       engineer, designer, and writer. Which is all to say: if it's ever broken, janky, or weird, I'm probably in the
       process of learning something new, and you're coming along for the ride with me! ✨
     </p>
-    <p>If you're interested in connecting:</p>
-    <ul>
-      <li><a href="https://linkedin.com/in/thalida/" target="_blank" rel="noopener">LinkedIn</a></li>
-      <li><a href="https://github.com/thalida" target="_blank" rel="noopener">Github</a></li>
-      <li><a href="mailto:hello@thalida.com">Email</a></li>
+    <p class="text-text mb-4 leading-relaxed">If you're interested in connecting:</p>
+    <ul class="text-text mb-4 pl-4 list-disc">
+      <li class="mb-2 leading-relaxed">
+        <a href="https://linkedin.com/in/thalida/" target="_blank" rel="noopener">LinkedIn</a>
+      </li>
+      <li class="mb-2 leading-relaxed">
+        <a href="https://github.com/thalida" target="_blank" rel="noopener">Github</a>
+      </li>
+      <li class="mb-2 leading-relaxed"><a href="mailto:hello@thalida.com">Email</a></li>
     </ul>
 
     <hr />
 
-    <h3>Career History</h3>
-    <p>
+    <h3 class="font-heading text-xl font-semibold text-teal mt-6 mb-2 tracking-tight">Career History</h3>
+    <p class="text-text mb-4 leading-relaxed">
       I have over 10 years of experience in the tech industry, working in various roles from Product Engineering to
       Engineering Management. My journey has taken me through startups, large corporations, and everything in between.
     </p>
-    <ul>
-      <li>Currently, I'm an Engineering Manager at Zapier on the MCP Team!</li>
-      <li>
+    <ul class="text-text mb-4 pl-4 list-disc">
+      <li class="mb-2 leading-relaxed">Currently, I'm an Engineering Manager at Zapier on the MCP Team!</li>
+      <li class="mb-2 leading-relaxed">
         Previously, I was Co-Founder and CTO of <a href="https://tourus.io">Tourus</a>, a VC-backed mobile-first AI,
         automation, and communication suite for property managers and leasing agents
       </li>
-      <li>
+      <li class="mb-2 leading-relaxed">
         Back in the day, I've worked at <a href="https://webflow.com/">Webflow</a>, <a href="https://www.etsy.com"
           >Etsy</a
         >, and <a href="https://www.okcupid.com/">OkCupid</a> as a Lead Engineer and Senior Engineering Manager
       </li>
-      <li>I also have experience in design and product management</li>
+      <li class="mb-2 leading-relaxed">I also have experience in design and product management</li>
     </ul>
 
     <hr />
 
-    <h3>About this site</h3>
-    <p>
+    <h3 class="font-heading text-xl font-semibold text-teal mt-6 mb-2 tracking-tight">About this site</h3>
+    <p class="text-text mb-4 leading-relaxed">
       This site is built with <a href="https://astro.build">Astro</a> and hosted on <a
         href="https://pages.cloudflare.com">Cloudflare Pages</a
       >.
     </p>
   </article>
 </BaseLayout>
-
-<style>
-  @reference "../layouts/BaseLayout/BaseLayout.css";
-
-  .about-page {
-    @apply font-body max-w-3xl mx-auto;
-  }
-
-  .about-page h2 {
-    @apply m-0 mb-2 font-display font-bold text-neon text-display-sm tracking-tighter leading-none;
-  }
-
-  .about-page h3 {
-    @apply font-heading text-xl font-semibold text-teal mt-6 mb-2 tracking-tight;
-  }
-
-  .about-page p {
-    @apply text-text mb-4 leading-relaxed;
-  }
-
-  .about-page ul {
-    @apply text-text mb-4 pl-4 list-disc;
-  }
-
-  .about-page li {
-    @apply mb-2 leading-relaxed;
-  }
-
-  .about-page a {
-    @apply text-teal hover:text-neon;
-  }
-
-  .about-photo {
-    @apply w-full h-auto border border-border rounded-lg;
-  }
-
-  .about-photos {
-    @apply grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6;
-  }
-</style>
