@@ -52,13 +52,6 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 
   <div class="flex flex-col gap-2 flex-1 min-h-0">
     <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
-    <span id="js-chat-context" hidden>
-      about
-      <select id="js-chat-context-select">
-        <option value="page"></option>
-        <option value="general">general</option>
-      </select>
-    </span>
     <div class="flex items-center gap-1">
       <input
         id="js-chat-input"
