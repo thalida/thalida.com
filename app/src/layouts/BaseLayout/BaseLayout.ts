@@ -1,5 +1,5 @@
 function initResponsiveUI() {
-  const menuBtn = document.getElementById("mobile-menu-btn");
+  const menuBtn = document.getElementById("toolbar-menu-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
   const chatPanel = document.getElementById("chat-panel");
@@ -41,7 +41,7 @@ function initResponsiveUI() {
   }
 
   // Nav slide-down panel toggle
-  menuBtn?.addEventListener("click", () => {
+  function toggleNav() {
     const willOpen = !navPanel?.classList.contains("open");
     closeAll();
     if (willOpen) {
@@ -49,7 +49,9 @@ function initResponsiveUI() {
       navBackdrop?.classList.add("visible");
       document.body.style.overflow = "hidden";
     }
-  });
+  }
+
+  menuBtn?.addEventListener("click", toggleNav);
 
   navBackdrop?.addEventListener("click", closeNav);
 
@@ -73,6 +75,12 @@ function initResponsiveUI() {
   const chatOverlayClose = document.getElementById("chat-overlay-close");
   chatOverlayClose?.addEventListener("click", closeChat);
   chatOverlayBackdrop?.addEventListener("click", closeChat);
+
+  // Close nav panel when resizing past xl breakpoint (sidebar becomes visible)
+  const xlQuery = window.matchMedia("(min-width: 1280px)");
+  xlQuery.addEventListener("change", (e) => {
+    if (e.matches) closeNav();
+  });
 
   // Move chat back to sidebar when resizing past lg breakpoint
   const lgQuery = window.matchMedia("(min-width: 1024px)");

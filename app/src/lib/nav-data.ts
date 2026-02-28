@@ -41,6 +41,13 @@ export const NAV_ORDER: NavEntry[] = [
   { type: "collection", collection: "links" },
 ];
 
+export const TOOLBAR_NAV_ORDER: NavEntry[] = [
+  { type: "page", page: "", label: "Home" },
+  { type: "page", page: "about", label: "About" },
+  { type: "collection", collection: "projects" },
+  { type: "collection", collection: "guides" },
+];
+
 export async function getNavData(): Promise<Record<string, NavCollection>> {
   const data: Record<string, NavCollection> = {};
 

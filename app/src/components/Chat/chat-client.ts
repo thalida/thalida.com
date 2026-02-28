@@ -71,14 +71,12 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let currentContext: MessageContext | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
-const renameBtn = document.getElementById("chat-rename-btn") as HTMLButtonElement;
-const renameControls = document.getElementById("chat-rename-controls") as HTMLSpanElement;
 const messagesEl = document.getElementById("chat-messages") as HTMLDivElement;
 const inputEl = document.getElementById("chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("chat-send") as HTMLButtonElement;
+const statusDotEl = document.getElementById("chat-status-dot") as HTMLSpanElement;
 const ownerStatusEl = document.getElementById("chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("chat-user-count") as HTMLSpanElement;
-const adminLink = document.getElementById("chat-admin-link") as HTMLAnchorElement;
 const contextEl = document.getElementById("chat-context") as HTMLSpanElement;
 const contextSelect = document.getElementById("chat-context-select") as HTMLSelectElement;
 
@@ -172,7 +170,6 @@ function connect(): void {
       username = data.username;
       usernameInput.value = data.username;
       saveUsername(data.username);
-      renameControls.hidden = isOwner;
       updateAdminUI();
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
       messagesEl.innerHTML = "";
@@ -189,9 +186,12 @@ function connect(): void {
       });
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
       const ownerLabel = adminUsername ?? "owner";
-      ownerStatusEl.textContent = data.isOwnerOnline ? `${ownerLabel}: online` : `${ownerLabel}: offline`;
+      statusDotEl.dataset.online = String(data.isOwnerOnline);
+      ownerStatusEl.textContent = data.isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
       ownerStatusEl.dataset.online = String(data.isOwnerOnline);
-      userCountEl.textContent = `${data.userCount} user${data.userCount !== 1 ? "s" : ""} connected`;
+      const viewerLabel = data.userCount === 1 ? "viewer" : "viewers";
+      userCountEl.innerHTML = `<i class="fa-solid fa-eye"></i> ${data.userCount} ${viewerLabel}`;
+      userCountEl.title = `${data.userCount} ${viewerLabel}`;
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
       if (data.code === "expired_username") {
         clearIdentity();
@@ -292,17 +292,26 @@ usernameInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
     changeUsername();
+    usernameInput.blur();
+  } else if (e.key === "Escape") {
+    usernameInput.value = username ?? "";
+    usernameInput.blur();
   }
 });
-renameBtn.addEventListener("click", changeUsername);
+usernameInput.addEventListener("blur", () => {
+  changeUsername();
+});
 
 function updateAdminUI(): void {
-  if (isOwner) {
-    adminLink.href = "/logout";
-    adminLink.textContent = "logout";
-  } else {
-    adminLink.href = "/login";
-    adminLink.textContent = "admin login";
+  const adminLinks = document.querySelectorAll<HTMLAnchorElement>("#admin-link");
+  for (const link of adminLinks) {
+    if (isOwner) {
+      link.href = "/logout";
+      link.textContent = "logout";
+    } else {
+      link.href = "/login";
+      link.textContent = "login";
+    }
   }
 }
 
@@ -355,7 +364,7 @@ async function fetchConfig(): Promise<void> {
     if (data.adminUsername) {
       adminUsername = data.adminUsername;
       setAdminUsername(adminUsername);
-      ownerStatusEl.textContent = `${adminUsername}: offline`;
+      ownerStatusEl.textContent = `${adminUsername} offline`;
     }
   } catch {
     console.warn("[chat] failed to fetch config, reserved name validation will be skipped client-side");

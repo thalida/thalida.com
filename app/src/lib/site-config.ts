@@ -1,1 +1,1 @@
-export const SPOTIFY_PLAYLIST_ID = "37i9dQZF1DXcBWIGoYBM5M";
+export const SPOTIFY_PLAYLIST_ID = "1fozUX3gAHgLIfKvg7H8RB";
