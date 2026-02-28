@@ -115,9 +115,9 @@ function initCommandPalette() {
       const displayTags = tags.slice(0, 2);
       const extra =
         tags.length > 2
-          ? `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-teal text-xs text-teal capitalize rounded">+${tags.length - 2}</span>`
+          ? `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-muted text-xs text-muted capitalize rounded">+${tags.length - 2}</span>`
           : "";
-      return `<div class="flex flex-wrap gap-1">${displayTags.map((t) => `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-teal text-xs text-teal capitalize rounded">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
+      return `<div class="flex flex-wrap gap-1">${displayTags.map((t) => `<span class="cp-row__tag py-0.5 px-2 bg-transparent border border-muted text-xs text-muted capitalize rounded">${escapeHtml(t)}</span>`).join("")}${extra}</div>`;
     }
 
     function renderItem(item: SearchItem, idx: number) {
