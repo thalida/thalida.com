@@ -15,9 +15,15 @@ interface Props {
 
 const { collection, title, subtitle, itemCount, items, allCategories, activeCategory } = Astro.props;
 
-const FLAG_COLLECTIONS = new Set(["recipes", "links"]);
+const LINK_COLLECTIONS = new Set(["links"]);
+const FLAG_COLLECTIONS = new Set(["recipes"]);
 const GALLERY_COLLECTIONS = new Set(["gallery"]);
-const useFlag = FLAG_COLLECTIONS.has(collection);
+
+let variant: CardVariant = "stacked";
+if (LINK_COLLECTIONS.has(collection)) variant = "link";
+else if (FLAG_COLLECTIONS.has(collection)) variant = "flag";
+else if (GALLERY_COLLECTIONS.has(collection)) variant = "gallery";
+
 const useGallery = GALLERY_COLLECTIONS.has(collection);
 ---
 
@@ -63,17 +69,7 @@ const useGallery = GALLERY_COLLECTIONS.has(collection);
       { "grid-cols-2 gap-4": useGallery },
     ]}
   >
-    {
-      items.map((item) => {
-        const isExternal = item.collection === "links";
-        let variant: CardVariant = "stacked";
-        if (isExternal) variant = "link";
-        else if (useFlag) variant = "flag";
-        else if (useGallery) variant = "gallery";
-
-        return <Card variant={variant} item={item} />;
-      })
-    }
+    {items.map((item) => <Card variant={variant} item={item} />)}
   </div>
 </div>
 
