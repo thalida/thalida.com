@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import { getNavData } from "@lib/nav-data";
+import Card from "@components/Card/Card.astro";
 
 const openweatherKey = import.meta.env.PUBLIC_OPENWEATHER_KEY || "";
 const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
@@ -47,31 +48,7 @@ const siteAge = new Date().getFullYear() - 2007;
       >
     </div>
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-      {
-        featuredProjects.map((project) => (
-          <a
-            href={`/projects/${project.id}`}
-            class="block no-underline bg-surface border border-border rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover"
-          >
-            <img
-              class="w-full object-cover"
-              style="aspect-ratio:16/10"
-              src={project.coverImageSrc}
-              alt={project.coverImageAlt ?? project.title}
-              loading="lazy"
-            />
-            <div class="p-4">
-              {project.category && (
-                <span class="font-body text-2xs text-muted uppercase tracking-widest">{project.category}</span>
-              )}
-              <h3 class="m-0 mt-1 font-heading text-text text-sm font-medium">{project.title}</h3>
-              {project.description && (
-                <p class="m-0 mt-2 font-body text-muted text-xs leading-relaxed line-clamp-2">{project.description}</p>
-              )}
-            </div>
-          </a>
-        ))
-      }
+      {featuredProjects.map((project) => <Card item={project} />)}
     </div>
   </section>
 
