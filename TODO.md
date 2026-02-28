@@ -1,7 +1,7 @@
 # ToDos
 
 - [x] Add tag to link pages
-- [ ] Search by post content
+- [x] Search by post content
 - [x] Underline links in posts so they look like links
 - [ ] chat page mapping
 - [-] spotify embed bg color
