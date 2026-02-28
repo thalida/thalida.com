@@ -89,7 +89,7 @@ const siteAge = new Date().getFullYear() - 2007;
                 <div class="home-timeline__thumb w-20 h-14 rounded overflow-hidden bg-surface border border-border relative z-10 group-hover:border-teal">
                   {version.coverImageSrc ? (
                     <img
-                      class="w-full h-full object-cover"
+                      class="block w-full h-full object-cover"
                       src={version.coverImageSrc}
                       alt={version.coverImageAlt ?? version.title}
                       loading="lazy"

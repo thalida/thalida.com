@@ -114,7 +114,10 @@ const pageTitle = entry.data.title as string;
   .post-content :global(a) {
     @apply text-teal hover:text-neon;
   }
-  .post-content :global(img) {
+  .post-content :global(img),
+  .post-content :global(video) {
+    max-width: 100%;
+    height: auto;
     @apply rounded-lg;
   }
 </style>

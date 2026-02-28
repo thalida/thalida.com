@@ -194,11 +194,3 @@ textarea,
 #chat-overlay #chat-overlay-close:hover {
   color: var(--color-neon);
 }
-
-/* ---- Content viewer media ---- */
-
-#content-viewer img,
-#content-viewer video {
-  max-width: 100%;
-  height: auto;
-}
