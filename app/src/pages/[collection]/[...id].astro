@@ -50,13 +50,13 @@ const pageTitle = entry.data.title as string;
   <article class="font-body max-w-3xl mx-auto">
     <header class="mb-6">
       <p class="m-0 mb-3 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
-        <a class="text-neon no-underline hover:text-teal" href={`/${collection}`}>{collection}</a>
+        <a class="text-teal no-underline hover:text-neon" href={`/${collection}`}>{collection}</a>
         {
           entry.data.category && (
             <span>
               {" "}
               /{" "}
-              <a class="text-neon no-underline hover:text-teal" href={`/${collection}/${entry.data.category}`}>
+              <a class="text-teal no-underline hover:text-neon" href={`/${collection}/${entry.data.category}`}>
                 {entry.data.category}
               </a>
             </span>
@@ -68,7 +68,7 @@ const pageTitle = entry.data.title as string;
       </h1>
       {
         entry.data.description && (
-          <p class="m-0 mb-3 font-heading font-semibold text-ice text-subtitle tracking-tight">
+          <p class="m-0 mb-3 font-heading font-semibold text-text text-subtitle tracking-tight">
             {entry.data.description}
           </p>
         )
@@ -103,7 +103,7 @@ const pageTitle = entry.data.title as string;
     @apply font-heading text-text;
   }
   .post-content :global(h2) {
-    @apply text-ice;
+    @apply text-text;
   }
   .post-content :global(.expressive-code) {
     @apply my-6;
