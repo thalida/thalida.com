@@ -20,9 +20,7 @@ const SERVER_MESSAGE_TYPE = {
 } as const;
 
 interface MessageContext {
-  collection: string;
-  id: string;
-  title: string;
+  path: string;
 }
 
 type ServerMessage =
@@ -68,7 +66,6 @@ let isOwner = false;
 let autoRetries = 0;
 let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
-let currentContext: MessageContext | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
 const messagesEl = document.getElementById("js-chat-messages") as HTMLDivElement;
@@ -77,8 +74,6 @@ const sendBtn = document.getElementById("js-chat-send") as HTMLButtonElement;
 const statusDotEl = document.getElementById("js-chat-status-dot") as HTMLSpanElement;
 const ownerStatusEl = document.getElementById("js-chat-owner-status") as HTMLSpanElement;
 const userCountEl = document.getElementById("js-chat-user-count") as HTMLSpanElement;
-const contextEl = document.getElementById("js-chat-context") as HTMLSpanElement;
-const contextSelect = document.getElementById("js-chat-context-select") as HTMLSelectElement;
 
 function getAdminToken(): string | null {
   return localStorage.getItem(LS_ADMIN_TOKEN_KEY);
@@ -118,8 +113,8 @@ function appendMessage(msg: ChatMessage): void {
     contextLine.style.opacity = "0.7";
     const label = document.createTextNode("on: ");
     const link = document.createElement("a");
-    link.href = `/${msg.context.collection}/${msg.context.id}`;
-    link.textContent = msg.context.title;
+    link.href = msg.context.path;
+    link.textContent = msg.context.path;
     contextLine.appendChild(label);
     contextLine.appendChild(link);
     div.appendChild(contextLine);
@@ -255,8 +250,10 @@ function sendMessage(): void {
   const text = inputEl.value.trim();
   if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
 
-  const data: { text: string; context?: MessageContext } = { text };
-  if (currentContext && contextSelect.value === "page") data.context = currentContext;
+  const data: { text: string; context: MessageContext } = {
+    text,
+    context: { path: window.location.pathname },
+  };
 
   ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.MESSAGE, data }));
   inputEl.value = "";
@@ -321,40 +318,6 @@ sendBtn.addEventListener("click", sendMessage);
 inputEl.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
-
-function updatePlaceholder(): void {
-  if (currentContext && contextSelect.value === "page") {
-    inputEl.placeholder = `Message about ${currentContext.title}...`;
-  } else {
-    inputEl.placeholder = "Type a message...";
-  }
-}
-
-function readPageContext(): void {
-  const meta = document.querySelector<HTMLMetaElement>('meta[name="page-context"]');
-  if (meta?.content) {
-    try {
-      const ctx = JSON.parse(meta.content) as MessageContext;
-      currentContext = ctx;
-      const pageOption = contextSelect.querySelector<HTMLOptionElement>('option[value="page"]');
-      if (pageOption) pageOption.textContent = ctx.title;
-      contextSelect.value = "page";
-      contextEl.hidden = false;
-    } catch {
-      currentContext = null;
-      contextEl.hidden = true;
-    }
-  } else {
-    currentContext = null;
-    contextEl.hidden = true;
-  }
-  updatePlaceholder();
-}
-
-contextSelect.addEventListener("change", updatePlaceholder);
-
-readPageContext();
-document.addEventListener("astro:after-swap", readPageContext);
 
 async function fetchConfig(): Promise<void> {
   try {
