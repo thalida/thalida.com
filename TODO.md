@@ -14,7 +14,7 @@
 - [x] show date on all cards (month + year)
 - [ ] window coloring
 - [x] date on the right
-- [ ] proper recipe formatting
-- [ ] remove "recipe" tag
+- [x] proper recipe formatting
+- [x] remove "recipe" tag
 - [x] fix "tip" in md
 - [x] add extended md w/ custom items like callouts

@@ -94,6 +94,13 @@ async function makeCollection(collectionName: CollectionName) {
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
         rating: z.coerce.number().optional(),
+        // Recipe-specific optional fields
+        prepTime: z.string().optional(),
+        cookTime: z.string().optional(),
+        totalTime: z.string().optional(),
+        recipeYield: z.string().optional(),
+        recipeCuisine: z.string().optional(),
+        calories: z.string().optional(),
       }),
   });
 }

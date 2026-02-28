@@ -41,6 +41,7 @@ const navData = await getNavData();
     />
     <ClientRouter />
     {pageContext && <meta name="page-context" content={JSON.stringify(pageContext)} />}
+    <slot name="head" />
   </head>
   <body>
     <div

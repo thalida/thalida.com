@@ -1,55 +1,73 @@
 ---
 title: Bang Bang Shrimp
-description: A delicious recipe for crispy, seasoned shrimp with a spicy sauce.
+description: Crispy baked panko shrimp with bold seasoning and a creamy spicy dipping sauce. A lighter take on the classic.
 publishedOn: 2024-08-27T22:08:00Z
 updatedOn: 2024-08-27T22:48:00Z
 category: seafood
 tags:
-  - recipe
+  - shrimp
+  - baked
+  - spicy
+recipeCuisine: American
+prepTime: PT20M
+cookTime: PT15M
+totalTime: PT35M
+recipeYield: "2 servings"
 ---
 
 > [!TIP]
-> **Modified version of this recipe:**
-> <https://bytherecipes.com/bang-bang-shrimp/>
->
-> Key Changes:
->
-> - Season flour before breading
-> - Use pepper spices in seasoning
+> Adapted from [bytherecipes.com](https://bytherecipes.com/bang-bang-shrimp/).
+> Key changes: season the flour and panko before breading, and add
+> cayenne and smoked paprika alongside the garlic powder.
 
 
 ## Ingredients
 
-- 1 lb. Medium sized, raw peeled shrimp
-- Breading:
-  - 1 cup All Purpose Flour
-  - 2 Eggs
-  - 2 cups Panko Bread Crumbs
-  - 2 tbs. Extra Virgin Olive Oil
-- Seasonings:
-  - 3 tsp. Garlic Powder
-  - Salt
-  - 3 tsp. Cayenne (add more to spice taste)
-  - 3 tsp. Smoked Paprika
-- 3 shallow bowls
-- Parchment Paper
+- 1 lb medium raw shrimp, peeled and deveined
+- **Breading**
+  - 1 cup all-purpose flour
+  - 2 large eggs
+  - 2 cups panko bread crumbs
+  - 2 tbsp extra virgin olive oil
+- **Seasoning** *(divided between the flour and panko)*
+  - 3 tsp garlic powder
+  - 3 tsp cayenne pepper, or to taste
+  - 3 tsp smoked paprika
+  - Salt to taste
+- **Sauce** *(optional)*
+  - ¼ cup mayonnaise
+  - ¼ cup Thai sweet chili sauce
+  - 1 tsp sriracha, or to taste
+  - ½ lime, juiced
 
 
-## Steps
-
-1. Line a baking sheet with parchment paper, set aside
-2. In a shallow bowl mix flour with 1 tsp. garlic powder, 1 tsp. cayenne, 1 tsp. smoked paprika
-3. In another bowl, beat 2 eggs until frothy
-4. In the third bowl, add panko, season with remaining garlic powder, cayenne, and smoked paprika.
-   Add salt to taste. I usually do maybe a 1/4 tsp (????)
-5. Mix olive oil through out the seasoned panko so it’s fully coated, and no dry pieces remain.
-   1. Add more olive oil as needed, there just be just enough olive oil that the panko is coated, but not swimming
-6. Bread shrimp (seasoned flour → egg → panko mixture), and place on lined baking sheet
-   1. (note: I usually bread w/ chop sticks — quick cleanup and no gunked up fork/hands)
-7. Preheat oven to 400F
-8. Bake for 13-15minutes, until shrimp is golden brown
+## Directions
 
 
-## Optional: Sauce
+### Shrimp
 
-- Mix 1 part mayo, 1 part thai sweet chili sauce. Mix in siracha and a squeeze of lime juice to taste
+1. Preheat the oven to 400°F and line a baking sheet with parchment paper.
+2. Whisk the flour with 1 tsp each of garlic powder, cayenne, and smoked
+   paprika in a shallow bowl.
+3. Beat the eggs until frothy in a second bowl.
+4. Combine the panko with the remaining garlic powder, cayenne, and
+   smoked paprika in a third bowl. Add salt to taste. Drizzle in the
+   olive oil and toss until every flake is evenly coated — add a little
+   more oil if needed.
+5. Dredge each shrimp in the seasoned flour, dip in the egg, then press
+   firmly into the panko. Place on the prepared baking sheet.
+6. Bake for 13–15 minutes until golden brown and cooked through.
+
+
+### Sauce (optional)
+
+1. Stir together the mayonnaise and Thai sweet chili sauce.
+2. Mix in the sriracha and lime juice to taste.
+3. Serve alongside the shrimp as a dipping sauce or drizzle over the top.
+
+
+## Notes
+
+- Use chopsticks for breading — keeps your hands clean and makes
+  cleanup much easier.
+- Adjust the cayenne across all three stations to control heat level.
