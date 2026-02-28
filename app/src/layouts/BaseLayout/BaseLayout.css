@@ -28,28 +28,38 @@
   --shadow-dialog: 0 0 0 1px var(--color-border), 0 16px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* ---- Global resets ---- */
+
 * {
-  @apply box-border;
+  box-sizing: border-box;
 }
 
 body {
-  @apply m-0 bg-midnight text-text font-body text-sm leading-relaxed;
+  margin: 0;
+  background-color: var(--color-midnight);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.625;
 }
 
 a {
-  @apply text-teal;
+  color: var(--color-teal);
 }
 
 a:hover {
-  @apply text-neon;
+  color: var(--color-neon);
 }
 
 hr {
-  @apply border-none border-t border-border my-6;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1.5rem 0;
 }
 
 ::selection {
-  @apply bg-neon text-midnight;
+  background-color: var(--color-neon);
+  color: var(--color-midnight);
 }
 
 /* ---- Custom cursors ---- */
@@ -158,115 +168,37 @@ textarea,
   background-clip: text;
 }
 
-/* ---- Three-column layout ---- */
+/* ---- JS-toggled states ---- */
 
-#layout {
-  @apply flex flex-col lg:flex-row w-screen h-svh;
-}
-
-#site-nav,
-#content-viewer,
-#chat-panel {
-  @apply overflow-y-auto overflow-x-hidden;
-}
-
-#site-nav {
-  @apply hidden xl:block xl:shrink-0 xl:grow-0 xl:basis-1/5 xl:max-w-64 xl:py-3 xl:pl-3 xl:pr-0;
-}
-
-#nav-panel #site-nav {
-  @apply block p-3;
-}
-
-#content-viewer {
-  @apply grow shrink basis-0 min-w-0 pt-16 pb-4 px-4 sm:px-6 sm:pb-6 xl:pt-6 xl:pb-6;
-}
-
-#content-viewer img,
-#content-viewer video {
-  @apply max-w-full h-auto;
-}
-
-/* #chat-panel responsive styles are in Chat.css to avoid cascade conflicts */
-
-/* ---- Mobile toolbar & drawers ---- */
-
-#mobile-toolbar {
-  @apply flex items-center justify-between fixed top-0 left-0 right-0 lg:right-1/4 h-12 px-3 bg-surface border-b border-border z-60 xl:hidden;
-}
-
-#mobile-toolbar button {
-  @apply bg-transparent border-none p-2 text-muted hover:text-neon;
-}
-
-#mobile-title {
-  @apply font-display font-bold text-base text-neon no-underline;
-}
-
-#mobile-about-link {
-  @apply font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors;
-}
-
-#tablet-search-btn {
-  @apply bg-transparent border-none p-1 text-muted hover:text-neon transition-colors;
-}
-
-#tablet-nav {
-  @apply items-center gap-1 overflow-x-auto;
-}
-
-.tablet-nav-link {
-  @apply font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors;
-}
-
-.tablet-nav-link[data-active] {
-  @apply text-teal;
-}
-
-#nav-backdrop {
-  @apply hidden fixed top-12 left-0 w-full h-[calc(100svh-48px)] z-40 bg-midnight/70 backdrop-blur-xs sm:hidden;
-}
-
-#nav-backdrop.visible {
-  @apply block;
-}
-
-#chat-overlay-backdrop {
-  @apply hidden fixed inset-0 z-40 bg-midnight/70 backdrop-blur-xs lg:hidden;
-}
-
+#nav-backdrop.visible,
 #chat-overlay-backdrop.visible {
-  @apply block;
-}
-
-#nav-panel {
-  @apply fixed top-12 left-0 w-full max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-full transition-transform duration-300 ease-in-out sm:hidden;
+  display: block;
 }
 
 #nav-panel.open {
-  @apply translate-y-0;
-}
-
-#chat-overlay {
-  @apply fixed bottom-0 left-0 w-full h-[85vh] bg-midnight border-t border-border z-50 translate-y-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col px-4 pt-2 pb-4;
+  transform: translateY(0);
 }
 
 #chat-overlay.open {
-  @apply translate-y-0;
-}
-
-#chat-overlay-content {
-  @apply flex flex-col flex-1 min-h-0 font-body gap-2;
+  transform: translateY(0);
 }
 
 #chat-overlay #chat-overlay-close {
-  @apply block bg-transparent border-none p-1 text-muted hover:text-neon;
+  display: block;
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  color: var(--color-muted);
 }
 
-#mobile-chat-fab {
-  @apply fixed bottom-4 right-4 z-30 w-12 h-12 rounded-full bg-neon text-midnight flex items-center justify-center shadow-lg lg:hidden;
+#chat-overlay #chat-overlay-close:hover {
+  color: var(--color-neon);
 }
 
-#mobile-chat-fab:hover {
-  @apply bg-teal;
+/* ---- Content viewer media ---- */
+
+#content-viewer img,
+#content-viewer video {
+  max-width: 100%;
+  height: auto;
 }
