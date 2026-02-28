@@ -1,0 +1,54 @@
+---
+import type { GetStaticPathsOptions } from "astro";
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
+import { getNavData, type NavItem } from "@lib/nav-data";
+import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "../../content.config";
+
+const PAGE_SIZE = 50;
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const navData = await getNavData();
+  const pages = COLLECTION_NAMES.flatMap((collection) => {
+    const collectionData = navData[collection];
+    if (!collectionData) return [];
+    return paginate(collectionData.items, {
+      pageSize: PAGE_SIZE,
+      params: { collection },
+      props: {
+        title: collectionData.title,
+        allCategories: collectionData.allCategories,
+      },
+    });
+  });
+  return pages;
+}
+
+const { collection } = Astro.params as { collection: CollectionName };
+const page = Astro.props.page as {
+  data: NavItem[];
+  start: number;
+  end: number;
+  total: number;
+  currentPage: number;
+  lastPage: number;
+  size: number;
+  url: { current: string; prev: string | undefined; next: string | undefined };
+};
+const { title, allCategories } = Astro.props as { title: string; allCategories: string[] };
+---
+
+<BaseLayout title={`${title} · thalida`} activeCollection={collection}>
+  <CollectionGrid
+    collection={collection}
+    title={title}
+    subtitle={collectionMeta[collection].description}
+    itemCount={page.total}
+    items={page.data}
+    allCategories={allCategories}
+    prevUrl={page.url.prev}
+    nextUrl={page.url.next}
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+  />
+</BaseLayout>
