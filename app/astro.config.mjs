@@ -5,6 +5,11 @@ import astroExpressiveCode from "astro-expressive-code";
 import pagefind from "astro-pagefind";
 import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
 import rehypeR2Media from "./src/plugins/rehype-r2-media.mjs";
+import { remarkAlert } from "remark-github-blockquote-alert";
+import remarkToc from "remark-toc";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeWrap from "rehype-wrap";
 
 const env = loadEnv(process.env.NODE_ENV || "", process.cwd(), "PUBLIC_");
 const r2BaseUrl = (env.PUBLIC_R2_BASE_URL || "").replace(/\/$/, "");
@@ -35,8 +40,13 @@ export default defineConfig({
     pagefind(),
   ],
   markdown: {
-    remarkPlugins: [[remarkR2Media, { baseUrl: mediaBaseUrl }]],
-    rehypePlugins: [[rehypeR2Media, { baseUrl: mediaBaseUrl }]],
+    remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }], [remarkR2Media, { baseUrl: mediaBaseUrl }]],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto" }],
+      [rehypeR2Media, { baseUrl: mediaBaseUrl }],
+    ],
   },
   vite: {
     plugins: [tailwindcss()],
