@@ -240,7 +240,7 @@ export class ChatRoom implements DurableObject {
       username: info.username,
       text,
       timestamp: Date.now(),
-      ...(context?.collection && context?.id && context?.title ? { context } : {}),
+      ...(context?.path && /^\/[a-z0-9\-._/]*$/.test(context.path) ? { context } : {}),
     };
 
     this.messages.push(message);
