@@ -7,7 +7,6 @@
   --color-surface: #0d1f2d;
   --color-neon: #39ff14;
   --color-teal: #00e5a0;
-  --color-ice: #80d4ff;
   --color-text: #e8f0f8;
   --color-muted: #7a9ab5;
   --color-border: #152535;
@@ -158,6 +157,23 @@ textarea,
   cursor:
     url("/cursors/zoom-out.svg") 10 10,
     zoom-out;
+}
+
+/* ---- Card base utility ---- */
+
+@utility item-card {
+  @apply bg-surface border border-border no-underline text-inherit transition-all rounded-lg;
+  &:hover {
+    @apply -translate-y-0.5;
+    border-color: color-mix(in srgb, var(--color-muted) 40%, transparent);
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+/* ---- Page title utility ---- */
+
+@utility page-title {
+  @apply m-0 font-display font-bold text-neon text-display tracking-tighter leading-display;
 }
 
 /* ---- Gradient text utility ---- */

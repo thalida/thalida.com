@@ -1,6 +1,7 @@
 ---
 import type { NavItem } from "@lib/nav-data";
-import { categoryDisplay, pickColor, tileSvg } from "./card-utils";
+import CardCategory from "./CardCategory.astro";
+import CardCover from "./CardCover.astro";
 
 interface Props {
   item: NavItem;
@@ -9,39 +10,20 @@ interface Props {
 const { item } = Astro.props;
 
 const href = `/${item.collection}/${item.id}`;
-
-const placeholderColor = pickColor(item.title);
 ---
 
-<a
-  href={href}
-  class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col overflow-hidden"
->
-  {
-    item.coverImageSrc ? (
-      <div class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm">
-        <img
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          src={item.coverImageSrc}
-          alt={item.coverImageAlt ?? item.title}
-          loading="lazy"
-        />
-      </div>
-    ) : (
-      <div
-        class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm relative"
-        style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
-      />
-    )
-  }
+<a href={href} class="group item-card flex flex-col overflow-hidden">
+  <div class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm">
+    <CardCover
+      src={item.coverImageSrc}
+      alt={item.coverImageAlt ?? item.title}
+      title={item.title}
+      imgClass="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      placeholderClass="w-full h-full relative"
+    />
+  </div>
   <div class="flex flex-col gap-1 p-3">
-    {
-      item.category && (
-        <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
-          {categoryDisplay(item.category)}
-        </p>
-      )
-    }
+    <CardCategory category={item.category} />
     <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
     {
       item.description && (

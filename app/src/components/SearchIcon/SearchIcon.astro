@@ -1,0 +1,9 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<i class:list={["fa-solid fa-magnifying-glass", className]} aria-hidden="true"></i>

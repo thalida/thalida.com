@@ -1,6 +1,7 @@
 ---
 import { NAV_ORDER, getNavData } from "@lib/nav-data";
 import SpotifyPlayer from "@components/SpotifyPlayer/SpotifyPlayer.astro";
+import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
 
 interface Props {
   activePage?: string;
@@ -26,19 +27,7 @@ const navData = await getNavData();
     type="button"
     id="js-nav-search-btn"
   >
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="11" cy="11" r="8"></circle>
-      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-    </svg>
+    <SearchIcon class="text-sm" />
     <span class="flex-1 text-left">Search…</span>
     <kbd class="text-xs py-0.5 px-2 border border-border rounded bg-surface-active text-muted font-body">⌘K</kbd>
   </button>
@@ -51,7 +40,7 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.page}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-text!"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-white!"
                 data-active={activePage === entry.page ? "true" : undefined}
               >
                 {entry.label}
@@ -61,11 +50,11 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.collection}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-text!"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-white!"
                 data-active={activeCollection === entry.collection ? "true" : undefined}
               >
                 <span class="flex-1">{navData[entry.collection].title}</span>
-                <span class="text-xs font-normal bg-midnight py-0.5 px-2 rounded-full text-muted group-data-active:bg-ice/15 group-data-active:text-ice">
+                <span class="text-xs font-normal bg-midnight py-0.5 px-2 rounded-full text-muted group-data-active:bg-white/15 group-data-active:text-white">
                   {navData[entry.collection].items.length}
                 </span>
               </a>

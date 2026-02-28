@@ -1,7 +1,8 @@
 ---
-import { categoryDisplay, type NavItem } from "@lib/nav-data";
+import { type NavItem } from "@lib/nav-data";
 import Card from "@components/Card/Card.astro";
 import type { CardVariant } from "@components/Card/Card.astro";
+import CategoryFilter from "@components/CategoryFilter/CategoryFilter.astro";
 
 interface Props {
   collection: string;
@@ -29,43 +30,12 @@ const useGallery = GALLERY_COLLECTIONS.has(collection);
 
 <div class="font-body max-w-5xl mx-auto">
   <header class="mb-6">
-    <h1 class="m-0 mb-3 font-display font-bold text-neon text-display tracking-tighter leading-display">{title}</h1>
+    <h1 class="page-title mb-3">{title}</h1>
     <p class="m-0 mb-3 font-heading font-semibold text-text text-subtitle tracking-tight">{subtitle}</p>
     <p class="m-0 font-body text-muted text-sm">{itemCount} items</p>
   </header>
 
-  {
-    allCategories.length > 0 && (
-      <div class="mb-6">
-        <div class="flex flex-wrap gap-2">
-          <a
-            href={`/${collection}`}
-            class:list={[
-              "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
-              !activeCategory
-                ? "bg-ice/15 text-text! border-ice"
-                : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
-            ]}
-          >
-            All
-          </a>
-          {allCategories.map((cat) => (
-            <a
-              href={`/${collection}/${encodeURIComponent(cat)}`}
-              class:list={[
-                "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
-                activeCategory === cat
-                  ? "bg-ice/15 text-text! border-ice"
-                  : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
-              ]}
-            >
-              {categoryDisplay(cat)}
-            </a>
-          ))}
-        </div>
-      </div>
-    )
-  }
+  <CategoryFilter collection={collection} categories={allCategories} activeCategory={activeCategory} />
 
   <div
     class:list={[

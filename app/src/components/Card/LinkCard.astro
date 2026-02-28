@@ -1,6 +1,6 @@
 ---
 import type { NavItem } from "@lib/nav-data";
-import { categoryDisplay } from "./card-utils";
+import CardCategory from "./CardCategory.astro";
 
 interface Props {
   item: NavItem;
@@ -19,19 +19,8 @@ const displayUrl = (() => {
 })();
 ---
 
-<a
-  href={href}
-  class="item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col gap-1 p-3"
-  target="_blank"
-  rel="noopener"
->
-  {
-    item.category && (
-      <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
-        {categoryDisplay(item.category)}
-      </p>
-    )
-  }
+<a href={href} class="item-card flex flex-col gap-1 p-3" target="_blank" rel="noopener">
+  <CardCategory category={item.category} />
   <h3 class="m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base">
     {
       item.faviconUrl ? (

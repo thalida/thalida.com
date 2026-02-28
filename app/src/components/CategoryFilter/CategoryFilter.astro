@@ -1,0 +1,44 @@
+---
+import { categoryDisplay } from "@lib/nav-data";
+
+interface Props {
+  collection: string;
+  categories: string[];
+  activeCategory?: string;
+}
+
+const { collection, categories, activeCategory } = Astro.props;
+---
+
+{
+  categories.length > 0 && (
+    <div class="mb-6">
+      <div class="flex flex-wrap gap-2">
+        <a
+          href={`/${collection}`}
+          class:list={[
+            "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+            !activeCategory
+              ? "bg-white/15 text-white! border-white"
+              : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
+          ]}
+        >
+          All
+        </a>
+        {categories.map((cat) => (
+          <a
+            href={`/${collection}/${encodeURIComponent(cat)}`}
+            class:list={[
+              "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+              activeCategory === cat
+                ? "bg-white/15 text-white! border-white"
+                : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
+            ]}
+          >
+            {categoryDisplay(cat)}
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}

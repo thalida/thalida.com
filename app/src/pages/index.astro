@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import { getNavData } from "@lib/nav-data";
 import Card from "@components/Card/Card.astro";
+import SectionHeader from "@components/SectionHeader/SectionHeader.astro";
 
 const openweatherKey = import.meta.env.PUBLIC_OPENWEATHER_KEY || "";
 const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
@@ -25,7 +26,7 @@ const siteAge = new Date().getFullYear() - 2007;
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
         <span id="js-greeting">Hey</span>, I'm&nbsp;Thalida.
       </h1>
-      <p class="m-0 mt-4 font-heading text-muted leading-relaxed text-subtitle tracking-tight">
+      <p class="m-0 mt-4 font-heading font-semibold text-text text-subtitle tracking-tight">
         Making weird and wonderful things on the internet since 2007.
       </p>
     </div>
@@ -33,20 +34,7 @@ const siteAge = new Date().getFullYear() - 2007;
 
   {/* ── Featured Projects ── */}
   <section class="mt-16" aria-label="Selected work">
-    <div class="flex items-center gap-3 mb-6">
-      <span class="font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap">SELECTED WORK</span>
-      <hr class="grow border-t border-border my-0" />
-      <a
-        href="/projects"
-        class="font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1 hover:text-neon"
-        >view all <svg class="inline-block" style="width:0.55em;height:0.55em" viewBox="0 0 320 512" aria-hidden="true"
-          ><path
-            fill="currentColor"
-            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
-          ></path></svg
-        ></a
-      >
-    </div>
+    <SectionHeader label="SELECTED WORK" href="/projects" />
     <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {featuredProjects.map((project) => <Card item={project} />)}
     </div>
@@ -54,22 +42,7 @@ const siteAge = new Date().getFullYear() - 2007;
 
   {/* ── Site Timeline ── */}
   <section class="mt-16" aria-label="Site timeline">
-    <div class="flex items-center gap-3 mb-6">
-      <span class="font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap"
-        >{siteAge} YEARS OF THALIDA.COM</span
-      >
-      <hr class="grow border-t border-border my-0" />
-      <a
-        href="/versions"
-        class="font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1 hover:text-neon"
-        >view all <svg class="inline-block" style="width:0.55em;height:0.55em" viewBox="0 0 320 512" aria-hidden="true"
-          ><path
-            fill="currentColor"
-            d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
-          ></path></svg
-        ></a
-      >
-    </div>
+    <SectionHeader label={`${siteAge} YEARS OF THALIDA.COM`} href="/versions" />
     <div class="home-timeline relative overflow-x-auto" role="region" aria-label="Site version timeline" tabindex="0">
       <div class="home-timeline__track flex gap-6 pb-4 relative" style="min-width:max-content">
         {
