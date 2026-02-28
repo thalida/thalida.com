@@ -47,7 +47,10 @@ const pageTitle = entry.data.title as string;
   activeCollection={collection}
   pageContext={{ collection: collection!, id: id!, title: pageTitle }}
 >
-  <article class="font-body max-w-3xl mx-auto">
+  <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
+    <meta data-pagefind-meta={`collection:${collection}`} />
+    <meta data-pagefind-meta={`category:${entry.data.category || ""}`} />
+    <meta data-pagefind-meta={`itemId:${id}`} />
     <header class="mb-6">
       <p class="m-0 mb-3 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
         <a class="text-teal no-underline hover:text-neon" href={`/${collection}`}>{collection}</a>
