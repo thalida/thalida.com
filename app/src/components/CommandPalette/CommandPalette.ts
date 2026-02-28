@@ -170,7 +170,7 @@ function initCommandPalette() {
 
   function renderItem(item: SearchItem, idx: number, showCollection: boolean) {
     const isExternal = item.collection === "links";
-    const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+    const href = isExternal ? item.id : `/${item.collection}/post/${item.id}`;
     const target = isExternal ? ' target="_blank" rel="noopener"' : "";
 
     const collectionLabel = showCollection ? escapeHtml(item.collectionTitle) : "";

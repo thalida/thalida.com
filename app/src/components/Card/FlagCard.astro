@@ -10,7 +10,7 @@ interface Props {
 
 const { item } = Astro.props;
 
-const href = `/${item.collection}/${item.id}`;
+const href = `/${item.collection}/post/${item.id}`;
 ---
 
 <a href={href} class="group item-card flex flex-row items-center p-3 gap-4">
