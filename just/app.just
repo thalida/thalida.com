@@ -48,6 +48,10 @@ serve env="dev":
 test:
     npm test
 
+[doc("Type-check the app")]
+typecheck:
+    npm run typecheck
+
 # ─── Build ────────────────────────────────────────────────────────────
 
 [doc("Build the frontend")]

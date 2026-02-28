@@ -53,6 +53,10 @@ serve env="dev":
 test:
     npm test
 
+[doc("Type-check the API")]
+typecheck:
+    npm run typecheck
+
 # ─── Deploy ──────────────────────────────────────────────────────────
 
 [doc("Deploy the API Worker")]
