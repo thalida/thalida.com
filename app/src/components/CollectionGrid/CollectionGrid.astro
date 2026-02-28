@@ -41,8 +41,10 @@ const useGallery = GALLERY_COLLECTIONS.has(collection);
           <a
             href={`/${collection}`}
             class:list={[
-              "bg-transparent border border-teal text-teal font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide hover:bg-teal/10 hover:text-teal",
-              { "bg-ice/15 text-ice border-ice": !activeCategory },
+              "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+              !activeCategory
+                ? "bg-ice/15 text-text! border-ice"
+                : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
             ]}
           >
             All
@@ -51,8 +53,10 @@ const useGallery = GALLERY_COLLECTIONS.has(collection);
             <a
               href={`/${collection}/${encodeURIComponent(cat)}`}
               class:list={[
-                "bg-transparent border border-teal text-teal font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide hover:bg-teal/10 hover:text-teal",
-                { "bg-ice/15 text-ice border-ice": activeCategory === cat },
+                "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+                activeCategory === cat
+                  ? "bg-ice/15 text-text! border-ice"
+                  : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
               ]}
             >
               {categoryDisplay(cat)}

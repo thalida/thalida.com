@@ -5,8 +5,8 @@
 - [ ] Underline links in posts so they look like links
 - [ ] chat page mapping
 - [ ] spotify embed bg color
-- [ ] project links selected color
-- [ ] tags selected color
+- [x] project links selected color
+- [x] tags selected color
 - [ ] chat item styling
-- [ ] make tags into component
-- [ ] ask for all things to be componentized
+- [x] make tags into component
+- [x] ask for all things to be componentized

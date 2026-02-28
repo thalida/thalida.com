@@ -52,7 +52,7 @@ const navData = await getNavData();
             entry.type === "page" ? (
               <a
                 href={`/${entry.page}`}
-                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-ice"
+                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-text"
                 data-active={activePage === entry.page ? "true" : undefined}
               >
                 {entry.label}
@@ -60,7 +60,7 @@ const navData = await getNavData();
             ) : navData[entry.collection] ? (
               <a
                 href={`/${entry.collection}`}
-                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-ice"
+                class="font-body text-xs text-muted no-underline whitespace-nowrap py-1 px-2 rounded-md hover:text-text hover:bg-surface-active transition-colors data-active:text-text"
                 data-active={activeCollection === entry.collection ? "true" : undefined}
               >
                 {navData[entry.collection].title}

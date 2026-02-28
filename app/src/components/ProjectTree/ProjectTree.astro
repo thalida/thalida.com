@@ -51,7 +51,7 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.page}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice!"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-text!"
                 data-active={activePage === entry.page ? "true" : undefined}
               >
                 {entry.label}
@@ -61,7 +61,7 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.collection}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice!"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-text!"
                 data-active={activeCollection === entry.collection ? "true" : undefined}
               >
                 <span class="flex-1">{navData[entry.collection].title}</span>
