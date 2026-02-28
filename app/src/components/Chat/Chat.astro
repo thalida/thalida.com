@@ -4,39 +4,40 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 
 <aside
   id="js-chat-panel"
-  class="hidden lg:flex lg:flex-col lg:border-l lg:border-border lg:p-4 font-body gap-1 overflow-y-auto overflow-x-hidden lg:shrink-0 lg:grow-0 lg:w-80 lg:min-w-80"
+  class="hidden lg:flex lg:flex-col lg:border-l lg:border-border font-body overflow-y-auto overflow-x-hidden lg:shrink-0 lg:grow-0 lg:w-80 lg:min-w-80"
   transition:persist="chat"
 >
-  <div class="flex flex-col gap-0.5 m-0">
-    <div class="flex items-center gap-1.5">
-      <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight">Chat</h2>
-      <span
-        id="js-chat-status-dot"
-        class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"></span>
-      <span id="js-chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
-      <span id="js-chat-user-count" class="text-xs text-muted" title="0 viewers"
-        ><i class="fa-solid fa-eye"></i> 0 viewers</span
+  <div class="flex items-center gap-1.5 h-12 px-3 bg-midnight border-b border-border shrink-0">
+    <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight">Chat</h2>
+    <span id="js-chat-status-dot" class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"
+    ></span>
+    <span id="js-chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
+    <span id="js-chat-user-count" class="text-xs text-muted" title="0 viewers"
+      ><i class="fa-solid fa-eye"></i> <span data-chat="viewer-count">0 viewers</span></span
+    >
+    <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       >
-      <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-    </div>
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <div class="flex flex-col gap-2 flex-1 min-h-0 p-4">
+    <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
     <div class="flex items-center gap-1.5">
-      <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted"
-        >chatting as</label
-      >
+      <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">
+        chatting as
+      </label>
       <input
         id="chat-username"
         class="flex-1 py-0.5 px-1 text-xs font-body bg-transparent text-text min-w-0 focus:outline-none"
@@ -48,10 +49,6 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
       />
     </div>
-  </div>
-
-  <div class="flex flex-col gap-2 flex-1 min-h-0">
-    <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
     <div class="flex items-center gap-1">
       <input
         id="js-chat-input"
@@ -68,6 +65,24 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
     </div>
   </div>
 </aside>
+
+<template id="chat-msg-tpl">
+  <div class="mb-2" data-msg-id="">
+    <div class="flex items-baseline gap-1.5 text-xs leading-tight">
+      <span data-chat="username" class="font-semibold text-teal data-admin:text-neon"></span>
+      <span class="ml-auto flex items-baseline gap-1.5 whitespace-nowrap">
+        <a data-chat="page" hidden class="text-text font-medium underline hover:text-teal" href=""></a>
+        <span data-chat="sep" hidden class="opacity-40">·</span>
+        <span data-chat="time" class="opacity-40"></span>
+      </span>
+    </div>
+    <div data-chat="text"></div>
+  </div>
+</template>
+
+<template id="chat-notice-tpl">
+  <div class="italic"></div>
+</template>
 
 <meta name="chat-ws-url" content={wsUrl} />
 

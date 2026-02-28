@@ -168,80 +168,96 @@ function initCommandPalette() {
     return merged.slice(0, MAX_PALETTE_RESULTS);
   }
 
-  function renderItem(item: SearchItem, idx: number, showCollection: boolean) {
+  const cpRowTpl = document.getElementById("cp-row-tpl") as HTMLTemplateElement;
+  const cpRowExternalTpl = document.getElementById("cp-row-external-tpl") as HTMLTemplateElement;
+  const cpEmptyTpl = document.getElementById("cp-empty-tpl") as HTMLTemplateElement;
+
+  function formatCategory(raw: string): string {
+    return raw
+      .split("-")
+      .map((p: string) => (p !== "and" ? p.charAt(0).toUpperCase() + p.slice(1) : p))
+      .join(" ");
+  }
+
+  function formatDateClient(iso: string) {
+    return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+  }
+
+  function populateMeta(slot: (name: string) => HTMLElement, collectionLabel: string, catDisplay: string) {
+    if (!collectionLabel && !catDisplay) return;
+    slot("meta").hidden = false;
+    if (collectionLabel) slot("collection").textContent = collectionLabel;
+    if (catDisplay) slot("category").textContent = catDisplay;
+    if (collectionLabel && catDisplay) slot("meta-sep").hidden = false;
+  }
+
+  function renderItem(item: SearchItem, idx: number, showCollection: boolean): DocumentFragment {
     const isExternal = item.collection === "links";
     const href = isExternal ? item.id : `/${item.collection}/post/${item.id}`;
-    const target = isExternal ? ' target="_blank" rel="noopener"' : "";
+    const tpl = isExternal ? cpRowExternalTpl : cpRowTpl;
 
-    const collectionLabel = showCollection ? escapeHtml(item.collectionTitle) : "";
-    const catDisplay = item.category
-      ? item.category
-          .split("-")
-          .map((p: string) => (p !== "and" ? p.charAt(0).toUpperCase() + p.slice(1) : p))
-          .join(" ")
-      : "";
+    const frag = tpl.content.cloneNode(true) as DocumentFragment;
+    const root = frag.firstElementChild as HTMLAnchorElement;
+    const slot = (name: string) => root.querySelector(`[data-cp="${name}"]`) as HTMLElement;
 
-    let metaLine = "";
-    if (showCollection && catDisplay) {
-      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${collectionLabel} <span class="text-muted/50">/</span> ${escapeHtml(catDisplay)}</span>`;
-    } else if (showCollection) {
-      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${collectionLabel}</span>`;
-    } else if (catDisplay) {
-      metaLine = `<span class="text-2xs text-neon uppercase tracking-widest">${escapeHtml(catDisplay)}</span>`;
-    }
+    root.href = href;
+    root.dataset.index = String(idx);
+
+    const collectionLabel = showCollection ? item.collectionTitle : "";
+    const catDisplay = item.category ? formatCategory(item.category) : "";
+    populateMeta(slot, collectionLabel, catDisplay);
+
+    slot("title").textContent = item.title;
 
     if (isExternal) {
-      const domain = (() => {
-        try {
-          return new URL(item.id).hostname.replace(/^www\./, "");
-        } catch {
-          return item.id;
-        }
-      })();
-      const favicon = item.faviconUrl
-        ? `<img class="w-4 h-4 rounded-sm shrink-0" src="${item.faviconUrl}" alt="" />`
-        : `<div class="w-4 h-4 rounded-sm shrink-0 bg-midnight flex items-center justify-center text-2xs font-semibold uppercase font-display border border-border"><span class="cp-row__initial">${escapeHtml(item.title.charAt(0))}</span></div>`;
+      let domain: string;
+      try {
+        domain = new URL(item.id).hostname.replace(/^www\./, "");
+      } catch {
+        domain = item.id;
+      }
+      slot("domain").textContent = domain;
 
-      return `<a href="${href}"${target} class="cp-row flex items-center gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
-        <div class="w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center border border-border">
-          ${favicon}
-        </div>
-        <div class="flex-1 min-w-0 flex flex-col gap-0.5">
-          ${metaLine ? `<div>${metaLine}</div>` : ""}
-          <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
-          <span class="cp-row__domain text-2xs text-muted flex items-center gap-1">${escapeHtml(domain)} <svg class="text-muted opacity-60" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg></span>
-        </div>
-      </a>`;
+      if (item.faviconUrl) {
+        const img = slot("favicon-img") as HTMLImageElement;
+        img.src = item.faviconUrl;
+        img.hidden = false;
+      } else {
+        slot("favicon-placeholder").hidden = false;
+        slot("initial").textContent = item.title.charAt(0);
+      }
+    } else {
+      if (item.coverImageSrc) {
+        const img = slot("cover-img") as HTMLImageElement;
+        img.src = item.coverImageSrc;
+        img.hidden = false;
+      } else {
+        slot("cover-placeholder").hidden = false;
+        slot("initial").textContent = item.title.charAt(0);
+      }
+      slot("date").textContent = formatDateClient(item.publishedOn);
     }
 
-    return `<a href="${href}"${target} class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text" data-index="${idx}">
-      ${
-        item.coverImageSrc
-          ? `<img class="w-8 h-8 rounded object-cover shrink-0 bg-midnight" src="${item.coverImageSrc}" alt="" />`
-          : `<div class="cp-row__img--empty w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center text-xs font-semibold uppercase font-display border border-border"><span>${escapeHtml(item.title.charAt(0))}</span></div>`
-      }
-      <div class="flex-1 min-w-0 flex flex-col gap-0.5">
-        ${metaLine ? `<div>${metaLine}</div>` : ""}
-        <span class="cp-row__title text-sm font-heading font-medium truncate text-text">${escapeHtml(item.title)}</span>
-      </div>
-      <span class="text-xs text-muted shrink-0">${formatDateClient(item.publishedOn)}</span>
-    </a>`;
+    return frag;
   }
 
   async function renderResults(query: string) {
     const filtered = await getFiltered(query);
     const activeCollection = getActiveCollection();
     selectedIndex = -1;
+    resultsContainer.innerHTML = "";
 
     if (filtered.length === 0) {
-      resultsContainer.innerHTML = '<div class="py-8 px-4 text-center text-muted text-sm">No results found</div>';
+      resultsContainer.appendChild(cpEmptyTpl.content.cloneNode(true));
       return;
     }
 
     const showCollection = !activeCollection;
-    resultsContainer.innerHTML = filtered
-      .map((item: SearchItem, i: number) => renderItem(item, i, showCollection))
-      .join("");
+    const batch = document.createDocumentFragment();
+    filtered.forEach((item: SearchItem, i: number) => {
+      batch.appendChild(renderItem(item, i, showCollection));
+    });
+    resultsContainer.appendChild(batch);
   }
 
   function updateSelection() {
@@ -250,14 +266,6 @@ function initCommandPalette() {
       el.classList.toggle("cp-row--selected", i === selectedIndex);
       if (i === selectedIndex) el.scrollIntoView({ block: "nearest" });
     });
-  }
-
-  function escapeHtml(str: string) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
-
-  function formatDateClient(iso: string) {
-    return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
   }
 
   // Input handlers

@@ -101,6 +101,79 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   }
 </style>
 
+<template id="cp-row-tpl">
+  <a
+    class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text"
+  >
+    <img data-cp="cover-img" hidden class="w-8 h-8 rounded object-cover shrink-0 bg-midnight" src="" alt="" />
+    <div
+      data-cp="cover-placeholder"
+      hidden
+      class="cp-row__img--empty w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center text-xs font-semibold uppercase font-display border border-border"
+    >
+      <span data-cp="initial"></span>
+    </div>
+    <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+      <div data-cp="meta" hidden>
+        <span class="text-2xs text-neon uppercase tracking-widest">
+          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-muted/50"> / </span><span
+            data-cp="category"></span>
+        </span>
+      </div>
+      <span data-cp="title" class="cp-row__title text-sm font-heading font-medium truncate text-text"></span>
+    </div>
+    <span data-cp="date" class="text-xs text-muted shrink-0"></span>
+  </a>
+</template>
+
+<template id="cp-row-external-tpl">
+  <a
+    class="cp-row flex items-center gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text"
+    target="_blank"
+    rel="noopener"
+  >
+    <div class="w-8 h-8 rounded shrink-0 bg-midnight flex items-center justify-center border border-border">
+      <img data-cp="favicon-img" hidden class="w-4 h-4 rounded-sm shrink-0" src="" alt="" />
+      <div
+        data-cp="favicon-placeholder"
+        hidden
+        class="w-4 h-4 rounded-sm shrink-0 bg-midnight flex items-center justify-center text-2xs font-semibold uppercase font-display border border-border"
+      >
+        <span data-cp="initial" class="cp-row__initial"></span>
+      </div>
+    </div>
+    <div class="flex-1 min-w-0 flex flex-col gap-0.5">
+      <div data-cp="meta" hidden>
+        <span class="text-2xs text-neon uppercase tracking-widest">
+          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-muted/50"> / </span><span
+            data-cp="category"></span>
+        </span>
+      </div>
+      <span data-cp="title" class="cp-row__title text-sm font-heading font-medium truncate text-text"></span>
+      <span class="cp-row__domain text-2xs text-muted flex items-center gap-1">
+        <span data-cp="domain"></span>
+        <svg
+          class="text-muted opacity-60"
+          width="10"
+          height="10"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"
+          ></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg
+        >
+      </span>
+    </div>
+  </a>
+</template>
+
+<template id="cp-empty-tpl">
+  <div class="py-8 px-4 text-center text-muted text-sm">No results found</div>
+</template>
+
 <script define:vars={{ allItems, navData }}>
   window.__cpData = { allItems, navData };
 </script>

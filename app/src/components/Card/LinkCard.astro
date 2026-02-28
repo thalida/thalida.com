@@ -49,6 +49,12 @@ const displayUrl = (() => {
     }
     {item.title}
   </h3>
+  {
+    (item.description || item.metaDescription) && (
+      <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description || item.metaDescription}</p>
+    )
+  }
+  <CardTags tags={item.tags} />
   <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case">
     {displayUrl}
     <svg
@@ -67,10 +73,4 @@ const displayUrl = (() => {
       <line x1="10" y1="14" x2="21" y2="3"></line>
     </svg>
   </p>
-  {
-    (item.description || item.metaDescription) && (
-      <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description || item.metaDescription}</p>
-    )
-  }
-  <CardTags tags={item.tags} />
 </a>

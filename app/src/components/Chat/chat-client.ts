@@ -104,40 +104,47 @@ function clearIdentity(): void {
   localStorage.setItem(LS_CLIENT_ID_KEY, clientId);
 }
 
+const msgTpl = document.getElementById("chat-msg-tpl") as HTMLTemplateElement;
+const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElement;
+
 function appendMessage(msg: ChatMessage): void {
-  const div = document.createElement("div");
-  div.dataset.msgId = String(msg.id);
+  const isAdmin = adminUsername != null && msg.username === adminUsername;
+  const frag = msgTpl.content.cloneNode(true) as DocumentFragment;
+  const root = frag.firstElementChild as HTMLElement;
+
+  root.dataset.msgId = String(msg.id);
+
+  const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
+
+  const usernameEl = slot("username");
+  usernameEl.textContent = msg.username;
+  if (isAdmin) usernameEl.dataset.admin = "";
+
   const time = new Date(msg.timestamp).toLocaleTimeString([], {
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
   });
+  slot("time").textContent = time;
 
   if (msg.context) {
-    const contextLine = document.createElement("div");
-    contextLine.style.fontSize = "0.85em";
-    contextLine.style.opacity = "0.7";
-    const label = document.createTextNode("on: ");
-    const link = document.createElement("a");
-    link.href = msg.context.path;
-    link.textContent = msg.context.path;
-    contextLine.appendChild(label);
-    contextLine.appendChild(link);
-    div.appendChild(contextLine);
+    const pageLink = slot("page") as HTMLAnchorElement;
+    pageLink.href = msg.context.path;
+    pageLink.textContent = msg.context.path;
+    pageLink.hidden = false;
+    slot("sep").hidden = false;
   }
 
-  const messageLine = document.createElement("div");
-  messageLine.textContent = `[${time}] ${msg.username}: ${msg.text}`;
-  div.appendChild(messageLine);
+  slot("text").textContent = msg.text;
 
-  messagesEl.appendChild(div);
+  messagesEl.appendChild(frag);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 function appendNotice(text: string): void {
-  const div = document.createElement("div");
-  div.textContent = text;
-  div.style.fontStyle = "italic";
-  messagesEl.appendChild(div);
+  const frag = noticeTpl.content.cloneNode(true) as DocumentFragment;
+  const root = frag.firstElementChild as HTMLElement;
+  root.textContent = text;
+  messagesEl.appendChild(frag);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
@@ -190,8 +197,9 @@ function connect(): void {
       ownerStatusEl.textContent = data.isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
       ownerStatusEl.dataset.online = String(data.isOwnerOnline);
       const viewerLabel = data.userCount === 1 ? "viewer" : "viewers";
-      userCountEl.innerHTML = `<i class="fa-solid fa-eye"></i> ${data.userCount} ${viewerLabel}`;
-      userCountEl.title = `${data.userCount} ${viewerLabel}`;
+      const viewerText = `${data.userCount} ${viewerLabel}`;
+      (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = viewerText;
+      userCountEl.title = viewerText;
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
       if (data.code === "expired_username") {
         clearIdentity();
