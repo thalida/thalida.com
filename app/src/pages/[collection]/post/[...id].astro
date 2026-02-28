@@ -111,6 +111,19 @@ const pageTitle = entry.data.title as string;
   .post-content :global(h4) {
     @apply font-heading text-text;
   }
+  .post-content :global(.heading-anchor) {
+    opacity: 0;
+    margin-left: 0.35rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-weight: 400;
+    transition: opacity 0.15s;
+  }
+  .post-content :global(h2:hover .heading-anchor),
+  .post-content :global(h3:hover .heading-anchor),
+  .post-content :global(h4:hover .heading-anchor) {
+    opacity: 1;
+  }
   .post-content :global(h2) {
     @apply text-text;
   }

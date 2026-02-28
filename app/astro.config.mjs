@@ -43,8 +43,15 @@ export default defineConfig({
     remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }], [remarkR2Media, { baseUrl: mediaBaseUrl }]],
     rehypePlugins: [
       rehypeSlug,
-      rehypeAutolinkHeadings,
-      [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto" }],
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "append",
+          properties: { ariaHidden: "true", tabIndex: -1, class: "heading-anchor" },
+          content: { type: "text", value: "#" },
+        },
+      ],
+      [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto", fallback: false }],
       [rehypeR2Media, { baseUrl: mediaBaseUrl }],
     ],
   },
