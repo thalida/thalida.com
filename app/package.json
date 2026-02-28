@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.2.0",
     "astro": "^5.10.1",
     "astro-expressive-code": "^0.41.6",
+    "astro-pagefind": "^1.8.5",
     "he": "^1.2.0",
     "tailwindcss": "^4.2.0",
     "unist-util-visit": "^5.1.0",
