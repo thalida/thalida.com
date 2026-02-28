@@ -18,3 +18,4 @@
 - [x] remove "recipe" tag
 - [x] fix "tip" in md
 - [x] add extended md w/ custom items like callouts
+- [x] homepage projects

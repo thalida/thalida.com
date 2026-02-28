@@ -1,11 +1,10 @@
 ---
 import type { NavItem } from "@lib/nav-data";
+import type { CardVariant } from "../../content.config";
 import StackedCard from "./StackedCard.astro";
 import LinkCard from "./LinkCard.astro";
 import CompactCard from "./CompactCard.astro";
 import GalleryCard from "./GalleryCard.astro";
-
-export type CardVariant = "stacked" | "link" | "compact" | "gallery";
 
 interface Props {
   variant?: CardVariant;

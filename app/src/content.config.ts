@@ -7,32 +7,41 @@ export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "ve
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 
-export const collectionMeta: Record<CollectionName, { title: string; description: string }> = {
-  projects: {
-    title: "Projects",
-    description: "Personal and professional projects, crafts, and experiments.",
-  },
-  guides: {
-    title: "Guides",
-    description: "Step-by-step guides and tutorials.",
-  },
-  gallery: {
-    title: "Gallery",
-    description: "Photography, art, and visual projects.",
-  },
-  links: {
-    title: "Links",
-    description: "Curated resources, tools, and websites.",
-  },
-  recipes: {
-    title: "Recipes",
-    description: "Favorite recipes.",
-  },
-  versions: {
-    title: "Site Versions",
-    description: "The evolution of thalida.com.",
-  },
-};
+export type CardVariant = "stacked" | "link" | "compact" | "gallery";
+
+export const collectionMeta: Record<CollectionName, { title: string; description: string; cardVariant: CardVariant }> =
+  {
+    projects: {
+      title: "Projects",
+      description: "Personal and professional projects, crafts, and experiments.",
+      cardVariant: "stacked",
+    },
+    guides: {
+      title: "Guides",
+      description: "Step-by-step guides and tutorials.",
+      cardVariant: "stacked",
+    },
+    gallery: {
+      title: "Gallery",
+      description: "Photography, art, and visual projects.",
+      cardVariant: "gallery",
+    },
+    links: {
+      title: "Links",
+      description: "Curated resources, tools, and websites.",
+      cardVariant: "link",
+    },
+    recipes: {
+      title: "Recipes",
+      description: "Favorite recipes.",
+      cardVariant: "compact",
+    },
+    versions: {
+      title: "Site Versions",
+      description: "The evolution of thalida.com.",
+      cardVariant: "stacked",
+    },
+  };
 
 async function combineYamlFiles({ filename, pattern, base }: { filename: string; pattern: string; base: string }) {
   const yamlFiles = fs.glob(pattern, { cwd: base });

@@ -1,7 +1,7 @@
 ---
 import { type NavItem } from "@lib/nav-data";
+import { collectionMeta, type CollectionName } from "../../content.config";
 import Card from "@components/Card/Card.astro";
-import type { CardVariant } from "@components/Card/Card.astro";
 import CategoryFilter from "@components/CategoryFilter/CategoryFilter.astro";
 import Pagination from "@components/Pagination/Pagination.astro";
 
@@ -33,16 +33,8 @@ const {
   lastPage,
 } = Astro.props;
 
-const LINK_COLLECTIONS = new Set(["links"]);
-const COMPACT_COLLECTIONS = new Set(["recipes"]);
-const GALLERY_COLLECTIONS = new Set(["gallery"]);
-
-let variant: CardVariant = "stacked";
-if (LINK_COLLECTIONS.has(collection)) variant = "link";
-else if (COMPACT_COLLECTIONS.has(collection)) variant = "compact";
-else if (GALLERY_COLLECTIONS.has(collection)) variant = "gallery";
-
-const useGallery = GALLERY_COLLECTIONS.has(collection);
+const variant = collectionMeta[collection as CollectionName]?.cardVariant ?? "stacked";
+const useGallery = variant === "gallery";
 ---
 
 <div class="font-body max-w-5xl mx-auto">
