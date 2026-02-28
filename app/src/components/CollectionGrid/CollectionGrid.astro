@@ -52,24 +52,33 @@ function tileSvg(title: string): string {
 }
 ---
 
-<div class="collection-page">
-  <header class="collection-hero">
-    <h1>{title}</h1>
-    <p class="collection-subtitle">{subtitle}</p>
-    <p class="collection-count">{itemCount} items</p>
+<div class="font-body max-w-5xl mx-auto">
+  <header class="mb-6">
+    <h1 class="m-0 mb-3 font-display font-bold text-neon text-display tracking-tighter leading-display">{title}</h1>
+    <p class="m-0 mb-3 font-heading font-semibold text-teal text-subtitle tracking-tight">{subtitle}</p>
+    <p class="m-0 font-body text-muted text-sm">{itemCount} items</p>
   </header>
 
   {
     allCategories.length > 0 && (
-      <div class="filter-section">
-        <div class="filter-tags">
-          <a href={`/${collection}`} class:list={["filter-tag", { "filter-tag--active": !activeCategory }]}>
+      <div class="mb-6">
+        <div class="flex flex-wrap gap-2">
+          <a
+            href={`/${collection}`}
+            class:list={[
+              "bg-transparent border border-teal text-teal font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide hover:bg-teal/10 hover:text-teal",
+              { "bg-teal/15 text-teal border-teal": !activeCategory },
+            ]}
+          >
             All
           </a>
           {allCategories.map((cat) => (
             <a
               href={`/${collection}/${encodeURIComponent(cat)}`}
-              class:list={["filter-tag", { "filter-tag--active": activeCategory === cat }]}
+              class:list={[
+                "bg-transparent border border-teal text-teal font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide hover:bg-teal/10 hover:text-teal",
+                { "bg-teal/15 text-teal border-teal": activeCategory === cat },
+              ]}
             >
               {categoryDisplay(cat)}
             </a>
@@ -79,7 +88,12 @@ function tileSvg(title: string): string {
     )
   }
 
-  <div class:list={["items-grid", { "items-grid--gallery": useGallery }]}>
+  <div
+    class:list={[
+      "items-grid grid gap-4 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3",
+      { "grid-cols-2 gap-4": useGallery },
+    ]}
+  >
     {
       items.map((item) => {
         const isExternal = item.collection === "links";
@@ -96,11 +110,16 @@ function tileSvg(title: string): string {
           })();
 
           return (
-            <a href={href} class="item-card item-card--link" target="_blank" rel="noopener">
-              <p class="item-card__meta">
+            <a
+              href={href}
+              class="item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col gap-1 p-3"
+              target="_blank"
+              rel="noopener"
+            >
+              <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case">
                 {displayUrl}
                 <svg
-                  class="item-card__external-icon"
+                  class="text-muted opacity-60"
                   width="10"
                   height="10"
                   viewBox="0 0 24 24"
@@ -115,16 +134,27 @@ function tileSvg(title: string): string {
                   <line x1="10" y1="14" x2="21" y2="3" />
                 </svg>
               </p>
-              <h3 class="item-card__title">
+              <h3 class="m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base">
                 {item.faviconUrl ? (
-                  <img class="item-card__favicon" src={item.faviconUrl} alt="" width="16" height="16" loading="lazy" />
+                  <img
+                    class="shrink-0 inline-block rounded-sm align-middle"
+                    src={item.faviconUrl}
+                    alt=""
+                    width="16"
+                    height="16"
+                    loading="lazy"
+                  />
                 ) : (
-                  <span class="item-card__favicon-placeholder gradient-text">{item.title.charAt(0)}</span>
+                  <span class="shrink-0 font-display font-bold uppercase text-xs w-4 text-center gradient-text">
+                    {item.title.charAt(0)}
+                  </span>
                 )}
                 {item.title}
               </h3>
               {(item.description || item.metaDescription) && (
-                <p class="item-card__description">{item.description || item.metaDescription}</p>
+                <p class="m-0 font-body text-muted leading-relaxed text-xs">
+                  {item.description || item.metaDescription}
+                </p>
               )}
             </a>
           );
@@ -133,22 +163,25 @@ function tileSvg(title: string): string {
         if (useFlag) {
           /* ---- Flag card (horizontal with image box — recipes) ---- */
           return (
-            <a href={href} class="item-card item-card--flag">
-              <div class="item-card__flag-image">
+            <a
+              href={href}
+              class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-row items-center p-3 gap-4"
+            >
+              <div class="shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden w-16 h-16 rounded-sm">
                 {item.coverImageSrc ? (
                   <img
-                    class="item-card__image"
+                    class="w-full h-full object-cover"
                     src={item.coverImageSrc}
                     alt={item.coverImageAlt ?? item.title}
                     loading="lazy"
                   />
                 ) : (
-                  <span class="item-card__placeholder gradient-text">{item.title.charAt(0)}</span>
+                  <span class="font-display font-bold uppercase text-2xl gradient-text">{item.title.charAt(0)}</span>
                 )}
               </div>
-              <div class="item-card__body">
-                <h3 class="item-card__title">{item.title}</h3>
-                {item.description && <p class="item-card__description">{item.description}</p>}
+              <div class="flex-1 min-w-0 flex flex-col gap-1">
+                <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
+                {item.description && <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description}</p>}
               </div>
             </a>
           );
@@ -159,25 +192,32 @@ function tileSvg(title: string): string {
           const placeholderColor = pickColor(item.title);
 
           return (
-            <a href={href} class="item-card item-card--gallery">
-              <div class="item-card__gallery-image-wrapper">
+            <a
+              href={href}
+              class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover overflow-hidden flex flex-col max-h-80"
+            >
+              <div class="overflow-hidden flex-1">
                 {item.coverImageSrc ? (
                   <img
-                    class="item-card__gallery-image"
+                    class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     src={item.coverImageSrc}
                     alt={item.coverImageAlt ?? item.title}
                     loading="lazy"
                   />
                 ) : (
                   <div
-                    class="item-card__gallery-placeholder"
+                    class="w-full h-full aspect-4/3"
                     style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
                   />
                 )}
               </div>
-              <div class="item-card__gallery-body">
-                <h3 class="item-card__gallery-title">{item.title}</h3>
-                {item.category && <span class="item-card__gallery-category">{categoryDisplay(item.category)}</span>}
+              <div class="p-3 flex flex-col gap-0.5">
+                <h3 class="m-0 font-heading font-bold text-text text-sm leading-snug">{item.title}</h3>
+                {item.category && (
+                  <span class="font-body uppercase text-neon font-semibold text-2xs tracking-widest">
+                    {categoryDisplay(item.category)}
+                  </span>
+                )}
               </div>
             </a>
           );
@@ -194,11 +234,14 @@ function tileSvg(title: string): string {
         const placeholderColor = pickColor(item.title);
 
         return (
-          <a href={href} class="item-card item-card--stacked">
+          <a
+            href={href}
+            class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col overflow-hidden"
+          >
             {item.coverImageSrc ? (
-              <div class="item-card__image-wrapper">
+              <div class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm">
                 <img
-                  class="item-card__image"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   src={item.coverImageSrc}
                   alt={item.coverImageAlt ?? item.title}
                   loading="lazy"
@@ -206,18 +249,24 @@ function tileSvg(title: string): string {
               </div>
             ) : (
               <div
-                class="item-card__image-wrapper item-card__image-wrapper--color"
+                class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm relative"
                 style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
               />
             )}
-            <div class="item-card__body">
-              {eyebrow && <p class="item-card__meta">{eyebrow}</p>}
-              <h3 class="item-card__title">{item.title}</h3>
-              {item.description && <p class="item-card__description">{item.description}</p>}
+            <div class="flex flex-col gap-1 p-3">
+              {eyebrow && (
+                <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">{eyebrow}</p>
+              )}
+              <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
+              {item.description && (
+                <p class="m-0 font-body text-muted leading-relaxed text-xs line-clamp-2">{item.description}</p>
+              )}
               {item.tags && item.tags.length > 0 && (
-                <div class="item-tags">
+                <div class="flex flex-wrap gap-1 mt-3">
                   {item.tags.slice(0, 3).map((tag) => (
-                    <span class="item-tag">{tag}</span>
+                    <span class="bg-transparent border border-teal text-teal capitalize text-2xs rounded-sm py-0.5 px-2 tracking-wide">
+                      {tag}
+                    </span>
                   ))}
                 </div>
               )}
@@ -295,6 +344,11 @@ function tileSvg(title: string): string {
 </script>
 
 <style>
-  /* force HMR recompile — subtitle + count styling */
-  @import "./CollectionGrid.css";
+  .items-grid.masonry-ready {
+    gap: 0 1rem;
+    grid-auto-rows: 10px;
+  }
+  .items-grid.masonry-ready > .item-card {
+    margin-bottom: 1rem;
+  }
 </style>
