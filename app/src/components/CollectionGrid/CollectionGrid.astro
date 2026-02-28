@@ -34,12 +34,12 @@ const {
 } = Astro.props;
 
 const LINK_COLLECTIONS = new Set(["links"]);
-const FLAG_COLLECTIONS = new Set(["recipes"]);
+const COMPACT_COLLECTIONS = new Set(["recipes"]);
 const GALLERY_COLLECTIONS = new Set(["gallery"]);
 
 let variant: CardVariant = "stacked";
 if (LINK_COLLECTIONS.has(collection)) variant = "link";
-else if (FLAG_COLLECTIONS.has(collection)) variant = "flag";
+else if (COMPACT_COLLECTIONS.has(collection)) variant = "compact";
 else if (GALLERY_COLLECTIONS.has(collection)) variant = "gallery";
 
 const useGallery = GALLERY_COLLECTIONS.has(collection);
