@@ -8,5 +8,6 @@
       "@lib/*": ["./src/lib/*"],
       "@assets/*": ["./src/assets/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "dist"]
 }

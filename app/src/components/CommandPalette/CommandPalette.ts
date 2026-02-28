@@ -42,10 +42,10 @@ async function loadPagefind() {
 }
 
 function initCommandPalette() {
-  const overlay = document.getElementById("command-palette");
-  const input = document.getElementById("js-cp-input") as HTMLInputElement | null;
-  const resultsContainer = document.getElementById("cp-results");
-  const collectionSelect = document.getElementById("js-cp-collection-select") as HTMLSelectElement | null;
+  const overlay = document.getElementById("command-palette") as HTMLElement;
+  const input = document.getElementById("js-cp-input") as HTMLInputElement;
+  const resultsContainer = document.getElementById("cp-results") as HTMLElement;
+  const collectionSelect = document.getElementById("js-cp-collection-select") as HTMLSelectElement;
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
@@ -324,3 +324,5 @@ function initCommandPalette() {
 }
 
 document.addEventListener("astro:page-load", initCommandPalette);
+
+export {};

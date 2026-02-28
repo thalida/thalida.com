@@ -15,7 +15,7 @@ function _corsHeaders(env: Env, request: Request): Record<string, string> {
   };
 }
 
-function _jsonResponse(body: Record<string, unknown>, status: number, headers: Record<string, string>): Response {
+function _jsonResponse(body: object, status: number, headers: Record<string, string>): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: { ...headers, "Content-Type": "application/json" },
