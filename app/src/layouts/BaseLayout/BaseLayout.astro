@@ -145,3 +145,30 @@ const navData = await getNavData();
     <script src="./BaseLayout.ts"></script>
   </body>
 </html>
+
+<style is:global>
+  #nav-backdrop.visible,
+  #chat-overlay-backdrop.visible {
+    display: block;
+  }
+
+  #nav-panel.open {
+    translate: 0;
+  }
+
+  #chat-overlay.open {
+    translate: 0;
+  }
+
+  #chat-overlay #chat-overlay-close {
+    display: block;
+    background: transparent;
+    border: none;
+    padding: 0.25rem;
+    color: var(--color-muted);
+  }
+
+  #chat-overlay #chat-overlay-close:hover {
+    color: var(--color-neon);
+  }
+</style>

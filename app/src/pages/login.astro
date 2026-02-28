@@ -9,31 +9,28 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>login &middot; thalida</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700&family=IBM+Plex+Mono:wght@400&family=Space+Grotesk:wght@700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body
-    style="margin:0;background:#030A12;color:#E8F0F8;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh;"
-  >
-    <div style="max-width:360px;width:100%;padding:2rem;">
-      <h1 style="font-family:'Bricolage Grotesque',sans-serif;color:#39FF14;font-size:1.5rem;margin:0 0 1.5rem;">
-        Login
-      </h1>
-      <form id="js-admin-form" style="display:flex;flex-direction:column;gap:0.75rem;">
+  <body>
+    <div class="login-card">
+      <h1>Login</h1>
+      <form id="js-admin-form">
         <input
           id="js-admin-secret"
           type="password"
           placeholder="Enter password..."
           autocomplete="current-password"
           required
-          style="padding:0.6rem 0.75rem;border:1px solid #152535;border-radius:6px;background:#0D1F2D;color:#E8F0F8;font-family:inherit;font-size:0.9rem;"
         />
-        <button
-          type="submit"
-          style="padding:0.6rem 1.25rem;border:none;border-radius:6px;background:#00E5A0;color:#030A12;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;"
-          >Log in</button
-        >
-        <p id="js-admin-error" hidden style="color:#ff4444;font-size:0.85rem;margin:0;"></p>
+        <button type="submit">Log in</button>
+        <p id="js-admin-error" hidden></p>
       </form>
-      <p style="margin-top:1.5rem;"><a href="/" style="color:#00E5A0;font-size:0.85rem;">&larr; back to chat</a></p>
+      <p class="back-link"><a href="/">&larr; back to chat</a></p>
     </div>
 
     <script is:inline define:vars={{ apiBase, LS_ADMIN_TOKEN_KEY }}>
@@ -74,3 +71,82 @@ const apiBase = wsUrl.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
     </script>
   </body>
 </html>
+
+<style>
+  :root {
+    --color-midnight: #030a12;
+    --color-surface: #0d1f2d;
+    --color-neon: #39ff14;
+    --color-teal: #00e5a0;
+    --color-text: #e8f0f8;
+    --color-border: #152535;
+    --color-error: #ff4444;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-midnight);
+    color: var(--color-text);
+    font-family: "IBM Plex Mono", monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .login-card {
+    max-width: 360px;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    color: var(--color-neon);
+    font-size: 1.5rem;
+    margin: 0 0 1.5rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  input {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+
+  button {
+    padding: 0.6rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--color-teal);
+    color: var(--color-midnight);
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  #js-admin-error {
+    color: var(--color-error);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .back-link {
+    margin-top: 1.5rem;
+  }
+
+  .back-link a {
+    color: var(--color-teal);
+    font-size: 0.85rem;
+  }
+</style>
