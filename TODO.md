@@ -13,4 +13,4 @@
 - [x] muted style tags on cards
 - [x] show date on all cards (month + year)
 - [ ] window coloring
-- [ ] date on the right
+- [x] date on the right

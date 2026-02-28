@@ -101,6 +101,11 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
   return data;
 }
 
+export function isValidDate(isoString: string): boolean {
+  const d = new Date(isoString);
+  return !isNaN(d.getTime()) && d.getFullYear() > 1970;
+}
+
 export function formatDate(isoString: string): string {
   return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short" });
 }
