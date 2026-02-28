@@ -2,7 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
-import { COLLECTION_NAMES, type CollectionName } from "../../content.config";
+import { COLLECTION_NAMES, type CollectionName } from "../../../content.config";
 import CardTags from "@components/Card/CardTags.astro";
 
 type AnyEntry = CollectionEntry<CollectionName>;
@@ -101,7 +101,7 @@ const pageTitle = entry.data.title as string;
 </BaseLayout>
 
 <style>
-  @reference "../../layouts/BaseLayout/BaseLayout.css";
+  @reference "../../../layouts/BaseLayout/BaseLayout.css";
 
   .post-content :global(h2),
   .post-content :global(h3),
