@@ -1,5 +1,7 @@
 ---
 import { categoryDisplay, type NavItem } from "@lib/nav-data";
+import Card from "@components/Card/Card.astro";
+import type { CardVariant } from "@components/Card/Card.astro";
 
 interface Props {
   collection: string;
@@ -17,39 +19,6 @@ const FLAG_COLLECTIONS = new Set(["recipes", "links"]);
 const GALLERY_COLLECTIONS = new Set(["gallery"]);
 const useFlag = FLAG_COLLECTIONS.has(collection);
 const useGallery = GALLERY_COLLECTIONS.has(collection);
-
-/* On-theme placeholder colors for stacked cards without images */
-const PLACEHOLDER_COLORS = [
-  "#39FF14" /* neon green */,
-  "#00E5A0" /* teal */,
-  "#00D4AA" /* mint */,
-  "#0A8F6F" /* deep teal */,
-  "#2B9F4B" /* forest green */,
-  "#1CB5A0" /* sea green */,
-];
-
-function pickColor(str: string): string {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return PLACEHOLDER_COLORS[Math.abs(hash) % PLACEHOLDER_COLORS.length];
-}
-
-function tileSvg(title: string): string {
-  const label = title.toUpperCase() + " ";
-  const escaped = label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  const charW = 6.8;
-  const w = Math.ceil(label.length * charW);
-  const h = 34;
-  const svg =
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
-    `<text x="0" y="12" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
-    `<text x="${Math.round(w / 2)}" y="29" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
-    `<text x="${Math.round(-w / 2)}" y="29" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
-    `</svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-}
 ---
 
 <div class="font-body max-w-5xl mx-auto">
@@ -97,182 +66,12 @@ function tileSvg(title: string): string {
     {
       items.map((item) => {
         const isExternal = item.collection === "links";
-        const href = isExternal ? item.id : `/${item.collection}/${item.id}`;
+        let variant: CardVariant = "stacked";
+        if (isExternal) variant = "link";
+        else if (useFlag) variant = "flag";
+        else if (useGallery) variant = "gallery";
 
-        if (isExternal) {
-          /* ---- Link card (compact flag with inline favicon) ---- */
-          const displayUrl = (() => {
-            try {
-              return new URL(item.id).hostname.replace(/^www\./, "");
-            } catch {
-              return item.id;
-            }
-          })();
-
-          return (
-            <a
-              href={href}
-              class="item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col gap-1 p-3"
-              target="_blank"
-              rel="noopener"
-            >
-              <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case">
-                {displayUrl}
-                <svg
-                  class="text-muted opacity-60"
-                  width="10"
-                  height="10"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-              </p>
-              <h3 class="m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base">
-                {item.faviconUrl ? (
-                  <img
-                    class="shrink-0 inline-block rounded-sm align-middle"
-                    src={item.faviconUrl}
-                    alt=""
-                    width="16"
-                    height="16"
-                    loading="lazy"
-                  />
-                ) : (
-                  <span class="shrink-0 font-display font-bold uppercase text-xs w-4 text-center gradient-text">
-                    {item.title.charAt(0)}
-                  </span>
-                )}
-                {item.title}
-              </h3>
-              {(item.description || item.metaDescription) && (
-                <p class="m-0 font-body text-muted leading-relaxed text-xs">
-                  {item.description || item.metaDescription}
-                </p>
-              )}
-            </a>
-          );
-        }
-
-        if (useFlag) {
-          /* ---- Flag card (horizontal with image box — recipes) ---- */
-          return (
-            <a
-              href={href}
-              class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-row items-center p-3 gap-4"
-            >
-              <div class="shrink-0 flex items-center justify-center bg-midnight border border-border overflow-hidden w-16 h-16 rounded-sm">
-                {item.coverImageSrc ? (
-                  <img
-                    class="w-full h-full object-cover"
-                    src={item.coverImageSrc}
-                    alt={item.coverImageAlt ?? item.title}
-                    loading="lazy"
-                  />
-                ) : (
-                  <span class="font-display font-bold uppercase text-2xl gradient-text">{item.title.charAt(0)}</span>
-                )}
-              </div>
-              <div class="flex-1 min-w-0 flex flex-col gap-1">
-                <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
-                {item.description && <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description}</p>}
-              </div>
-            </a>
-          );
-        }
-
-        if (useGallery) {
-          /* ---- Gallery card (image-dominant with text overlay) ---- */
-          const placeholderColor = pickColor(item.title);
-
-          return (
-            <a
-              href={href}
-              class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover overflow-hidden flex flex-col max-h-80"
-            >
-              <div class="overflow-hidden flex-1">
-                {item.coverImageSrc ? (
-                  <img
-                    class="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                    src={item.coverImageSrc}
-                    alt={item.coverImageAlt ?? item.title}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div
-                    class="w-full h-full aspect-4/3"
-                    style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
-                  />
-                )}
-              </div>
-              <div class="p-3 flex flex-col gap-0.5">
-                <h3 class="m-0 font-heading font-bold text-text text-sm leading-snug">{item.title}</h3>
-                {item.category && (
-                  <span class="font-body uppercase text-neon font-semibold text-2xs tracking-widest">
-                    {categoryDisplay(item.category)}
-                  </span>
-                )}
-              </div>
-            </a>
-          );
-        }
-
-        /* ---- Stacked card (vertical) ---- */
-        const eyebrow = [
-          item.category ? categoryDisplay(item.category) : null,
-          item.publishedOn ? new Date(item.publishedOn).getFullYear() : null,
-        ]
-          .filter(Boolean)
-          .join(" · ");
-
-        const placeholderColor = pickColor(item.title);
-
-        return (
-          <a
-            href={href}
-            class="group item-card bg-surface border border-border no-underline text-inherit transition-all rounded-lg hover:-translate-y-0.5 hover:border-muted/40 hover:shadow-card-hover flex flex-col overflow-hidden"
-          >
-            {item.coverImageSrc ? (
-              <div class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm">
-                <img
-                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  src={item.coverImageSrc}
-                  alt={item.coverImageAlt ?? item.title}
-                  loading="lazy"
-                />
-              </div>
-            ) : (
-              <div
-                class="overflow-hidden bg-midnight border-b border-border h-24 rounded-t-sm relative"
-                style={`background-color: ${placeholderColor}; background-image: ${tileSvg(item.title)}; background-repeat: repeat;`}
-              />
-            )}
-            <div class="flex flex-col gap-1 p-3">
-              {eyebrow && (
-                <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">{eyebrow}</p>
-              )}
-              <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
-              {item.description && (
-                <p class="m-0 font-body text-muted leading-relaxed text-xs line-clamp-2">{item.description}</p>
-              )}
-              {item.tags && item.tags.length > 0 && (
-                <div class="flex flex-wrap gap-1 mt-3">
-                  {item.tags.slice(0, 3).map((tag) => (
-                    <span class="bg-transparent border border-teal text-teal capitalize text-2xs rounded-sm py-0.5 px-2 tracking-wide">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </a>
-        );
+        return <Card variant={variant} item={item} />;
       })
     }
   </div>
