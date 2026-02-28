@@ -11,14 +11,9 @@ interface Props {
   title?: string;
   activePage?: string;
   activeCollection?: string;
-  pageContext?: {
-    collection: string;
-    id: string;
-    title: string;
-  } | null;
 }
 
-const { title = "thalida", activePage, activeCollection, pageContext = null } = Astro.props;
+const { title = "thalida", activePage, activeCollection } = Astro.props;
 const navData = await getNavData();
 ---
 
@@ -40,7 +35,6 @@ const navData = await getNavData();
       referrerpolicy="no-referrer"
     />
     <ClientRouter />
-    {pageContext && <meta name="page-context" content={JSON.stringify(pageContext)} />}
     <slot name="head" />
   </head>
   <body>

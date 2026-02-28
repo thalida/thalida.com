@@ -108,11 +108,7 @@ const recipeMeta =
     : [];
 ---
 
-<BaseLayout
-  title={`${pageTitle} · thalida`}
-  activeCollection={collection}
-  pageContext={{ collection: collection!, id: id!, title: pageTitle }}
->
+<BaseLayout title={`${pageTitle} · thalida`} activeCollection={collection}>
   {recipeJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={recipeJsonLd} />}
   <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
     <meta data-pagefind-meta={`collection:${collection}`} />
