@@ -51,10 +51,9 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.page}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice!"
                 data-active={activePage === entry.page ? "true" : undefined}
               >
-                <span class="shrink-0 w-1.25 h-1.25 rounded-full bg-current" />
                 {entry.label}
               </a>
             </li>
@@ -62,10 +61,9 @@ const navData = await getNavData();
             <li>
               <a
                 href={`/${entry.collection}`}
-                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice"
+                class="group flex items-center gap-2 w-full no-underline text-muted font-body font-medium transition-colors text-sm tracking-wider py-2 px-3 rounded-md hover:bg-surface-active hover:text-text data-active:bg-surface-active data-active:text-ice!"
                 data-active={activeCollection === entry.collection ? "true" : undefined}
               >
-                <span class="shrink-0 w-1.25 h-1.25 rounded-full bg-current" />
                 <span class="flex-1">{navData[entry.collection].title}</span>
                 <span class="text-xs font-normal bg-midnight py-0.5 px-2 rounded-full text-muted group-data-active:bg-ice/15 group-data-active:text-ice">
                   {navData[entry.collection].items.length}
