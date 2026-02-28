@@ -1,5 +1,6 @@
 ---
 import type { NavItem } from "@lib/nav-data";
+import { categoryDisplay } from "./card-utils";
 
 interface Props {
   item: NavItem;
@@ -31,6 +32,13 @@ const href = `/${item.collection}/${item.id}`;
     }
   </div>
   <div class="flex-1 min-w-0 flex flex-col gap-1">
+    {
+      item.category && (
+        <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
+          {categoryDisplay(item.category)}
+        </p>
+      )
+    }
     <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
     {item.description && <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description}</p>}
   </div>

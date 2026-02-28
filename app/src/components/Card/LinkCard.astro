@@ -1,5 +1,6 @@
 ---
 import type { NavItem } from "@lib/nav-data";
+import { categoryDisplay } from "./card-utils";
 
 interface Props {
   item: NavItem;
@@ -24,24 +25,13 @@ const displayUrl = (() => {
   target="_blank"
   rel="noopener"
 >
-  <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case">
-    {displayUrl}
-    <svg
-      class="text-muted opacity-60"
-      width="10"
-      height="10"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-      <polyline points="15 3 21 3 21 9"></polyline>
-      <line x1="10" y1="14" x2="21" y2="3"></line>
-    </svg>
-  </p>
+  {
+    item.category && (
+      <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
+        {categoryDisplay(item.category)}
+      </p>
+    )
+  }
   <h3 class="m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base">
     {
       item.faviconUrl ? (
@@ -66,4 +56,22 @@ const displayUrl = (() => {
       <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description || item.metaDescription}</p>
     )
   }
+  <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case mt-1">
+    {displayUrl}
+    <svg
+      class="text-muted opacity-60"
+      width="10"
+      height="10"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+      <polyline points="15 3 21 3 21 9"></polyline>
+      <line x1="10" y1="14" x2="21" y2="3"></line>
+    </svg>
+  </p>
 </a>
