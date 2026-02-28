@@ -18,21 +18,27 @@ const siteAge = new Date().getFullYear() - 2007;
 
 <BaseLayout activePage="">
   {/* ── Hero ── */}
-  <section class="home-hero" aria-label="Introduction">
+  <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
     <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
-    <div class="home-hero__text">
-      <h1 class="home-hero__title"><span id="greeting">Hey</span>, I'm&nbsp;Thalida.</h1>
-      <p class="home-hero__body">Making weird and wonderful things on the internet since 2007.</p>
+    <div class="max-w-lg">
+      <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
+        <span id="greeting">Hey</span>, I'm&nbsp;Thalida.
+      </h1>
+      <p class="m-0 mt-4 font-heading text-muted leading-relaxed text-subtitle tracking-tight">
+        Making weird and wonderful things on the internet since 2007.
+      </p>
     </div>
   </section>
 
   {/* ── Featured Projects ── */}
-  <section class="home-section" aria-label="Selected work">
-    <div class="home-section__header">
-      <span class="home-section__label">SELECTED WORK</span>
-      <hr class="home-section__rule" />
-      <a href="/projects" class="home-section__link"
-        >view all <svg class="home-section__arrow" viewBox="0 0 320 512" aria-hidden="true"
+  <section class="mt-16" aria-label="Selected work">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap">SELECTED WORK</span>
+      <hr class="grow border-t border-border my-0" />
+      <a
+        href="/projects"
+        class="font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1 hover:text-neon"
+        >view all <svg class="inline-block" style="width:0.55em;height:0.55em" viewBox="0 0 320 512" aria-hidden="true"
           ><path
             fill="currentColor"
             d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
@@ -40,20 +46,28 @@ const siteAge = new Date().getFullYear() - 2007;
         ></a
       >
     </div>
-    <div class="home-projects">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {
         featuredProjects.map((project) => (
-          <a href={`/projects/${project.id}`} class="home-project-card">
+          <a
+            href={`/projects/${project.id}`}
+            class="block no-underline bg-surface border border-border rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover"
+          >
             <img
-              class="home-project-card__image"
+              class="w-full object-cover"
+              style="aspect-ratio:16/10"
               src={project.coverImageSrc}
               alt={project.coverImageAlt ?? project.title}
               loading="lazy"
             />
-            <div class="home-project-card__body">
-              {project.category && <span class="home-project-card__category">{project.category}</span>}
-              <h3 class="home-project-card__title">{project.title}</h3>
-              {project.description && <p class="home-project-card__desc">{project.description}</p>}
+            <div class="p-4">
+              {project.category && (
+                <span class="font-body text-2xs text-muted uppercase tracking-widest">{project.category}</span>
+              )}
+              <h3 class="m-0 mt-1 font-heading text-text text-sm font-medium">{project.title}</h3>
+              {project.description && (
+                <p class="m-0 mt-2 font-body text-muted text-xs leading-relaxed line-clamp-2">{project.description}</p>
+              )}
             </div>
           </a>
         ))
@@ -62,12 +76,16 @@ const siteAge = new Date().getFullYear() - 2007;
   </section>
 
   {/* ── Site Timeline ── */}
-  <section class="home-section" aria-label="Site timeline">
-    <div class="home-section__header">
-      <span class="home-section__label">{siteAge} YEARS OF THALIDA.COM</span>
-      <hr class="home-section__rule" />
-      <a href="/versions" class="home-section__link"
-        >view all <svg class="home-section__arrow" viewBox="0 0 320 512" aria-hidden="true"
+  <section class="mt-16" aria-label="Site timeline">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap"
+        >{siteAge} YEARS OF THALIDA.COM</span
+      >
+      <hr class="grow border-t border-border my-0" />
+      <a
+        href="/versions"
+        class="font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1 hover:text-neon"
+        >view all <svg class="inline-block" style="width:0.55em;height:0.55em" viewBox="0 0 320 512" aria-hidden="true"
           ><path
             fill="currentColor"
             d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"
@@ -75,8 +93,8 @@ const siteAge = new Date().getFullYear() - 2007;
         ></a
       >
     </div>
-    <div class="home-timeline" role="region" aria-label="Site version timeline" tabindex="0">
-      <div class="home-timeline__track">
+    <div class="home-timeline relative overflow-x-auto" role="region" aria-label="Site version timeline" tabindex="0">
+      <div class="home-timeline__track flex gap-6 pb-4 relative" style="min-width:max-content">
         {
           versions.map((version) => {
             const year = version.category || "";
@@ -85,17 +103,26 @@ const siteAge = new Date().getFullYear() - 2007;
             return (
               <a
                 href={`/versions/${version.id}`}
-                class:list={["home-timeline__item", { "home-timeline__item--current": isCurrent }]}
+                class:list={[
+                  "group flex flex-col items-center no-underline relative",
+                  { "home-timeline__item--current": isCurrent },
+                ]}
+                style="flex:0 0 auto;width:90px"
               >
-                <div class="home-timeline__thumb">
+                <div class="home-timeline__thumb w-20 h-14 rounded overflow-hidden bg-surface border border-border relative z-10 group-hover:border-teal">
                   {version.coverImageSrc ? (
-                    <img src={version.coverImageSrc} alt={version.coverImageAlt ?? version.title} loading="lazy" />
+                    <img
+                      class="w-full h-full object-cover"
+                      src={version.coverImageSrc}
+                      alt={version.coverImageAlt ?? version.title}
+                      loading="lazy"
+                    />
                   ) : (
-                    <div class="home-timeline__thumb-placeholder" />
+                    <div class="w-full h-full bg-surface" />
                   )}
                 </div>
-                <span class="home-timeline__year">{year}</span>
-                <span class="home-timeline__name">{name}</span>
+                <span class="font-body text-2xs text-text mt-2 font-medium group-hover:text-teal">{year}</span>
+                <span class="home-timeline__name font-body text-muted mt-0.5 text-center leading-tight">{name}</span>
               </a>
             );
           })
@@ -132,7 +159,7 @@ const siteAge = new Date().getFullYear() - 2007;
 <style>
   @reference "../layouts/BaseLayout/BaseLayout.css";
 
-  /* ── Live-window overrides ── */
+  /* Web component custom properties */
   live-window {
     --window-color: var(--color-midnight);
     --blinds-color: var(--color-midnight);
@@ -145,148 +172,27 @@ const siteAge = new Date().getFullYear() - 2007;
     --weather-text-letter-spacing: 0.08em;
   }
 
-  /* ── Hero ── */
-  .home-hero {
-    @apply flex flex-col items-center text-center gap-8;
-  }
-
-  .home-hero__text {
-    @apply max-w-lg;
-  }
-
-  .home-hero__title {
-    @apply m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none;
-  }
-
-  .home-hero__body {
-    @apply m-0 mt-4 font-heading text-muted leading-relaxed text-subtitle tracking-tight;
-  }
-
-  /* ── Shared section header ── */
-  .home-section {
-    @apply mt-16;
-  }
-
-  .home-section__header {
-    @apply flex items-center gap-3 mb-6;
-  }
-
-  .home-section__label {
-    @apply font-body text-2xs text-muted uppercase tracking-widest whitespace-nowrap;
-  }
-
-  .home-section__rule {
-    @apply grow border-t border-border my-0;
-  }
-
-  .home-section__link {
-    @apply font-body text-xs text-teal no-underline whitespace-nowrap tracking-wider inline-flex items-center gap-1;
-  }
-
-  .home-section__link:hover {
-    @apply text-neon;
-  }
-
-  .home-section__arrow {
-    @apply inline-block;
-    width: 0.55em;
-    height: 0.55em;
-  }
-
-  /* ── Featured Projects ── */
-  .home-projects {
-    @apply grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-  }
-
-  .home-project-card {
-    @apply block no-underline bg-surface border border-border rounded-lg overflow-hidden transition-all duration-200;
-  }
-
-  .home-project-card:hover {
-    @apply -translate-y-1;
-    box-shadow: var(--shadow-card-hover);
-  }
-
-  .home-project-card__image {
-    @apply w-full object-cover;
-    aspect-ratio: 16 / 10;
-  }
-
-  .home-project-card__body {
-    @apply p-4;
-  }
-
-  .home-project-card__category {
-    @apply font-body text-2xs text-muted uppercase tracking-widest;
-  }
-
-  .home-project-card__title {
-    @apply m-0 mt-1 font-heading text-text text-sm font-medium;
-  }
-
-  .home-project-card__desc {
-    @apply m-0 mt-2 font-body text-muted text-xs leading-relaxed;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* ── Timeline ── */
+  /* Timeline: horizontal scroll fade */
   .home-timeline {
-    @apply relative overflow-x-auto;
     -webkit-overflow-scrolling: touch;
     mask-image: linear-gradient(to right, transparent, black 2%, black 98%, transparent);
   }
 
-  .home-timeline__track {
-    @apply flex gap-6 pb-4 relative;
-    min-width: max-content;
-  }
-
+  /* Timeline: track line pseudo-element */
   .home-timeline__track::before {
     content: "";
     @apply absolute left-0 right-0 border-t border-border;
     top: 40px;
   }
 
-  .home-timeline__item {
-    @apply flex flex-col items-center no-underline relative;
-    flex: 0 0 auto;
-    width: 90px;
-  }
-
-  .home-timeline__thumb {
-    @apply w-20 h-14 rounded overflow-hidden bg-surface border border-border relative z-10;
-  }
-
-  .home-timeline__thumb img {
-    @apply w-full h-full object-cover;
-  }
-
-  .home-timeline__thumb-placeholder {
-    @apply w-full h-full bg-surface;
-  }
-
+  /* Timeline: current version glow */
   .home-timeline__item--current .home-timeline__thumb {
     @apply border-neon;
     box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
   }
 
-  .home-timeline__year {
-    @apply font-body text-2xs text-text mt-2 font-medium;
-  }
-
+  /* Timeline: name font size */
   .home-timeline__name {
-    @apply font-body text-muted mt-0.5 text-center leading-tight;
     font-size: 0.6rem;
-  }
-
-  .home-timeline__item:hover .home-timeline__thumb {
-    @apply border-teal;
-  }
-
-  .home-timeline__item:hover .home-timeline__year {
-    @apply text-teal;
   }
 </style>
