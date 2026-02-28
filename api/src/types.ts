@@ -1,9 +1,7 @@
 // ── Data Types ──────────────────────────────────────────────────────
 
 export interface MessageContext {
-  collection: string;
-  id: string;
-  title: string;
+  path: string;
 }
 
 export interface ChatMessage {
