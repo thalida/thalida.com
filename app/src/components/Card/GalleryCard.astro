@@ -1,7 +1,9 @@
 ---
 import type { NavItem } from "@lib/nav-data";
+import { formatDate } from "@lib/nav-data";
 import CardCategory from "./CardCategory.astro";
 import CardCover from "./CardCover.astro";
+import CardTags from "./CardTags.astro";
 
 interface Props {
   item: NavItem;
@@ -23,7 +25,11 @@ const href = `/${item.collection}/${item.id}`;
     />
   </div>
   <div class="p-3 flex flex-col gap-0.5">
-    <CardCategory category={item.category} />
+    <div class="flex items-center gap-2">
+      <CardCategory category={item.category} />
+      <span class="text-muted/40 text-2xs">{formatDate(item.publishedOn)}</span>
+    </div>
     <h3 class="m-0 font-heading font-bold text-text text-sm leading-snug">{item.title}</h3>
+    <CardTags tags={item.tags} />
   </div>
 </a>

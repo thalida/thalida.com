@@ -1,0 +1,19 @@
+---
+interface Props {
+  tags?: string[];
+  max?: number;
+}
+
+const { tags, max = 3 } = Astro.props;
+const visibleTags = tags?.slice(0, max) ?? [];
+---
+
+{
+  visibleTags.length > 0 && (
+    <div class="flex flex-wrap gap-1 mt-1">
+      {visibleTags.map((tag) => (
+        <span class="text-muted/60 lowercase text-2xs tracking-wide bg-muted/10 rounded-full py-0.5 px-2">{tag}</span>
+      ))}
+    </div>
+  )
+}
