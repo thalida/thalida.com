@@ -47,25 +47,36 @@ const pageTitle = entry.data.title as string;
   activeCollection={collection}
   pageContext={{ collection: collection!, id: id!, title: pageTitle }}
 >
-  <article class="post-page">
-    <header class="post-header">
-      <p class="post-breadcrumb">
-        <a href={`/${collection}`}>{collection}</a>
+  <article class="font-body max-w-3xl mx-auto">
+    <header class="mb-6">
+      <p class="m-0 mb-3 font-body uppercase text-neon font-semibold text-2xs tracking-widest">
+        <a class="text-neon no-underline hover:text-teal" href={`/${collection}`}>{collection}</a>
         {
           entry.data.category && (
             <span>
               {" "}
-              / <a href={`/${collection}/${entry.data.category}`}>{entry.data.category}</a>
+              /{" "}
+              <a class="text-neon no-underline hover:text-teal" href={`/${collection}/${entry.data.category}`}>
+                {entry.data.category}
+              </a>
             </span>
           )
         }
       </p>
-      <h1>{pageTitle}</h1>
-      {entry.data.description && <p class="post-description">{entry.data.description}</p>}
-      <div class="post-meta">
+      <h1 class="m-0 mb-3 font-display font-bold text-neon text-display tracking-tighter leading-display">
+        {pageTitle}
+      </h1>
+      {
+        entry.data.description && (
+          <p class="m-0 mb-3 font-heading font-semibold text-teal text-subtitle tracking-tight">
+            {entry.data.description}
+          </p>
+        )
+      }
+      <div class="flex flex-wrap items-center gap-3">
         {
           entry.data.publishedOn && (
-            <time class="post-date">
+            <time class="text-sm text-muted">
               {new Date(entry.data.publishedOn).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -77,7 +88,7 @@ const pageTitle = entry.data.title as string;
       </div>
     </header>
     <hr />
-    <div class="post-content prose prose-invert prose-sm max-w-none">
+    <div class="post-content prose prose-invert prose-sm max-w-none text-text font-body">
       {Content ? <Content /> : <p>Content could not be rendered.</p>}
     </div>
   </article>
@@ -86,68 +97,23 @@ const pageTitle = entry.data.title as string;
 <style>
   @reference "../../layouts/BaseLayout/BaseLayout.css";
 
-  .post-page {
-    @apply font-body max-w-3xl mx-auto;
-  }
-
-  .post-breadcrumb {
-    @apply m-0 mb-3 font-body uppercase text-neon font-semibold text-2xs tracking-widest;
-  }
-
-  .post-breadcrumb a {
-    @apply text-neon no-underline;
-  }
-
-  .post-breadcrumb a:hover {
-    @apply text-teal;
-  }
-
-  .post-header {
-    @apply mb-6;
-  }
-
-  .post-header h1 {
-    @apply m-0 mb-3 font-display font-bold text-neon text-display tracking-tighter leading-display;
-  }
-
-  .post-description {
-    @apply m-0 mb-3 font-heading font-semibold text-teal text-subtitle tracking-tight;
-  }
-
-  .post-meta {
-    @apply flex flex-wrap items-center gap-3;
-  }
-
-  .post-date {
-    @apply text-sm text-muted;
-  }
-
-  .post-content {
-    @apply text-text font-body;
-  }
-
   .post-content :global(h2),
   .post-content :global(h3),
   .post-content :global(h4) {
     @apply font-heading text-text;
   }
-
   .post-content :global(h2) {
     @apply text-teal;
   }
-
   .post-content :global(.expressive-code) {
     @apply my-6;
   }
-
   .post-content :global(code:not(pre code)) {
     @apply font-body bg-surface border border-border text-teal px-1.5 py-0.5 rounded text-xs;
   }
-
   .post-content :global(a) {
     @apply text-teal hover:text-neon;
   }
-
   .post-content :global(img) {
     @apply rounded-lg;
   }
