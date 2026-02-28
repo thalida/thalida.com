@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect } from "vitest";
-import remarkR2Media from "../remark-r2-media.mjs";
-import rehypeR2Media from "../rehype-r2-media.mjs";
+import remarkR2Media from "@plugins/remark-r2-media.mjs";
+import rehypeR2Media from "@plugins/rehype-r2-media.mjs";
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

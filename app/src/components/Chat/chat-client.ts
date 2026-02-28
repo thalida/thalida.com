@@ -1,4 +1,9 @@
-import { generateRandomUsername, validateUsername, setAdminUsername, LS_ADMIN_TOKEN_KEY } from "./chat-utils";
+import {
+  generateRandomUsername,
+  validateUsername,
+  setAdminUsername,
+  LS_ADMIN_TOKEN_KEY,
+} from "@components/Chat/chat-utils";
 
 const RECONNECT_DELAY_MS = 3000;
 
