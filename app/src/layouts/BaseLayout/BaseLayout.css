@@ -7,6 +7,7 @@
   --color-surface: #0d1f2d;
   --color-neon: #39ff14;
   --color-teal: #00e5a0;
+  --color-ice: #80d4ff;
   --color-text: #e8f0f8;
   --color-muted: #7a9ab5;
   --color-border: #152535;
@@ -176,11 +177,11 @@ textarea,
 }
 
 #nav-panel.open {
-  transform: translateY(0);
+  translate: 0;
 }
 
 #chat-overlay.open {
-  transform: translateY(0);
+  translate: 0;
 }
 
 #chat-overlay #chat-overlay-close {

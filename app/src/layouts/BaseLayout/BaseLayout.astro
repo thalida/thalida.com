@@ -99,7 +99,7 @@ const navData = await getNavData();
     <div id="chat-overlay-backdrop" class="hidden fixed inset-0 z-40 bg-midnight/70 backdrop-blur-xs lg:hidden"></div>
     <div
       id="nav-panel"
-      class="fixed top-12 left-0 right-0 lg:right-80 max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-[calc(100%+4px)] transition-transform duration-300 ease-in-out xl:hidden"
+      class="fixed top-12 left-0 right-0 lg:right-80 max-h-[60vh] overflow-y-auto bg-midnight/95 backdrop-blur-md border-b border-border z-50 -translate-y-[calc(100%+4px)] transition-[translate] duration-300 ease-in-out xl:hidden"
     >
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
     </div>
@@ -133,7 +133,7 @@ const navData = await getNavData();
     </button>
     <div
       id="chat-overlay"
-      class="fixed bottom-0 left-0 w-full h-[85vh] bg-midnight border-t border-border z-50 translate-y-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col px-4 pt-2 pb-4"
+      class="fixed bottom-0 left-0 w-full h-[85vh] bg-midnight border-t border-border z-50 translate-y-full transition-[translate] duration-300 ease-in-out lg:hidden flex flex-col px-4 pt-2 pb-4"
     >
       <div id="js-chat-overlay-content" class="flex flex-col flex-1 min-h-0 font-body gap-2"></div>
     </div>
