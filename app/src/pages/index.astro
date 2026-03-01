@@ -61,7 +61,7 @@ const siteAge = new Date().getFullYear() - 2007;
   <section class="mt-16" aria-label="Site timeline">
     <SectionHeader label={`${siteAge} YEARS OF THALIDA.COM`} href="/versions" />
     <div class="home-timeline relative overflow-x-auto" role="region" aria-label="Site version timeline" tabindex="0">
-      <div class="home-timeline__track flex gap-6 pb-4 relative" style="min-width:max-content">
+      <div class="home-timeline__track flex gap-6 pb-4 relative min-w-max">
         {
           versions.map((version) => {
             const year = version.category || "";
