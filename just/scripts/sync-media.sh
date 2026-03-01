@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BUCKET="thalida-media"
-ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT_DIR="$(git rev-parse --show-toplevel)"
 APP_DIR="$ROOT_DIR/app"
 PREFIX=""
 DIFF_BASE=""
