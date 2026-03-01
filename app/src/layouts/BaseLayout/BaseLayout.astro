@@ -4,6 +4,7 @@ import Chat from "@components/Chat/Chat.astro";
 import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
 import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
 import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
+import SEO from "@components/SEO/SEO.astro";
 import { TOOLBAR_NAV_ORDER, getNavData } from "@lib/nav-data";
 import "./BaseLayout.css";
 
@@ -11,9 +12,27 @@ interface Props {
   title?: string;
   activePage?: string;
   activeCollection?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
+  publishedOn?: Date;
+  updatedOn?: Date;
+  tags?: string[];
+  noindex?: boolean;
 }
 
-const { title = "thalida", activePage, activeCollection } = Astro.props;
+const {
+  title = "thalida",
+  activePage,
+  activeCollection,
+  description,
+  ogImage,
+  ogType,
+  publishedOn,
+  updatedOn,
+  tags,
+  noindex,
+} = Astro.props;
 const navData = await getNavData();
 ---
 
@@ -22,6 +41,16 @@ const navData = await getNavData();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <SEO
+      title={title}
+      description={description}
+      image={ogImage}
+      type={ogType}
+      publishedOn={publishedOn}
+      updatedOn={updatedOn}
+      tags={tags}
+      noindex={noindex}
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
