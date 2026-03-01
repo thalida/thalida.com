@@ -9,6 +9,11 @@ usage() {
   echo ""
   echo "Deletes all objects under {prefix}/ in the R2 bucket."
   echo "Example: $0 --prefix v-2026"
+  echo ""
+  echo "Required env vars:"
+  echo "  CLOUDFLARE_ACCOUNT_ID   Cloudflare account ID (used to build R2 S3 endpoint)"
+  echo "  AWS_ACCESS_KEY_ID       R2 S3 API access key"
+  echo "  AWS_SECRET_ACCESS_KEY   R2 S3 API secret key"
   exit 1
 }
 
@@ -24,39 +29,23 @@ if [ -z "$PREFIX" ]; then
   usage
 fi
 
+if [ -z "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+  echo "ERROR: CLOUDFLARE_ACCOUNT_ID is not set"
+  exit 1
+fi
+
 # Safety: never delete the main prefix via this script
 if [ "$PREFIX" = "main" ]; then
   echo "ERROR: Refusing to delete the main prefix. This script is for cleaning up branch prefixes."
   exit 1
 fi
 
+R2_ENDPOINT="https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
+
 echo "Cleaning up R2 prefix: $PREFIX/ in bucket $BUCKET"
 echo ""
 
-# List all objects under the prefix and delete them one by one
-# wrangler r2 object list outputs JSON; extract keys with a simple parser
-KEYS=$(npx wrangler r2 object list "$BUCKET" --prefix "$PREFIX/" --remote 2>&1 \
-  | grep -oE '"key"\s*:\s*"[^"]*"' \
-  | sed 's/"key"[[:space:]]*:[[:space:]]*"//;s/"$//' || true)
-
-if [ -z "$KEYS" ]; then
-  echo "No objects found under prefix: $PREFIX/"
-  exit 0
-fi
-
-COUNT=0
-TOTAL=$(echo "$KEYS" | wc -l | tr -d ' ')
-echo "Found $TOTAL objects to delete"
-
-echo "$KEYS" | while IFS= read -r key; do
-  COUNT=$((COUNT + 1))
-  printf "  [%d/%d] Deleting %s " "$COUNT" "$TOTAL" "$key"
-  if npx wrangler r2 object delete "$BUCKET/$key" --remote > /dev/null 2>&1; then
-    echo "ok"
-  else
-    echo "FAILED"
-  fi
-done
+aws s3 rm "s3://$BUCKET/$PREFIX/" --recursive --endpoint-url "$R2_ENDPOINT"
 
 echo ""
 echo "Cleanup complete"

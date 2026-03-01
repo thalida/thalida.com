@@ -18,17 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
 
       - uses: extractions/setup-just@v2
-
-      - name: Install wrangler
-        run: npm install -g wrangler
 
       - name: Determine branch
         id: branch
@@ -41,8 +32,9 @@ jobs:
 
       - name: Sync media to R2
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: just media::sync --prefix ${{ steps.branch.outputs.name }}
 
   # ── Deploy frontend to Cloudflare Pages ──────────────────────────
@@ -172,17 +164,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
       - uses: extractions/setup-just@v2
-
-      - name: Install wrangler
-        run: npm install -g wrangler
 
       - name: Delete branch media from R2
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: just media::cleanup --branch "${{ github.event.pull_request.head.ref }}"
