@@ -28,3 +28,4 @@
 - [x] change # of viewers into # of users (?) # of
 - [x] fix link card styling
 - [x] chatting as is misaligned from input by 2 px
+- [ ] audit all links

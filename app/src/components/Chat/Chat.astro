@@ -13,13 +13,16 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
       <span class="flex items-center gap-1" data-chat="owner-wrap" title="Site owner: offline">
         <span
           data-chat="owner-status-dot"
-          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
+          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"
+        >
+        </span>
         <span data-chat="owner-status" class="text-admin">offline</span>
       </span>
       <span class="text-dim">·</span>
-      <span data-chat="user-count" title="0 online"
-        ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0</span></span
-      >
+      <span data-chat="user-count" title="0 online">
+        <i class="fa-solid fa-users"></i>
+        <span data-chat="viewer-count">0</span>
+      </span>
     </span>
     <button data-chat="overlay-close" class="layout-chat-overlay-close hidden" type="button" aria-label="Close chat">
       <i class="fa-solid fa-xmark" aria-hidden="true"></i>
@@ -29,7 +32,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   <div class="flex flex-col gap-2 flex-1 min-h-0 px-2.5 py-3">
     <div data-chat="messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
     <label data-chat="username-row" class="flex items-center gap-1.5">
-      <span class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted"> chatting as </span>
+      <span class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">chatting as</span>
       <input
         data-chat="username-input"
         class="chat-username-input flex-1 py-0.5 px-1 text-xs font-body bg-transparent text-text min-w-0 focus:outline-none"
@@ -52,8 +55,10 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
       <button
         data-chat="send"
         class="p-2 border-none bg-transparent text-muted text-sm hover:text-neon transition-colors"
-        type="button"><i class="fa-solid fa-paper-plane"></i></button
+        type="button"
       >
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 </aside>
@@ -63,9 +68,11 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
       <span
         data-chat="status-dot"
-        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
-      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0"
-      ></span>
+        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"
+      >
+      </span>
+      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0">
+      </span>
       <span data-chat="at-sep" hidden class="text-dim shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
       <span class="flex-1"></span>

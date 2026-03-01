@@ -43,17 +43,17 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     </div>
     <div class="cp-results overflow-y-auto flex-1 p-2" data-cp="results"></div>
     <div class="hidden md:flex gap-4 py-2 px-4 border-t border-border text-xs text-muted">
-      <span class="flex items-center gap-1"
-        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted"
-          >&uarr;&darr;</kbd
-        > navigate</span
-      >
-      <span class="flex items-center gap-1"
-        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">&crarr;</kbd> open</span
-      >
-      <span class="flex items-center gap-1"
-        ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">esc</kbd> close</span
-      >
+      <span class="flex items-center gap-1">
+        <kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">
+          &uarr;&darr;
+        </kbd> navigate
+      </span>
+      <span class="flex items-center gap-1">
+        <kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">&crarr;</kbd> open
+      </span>
+      <span class="flex items-center gap-1">
+        <kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted">esc</kbd> close
+      </span>
     </div>
   </div>
 </div>
@@ -109,8 +109,10 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     <div class="flex-1 min-w-0 flex flex-col gap-0.5">
       <div data-cp="meta" hidden>
         <span class="text-2xs text-neon uppercase tracking-widest">
-          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-dim"> / </span><span
-            data-cp="category"></span>
+          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-dim">/</span><span
+            data-cp="category"
+          >
+          </span>
         </span>
       </div>
       <span data-cp="title" class="cp-row__title text-sm font-heading font-medium truncate text-text"></span>
@@ -138,8 +140,10 @@ const collections = Object.entries(navData).map(([key, col]) => ({
     <div class="flex-1 min-w-0 flex flex-col gap-0.5">
       <div data-cp="meta" hidden>
         <span class="text-2xs text-neon uppercase tracking-widest">
-          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-dim"> / </span><span
-            data-cp="category"></span>
+          <span data-cp="collection"></span><span data-cp="meta-sep" hidden class="text-dim">/</span><span
+            data-cp="category"
+          >
+          </span>
         </span>
       </div>
       <span data-cp="title" class="cp-row__title text-sm font-heading font-medium truncate text-text"></span>
