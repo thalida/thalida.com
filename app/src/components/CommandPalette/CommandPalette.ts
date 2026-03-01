@@ -42,15 +42,14 @@ async function loadPagefind() {
 }
 
 function initCommandPalette() {
-  const overlay = document.querySelector<HTMLElement>('[data-cp="overlay"]');
-  const input = document.querySelector<HTMLInputElement>('[data-cp="input"]');
-  const resultsContainer = document.querySelector<HTMLElement>('[data-cp="results"]');
-  const collectionSelect = document.querySelector<HTMLSelectElement>('[data-cp="collection-select"]');
+  const overlay = document.querySelector('[data-cp="overlay"]') as HTMLElement;
+  const input = document.querySelector('[data-cp="input"]') as HTMLInputElement;
+  const resultsContainer = document.querySelector('[data-cp="results"]') as HTMLElement;
+  const collectionSelect = document.querySelector('[data-cp="collection-select"]') as HTMLSelectElement;
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
   const backdrop = document.querySelector<HTMLElement>('[data-cp="backdrop"]');
-  const _dialog = document.querySelector<HTMLElement>('[data-cp="dialog"]');
 
   const data = window.__cpData;
   const itemLookup = new Map<string, SearchItem>();
@@ -166,9 +165,9 @@ function initCommandPalette() {
     return merged.slice(0, MAX_PALETTE_RESULTS);
   }
 
-  const cpRowTpl = document.querySelector<HTMLTemplateElement>('[data-cp="row-tpl"]');
-  const cpRowExternalTpl = document.querySelector<HTMLTemplateElement>('[data-cp="row-external-tpl"]');
-  const cpEmptyTpl = document.querySelector<HTMLTemplateElement>('[data-cp="empty-tpl"]');
+  const cpRowTpl = document.querySelector('[data-cp="row-tpl"]') as HTMLTemplateElement;
+  const cpRowExternalTpl = document.querySelector('[data-cp="row-external-tpl"]') as HTMLTemplateElement;
+  const cpEmptyTpl = document.querySelector('[data-cp="empty-tpl"]') as HTMLTemplateElement;
 
   function formatCategory(raw: string): string {
     return raw
