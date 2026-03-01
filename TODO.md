@@ -27,4 +27,4 @@
 - [ ] copy favicon and setup metadata -- copy from v-2025
 - [x] change # of viewers into # of users (?) # of
 - [ ] fix link card styling
-- [ ] chatting as is misaligned from input by 2 px
+- [x] chatting as is misaligned from input by 2 px
