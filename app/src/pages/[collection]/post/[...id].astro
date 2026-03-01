@@ -185,12 +185,7 @@ const recipeMeta =
     @apply font-heading text-text;
   }
   .post-content :global(.heading-anchor) {
-    opacity: 0;
-    margin-left: 0.35rem;
-    color: var(--color-muted);
-    text-decoration: none;
-    font-weight: 400;
-    transition: opacity 0.15s;
+    @apply opacity-0 ml-[0.35rem] text-muted no-underline font-normal transition-opacity duration-150;
   }
   .post-content :global(h2:hover .heading-anchor),
   .post-content :global(h3:hover .heading-anchor),
@@ -215,8 +210,6 @@ const recipeMeta =
   }
   .post-content :global(img),
   .post-content :global(video) {
-    max-width: 100%;
-    height: auto;
-    @apply rounded-lg;
+    @apply max-w-full h-auto rounded-lg;
   }
 </style>
