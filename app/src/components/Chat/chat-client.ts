@@ -10,6 +10,9 @@ const RECONNECT_DELAY_MS = 3000;
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
   MESSAGE: "message",
+  DELETE: "delete",
+  FLAG: "flag",
+  DELETE_BY_USER: "delete_by_user",
 } as const;
 
 const SERVER_MESSAGE_TYPE = {
@@ -18,6 +21,8 @@ const SERVER_MESSAGE_TYPE = {
   BLOCKED: "blocked",
   UNBLOCKED: "unblocked",
   HELP: "help",
+  FLAGGED: "flagged",
+  BLOCKED_LIST: "blocked_list",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
@@ -46,7 +51,9 @@ type ServerMessage =
   | { type: "warning"; code: string; message: string }
   | { type: "blocked"; code: string; message: string }
   | { type: "unblocked"; ip: string }
-  | { type: "help"; commands: Array<{ name: string; description: string }> };
+  | { type: "help"; commands: Array<{ name: string; description: string }> }
+  | { type: "flagged"; username: string; ip: string; messageId: string }
+  | { type: "blocked_list"; entries: Array<{ ip: string; username: string; blockedAt: number }> };
 
 interface ChatMessage {
   id: string;
@@ -109,6 +116,11 @@ function clearIdentity(): void {
 const msgTpl = document.getElementById("chat-msg-tpl") as HTMLTemplateElement;
 const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElement;
 
+function wsSend(data: Record<string, unknown>): void {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify(data));
+}
+
 function appendMessage(msg: ChatMessage): void {
   const isAdmin = adminUsername != null && msg.username === adminUsername;
   const frag = msgTpl.content.cloneNode(true) as DocumentFragment;
@@ -138,6 +150,34 @@ function appendMessage(msg: ChatMessage): void {
 
   slot("text").textContent = msg.text;
 
+  if (isOwner && !isAdmin) {
+    const controls = slot("admin-controls");
+    controls.hidden = false;
+
+    const deleteBtn = slot("delete-btn") as HTMLButtonElement;
+    const flagBtn = slot("flag-btn") as HTMLButtonElement;
+
+    deleteBtn.addEventListener("click", () => {
+      if (deleteBtn.dataset.confirm !== undefined) {
+        wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE, data: { id: msg.id } });
+        delete deleteBtn.dataset.confirm;
+      } else {
+        deleteBtn.dataset.confirm = "";
+        setTimeout(() => delete deleteBtn.dataset.confirm, 3000);
+      }
+    });
+
+    flagBtn.addEventListener("click", () => {
+      if (flagBtn.dataset.confirm !== undefined) {
+        wsSend({ type: CLIENT_MESSAGE_TYPE.FLAG, data: { id: msg.id } });
+        delete flagBtn.dataset.confirm;
+      } else {
+        flagBtn.dataset.confirm = "";
+        setTimeout(() => delete flagBtn.dataset.confirm, 3000);
+      }
+    });
+  }
+
   messagesEl.appendChild(frag);
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
@@ -148,6 +188,31 @@ function appendNotice(text: string): void {
   root.textContent = text;
   messagesEl.appendChild(frag);
   messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function appendInteractiveNotice(text: string, actions: Array<{ label: string; action: () => void }>): HTMLElement {
+  const frag = noticeTpl.content.cloneNode(true) as DocumentFragment;
+  const root = frag.firstElementChild as HTMLElement;
+  root.textContent = "";
+
+  const textNode = document.createTextNode(text + "  ");
+  root.appendChild(textNode);
+
+  actions.forEach((a, i) => {
+    if (i > 0) root.appendChild(document.createTextNode(" · "));
+    const span = document.createElement("span");
+    span.textContent = `[${a.label}]`;
+    span.className = "cursor-pointer underline hover:text-teal not-italic";
+    span.addEventListener("click", () => {
+      a.action();
+      root.textContent = `${text} — ${a.label}`;
+    });
+    root.appendChild(span);
+  });
+
+  messagesEl.appendChild(frag);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return root;
 }
 
 function sendJoin(): void {
@@ -244,6 +309,25 @@ function connect(): void {
     } else if (data.type === SERVER_MESSAGE_TYPE.HELP) {
       const lines = data.commands.map((c) => `  /${c.name} — ${c.description}`);
       appendNotice(`Available commands:\n${lines.join("\n")}`);
+    } else if (data.type === SERVER_MESSAGE_TYPE.FLAGGED) {
+      appendInteractiveNotice(`Banned ${data.username} (${data.ip}).\nDelete their messages?`, [
+        {
+          label: "all",
+          action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE_BY_USER, data: { username: data.username } }),
+        },
+        { label: "this one", action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE, data: { id: data.messageId } }) },
+        { label: "none", action: () => {} },
+      ]);
+    } else if (data.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST) {
+      if (data.entries.length === 0) {
+        appendNotice("No blocked users.");
+      } else {
+        const lines = data.entries.map((e) => {
+          const date = e.blockedAt > 0 ? new Date(e.blockedAt).toLocaleDateString() : "unknown date";
+          return `  ${e.username} — ${e.ip} (blocked ${date})`;
+        });
+        appendNotice(`Blocked users:\n${lines.join("\n")}`);
+      }
     }
   });
 
