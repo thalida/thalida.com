@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Neon glow filter: tight inner + wide outer bloom -->
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <!-- Wide outer bloom -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur-wide"/>
+      <feColorMatrix in="blur-wide" type="matrix"
+        values="0 0 0 0 0.106
+                0 0 0 0 0.894
+                0 0 0 0 0.549
+                0 0 0 0.5 0" result="glow-wide"/>
+      <!-- Tight inner glow -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur-tight"/>
+      <feColorMatrix in="blur-tight" type="matrix"
+        values="0 0 0 0 0.106
+                0 0 0 0 0.894
+                0 0 0 0 0.549
+                0 0 0 0.8 0" result="glow-tight"/>
+      <!-- Compose: wide glow + tight glow + sharp original -->
+      <feMerge>
+        <feMergeNode in="glow-wide"/>
+        <feMergeNode in="glow-tight"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Subtle glow for text -->
+    <filter id="text-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
+      <feColorMatrix in="blur" type="matrix"
+        values="0 0 0 0 0.91
+                0 0 0 0 0.94
+                0 0 0 0 0.97
+                0 0 0 0.3 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#030a12"/>
+
+  <!-- Artistic <3 mark with neon glow -->
+  <g filter="url(#neon-glow)">
+    <!-- < chevron: expressive, sweeping strokes -->
+    <polyline
+      points="560,140 430,280 560,420"
+      fill="none" stroke="#1be48c" stroke-width="18"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 3 numeral: flowing curves -->
+    <path
+      d="M620 140 L720 140 Q760 140 760 180 L760 240 Q760 280 720 280 L670 280
+         M720 280 Q760 280 760 320 L760 380 Q760 420 720 420 L620 420"
+      fill="none" stroke="#1be48c" stroke-width="18"
+      stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Site name -->
+  <text
+    x="600" y="530"
+    text-anchor="middle"
+    font-family="'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif"
+    font-weight="500"
+    font-size="36"
+    fill="#e8f0f8"
+    filter="url(#text-glow)"
+    letter-spacing="4">thalida.com</text>
+</svg>
