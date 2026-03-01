@@ -367,6 +367,110 @@ describe("ChatRoom Durable Object", () => {
     });
   });
 
+  // ── Admin Commands ─────────────────────────────────────────────
+
+  describe("admin commands", () => {
+    it("admin /help returns help message with command list", async () => {
+      const { ws, msgs } = await connectAndJoin("thalida", { token: "test-admin-secret" });
+      msgs.length = 0;
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
+      await flush();
+
+      const help = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.HELP);
+      expect(help).toBeDefined();
+      if (help && help.type === SERVER_MESSAGE_TYPE.HELP) {
+        expect(help.commands.length).toBeGreaterThanOrEqual(2);
+        const names = help.commands.map((c) => c.name);
+        expect(names).toContain("help");
+        expect(names).toContain("unblock");
+      }
+
+      ws.close();
+    });
+
+    it("/help is not broadcast to other users", async () => {
+      const { ws: adminWs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+        ip: "10.0.0.1",
+      });
+      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin("viewer", { ip: "10.0.0.2" });
+      otherMsgs.length = 0;
+
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
+      await flush();
+
+      const anyMsg = otherMsgs.filter(
+        (m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE || m.type === SERVER_MESSAGE_TYPE.HELP,
+      );
+      expect(anyMsg).toHaveLength(0);
+
+      adminWs.close();
+      otherWs.close();
+    });
+
+    it("non-admin /help sends as regular chat message", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("regular");
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("observer");
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
+      await flush();
+
+      const msg = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "regular", text: "/help" });
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("non-admin /unblock sends as regular chat message", async () => {
+      const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("watcher", { ip: "10.0.0.3" });
+
+      msgs.length = 0;
+      msgs2.length = 0;
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      await flush();
+
+      const msg = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.MESSAGE,
+        username: "regular-user",
+        text: "/unblock 10.0.0.50",
+      });
+
+      ws.close();
+      ws2.close();
+    });
+
+    it("admin unknown /command sends as regular chat message", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+      });
+      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin("viewer");
+
+      adminMsgs.length = 0;
+      otherMsgs.length = 0;
+
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/nonexistent" } });
+      await flush();
+
+      const msg = otherMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.MESSAGE,
+        username: "thalida",
+        text: "/nonexistent",
+      });
+
+      adminWs.close();
+      otherWs.close();
+    });
+  });
+
   // ── Failure / Error States ───────────────────────────────────────
 
   describe("failure and error states", () => {
