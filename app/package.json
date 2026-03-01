@@ -14,7 +14,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "astro sync && tsc --noEmit"
+    "typecheck": "astro sync && tsc --noEmit",
+    "convert-cards": "node scripts/convert-card-svgs.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
@@ -35,6 +36,7 @@
     "yaml": "^2.8.2"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/he": "^1.2.3",
     "@types/node": "^25.3.2",
     "eslint": "^9.39.2",

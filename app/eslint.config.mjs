@@ -34,6 +34,7 @@ export default defineConfig(
     files: ["**/*.mjs"],
     languageOptions: {
       globals: {
+        console: "readonly",
         process: "readonly",
       },
     },
