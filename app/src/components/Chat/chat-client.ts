@@ -119,19 +119,20 @@ function wsSend(data: ClientModAction): void {
 
 function appendMessage(msg: ChatMessage): void {
   const isAdminMsg = adminUsername != null && msg.username === adminUsername;
-  const showAsAdmin = (isOwner && msg.isOwn && !isAdminMsg) || (!isOwner && isAdminMsg);
   const frag = msgTpl.content.cloneNode(true) as DocumentFragment;
   const root = frag.firstElementChild as HTMLElement;
 
   root.dataset.msgId = String(msg.id);
   if (msg.clientId) root.dataset.clientId = msg.clientId;
-  if (msg.isOwn && !showAsAdmin) root.dataset.own = "";
+  if (msg.isOwn) root.dataset.own = "";
 
   const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
 
   const usernameEl = slot("username");
   usernameEl.textContent = msg.username;
-  if (showAsAdmin) usernameEl.dataset.admin = "";
+  const isCurrentUser = msg.isOwn && msg.username === username;
+  if (isCurrentUser) usernameEl.dataset.own = "";
+  else if (isAdminMsg) usernameEl.dataset.admin = "";
 
   slot("time").textContent = formatMessageTime(msg.timestamp);
 

@@ -63,7 +63,8 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 <template id="chat-msg-tpl">
   <div class="group mb-2" data-msg-id="">
     <div class="flex items-baseline gap-1 text-xs leading-tight">
-      <span data-chat="username" class="font-semibold text-neon data-admin:text-admin shrink-0"></span>
+      <span data-chat="username" class="font-semibold text-neon data-admin:text-admin data-own:text-accent shrink-0"
+      ></span>
       <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
       <span class="flex-1"></span>
@@ -125,8 +126,5 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   }
   [data-chat="flag-btn"][data-confirm] {
     color: var(--color-yellow-400, #facc15);
-  }
-  [data-own] [data-chat="username"] {
-    color: var(--color-accent);
   }
 </style>
