@@ -16,8 +16,6 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     name: Sync media to R2
     runs-on: ubuntu-latest
-    outputs:
-      branch: ${{ steps.branch.outputs.name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,9 +45,9 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: just media::sync --prefix ${{ steps.branch.outputs.name }}
 
-  # ── Deploy frontend to Cloudflare Pages (after media sync) ───────
+  # ── Deploy frontend to Cloudflare Pages ──────────────────────────
   deploy-pages:
-    needs: [sync-media]
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     name: Deploy frontend
     runs-on: ubuntu-latest
     steps:
@@ -60,6 +58,15 @@ jobs:
           node-version: 22
 
       - uses: extractions/setup-just@v2
+
+      - name: Determine branch
+        id: branch
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "name=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Install dependencies
         working-directory: app
@@ -74,14 +81,14 @@ jobs:
           PUBLIC_CHAT_WS_URL: ${{ github.event_name == 'push' && vars.PUBLIC_CHAT_WS_URL || vars.PUBLIC_CHAT_WS_URL_PREVIEW }}
           PUBLIC_OPENWEATHER_KEY: ${{ secrets.PUBLIC_OPENWEATHER_KEY }}
           PUBLIC_IPREGISTRY_KEY: ${{ secrets.PUBLIC_IPREGISTRY_KEY }}
-          CF_PAGES_BRANCH: ${{ needs.sync-media.outputs.branch }}
+          CF_PAGES_BRANCH: ${{ steps.branch.outputs.name }}
         run: just app::build-pages
 
       - name: Deploy to Cloudflare Pages
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: just app::deploy --branch "${{ needs.sync-media.outputs.branch }}" --project "${{ vars.CLOUDFLARE_PAGES_PROJECT }}"
+        run: just app::deploy --branch "${{ steps.branch.outputs.name }}" --project "${{ vars.CLOUDFLARE_PAGES_PROJECT }}"
 
   # ── Deploy API Worker (preview) on PRs with api/ changes ─────────
   deploy-api-preview:
