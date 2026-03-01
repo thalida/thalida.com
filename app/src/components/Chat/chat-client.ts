@@ -30,6 +30,7 @@ const SERVER_MESSAGE_TYPE = {
   HISTORY: "history",
   REMOVE: "remove",
   MESSAGE: "message",
+  RENAME: "rename",
 } as const;
 
 interface MessageContext {
@@ -41,6 +42,7 @@ type ServerMessage =
   | {
       type: "message";
       id: string;
+      clientId: string;
       username: string;
       text: string;
       timestamp: number;
@@ -52,13 +54,15 @@ type ServerMessage =
   | { type: "remove"; id: string }
   | { type: "warning"; code: string; message: string }
   | { type: "blocked"; code: string; message: string }
-  | { type: "unblocked"; ip: string }
+  | { type: "unblocked"; clientId: string }
   | { type: "help"; commands: Array<{ name: string; description: string }> }
-  | { type: "flagged"; username: string; ip: string; messageId: string }
-  | { type: "blocked_list"; entries: Array<{ ip: string; username: string; blockedAt: number }> };
+  | { type: "flagged"; username: string; clientId: string; messageId: string }
+  | { type: "blocked_list"; entries: Array<{ clientId: string; username: string; blockedAt: number }> }
+  | { type: "rename"; oldUsername: string; newUsername: string };
 
 interface ChatMessage {
   id: string;
+  clientId: string;
   username: string;
   text: string;
   timestamp: number;
@@ -122,8 +126,8 @@ const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElem
 type ClientModAction =
   | { type: typeof CLIENT_MESSAGE_TYPE.DELETE; data: { id: string } }
   | { type: typeof CLIENT_MESSAGE_TYPE.FLAG; data: { id: string } }
-  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE_BY_USER; data: { username: string } }
-  | { type: typeof CLIENT_MESSAGE_TYPE.UNBLOCK; data: { ip: string } };
+  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE_BY_USER; data: { clientId: string } }
+  | { type: typeof CLIENT_MESSAGE_TYPE.UNBLOCK; data: { clientId: string } };
 
 function wsSend(data: ClientModAction): void {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
@@ -136,6 +140,7 @@ function appendMessage(msg: ChatMessage): void {
   const root = frag.firstElementChild as HTMLElement;
 
   root.dataset.msgId = String(msg.id);
+  root.dataset.clientId = msg.clientId;
 
   const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
 
@@ -230,6 +235,7 @@ function connect(): void {
     } else if (data.type === SERVER_MESSAGE_TYPE.MESSAGE) {
       appendMessage({
         id: data.id,
+        clientId: data.clientId,
         username: data.username,
         text: data.text,
         timestamp: data.timestamp,
@@ -274,21 +280,28 @@ function connect(): void {
     } else if (data.type === SERVER_MESSAGE_TYPE.REMOVE) {
       const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
       if (el) el.remove();
+    } else if (data.type === SERVER_MESSAGE_TYPE.RENAME) {
+      const usernameEls = messagesEl.querySelectorAll<HTMLElement>('[data-chat="username"]');
+      for (const el of usernameEls) {
+        if (el.textContent === data.oldUsername) {
+          el.textContent = data.newUsername;
+        }
+      }
     } else if (data.type === SERVER_MESSAGE_TYPE.WARNING) {
       appendSystemMessage(data.message);
     } else if (data.type === SERVER_MESSAGE_TYPE.BLOCKED) {
       appendSystemMessage(data.message);
       setBlocked(true);
     } else if (data.type === SERVER_MESSAGE_TYPE.UNBLOCKED) {
-      appendSystemMessage(`Unblocked IP: ${data.ip}`);
+      appendSystemMessage(`Unblocked user: ${data.clientId.slice(0, 8)}\u2026`);
     } else if (data.type === SERVER_MESSAGE_TYPE.HELP) {
       const lines = data.commands.map((c) => `  /${c.name} — ${c.description}`);
       appendSystemMessage(`Available commands:\n${lines.join("\n")}`);
     } else if (data.type === SERVER_MESSAGE_TYPE.FLAGGED) {
-      appendSystemMessage(`Banned ${data.username} (${data.ip}).\nDelete their messages?`, [
+      appendSystemMessage(`Banned ${data.username}.\nDelete their messages?`, [
         {
           label: "all",
-          action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE_BY_USER, data: { username: data.username } }),
+          action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE_BY_USER, data: { clientId: data.clientId } }),
         },
         { label: "this one", action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE, data: { id: data.messageId } }) },
         { label: "none", action: () => {} },
@@ -300,11 +313,11 @@ function connect(): void {
         appendSystemMessage(`Blocked users (${data.entries.length}):`);
         for (const e of data.entries) {
           const date = e.blockedAt > 0 ? new Date(e.blockedAt).toLocaleDateString() : "unknown date";
-          appendSystemMessage(`  ${e.username} — ${e.ip} (blocked ${date})`, [
+          appendSystemMessage(`  ${e.username} \u2014 ${e.clientId.slice(0, 8)}\u2026 (blocked ${date})`, [
             {
               label: "unblock",
               action: () => {
-                wsSend({ type: CLIENT_MESSAGE_TYPE.UNBLOCK, data: { ip: e.ip } });
+                wsSend({ type: CLIENT_MESSAGE_TYPE.UNBLOCK, data: { clientId: e.clientId } });
               },
             },
           ]);
