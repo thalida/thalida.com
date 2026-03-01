@@ -18,8 +18,11 @@ const r2BaseUrl = (env.PUBLIC_R2_BASE_URL || "").replace(/\/$/, "");
 const mediaBranch = process.env.CF_PAGES_BRANCH || "main";
 const mediaBaseUrl = r2BaseUrl ? `${r2BaseUrl}/${mediaBranch}` : "";
 
+// Use Cloudflare Pages deploy URL on preview branches so OG images resolve correctly
+const site = mediaBranch === "main" || !process.env.CF_PAGES_URL ? "https://thalida.com" : process.env.CF_PAGES_URL;
+
 export default defineConfig({
-  site: "https://thalida.com",
+  site,
   integrations: [
     sitemap(),
     astroExpressiveCode({
