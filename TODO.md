@@ -20,10 +20,11 @@
 - [x] add extended md w/ custom items like callouts
 - [x] homepage projects
 - [x] Fix chat row styling: username @ path on left, truncate
-  middle of long paths
+      middle of long paths
 - [ ] improve homepage history
 - [x] add ability to remove chat messages if admin or manually flag if admin
 - [x] add an admin only /help that shows admin options
 - [ ] copy favicon and setup metadata -- copy from v-2025
-- [ ] change # of viewers into # of users (?) # of
+- [x] change # of viewers into # of users (?) # of
 - [ ] fix link card styling
+- [ ] chatting as is misaligned from input by 2 px

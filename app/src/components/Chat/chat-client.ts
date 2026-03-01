@@ -94,6 +94,7 @@ const inputEl = document.getElementById("js-chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("js-chat-send") as HTMLButtonElement;
 const statusDotEl = document.getElementById("js-chat-status-dot") as HTMLSpanElement;
 const ownerStatusEl = document.getElementById("js-chat-owner-status") as HTMLSpanElement;
+const ownerWrapEl = document.getElementById("js-chat-owner-wrap") as HTMLSpanElement;
 const userCountEl = document.getElementById("js-chat-user-count") as HTMLSpanElement;
 
 function getAdminToken(): string | null {
@@ -402,11 +403,11 @@ usernameInput.addEventListener("blur", () => {
 function updateStatus(isOwnerOnline: boolean, userCount: number): void {
   const ownerLabel = adminUsername ?? "owner";
   statusDotEl.dataset.online = String(isOwnerOnline);
-  ownerStatusEl.textContent = isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
+  ownerStatusEl.textContent = ownerLabel;
   ownerStatusEl.dataset.online = String(isOwnerOnline);
-  const viewerText = `${userCount} online`;
-  (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = viewerText;
-  userCountEl.title = viewerText;
+  ownerWrapEl.title = `Site owner: ${isOwnerOnline ? "online" : "offline"}`;
+  (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = String(userCount);
+  userCountEl.title = `${userCount} online`;
 }
 
 function setBlocked(blocked: boolean): void {
@@ -447,7 +448,7 @@ async function fetchConfig(): Promise<void> {
     if (data.adminUsername) {
       adminUsername = data.adminUsername;
       setAdminUsername(adminUsername);
-      ownerStatusEl.textContent = `${adminUsername} offline`;
+      ownerStatusEl.textContent = adminUsername;
     }
   } catch {
     console.warn("[chat] failed to fetch config, reserved name validation will be skipped client-side");

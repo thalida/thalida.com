@@ -8,13 +8,19 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   transition:persist="chat"
 >
   <div class="flex items-center gap-1.5 h-12 px-3 bg-midnight border-b border-border shrink-0">
-    <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight">Chat</h2>
-    <span id="js-chat-status-dot" class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"
-    ></span>
-    <span id="js-chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
-    <span id="js-chat-user-count" class="text-xs text-muted" title="0 online"
-      ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0 online</span></span
-    >
+    <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight flex-1">Chat</h2>
+    <span class="flex items-center gap-1.5 text-xs text-muted">
+      <span class="flex items-center gap-1" id="js-chat-owner-wrap" title="Site owner: offline">
+        <span
+          id="js-chat-status-dot"
+          class="inline-block shrink-0 w-1.5 h-1.5 rounded-full bg-muted data-[online=true]:bg-neon"></span>
+        <span id="js-chat-owner-status" class="data-[online=true]:text-neon">offline</span>
+      </span>
+      <span class="opacity-30">·</span>
+      <span id="js-chat-user-count" title="0 online"
+        ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0</span></span
+      >
+    </span>
     <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
       <i class="fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
