@@ -51,6 +51,7 @@ export const SERVER_MESSAGE_TYPE = {
   WARNING: "warning",
   BLOCKED: "blocked",
   UNBLOCKED: "unblocked",
+  HELP: "help",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
@@ -125,6 +126,11 @@ export interface ServerUnblockedMessage {
   ip: string;
 }
 
+export interface ServerHelpMessage {
+  type: "help";
+  commands: Array<{ name: string; description: string }>;
+}
+
 // ── Combined Server Message ─────────────────────────────────────────
 
 export type ServerMessage =
@@ -132,6 +138,7 @@ export type ServerMessage =
   | ServerBroadcast
   | ServerJoinedMessage
   | ServerUnblockedMessage
+  | ServerHelpMessage
   | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────
