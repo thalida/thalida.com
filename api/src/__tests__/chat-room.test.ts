@@ -157,21 +157,20 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
-    it("message buffer caps at 50", async () => {
-      const { ws } = await connectAndJoin("spammer");
+    it("messages persist to durable storage", async () => {
+      const { ws } = await connectAndJoin("persister");
 
-      for (let i = 0; i < 55; i++) {
-        send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: `msg-${i}` } });
-      }
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "persistent msg" } });
       await flush();
 
-      // Connect a new user and check history
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("reader");
+      // Connect a new user and check history includes the persisted message
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("checker");
       const history = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
       if (history && history.type === SERVER_MESSAGE_TYPE.HISTORY) {
-        expect(history.messages.length).toBeLessThanOrEqual(50);
-        expect(history.messages[0].text).not.toBe("msg-0");
+        expect(history.messages.length).toBeGreaterThanOrEqual(1);
+        const found = history.messages.find((m: { text: string }) => m.text === "persistent msg");
+        expect(found).toBeDefined();
       }
 
       ws.close();
