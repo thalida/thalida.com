@@ -1,6 +1,7 @@
 import { v7 as uuidv7 } from "uuid";
 import { dispatch } from "./commands";
 import type {
+  BlockedEntry,
   Env,
   ChatMessage,
   ClientChatData,
@@ -465,6 +466,14 @@ export class ChatRoom implements DurableObject {
 
   handleDeleteMessage(ws: WebSocket, messageId: string): void {
     this.handleDelete(ws, { id: messageId });
+  }
+
+  getBlockedEntries(): BlockedEntry[] {
+    return [...this.blockedEntries.entries()].map(([ip, info]) => ({
+      ip,
+      username: info.username,
+      blockedAt: info.blockedAt,
+    }));
   }
 
   // ── Connection Helpers ───────────────────────────────────────────────

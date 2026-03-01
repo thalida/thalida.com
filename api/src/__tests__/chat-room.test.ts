@@ -447,6 +447,45 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
+    it("admin /blocked returns list of blocked entries", async () => {
+      // First, create a blocked user by having admin flag someone
+      const { ws: userWs, msgs: _userMsgs } = await connectAndJoin("troublemaker", { ip: "10.0.0.77" });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+        ip: "10.0.0.1",
+      });
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "bad stuff" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      send(adminWs, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      adminMsgs.length = 0;
+
+      // Now ask for the blocked list
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/blocked" } });
+      await flush();
+
+      const list = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST);
+      expect(list).toBeDefined();
+      if (list && list.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST) {
+        expect(list.entries.length).toBeGreaterThanOrEqual(1);
+        const entry = list.entries.find((e) => e.ip === "10.0.0.77");
+        expect(entry).toBeDefined();
+        if (entry) {
+          expect(entry.username).toBe("troublemaker");
+          expect(entry.blockedAt).toBeGreaterThan(0);
+        }
+      }
+
+      adminWs.close();
+      userWs.close();
+    });
+
     it("admin unknown /command sends as regular chat message", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
         token: "test-admin-secret",

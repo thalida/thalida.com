@@ -40,6 +40,17 @@ register({
   },
 });
 
+register({
+  name: "blocked",
+  description: "List all blocked users and IPs",
+  handler: (ws, _args, chatRoom) => {
+    chatRoom.sendToSocket(ws, {
+      type: SERVER_MESSAGE_TYPE.BLOCKED_LIST,
+      entries: chatRoom.getBlockedEntries(),
+    });
+  },
+});
+
 export function dispatch(text: string, ws: WebSocket, chatRoom: ChatRoom): boolean {
   const match = text.match(/^\/(\S+)\s*(.*)$/);
   if (!match) return false;
