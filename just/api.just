@@ -57,6 +57,12 @@ test:
 typecheck:
     npm run typecheck
 
+# ─── Data ────────────────────────────────────────────────────────────
+
+[doc("Clear local Durable Object storage (messages, users, etc.)")]
+reset-local:
+    rm -rf .wrangler/state/
+
 # ─── Deploy ──────────────────────────────────────────────────────────
 
 [doc("Deploy the API Worker")]

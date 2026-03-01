@@ -1,13 +1,13 @@
 import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
-import type { ServerMessage } from "../types";
+import type { ChatMessage, ServerMessage } from "../types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../types";
 
 // ── helpers ──────────────────────────────────────────────────────────
 
-async function openWs(ip = "127.0.0.1"): Promise<WebSocket> {
+async function openWs(): Promise<WebSocket> {
   const resp = await SELF.fetch("https://fake-host/ws", {
-    headers: { Upgrade: "websocket", "CF-Connecting-IP": ip },
+    headers: { Upgrade: "websocket" },
   });
   const ws = resp.webSocket;
   if (!ws) throw new Error("No WebSocket returned");
@@ -28,22 +28,43 @@ function send(ws: WebSocket, data: Record<string, unknown>): void {
 }
 
 async function flush(): Promise<void> {
-  await new Promise((r) => setTimeout(r, 50));
+  await new Promise((r) => setTimeout(r, 200));
 }
 
-async function connectAndJoin(
-  username: string,
-  options?: { token?: string; ip?: string },
-): Promise<{ ws: WebSocket; msgs: ServerMessage[] }> {
-  const ws = await openWs(options?.ip);
+async function connectAndJoin(options?: {
+  token?: string;
+  clientId?: string;
+  username?: string;
+}): Promise<{ ws: WebSocket; msgs: ServerMessage[]; username: string }> {
+  const ws = await openWs();
   const msgs = collect(ws);
   await flush();
 
-  const data: Record<string, unknown> = { username };
+  const data: Record<string, unknown> = { clientId: options?.clientId ?? crypto.randomUUID() };
   if (options?.token) data.token = options.token;
   send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data });
   await flush();
-  return { ws, msgs };
+
+  // Extract the server-assigned username from JOINED response
+  const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+  let username = "";
+  if (joined && "username" in joined) {
+    username = (joined as { username: string }).username;
+  }
+
+  // If a specific username was requested (and we're not admin), send a rename
+  if (options?.username && username !== options.username) {
+    send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: options.username } });
+    await flush();
+    // The JOINED response from rename confirms the new name
+    const joinedIdx = joined ? msgs.indexOf(joined) : -1;
+    const renameJoined = msgs.find((m, i) => m.type === SERVER_MESSAGE_TYPE.JOINED && i > joinedIdx);
+    if (renameJoined && "username" in renameJoined) {
+      username = (renameJoined as { username: string }).username;
+    }
+  }
+
+  return { ws, msgs, username };
 }
 
 // ── tests ────────────────────────────────────────────────────────────
@@ -63,11 +84,12 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("join with valid username returns joined + history + status", async () => {
-      const { ws, msgs } = await connectAndJoin("red-fox");
+    it("join returns server-assigned username + history + status", async () => {
+      const { ws, msgs, username } = await connectAndJoin();
 
       const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
-      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false, username: "red-fox" });
+      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false });
+      expect(username.length).toBeGreaterThanOrEqual(2);
 
       const history = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
@@ -82,8 +104,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("message is broadcast to all connected users", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("alpha");
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("beta");
+      const { ws: ws1, msgs: msgs1, username: user1 } = await connectAndJoin({ username: "alpha" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "beta" });
 
       msgs1.length = 0;
       msgs2.length = 0;
@@ -93,16 +115,16 @@ describe("ChatRoom Durable Object", () => {
 
       const msg1 = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
       const msg2 = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
-      expect(msg1).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "alpha", text: "hello from alpha" });
-      expect(msg2).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "alpha", text: "hello from alpha" });
+      expect(msg1).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: user1, text: "hello from alpha" });
+      expect(msg2).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: user1, text: "hello from alpha" });
 
       ws1.close();
       ws2.close();
     });
 
     it("two users join and both see correct user count", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("user-one");
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("user-two");
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "user-one" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "user-two" });
 
       const status1 = [...msgs1].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
       const status2 = [...msgs2].reverse().find((m) => m.type === SERVER_MESSAGE_TYPE.STATUS);
@@ -115,7 +137,7 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("owner joins with valid ADMIN_SECRET token and receives joined message", async () => {
-      const { ws, msgs } = await connectAndJoin("anything", { token: "test-admin-secret" });
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
 
       const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -127,7 +149,7 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("owner username is forced to 'thalida' regardless of input", async () => {
-      const { ws, msgs } = await connectAndJoin("some-other-name", { token: "test-admin-secret" });
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
 
       const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -144,8 +166,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("multiple owner sessions can share the 'thalida' username", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("thalida", { token: "test-admin-secret" });
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("thalida", { token: "test-admin-secret" });
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ token: "test-admin-secret" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ token: "test-admin-secret" });
 
       const joined1 = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined1).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -157,21 +179,20 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
-    it("message buffer caps at 50", async () => {
-      const { ws } = await connectAndJoin("spammer");
+    it("messages persist to durable storage", async () => {
+      const { ws } = await connectAndJoin({ username: "persister" });
 
-      for (let i = 0; i < 55; i++) {
-        send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: `msg-${i}` } });
-      }
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "persistent msg" } });
       await flush();
 
-      // Connect a new user and check history
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("reader");
+      // Connect a new user and check history includes the persisted message
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "checker" });
       const history = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
       expect(history).toBeDefined();
       if (history && history.type === SERVER_MESSAGE_TYPE.HISTORY) {
-        expect(history.messages.length).toBeLessThanOrEqual(50);
-        expect(history.messages[0].text).not.toBe("msg-0");
+        expect(history.messages.length).toBeGreaterThanOrEqual(1);
+        const found = history.messages.find((m: { text: string }) => m.text === "persistent msg");
+        expect(found).toBeDefined();
       }
 
       ws.close();
@@ -179,8 +200,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("user disconnect decrements user count", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("stayer");
-      const { ws: ws2 } = await connectAndJoin("leaver");
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "stayer" });
+      const { ws: ws2 } = await connectAndJoin({ username: "leaver" });
 
       msgs1.length = 0;
       ws2.close();
@@ -197,8 +218,8 @@ describe("ChatRoom Durable Object", () => {
 
   describe("security concerns", () => {
     it("XSS in message text is stored as-is (plain text, no mangling)", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("sender");
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("receiver");
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "sender" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "receiver" });
 
       msgs1.length = 0;
       msgs2.length = 0;
@@ -217,12 +238,11 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
-    it("XSS in username is rejected by validation regex", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
+    it("XSS in username is rejected by validation regex via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: '<img onerror=alert(1) src="x">' } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: '<img onerror=alert(1) src="x">' } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -232,34 +252,28 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("invalid admin token does not grant owner status", async () => {
-      const ws = await openWs();
-      const _msgs = collect(ws);
+      // Join with wrong token - should still succeed but not be owner
+      const { ws, msgs } = await connectAndJoin({ token: "wrong-secret" });
+
+      const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false });
+
+      // Should not be able to use reserved name "thalida" via rename
+      msgs.length = 0;
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "thalida" } });
       await flush();
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "imposter", token: "wrong-secret" } });
-      await flush();
-
-      // Should not be able to use reserved name as non-owner
-      const ws2 = await openWs();
-      const msgs2 = collect(ws2);
-      await flush();
-
-      send(ws2, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida", token: "wrong-secret" } });
-      await flush();
-
-      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
       expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
 
       ws.close();
-      ws2.close();
     });
 
     it("empty string admin token is not treated as valid owner", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
+      const { ws, msgs } = await connectAndJoin({ token: "" });
+      msgs.length = 0;
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida", token: "" } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "thalida" } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -269,8 +283,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("message text is truncated at 500 characters", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("truncator");
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("watcher");
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "truncator" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "watcher" });
 
       msgs1.length = 0;
       msgs2.length = 0;
@@ -290,8 +304,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("blocked user receives blocked notice", async () => {
-      const { ws: sender, msgs: senderMsgs } = await connectAndJoin("bad-actor");
-      const { ws: other } = await connectAndJoin("bystander");
+      const { ws: sender, msgs: senderMsgs } = await connectAndJoin({ username: "bad-actor" });
+      const { ws: other } = await connectAndJoin({ username: "bystander" });
 
       // Simulate 3 warnings by sending moderation-flagged content
       // Since OPENAI_API_KEY is empty, moderation is skipped.
@@ -312,83 +326,361 @@ describe("ChatRoom Durable Object", () => {
     });
   });
 
-  // ── IP Blocking ─────────────────────────────────────────────────
+  // ── Blocking ────────────────────────────────────────────────────
 
-  describe("IP blocking", () => {
-    it("admin can unblock an IP via /unblock command", async () => {
-      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+  describe("Blocking", () => {
+    it("admin can unblock a client via unblock message", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
         token: "test-admin-secret",
-        ip: "10.0.0.1",
       });
       adminMsgs.length = 0;
 
-      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.UNBLOCK, data: { clientId: "some-client-id" } });
       await flush();
 
       const unblocked = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.UNBLOCKED);
-      expect(unblocked).toMatchObject({ type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip: "10.0.0.50" });
+      expect(unblocked).toMatchObject({ type: SERVER_MESSAGE_TYPE.UNBLOCKED, clientId: "some-client-id" });
 
       adminWs.close();
     });
+  });
 
-    it("non-owner /unblock command returns unauthorized error", async () => {
-      const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
+  // ── Admin Commands ─────────────────────────────────────────────
+
+  describe("admin commands", () => {
+    it("admin /help returns help message with command list", async () => {
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
       msgs.length = 0;
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
-      expect(error).toMatchObject({
-        type: SERVER_MESSAGE_TYPE.ERROR,
-        code: SERVER_ERROR_CODE.UNAUTHORIZED,
-      });
+      const help = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.HELP);
+      expect(help).toBeDefined();
+      if (help && help.type === SERVER_MESSAGE_TYPE.HELP) {
+        expect(help.commands.length).toBeGreaterThanOrEqual(2);
+        const names = help.commands.map((c) => c.name);
+        expect(names).toContain("help");
+        expect(names).toContain("blocked");
+      }
 
       ws.close();
     });
 
-    it("/unblock command is not broadcast as a chat message", async () => {
-      const { ws: adminWs } = await connectAndJoin("thalida", {
+    it("/help is not broadcast to other users", async () => {
+      const { ws: adminWs } = await connectAndJoin({
         token: "test-admin-secret",
-        ip: "10.0.0.1",
       });
-      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin("viewer", { ip: "10.0.0.2" });
+      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin({ username: "viewer" });
       otherMsgs.length = 0;
 
-      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
       await flush();
 
-      const chatMsgs = otherMsgs.filter((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
-      expect(chatMsgs).toHaveLength(0);
+      const anyMsg = otherMsgs.filter(
+        (m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE || m.type === SERVER_MESSAGE_TYPE.HELP,
+      );
+      expect(anyMsg).toHaveLength(0);
+
+      adminWs.close();
+      otherWs.close();
+    });
+
+    it("non-admin /help sends as regular chat message", async () => {
+      const { ws: ws1, msgs: msgs1, username: user1 } = await connectAndJoin({ username: "regular" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "observer" });
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
+      await flush();
+
+      const msg = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: user1, text: "/help" });
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("admin /blocked returns list of blocked entries", async () => {
+      // First, create a blocked user by having admin flag someone
+      const {
+        ws: userWs,
+        msgs: _userMsgs,
+        username: troublemakerName,
+      } = await connectAndJoin({ username: "troublemaker" });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "bad stuff" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      send(adminWs, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      adminMsgs.length = 0;
+
+      // Now ask for the blocked list
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/blocked" } });
+      await flush();
+
+      const list = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST);
+      expect(list).toBeDefined();
+      if (list && list.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST) {
+        expect(list.entries.length).toBeGreaterThanOrEqual(1);
+        const entry = list.entries.find((e) => e.username === troublemakerName);
+        expect(entry).toBeDefined();
+        if (entry) {
+          expect(entry.clientId).toBeDefined();
+          expect(entry.blockedAt).toBeGreaterThan(0);
+        }
+      }
+
+      adminWs.close();
+      userWs.close();
+    });
+
+    it("admin unknown /command sends as regular chat message", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin({ username: "cmd-viewer" });
+
+      adminMsgs.length = 0;
+      otherMsgs.length = 0;
+
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/nonexistent" } });
+      await flush();
+      const msg = otherMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(msg).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.MESSAGE,
+        username: "thalida",
+        text: "/nonexistent",
+      });
 
       adminWs.close();
       otherWs.close();
     });
   });
 
+  // ── Admin Delete ────────────────────────────────────────────────
+
+  describe("admin delete", () => {
+    it("admin can delete a message by ID", async () => {
+      const { ws: userWs, msgs: userMsgs } = await connectAndJoin({ username: "chatter" });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      userMsgs.length = 0;
+      adminMsgs.length = 0;
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "delete me" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(chatMsg).toBeDefined();
+      const msgId = chatMsg?.id;
+      expect(msgId).toBeDefined();
+
+      adminMsgs.length = 0;
+      userMsgs.length = 0;
+
+      send(adminWs, { type: "delete", data: { id: msgId } });
+      await flush();
+
+      const remove1 = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      const remove2 = userMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove1).toMatchObject({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msgId });
+      expect(remove2).toMatchObject({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msgId });
+
+      userWs.close();
+      adminWs.close();
+    });
+
+    it("non-admin delete request is silently ignored", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "del-sender" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "del-hacker" });
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "stay here" } });
+      await flush();
+
+      const chatMsg = msgs2.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws2, { type: "delete", data: { id: msgId } });
+      await flush();
+
+      const remove = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove).toBeUndefined();
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("delete of nonexistent message ID is silently ignored", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "delete", data: { id: "nonexistent-id" } });
+      await flush();
+
+      const remove = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove).toBeUndefined();
+
+      adminWs.close();
+    });
+
+    it("admin can delete all messages from a client", async () => {
+      const cid = crypto.randomUUID();
+      const { ws: userWs } = await connectAndJoin({ username: "bulk-poster", clientId: cid });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 1" } });
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 2" } });
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 3" } });
+      await flush();
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "delete_by_user", data: { clientId: cid } });
+      await flush();
+
+      const removes = adminMsgs.filter((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(removes).toHaveLength(3);
+
+      userWs.close();
+      adminWs.close();
+    });
+
+    it("non-admin delete_by_user is silently ignored", async () => {
+      const { ws: ws1 } = await connectAndJoin({ username: "dbu-poster" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "dbu-hacker" });
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "keep this" } });
+      await flush();
+
+      msgs2.length = 0;
+
+      send(ws2, { type: "delete_by_user", data: { clientId: "some-fake-id" } });
+      await flush();
+
+      const removes = msgs2.filter((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(removes).toHaveLength(0);
+
+      ws1.close();
+      ws2.close();
+    });
+  });
+
+  // ── Admin Flag ─────────────────────────────────────────────────
+
+  describe("admin flag", () => {
+    it("admin can flag a user, which blocks their IP and responds with FLAGGED", async () => {
+      const { ws: userWs, msgs: userMsgs, username: badUserName } = await connectAndJoin({ username: "bad-user" });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      userMsgs.length = 0;
+      adminMsgs.length = 0;
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "offensive content" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      adminMsgs.length = 0;
+      userMsgs.length = 0;
+
+      send(adminWs, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      const flagged = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.FLAGGED,
+        username: badUserName,
+        clientId: expect.any(String),
+        messageId: msgId,
+      });
+
+      const blocked = userMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
+      expect(blocked).toBeDefined();
+
+      adminWs.close();
+      userWs.close();
+    });
+
+    it("non-admin flag request is silently ignored", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "flag-target" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "flag-hacker" });
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "normal message" } });
+      await flush();
+
+      const chatMsg = msgs2.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws2, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      const flagged = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toBeUndefined();
+      const blocked = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
+      expect(blocked).toBeUndefined();
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("flagging nonexistent message ID is silently ignored", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "flag", data: { id: "nonexistent-id" } });
+      await flush();
+
+      const flagged = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toBeUndefined();
+
+      adminWs.close();
+    });
+  });
+
   // ── Failure / Error States ───────────────────────────────────────
 
   describe("failure and error states", () => {
-    it("reserved word 'thalida' in username returns error without admin token", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
+    it("reserved word 'thalida' in username returns error via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida" } });
-      await flush();
-
-      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
-      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
-
-      ws.close();
-    });
-
-    it("username containing admin name as substring returns error", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
-
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "thalida-fan" } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "thalida" } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -397,12 +689,24 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("username too short (1 char) returns invalid_username error", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
+    it("username containing admin name as substring returns error via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "thalida-fan" } });
       await flush();
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "x" } });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.RESERVED_USERNAME });
+
+      ws.close();
+    });
+
+    it("username too short (1 char) returns invalid_username error via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "x" } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -411,26 +715,11 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("username with spaces returns invalid_username error", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
+    it("username with spaces returns invalid_username error via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
 
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "has spaces" } });
-      await flush();
-
-      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
-      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
-
-      ws.close();
-    });
-
-    it("username with special characters returns invalid_username error", async () => {
-      const ws = await openWs();
-      const msgs = collect(ws);
-      await flush();
-
-      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "user@#$!" } });
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "has spaces" } });
       await flush();
 
       const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -439,14 +728,26 @@ describe("ChatRoom Durable Object", () => {
       ws.close();
     });
 
-    it("duplicate username returns taken_username error", async () => {
-      const { ws: ws1 } = await connectAndJoin("unique-name");
+    it("username with special characters returns invalid_username error via rename", async () => {
+      const { ws, msgs } = await connectAndJoin();
+      msgs.length = 0;
 
-      const ws2 = await openWs();
-      const msgs2 = collect(ws2);
+      send(ws, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "user@#$!" } });
       await flush();
 
-      send(ws2, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { username: "unique-name" } });
+      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.INVALID_USERNAME });
+
+      ws.close();
+    });
+
+    it("duplicate username returns taken_username error via rename", async () => {
+      const { ws: ws1, username: takenName } = await connectAndJoin({ username: "unique-name" });
+
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin();
+      msgs2.length = 0;
+
+      send(ws2, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: takenName } });
       await flush();
 
       const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
@@ -457,8 +758,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("empty message text is silently dropped", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("silent");
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("listener");
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "silent" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "listener" });
 
       msgs1.length = 0;
       msgs2.length = 0;
@@ -479,7 +780,7 @@ describe("ChatRoom Durable Object", () => {
       const _msgs1 = collect(ws1);
       await flush();
 
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("observer");
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "spec-observer" });
       msgs2.length = 0;
 
       send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "ghost message" } });
@@ -493,7 +794,7 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("malformed JSON returns error and keeps connection alive", async () => {
-      const { ws, msgs } = await connectAndJoin("robust-user");
+      const { ws, msgs } = await connectAndJoin({ username: "robust-user" });
       msgs.length = 0;
 
       ws.send("this is not json {{{");
@@ -510,6 +811,140 @@ describe("ChatRoom Durable Object", () => {
       expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, text: "still here" });
 
       ws.close();
+    });
+  });
+
+  // ── Rename ──────────────────────────────────────────────────────
+
+  describe("rename", () => {
+    it("rename message broadcasts rename and updates history", async () => {
+      const cid = crypto.randomUUID();
+      const { ws: ws1, msgs: msgs1, username: oldName } = await connectAndJoin({ username: "old-name", clientId: cid });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "rename-watcher" });
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "hello" } });
+      await flush();
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "new-name" } });
+      await flush();
+
+      const rename = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.RENAME);
+      expect(rename).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.RENAME,
+        oldUsername: oldName,
+        newUsername: "new-name",
+      });
+
+      const { ws: ws3, msgs: msgs3 } = await connectAndJoin({ username: "late-joiner" });
+      const history = msgs3.find((m) => m.type === SERVER_MESSAGE_TYPE.HISTORY);
+      if (history && history.type === SERVER_MESSAGE_TYPE.HISTORY) {
+        const fromRenamed = history.messages.filter((m) => m.username === "new-name");
+        expect(fromRenamed.length).toBeGreaterThanOrEqual(1);
+        const fromOld = history.messages.filter((m) => m.username === oldName);
+        expect(fromOld).toHaveLength(0);
+      }
+
+      ws1.close();
+      ws2.close();
+      ws3.close();
+    });
+
+    it("flag works after user has renamed", async () => {
+      const cid = crypto.randomUUID();
+      const { ws: userWs, msgs: userMsgs } = await connectAndJoin({ username: "original", clientId: cid });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
+        token: "test-admin-secret",
+      });
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "bad content" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: "renamed" } });
+      await flush();
+
+      adminMsgs.length = 0;
+      userMsgs.length = 0;
+
+      send(adminWs, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      const flagged = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toBeDefined();
+
+      const blocked = userMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
+      expect(blocked).toBeDefined();
+
+      adminWs.close();
+      userWs.close();
+    });
+  });
+
+  // ── Server-Assigned Identity ───────────────────────────────────
+
+  describe("server-assigned identity", () => {
+    it("join without username assigns a random name", async () => {
+      const ws = await openWs();
+      const msgs = collect(ws);
+      await flush();
+
+      send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data: { clientId: crypto.randomUUID() } });
+      await flush();
+
+      const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(joined).toBeDefined();
+      if (joined && "username" in joined) {
+        expect((joined as { username: string }).username.length).toBeGreaterThanOrEqual(2);
+      }
+
+      ws.close();
+    });
+
+    it("reconnecting with same clientId returns same username", async () => {
+      const cid = crypto.randomUUID();
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ clientId: cid });
+      const firstJoined = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      const firstUsername =
+        firstJoined && "username" in firstJoined ? (firstJoined as { username: string }).username : "";
+      ws1.close();
+      await flush();
+
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ clientId: cid });
+      const secondJoined = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      const secondUsername =
+        secondJoined && "username" in secondJoined ? (secondJoined as { username: string }).username : "";
+
+      expect(secondUsername).toBe(firstUsername);
+
+      ws2.close();
+    });
+
+    it("admin login does not change client mapping, logout restores original name", async () => {
+      const cid = crypto.randomUUID();
+
+      // First join as regular user
+      const { ws: ws1, username: originalName } = await connectAndJoin({ clientId: cid });
+      ws1.close();
+      await flush();
+
+      // Login as admin with same clientId
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ token: "test-admin-secret", clientId: cid });
+      const adminJoined = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(adminJoined).toMatchObject({ username: "thalida", isOwner: true });
+      ws2.close();
+      await flush();
+
+      // Logout (reconnect without token)
+      const { ws: ws3, msgs: msgs3 } = await connectAndJoin({ clientId: cid });
+      const logoutJoined = msgs3.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
+      expect(logoutJoined).toMatchObject({ username: originalName, isOwner: false });
+
+      ws3.close();
     });
   });
 });

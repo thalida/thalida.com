@@ -7,6 +7,7 @@ export interface MessageContext {
 export interface ChatMessage {
   type: "message";
   id: string;
+  clientId: string;
   username: string;
   text: string;
   timestamp: number;
@@ -14,25 +15,28 @@ export interface ChatMessage {
 }
 
 export interface ConnectionInfo {
-  ip: string;
+  clientId: string;
   username: string;
   isOwner: boolean;
   warnings: number;
   isBlocked: boolean;
-  clientId?: string;
 }
 
 // ── Client → Server ─────────────────────────────────────────────────
 
 export const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
+  RENAME: "rename",
   MESSAGE: "message",
+  DELETE: "delete",
+  FLAG: "flag",
+  DELETE_BY_USER: "delete_by_user",
+  UNBLOCK: "unblock",
 } as const;
 
 export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT_MESSAGE_TYPE];
 
 export interface ClientJoinData {
-  username: string;
   token?: string;
   clientId?: string;
 }
@@ -42,7 +46,34 @@ export interface ClientChatData {
   context?: MessageContext;
 }
 
-export type ClientMessage = { type: "join"; data: ClientJoinData } | { type: "message"; data: ClientChatData };
+export interface ClientDeleteData {
+  id: string;
+}
+
+export interface ClientFlagData {
+  id: string;
+}
+
+export interface ClientDeleteByUserData {
+  clientId: string;
+}
+
+export interface ClientUnblockData {
+  clientId: string;
+}
+
+export interface ClientRenameData {
+  username: string;
+}
+
+export type ClientMessage =
+  | { type: "join"; data: ClientJoinData }
+  | { type: "rename"; data: ClientRenameData }
+  | { type: "message"; data: ClientChatData }
+  | { type: "delete"; data: ClientDeleteData }
+  | { type: "flag"; data: ClientFlagData }
+  | { type: "delete_by_user"; data: ClientDeleteByUserData }
+  | { type: "unblock"; data: ClientUnblockData };
 
 // ── Server → Client ─────────────────────────────────────────────────
 
@@ -51,11 +82,15 @@ export const SERVER_MESSAGE_TYPE = {
   WARNING: "warning",
   BLOCKED: "blocked",
   UNBLOCKED: "unblocked",
+  HELP: "help",
+  FLAGGED: "flagged",
+  BLOCKED_LIST: "blocked_list",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
   MESSAGE: "message",
+  RENAME: "rename",
 } as const;
 
 export type ServerMessageType = (typeof SERVER_MESSAGE_TYPE)[keyof typeof SERVER_MESSAGE_TYPE];
@@ -76,6 +111,7 @@ export const SERVER_ERROR_CODE = {
   MODERATION_WARNING: "moderation_warning",
   MODERATION_BLOCKED: "moderation_blocked",
   UNAUTHORIZED: "unauthorized",
+  UNBLOCKED: "unblocked",
 } as const;
 
 export type ServerErrorCode = (typeof SERVER_ERROR_CODE)[keyof typeof SERVER_ERROR_CODE];
@@ -93,6 +129,7 @@ export interface ServerBroadcastStatusMessage {
   type: "status";
   isOwnerOnline: boolean;
   userCount: number;
+  onlineUsernames: string[];
 }
 
 export interface ServerBroadcastHistoryMessage {
@@ -116,13 +153,43 @@ export interface ServerJoinedMessage {
   type: "joined";
   isOwner: boolean;
   username: string;
+  isBlocked: boolean;
 }
 
 // ── Server → Client: Admin Responses ─────────────────────────────────
 
 export interface ServerUnblockedMessage {
   type: "unblocked";
-  ip: string;
+  clientId: string;
+}
+
+export interface ServerHelpMessage {
+  type: "help";
+  commands: Array<{ name: string; description: string }>;
+}
+
+export interface ServerFlaggedMessage {
+  type: "flagged";
+  username: string;
+  clientId: string;
+  messageId: string;
+}
+
+export interface ServerRenameMessage {
+  type: "rename";
+  oldUsername: string;
+  newUsername: string;
+}
+
+export interface BlockedEntry {
+  clientId: string;
+  username: string;
+  blockedAt: number;
+}
+
+export interface ServerBlockedListMessage {
+  type: "blocked_list";
+  entries: BlockedEntry[];
 }
 
 // ── Combined Server Message ─────────────────────────────────────────
@@ -132,6 +199,10 @@ export type ServerMessage =
   | ServerBroadcast
   | ServerJoinedMessage
   | ServerUnblockedMessage
+  | ServerHelpMessage
+  | ServerFlaggedMessage
+  | ServerRenameMessage
+  | ServerBlockedListMessage
   | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────

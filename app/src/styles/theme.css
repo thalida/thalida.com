@@ -8,9 +8,11 @@
   --color-neon: #39ff14;
   --color-teal: #00e5a0;
   --color-text: #e8f0f8;
-  --color-muted: #7a9ab5;
+  --color-muted: #85a3bc;
   --color-border: #152535;
   --color-surface-active: #0a1826;
+  --color-accent: #7dd3fc;
+  --color-admin: #d4a520;
 
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Space Grotesk", sans-serif;

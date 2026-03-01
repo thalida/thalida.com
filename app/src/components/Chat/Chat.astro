@@ -8,21 +8,27 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   transition:persist="chat"
 >
   <div class="flex items-center gap-1.5 h-12 px-3 bg-midnight border-b border-border shrink-0">
-    <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight">Chat</h2>
-    <span id="js-chat-status-dot" class="inline-block shrink-0 w-2 h-2 rounded-full bg-muted data-[online=true]:bg-neon"
-    ></span>
-    <span id="js-chat-owner-status" class="flex-1 text-xs text-muted data-[online=true]:text-neon">offline</span>
-    <span id="js-chat-user-count" class="text-xs text-muted" title="0 viewers"
-      ><i class="fa-solid fa-eye"></i> <span data-chat="viewer-count">0 viewers</span></span
-    >
+    <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight flex-1">Chat</h2>
+    <span class="flex items-center gap-1.5 text-xs text-muted">
+      <span class="flex items-center gap-1" id="js-chat-owner-wrap" title="Site owner: offline">
+        <span
+          id="js-chat-status-dot"
+          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
+        <span id="js-chat-owner-status" class="text-admin">offline</span>
+      </span>
+      <span class="opacity-30">·</span>
+      <span id="js-chat-user-count" title="0 online"
+        ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0</span></span
+      >
+    </span>
     <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
       <i class="fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
   </div>
 
-  <div class="flex flex-col gap-2 flex-1 min-h-0 p-4">
+  <div class="flex flex-col gap-2 flex-1 min-h-0 px-2.5 py-3">
     <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
-    <div class="flex items-center gap-1.5">
+    <div id="js-chat-username-row" class="flex items-center gap-1.5">
       <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">
         chatting as
       </label>
@@ -55,21 +61,49 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 </aside>
 
 <template id="chat-msg-tpl">
-  <div class="mb-2" data-msg-id="">
+  <div class="group mb-2" data-msg-id="">
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
-      <span data-chat="username" class="font-semibold text-teal data-admin:text-neon"></span>
-      <span class="ml-auto flex items-baseline gap-1.5 whitespace-nowrap">
-        <a data-chat="page" hidden class="text-text font-medium underline hover:text-teal" href=""></a>
-        <span data-chat="sep" hidden class="opacity-40">·</span>
-        <span data-chat="time" class="opacity-40"></span>
-      </span>
+      <span
+        data-chat="status-dot"
+        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
+      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0"
+      ></span>
+      <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
+      <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
+      <span class="flex-1"></span>
+      <span data-chat="time" class="opacity-40 whitespace-nowrap"></span>
+      <button
+        data-chat="flag-btn"
+        hidden
+        class="text-muted hover:text-yellow-400 transition-colors leading-none"
+        type="button"
+        title="Flag & ban user"
+      >
+        <i class="fa-solid fa-flag fa-xs" aria-hidden="true"></i>
+      </button>
+      <button
+        data-chat="delete-btn"
+        hidden
+        class="text-muted hover:text-red-400 transition-colors leading-none"
+        type="button"
+        title="Delete message"
+      >
+        <i class="fa-solid fa-trash-can fa-xs" aria-hidden="true"></i>
+      </button>
     </div>
-    <div data-chat="text"></div>
+    <div data-chat="text" class="mt-0.5 text-sm whitespace-pre-line hyphens-auto wrap-break-word"></div>
   </div>
 </template>
 
 <template id="chat-notice-tpl">
-  <div class="italic"></div>
+  <div class="mb-2">
+    <div class="flex items-baseline gap-1.5 text-xs leading-tight">
+      <span class="font-semibold text-muted">system</span>
+      <span class="ml-auto opacity-40" data-chat="notice-time"></span>
+    </div>
+    <div data-chat="notice-text" class="mt-0.5 text-muted whitespace-pre-line"></div>
+    <div data-chat="notice-actions" hidden class="mt-0.5 flex items-baseline gap-1.5 text-muted"></div>
+  </div>
 </template>
 
 <meta name="chat-ws-url" content={wsUrl} />
@@ -89,5 +123,11 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   #chat-username:read-only {
     border-bottom: none;
     cursor: default;
+  }
+  [data-chat="delete-btn"][data-confirm] {
+    color: var(--color-red-400, #f87171);
+  }
+  [data-chat="flag-btn"][data-confirm] {
+    color: var(--color-yellow-400, #facc15);
   }
 </style>
