@@ -549,6 +549,91 @@ describe("ChatRoom Durable Object", () => {
     });
   });
 
+  // ── Admin Flag ─────────────────────────────────────────────────
+
+  describe("admin flag", () => {
+    it("admin can flag a user, which blocks their IP and responds with FLAGGED", async () => {
+      const { ws: userWs, msgs: userMsgs } = await connectAndJoin("bad-user", { ip: "10.0.0.99" });
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+        ip: "10.0.0.1",
+      });
+
+      userMsgs.length = 0;
+      adminMsgs.length = 0;
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "offensive content" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      adminMsgs.length = 0;
+      userMsgs.length = 0;
+
+      send(adminWs, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      const flagged = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.FLAGGED,
+        username: "bad-user",
+        ip: "10.0.0.99",
+        messageId: msgId,
+      });
+
+      const blocked = userMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
+      expect(blocked).toBeDefined();
+
+      adminWs.close();
+      userWs.close();
+    });
+
+    it("non-admin flag request is silently ignored", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("target", { ip: "10.0.0.10" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("hacker", { ip: "10.0.0.11" });
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "normal message" } });
+      await flush();
+
+      const chatMsg = msgs2.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws2, { type: "flag", data: { id: msgId } });
+      await flush();
+
+      const flagged = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toBeUndefined();
+      const blocked = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
+      expect(blocked).toBeUndefined();
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("flagging nonexistent message ID is silently ignored", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+      });
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "flag", data: { id: "nonexistent-id" } });
+      await flush();
+
+      const flagged = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.FLAGGED);
+      expect(flagged).toBeUndefined();
+
+      adminWs.close();
+    });
+  });
+
   // ── Failure / Error States ───────────────────────────────────────
 
   describe("failure and error states", () => {

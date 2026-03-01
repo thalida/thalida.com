@@ -5,6 +5,7 @@ import type {
   ChatMessage,
   ClientChatData,
   ClientDeleteData,
+  ClientFlagData,
   ClientJoinData,
   ClientMessage,
   ConnectionInfo,
@@ -162,6 +163,9 @@ export class ChatRoom implements DurableObject {
       case CLIENT_MESSAGE_TYPE.DELETE:
         this.handleDelete(ws, msg.data);
         break;
+      case CLIENT_MESSAGE_TYPE.FLAG:
+        this.handleFlag(ws, msg.data);
+        break;
     }
   }
 
@@ -295,6 +299,49 @@ export class ChatRoom implements DurableObject {
 
     this.messages.splice(idx, 1);
     this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
+  }
+
+  private handleFlag(ws: WebSocket, { id }: ClientFlagData): void {
+    const info = this.connections.get(ws);
+    if (!info?.isOwner) return;
+
+    const message = this.messages.find((m) => m.id === id);
+    if (!message) return;
+
+    const targetUsername = message.username;
+
+    // Find the target's IP from their connection
+    let targetIp: string | undefined;
+    for (const [, connInfo] of this.connections) {
+      if (connInfo.username === targetUsername && !connInfo.isOwner) {
+        targetIp = connInfo.ip;
+        break;
+      }
+    }
+
+    if (!targetIp) return;
+
+    // Block the IP
+    this.blockedEntries.set(targetIp, { username: targetUsername, blockedAt: Date.now() });
+    this.persistBlockedIps().catch((err) => {
+      console.error("[flag] failed to persist blocked IP:", err);
+    });
+
+    // Send BLOCKED to all of the target's sockets
+    for (const [targetWs, connInfo] of this.connections) {
+      if (connInfo.ip === targetIp && !connInfo.isOwner) {
+        this.sendBlocked(targetWs, SERVER_ERROR_CODE.MODERATION_BLOCKED, "You have been blocked by the admin.");
+        connInfo.isBlocked = true;
+      }
+    }
+
+    // Respond to admin
+    this.send(ws, {
+      type: SERVER_MESSAGE_TYPE.FLAGGED,
+      username: targetUsername,
+      ip: targetIp,
+      messageId: id,
+    });
   }
 
   // ── Moderation ───────────────────────────────────────────────────────
