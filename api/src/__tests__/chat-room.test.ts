@@ -331,17 +331,18 @@ describe("ChatRoom Durable Object", () => {
       adminWs.close();
     });
 
-    it("non-owner /unblock command returns unauthorized error", async () => {
+    it("non-owner /unblock command is treated as regular chat text", async () => {
       const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
       msgs.length = 0;
 
       send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
       await flush();
 
-      const error = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
-      expect(error).toMatchObject({
-        type: SERVER_MESSAGE_TYPE.ERROR,
-        code: SERVER_ERROR_CODE.UNAUTHORIZED,
+      const chatMsg = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(chatMsg).toMatchObject({
+        type: SERVER_MESSAGE_TYPE.MESSAGE,
+        username: "regular-user",
+        text: "/unblock 10.0.0.50",
       });
 
       ws.close();
