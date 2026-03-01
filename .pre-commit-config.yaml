@@ -33,3 +33,28 @@ repos:
         args: [--markdown-linebreak-ext=md]
       - id: check-merge-conflict
       - id: mixed-line-ending
+
+  - repo: local
+    hooks:
+      - id: typecheck-api
+        name: typecheck (api)
+        entry: just api::typecheck
+        language: system
+        pass_filenames: false
+        files: ^api/.*\.(ts|mjs)$
+        stages: [pre-push]
+
+      - id: typecheck-app
+        name: typecheck (app)
+        entry: just app::typecheck
+        language: system
+        pass_filenames: false
+        files: ^app/.*\.(ts|mjs|astro)$
+        stages: [pre-push]
+
+      - id: test
+        name: test
+        entry: just test
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
