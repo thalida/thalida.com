@@ -1,4 +1,5 @@
 import { v7 as uuidv7 } from "uuid";
+import { dispatch } from "./commands";
 import type {
   Env,
   ChatMessage,
@@ -228,10 +229,8 @@ export class ChatRoom implements DurableObject {
       .slice(0, MAX_MESSAGE_LENGTH);
     if (!text) return;
 
-    const unblockMatch = text.match(/^\/unblock\s+(.+)$/);
-    if (unblockMatch) {
-      this.handleUnblock(ws, unblockMatch[1].trim());
-      return;
+    if (info.isOwner && text.startsWith("/")) {
+      if (dispatch(text, ws, this)) return;
     }
 
     const message: ChatMessage = {
@@ -360,6 +359,16 @@ export class ChatRoom implements DurableObject {
 
     console.error("[moderation] exhausted retries after 429s");
     return null;
+  }
+
+  // ── Command Interface ──────────────────────────────────────────────
+
+  sendToSocket(ws: WebSocket, message: ServerMessage): void {
+    this.send(ws, message);
+  }
+
+  handleUnblockCommand(ws: WebSocket, ip: string): void {
+    this.handleUnblock(ws, ip);
   }
 
   // ── Connection Helpers ───────────────────────────────────────────────
