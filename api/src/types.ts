@@ -27,6 +27,9 @@ export interface ConnectionInfo {
 export const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
   MESSAGE: "message",
+  DELETE: "delete",
+  FLAG: "flag",
+  DELETE_BY_USER: "delete_by_user",
 } as const;
 
 export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT_MESSAGE_TYPE];
@@ -42,7 +45,24 @@ export interface ClientChatData {
   context?: MessageContext;
 }
 
-export type ClientMessage = { type: "join"; data: ClientJoinData } | { type: "message"; data: ClientChatData };
+export interface ClientDeleteData {
+  id: string;
+}
+
+export interface ClientFlagData {
+  id: string;
+}
+
+export interface ClientDeleteByUserData {
+  username: string;
+}
+
+export type ClientMessage =
+  | { type: "join"; data: ClientJoinData }
+  | { type: "message"; data: ClientChatData }
+  | { type: "delete"; data: ClientDeleteData }
+  | { type: "flag"; data: ClientFlagData }
+  | { type: "delete_by_user"; data: ClientDeleteByUserData };
 
 // ── Server → Client ─────────────────────────────────────────────────
 
@@ -52,6 +72,8 @@ export const SERVER_MESSAGE_TYPE = {
   BLOCKED: "blocked",
   UNBLOCKED: "unblocked",
   HELP: "help",
+  FLAGGED: "flagged",
+  BLOCKED_LIST: "blocked_list",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
@@ -131,6 +153,24 @@ export interface ServerHelpMessage {
   commands: Array<{ name: string; description: string }>;
 }
 
+export interface ServerFlaggedMessage {
+  type: "flagged";
+  username: string;
+  ip: string;
+  messageId: string;
+}
+
+export interface BlockedEntry {
+  ip: string;
+  username: string;
+  blockedAt: number;
+}
+
+export interface ServerBlockedListMessage {
+  type: "blocked_list";
+  entries: BlockedEntry[];
+}
+
 // ── Combined Server Message ─────────────────────────────────────────
 
 export type ServerMessage =
@@ -139,6 +179,8 @@ export type ServerMessage =
   | ServerJoinedMessage
   | ServerUnblockedMessage
   | ServerHelpMessage
+  | ServerFlaggedMessage
+  | ServerBlockedListMessage
   | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────
