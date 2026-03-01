@@ -2,7 +2,7 @@ function initResponsiveUI() {
   const menuBtn = document.getElementById("js-toolbar-menu-btn");
   const navPanel = document.getElementById("nav-panel");
   const navBackdrop = document.getElementById("nav-backdrop");
-  const chatPanel = document.getElementById("js-chat-panel");
+  const chatPanel = document.querySelector<HTMLElement>('[data-chat="panel"]');
   const chatFab = document.getElementById("js-mobile-chat-fab");
   const chatOverlay = document.getElementById("chat-overlay");
   const chatOverlayBackdrop = document.getElementById("chat-overlay-backdrop");
@@ -72,7 +72,7 @@ function initResponsiveUI() {
   chatFab?.addEventListener("click", openChat);
 
   // Close chat overlay
-  const chatOverlayClose = document.getElementById("chat-overlay-close");
+  const chatOverlayClose = document.querySelector<HTMLElement>('[data-chat="overlay-close"]');
   chatOverlayClose?.addEventListener("click", closeChat);
   chatOverlayBackdrop?.addEventListener("click", closeChat);
 

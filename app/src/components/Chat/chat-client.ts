@@ -81,15 +81,15 @@ let isOwner = false;
 let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
-const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
-const usernameRow = document.getElementById("js-chat-username-row") as HTMLDivElement;
-const messagesEl = document.getElementById("js-chat-messages") as HTMLDivElement;
-const inputEl = document.getElementById("js-chat-input") as HTMLInputElement;
-const sendBtn = document.getElementById("js-chat-send") as HTMLButtonElement;
-const statusDotEl = document.getElementById("js-chat-status-dot") as HTMLSpanElement;
-const ownerStatusEl = document.getElementById("js-chat-owner-status") as HTMLSpanElement;
-const ownerWrapEl = document.getElementById("js-chat-owner-wrap") as HTMLSpanElement;
-const userCountEl = document.getElementById("js-chat-user-count") as HTMLSpanElement;
+const usernameInput = document.querySelector('[data-chat="username-input"]') as HTMLInputElement;
+const usernameRow = document.querySelector('[data-chat="username-row"]') as HTMLLabelElement;
+const messagesEl = document.querySelector('[data-chat="messages"]') as HTMLDivElement;
+const inputEl = document.querySelector('[data-chat="input"]') as HTMLInputElement;
+const sendBtn = document.querySelector('[data-chat="send"]') as HTMLButtonElement;
+const statusDotEl = document.querySelector('[data-chat="owner-status-dot"]') as HTMLSpanElement;
+const ownerStatusEl = document.querySelector('[data-chat="owner-status"]') as HTMLSpanElement;
+const ownerWrapEl = document.querySelector('[data-chat="owner-wrap"]') as HTMLSpanElement;
+const userCountEl = document.querySelector('[data-chat="user-count"]') as HTMLSpanElement;
 
 function getAdminToken(): string | null {
   return localStorage.getItem(LS_ADMIN_TOKEN_KEY);
@@ -103,8 +103,8 @@ function loadIdentity(): void {
   }
 }
 
-const msgTpl = document.getElementById("chat-msg-tpl") as HTMLTemplateElement;
-const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElement;
+const msgTpl = document.querySelector('[data-chat="msg-tpl"]') as HTMLTemplateElement;
+const noticeTpl = document.querySelector('[data-chat="notice-tpl"]') as HTMLTemplateElement;
 
 type ClientModAction =
   | { type: typeof CLIENT_MESSAGE_TYPE.DELETE; data: { id: string } }
