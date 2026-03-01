@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import sitemap from "@astrojs/sitemap";
 import astroExpressiveCode from "astro-expressive-code";
 import pagefind from "astro-pagefind";
 import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
@@ -20,6 +21,7 @@ const mediaBaseUrl = r2BaseUrl ? `${r2BaseUrl}/${mediaBranch}` : "";
 export default defineConfig({
   site: "https://thalida.com",
   integrations: [
+    sitemap(),
     astroExpressiveCode({
       themes: ["houston"],
       styleOverrides: {
