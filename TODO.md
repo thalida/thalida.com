@@ -24,7 +24,7 @@
 - [x] improve homepage history
 - [x] add ability to remove chat messages if admin or manually flag if admin
 - [x] add an admin only /help that shows admin options
-- [ ] copy favicon and setup metadata -- copy from v-2025
+- [x] copy favicon and setup metadata -- copy from v-2025
 - [x] change # of viewers into # of users (?) # of
 - [x] fix link card styling
 - [x] chatting as is misaligned from input by 2 px
