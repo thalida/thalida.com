@@ -24,5 +24,7 @@ const href = `/${item.collection}/post/${item.id}`;
   </div>
   <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
   {item.description && <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description}</p>}
-  <CardTags tags={item.tags} />
+  <div class="mt-auto pt-2">
+    <CardTags tags={item.tags} />
+  </div>
 </a>
