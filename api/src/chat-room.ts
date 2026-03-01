@@ -115,16 +115,6 @@ export class ChatRoom implements DurableObject {
 
     server.accept();
 
-    if (this.blockedEntries.has(ip)) {
-      this.sendBlocked(
-        server,
-        SERVER_ERROR_CODE.MODERATION_BLOCKED,
-        "You have been blocked due to repeated violations.",
-      );
-      server.close(1008, "blocked");
-      return new Response(null, { status: 101, webSocket: client });
-    }
-
     this.ipBySocket.set(server, ip);
     this.spectators.add(server);
     this.sendStatus(server);
@@ -155,6 +145,15 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
+    const info = this.connections.get(ws);
+    if (info?.isBlocked && msg.type !== CLIENT_MESSAGE_TYPE.JOIN) {
+      this.sendBlocked(ws);
+      return;
+    }
+    if (info?.isBlocked && msg.type === CLIENT_MESSAGE_TYPE.JOIN) {
+      return;
+    }
+
     switch (msg.type) {
       case CLIENT_MESSAGE_TYPE.JOIN:
         this.handleJoin(ws, msg.data);
@@ -171,11 +170,16 @@ export class ChatRoom implements DurableObject {
       case CLIENT_MESSAGE_TYPE.DELETE_BY_USER:
         this.handleDeleteByUser(ws, msg.data);
         break;
+      case CLIENT_MESSAGE_TYPE.UNBLOCK:
+        this.handleUnblock(ws, msg.data.ip);
+        break;
     }
   }
 
   private async handleJoin(ws: WebSocket, { username, token, clientId }: ClientJoinData): Promise<void> {
     const isOwner = typeof token === "string" && token.length > 0 && token === this.env.ADMIN_SECRET;
+
+    const ipBlocked = !isOwner && this.blockedEntries.has(this.ipBySocket.get(ws) ?? "unknown");
 
     const name = isOwner
       ? ADMIN_USERNAME
@@ -229,11 +233,11 @@ export class ChatRoom implements DurableObject {
       username: name,
       isOwner,
       warnings: 0,
-      isBlocked: false,
+      isBlocked: ipBlocked,
       clientId: clientId ?? undefined,
     });
 
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name });
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked: ipBlocked });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.HISTORY, messages: this.messages });
     this.broadcastStatus();
   }
@@ -241,15 +245,6 @@ export class ChatRoom implements DurableObject {
   private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
     const info = this.connections.get(ws);
     if (!info) return;
-
-    if (info.isBlocked) {
-      this.sendBlocked(
-        ws,
-        SERVER_ERROR_CODE.MODERATION_BLOCKED,
-        "You have been blocked from sending messages due to repeated violations.",
-      );
-      return;
-    }
 
     const text = String(rawText ?? "")
       .trim()
@@ -293,6 +288,23 @@ export class ChatRoom implements DurableObject {
       console.error("[unblock] failed to persist unblock:", err);
     });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip });
+
+    for (const [sock, connInfo] of this.connections) {
+      if (connInfo.ip === ip && connInfo.isBlocked) {
+        connInfo.isBlocked = false;
+        this.send(sock, {
+          type: SERVER_MESSAGE_TYPE.JOINED,
+          isOwner: false,
+          username: connInfo.username,
+          isBlocked: false,
+        });
+        this.send(sock, {
+          type: SERVER_MESSAGE_TYPE.WARNING,
+          code: SERVER_ERROR_CODE.UNBLOCKED,
+          message: "You have been unblocked.",
+        });
+      }
+    }
   }
 
   private handleDelete(ws: WebSocket, { id }: ClientDeleteData): void {
@@ -335,7 +347,7 @@ export class ChatRoom implements DurableObject {
     // Send BLOCKED to all of the target's sockets
     for (const [targetWs, connInfo] of this.connections) {
       if (connInfo.ip === targetIp && !connInfo.isOwner) {
-        this.sendBlocked(targetWs, SERVER_ERROR_CODE.MODERATION_BLOCKED, "You have been blocked by the admin.");
+        this.sendBlocked(targetWs);
         connInfo.isBlocked = true;
       }
     }
@@ -394,11 +406,7 @@ export class ChatRoom implements DurableObject {
       this.persistBlockedIps().catch((err) => {
         console.error("[block] failed to persist blocked IP:", err);
       });
-      this.sendBlocked(
-        ws,
-        SERVER_ERROR_CODE.MODERATION_BLOCKED,
-        "You have been blocked from sending messages due to repeated violations.",
-      );
+      this.sendBlocked(ws);
     } else {
       const remaining = MAX_WARNINGS - info.warnings;
       this.sendWarning(
@@ -460,10 +468,6 @@ export class ChatRoom implements DurableObject {
     this.send(ws, message);
   }
 
-  handleUnblockCommand(ws: WebSocket, ip: string): void {
-    this.handleUnblock(ws, ip);
-  }
-
   handleDeleteMessage(ws: WebSocket, messageId: string): void {
     this.handleDelete(ws, { id: messageId });
   }
@@ -504,8 +508,12 @@ export class ChatRoom implements DurableObject {
     this.send(ws, { type: SERVER_MESSAGE_TYPE.WARNING, code, message });
   }
 
-  private sendBlocked(ws: WebSocket, code: ServerErrorCode, message: string): void {
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.BLOCKED, code, message });
+  private sendBlocked(ws: WebSocket): void {
+    this.send(ws, {
+      type: SERVER_MESSAGE_TYPE.BLOCKED,
+      code: SERVER_ERROR_CODE.MODERATION_BLOCKED,
+      message: "You have been blocked.",
+    });
   }
 
   private sendStatus(ws: WebSocket): void {

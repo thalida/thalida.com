@@ -30,6 +30,7 @@ export const CLIENT_MESSAGE_TYPE = {
   DELETE: "delete",
   FLAG: "flag",
   DELETE_BY_USER: "delete_by_user",
+  UNBLOCK: "unblock",
 } as const;
 
 export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT_MESSAGE_TYPE];
@@ -57,12 +58,17 @@ export interface ClientDeleteByUserData {
   username: string;
 }
 
+export interface ClientUnblockData {
+  ip: string;
+}
+
 export type ClientMessage =
   | { type: "join"; data: ClientJoinData }
   | { type: "message"; data: ClientChatData }
   | { type: "delete"; data: ClientDeleteData }
   | { type: "flag"; data: ClientFlagData }
-  | { type: "delete_by_user"; data: ClientDeleteByUserData };
+  | { type: "delete_by_user"; data: ClientDeleteByUserData }
+  | { type: "unblock"; data: ClientUnblockData };
 
 // ── Server → Client ─────────────────────────────────────────────────
 
@@ -99,6 +105,7 @@ export const SERVER_ERROR_CODE = {
   MODERATION_WARNING: "moderation_warning",
   MODERATION_BLOCKED: "moderation_blocked",
   UNAUTHORIZED: "unauthorized",
+  UNBLOCKED: "unblocked",
 } as const;
 
 export type ServerErrorCode = (typeof SERVER_ERROR_CODE)[keyof typeof SERVER_ERROR_CODE];
@@ -139,6 +146,7 @@ export interface ServerJoinedMessage {
   type: "joined";
   isOwner: boolean;
   username: string;
+  isBlocked: boolean;
 }
 
 // ── Server → Client: Admin Responses ─────────────────────────────────

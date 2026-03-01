@@ -1,5 +1,5 @@
 import type { ChatRoom } from "./chat-room";
-import { SERVER_MESSAGE_TYPE, SERVER_ERROR_CODE } from "./types";
+import { SERVER_MESSAGE_TYPE } from "./types";
 
 interface Command {
   name: string;
@@ -21,22 +21,6 @@ register({
       type: SERVER_MESSAGE_TYPE.HELP,
       commands: commands.map(({ name, description }) => ({ name, description })),
     });
-  },
-});
-
-register({
-  name: "unblock",
-  description: "Unblock a user by IP address — /unblock <ip>",
-  handler: (ws, args, chatRoom) => {
-    if (!args) {
-      chatRoom.sendToSocket(ws, {
-        type: SERVER_MESSAGE_TYPE.ERROR,
-        code: SERVER_ERROR_CODE.INVALID_MESSAGE,
-        message: "Usage: /unblock <ip>",
-      });
-      return;
-    }
-    chatRoom.handleUnblockCommand(ws, args);
   },
 });
 

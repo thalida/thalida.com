@@ -315,55 +315,20 @@ describe("ChatRoom Durable Object", () => {
   // ── IP Blocking ─────────────────────────────────────────────────
 
   describe("IP blocking", () => {
-    it("admin can unblock an IP via /unblock command", async () => {
+    it("admin can unblock an IP via unblock message", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
         token: "test-admin-secret",
         ip: "10.0.0.1",
       });
       adminMsgs.length = 0;
 
-      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
+      send(adminWs, { type: CLIENT_MESSAGE_TYPE.UNBLOCK, data: { ip: "10.0.0.50" } });
       await flush();
 
       const unblocked = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.UNBLOCKED);
       expect(unblocked).toMatchObject({ type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip: "10.0.0.50" });
 
       adminWs.close();
-    });
-
-    it("non-owner /unblock command is treated as regular chat text", async () => {
-      const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
-      msgs.length = 0;
-
-      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
-      await flush();
-
-      const chatMsg = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
-      expect(chatMsg).toMatchObject({
-        type: SERVER_MESSAGE_TYPE.MESSAGE,
-        username: "regular-user",
-        text: "/unblock 10.0.0.50",
-      });
-
-      ws.close();
-    });
-
-    it("/unblock command is not broadcast as a chat message", async () => {
-      const { ws: adminWs } = await connectAndJoin("thalida", {
-        token: "test-admin-secret",
-        ip: "10.0.0.1",
-      });
-      const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin("viewer", { ip: "10.0.0.2" });
-      otherMsgs.length = 0;
-
-      send(adminWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
-      await flush();
-
-      const chatMsgs = otherMsgs.filter((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
-      expect(chatMsgs).toHaveLength(0);
-
-      adminWs.close();
-      otherWs.close();
     });
   });
 
@@ -383,7 +348,7 @@ describe("ChatRoom Durable Object", () => {
         expect(help.commands.length).toBeGreaterThanOrEqual(2);
         const names = help.commands.map((c) => c.name);
         expect(names).toContain("help");
-        expect(names).toContain("unblock");
+        expect(names).toContain("blocked");
       }
 
       ws.close();
@@ -423,27 +388,6 @@ describe("ChatRoom Durable Object", () => {
       expect(msg).toMatchObject({ type: SERVER_MESSAGE_TYPE.MESSAGE, username: "regular", text: "/help" });
 
       ws1.close();
-      ws2.close();
-    });
-
-    it("non-admin /unblock sends as regular chat message", async () => {
-      const { ws, msgs } = await connectAndJoin("regular-user", { ip: "10.0.0.2" });
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("watcher", { ip: "10.0.0.3" });
-
-      msgs.length = 0;
-      msgs2.length = 0;
-
-      send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/unblock 10.0.0.50" } });
-      await flush();
-
-      const msg = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
-      expect(msg).toMatchObject({
-        type: SERVER_MESSAGE_TYPE.MESSAGE,
-        username: "regular-user",
-        text: "/unblock 10.0.0.50",
-      });
-
-      ws.close();
       ws2.close();
     });
 

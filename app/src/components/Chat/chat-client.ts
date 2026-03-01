@@ -13,6 +13,7 @@ const CLIENT_MESSAGE_TYPE = {
   DELETE: "delete",
   FLAG: "flag",
   DELETE_BY_USER: "delete_by_user",
+  UNBLOCK: "unblock",
 } as const;
 
 const SERVER_MESSAGE_TYPE = {
@@ -44,7 +45,7 @@ type ServerMessage =
       timestamp: number;
       context?: MessageContext;
     }
-  | { type: "joined"; isOwner: boolean; username: string }
+  | { type: "joined"; isOwner: boolean; username: string; isBlocked: boolean }
   | { type: "status"; isOwnerOnline: boolean; userCount: number }
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
@@ -82,6 +83,7 @@ let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
 const usernameInput = document.getElementById("chat-username") as HTMLInputElement;
+const usernameRow = document.getElementById("js-chat-username-row") as HTMLDivElement;
 const messagesEl = document.getElementById("js-chat-messages") as HTMLDivElement;
 const inputEl = document.getElementById("js-chat-input") as HTMLInputElement;
 const sendBtn = document.getElementById("js-chat-send") as HTMLButtonElement;
@@ -119,7 +121,8 @@ const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElem
 type ClientModAction =
   | { type: typeof CLIENT_MESSAGE_TYPE.DELETE; data: { id: string } }
   | { type: typeof CLIENT_MESSAGE_TYPE.FLAG; data: { id: string } }
-  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE_BY_USER; data: { username: string } };
+  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE_BY_USER; data: { username: string } }
+  | { type: typeof CLIENT_MESSAGE_TYPE.UNBLOCK; data: { ip: string } };
 
 function wsSend(data: ClientModAction): void {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
@@ -155,30 +158,28 @@ function appendMessage(msg: ChatMessage): void {
 
   slot("text").textContent = msg.text;
 
-  if (isOwner && !isAdmin) {
+  if (isOwner) {
     const controls = slot("admin-controls");
     controls.hidden = false;
 
     const deleteBtn = slot("delete-btn") as HTMLButtonElement;
-    const flagBtn = slot("flag-btn") as HTMLButtonElement;
+
+    const snippet = msg.text.length > 50 ? msg.text.slice(0, 50) + "…" : msg.text;
 
     deleteBtn.addEventListener("click", () => {
-      if (deleteBtn.dataset.confirm !== undefined) {
+      if (confirm(`Delete message from ${msg.username}?\n\n"${snippet}"`)) {
         wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE, data: { id: msg.id } });
-        delete deleteBtn.dataset.confirm;
-      } else {
-        deleteBtn.dataset.confirm = "";
-        setTimeout(() => delete deleteBtn.dataset.confirm, 3000);
       }
     });
 
+    const flagBtn = slot("flag-btn") as HTMLButtonElement;
+    if (isAdmin) {
+      flagBtn.hidden = true;
+    }
+
     flagBtn.addEventListener("click", () => {
-      if (flagBtn.dataset.confirm !== undefined) {
+      if (confirm(`Flag & ban ${msg.username}?\n\n"${snippet}"`)) {
         wsSend({ type: CLIENT_MESSAGE_TYPE.FLAG, data: { id: msg.id } });
-        delete flagBtn.dataset.confirm;
-      } else {
-        flagBtn.dataset.confirm = "";
-        setTimeout(() => delete flagBtn.dataset.confirm, 3000);
       }
     });
   }
@@ -187,33 +188,33 @@ function appendMessage(msg: ChatMessage): void {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-function appendNotice(text: string): void {
+function appendSystemMessage(text: string, actions?: Array<{ label: string; action: () => void }>): HTMLElement {
   const frag = noticeTpl.content.cloneNode(true) as DocumentFragment;
   const root = frag.firstElementChild as HTMLElement;
-  root.textContent = text;
-  messagesEl.appendChild(frag);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-}
 
-function appendInteractiveNotice(text: string, actions: Array<{ label: string; action: () => void }>): HTMLElement {
-  const frag = noticeTpl.content.cloneNode(true) as DocumentFragment;
-  const root = frag.firstElementChild as HTMLElement;
-  root.textContent = "";
+  const timeEl = root.querySelector('[data-chat="notice-time"]') as HTMLElement;
+  timeEl.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
-  const textNode = document.createTextNode(text + "  ");
-  root.appendChild(textNode);
+  const textEl = root.querySelector('[data-chat="notice-text"]') as HTMLElement;
 
-  actions.forEach((a, i) => {
-    if (i > 0) root.appendChild(document.createTextNode(" · "));
-    const span = document.createElement("span");
-    span.textContent = `[${a.label}]`;
-    span.className = "cursor-pointer underline hover:text-teal not-italic";
-    span.addEventListener("click", () => {
-      a.action();
-      root.textContent = `${text} — ${a.label}`;
+  if (!actions || actions.length === 0) {
+    textEl.textContent = text;
+  } else {
+    const textNode = document.createTextNode(text + "  ");
+    textEl.appendChild(textNode);
+
+    actions.forEach((a, i) => {
+      if (i > 0) textEl.appendChild(document.createTextNode(" · "));
+      const span = document.createElement("span");
+      span.textContent = `[${a.label}]`;
+      span.className = "cursor-pointer underline text-text hover:text-teal";
+      span.addEventListener("click", () => {
+        a.action();
+        textEl.textContent = `${text} — ${a.label}`;
+      });
+      textEl.appendChild(span);
     });
-    root.appendChild(span);
-  });
+  }
 
   messagesEl.appendChild(frag);
   messagesEl.scrollTop = messagesEl.scrollHeight;
@@ -250,6 +251,7 @@ function connect(): void {
       usernameInput.value = data.username;
       saveUsername(data.username);
       updateAdminUI();
+      setBlocked(data.isBlocked);
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
       messagesEl.innerHTML = "";
       for (const msg of data.messages) {
@@ -264,15 +266,10 @@ function connect(): void {
         context: data.context,
       });
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
-      const ownerLabel = adminUsername ?? "owner";
-      statusDotEl.dataset.online = String(data.isOwnerOnline);
-      ownerStatusEl.textContent = data.isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
-      ownerStatusEl.dataset.online = String(data.isOwnerOnline);
-      const viewerLabel = data.userCount === 1 ? "viewer" : "viewers";
-      const viewerText = `${data.userCount} ${viewerLabel}`;
-      (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = viewerText;
-      userCountEl.title = viewerText;
+      updateStatus(data.isOwnerOnline, data.userCount);
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
+      const usernameErrors = new Set(["invalid_username", "reserved_username", "taken_username", "expired_username"]);
+
       if (data.code === "expired_username") {
         clearIdentity();
         username = generateRandomUsername();
@@ -281,7 +278,7 @@ function connect(): void {
         return;
       }
 
-      if (pendingRename) {
+      if (pendingRename && usernameErrors.has(data.code)) {
         pendingRename = false;
         usernameInput.setCustomValidity(data.message);
         usernameInput.reportValidity();
@@ -289,7 +286,7 @@ function connect(): void {
         return;
       }
 
-      if (autoRetries < MAX_AUTO_RETRIES) {
+      if (usernameErrors.has(data.code) && autoRetries < MAX_AUTO_RETRIES) {
         autoRetries++;
         username = generateRandomUsername();
         usernameInput.value = username;
@@ -297,25 +294,28 @@ function connect(): void {
         return;
       }
 
-      appendNotice("Could not auto-join. Please change your username and try saving.");
-      usernameInput.focus();
+      if (usernameErrors.has(data.code)) {
+        appendSystemMessage("Could not auto-join. Please change your username and try saving.");
+        usernameInput.focus();
+        return;
+      }
+
+      appendSystemMessage(data.message);
     } else if (data.type === SERVER_MESSAGE_TYPE.REMOVE) {
       const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
       if (el) el.remove();
     } else if (data.type === SERVER_MESSAGE_TYPE.WARNING) {
-      appendNotice(data.message);
+      appendSystemMessage(data.message);
     } else if (data.type === SERVER_MESSAGE_TYPE.BLOCKED) {
-      appendNotice(data.message);
-      inputEl.disabled = true;
-      sendBtn.disabled = true;
-      inputEl.placeholder = "You have been blocked.";
+      appendSystemMessage(data.message);
+      setBlocked(true);
     } else if (data.type === SERVER_MESSAGE_TYPE.UNBLOCKED) {
-      appendNotice(`Unblocked IP: ${data.ip}`);
+      appendSystemMessage(`Unblocked IP: ${data.ip}`);
     } else if (data.type === SERVER_MESSAGE_TYPE.HELP) {
       const lines = data.commands.map((c) => `  /${c.name} — ${c.description}`);
-      appendNotice(`Available commands:\n${lines.join("\n")}`);
+      appendSystemMessage(`Available commands:\n${lines.join("\n")}`);
     } else if (data.type === SERVER_MESSAGE_TYPE.FLAGGED) {
-      appendInteractiveNotice(`Banned ${data.username} (${data.ip}).\nDelete their messages?`, [
+      appendSystemMessage(`Banned ${data.username} (${data.ip}).\nDelete their messages?`, [
         {
           label: "all",
           action: () => wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE_BY_USER, data: { username: data.username } }),
@@ -325,13 +325,20 @@ function connect(): void {
       ]);
     } else if (data.type === SERVER_MESSAGE_TYPE.BLOCKED_LIST) {
       if (data.entries.length === 0) {
-        appendNotice("No blocked users.");
+        appendSystemMessage("No blocked users.");
       } else {
-        const lines = data.entries.map((e) => {
+        appendSystemMessage(`Blocked users (${data.entries.length}):`);
+        for (const e of data.entries) {
           const date = e.blockedAt > 0 ? new Date(e.blockedAt).toLocaleDateString() : "unknown date";
-          return `  ${e.username} — ${e.ip} (blocked ${date})`;
-        });
-        appendNotice(`Blocked users:\n${lines.join("\n")}`);
+          appendSystemMessage(`  ${e.username} — ${e.ip} (blocked ${date})`, [
+            {
+              label: "unblock",
+              action: () => {
+                wsSend({ type: CLIENT_MESSAGE_TYPE.UNBLOCK, data: { ip: e.ip } });
+              },
+            },
+          ]);
+        }
       }
     }
   });
@@ -406,6 +413,24 @@ usernameInput.addEventListener("keydown", (e) => {
 usernameInput.addEventListener("blur", () => {
   changeUsername();
 });
+
+function updateStatus(isOwnerOnline: boolean, userCount: number): void {
+  const ownerLabel = adminUsername ?? "owner";
+  statusDotEl.dataset.online = String(isOwnerOnline);
+  ownerStatusEl.textContent = isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
+  ownerStatusEl.dataset.online = String(isOwnerOnline);
+  const viewerLabel = userCount === 1 ? "viewer" : "viewers";
+  const viewerText = `${userCount} ${viewerLabel}`;
+  (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = viewerText;
+  userCountEl.title = viewerText;
+}
+
+function setBlocked(blocked: boolean): void {
+  usernameRow.hidden = blocked;
+  inputEl.disabled = blocked;
+  sendBtn.disabled = blocked;
+  inputEl.placeholder = blocked ? "You have been blocked." : "";
+}
 
 function updateAdminUI(): void {
   const adminLinks = document.querySelectorAll<HTMLAnchorElement>("#js-admin-link");
