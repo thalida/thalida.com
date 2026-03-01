@@ -550,6 +550,15 @@ export class ChatRoom implements DurableObject {
     }));
   }
 
+  clearMessages(): void {
+    const ids = this.messages.map((m) => m.id);
+    this.messages = [];
+    this.saveMessages();
+    for (const id of ids) {
+      this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
+    }
+  }
+
   // ── Sanitization ────────────────────────────────────────────────────
 
   private sanitizeMessage(msg: ChatMessage, viewer: ConnectionInfo): Record<string, unknown> {

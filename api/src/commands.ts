@@ -35,6 +35,14 @@ register({
   },
 });
 
+register({
+  name: "clear",
+  description: "Clear all chat messages (keeps users & blocked list)",
+  handler: (_ws, _args, chatRoom) => {
+    chatRoom.clearMessages();
+  },
+});
+
 export function dispatch(text: string, ws: WebSocket, chatRoom: ChatRoom): boolean {
   const match = text.match(/^\/(\S+)\s*(.*)$/);
   if (!match) return false;
