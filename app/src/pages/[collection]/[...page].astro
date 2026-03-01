@@ -37,7 +37,11 @@ const page = Astro.props.page as {
 const { title, allCategories } = Astro.props as { title: string; allCategories: string[] };
 ---
 
-<BaseLayout title={`${title} · thalida`} activeCollection={collection}>
+<BaseLayout
+  title={`${title} · thalida`}
+  activeCollection={collection}
+  description={collectionMeta[collection].description}
+>
   <CollectionGrid
     collection={collection}
     title={title}
