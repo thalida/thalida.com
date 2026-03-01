@@ -62,7 +62,7 @@ function initCommandPalette() {
   let selectedIndex = -1;
 
   function getActiveCollectionFromPage() {
-    const nav = document.getElementById("site-nav");
+    const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
     const col = nav?.dataset?.activeCollection;
     return col && col.length > 0 ? col : null;
   }
@@ -312,7 +312,7 @@ function initCommandPalette() {
   });
 
   // Sidebar search button click (multiple instances due to responsive layout)
-  document.querySelectorAll("#js-nav-search-btn").forEach((btn) => {
+  document.querySelectorAll('[data-nav="search-btn"]').forEach((btn) => {
     btn.addEventListener("click", () => {
       if (!isOpen()) {
         open();

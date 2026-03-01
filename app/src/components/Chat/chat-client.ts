@@ -393,7 +393,7 @@ function setBlocked(blocked: boolean): void {
 }
 
 function updateAdminUI(): void {
-  const adminLinks = document.querySelectorAll<HTMLAnchorElement>("#js-admin-link");
+  const adminLinks = document.querySelectorAll<HTMLAnchorElement>('[data-nav="admin-link"]');
   for (const link of adminLinks) {
     if (isOwner) {
       link.href = "/logout";

@@ -94,11 +94,11 @@ document.addEventListener("astro:page-load", initResponsiveUI);
 // Preserve nav scroll across View Transitions
 let savedNavScroll = 0;
 document.addEventListener("astro:before-swap", () => {
-  const nav = document.getElementById("site-nav");
+  const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
   if (nav) savedNavScroll = nav.scrollTop;
   document.body.style.overflow = "";
 });
 document.addEventListener("astro:after-swap", () => {
-  const nav = document.getElementById("site-nav");
+  const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
   if (nav) nav.scrollTop = savedNavScroll;
 });
