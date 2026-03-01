@@ -42,7 +42,8 @@ type ServerMessage =
   | {
       type: "message";
       id: string;
-      clientId: string;
+      clientId?: string;
+      isOwn?: boolean;
       username: string;
       text: string;
       timestamp: number;
@@ -62,7 +63,8 @@ type ServerMessage =
 
 interface ChatMessage {
   id: string;
-  clientId: string;
+  clientId?: string;
+  isOwn?: boolean;
   username: string;
   text: string;
   timestamp: number;
@@ -141,7 +143,8 @@ function appendMessage(msg: ChatMessage): void {
   const root = frag.firstElementChild as HTMLElement;
 
   root.dataset.msgId = String(msg.id);
-  root.dataset.clientId = msg.clientId;
+  if (msg.clientId) root.dataset.clientId = msg.clientId;
+  if (msg.isOwn) root.dataset.own = "";
 
   const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
 
@@ -239,6 +242,7 @@ function connect(): void {
       appendMessage({
         id: data.id,
         clientId: data.clientId,
+        isOwn: data.isOwn,
         username: data.username,
         text: data.text,
         timestamp: data.timestamp,
