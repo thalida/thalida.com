@@ -5,7 +5,7 @@ repos:
         name: prettier
         entry: npx prettier --write --ignore-unknown
         language: system
-        files: \.(js|jsx|ts|tsx|mjs|css|json|yaml|yml|astro)$
+        files: \.(js|jsx|ts|tsx|mjs|css|json|yaml|yml|astro|html)$
 
       - id: eslint-api
         name: eslint (api)
@@ -24,6 +24,7 @@ repos:
     hooks:
       - id: markdownlint
         args: ["-f"]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
