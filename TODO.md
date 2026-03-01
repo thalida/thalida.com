@@ -21,7 +21,7 @@
 - [x] homepage projects
 - [x] Fix chat row styling: username @ path on left, truncate
       middle of long paths
-- [ ] improve homepage history
+- [x] improve homepage history
 - [x] add ability to remove chat messages if admin or manually flag if admin
 - [x] add an admin only /help that shows admin options
 - [ ] copy favicon and setup metadata -- copy from v-2025

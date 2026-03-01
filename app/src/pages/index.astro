@@ -69,12 +69,11 @@ const siteAge = new Date().getFullYear() - 2007;
             const isCurrent = year === latestYear;
             return (
               <a
-                href={`/versions/${version.id}`}
+                href={`/versions/post/${version.id}`}
                 class:list={[
-                  "group flex flex-col items-center no-underline relative",
+                  "group flex flex-col items-center no-underline relative shrink-0 w-25",
                   { "home-timeline__item--current": isCurrent },
                 ]}
-                style="flex:0 0 auto;width:130px"
               >
                 <div class="home-timeline__thumb w-25 h-17.5 rounded overflow-hidden bg-surface border border-border relative z-10 group-hover:border-teal">
                   {version.coverImageSrc ? (
@@ -89,7 +88,9 @@ const siteAge = new Date().getFullYear() - 2007;
                   )}
                 </div>
                 <span class="font-body text-2xs text-text mt-2 font-medium group-hover:text-teal">{year}</span>
-                <span class="home-timeline__name font-body text-muted mt-0.5 text-center leading-tight">{name}</span>
+                <span class="home-timeline__name font-body text-muted mt-0.5 text-center leading-tight break-normal">
+                  {name}
+                </span>
               </a>
             );
           })
@@ -173,8 +174,10 @@ const siteAge = new Date().getFullYear() - 2007;
   /* Timeline: track line pseudo-element */
   .home-timeline__track::before {
     content: "";
-    @apply absolute left-0 right-0 border-t border-border;
+    @apply absolute border-t border-border;
     top: 35px;
+    left: 0;
+    right: 0;
   }
 
   /* Timeline: current version glow */
