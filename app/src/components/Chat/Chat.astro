@@ -55,10 +55,28 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 </aside>
 
 <template id="chat-msg-tpl">
-  <div class="mb-2" data-msg-id="">
+  <div class="group mb-2" data-msg-id="">
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
       <span data-chat="username" class="font-semibold text-teal data-admin:text-neon"></span>
       <span class="ml-auto flex items-baseline gap-1.5 whitespace-nowrap">
+        <span data-chat="admin-controls" hidden class="inline-flex gap-1">
+          <button
+            data-chat="delete-btn"
+            class="text-muted hover:text-red-400 transition-colors"
+            type="button"
+            title="Delete message"
+          >
+            <i class="fa-solid fa-trash-can fa-xs" aria-hidden="true"></i>
+          </button>
+          <button
+            data-chat="flag-btn"
+            class="text-muted hover:text-orange-400 transition-colors"
+            type="button"
+            title="Flag & ban user"
+          >
+            <i class="fa-solid fa-flag fa-xs" aria-hidden="true"></i>
+          </button>
+        </span>
         <a data-chat="page" hidden class="text-text font-medium underline hover:text-teal" href=""></a>
         <span data-chat="sep" hidden class="opacity-40">·</span>
         <span data-chat="time" class="opacity-40"></span>
@@ -69,7 +87,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 </template>
 
 <template id="chat-notice-tpl">
-  <div class="italic"></div>
+  <div class="italic whitespace-pre-line"></div>
 </template>
 
 <meta name="chat-ws-url" content={wsUrl} />
@@ -89,5 +107,11 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   #chat-username:read-only {
     border-bottom: none;
     cursor: default;
+  }
+  [data-chat="delete-btn"][data-confirm] {
+    color: var(--color-red-400, #f87171);
+  }
+  [data-chat="flag-btn"][data-confirm] {
+    color: var(--color-orange-400, #fb923c);
   }
 </style>
