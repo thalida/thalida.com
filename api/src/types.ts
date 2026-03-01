@@ -26,6 +26,7 @@ export interface ConnectionInfo {
 
 export const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
+  RENAME: "rename",
   MESSAGE: "message",
   DELETE: "delete",
   FLAG: "flag",
@@ -36,7 +37,6 @@ export const CLIENT_MESSAGE_TYPE = {
 export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT_MESSAGE_TYPE];
 
 export interface ClientJoinData {
-  username: string;
   token?: string;
   clientId?: string;
 }
@@ -62,8 +62,13 @@ export interface ClientUnblockData {
   clientId: string;
 }
 
+export interface ClientRenameData {
+  username: string;
+}
+
 export type ClientMessage =
   | { type: "join"; data: ClientJoinData }
+  | { type: "rename"; data: ClientRenameData }
   | { type: "message"; data: ClientChatData }
   | { type: "delete"; data: ClientDeleteData }
   | { type: "flag"; data: ClientFlagData }

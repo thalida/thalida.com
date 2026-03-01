@@ -14,7 +14,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         <span
           id="js-chat-status-dot"
           class="inline-block shrink-0 w-1.5 h-1.5 rounded-full bg-muted data-[online=true]:bg-neon"></span>
-        <span id="js-chat-owner-status" class="data-[online=true]:text-neon">offline</span>
+        <span id="js-chat-owner-status" class="data-[online=true]:text-admin">offline</span>
       </span>
       <span class="opacity-30">·</span>
       <span id="js-chat-user-count" title="0 online"
@@ -63,7 +63,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 <template id="chat-msg-tpl">
   <div class="group mb-2" data-msg-id="">
     <div class="flex items-baseline gap-1 text-xs leading-tight">
-      <span data-chat="username" class="font-semibold text-teal data-admin:text-neon shrink-0"></span>
+      <span data-chat="username" class="font-semibold text-neon data-admin:text-admin shrink-0"></span>
       <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
       <span class="flex-1"></span>

@@ -1,15 +1,11 @@
-import {
-  generateRandomUsername,
-  validateUsername,
-  setAdminUsername,
-  LS_ADMIN_TOKEN_KEY,
-} from "@components/Chat/chat-utils";
+import { validateUsername, setAdminUsername, LS_ADMIN_TOKEN_KEY } from "@components/Chat/chat-utils";
 import { truncateMiddle, formatMessageTime, renderNotice } from "@components/Chat/chat-render";
 
 const RECONNECT_DELAY_MS = 3000;
 
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
+  RENAME: "rename",
   MESSAGE: "message",
   DELETE: "delete",
   FLAG: "flag",
@@ -71,13 +67,10 @@ interface ChatMessage {
   context?: MessageContext;
 }
 
-const MAX_AUTO_RETRIES = 5;
-
 const WS_URL =
   document.querySelector<HTMLMetaElement>('meta[name="chat-ws-url"]')?.content?.trim() || "ws://localhost:8787/ws";
 const API_BASE = WS_URL.replace(/^ws(s?):/, "http$1:").replace(/\/ws$/, "");
 
-const LS_USERNAME_KEY = "chat_username";
 const LS_CLIENT_ID_KEY = "chat_client_id";
 
 let ws: WebSocket | null = null;
@@ -85,7 +78,6 @@ let username: string | null = null;
 let clientId: string | null = null;
 let adminUsername: string | null = null;
 let isOwner = false;
-let autoRetries = 0;
 let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -109,18 +101,6 @@ function loadIdentity(): void {
     clientId = crypto.randomUUID();
     localStorage.setItem(LS_CLIENT_ID_KEY, clientId);
   }
-  username = localStorage.getItem(LS_USERNAME_KEY);
-}
-
-function saveUsername(name: string): void {
-  localStorage.setItem(LS_USERNAME_KEY, name);
-}
-
-function clearIdentity(): void {
-  localStorage.removeItem(LS_USERNAME_KEY);
-  localStorage.removeItem(LS_CLIENT_ID_KEY);
-  clientId = crypto.randomUUID();
-  localStorage.setItem(LS_CLIENT_ID_KEY, clientId);
 }
 
 const msgTpl = document.getElementById("chat-msg-tpl") as HTMLTemplateElement;
@@ -138,19 +118,20 @@ function wsSend(data: ClientModAction): void {
 }
 
 function appendMessage(msg: ChatMessage): void {
-  const isAdmin = adminUsername != null && msg.username === adminUsername;
+  const isAdminMsg = adminUsername != null && msg.username === adminUsername;
+  const showAsAdmin = (isOwner && msg.isOwn && !isAdminMsg) || (!isOwner && isAdminMsg);
   const frag = msgTpl.content.cloneNode(true) as DocumentFragment;
   const root = frag.firstElementChild as HTMLElement;
 
   root.dataset.msgId = String(msg.id);
   if (msg.clientId) root.dataset.clientId = msg.clientId;
-  if (msg.isOwn) root.dataset.own = "";
+  if (msg.isOwn && !showAsAdmin) root.dataset.own = "";
 
   const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
 
   const usernameEl = slot("username");
   usernameEl.textContent = msg.username;
-  if (isAdmin) usernameEl.dataset.admin = "";
+  if (showAsAdmin) usernameEl.dataset.admin = "";
 
   slot("time").textContent = formatMessageTime(msg.timestamp);
 
@@ -179,7 +160,7 @@ function appendMessage(msg: ChatMessage): void {
     });
 
     const flagBtn = slot("flag-btn") as HTMLButtonElement;
-    if (!isAdmin) {
+    if (!isAdminMsg) {
       flagBtn.hidden = false;
     }
 
@@ -203,12 +184,12 @@ function appendSystemMessage(text: string, actions?: Array<{ label: string; acti
 }
 
 function sendJoin(): void {
-  if (!ws || ws.readyState !== WebSocket.OPEN || !username) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
 
   const token = getAdminToken();
-  const data: Record<string, string> = { username };
-  if (token) data.token = token;
+  const data: Record<string, string> = {};
   if (clientId) data.clientId = clientId;
+  if (token) data.token = token;
   ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.JOIN, data }));
 }
 
@@ -230,7 +211,6 @@ function connect(): void {
       isOwner = data.isOwner;
       username = data.username;
       usernameInput.value = data.username;
-      saveUsername(data.username);
       updateAdminUI();
       setBlocked(data.isBlocked);
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
@@ -251,35 +231,13 @@ function connect(): void {
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
       updateStatus(data.isOwnerOnline, data.userCount);
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
-      const usernameErrors = new Set(["invalid_username", "reserved_username", "taken_username", "expired_username"]);
-
-      if (data.code === "expired_username") {
-        clearIdentity();
-        username = generateRandomUsername();
-        usernameInput.value = username;
-        sendJoin();
-        return;
-      }
+      const usernameErrors = new Set(["invalid_username", "reserved_username", "taken_username"]);
 
       if (pendingRename && usernameErrors.has(data.code)) {
         pendingRename = false;
         usernameInput.setCustomValidity(data.message);
         usernameInput.reportValidity();
         usernameInput.value = username ?? "";
-        return;
-      }
-
-      if (usernameErrors.has(data.code) && autoRetries < MAX_AUTO_RETRIES) {
-        autoRetries++;
-        username = generateRandomUsername();
-        usernameInput.value = username;
-        sendJoin();
-        return;
-      }
-
-      if (usernameErrors.has(data.code)) {
-        appendSystemMessage("Could not auto-join. Please change your username and try saving.");
-        usernameInput.focus();
         return;
       }
 
@@ -376,6 +334,7 @@ function validateUsernameInput(): boolean {
 
 function changeUsername(): void {
   if (isOwner) return;
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
   if (!validateUsernameInput()) {
     usernameInput.reportValidity();
     return;
@@ -385,8 +344,7 @@ function changeUsername(): void {
   if (newName === username) return;
 
   pendingRename = true;
-  username = newName;
-  sendJoin();
+  ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.RENAME, data: { username: newName } }));
 }
 
 usernameInput.addEventListener("input", () => validateUsernameInput());
@@ -461,9 +419,5 @@ async function fetchConfig(): Promise<void> {
 
 fetchConfig().then(() => {
   loadIdentity();
-  if (!username) {
-    username = generateRandomUsername();
-  }
-  usernameInput.value = username;
   connect();
 });

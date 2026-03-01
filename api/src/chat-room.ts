@@ -10,6 +10,7 @@ import type {
   ClientFlagData,
   ClientJoinData,
   ClientMessage,
+  ClientRenameData,
   ConnectionInfo,
   ServerErrorCode,
   ServerMessage,
@@ -23,14 +24,15 @@ import {
   MAX_WARNINGS,
   MIN_USERNAME_LENGTH,
   RESERVATION_DURATION_MS,
+  generateRandomUsername,
 } from "./config";
 
 const BLOCKED_IPS_KEY = "blockedIps";
 const MESSAGES_KEY = "messages";
-const RESERVATION_PREFIX = "reservation:";
+const CLIENT_PREFIX = "client:";
 
-interface UsernameReservation {
-  clientId: string;
+interface ClientMapping {
+  username: string;
   lastSeen: number;
 }
 
@@ -139,29 +141,46 @@ export class ChatRoom implements DurableObject {
     this.saveBlockedClients();
   }
 
-  private async getReservation(username: string): Promise<UsernameReservation | undefined> {
-    return this.state.storage.get<UsernameReservation>(`${RESERVATION_PREFIX}${username}`);
+  private async getClientMapping(clientId: string): Promise<ClientMapping | undefined> {
+    return this.state.storage.get<ClientMapping>(`${CLIENT_PREFIX}${clientId}`);
   }
 
-  private async upsertReservation(username: string, clientId: string): Promise<void> {
-    await this.state.storage.put<UsernameReservation>(`${RESERVATION_PREFIX}${username}`, {
-      clientId,
+  private async setClientMapping(clientId: string, username: string): Promise<void> {
+    await this.state.storage.put<ClientMapping>(`${CLIENT_PREFIX}${clientId}`, {
+      username,
       lastSeen: Date.now(),
     });
   }
 
-  private async cleanupExpiredReservations(): Promise<void> {
-    const all = await this.state.storage.list<UsernameReservation>({ prefix: RESERVATION_PREFIX });
-    const now = Date.now();
+  private async isUsernameTaken(username: string, excludeClientId: string): Promise<boolean> {
+    // Check active connections first
+    for (const info of this.connections.values()) {
+      if (info.username === username && info.clientId !== excludeClientId) {
+        return true;
+      }
+    }
+    // Check stored mappings
+    const all = await this.state.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
+    for (const [key, value] of all) {
+      const cid = key.slice(CLIENT_PREFIX.length);
+      if (cid !== excludeClientId && value.username === username) {
+        const expired = Date.now() - value.lastSeen > RESERVATION_DURATION_MS;
+        if (!expired) return true;
+      }
+    }
+    return false;
+  }
+
+  private async cleanupExpiredClients(): Promise<void> {
+    const all = await this.state.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
     const expired: string[] = [];
+    const now = Date.now();
     for (const [key, value] of all) {
       if (now - value.lastSeen > RESERVATION_DURATION_MS) {
         expired.push(key);
       }
     }
-    if (expired.length > 0) {
-      await this.state.storage.delete(expired);
-    }
+    if (expired.length > 0) await this.state.storage.delete(expired);
   }
 
   // ── Public API ───────────────────────────────────────────────────────
@@ -173,8 +192,8 @@ export class ChatRoom implements DurableObject {
 
     await this.loadBlockedClients();
     await this.loadMessages();
-    this.cleanupExpiredReservations().catch((err) => {
-      console.error("[reservations] cleanup error:", err);
+    this.cleanupExpiredClients().catch((err) => {
+      console.error("[clients] cleanup error:", err);
     });
 
     const [client, server] = Object.values(new WebSocketPair());
@@ -223,6 +242,9 @@ export class ChatRoom implements DurableObject {
       case CLIENT_MESSAGE_TYPE.JOIN:
         this.handleJoin(ws, msg.data);
         break;
+      case CLIENT_MESSAGE_TYPE.RENAME:
+        this.handleRename(ws, msg.data);
+        break;
       case CLIENT_MESSAGE_TYPE.MESSAGE:
         this.handleChatMessage(ws, msg.data);
         break;
@@ -241,64 +263,27 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private async handleJoin(ws: WebSocket, { username, token, clientId }: ClientJoinData): Promise<void> {
+  private async handleJoin(ws: WebSocket, { token, clientId }: ClientJoinData): Promise<void> {
     const isOwner = typeof token === "string" && token.length > 0 && token === this.env.ADMIN_SECRET;
-
     const resolvedClientId = clientId ?? crypto.randomUUID();
     const isBlocked = !isOwner && this.blockedEntries.has(resolvedClientId);
 
-    const name = isOwner
-      ? ADMIN_USERNAME
-      : String(username ?? "")
-          .trim()
-          .toLowerCase();
-
-    const usernamePattern = new RegExp(`^[a-z0-9_\\-.]{${MIN_USERNAME_LENGTH},${MAX_USERNAME_LENGTH}}$`);
-    if (!usernamePattern.test(name)) {
-      this.sendError(
-        ws,
-        SERVER_ERROR_CODE.INVALID_USERNAME,
-        `Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters: lowercase letters, numbers, hyphens, underscores, or dots.`,
-      );
-      return;
-    }
-
-    if (name.includes(ADMIN_USERNAME) && !isOwner) {
-      this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
-      return;
-    }
-
-    for (const [existingWs, info] of this.connections) {
-      if (info.username === name && existingWs !== ws && !(isOwner && info.isOwner)) {
-        if (resolvedClientId && info.clientId === resolvedClientId) continue;
-        this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
-        return;
-      }
-    }
-
-    if (!isOwner && resolvedClientId) {
-      const reservation = await this.getReservation(name);
-      if (reservation) {
-        const expired = Date.now() - reservation.lastSeen > RESERVATION_DURATION_MS;
-        if (reservation.clientId === resolvedClientId && expired) {
-          this.sendError(ws, SERVER_ERROR_CODE.EXPIRED_USERNAME, "Your reserved username has expired.");
-          return;
+    let name: string;
+    if (isOwner) {
+      name = ADMIN_USERNAME;
+    } else {
+      const mapping = await this.getClientMapping(resolvedClientId);
+      if (mapping) {
+        name = mapping.username;
+        await this.setClientMapping(resolvedClientId, name); // update lastSeen
+      } else {
+        name = generateRandomUsername();
+        // Ensure generated name isn't taken
+        while (await this.isUsernameTaken(name, resolvedClientId)) {
+          name = generateRandomUsername();
         }
-        if (reservation.clientId !== resolvedClientId && !expired) {
-          this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
-          return;
-        }
+        await this.setClientMapping(resolvedClientId, name);
       }
-      await this.upsertReservation(name, resolvedClientId);
-    }
-
-    // Detect rename: same clientId, different username
-    const existingConn = this.connections.get(ws);
-    const oldUsername = existingConn?.clientId === resolvedClientId ? existingConn.username : undefined;
-
-    if (oldUsername != null && oldUsername !== name) {
-      this.renameMessagesForClient(resolvedClientId, name);
-      this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });
     }
 
     this.spectators.delete(ws);
@@ -314,6 +299,47 @@ export class ChatRoom implements DurableObject {
     this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked });
     if (connInfo) this.sendHistory(ws, connInfo);
     this.broadcastStatus();
+  }
+
+  private async handleRename(ws: WebSocket, { username }: ClientRenameData): Promise<void> {
+    const info = this.connections.get(ws);
+    if (!info) return;
+
+    if (info.isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Admin cannot rename.");
+      return;
+    }
+
+    const name = String(username ?? "")
+      .trim()
+      .toLowerCase();
+
+    const usernamePattern = new RegExp(`^[a-z0-9_\\-.]{${MIN_USERNAME_LENGTH},${MAX_USERNAME_LENGTH}}$`);
+    if (!usernamePattern.test(name)) {
+      this.sendError(
+        ws,
+        SERVER_ERROR_CODE.INVALID_USERNAME,
+        `Username must be ${MIN_USERNAME_LENGTH}-${MAX_USERNAME_LENGTH} characters: lowercase letters, numbers, hyphens, underscores, or dots.`,
+      );
+      return;
+    }
+
+    if (name.includes(ADMIN_USERNAME)) {
+      this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
+      return;
+    }
+
+    if (await this.isUsernameTaken(name, info.clientId)) {
+      this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
+      return;
+    }
+
+    const oldUsername = info.username;
+    await this.setClientMapping(info.clientId, name);
+    this.renameMessagesForClient(info.clientId, name);
+    info.username = name;
+    this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false, username: name, isBlocked: info.isBlocked });
   }
 
   private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
