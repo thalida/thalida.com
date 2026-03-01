@@ -35,9 +35,9 @@ echo ""
 
 # List all objects under the prefix and delete them one by one
 # wrangler r2 object list outputs JSON; extract keys with a simple parser
-KEYS=$(npx wrangler r2 object list "$BUCKET" --prefix "$PREFIX/" --remote 2>/dev/null \
-  | grep -o '"key":"[^"]*"' \
-  | sed 's/"key":"//;s/"$//' || true)
+KEYS=$(npx wrangler r2 object list "$BUCKET" --prefix "$PREFIX/" --remote 2>&1 \
+  | grep -oE '"key"\s*:\s*"[^"]*"' \
+  | sed 's/"key"[[:space:]]*:[[:space:]]*"//;s/"$//' || true)
 
 if [ -z "$KEYS" ]; then
   echo "No objects found under prefix: $PREFIX/"
