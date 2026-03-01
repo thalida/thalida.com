@@ -34,7 +34,7 @@ export class ChatRoom implements DurableObject {
   private connections: Map<WebSocket, ConnectionInfo> = new Map();
   private spectators: Set<WebSocket> = new Set();
   private ipBySocket: Map<WebSocket, string> = new Map();
-  private blockedIps: Set<string> = new Set();
+  private blockedEntries: Map<string, { username: string; blockedAt: number }> = new Map();
   private blockedIpsLoaded = false;
 
   constructor(
@@ -44,15 +44,29 @@ export class ChatRoom implements DurableObject {
 
   private async loadBlockedIps(): Promise<void> {
     if (this.blockedIpsLoaded) return;
-    const stored = await this.state.storage.get<string[]>(BLOCKED_IPS_KEY);
-    if (stored) {
-      for (const ip of stored) this.blockedIps.add(ip);
+    const stored = await this.state.storage.get<unknown>(BLOCKED_IPS_KEY);
+    if (Array.isArray(stored)) {
+      for (const entry of stored) {
+        if (typeof entry === "string") {
+          // Old format: plain IP strings
+          this.blockedEntries.set(entry, { username: "unknown", blockedAt: 0 });
+        } else if (entry && typeof entry === "object" && "ip" in entry) {
+          // New format: { ip, username, blockedAt }
+          const e = entry as { ip: string; username: string; blockedAt: number };
+          this.blockedEntries.set(e.ip, { username: e.username, blockedAt: e.blockedAt });
+        }
+      }
     }
     this.blockedIpsLoaded = true;
   }
 
   private async persistBlockedIps(): Promise<void> {
-    await this.state.storage.put(BLOCKED_IPS_KEY, [...this.blockedIps]);
+    const entries = [...this.blockedEntries.entries()].map(([ip, info]) => ({
+      ip,
+      username: info.username,
+      blockedAt: info.blockedAt,
+    }));
+    await this.state.storage.put(BLOCKED_IPS_KEY, entries);
   }
 
   private async getReservation(username: string): Promise<UsernameReservation | undefined> {
@@ -97,7 +111,7 @@ export class ChatRoom implements DurableObject {
 
     server.accept();
 
-    if (this.blockedIps.has(ip)) {
+    if (this.blockedEntries.has(ip)) {
       this.sendBlocked(
         server,
         SERVER_ERROR_CODE.MODERATION_BLOCKED,
@@ -261,7 +275,7 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    this.blockedIps.delete(ip);
+    this.blockedEntries.delete(ip);
     this.persistBlockedIps().catch((err) => {
       console.error("[unblock] failed to persist unblock:", err);
     });
@@ -297,7 +311,7 @@ export class ChatRoom implements DurableObject {
 
     if (info.warnings >= MAX_WARNINGS) {
       info.isBlocked = true;
-      this.blockedIps.add(info.ip);
+      this.blockedEntries.set(info.ip, { username: info.username, blockedAt: Date.now() });
       this.persistBlockedIps().catch((err) => {
         console.error("[block] failed to persist blocked IP:", err);
       });
