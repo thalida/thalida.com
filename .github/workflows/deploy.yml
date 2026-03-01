@@ -42,6 +42,8 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     name: Deploy frontend
     runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -77,16 +79,23 @@ jobs:
         run: just app::build-pages
 
       - name: Deploy to Cloudflare Pages
+        id: deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: just app::deploy --branch "${{ steps.branch.outputs.name }}" --project "${{ vars.CLOUDFLARE_PAGES_PROJECT }}"
+        run: |
+          OUTPUT=$(just app::deploy --branch "${{ steps.branch.outputs.name }}" --project "${{ vars.CLOUDFLARE_PAGES_PROJECT }}" 2>&1)
+          echo "$OUTPUT"
+          URL=$(echo "$OUTPUT" | grep -oE 'https://[^ ]*\.pages\.dev' | tail -1)
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
 
   # ── Deploy API Worker (preview) on PRs with api/ changes ─────────
   deploy-api-preview:
     if: github.event_name == 'pull_request'
     name: Deploy API (preview)
     runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -113,11 +122,16 @@ jobs:
         run: npm ci
 
       - name: Deploy Worker (preview)
+        id: deploy
         if: steps.changes.outputs.api == 'true'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: just api::deploy --env preview
+        run: |
+          OUTPUT=$(just api::deploy --env preview 2>&1)
+          echo "$OUTPUT"
+          URL=$(echo "$OUTPUT" | grep -oE 'https://[^ ]*\.workers\.dev' | tail -1)
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
 
   # ── Deploy API Worker (production) on push to main ───────────────
   deploy-api-production:
@@ -155,6 +169,40 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: just api::deploy --env prod
+
+  # ── Comment preview URLs on PR ───────────────────────────────────
+  comment-preview-urls:
+    if: github.event_name == 'pull_request'
+    name: Comment preview URLs
+    needs: [deploy-pages, deploy-api-preview]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Comment deploy URLs on PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PAGES_URL: ${{ needs.deploy-pages.outputs.url }}
+          API_URL: ${{ needs.deploy-api-preview.outputs.url }}
+        run: |
+          MARKER="<!-- deploy-preview-urls -->"
+          BODY="$MARKER
+          ## Preview Deployments
+
+          | Service | URL |
+          |---------|-----|
+          | Frontend | ${PAGES_URL:-_not deployed_} |
+          | API | ${API_URL:-_no changes_} |"
+
+          # Update existing comment or create new one
+          COMMENT_ID=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+            --jq '.[] | select(.body | startswith("<!-- deploy-preview-urls -->")) | .id' | head -1)
+
+          if [ -n "$COMMENT_ID" ]; then
+            gh api "repos/${{ github.repository }}/issues/comments/$COMMENT_ID" -X PATCH -f body="$BODY"
+          else
+            gh pr comment "${{ github.event.pull_request.number }}" -R "${{ github.repository }}" --body "$BODY"
+          fi
 
   # ── Cleanup R2 branch prefix when PR is merged ───────────────────
   cleanup-media:
