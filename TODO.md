@@ -29,3 +29,4 @@
 - [x] fix link card styling
 - [x] chatting as is misaligned from input by 2 px
 - [ ] audit all links
+- [ ] audit all tests - mock [moderation] skipped: OPENAI_API_KEY not set
