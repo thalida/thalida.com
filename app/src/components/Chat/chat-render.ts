@@ -29,16 +29,12 @@ export function truncateMiddle(path: string, maxLen: number): string {
 
 export function formatMessageTime(timestamp: number): string {
   const msgDate = new Date(timestamp);
-  const now = new Date();
-  const isToday =
-    msgDate.getFullYear() === now.getFullYear() &&
-    msgDate.getMonth() === now.getMonth() &&
-    msgDate.getDate() === now.getDate();
-  return isToday
-    ? msgDate.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })
+  const isRecent = Date.now() - timestamp < 24 * 60 * 60 * 1000;
+  return isRecent
+    ? msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
     : msgDate.toLocaleDateString([], { month: "short", day: "numeric" }) +
         ", " +
-        msgDate.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        msgDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
 export function renderNotice(template: HTMLTemplateElement, text: string, actions?: NoticeAction[]): HTMLElement {
@@ -46,7 +42,7 @@ export function renderNotice(template: HTMLTemplateElement, text: string, action
   const root = frag.firstElementChild as HTMLElement;
 
   const timeEl = root.querySelector('[data-chat="notice-time"]') as HTMLElement;
-  timeEl.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  timeEl.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
 
   const textEl = root.querySelector('[data-chat="notice-text"]') as HTMLElement;
   textEl.textContent = text;

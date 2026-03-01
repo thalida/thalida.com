@@ -41,16 +41,16 @@ describe("truncateMiddle", () => {
 // -- formatMessageTime -------------------------------------------------------
 
 describe("formatMessageTime", () => {
-  it("returns time only for today's messages", () => {
+  it("returns time only for messages within 24 hours", () => {
     const now = Date.now();
     const result = formatMessageTime(now);
     // Should NOT contain a month abbreviation
     expect(result).not.toMatch(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/);
   });
 
-  it("includes date for messages from a different day", () => {
-    const yesterday = Date.now() - 2 * 24 * 60 * 60 * 1000;
-    const result = formatMessageTime(yesterday);
+  it("includes date for messages older than 24 hours", () => {
+    const overADay = Date.now() - 25 * 60 * 60 * 1000;
+    const result = formatMessageTime(overADay);
     // Should contain a month abbreviation
     expect(result).toMatch(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/);
   });
