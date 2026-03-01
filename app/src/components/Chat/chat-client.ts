@@ -116,7 +116,12 @@ function clearIdentity(): void {
 const msgTpl = document.getElementById("chat-msg-tpl") as HTMLTemplateElement;
 const noticeTpl = document.getElementById("chat-notice-tpl") as HTMLTemplateElement;
 
-function wsSend(data: Record<string, unknown>): void {
+type ClientModAction =
+  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE; data: { id: string } }
+  | { type: typeof CLIENT_MESSAGE_TYPE.FLAG; data: { id: string } }
+  | { type: typeof CLIENT_MESSAGE_TYPE.DELETE_BY_USER; data: { username: string } };
+
+function wsSend(data: ClientModAction): void {
   if (!ws || ws.readyState !== WebSocket.OPEN) return;
   ws.send(JSON.stringify(data));
 }
