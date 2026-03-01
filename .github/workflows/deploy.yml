@@ -32,33 +32,20 @@ jobs:
       - name: Install wrangler
         run: npm install -g wrangler
 
-      - name: Determine branch and diff base
+      - name: Determine branch
         id: branch
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "name=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
-            BEFORE="${{ github.event.before }}"
-            if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
-              echo "diff_base=$BEFORE" >> "$GITHUB_OUTPUT"
-            else
-              echo "diff_base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
-            fi
           else
-            # Push to main: always do a full sync to ensure production has all media
             echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-            echo "diff_base=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Sync media to R2
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          ARGS="--prefix ${{ steps.branch.outputs.name }}"
-          if [ -n "${{ steps.branch.outputs.diff_base }}" ]; then
-            ARGS="$ARGS --diff-base ${{ steps.branch.outputs.diff_base }}"
-          fi
-          just media::sync $ARGS
+        run: just media::sync --prefix ${{ steps.branch.outputs.name }}
 
   # ── Deploy frontend to Cloudflare Pages (after media sync) ───────
   deploy-pages:
