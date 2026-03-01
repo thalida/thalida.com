@@ -197,22 +197,22 @@ function appendSystemMessage(text: string, actions?: Array<{ label: string; acti
 
   const textEl = root.querySelector('[data-chat="notice-text"]') as HTMLElement;
 
-  if (!actions || actions.length === 0) {
-    textEl.textContent = text;
-  } else {
-    const textNode = document.createTextNode(text + "  ");
-    textEl.appendChild(textNode);
+  textEl.textContent = text;
+
+  if (actions && actions.length > 0) {
+    const actionsEl = root.querySelector('[data-chat="notice-actions"]') as HTMLElement;
+    actionsEl.hidden = false;
 
     actions.forEach((a, i) => {
-      if (i > 0) textEl.appendChild(document.createTextNode(" · "));
+      if (i > 0) actionsEl.appendChild(document.createTextNode(" · "));
       const span = document.createElement("span");
       span.textContent = `[${a.label}]`;
-      span.className = "cursor-pointer underline text-text hover:text-teal";
+      span.className = "cursor-pointer text-text hover:text-teal";
       span.addEventListener("click", () => {
-        a.action();
+        actionsEl.hidden = true;
         textEl.textContent = `${text} — ${a.label}`;
       });
-      textEl.appendChild(span);
+      actionsEl.appendChild(span);
     });
   }
 
