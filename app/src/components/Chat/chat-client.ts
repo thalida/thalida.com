@@ -404,8 +404,7 @@ function updateStatus(isOwnerOnline: boolean, userCount: number): void {
   statusDotEl.dataset.online = String(isOwnerOnline);
   ownerStatusEl.textContent = isOwnerOnline ? `${ownerLabel} online` : `${ownerLabel} offline`;
   ownerStatusEl.dataset.online = String(isOwnerOnline);
-  const viewerLabel = userCount === 1 ? "viewer" : "viewers";
-  const viewerText = `${userCount} ${viewerLabel}`;
+  const viewerText = `${userCount} online`;
   (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = viewerText;
   userCountEl.title = viewerText;
 }
