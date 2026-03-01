@@ -168,7 +168,8 @@ function appendMessage(msg: ChatMessage): void {
     const snippet = msg.text.length > 50 ? msg.text.slice(0, 50) + "…" : msg.text;
 
     deleteBtn.addEventListener("click", () => {
-      if (confirm(`Delete message from ${msg.username}?\n\n"${snippet}"`)) {
+      const currentName = usernameEl.textContent ?? msg.username;
+      if (confirm(`Delete message from ${currentName}?\n\n"${snippet}"`)) {
         wsSend({ type: CLIENT_MESSAGE_TYPE.DELETE, data: { id: msg.id } });
       }
     });
@@ -179,7 +180,8 @@ function appendMessage(msg: ChatMessage): void {
     }
 
     flagBtn.addEventListener("click", () => {
-      if (confirm(`Flag & ban ${msg.username}?\n\n"${snippet}"`)) {
+      const currentName = usernameEl.textContent ?? msg.username;
+      if (confirm(`Flag & ban ${currentName}?\n\n"${snippet}"`)) {
         wsSend({ type: CLIENT_MESSAGE_TYPE.FLAG, data: { id: msg.id } });
       }
     });
