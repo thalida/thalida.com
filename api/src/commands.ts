@@ -26,7 +26,7 @@ register({
 
 register({
   name: "blocked",
-  description: "List all blocked users and IPs",
+  description: "List all blocked users",
   handler: (ws, _args, chatRoom) => {
     chatRoom.sendToSocket(ws, {
       type: SERVER_MESSAGE_TYPE.BLOCKED_LIST,

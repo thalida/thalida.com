@@ -37,7 +37,6 @@ export class ChatRoom implements DurableObject {
   private messages: ChatMessage[] = [];
   private connections: Map<WebSocket, ConnectionInfo> = new Map();
   private spectators: Set<WebSocket> = new Set();
-  private ipBySocket: Map<WebSocket, string> = new Map();
   private blockedEntries: Map<string, { username: string; blockedAt: number }> = new Map();
   private blockedIpsLoaded = false;
 
@@ -46,27 +45,23 @@ export class ChatRoom implements DurableObject {
     private env: Env,
   ) {}
 
-  private async loadBlockedIps(): Promise<void> {
+  private async loadBlockedClients(): Promise<void> {
     if (this.blockedIpsLoaded) return;
     const stored = await this.state.storage.get<unknown>(BLOCKED_IPS_KEY);
     if (Array.isArray(stored)) {
       for (const entry of stored) {
-        if (typeof entry === "string") {
-          // Old format: plain IP strings
-          this.blockedEntries.set(entry, { username: "unknown", blockedAt: 0 });
-        } else if (entry && typeof entry === "object" && "ip" in entry) {
-          // New format: { ip, username, blockedAt }
-          const e = entry as { ip: string; username: string; blockedAt: number };
-          this.blockedEntries.set(e.ip, { username: e.username, blockedAt: e.blockedAt });
+        if (entry && typeof entry === "object" && "clientId" in entry) {
+          const e = entry as { clientId: string; username: string; blockedAt: number };
+          this.blockedEntries.set(e.clientId, { username: e.username, blockedAt: e.blockedAt });
         }
       }
     }
     this.blockedIpsLoaded = true;
   }
 
-  private async persistBlockedIps(): Promise<void> {
-    const entries = [...this.blockedEntries.entries()].map(([ip, info]) => ({
-      ip,
+  private async persistBlockedClients(): Promise<void> {
+    const entries = [...this.blockedEntries.entries()].map(([clientId, info]) => ({
+      clientId,
       username: info.username,
       blockedAt: info.blockedAt,
     }));
@@ -105,17 +100,15 @@ export class ChatRoom implements DurableObject {
       return new Response("Expected WebSocket", { status: 426 });
     }
 
-    await this.loadBlockedIps();
+    await this.loadBlockedClients();
     this.cleanupExpiredReservations().catch((err) => {
       console.error("[reservations] cleanup error:", err);
     });
 
-    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
     const [client, server] = Object.values(new WebSocketPair());
 
     server.accept();
 
-    this.ipBySocket.set(server, ip);
     this.spectators.add(server);
     this.sendStatus(server);
 
@@ -171,7 +164,7 @@ export class ChatRoom implements DurableObject {
         this.handleDeleteByUser(ws, msg.data);
         break;
       case CLIENT_MESSAGE_TYPE.UNBLOCK:
-        this.handleUnblock(ws, msg.data.ip);
+        this.handleUnblock(ws, msg.data.clientId);
         break;
     }
   }
@@ -179,7 +172,8 @@ export class ChatRoom implements DurableObject {
   private async handleJoin(ws: WebSocket, { username, token, clientId }: ClientJoinData): Promise<void> {
     const isOwner = typeof token === "string" && token.length > 0 && token === this.env.ADMIN_SECRET;
 
-    const ipBlocked = !isOwner && this.blockedEntries.has(this.ipBySocket.get(ws) ?? "unknown");
+    const resolvedClientId = clientId ?? crypto.randomUUID();
+    const isBlocked = !isOwner && this.blockedEntries.has(resolvedClientId);
 
     const name = isOwner
       ? ADMIN_USERNAME
@@ -204,40 +198,51 @@ export class ChatRoom implements DurableObject {
 
     for (const [existingWs, info] of this.connections) {
       if (info.username === name && existingWs !== ws && !(isOwner && info.isOwner)) {
-        // Allow the same clientId to reuse their username across multiple tabs
-        if (clientId && info.clientId === clientId) continue;
+        if (resolvedClientId && info.clientId === resolvedClientId) continue;
         this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
         return;
       }
     }
 
-    if (!isOwner && clientId) {
+    if (!isOwner && resolvedClientId) {
       const reservation = await this.getReservation(name);
       if (reservation) {
         const expired = Date.now() - reservation.lastSeen > RESERVATION_DURATION_MS;
-        if (reservation.clientId === clientId && expired) {
+        if (reservation.clientId === resolvedClientId && expired) {
           this.sendError(ws, SERVER_ERROR_CODE.EXPIRED_USERNAME, "Your reserved username has expired.");
           return;
         }
-        if (reservation.clientId !== clientId && !expired) {
+        if (reservation.clientId !== resolvedClientId && !expired) {
           this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
           return;
         }
       }
-      await this.upsertReservation(name, clientId);
+      await this.upsertReservation(name, resolvedClientId);
+    }
+
+    // Detect rename: same clientId, different username
+    const existingConn = this.connections.get(ws);
+    const oldUsername = existingConn?.clientId === resolvedClientId ? existingConn.username : undefined;
+
+    if (oldUsername != null && oldUsername !== name) {
+      for (const msg of this.messages) {
+        if (msg.clientId === resolvedClientId) {
+          msg.username = name;
+        }
+      }
+      this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });
     }
 
     this.spectators.delete(ws);
     this.connections.set(ws, {
-      ip: this.ipBySocket.get(ws) ?? "unknown",
+      clientId: resolvedClientId,
       username: name,
       isOwner,
       warnings: 0,
-      isBlocked: ipBlocked,
-      clientId: clientId ?? undefined,
+      isBlocked,
     });
 
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked: ipBlocked });
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.HISTORY, messages: this.messages });
     this.broadcastStatus();
   }
@@ -258,6 +263,7 @@ export class ChatRoom implements DurableObject {
     const message: ChatMessage = {
       type: SERVER_MESSAGE_TYPE.MESSAGE,
       id: uuidv7(),
+      clientId: info.clientId,
       username: info.username,
       text,
       timestamp: Date.now(),
@@ -276,21 +282,21 @@ export class ChatRoom implements DurableObject {
     });
   }
 
-  private handleUnblock(ws: WebSocket, ip: string): void {
+  private handleUnblock(ws: WebSocket, clientId: string): void {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can unblock users.");
       return;
     }
 
-    this.blockedEntries.delete(ip);
-    this.persistBlockedIps().catch((err) => {
+    this.blockedEntries.delete(clientId);
+    this.persistBlockedClients().catch((err: unknown) => {
       console.error("[unblock] failed to persist unblock:", err);
     });
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip });
+    this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, clientId });
 
     for (const [sock, connInfo] of this.connections) {
-      if (connInfo.ip === ip && connInfo.isBlocked) {
+      if (connInfo.clientId === clientId && connInfo.isBlocked) {
         connInfo.isBlocked = false;
         this.send(sock, {
           type: SERVER_MESSAGE_TYPE.JOINED,
@@ -325,48 +331,35 @@ export class ChatRoom implements DurableObject {
     const message = this.messages.find((m) => m.id === id);
     if (!message) return;
 
-    const targetUsername = message.username;
+    const targetClientId = message.clientId;
+    if (!targetClientId) return;
 
-    // Find the target's IP from their connection
-    let targetIp: string | undefined;
-    for (const [, connInfo] of this.connections) {
-      if (connInfo.username === targetUsername && !connInfo.isOwner) {
-        targetIp = connInfo.ip;
-        break;
-      }
-    }
-
-    if (!targetIp) return;
-
-    // Block the IP
-    this.blockedEntries.set(targetIp, { username: targetUsername, blockedAt: Date.now() });
-    this.persistBlockedIps().catch((err) => {
-      console.error("[flag] failed to persist blocked IP:", err);
+    this.blockedEntries.set(targetClientId, { username: message.username, blockedAt: Date.now() });
+    this.persistBlockedClients().catch((err: unknown) => {
+      console.error("[flag] failed to persist blocked client:", err);
     });
 
-    // Send BLOCKED to all of the target's sockets
     for (const [targetWs, connInfo] of this.connections) {
-      if (connInfo.ip === targetIp && !connInfo.isOwner) {
+      if (connInfo.clientId === targetClientId && !connInfo.isOwner) {
         this.sendBlocked(targetWs);
         connInfo.isBlocked = true;
       }
     }
 
-    // Respond to admin
     this.send(ws, {
       type: SERVER_MESSAGE_TYPE.FLAGGED,
-      username: targetUsername,
-      ip: targetIp,
+      username: message.username,
+      clientId: targetClientId,
       messageId: id,
     });
   }
 
-  private handleDeleteByUser(ws: WebSocket, { username: targetUsername }: ClientDeleteByUserData): void {
+  private handleDeleteByUser(ws: WebSocket, { clientId: targetClientId }: ClientDeleteByUserData): void {
     const info = this.connections.get(ws);
     if (!info?.isOwner) return;
 
-    const toRemove = this.messages.filter((m) => m.username === targetUsername);
-    this.messages = this.messages.filter((m) => m.username !== targetUsername);
+    const toRemove = this.messages.filter((m) => m.clientId === targetClientId);
+    this.messages = this.messages.filter((m) => m.clientId !== targetClientId);
 
     for (const msg of toRemove) {
       this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msg.id });
@@ -402,9 +395,9 @@ export class ChatRoom implements DurableObject {
 
     if (info.warnings >= MAX_WARNINGS) {
       info.isBlocked = true;
-      this.blockedEntries.set(info.ip, { username: info.username, blockedAt: Date.now() });
-      this.persistBlockedIps().catch((err) => {
-        console.error("[block] failed to persist blocked IP:", err);
+      this.blockedEntries.set(info.clientId, { username: info.username, blockedAt: Date.now() });
+      this.persistBlockedClients().catch((err: unknown) => {
+        console.error("[block] failed to persist blocked client:", err);
       });
       this.sendBlocked(ws);
     } else {
@@ -473,8 +466,8 @@ export class ChatRoom implements DurableObject {
   }
 
   getBlockedEntries(): BlockedEntry[] {
-    return [...this.blockedEntries.entries()].map(([ip, info]) => ({
-      ip,
+    return [...this.blockedEntries.entries()].map(([clientId, info]) => ({
+      clientId,
       username: info.username,
       blockedAt: info.blockedAt,
     }));
@@ -483,7 +476,6 @@ export class ChatRoom implements DurableObject {
   // ── Connection Helpers ───────────────────────────────────────────────
 
   private removeConnection(ws: WebSocket): void {
-    this.ipBySocket.delete(ws);
     this.spectators.delete(ws);
     this.connections.delete(ws);
     this.broadcastStatus();
@@ -542,9 +534,7 @@ export class ChatRoom implements DurableObject {
     const uniqueClients = new Set<string>();
     for (const info of this.connections.values()) {
       if (info.isOwner) isOwnerOnline = true;
-      // Deduplicate by clientId (multiple tabs share the same clientId);
-      // fall back to ip+username for connections without one (e.g. owner)
-      uniqueClients.add(info.clientId ?? `${info.ip}:${info.username}`);
+      uniqueClients.add(info.clientId);
     }
     return { type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline, userCount: uniqueClients.size };
   }
