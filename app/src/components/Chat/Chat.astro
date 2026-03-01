@@ -16,7 +16,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
           class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
         <span id="js-chat-owner-status" class="text-admin">offline</span>
       </span>
-      <span class="opacity-30">·</span>
+      <span class="text-dim">·</span>
       <span id="js-chat-user-count" title="0 online"
         ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0</span></span
       >
@@ -68,10 +68,10 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
       <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0"
       ></span>
-      <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
+      <span data-chat="at-sep" hidden class="text-dim shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
       <span class="flex-1"></span>
-      <span data-chat="time" class="opacity-40 whitespace-nowrap"></span>
+      <span data-chat="time" class="text-dim whitespace-nowrap"></span>
       <button
         data-chat="flag-btn"
         hidden
@@ -99,7 +99,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   <div class="mb-2">
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
       <span class="font-semibold text-muted">system</span>
-      <span class="ml-auto opacity-40" data-chat="notice-time"></span>
+      <span class="ml-auto text-dim" data-chat="notice-time"></span>
     </div>
     <div data-chat="notice-text" class="mt-0.5 text-muted whitespace-pre-line"></div>
     <div data-chat="notice-actions" hidden class="mt-0.5 flex items-baseline gap-1.5 text-muted"></div>

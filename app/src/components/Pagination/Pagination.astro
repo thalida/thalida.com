@@ -17,7 +17,7 @@ const { prevUrl, nextUrl, currentPage, lastPage } = Astro.props;
           &larr; Previous
         </a>
       ) : (
-        <span class="text-muted/40">&larr; Previous</span>
+        <span class="text-dim">&larr; Previous</span>
       )}
 
       <span class="text-muted">
@@ -29,7 +29,7 @@ const { prevUrl, nextUrl, currentPage, lastPage } = Astro.props;
           Next &rarr;
         </a>
       ) : (
-        <span class="text-muted/40">Next &rarr;</span>
+        <span class="text-dim">Next &rarr;</span>
       )}
     </nav>
   )
