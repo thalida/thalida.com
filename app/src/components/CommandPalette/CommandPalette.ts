@@ -321,7 +321,7 @@ function initCommandPalette() {
   });
 
   // Toolbar search button click
-  const tabletSearchBtn = document.getElementById("toolbar-search-btn");
+  const tabletSearchBtn = document.querySelector<HTMLElement>('[data-layout="search-btn"]');
   if (tabletSearchBtn) {
     tabletSearchBtn.addEventListener("click", () => {
       if (!isOpen()) {

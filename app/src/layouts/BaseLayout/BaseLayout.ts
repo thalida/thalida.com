@@ -1,17 +1,17 @@
 function initResponsiveUI() {
-  const menuBtn = document.getElementById("js-toolbar-menu-btn");
-  const navPanel = document.getElementById("nav-panel");
-  const navBackdrop = document.getElementById("nav-backdrop");
+  const menuBtn = document.querySelector<HTMLElement>('[data-layout="menu-btn"]');
+  const navPanel = document.querySelector<HTMLElement>('[data-layout="nav-panel"]');
+  const navBackdrop = document.querySelector<HTMLElement>('[data-layout="nav-backdrop"]');
   const chatPanel = document.querySelector<HTMLElement>('[data-chat="panel"]');
-  const chatFab = document.getElementById("js-mobile-chat-fab");
-  const chatOverlay = document.getElementById("chat-overlay");
-  const chatOverlayBackdrop = document.getElementById("chat-overlay-backdrop");
-  const chatOverlayContent = document.getElementById("js-chat-overlay-content");
+  const chatFab = document.querySelector<HTMLElement>('[data-layout="chat-fab"]');
+  const chatOverlay = document.querySelector<HTMLElement>('[data-layout="chat-overlay"]');
+  const chatOverlayBackdrop = document.querySelector<HTMLElement>('[data-layout="chat-overlay-backdrop"]');
+  const chatOverlayContent = document.querySelector<HTMLElement>('[data-layout="chat-overlay-content"]');
 
   function closeNav() {
     navPanel?.classList.remove("open");
     navBackdrop?.classList.remove("visible");
-    document.body.style.overflow = "";
+    document.body.classList.remove("overflow-hidden");
   }
 
   function moveChatToOverlay() {
@@ -32,7 +32,7 @@ function initResponsiveUI() {
     chatOverlay?.classList.remove("open");
     chatOverlayBackdrop?.classList.remove("visible");
     moveChatBack();
-    document.body.style.overflow = "";
+    document.body.classList.remove("overflow-hidden");
   }
 
   function closeAll() {
@@ -47,7 +47,7 @@ function initResponsiveUI() {
     if (willOpen) {
       navPanel?.classList.add("open");
       navBackdrop?.classList.add("visible");
-      document.body.style.overflow = "hidden";
+      document.body.classList.add("overflow-hidden");
     }
   }
 
@@ -65,7 +65,7 @@ function initResponsiveUI() {
     moveChatToOverlay();
     chatOverlay?.classList.add("open");
     chatOverlayBackdrop?.classList.add("visible");
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("overflow-hidden");
   }
 
   // Mobile chat FAB
@@ -96,7 +96,7 @@ let savedNavScroll = 0;
 document.addEventListener("astro:before-swap", () => {
   const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
   if (nav) savedNavScroll = nav.scrollTop;
-  document.body.style.overflow = "";
+  document.body.classList.remove("overflow-hidden");
 });
 document.addEventListener("astro:after-swap", () => {
   const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
