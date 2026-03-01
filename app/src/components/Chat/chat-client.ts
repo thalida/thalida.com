@@ -4,6 +4,7 @@ import {
   setAdminUsername,
   LS_ADMIN_TOKEN_KEY,
 } from "@components/Chat/chat-utils";
+import { truncateMiddle, formatMessageTime, renderNotice } from "@components/Chat/chat-render";
 
 const RECONNECT_DELAY_MS = 3000;
 
@@ -142,27 +143,22 @@ function appendMessage(msg: ChatMessage): void {
   usernameEl.textContent = msg.username;
   if (isAdmin) usernameEl.dataset.admin = "";
 
-  const time = new Date(msg.timestamp).toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  slot("time").textContent = time;
+  slot("time").textContent = formatMessageTime(msg.timestamp);
 
   if (msg.context) {
     const pageLink = slot("page") as HTMLAnchorElement;
     pageLink.href = msg.context.path;
-    pageLink.textContent = msg.context.path;
+    pageLink.textContent = truncateMiddle(msg.context.path, 25);
+    pageLink.title = msg.context.path;
     pageLink.hidden = false;
-    slot("sep").hidden = false;
+    slot("at-sep").hidden = false;
   }
 
   slot("text").textContent = msg.text;
 
   if (isOwner) {
-    const controls = slot("admin-controls");
-    controls.hidden = false;
-
     const deleteBtn = slot("delete-btn") as HTMLButtonElement;
+    deleteBtn.hidden = false;
 
     const snippet = msg.text.length > 50 ? msg.text.slice(0, 50) + "…" : msg.text;
 
@@ -173,8 +169,8 @@ function appendMessage(msg: ChatMessage): void {
     });
 
     const flagBtn = slot("flag-btn") as HTMLButtonElement;
-    if (isAdmin) {
-      flagBtn.hidden = true;
+    if (!isAdmin) {
+      flagBtn.hidden = false;
     }
 
     flagBtn.addEventListener("click", () => {
@@ -189,34 +185,8 @@ function appendMessage(msg: ChatMessage): void {
 }
 
 function appendSystemMessage(text: string, actions?: Array<{ label: string; action: () => void }>): HTMLElement {
-  const frag = noticeTpl.content.cloneNode(true) as DocumentFragment;
-  const root = frag.firstElementChild as HTMLElement;
-
-  const timeEl = root.querySelector('[data-chat="notice-time"]') as HTMLElement;
-  timeEl.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-
-  const textEl = root.querySelector('[data-chat="notice-text"]') as HTMLElement;
-
-  textEl.textContent = text;
-
-  if (actions && actions.length > 0) {
-    const actionsEl = root.querySelector('[data-chat="notice-actions"]') as HTMLElement;
-    actionsEl.hidden = false;
-
-    actions.forEach((a, i) => {
-      if (i > 0) actionsEl.appendChild(document.createTextNode(" · "));
-      const span = document.createElement("span");
-      span.textContent = `[${a.label}]`;
-      span.className = "cursor-pointer text-text hover:text-teal";
-      span.addEventListener("click", () => {
-        actionsEl.hidden = true;
-        textEl.textContent = `${text} — ${a.label}`;
-      });
-      actionsEl.appendChild(span);
-    });
-  }
-
-  messagesEl.appendChild(frag);
+  const root = renderNotice(noticeTpl, text, actions);
+  messagesEl.appendChild(root);
   messagesEl.scrollTop = messagesEl.scrollHeight;
   return root;
 }

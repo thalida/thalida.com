@@ -56,33 +56,39 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 
 <template id="chat-msg-tpl">
   <div class="group mb-2" data-msg-id="">
-    <div class="flex items-baseline gap-1.5 text-xs leading-tight">
-      <span data-chat="username" class="font-semibold text-teal data-admin:text-neon"></span>
-      <span class="ml-auto flex items-baseline gap-1.5 whitespace-nowrap">
-        <span data-chat="admin-controls" hidden class="inline-flex gap-1">
-          <button
-            data-chat="delete-btn"
-            class="text-muted hover:text-red-400 transition-colors"
-            type="button"
-            title="Delete message"
-          >
-            <i class="fa-solid fa-trash-can fa-xs" aria-hidden="true"></i>
-          </button>
+    <div class="flex gap-1.5">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-baseline gap-1 text-xs leading-tight">
+          <span data-chat="username" class="font-semibold text-teal data-admin:text-neon shrink-0"></span>
+          <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
+          <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
+        </div>
+        <div data-chat="text" class="text-sm"></div>
+      </div>
+      <div class="flex flex-col items-end shrink-0 text-xs leading-tight">
+        <span class="flex items-center gap-1">
+          <span data-chat="time" class="opacity-40 whitespace-nowrap"></span>
           <button
             data-chat="flag-btn"
-            class="text-muted hover:text-yellow-400 transition-colors"
+            hidden
+            class="text-muted hover:text-yellow-400 transition-colors leading-none"
             type="button"
             title="Flag & ban user"
           >
-            <i class="fa-solid fa-flag fa-xs" aria-hidden="true"></i>
+            <i class="fa-solid fa-flag fa-2xs" aria-hidden="true"></i>
           </button>
         </span>
-        <a data-chat="page" hidden class="text-text font-medium underline hover:text-teal" href=""></a>
-        <span data-chat="sep" hidden class="opacity-40">·</span>
-        <span data-chat="time" class="opacity-40"></span>
-      </span>
+        <button
+          data-chat="delete-btn"
+          hidden
+          class="text-muted hover:text-red-400 transition-colors leading-none self-end"
+          type="button"
+          title="Delete message"
+        >
+          <i class="fa-solid fa-trash-can fa-2xs" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
-    <div data-chat="text"></div>
   </div>
 </template>
 
