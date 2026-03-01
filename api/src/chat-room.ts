@@ -4,6 +4,7 @@ import type {
   Env,
   ChatMessage,
   ClientChatData,
+  ClientDeleteByUserData,
   ClientDeleteData,
   ClientFlagData,
   ClientJoinData,
@@ -165,6 +166,9 @@ export class ChatRoom implements DurableObject {
         break;
       case CLIENT_MESSAGE_TYPE.FLAG:
         this.handleFlag(ws, msg.data);
+        break;
+      case CLIENT_MESSAGE_TYPE.DELETE_BY_USER:
+        this.handleDeleteByUser(ws, msg.data);
         break;
     }
   }
@@ -342,6 +346,18 @@ export class ChatRoom implements DurableObject {
       ip: targetIp,
       messageId: id,
     });
+  }
+
+  private handleDeleteByUser(ws: WebSocket, { username: targetUsername }: ClientDeleteByUserData): void {
+    const info = this.connections.get(ws);
+    if (!info?.isOwner) return;
+
+    const toRemove = this.messages.filter((m) => m.username === targetUsername);
+    this.messages = this.messages.filter((m) => m.username !== targetUsername);
+
+    for (const msg of toRemove) {
+      this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msg.id });
+    }
   }
 
   // ── Moderation ───────────────────────────────────────────────────────

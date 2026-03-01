@@ -547,6 +547,48 @@ describe("ChatRoom Durable Object", () => {
 
       adminWs.close();
     });
+
+    it("admin can delete all messages from a username", async () => {
+      const { ws: userWs } = await connectAndJoin("bulk-poster");
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+      });
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 1" } });
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 2" } });
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 3" } });
+      await flush();
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "delete_by_user", data: { username: "bulk-poster" } });
+      await flush();
+
+      const removes = adminMsgs.filter((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(removes).toHaveLength(3);
+
+      userWs.close();
+      adminWs.close();
+    });
+
+    it("non-admin delete_by_user is silently ignored", async () => {
+      const { ws: ws1 } = await connectAndJoin("poster");
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("hacker");
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "keep this" } });
+      await flush();
+
+      msgs2.length = 0;
+
+      send(ws2, { type: "delete_by_user", data: { username: "poster" } });
+      await flush();
+
+      const removes = msgs2.filter((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(removes).toHaveLength(0);
+
+      ws1.close();
+      ws2.close();
+    });
   });
 
   // ── Admin Flag ─────────────────────────────────────────────────
