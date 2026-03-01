@@ -1,6 +1,6 @@
 import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
-import type { ServerMessage } from "../types";
+import type { ChatMessage, ServerMessage } from "../types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../types";
 
 // ── helpers ──────────────────────────────────────────────────────────
@@ -468,6 +468,84 @@ describe("ChatRoom Durable Object", () => {
 
       adminWs.close();
       otherWs.close();
+    });
+  });
+
+  // ── Admin Delete ────────────────────────────────────────────────
+
+  describe("admin delete", () => {
+    it("admin can delete a message by ID", async () => {
+      const { ws: userWs, msgs: userMsgs } = await connectAndJoin("chatter");
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+      });
+
+      userMsgs.length = 0;
+      adminMsgs.length = 0;
+
+      send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "delete me" } });
+      await flush();
+
+      const chatMsg = adminMsgs.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      expect(chatMsg).toBeDefined();
+      const msgId = chatMsg?.id;
+      expect(msgId).toBeDefined();
+
+      adminMsgs.length = 0;
+      userMsgs.length = 0;
+
+      send(adminWs, { type: "delete", data: { id: msgId } });
+      await flush();
+
+      const remove1 = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      const remove2 = userMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove1).toMatchObject({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msgId });
+      expect(remove2).toMatchObject({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msgId });
+
+      userWs.close();
+      adminWs.close();
+    });
+
+    it("non-admin delete request is silently ignored", async () => {
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin("sender");
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin("hacker");
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws1, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "stay here" } });
+      await flush();
+
+      const chatMsg = msgs2.find((m): m is ChatMessage => m.type === SERVER_MESSAGE_TYPE.MESSAGE);
+      const msgId = chatMsg?.id;
+
+      msgs1.length = 0;
+      msgs2.length = 0;
+
+      send(ws2, { type: "delete", data: { id: msgId } });
+      await flush();
+
+      const remove = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove).toBeUndefined();
+
+      ws1.close();
+      ws2.close();
+    });
+
+    it("delete of nonexistent message ID is silently ignored", async () => {
+      const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin("thalida", {
+        token: "test-admin-secret",
+      });
+
+      adminMsgs.length = 0;
+
+      send(adminWs, { type: "delete", data: { id: "nonexistent-id" } });
+      await flush();
+
+      const remove = adminMsgs.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
+      expect(remove).toBeUndefined();
+
+      adminWs.close();
     });
   });
 

@@ -4,6 +4,7 @@ import type {
   Env,
   ChatMessage,
   ClientChatData,
+  ClientDeleteData,
   ClientJoinData,
   ClientMessage,
   ConnectionInfo,
@@ -158,6 +159,9 @@ export class ChatRoom implements DurableObject {
       case CLIENT_MESSAGE_TYPE.MESSAGE:
         this.handleChatMessage(ws, msg.data);
         break;
+      case CLIENT_MESSAGE_TYPE.DELETE:
+        this.handleDelete(ws, msg.data);
+        break;
     }
   }
 
@@ -282,6 +286,17 @@ export class ChatRoom implements DurableObject {
     this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, ip });
   }
 
+  private handleDelete(ws: WebSocket, { id }: ClientDeleteData): void {
+    const info = this.connections.get(ws);
+    if (!info?.isOwner) return;
+
+    const idx = this.messages.findIndex((m) => m.id === id);
+    if (idx === -1) return;
+
+    this.messages.splice(idx, 1);
+    this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
+  }
+
   // ── Moderation ───────────────────────────────────────────────────────
 
   private async moderate(message: ChatMessage, senderWs: WebSocket): Promise<void> {
@@ -383,6 +398,10 @@ export class ChatRoom implements DurableObject {
 
   handleUnblockCommand(ws: WebSocket, ip: string): void {
     this.handleUnblock(ws, ip);
+  }
+
+  handleDeleteMessage(ws: WebSocket, messageId: string): void {
+    this.handleDelete(ws, { id: messageId });
   }
 
   // ── Connection Helpers ───────────────────────────────────────────────
