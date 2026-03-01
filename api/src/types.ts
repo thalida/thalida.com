@@ -7,6 +7,7 @@ export interface MessageContext {
 export interface ChatMessage {
   type: "message";
   id: string;
+  clientId: string;
   username: string;
   text: string;
   timestamp: number;
@@ -14,12 +15,11 @@ export interface ChatMessage {
 }
 
 export interface ConnectionInfo {
-  ip: string;
+  clientId: string;
   username: string;
   isOwner: boolean;
   warnings: number;
   isBlocked: boolean;
-  clientId?: string;
 }
 
 // ── Client → Server ─────────────────────────────────────────────────
@@ -55,11 +55,11 @@ export interface ClientFlagData {
 }
 
 export interface ClientDeleteByUserData {
-  username: string;
+  clientId: string;
 }
 
 export interface ClientUnblockData {
-  ip: string;
+  clientId: string;
 }
 
 export type ClientMessage =
@@ -85,6 +85,7 @@ export const SERVER_MESSAGE_TYPE = {
   HISTORY: "history",
   REMOVE: "remove",
   MESSAGE: "message",
+  RENAME: "rename",
 } as const;
 
 export type ServerMessageType = (typeof SERVER_MESSAGE_TYPE)[keyof typeof SERVER_MESSAGE_TYPE];
@@ -153,7 +154,7 @@ export interface ServerJoinedMessage {
 
 export interface ServerUnblockedMessage {
   type: "unblocked";
-  ip: string;
+  clientId: string;
 }
 
 export interface ServerHelpMessage {
@@ -164,12 +165,18 @@ export interface ServerHelpMessage {
 export interface ServerFlaggedMessage {
   type: "flagged";
   username: string;
-  ip: string;
+  clientId: string;
   messageId: string;
 }
 
+export interface ServerRenameMessage {
+  type: "rename";
+  oldUsername: string;
+  newUsername: string;
+}
+
 export interface BlockedEntry {
-  ip: string;
+  clientId: string;
   username: string;
   blockedAt: number;
 }
@@ -188,6 +195,7 @@ export type ServerMessage =
   | ServerUnblockedMessage
   | ServerHelpMessage
   | ServerFlaggedMessage
+  | ServerRenameMessage
   | ServerBlockedListMessage
   | ChatMessage;
 
