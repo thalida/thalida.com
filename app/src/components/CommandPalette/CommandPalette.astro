@@ -16,17 +16,17 @@ const collections = Object.entries(navData).map(([key, col]) => ({
 }));
 ---
 
-<div id="command-palette" class="hidden fixed inset-0 z-1000 overflow-hidden" aria-hidden="true">
-  <div id="js-cp-backdrop" class="absolute inset-0 bg-midnight/70 backdrop-blur-sm"></div>
+<div data-cp="overlay" class="cp-overlay hidden fixed inset-0 z-1000 overflow-hidden" aria-hidden="true">
+  <div data-cp="backdrop" class="absolute inset-0 bg-midnight/70 backdrop-blur-sm"></div>
   <div
-    id="js-cp-dialog"
-    class="relative w-full bg-surface overflow-hidden font-body flex flex-col shadow-dialog"
+    data-cp="dialog"
+    class="cp-dialog relative w-full bg-surface overflow-hidden font-body flex flex-col shadow-dialog"
     role="dialog"
     aria-label="Search content"
   >
     <div class="flex items-center gap-2 py-3 px-4 border-b border-border">
       <select
-        id="js-cp-collection-select"
+        data-cp="collection-select"
         class="py-2 px-3 border border-border rounded-md text-xs font-body bg-midnight text-text outline-none min-w-24 hover:border-muted/50 focus:border-teal focus:ring-2 focus:ring-teal/20"
       >
         <option value="">All</option>
@@ -34,14 +34,14 @@ const collections = Object.entries(navData).map(([key, col]) => ({
       </select>
       <input
         type="text"
-        id="js-cp-input"
+        data-cp="input"
         class="cp-input flex-1 border-none outline-none text-sm py-0.5 font-body bg-transparent text-text"
         placeholder="Search…"
         autocomplete="off"
         spellcheck="false"
       />
     </div>
-    <div class="overflow-y-auto flex-1 p-2" id="cp-results"></div>
+    <div class="cp-results overflow-y-auto flex-1 p-2" data-cp="results"></div>
     <div class="hidden md:flex gap-4 py-2 px-4 border-t border-border text-xs text-muted">
       <span class="flex items-center gap-1"
         ><kbd class="text-xs py-0.5 px-2 border border-border rounded-sm bg-midnight font-body text-muted"
@@ -59,18 +59,17 @@ const collections = Object.entries(navData).map(([key, col]) => ({
 </div>
 
 <style>
-  #command-palette.cp-overlay--open {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+  .cp-overlay.cp-overlay--open {
+    @apply flex items-center justify-center;
   }
-  #js-cp-dialog {
+  .cp-dialog {
     max-width: calc(100% - 2rem);
-    border-radius: 0.5rem;
+    @apply rounded-lg;
     max-height: calc(100svh - 6rem);
   }
   @media (min-width: 768px) {
-    #js-cp-dialog {
+    .cp-dialog {
       max-width: 32rem;
       max-height: 60%;
     }
@@ -80,28 +79,22 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   }
 </style>
 <style is:global>
-  #cp-results .cp-row--selected {
-    background-color: var(--color-surface-active);
-    color: #ffffff;
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+  .cp-results .cp-row--selected {
+    @apply bg-surface-active text-white;
   }
-  #cp-results .cp-row--selected .cp-row__title {
-    color: #ffffff;
+  .cp-results .cp-row--selected .cp-row__title {
+    @apply text-white;
   }
-  #cp-results .cp-row__img--empty span {
-    background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .cp-results .cp-row__img--empty span {
+    @apply gradient-text;
   }
-  #cp-results .cp-row__initial {
-    background: linear-gradient(135deg, var(--color-neon) 0%, var(--color-teal) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .cp-results .cp-row__initial {
+    @apply gradient-text;
   }
 </style>
 
-<template id="cp-row-tpl">
+<template data-cp="row-tpl">
   <a
     class="cp-row flex items-center justify-between gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text"
   >
@@ -126,7 +119,7 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   </a>
 </template>
 
-<template id="cp-row-external-tpl">
+<template data-cp="row-external-tpl">
   <a
     class="cp-row flex items-center gap-3 py-2 px-3 rounded-md no-underline text-muted transition-colors hover:bg-midnight hover:text-text"
     target="_blank"
@@ -158,7 +151,7 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   </a>
 </template>
 
-<template id="cp-empty-tpl">
+<template data-cp="empty-tpl">
   <div class="py-8 px-4 text-center text-muted text-sm">No results found</div>
 </template>
 

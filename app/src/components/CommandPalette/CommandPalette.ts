@@ -42,17 +42,15 @@ async function loadPagefind() {
 }
 
 function initCommandPalette() {
-  const overlay = document.getElementById("command-palette") as HTMLElement;
-  const input = document.getElementById("js-cp-input") as HTMLInputElement;
-  const resultsContainer = document.getElementById("cp-results") as HTMLElement;
-  const collectionSelect = document.getElementById("js-cp-collection-select") as HTMLSelectElement;
+  const overlay = document.querySelector<HTMLElement>('[data-cp="overlay"]');
+  const input = document.querySelector<HTMLInputElement>('[data-cp="input"]');
+  const resultsContainer = document.querySelector<HTMLElement>('[data-cp="results"]');
+  const collectionSelect = document.querySelector<HTMLSelectElement>('[data-cp="collection-select"]');
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
-  const backdrop = document.getElementById("js-cp-backdrop");
-  const dialog = document.getElementById("js-cp-dialog");
-
-  if (!backdrop || !dialog) return;
+  const backdrop = document.querySelector<HTMLElement>('[data-cp="backdrop"]');
+  const _dialog = document.querySelector<HTMLElement>('[data-cp="dialog"]');
 
   const data = window.__cpData;
   const itemLookup = new Map<string, SearchItem>();
@@ -168,9 +166,9 @@ function initCommandPalette() {
     return merged.slice(0, MAX_PALETTE_RESULTS);
   }
 
-  const cpRowTpl = document.getElementById("cp-row-tpl") as HTMLTemplateElement;
-  const cpRowExternalTpl = document.getElementById("cp-row-external-tpl") as HTMLTemplateElement;
-  const cpEmptyTpl = document.getElementById("cp-empty-tpl") as HTMLTemplateElement;
+  const cpRowTpl = document.querySelector<HTMLTemplateElement>('[data-cp="row-tpl"]');
+  const cpRowExternalTpl = document.querySelector<HTMLTemplateElement>('[data-cp="row-external-tpl"]');
+  const cpEmptyTpl = document.querySelector<HTMLTemplateElement>('[data-cp="empty-tpl"]');
 
   function formatCategory(raw: string): string {
     return raw
@@ -297,7 +295,7 @@ function initCommandPalette() {
   });
 
   // Close on backdrop click
-  backdrop.addEventListener("click", close);
+  backdrop?.addEventListener("click", close);
 
   // Global keyboard shortcut (Cmd+K / Ctrl+K)
   document.addEventListener("keydown", (e) => {
