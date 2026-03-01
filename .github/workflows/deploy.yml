@@ -44,13 +44,9 @@ jobs:
               echo "diff_base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
             fi
           else
-            BEFORE="${{ github.event.before }}"
+            # Push to main: always do a full sync to ensure production has all media
             echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-            if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
-              echo "diff_base=" >> "$GITHUB_OUTPUT"
-            else
-              echo "diff_base=$BEFORE" >> "$GITHUB_OUTPUT"
-            fi
+            echo "diff_base=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Sync media to R2
