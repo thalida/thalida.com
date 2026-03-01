@@ -2,7 +2,7 @@
 import { SPOTIFY_PLAYLIST_ID } from "@lib/site-config";
 ---
 
-<div class="mt-auto pt-3" style="transform: scale(0.88); transform-origin: bottom left; margin-right: -12%;">
+<div class="mt-auto pt-3 scale-[0.88] origin-bottom-left mr-[-12%]">
   <iframe
     data-testid="embed-iframe"
     title="Spotify playlist"
@@ -13,5 +13,7 @@ import { SPOTIFY_PLAYLIST_ID } from "@lib/site-config";
     allowfullscreen=""
     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
     loading="lazy"
-    style="border-radius:12px;"></iframe>
+    class="rounded-xl"
+  >
+  </iframe>
 </div>

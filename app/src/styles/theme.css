@@ -9,10 +9,12 @@
   --color-teal: #00e5a0;
   --color-text: #e8f0f8;
   --color-muted: #85a3bc;
-  --color-border: #152535;
+  --color-dim: #6b8ba3;
+  --color-border: #1e3a50;
   --color-surface-active: #0a1826;
   --color-accent: #7dd3fc;
   --color-admin: #d4a520;
+  --color-error: #ff4444;
 
   --font-display: "Bricolage Grotesque", sans-serif;
   --font-heading: "Space Grotesk", sans-serif;

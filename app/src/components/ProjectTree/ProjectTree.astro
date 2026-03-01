@@ -13,8 +13,8 @@ const navData = await getNavData();
 ---
 
 <nav
-  id="site-nav"
-  class="font-body relative xl:flex xl:flex-col min-h-full overflow-y-auto overflow-x-hidden hidden xl:shrink-0 xl:grow-0 xl:basis-1/5 xl:max-w-64 xl:py-3 xl:pl-3 xl:pr-0"
+  data-nav="root"
+  class="nav-root font-body relative xl:flex xl:flex-col min-h-full overflow-y-auto overflow-x-hidden hidden xl:shrink-0 xl:grow-0 xl:basis-1/5 xl:max-w-64 xl:py-3 xl:pl-3 xl:pr-0"
   aria-label="Main navigation"
   data-active-collection={activeCollection || ""}
 >
@@ -25,11 +25,16 @@ const navData = await getNavData();
   <button
     class="hidden xl:flex items-center gap-2 w-full py-2 px-3 mb-3 border border-border rounded-lg bg-surface text-muted text-sm font-body transition-colors hover:border-muted/50"
     type="button"
-    id="js-nav-search-btn"
+    data-nav="search-btn"
   >
     <SearchIcon class="text-sm" />
     <span class="flex-1 text-left">Search…</span>
-    <kbd class="text-xs py-0.5 px-2 border border-border rounded bg-surface-active text-muted font-body">⌘K</kbd>
+    <kbd
+      data-nav="shortcut-hint"
+      class="text-xs py-0.5 px-2 border border-border rounded bg-surface-active text-muted font-body"
+    >
+      ⌘K
+    </kbd>
   </button>
 
   <div class="bg-surface border border-border rounded-lg p-3">
@@ -66,10 +71,12 @@ const navData = await getNavData();
   </div>
 
   <a
-    id="js-admin-link"
+    data-nav="admin-link"
     href="/login"
-    class="block w-full text-center text-xs text-muted! no-underline mt-2 hover:text-text! transition-colors">login</a
+    class="block w-full text-center text-xs text-muted! no-underline mt-2 hover:text-text! transition-colors"
   >
+    login
+  </a>
 
   <SpotifyPlayer />
 </nav>
@@ -77,9 +84,9 @@ const navData = await getNavData();
 <script src="./ProjectTree.ts"></script>
 
 <style>
-  :global(#nav-panel) #site-nav {
-    display: flex;
-    flex-direction: column;
-    padding: 0.75rem;
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+
+  :global(.layout-nav-panel) .nav-root {
+    @apply flex flex-col p-3;
   }
 </style>

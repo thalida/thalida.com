@@ -3,4 +3,9 @@ node_modules/
 .generated/
 .astro/
 .wrangler/
+.mypy_cache/
+.venv/
 package-lock.json
+styleguide.html
+docs/plans/
+*.md

@@ -3,38 +3,39 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 ---
 
 <aside
-  id="js-chat-panel"
+  data-chat="panel"
   class="hidden lg:flex lg:flex-col lg:border-l lg:border-border font-body overflow-y-auto overflow-x-hidden lg:shrink-0 lg:grow-0 lg:w-80 lg:min-w-80"
   transition:persist="chat"
 >
   <div class="flex items-center gap-1.5 h-12 px-3 bg-midnight border-b border-border shrink-0">
     <h2 class="m-0 font-heading text-base font-semibold text-text tracking-tight flex-1">Chat</h2>
     <span class="flex items-center gap-1.5 text-xs text-muted">
-      <span class="flex items-center gap-1" id="js-chat-owner-wrap" title="Site owner: offline">
+      <span class="flex items-center gap-1" data-chat="owner-wrap" title="Site owner: offline">
         <span
-          id="js-chat-status-dot"
-          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
-        <span id="js-chat-owner-status" class="text-admin">offline</span>
+          data-chat="owner-status-dot"
+          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"
+        >
+        </span>
+        <span data-chat="owner-status" class="text-admin">offline</span>
       </span>
-      <span class="opacity-30">·</span>
-      <span id="js-chat-user-count" title="0 online"
-        ><i class="fa-solid fa-users"></i> <span data-chat="viewer-count">0</span></span
-      >
+      <span class="text-dim">·</span>
+      <span data-chat="user-count" title="0 online">
+        <i class="fa-solid fa-users"></i>
+        <span data-chat="viewer-count">0</span>
+      </span>
     </span>
-    <button id="chat-overlay-close" class="hidden" type="button" aria-label="Close chat">
+    <button data-chat="overlay-close" class="layout-chat-overlay-close hidden" type="button" aria-label="Close chat">
       <i class="fa-solid fa-xmark" aria-hidden="true"></i>
     </button>
   </div>
 
   <div class="flex flex-col gap-2 flex-1 min-h-0 px-2.5 py-3">
-    <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
-    <div id="js-chat-username-row" class="flex items-center gap-1.5">
-      <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">
-        chatting as
-      </label>
+    <div data-chat="messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
+    <label data-chat="username-row" class="flex items-center gap-1.5">
+      <span class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">chatting as</span>
       <input
-        id="chat-username"
-        class="flex-1 py-0.5 px-1 text-xs font-body bg-transparent text-text min-w-0 focus:outline-none"
+        data-chat="username-input"
+        class="chat-username-input flex-1 py-0.5 px-1 text-xs font-body bg-transparent text-text min-w-0 focus:outline-none"
         type="text"
         autocomplete="off"
         minlength="2"
@@ -42,36 +43,40 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         pattern="[a-z0-9_.-]+"
         title="2-20 characters: lowercase letters, numbers, hyphens, underscores, dots. No spaces."
       />
-    </div>
+    </label>
     <div class="flex items-center gap-1">
       <input
-        id="js-chat-input"
+        data-chat="input"
         class="flex-1 py-2 px-3 border border-border rounded-md text-sm font-body bg-midnight text-text min-w-0 focus:outline-none focus:border-teal"
         type="text"
         placeholder="Type a message..."
         autocomplete="off"
       />
       <button
-        id="js-chat-send"
+        data-chat="send"
         class="p-2 border-none bg-transparent text-muted text-sm hover:text-neon transition-colors"
-        type="button"><i class="fa-solid fa-paper-plane"></i></button
+        type="button"
       >
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 </aside>
 
-<template id="chat-msg-tpl">
+<template data-chat="msg-tpl">
   <div class="group mb-2" data-msg-id="">
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
       <span
         data-chat="status-dot"
-        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
-      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0"
-      ></span>
-      <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
+        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"
+      >
+      </span>
+      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0">
+      </span>
+      <span data-chat="at-sep" hidden class="text-dim shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
       <span class="flex-1"></span>
-      <span data-chat="time" class="opacity-40 whitespace-nowrap"></span>
+      <span data-chat="time" class="text-dim whitespace-nowrap"></span>
       <button
         data-chat="flag-btn"
         hidden
@@ -95,11 +100,11 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
   </div>
 </template>
 
-<template id="chat-notice-tpl">
+<template data-chat="notice-tpl">
   <div class="mb-2">
     <div class="flex items-baseline gap-1.5 text-xs leading-tight">
       <span class="font-semibold text-muted">system</span>
-      <span class="ml-auto opacity-40" data-chat="notice-time"></span>
+      <span class="ml-auto text-dim" data-chat="notice-time"></span>
     </div>
     <div data-chat="notice-text" class="mt-0.5 text-muted whitespace-pre-line"></div>
     <div data-chat="notice-actions" hidden class="mt-0.5 flex items-baseline gap-1.5 text-muted"></div>
@@ -111,23 +116,23 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 <script src="./chat-client.ts"></script>
 
 <style>
-  #chat-username {
+  .chat-username-input {
     border: none;
     border-bottom: 1px dashed var(--color-border);
     border-radius: 0;
     box-shadow: none;
   }
-  #chat-username:focus {
+  .chat-username-input:focus {
     border-bottom-color: var(--color-teal);
   }
-  #chat-username:read-only {
+  .chat-username-input:read-only {
     border-bottom: none;
     cursor: default;
   }
-  [data-chat="delete-btn"][data-confirm] {
-    color: var(--color-red-400, #f87171);
+  .chat-delete-confirm {
+    color: #f87171;
   }
-  [data-chat="flag-btn"][data-confirm] {
-    color: var(--color-yellow-400, #facc15);
+  .chat-flag-confirm {
+    color: #facc15;
   }
 </style>

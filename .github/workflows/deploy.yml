@@ -11,6 +11,38 @@ on:
 # This workflow handles media sync → frontend build → deploy in order.
 
 jobs:
+  # ── CI checks ──────────────────────────────────────────────────────
+  ci:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    name: Lint, typecheck & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: extractions/setup-just@v2
+
+      - name: Install dependencies
+        run: just install
+
+      - name: Format check
+        run: just format --check
+
+      - name: Lint
+        run: just lint
+
+      - name: Typecheck API
+        run: just api::typecheck
+
+      - name: Typecheck App
+        run: just app::typecheck
+
+      - name: Test
+        run: just test
+
   # ── Sync media to R2 ─────────────────────────────────────────────
   sync-media:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')

@@ -7,6 +7,7 @@ export default {
   singleQuote: false,
   trailingComma: "all",
   bracketSpacing: true,
+  htmlWhitespaceSensitivity: "ignore",
   plugins: ["prettier-plugin-astro"],
   overrides: [
     {

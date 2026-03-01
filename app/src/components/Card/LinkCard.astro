@@ -24,17 +24,13 @@ const displayUrl = (() => {
 <a href={href} class="item-card flex flex-col gap-1 p-3" target="_blank" rel="noopener">
   <div class="flex items-center gap-2">
     <CardCategory category={item.category} />
-    {
-      isValidDate(item.publishedOn) && (
-        <span class="text-muted/40 text-2xs ml-auto">{formatDate(item.publishedOn)}</span>
-      )
-    }
+    {isValidDate(item.publishedOn) && <span class="text-dim text-2xs ml-auto">{formatDate(item.publishedOn)}</span>}
   </div>
-  <h3 class="m-0 font-heading font-bold text-text leading-snug flex items-center gap-2 text-base">
+  <h3 class="m-0 font-heading font-bold text-text leading-snug flex gap-2 text-base">
     {
       item.faviconUrl ? (
         <img
-          class="shrink-0 inline-block rounded-sm align-middle"
+          class="shrink-0 inline-block rounded-sm mt-0.75 w-4 h-4 object-contain"
           src={item.faviconUrl}
           alt=""
           width="16"
@@ -42,22 +38,25 @@ const displayUrl = (() => {
           loading="lazy"
         />
       ) : (
-        <span class="shrink-0 font-display font-bold uppercase text-xs w-4 text-center gradient-text">
+        <span class="shrink-0 font-display font-bold uppercase text-xs w-4 text-center gradient-text mt-0.75">
           {item.title.charAt(0)}
         </span>
       )
     }
-    {item.title}
+    <span class="line-clamp-2">{item.title}</span>
   </h3>
   {
     (item.description || item.metaDescription) && (
-      <p class="m-0 font-body text-muted leading-relaxed text-xs">{item.description || item.metaDescription}</p>
+      <p class="m-0 font-body text-muted leading-relaxed text-xs line-clamp-2">
+        {item.description || item.metaDescription}
+      </p>
     )
   }
-  <CardTags tags={item.tags} />
-  <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case">
-    {displayUrl}
-    <i class="fa-solid fa-arrow-up-right-from-square text-muted opacity-60" style="font-size:10px" aria-hidden="true"
-    ></i>
-  </p>
+  <div class="mt-auto pt-2">
+    <CardTags tags={item.tags} />
+    <p class="m-0 text-muted flex items-center gap-1 text-2xs normal-case mt-1">
+      {displayUrl}
+      <i class="fa-solid fa-arrow-up-right-from-square text-muted opacity-60 text-[10px]" aria-hidden="true"></i>
+    </p>
+  </div>
 </a>

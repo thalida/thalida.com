@@ -42,17 +42,14 @@ async function loadPagefind() {
 }
 
 function initCommandPalette() {
-  const overlay = document.getElementById("command-palette") as HTMLElement;
-  const input = document.getElementById("js-cp-input") as HTMLInputElement;
-  const resultsContainer = document.getElementById("cp-results") as HTMLElement;
-  const collectionSelect = document.getElementById("js-cp-collection-select") as HTMLSelectElement;
+  const overlay = document.querySelector('[data-cp="overlay"]') as HTMLElement;
+  const input = document.querySelector('[data-cp="input"]') as HTMLInputElement;
+  const resultsContainer = document.querySelector('[data-cp="results"]') as HTMLElement;
+  const collectionSelect = document.querySelector('[data-cp="collection-select"]') as HTMLSelectElement;
 
   if (!overlay || !input || !resultsContainer || !collectionSelect) return;
 
-  const backdrop = document.getElementById("js-cp-backdrop");
-  const dialog = document.getElementById("js-cp-dialog");
-
-  if (!backdrop || !dialog) return;
+  const backdrop = document.querySelector<HTMLElement>('[data-cp="backdrop"]');
 
   const data = window.__cpData;
   const itemLookup = new Map<string, SearchItem>();
@@ -62,7 +59,7 @@ function initCommandPalette() {
   let selectedIndex = -1;
 
   function getActiveCollectionFromPage() {
-    const nav = document.getElementById("site-nav");
+    const nav = document.querySelector<HTMLElement>('[data-nav="root"]');
     const col = nav?.dataset?.activeCollection;
     return col && col.length > 0 ? col : null;
   }
@@ -168,9 +165,9 @@ function initCommandPalette() {
     return merged.slice(0, MAX_PALETTE_RESULTS);
   }
 
-  const cpRowTpl = document.getElementById("cp-row-tpl") as HTMLTemplateElement;
-  const cpRowExternalTpl = document.getElementById("cp-row-external-tpl") as HTMLTemplateElement;
-  const cpEmptyTpl = document.getElementById("cp-empty-tpl") as HTMLTemplateElement;
+  const cpRowTpl = document.querySelector('[data-cp="row-tpl"]') as HTMLTemplateElement;
+  const cpRowExternalTpl = document.querySelector('[data-cp="row-external-tpl"]') as HTMLTemplateElement;
+  const cpEmptyTpl = document.querySelector('[data-cp="empty-tpl"]') as HTMLTemplateElement;
 
   function formatCategory(raw: string): string {
     return raw
@@ -297,7 +294,7 @@ function initCommandPalette() {
   });
 
   // Close on backdrop click
-  backdrop.addEventListener("click", close);
+  backdrop?.addEventListener("click", close);
 
   // Global keyboard shortcut (Cmd+K / Ctrl+K)
   document.addEventListener("keydown", (e) => {
@@ -312,7 +309,7 @@ function initCommandPalette() {
   });
 
   // Sidebar search button click (multiple instances due to responsive layout)
-  document.querySelectorAll("#js-nav-search-btn").forEach((btn) => {
+  document.querySelectorAll('[data-nav="search-btn"]').forEach((btn) => {
     btn.addEventListener("click", () => {
       if (!isOpen()) {
         open();
@@ -321,7 +318,7 @@ function initCommandPalette() {
   });
 
   // Toolbar search button click
-  const tabletSearchBtn = document.getElementById("toolbar-search-btn");
+  const tabletSearchBtn = document.querySelector<HTMLElement>('[data-layout="search-btn"]');
   if (tabletSearchBtn) {
     tabletSearchBtn.addEventListener("click", () => {
       if (!isOpen()) {

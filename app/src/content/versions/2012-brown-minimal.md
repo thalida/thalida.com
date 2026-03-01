@@ -1,5 +1,5 @@
 ---
-title: "2012: Brown & Mini­mal"
+title: "2012: Brown & Minimal"
 description: Oh so very very sepia
 publishedOn: 2012-01-01
 category: "2012"

@@ -5,7 +5,7 @@ repos:
         name: prettier
         entry: npx prettier --write --ignore-unknown
         language: system
-        files: \.(js|jsx|ts|tsx|mjs|css|json|yaml|yml|astro)$
+        files: \.(js|jsx|ts|tsx|mjs|css|json|yaml|yml|astro|html)$
 
       - id: eslint-api
         name: eslint (api)
@@ -24,6 +24,7 @@ repos:
     hooks:
       - id: markdownlint
         args: ["-f"]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
@@ -32,3 +33,28 @@ repos:
         args: [--markdown-linebreak-ext=md]
       - id: check-merge-conflict
       - id: mixed-line-ending
+
+  - repo: local
+    hooks:
+      - id: typecheck-api
+        name: typecheck (api)
+        entry: just api::typecheck
+        language: system
+        pass_filenames: false
+        files: ^api/.*\.(ts|mjs)$
+        stages: [pre-push]
+
+      - id: typecheck-app
+        name: typecheck (app)
+        entry: just app::typecheck
+        language: system
+        pass_filenames: false
+        files: ^app/.*\.(ts|mjs|astro)$
+        stages: [pre-push]
+
+      - id: test
+        name: test
+        entry: just test
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

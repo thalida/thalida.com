@@ -19,7 +19,8 @@ setup: install
         brew install pre-commit
     fi
     pre-commit install
-    echo "pre-commit hooks installed"
+    pre-commit install --hook-type pre-push
+    echo "pre-commit and pre-push hooks installed"
     if [ ! -f api/.dev.vars ]; then
         cp api/.dev.vars.example api/.dev.vars
         echo "Created api/.dev.vars from template — edit it to add your secrets"

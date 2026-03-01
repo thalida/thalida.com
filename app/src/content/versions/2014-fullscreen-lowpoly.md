@@ -1,5 +1,5 @@
 ---
-title: "2014: Full­screen Low­poly"
+title: "2014: Fullscreen Lowpoly"
 description: A fullscreen lowpoly live space scene
 publishedOn: 2014-01-01
 category: "2014"
