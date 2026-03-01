@@ -340,6 +340,7 @@ export class ChatRoom implements DurableObject {
     info.username = name;
     this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false, username: name, isBlocked: info.isBlocked });
+    this.broadcastStatus();
   }
 
   private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
@@ -635,10 +636,17 @@ export class ChatRoom implements DurableObject {
   private buildStatusMessage(): ServerMessage {
     let isOwnerOnline = false;
     const uniqueClients = new Set<string>();
+    const uniqueUsernames = new Set<string>();
     for (const info of this.connections.values()) {
       if (info.isOwner) isOwnerOnline = true;
       uniqueClients.add(info.clientId);
+      uniqueUsernames.add(info.username);
     }
-    return { type: SERVER_MESSAGE_TYPE.STATUS, isOwnerOnline, userCount: uniqueClients.size };
+    return {
+      type: SERVER_MESSAGE_TYPE.STATUS,
+      isOwnerOnline,
+      userCount: uniqueClients.size,
+      onlineUsernames: [...uniqueUsernames],
+    };
   }
 }

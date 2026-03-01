@@ -46,7 +46,7 @@ type ServerMessage =
       context?: MessageContext;
     }
   | { type: "joined"; isOwner: boolean; username: string; isBlocked: boolean }
-  | { type: "status"; isOwnerOnline: boolean; userCount: number }
+  | { type: "status"; isOwnerOnline: boolean; userCount: number; onlineUsernames: string[] }
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
   | { type: "warning"; code: string; message: string }
@@ -230,7 +230,7 @@ function connect(): void {
         context: data.context,
       });
     } else if (data.type === SERVER_MESSAGE_TYPE.STATUS) {
-      updateStatus(data.isOwnerOnline, data.userCount);
+      updateStatus(data.isOwnerOnline, data.userCount, data.onlineUsernames);
     } else if (data.type === SERVER_MESSAGE_TYPE.ERROR) {
       const usernameErrors = new Set(["invalid_username", "reserved_username", "taken_username"]);
 
@@ -363,14 +363,26 @@ usernameInput.addEventListener("blur", () => {
   changeUsername();
 });
 
-function updateStatus(isOwnerOnline: boolean, userCount: number): void {
+function updateStatus(isOwnerOnline: boolean, userCount: number, onlineUsernames: string[]): void {
   const ownerLabel = adminUsername ?? "owner";
-  statusDotEl.dataset.online = String(isOwnerOnline);
+  if (isOwnerOnline) statusDotEl.dataset.online = "";
+  else delete statusDotEl.dataset.online;
   ownerStatusEl.textContent = ownerLabel;
-  ownerStatusEl.dataset.online = String(isOwnerOnline);
   ownerWrapEl.title = `Site owner: ${isOwnerOnline ? "online" : "offline"}`;
   (userCountEl.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = String(userCount);
   userCountEl.title = `${userCount} online`;
+
+  const onlineSet = new Set(onlineUsernames);
+  for (const row of messagesEl.querySelectorAll<HTMLElement>("[data-msg-id]")) {
+    const dot = row.querySelector<HTMLElement>('[data-chat="status-dot"]');
+    const usernameEl = row.querySelector<HTMLElement>('[data-chat="username"]');
+    if (!dot || !usernameEl) continue;
+    if (onlineSet.has(usernameEl.textContent ?? "")) {
+      dot.dataset.online = "";
+    } else {
+      delete dot.dataset.online;
+    }
+  }
 }
 
 function setBlocked(blocked: boolean): void {

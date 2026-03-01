@@ -129,6 +129,7 @@ export interface ServerBroadcastStatusMessage {
   type: "status";
   isOwnerOnline: boolean;
   userCount: number;
+  onlineUsernames: string[];
 }
 
 export interface ServerBroadcastHistoryMessage {

@@ -13,7 +13,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
       <span class="flex items-center gap-1" id="js-chat-owner-wrap" title="Site owner: offline">
         <span
           id="js-chat-status-dot"
-          class="inline-block shrink-0 w-1.5 h-1.5 rounded-full bg-muted data-[online=true]:bg-neon"></span>
+          class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
         <span id="js-chat-owner-status" class="text-admin">offline</span>
       </span>
       <span class="opacity-30">·</span>
@@ -26,7 +26,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
     </button>
   </div>
 
-  <div class="flex flex-col gap-2 flex-1 min-h-0 p-4">
+  <div class="flex flex-col gap-2 flex-1 min-h-0 px-2.5 py-3">
     <div id="js-chat-messages" class="flex-1 text-sm text-text overflow-y-auto min-h-0"></div>
     <div id="js-chat-username-row" class="flex items-center gap-1.5">
       <label for="chat-username" class="whitespace-nowrap uppercase tracking-widest font-body text-2xs text-muted">
@@ -62,8 +62,11 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
 
 <template id="chat-msg-tpl">
   <div class="group mb-2" data-msg-id="">
-    <div class="flex items-baseline gap-1 text-xs leading-tight">
-      <span data-chat="username" class="font-semibold text-neon data-admin:text-admin data-own:text-accent shrink-0"
+    <div class="flex items-baseline gap-1.5 text-xs leading-tight">
+      <span
+        data-chat="status-dot"
+        class="inline-block self-center shrink-0 w-1.5 h-1.5 rounded-full bg-muted/50 data-online:bg-neon/70"></span>
+      <span data-chat="username" class="font-semibold text-teal data-admin:text-admin data-own:text-accent shrink-0"
       ></span>
       <span data-chat="at-sep" hidden class="opacity-40 shrink-0">@</span>
       <a data-chat="page" hidden class="text-muted hover:text-teal truncate min-w-0" href=""></a>
@@ -88,7 +91,7 @@ const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
         <i class="fa-solid fa-trash-can fa-xs" aria-hidden="true"></i>
       </button>
     </div>
-    <div data-chat="text" class="text-sm whitespace-pre-line hyphens-auto wrap-break-word"></div>
+    <div data-chat="text" class="mt-0.5 text-sm whitespace-pre-line hyphens-auto wrap-break-word"></div>
   </div>
 </template>
 
