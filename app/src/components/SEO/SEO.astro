@@ -1,0 +1,72 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  url?: string;
+  publishedOn?: Date;
+  updatedOn?: Date;
+  tags?: string[];
+  noindex?: boolean;
+}
+
+const SITE_NAME = "thalida.com";
+const DEFAULT_DESCRIPTION =
+  "Thalida Noel's corner of the internet since 2007 — projects, guides, experiments, and the occasional recipe from a creative technologist in New York.";
+const TWITTER_HANDLE = "@thalida";
+
+const {
+  title = "thalida",
+  description = DEFAULT_DESCRIPTION,
+  image,
+  type = "website",
+  publishedOn,
+  updatedOn,
+  tags,
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://thalida.com";
+const canonicalUrl = Astro.props.url ?? new URL(Astro.url.pathname, siteUrl).toString();
+const ogImage = image ?? `${siteUrl}/card-512x512.png`;
+---
+
+{/* Basic meta */}
+<meta name="description" content={description} />
+<meta name="author" content="Thalida Noel" />
+<meta name="theme-color" content="#1be48c" />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+{/* Canonical */}
+<link rel="canonical" href={canonicalUrl} />
+
+{/* OpenGraph */}
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImage} />
+
+{/* Article-specific OG */}
+{type === "article" && publishedOn && <meta property="article:published_time" content={publishedOn.toISOString()} />}
+{type === "article" && updatedOn && <meta property="article:modified_time" content={updatedOn.toISOString()} />}
+{type === "article" && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
+
+{/* Twitter Card */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={TWITTER_HANDLE} />
+<meta name="twitter:creator" content={TWITTER_HANDLE} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{/* Favicons */}
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
+{/* Sitemap */}
+<link rel="sitemap" href="/sitemap-index.xml" />
