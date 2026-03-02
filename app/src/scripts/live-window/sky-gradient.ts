@@ -217,7 +217,7 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
   const coreEnd = goldenPmStart;
   const coreDuration = coreEnd - coreStart;
 
-  return [
+  const raw = [
     midnight.getTime(), //  0: night
     sunrise - MIN90, //  1: astronomicalDawn
     sunrise - MIN60, //  2: nauticalDawn
@@ -235,6 +235,17 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
     sunset + MIN60, // 14: nauticalDusk
     sunset + MIN90, // 15: astronomicalDusk
   ];
+
+  // Ensure strictly ascending order for extreme latitudes where phases
+  // may overlap (very short days near poles, or very long days with
+  // twilight extending past midnight).
+  for (let i = 1; i < raw.length; i++) {
+    if (raw[i] <= raw[i - 1]) {
+      raw[i] = raw[i - 1] + 1;
+    }
+  }
+
+  return raw;
 }
 
 function blendChannel(a: number, b: number, t: number): number {

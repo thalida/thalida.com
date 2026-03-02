@@ -96,6 +96,34 @@ describe("calculatePhaseTimestamps", () => {
     const timestamps = calculatePhaseTimestamps(sunrise, sunset);
     expect(timestamps[8]).toBe((sunrise + sunset) / 2);
   });
+
+  it("stays strictly ascending with very short days (polar winter)", () => {
+    // 1 hour of daylight: sunrise 11:30 AM, sunset 12:30 PM
+    const d = new Date();
+    d.setHours(11, 30, 0, 0);
+    const shortSunrise = d.getTime();
+    d.setHours(12, 30, 0, 0);
+    const shortSunset = d.getTime();
+    const timestamps = calculatePhaseTimestamps(shortSunrise, shortSunset);
+    expect(timestamps).toHaveLength(16);
+    for (let i = 1; i < timestamps.length; i++) {
+      expect(timestamps[i]).toBeGreaterThan(timestamps[i - 1]);
+    }
+  });
+
+  it("stays strictly ascending with very long days (polar summer)", () => {
+    // 22 hours of daylight: sunrise 1:00 AM, sunset 11:00 PM
+    const d = new Date();
+    d.setHours(1, 0, 0, 0);
+    const longSunrise = d.getTime();
+    d.setHours(23, 0, 0, 0);
+    const longSunset = d.getTime();
+    const timestamps = calculatePhaseTimestamps(longSunrise, longSunset);
+    expect(timestamps).toHaveLength(16);
+    for (let i = 1; i < timestamps.length; i++) {
+      expect(timestamps[i]).toBeGreaterThan(timestamps[i - 1]);
+    }
+  });
 });
 
 describe("blendGradient", () => {
