@@ -207,14 +207,17 @@ class LiveWindowElement extends HTMLElement {
     const ipKey = this.getAttribute("ipregistry-key");
     if (!owKey || !ipKey) return;
 
-    const units = this.state.attrs.resolvedUnits;
-    if (!shouldFetchWeather(this.state.store, units)) {
+    if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
       this.updateAll();
       return;
     }
 
     this.state.store = await fetchLocation(ipKey, this.state.store);
     saveState(this.state);
+
+    // Re-resolve units after location fetch — country may have changed
+    this.refreshAttrs();
+    const units = this.state.attrs.resolvedUnits;
 
     const result = await fetchWeather(owKey, this.state.store, units);
     this.state.store = result.state;
