@@ -54,6 +54,10 @@ typecheck:
 
 # ─── Build ────────────────────────────────────────────────────────────
 
+[doc("Convert card SVGs to PNGs")]
+convert-cards:
+    npm run convert-cards
+
 [doc("Build the frontend")]
 build:
     npm run build
