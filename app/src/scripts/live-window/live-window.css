@@ -99,6 +99,33 @@
   height: 100%;
 }
 
+/* ---- Stars ---- */
+
+.stars {
+  z-index: 1;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--star-opacity, 1);
+  }
+  50% {
+    opacity: calc(var(--star-opacity, 1) * 0.3);
+  }
+}
+
 /* ---- Weather effects ---- */
 
 .weather {
