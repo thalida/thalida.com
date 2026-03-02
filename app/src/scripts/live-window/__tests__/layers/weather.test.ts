@@ -1,18 +1,28 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { WeatherLayer, ICON_WEATHER_MAP } from "../../layers/weather";
-import type { PhaseInfo } from "../../types";
+import { WeatherLayer, ICON_WEATHER_MAP } from "../../components/sky/WeatherLayer";
+import type { LiveWindowState } from "../../types";
+import { DEFAULT_STATE } from "../../state";
+import { buildPhaseInfo } from "../../utils/phase";
 
-function makePhaseInfo(icon: string | null): PhaseInfo {
+function makeState(icon: string | null): LiveWindowState {
+  const store = {
+    ...DEFAULT_STATE,
+    weather: {
+      ...DEFAULT_STATE.weather,
+      current: icon ? { main: "Test", description: "test", icon, temp: 20 } : null,
+    },
+  };
   return {
-    now: Date.now(),
-    sunrise: null,
-    sunset: null,
-    phaseIndex: 8,
-    nextPhaseIndex: 9,
-    t: 0.5,
-    isDaytime: true,
-    sun: { altitude: 45, azimuth: 180, progress: 0.5 },
-    weather: { icon, main: null, description: null, temp: null },
+    store,
+    computed: { phase: buildPhaseInfo(store, Date.now()) },
+    ref: {},
+    attrs: {
+      use12Hour: false,
+      hideClock: false,
+      hideWeatherText: false,
+      bgColor: { r: 0, g: 0, b: 0 },
+      resolvedUnits: "metric",
+    },
   };
 }
 
@@ -53,41 +63,41 @@ describe("WeatherLayer", () => {
   });
 
   it("renders nothing when icon is null", () => {
-    layer.update(makePhaseInfo(null));
+    layer.update(makeState(null));
     expect(container.innerHTML).toBe("");
   });
 
   it("renders clouds for partly cloudy (02d)", () => {
-    layer.update(makePhaseInfo("02d"));
+    layer.update(makeState("02d"));
     expect(container.querySelector(".cloud-sm")).toBeTruthy();
   });
 
   it("renders droplets for rain (10d)", () => {
-    layer.update(makePhaseInfo("10d"));
+    layer.update(makeState("10d"));
     expect(container.querySelector(".droplets")).toBeTruthy();
     expect(container.querySelector(".cloud-lg")).toBeTruthy();
   });
 
   it("renders lightning for thunderstorm (11d)", () => {
-    layer.update(makePhaseInfo("11d"));
+    layer.update(makeState("11d"));
     expect(container.querySelector(".lightning")).toBeTruthy();
   });
 
   it("renders mist layers for mist (50d)", () => {
-    layer.update(makePhaseInfo("50d"));
+    layer.update(makeState("50d"));
     expect(container.querySelector(".mist-lg")).toBeTruthy();
     expect(container.querySelector(".mist-md")).toBeTruthy();
     expect(container.querySelector(".mist-sm")).toBeTruthy();
   });
 
   it("renders snow mounds for snow (13d)", () => {
-    layer.update(makePhaseInfo("13d"));
+    layer.update(makeState("13d"));
     expect(container.querySelector(".snow-sill")).toBeTruthy();
     expect(container.querySelector(".droplets")).toBeTruthy();
   });
 
   it("cleans up on destroy", () => {
-    layer.update(makePhaseInfo("10d"));
+    layer.update(makeState("10d"));
     layer.destroy();
     expect(container.innerHTML).toBe("");
   });
