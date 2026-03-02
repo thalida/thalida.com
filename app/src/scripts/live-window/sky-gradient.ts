@@ -236,3 +236,25 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
     sunset + MIN90, // 15: astronomicalDusk
   ];
 }
+
+function blendChannel(a: number, b: number, t: number): number {
+  return Math.round(a + (b - a) * t);
+}
+
+function blendColor(a: RGB, b: RGB, t: number): RGB {
+  return {
+    r: blendChannel(a.r, b.r, t),
+    g: blendChannel(a.g, b.g, t),
+    b: blendChannel(a.b, b.b, t),
+  };
+}
+
+export function blendGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGradient {
+  const clamped = Math.max(0, Math.min(1, t));
+  return {
+    zenith: blendColor(a.zenith, b.zenith, clamped),
+    upper: blendColor(a.upper, b.upper, clamped),
+    lower: blendColor(a.lower, b.lower, clamped),
+    horizon: blendColor(a.horizon, b.horizon, clamped),
+  };
+}

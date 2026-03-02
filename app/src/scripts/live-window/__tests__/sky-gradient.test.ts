@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { SKY_PHASES, calculatePhaseTimestamps, getDefaultSunTimes } from "../sky-gradient";
+import { SKY_PHASES, calculatePhaseTimestamps, getDefaultSunTimes, blendGradient } from "../sky-gradient";
+import type { SkyGradient } from "../sky-gradient";
 
 describe("SKY_PHASES", () => {
   it("has exactly 16 phases", () => {
@@ -88,5 +89,50 @@ describe("calculatePhaseTimestamps", () => {
   it("solar noon (midday, index 8) is midpoint of sunrise and sunset", () => {
     const timestamps = calculatePhaseTimestamps(sunrise, sunset);
     expect(timestamps[8]).toBe((sunrise + sunset) / 2);
+  });
+});
+
+describe("blendGradient", () => {
+  const a: SkyGradient = {
+    zenith: { r: 0, g: 0, b: 0 },
+    upper: { r: 0, g: 0, b: 0 },
+    lower: { r: 0, g: 0, b: 0 },
+    horizon: { r: 0, g: 0, b: 0 },
+  };
+  const b: SkyGradient = {
+    zenith: { r: 100, g: 200, b: 50 },
+    upper: { r: 200, g: 100, b: 150 },
+    lower: { r: 50, g: 50, b: 250 },
+    horizon: { r: 255, g: 255, b: 255 },
+  };
+
+  it("returns first gradient at t=0", () => {
+    const result = blendGradient(a, b, 0);
+    expect(result.zenith).toEqual({ r: 0, g: 0, b: 0 });
+    expect(result.horizon).toEqual({ r: 0, g: 0, b: 0 });
+  });
+
+  it("returns second gradient at t=1", () => {
+    const result = blendGradient(a, b, 1);
+    expect(result.zenith).toEqual({ r: 100, g: 200, b: 50 });
+    expect(result.horizon).toEqual({ r: 255, g: 255, b: 255 });
+  });
+
+  it("returns midpoint at t=0.5", () => {
+    const result = blendGradient(a, b, 0.5);
+    expect(result.zenith).toEqual({ r: 50, g: 100, b: 25 });
+    expect(result.upper).toEqual({ r: 100, g: 50, b: 75 });
+    expect(result.lower).toEqual({ r: 25, g: 25, b: 125 });
+    expect(result.horizon).toEqual({ r: 128, g: 128, b: 128 });
+  });
+
+  it("clamps t below 0 to 0", () => {
+    const result = blendGradient(a, b, -0.5);
+    expect(result.zenith).toEqual({ r: 0, g: 0, b: 0 });
+  });
+
+  it("clamps t above 1 to 1", () => {
+    const result = blendGradient(a, b, 1.5);
+    expect(result.zenith).toEqual({ r: 100, g: 200, b: 50 });
   });
 });
