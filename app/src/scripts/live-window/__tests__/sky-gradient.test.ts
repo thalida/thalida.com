@@ -5,7 +5,7 @@ import {
   getDefaultSunTimes,
   blendGradient,
   getCurrentSkyGradient,
-} from "../layers/gradient";
+} from "../utils/sky-gradient";
 import type { SkyGradient } from "../types";
 
 describe("SKY_PHASES", () => {

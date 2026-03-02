@@ -1,12 +1,12 @@
 import type { SkyLayer, StoreState, RGB } from "./types";
 import { loadState, saveState } from "./state";
 import { resolveUnits, tempSymbol, shouldFetchWeather, fetchLocation, fetchWeather } from "./api";
-import { parseHexColor, parseComputedColor, getReadableColor } from "./color";
+import { parseHexColor, parseComputedColor, getReadableColor } from "./utils/color";
 import { renderClock } from "./clock";
 import type { ClockElements } from "./clock";
 import { createBlindsState, renderBlinds, updateStrings, runBlindsAnimation, NUM_BLINDS } from "./blinds";
 import type { BlindsState } from "./blinds";
-import { buildPhaseInfo } from "./phase-info";
+import { buildPhaseInfo } from "./utils/phase";
 import { GradientLayer } from "./layers/gradient";
 import { WeatherLayer } from "./layers/weather";
 

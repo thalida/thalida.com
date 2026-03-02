@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildPhaseInfo, calculateSunPosition } from "../phase-info";
+import { buildPhaseInfo, calculateSunPosition } from "../utils/phase";
 import { DEFAULT_STATE } from "../state";
 import type { StoreState } from "../types";
 

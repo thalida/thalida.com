@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { relativeLuminance, contrastRatio, getReadableColor, parseHexColor, parseComputedColor } from "../color";
+import { relativeLuminance, contrastRatio, getReadableColor, parseHexColor, parseComputedColor } from "../utils/color";
 
 describe("parseHexColor", () => {
   it("parses 6-digit hex with #", () => {

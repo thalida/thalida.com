@@ -1,4 +1,4 @@
-import type { RGB } from "./types";
+import type { RGB } from "../types";
 
 /**
  * Parse a 6-digit hex color string (with or without leading #) into RGB.

@@ -1,5 +1,5 @@
-import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "./types";
-import { SKY_PHASES, getDefaultSunTimes, calculatePhaseTimestamps } from "./layers/gradient";
+import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "../types";
+import { SKY_PHASES, getDefaultSunTimes, calculatePhaseTimestamps } from "./sky-gradient";
 
 export function calculateSunPosition(now: number, sunrise: number, sunset: number): SunPosition {
   const isDaytime = now >= sunrise && now <= sunset;
