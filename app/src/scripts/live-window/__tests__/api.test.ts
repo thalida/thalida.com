@@ -1,7 +1,47 @@
 import { describe, it, expect } from "vitest";
-import { shouldFetchLocation, shouldFetchWeather, IP_RATE_LIMIT, WEATHER_RATE_LIMIT } from "../api";
+import { resolveUnits, shouldFetchLocation, shouldFetchWeather, IP_RATE_LIMIT, WEATHER_RATE_LIMIT } from "../api";
 import { DEFAULT_STATE } from "../state";
 import type { StoreState } from "../types";
+
+describe("resolveUnits", () => {
+  it("returns metric by default when no attr and no country", () => {
+    expect(resolveUnits(null, null)).toBe("metric");
+  });
+
+  it("returns imperial when attr is F", () => {
+    expect(resolveUnits("F", null)).toBe("imperial");
+  });
+
+  it("returns metric when attr is C", () => {
+    expect(resolveUnits("C", null)).toBe("metric");
+  });
+
+  it("returns imperial for US country with auto units", () => {
+    expect(resolveUnits(null, "US")).toBe("imperial");
+  });
+
+  it("returns metric for non-imperial country with auto units", () => {
+    expect(resolveUnits(null, "GB")).toBe("metric");
+  });
+
+  it("explicit attr overrides country", () => {
+    expect(resolveUnits("C", "US")).toBe("metric");
+    expect(resolveUnits("F", "GB")).toBe("imperial");
+  });
+
+  it("changes result when country becomes known (the fetchLocation scenario)", () => {
+    // Before location fetch: no country → metric
+    const beforeLocation = resolveUnits(null, null);
+    expect(beforeLocation).toBe("metric");
+
+    // After location fetch: country=US → imperial
+    const afterLocation = resolveUnits(null, "US");
+    expect(afterLocation).toBe("imperial");
+
+    // This difference means weather must be fetched AFTER location resolves
+    expect(beforeLocation).not.toBe(afterLocation);
+  });
+});
 
 describe("shouldFetchLocation", () => {
   it("returns true when never fetched", () => {
