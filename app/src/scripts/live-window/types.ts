@@ -40,12 +40,6 @@ export interface PhaseInfo {
   weather: WeatherInfo;
 }
 
-export interface SkyLayer {
-  mount(container: HTMLElement): void;
-  update(phase: PhaseInfo): void;
-  destroy(): void;
-}
-
 export interface WeatherCurrent {
   main: string;
   description: string;
@@ -67,4 +61,34 @@ export interface StoreState {
     sunrise: number | null;
     sunset: number | null;
   };
+}
+
+export interface LiveWindowState {
+  /** Persisted to localStorage — API cache data */
+  store: StoreState;
+  /** Recomputed each update cycle from store + current time */
+  computed: {
+    phase: PhaseInfo;
+  };
+  /** Written by components during update(), read by downstream components */
+  ref: {
+    currentGradient?: SkyGradient;
+  };
+  /** Derived from web component attributes each cycle */
+  attrs: {
+    use12Hour: boolean;
+    hideClock: boolean;
+    hideWeatherText: boolean;
+    bgColor: RGB;
+    resolvedUnits: string;
+  };
+}
+
+export interface SceneComponent {
+  /** Create DOM elements inside the provided container */
+  mount(container: HTMLElement): void;
+  /** Called by the orchestrator at the component's update cadence */
+  update(state: LiveWindowState): void;
+  /** Tear down DOM and release resources */
+  destroy(): void;
 }
