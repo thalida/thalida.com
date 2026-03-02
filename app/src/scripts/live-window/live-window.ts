@@ -1,8 +1,5 @@
-interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
+import { getCurrentSkyGradient } from "./sky-gradient";
+import type { RGB, SkyGradient } from "./sky-gradient";
 
 interface WeatherCurrent {
   main: string;
@@ -27,26 +24,10 @@ interface StoreState {
 type AnimatableProp = "numBlindsCollapsed" | "blindsOpenDeg" | "blindsSkewDeg" | "skewDirection";
 
 const NUM_BLINDS = 20;
-const HOURS_IN_DAY = 24;
-const MINUTES_IN_HOUR = 60;
 const IP_RATE_LIMIT = 30 * 60_000;
 const WEATHER_RATE_LIMIT = 30 * 60_000;
 const CACHE_VERSION = 2;
 const STORAGE_KEY = "liveWindowStore";
-const SUNRISE_COLOR_IDX = 2;
-const SUNSET_COLOR_IDX = 6;
-
-const TIME_COLORS: RGB[] = [
-  { r: 4, g: 10, b: 30 },
-  { r: 139, g: 152, b: 206 },
-  { r: 86, g: 216, b: 255 },
-  { r: 255, g: 216, b: 116 },
-  { r: 255, g: 183, b: 116 },
-  { r: 255, g: 153, b: 116 },
-  { r: 255, g: 103, b: 116 },
-  { r: 20, g: 40, b: 116 },
-];
-
 const ICON_WEATHER_MAP: Record<string, string[]> = {
   "02d": ["cloudSm"],
   "02n": ["cloudSm"],
@@ -91,7 +72,7 @@ class LiveWindowElement extends HTMLElement {
 
   private shadow: ShadowRoot;
   private state: StoreState;
-  private gradient: { start: RGB | null; end: RGB | null } = { start: null, end: null };
+  private gradient: SkyGradient | null = null;
   private isDataFetched = false;
 
   private clockInterval: number | null = null;
@@ -440,138 +421,27 @@ class LiveWindowElement extends HTMLElement {
     return result;
   }
 
-  private getColorBlend(start: RGB, end: RGB, distance: number): RGB {
-    return {
-      r: Math.round(start.r + (end.r - start.r) * distance),
-      g: Math.round(start.g + (end.g - start.g) * distance),
-      b: Math.round(start.b + (end.b - start.b) * distance),
-    };
-  }
-
   private isSameDate(a: Date, b: Date): boolean {
     return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
   }
 
-  private getRealisticColor(now: number): RGB {
-    const sunriseTime = this.state.weather.sunrise;
-    const sunsetTime = this.state.weather.sunset;
-    if (sunriseTime == null || sunsetTime == null) return TIME_COLORS[0];
-
-    let colorPhase: RGB[];
-    let phaseStartTime: number;
-    let phaseEndTime: number;
-
-    if (now < sunriseTime) {
-      const midnight = new Date(now);
-      midnight.setHours(0, 0, 0, 0);
-      colorPhase = TIME_COLORS.slice(0, SUNRISE_COLOR_IDX + 1);
-      phaseStartTime = midnight.getTime();
-      phaseEndTime = sunriseTime;
-    } else if (now >= sunsetTime) {
-      const eod = new Date(now);
-      eod.setHours(23, 59, 59, 999);
-      colorPhase = TIME_COLORS.slice(SUNSET_COLOR_IDX);
-      colorPhase.push(TIME_COLORS[0]);
-      phaseStartTime = sunsetTime;
-      phaseEndTime = eod.getTime();
-
-      if (!this.isSameDate(new Date(phaseStartTime), eod)) {
-        // Sunrise/sunset data is from a previous day and we're past midnight.
-        // Return deep night color until fresh weather data is fetched.
-        return TIME_COLORS[0];
-      }
-    } else {
-      colorPhase = TIME_COLORS.slice(SUNRISE_COLOR_IDX, SUNSET_COLOR_IDX + 1);
-      phaseStartTime = sunriseTime;
-      phaseEndTime = sunsetTime;
-    }
-
-    const timeSinceStart = now - phaseStartTime;
-    const timeInPhase = phaseEndTime - phaseStartTime;
-    const distance = timeSinceStart / timeInPhase;
-    const phaseSegments = timeInPhase / (colorPhase.length - 1);
-    const startIdx = Math.min(Math.floor((colorPhase.length - 1) * distance), colorPhase.length - 2);
-    const endIdx = startIdx + 1;
-    const startTime = phaseStartTime + startIdx * phaseSegments;
-    const endTime = phaseStartTime + endIdx * phaseSegments;
-    const segLen = endTime - startTime;
-    const segDist = segLen > 0 ? (now - startTime) / segLen : 0;
-
-    return this.getColorBlend(colorPhase[startIdx], colorPhase[endIdx], segDist);
-  }
-
-  private getRealisticColorGradient(): { start: RGB; end: RGB } {
-    const date = new Date();
-    const now = date.getTime();
-    const shiftBy = 1 * 60 * 60 * 1000;
-    let hourAgo = new Date(now - shiftBy);
-
-    if (!this.isSameDate(hourAgo, date)) {
-      hourAgo = new Date(now);
-      hourAgo.setHours(0, 0, 0, 0);
-    }
-
-    const gradientStart = this.getRealisticColor(hourAgo.getTime());
-    const gradientEnd = this.getRealisticColor(now);
-
-    if (this.state.weather.sunset != null && now >= this.state.weather.sunset) {
-      return { start: gradientEnd, end: gradientStart };
-    }
-    return { start: gradientStart, end: gradientEnd };
-  }
-
-  private getColorGradient(): { start: RGB; end: RGB } {
-    const date = new Date();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const numSegments = HOURS_IN_DAY / TIME_COLORS.length;
-    const startColorIdx = Math.floor(hour / numSegments);
-    const endColorIdx = (startColorIdx + 1) % TIME_COLORS.length;
-
-    const timeInMins = hour * MINUTES_IN_HOUR + minute;
-    const startColor = TIME_COLORS[startColorIdx];
-    const endColor = TIME_COLORS[endColorIdx];
-    const colorStartMins = startColorIdx * numSegments * MINUTES_IN_HOUR;
-    const colorEndMins =
-      endColorIdx === 0 ? HOURS_IN_DAY * MINUTES_IN_HOUR : endColorIdx * numSegments * MINUTES_IN_HOUR;
-    const minSince = timeInMins - colorStartMins;
-    const range = Math.abs(colorEndMins - colorStartMins);
-    const startDist = minSince - 60 >= 0 ? (minSince - 60) / range : 0;
-    const endDist = minSince / range;
-
-    const gradientStart = this.getColorBlend(startColor, endColor, startDist);
-    const gradientEnd = this.getColorBlend(startColor, endColor, endDist);
-
-    if (startColorIdx >= SUNSET_COLOR_IDX) {
-      return { start: gradientEnd, end: gradientStart };
-    }
-    return { start: gradientStart, end: gradientEnd };
-  }
-
   private updateGradient() {
-    let g: { start: RGB; end: RGB };
-
-    if (this.isDataFetched && this.state.weather.sunrise != null && this.state.weather.sunset != null) {
-      g = this.getRealisticColorGradient();
-    } else {
-      g = this.getColorGradient();
-    }
-
-    this.gradient = g;
+    const sunrise = this.state.weather.sunrise;
+    const sunset = this.state.weather.sunset;
+    this.gradient = getCurrentSkyGradient(Date.now(), sunrise, sunset);
     this.renderSkyColor();
 
-    if (this.gradient.start && !this.blindsAnimationStarted) {
+    if (!this.blindsAnimationStarted) {
       this.blindsAnimationStarted = true;
       this.runBlindsAnimation();
     }
   }
 
   private renderSkyColor() {
-    if (!this.skyColorEl || !this.gradient.start || !this.gradient.end) return;
-    const s = this.gradient.start;
-    const e = this.gradient.end;
-    this.skyColorEl.style.background = `linear-gradient(180deg, rgb(${s.r},${s.g},${s.b}), rgb(${e.r},${e.g},${e.b}))`;
-    const tc = this.getReadableColor(e);
+    if (!this.skyColorEl || !this.gradient) return;
+    const { zenith, upper, lower, horizon } = this.gradient;
+    this.skyColorEl.style.background = `linear-gradient(180deg, rgb(${zenith.r},${zenith.g},${zenith.b}), rgb(${upper.r},${upper.g},${upper.b}), rgb(${lower.r},${lower.g},${lower.b}), rgb(${horizon.r},${horizon.g},${horizon.b}))`;
+    const tc = this.getReadableColor(horizon);
     this.style.setProperty("--weather-text-color", `rgb(${tc.r},${tc.g},${tc.b})`);
   }
 
