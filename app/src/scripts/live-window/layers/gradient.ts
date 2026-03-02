@@ -315,12 +315,7 @@ export class GradientLayer implements SkyLayer {
 
   mount(container: HTMLElement): void {
     this.el = container;
-    this.el.className = "sky-layer sky-color";
-    this.el.style.position = "absolute";
-    this.el.style.top = "0";
-    this.el.style.left = "0";
-    this.el.style.width = "100%";
-    this.el.style.height = "100%";
+    this.el.className = "sky-layer";
   }
 
   update(phase: PhaseInfo): void {
