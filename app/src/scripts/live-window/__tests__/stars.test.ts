@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { mulberry32, generateStars, getStarsOpacity } from "../utils/stars";
+import { describe, it, expect, vi } from "vitest";
+import { mulberry32, generateStars, getStarsOpacity, todaySeed } from "../utils/stars";
 
 describe("mulberry32", () => {
   it("returns deterministic values for the same seed", () => {
@@ -26,10 +26,9 @@ describe("mulberry32", () => {
 });
 
 describe("generateStars", () => {
-  it("generates ~40 stars by default", () => {
+  it("generates 40 stars by default", () => {
     const stars = generateStars(20260302);
-    expect(stars.length).toBeGreaterThanOrEqual(35);
-    expect(stars.length).toBeLessThanOrEqual(45);
+    expect(stars.length).toBe(40);
   });
 
   it("returns same stars for the same seed", () => {
@@ -122,5 +121,14 @@ describe("getStarsOpacity", () => {
     const end = getStarsOpacity(2, 0);
     expect(mid).toBeLessThan(start);
     expect(mid).toBeGreaterThan(end);
+  });
+});
+
+describe("todaySeed", () => {
+  it("returns YYYYMMDD integer for the current date", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 2, 15)); // March 15, 2026
+    expect(todaySeed()).toBe(20260315);
+    vi.useRealTimers();
   });
 });

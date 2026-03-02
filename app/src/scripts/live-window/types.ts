@@ -84,6 +84,16 @@ export interface LiveWindowState {
   };
 }
 
+export interface Star {
+  x: number;
+  y: number;
+  size: number;
+  baseOpacity: number;
+  twinkleDuration: number;
+  twinkleDelay: number;
+  glowSize: number;
+}
+
 export interface SceneComponent {
   /** Create DOM elements inside the provided container */
   mount(container: HTMLElement): void;

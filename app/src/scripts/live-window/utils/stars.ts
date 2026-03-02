@@ -1,12 +1,6 @@
-export interface Star {
-  x: number;
-  y: number;
-  size: number;
-  baseOpacity: number;
-  twinkleDuration: number;
-  twinkleDelay: number;
-  glowSize: number;
-}
+import type { Star } from "../types";
+
+export type { Star } from "../types";
 
 /**
  * Mulberry32 PRNG — deterministic random from a 32-bit seed.
@@ -83,10 +77,11 @@ const PHASE_OPACITY: Record<number, number> = {
  * Smoothly blends between the current phase opacity and the next phase opacity.
  */
 export function getStarsOpacity(phaseIndex: number, t: number): number {
+  const clamped = Math.max(0, Math.min(1, t));
   const current = PHASE_OPACITY[phaseIndex] ?? 0;
   const nextPhase = (phaseIndex + 1) % 16;
   const next = PHASE_OPACITY[nextPhase] ?? 0;
-  return current + (next - current) * t;
+  return current + (next - current) * clamped;
 }
 
 /**
