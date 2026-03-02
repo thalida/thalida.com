@@ -397,6 +397,9 @@ class LiveWindowElement extends HTMLElement {
       else h = ((r - g) / (max - min) + 4) / 6;
     }
 
+    // Boost saturation for a neon look
+    s = Math.min(s + (1 - s) * 0.6, 1);
+
     const hueToRgb = (p: number, q: number, t: number) => {
       if (t < 0) t += 1;
       if (t > 1) t -= 1;
