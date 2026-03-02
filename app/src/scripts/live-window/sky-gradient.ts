@@ -236,9 +236,15 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
     sunset + MIN90, // 15: astronomicalDusk
   ];
 
-  // Ensure strictly ascending order for extreme latitudes where phases
-  // may overlap (very short days near poles, or very long days with
-  // twilight extending past midnight).
+  // At extreme latitudes, phases can overlap or go out of order.
+  // For example, with only 1 hour of daylight (sunrise=11:30, sunset=12:30):
+  //   - goldenAmEnd (sunrise+60min) = 12:30, same as sunset
+  //   - coreDuration becomes 0, so midday/lateMorning/earlyAfternoon collapse
+  //   - some timestamps end up BEFORE earlier ones
+  // This loop walks the array and bumps any out-of-order timestamp to be
+  // 1ms after the previous one. Collapsed phases effectively get ~0 duration
+  // and instantly blend into the next — which is correct (there's no real
+  // "afternoon" in a 1-hour day).
   for (let i = 1; i < raw.length; i++) {
     if (raw[i] <= raw[i - 1]) {
       raw[i] = raw[i - 1] + 1;
