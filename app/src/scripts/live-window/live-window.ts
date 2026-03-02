@@ -1,62 +1,16 @@
-import { getCurrentSkyGradient } from "./layers/gradient";
-import type { RGB, SkyGradient } from "./layers/gradient";
-
-interface WeatherCurrent {
-  main: string;
-  description: string;
-  icon: string;
-  temp: number;
-}
-
-const IMPERIAL_COUNTRIES = new Set(["US", "LR", "MM"]);
-
-interface StoreState {
-  location: { lastFetched: number | null; lat: number | null; lng: number | null; country: string | null };
-  weather: {
-    lastFetched: number | null;
-    units: string | null;
-    current: WeatherCurrent | null;
-    sunrise: number | null;
-    sunset: number | null;
-  };
-}
-
-type AnimatableProp = "numBlindsCollapsed" | "blindsOpenDeg" | "blindsSkewDeg" | "skewDirection";
-
-const NUM_BLINDS = 20;
-const IP_RATE_LIMIT = 30 * 60_000;
-const WEATHER_RATE_LIMIT = 30 * 60_000;
-const CACHE_VERSION = 2;
-const STORAGE_KEY = "liveWindowStore";
-const ICON_WEATHER_MAP: Record<string, string[]> = {
-  "02d": ["cloudSm"],
-  "02n": ["cloudSm"],
-  "03d": ["cloudSm", "cloudMd"],
-  "03n": ["cloudSm", "cloudMd"],
-  "04d": ["cloudSm", "cloudMd", "cloudLg"],
-  "04n": ["cloudSm", "cloudMd", "cloudLg"],
-  "09d": ["cloudMd", "lightRain"],
-  "09n": ["cloudMd", "lightRain"],
-  "10d": ["cloudMd", "cloudLg", "rain"],
-  "10n": ["cloudMd", "cloudLg", "rain"],
-  "11d": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
-  "11n": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
-  "13d": ["snow"],
-  "13n": ["snow"],
-  "50d": ["mist"],
-  "50n": ["mist"],
-};
-
-const DEFAULT_STATE: StoreState = {
-  location: { lastFetched: null, lat: null, lng: null, country: null },
-  weather: { lastFetched: null, units: null, current: null, sunrise: null, sunset: null },
-};
+import type { SkyLayer, StoreState, RGB } from "./types";
+import { loadState, saveState } from "./state";
+import { resolveUnits, tempSymbol, shouldFetchWeather, fetchLocation, fetchWeather } from "./api";
+import { parseHexColor, parseComputedColor, getReadableColor } from "./color";
+import { renderClock } from "./clock";
+import type { ClockElements } from "./clock";
+import { createBlindsState, renderBlinds, updateStrings, runBlindsAnimation, NUM_BLINDS } from "./blinds";
+import type { BlindsState } from "./blinds";
+import { buildPhaseInfo } from "./phase-info";
+import { GradientLayer } from "./layers/gradient";
+import { WeatherLayer } from "./layers/weather";
 
 import STYLES_URL from "./live-window.css?url";
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 class LiveWindowElement extends HTMLElement {
   static observedAttributes = [
@@ -72,41 +26,33 @@ class LiveWindowElement extends HTMLElement {
 
   private shadow: ShadowRoot;
   private state: StoreState;
-  private gradient: SkyGradient | null = null;
-  private isDataFetched = false;
+  private layers: SkyLayer[];
+  private gradientLayer: GradientLayer;
 
   private clockInterval: number | null = null;
-  private gradientInterval: number | null = null;
+  private skyInterval: number | null = null;
   private weatherInterval: number | null = null;
 
-  private blindsSettings = {
-    numBlindsCollapsed: 0,
-    blindsOpenDeg: 20,
-    blindsSkewDeg: 0,
-    skewDirection: 0,
-  };
+  private blindsState: BlindsState;
   private blindsAnimationStarted = false;
 
   private stringLeftEl!: HTMLDivElement;
   private stringRightEl!: HTMLDivElement;
-  private skyColorEl!: HTMLDivElement;
-  private weatherEl!: HTMLDivElement;
+  private skyEl!: HTMLDivElement;
   private blindsEl!: HTMLDivElement;
-  private clockEl!: HTMLDivElement;
-  private clockHourEl!: HTMLSpanElement;
-  private clockMinuteEl!: HTMLSpanElement;
-  private clockAmpmEl!: HTMLSpanElement;
-  private ampmAmEl!: HTMLSpanElement;
-  private ampmPmEl!: HTMLSpanElement;
+  private clockEls!: ClockElements & { containerEl: HTMLDivElement };
   private weatherTextEl!: HTMLParagraphElement;
 
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
-    this.state = this.loadState();
+    this.state = loadState();
+    this.gradientLayer = new GradientLayer();
+    this.layers = [this.gradientLayer, new WeatherLayer()];
+    this.blindsState = createBlindsState();
   }
 
-  // -- Lifecycle ------------------------------------------------------------
+  // -- Lifecycle --------------------------------------------------------------
 
   connectedCallback() {
     if (!document.querySelector("link[data-live-window-font]")) {
@@ -125,6 +71,7 @@ class LiveWindowElement extends HTMLElement {
 
   disconnectedCallback() {
     this.stopUpdates();
+    for (const layer of this.layers) layer.destroy();
   }
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null) {
@@ -134,37 +81,24 @@ class LiveWindowElement extends HTMLElement {
       this.updateClock();
       return;
     }
-
     if (name === "hide-clock" || name === "hide-weather-text") {
       this.applyVisibility();
       return;
     }
-
     if (name === "temp-unit") {
-      this.fetchWeather();
+      this.doFetchWeather();
       return;
     }
-
     if (name === "bg-color") {
-      this.renderSkyColor();
+      this.updateWeatherTextColor();
       return;
     }
-
     if (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key") && !this.weatherInterval) {
       this.startWeatherPolling();
     }
   }
 
-  private applyVisibility() {
-    if (this.clockEl) {
-      this.clockEl.hidden = this.hasAttribute("hide-clock");
-    }
-    if (this.weatherTextEl) {
-      this.weatherTextEl.hidden = this.hasAttribute("hide-weather-text") || !this.weatherTextEl.textContent;
-    }
-  }
-
-  // -- DOM ------------------------------------------------------------------
+  // -- DOM --------------------------------------------------------------------
 
   private buildDOM() {
     const link = document.createElement("link");
@@ -176,10 +110,7 @@ class LiveWindowElement extends HTMLElement {
     scene.className = "scene";
     scene.innerHTML = `
       <div class="live-window">
-        <div class="sky">
-          <div class="sky-color"></div>
-          <div class="weather"></div>
-        </div>
+        <div class="sky"></div>
         <div class="horizontal-bar"></div>
         <div class="blinds" style="--live-window-num-blinds: ${NUM_BLINDS}"></div>
         <div class="blinds-string blinds-string-left"></div>
@@ -198,31 +129,49 @@ class LiveWindowElement extends HTMLElement {
     `;
     this.shadow.appendChild(scene);
 
-    this.skyColorEl = this.shadow.querySelector(".sky-color") as HTMLDivElement;
-    this.weatherEl = this.shadow.querySelector(".weather") as HTMLDivElement;
+    this.skyEl = this.shadow.querySelector(".sky") as HTMLDivElement;
     this.blindsEl = this.shadow.querySelector(".blinds") as HTMLDivElement;
     this.stringLeftEl = this.shadow.querySelector(".blinds-string-left") as HTMLDivElement;
     this.stringRightEl = this.shadow.querySelector(".blinds-string-right") as HTMLDivElement;
-    this.clockEl = this.shadow.querySelector(".clock") as HTMLDivElement;
-    this.clockHourEl = this.shadow.querySelector(".clock-hour") as HTMLSpanElement;
-    this.clockMinuteEl = this.shadow.querySelector(".clock-minute") as HTMLSpanElement;
-    this.clockAmpmEl = this.shadow.querySelector(".clock-ampm") as HTMLSpanElement;
-    this.ampmAmEl = this.shadow.querySelector(".ampm-am") as HTMLSpanElement;
-    this.ampmPmEl = this.shadow.querySelector(".ampm-pm") as HTMLSpanElement;
     this.weatherTextEl = this.shadow.querySelector(".current-weather-text") as HTMLParagraphElement;
 
+    this.clockEls = {
+      containerEl: this.shadow.querySelector(".clock") as HTMLDivElement,
+      hourEl: this.shadow.querySelector(".clock-hour") as HTMLSpanElement,
+      minuteEl: this.shadow.querySelector(".clock-minute") as HTMLSpanElement,
+      ampmEl: this.shadow.querySelector(".clock-ampm") as HTMLSpanElement,
+      amEl: this.shadow.querySelector(".ampm-am") as HTMLSpanElement,
+      pmEl: this.shadow.querySelector(".ampm-pm") as HTMLSpanElement,
+    };
+
+    // Mount layers into .sky
+    for (const layer of this.layers) {
+      const container = document.createElement("div");
+      this.skyEl.appendChild(container);
+      layer.mount(container);
+    }
+
     this.applyVisibility();
-    this.renderBlinds();
+    this.doRenderBlinds();
   }
 
-  // -- Intervals ------------------------------------------------------------
+  private applyVisibility() {
+    if (this.clockEls?.containerEl) {
+      this.clockEls.containerEl.hidden = this.hasAttribute("hide-clock");
+    }
+    if (this.weatherTextEl) {
+      this.weatherTextEl.hidden = this.hasAttribute("hide-weather-text") || !this.weatherTextEl.textContent;
+    }
+  }
+
+  // -- Updates ----------------------------------------------------------------
 
   private startUpdates() {
     this.updateClock();
-    this.updateGradient();
+    this.updateSky();
 
     this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
-    this.gradientInterval = window.setInterval(() => this.updateGradient(), 15 * 60 * 1000);
+    this.skyInterval = window.setInterval(() => this.updateSky(), 15 * 60 * 1000);
 
     if (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key")) {
       this.startWeatherPolling();
@@ -230,473 +179,113 @@ class LiveWindowElement extends HTMLElement {
   }
 
   private startWeatherPolling() {
-    this.fetchWeather();
-    this.weatherInterval = window.setInterval(() => this.fetchWeather(), 60 * 60 * 1000);
+    this.doFetchWeather();
+    this.weatherInterval = window.setInterval(() => this.doFetchWeather(), 60 * 60 * 1000);
   }
 
   private stopUpdates() {
     if (this.clockInterval != null) clearInterval(this.clockInterval);
-    if (this.gradientInterval != null) clearInterval(this.gradientInterval);
+    if (this.skyInterval != null) clearInterval(this.skyInterval);
     if (this.weatherInterval != null) clearInterval(this.weatherInterval);
     this.clockInterval = null;
-    this.gradientInterval = null;
+    this.skyInterval = null;
     this.weatherInterval = null;
   }
 
-  // -- State persistence ----------------------------------------------------
-
-  private loadState(): StoreState {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const data = JSON.parse(raw);
-        if (data._v !== CACHE_VERSION) {
-          localStorage.removeItem(STORAGE_KEY);
-          return JSON.parse(JSON.stringify(DEFAULT_STATE));
-        }
-        return {
-          location: { ...DEFAULT_STATE.location, ...data.location },
-          weather: { ...DEFAULT_STATE.weather, ...data.weather },
-        };
-      }
-    } catch {
-      /* ignore */
-    }
-    return JSON.parse(JSON.stringify(DEFAULT_STATE));
-  }
-
-  private saveState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ _v: CACHE_VERSION, ...this.state }));
-    } catch {
-      /* ignore */
-    }
-  }
-
-  // -- Units ----------------------------------------------------------------
-
-  private get resolvedUnits(): "metric" | "imperial" {
-    const attr = (this.getAttribute("temp-unit") ?? "auto").toUpperCase();
-    if (attr === "F" || attr === "IMPERIAL") return "imperial";
-    if (attr === "C" || attr === "METRIC") return "metric";
-    const country = this.state.location.country;
-    if (country && IMPERIAL_COUNTRIES.has(country)) return "imperial";
-    return "metric";
-  }
-
-  private get tempSymbol(): string {
-    return this.resolvedUnits === "imperial" ? "°F" : "°C";
-  }
-
-  // -- Clock ----------------------------------------------------------------
+  // -- Clock ------------------------------------------------------------------
 
   private get use12Hour(): boolean {
     return this.getAttribute("time-format") === "12";
   }
 
   private updateClock() {
-    const now = new Date();
-    const raw = now.getHours();
-    let h = raw;
-    const m = now.getMinutes();
-    const is12 = this.use12Hour;
-
-    if (is12) {
-      h = raw % 12 || 12;
-    }
-
-    if (this.clockHourEl) this.clockHourEl.textContent = `${h < 10 ? "0" : ""}${h}`;
-    if (this.clockMinuteEl) this.clockMinuteEl.textContent = `${m < 10 ? "0" : ""}${m}`;
-
-    if (this.clockAmpmEl) {
-      this.clockAmpmEl.hidden = !is12;
-      if (is12) {
-        const isPm = raw >= 12;
-        this.ampmAmEl.classList.toggle("active", !isPm);
-        this.ampmPmEl.classList.toggle("active", isPm);
-      }
-    }
-
-    this.dispatchEvent(new CustomEvent("live-window:clock-update", { detail: { hour: raw, minute: m } }));
+    if (!this.clockEls) return;
+    const { hour, minute } = renderClock(this.clockEls, this.use12Hour);
+    this.dispatchEvent(new CustomEvent("live-window:clock-update", { detail: { hour, minute } }));
   }
 
-  // -- Sky colour gradient --------------------------------------------------
+  // -- Sky & Layers -----------------------------------------------------------
+
+  private updateSky() {
+    const phase = buildPhaseInfo(this.state, Date.now());
+    for (const layer of this.layers) layer.update(phase);
+    this.updateWeatherTextColor();
+
+    if (!this.blindsAnimationStarted) {
+      this.blindsAnimationStarted = true;
+      runBlindsAnimation(this.blindsState, () => this.doRenderBlinds());
+    }
+  }
 
   private get bgColor(): RGB {
     const attr = this.getAttribute("bg-color");
     if (attr) {
-      const hex = attr.replace("#", "");
-      if (hex.length === 6) {
-        return {
-          r: parseInt(hex.slice(0, 2), 16),
-          g: parseInt(hex.slice(2, 4), 16),
-          b: parseInt(hex.slice(4, 6), 16),
-        };
-      }
+      const parsed = parseHexColor(attr);
+      if (parsed) return parsed;
     }
-    // Auto-detect from parent's computed background
     const computed = getComputedStyle(this).backgroundColor;
-    const match = computed.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
-    if (match) return { r: +match[1], g: +match[2], b: +match[3] };
-    return { r: 0, g: 0, b: 0 };
+    return parseComputedColor(computed) ?? { r: 0, g: 0, b: 0 };
   }
 
-  private relativeLuminance(c: RGB): number {
-    const toLinear = (v: number) => {
-      const s = v / 255;
-      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-    };
-    return 0.2126 * toLinear(c.r) + 0.7152 * toLinear(c.g) + 0.0722 * toLinear(c.b);
-  }
-
-  private contrastRatio(a: RGB, b: RGB): number {
-    const la = this.relativeLuminance(a);
-    const lb = this.relativeLuminance(b);
-    const lighter = Math.max(la, lb);
-    const darker = Math.min(la, lb);
-    return (lighter + 0.05) / (darker + 0.05);
-  }
-
-  private getReadableColor(color: RGB, minContrast = 4.5): RGB {
-    const bg = this.bgColor;
-    if (this.contrastRatio(color, bg) >= minContrast) return color;
-
-    // Convert to HSL, then increase lightness until contrast is met
-    const r = color.r / 255;
-    const g = color.g / 255;
-    const b = color.b / 255;
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-
-    let h = 0;
-    let s = 0;
-    if (max !== min) {
-      const d = max - min;
-      s = (max + min) / 2 > 0.5 ? d / (2 - max - min) : d / (max + min);
-      if (max === r) h = ((g - b) / (max - min) + (g < b ? 6 : 0)) / 6;
-      else if (max === g) h = ((b - r) / (max - min) + 2) / 6;
-      else h = ((r - g) / (max - min) + 4) / 6;
-    }
-
-    // Boost saturation for a neon look
-    s = Math.min(s + (1 - s) * 0.6, 1);
-
-    const hueToRgb = (p: number, q: number, t: number) => {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-      return p;
-    };
-
-    const hslToRgb = (l: number): RGB => {
-      if (s === 0) {
-        const v = Math.round(l * 255);
-        return { r: v, g: v, b: v };
-      }
-      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      const p = 2 * l - q;
-      return {
-        r: Math.round(hueToRgb(p, q, h + 1 / 3) * 255),
-        g: Math.round(hueToRgb(p, q, h) * 255),
-        b: Math.round(hueToRgb(p, q, h - 1 / 3) * 255),
-      };
-    };
-
-    // Binary search for the minimum lightness that meets the contrast ratio
-    let lo = (max + min) / 2;
-    let hi = 1;
-    let result = hslToRgb(hi);
-    for (let i = 0; i < 16; i++) {
-      const mid = (lo + hi) / 2;
-      const candidate = hslToRgb(mid);
-      if (this.contrastRatio(candidate, bg) >= minContrast) {
-        result = candidate;
-        hi = mid;
-      } else {
-        lo = mid;
-      }
-    }
-    return result;
-  }
-
-  private isSameDate(a: Date, b: Date): boolean {
-    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
-  }
-
-  private updateGradient() {
-    const sunrise = this.state.weather.sunrise;
-    const sunset = this.state.weather.sunset;
-    this.gradient = getCurrentSkyGradient(Date.now(), sunrise, sunset);
-    this.renderSkyColor();
-
-    if (!this.blindsAnimationStarted) {
-      this.blindsAnimationStarted = true;
-      this.runBlindsAnimation();
-    }
-  }
-
-  private renderSkyColor() {
-    if (!this.skyColorEl || !this.gradient) return;
-    const { zenith, upper, lower, horizon } = this.gradient;
-    this.skyColorEl.style.background = `linear-gradient(180deg, rgb(${zenith.r},${zenith.g},${zenith.b}), rgb(${upper.r},${upper.g},${upper.b}), rgb(${lower.r},${lower.g},${lower.b}), rgb(${horizon.r},${horizon.g},${horizon.b}))`;
-    const tc = this.getReadableColor(horizon);
+  private updateWeatherTextColor() {
+    const gradient = this.gradientLayer.currentGradient;
+    if (!gradient) return;
+    const tc = getReadableColor(gradient.horizon, this.bgColor);
     this.style.setProperty("--weather-text-color", `rgb(${tc.r},${tc.g},${tc.b})`);
   }
 
-  // -- Weather effects ------------------------------------------------------
+  // -- Blinds -----------------------------------------------------------------
 
-  private renderWeatherEffects() {
-    if (!this.weatherEl) return;
-    const icon = this.state.weather.current?.icon ?? null;
-    this.weatherEl.className = "weather" + (icon ? ` weather-${icon}` : "");
+  private doRenderBlinds() {
+    if (!this.blindsEl) return;
+    renderBlinds(this.blindsEl, this.blindsState);
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => updateStrings(this.shadow, this.stringLeftEl, this.stringRightEl)),
+    );
+  }
 
-    if (!icon) {
-      this.weatherEl.innerHTML = "";
+  // -- API --------------------------------------------------------------------
+
+  private get resolvedUnits() {
+    return resolveUnits(this.getAttribute("temp-unit"), this.state.location.country);
+  }
+
+  private async doFetchWeather(): Promise<void> {
+    const owKey = this.getAttribute("openweather-key");
+    const ipKey = this.getAttribute("ipregistry-key");
+    if (!owKey || !ipKey) return;
+
+    const units = this.resolvedUnits;
+    if (!shouldFetchWeather(this.state, units)) {
+      this.updateWeatherText();
+      this.updateSky();
       return;
     }
 
-    const effects = ICON_WEATHER_MAP[icon] ?? [];
-    const has = (k: string) => effects.includes(k);
-    const showDroplets = has("lightRain") || has("rain") || has("thunderstorm") || has("snow");
+    this.state = await fetchLocation(ipKey, this.state);
+    saveState(this.state);
 
-    let html = "";
-    if (has("cloudLg")) html += '<div class="cloud cloud-lg"></div>';
-    if (has("cloudMd")) html += '<div class="cloud cloud-md"></div>';
-    if (has("thunderstorm")) html += '<div class="lightning"></div>';
-    if (has("cloudSm")) html += '<div class="cloud cloud-sm"></div>';
-    if (has("mist")) {
-      html += '<div class="mist mist-lg"></div><div class="mist mist-md"></div><div class="mist mist-sm"></div>';
+    const result = await fetchWeather(owKey, this.state, units);
+    this.state = result.state;
+    saveState(this.state);
+
+    if (result.changed) {
+      this.updateWeatherText();
+      this.updateSky();
+      this.dispatchEvent(new CustomEvent("live-window:weather-update", { detail: { weather: this.state.weather } }));
     }
-    if (showDroplets) {
-      html += '<div class="droplets">';
-      for (let h = 0; h < 2; h++) {
-        html += '<div class="droplets-half">';
-        for (let i = 0; i < 6; i++) {
-          html += `<div class="droplet-row droplet-row-${i + 1}">`;
-          for (let j = 0; j < 6; j++) {
-            html += `<div class="droplet droplet-${j + 1}"></div>`;
-          }
-          html += "</div>";
-        }
-        html += "</div>";
-      }
-      html += "</div>";
-    }
-    if (has("snow")) {
-      html += '<div class="snow-sill">';
-      html += '<div class="snow-mound snow-mound-1"></div>';
-      html += '<div class="snow-mound snow-mound-2"></div>';
-      html += '<div class="snow-mound snow-mound-3"></div>';
-      html += '<div class="snow-mound snow-mound-4"></div>';
-      html += '<div class="snow-mound snow-mound-5"></div>';
-      html += '<div class="snow-mound snow-mound-6"></div>';
-      html += "</div>";
-    }
-    this.weatherEl.innerHTML = html;
   }
 
   private updateWeatherText() {
     if (!this.weatherTextEl) return;
     const c = this.state.weather.current;
     if (c) {
-      this.weatherTextEl.textContent = `It\u2019s ${Math.round(c.temp)}${this.tempSymbol} with ${c.description}`;
+      this.weatherTextEl.textContent = `It\u2019s ${Math.round(c.temp)}${tempSymbol(this.resolvedUnits)} with ${c.description}`;
       this.weatherTextEl.hidden = this.hasAttribute("hide-weather-text");
     } else {
       this.weatherTextEl.hidden = true;
     }
   }
-
-  // -- Blinds ---------------------------------------------------------------
-
-  private getSkewAndRotateTransform(blindIndex: number): string {
-    const currBlind = NUM_BLINDS - blindIndex;
-    const numOpen = NUM_BLINDS - this.blindsSettings.numBlindsCollapsed;
-    const skewSteps = numOpen > 0 ? this.blindsSettings.blindsSkewDeg / numOpen : 0;
-
-    let skewDeg = 0;
-    if (this.blindsSettings.skewDirection !== 0 && this.blindsSettings.blindsSkewDeg >= 0) {
-      skewDeg =
-        this.blindsSettings.blindsSkewDeg - (currBlind - this.blindsSettings.numBlindsCollapsed - 1) * skewSteps;
-    }
-
-    const rot = this.blindsSettings.blindsOpenDeg;
-    return `rotateX(${rot}deg) skewY(${skewDeg * this.blindsSettings.skewDirection}deg)`;
-  }
-
-  private getSkewOnlyTransform(): string {
-    let skewDeg = 0;
-    if (this.blindsSettings.skewDirection !== 0 && this.blindsSettings.blindsSkewDeg >= 0) {
-      skewDeg = this.blindsSettings.blindsSkewDeg / 2;
-    }
-    return `skewY(${skewDeg * this.blindsSettings.skewDirection}deg)`;
-  }
-
-  private renderBlinds() {
-    if (!this.blindsEl) return;
-    const numOpen = NUM_BLINDS - Math.round(this.blindsSettings.numBlindsCollapsed);
-    const numCollapsed = Math.round(this.blindsSettings.numBlindsCollapsed);
-
-    let slats = "";
-    for (let i = 0; i < numOpen; i++) {
-      slats += `<div class="slat slat-${i + 1}" style="transform:${this.getSkewAndRotateTransform(i)}"></div>`;
-    }
-
-    const skew = this.getSkewOnlyTransform();
-    slats += `<div class="slat-collapse-group" style="transform:${skew}">`;
-    for (let i = 0; i < numCollapsed; i++) {
-      slats += '<div class="slat collapse"></div>';
-    }
-    slats += "</div>";
-
-    slats += `<div class="slat-bar" style="transform:${skew}">`;
-    slats += '<span class="string-marker string-marker-left"></span>';
-    slats += '<span class="string-marker string-marker-right"></span>';
-    slats += "</div>";
-
-    this.blindsEl.innerHTML = `
-      <div class="slats">${slats}</div>
-      <div class="rod"></div>
-    `;
-
-    requestAnimationFrame(() => requestAnimationFrame(() => this.updateStrings()));
-  }
-
-  private updateStrings() {
-    const win = this.shadow.querySelector(".live-window");
-    const ml = this.shadow.querySelector(".string-marker-left");
-    const mr = this.shadow.querySelector(".string-marker-right");
-    if (!win || !ml || !mr) return;
-
-    const winTop = win.getBoundingClientRect().top;
-
-    if (this.stringLeftEl) this.stringLeftEl.style.height = `${ml.getBoundingClientRect().top - winTop}px`;
-    if (this.stringRightEl) this.stringRightEl.style.height = `${mr.getBoundingClientRect().top - winTop}px`;
-  }
-
-  private stepAnimation(
-    targets: Partial<Record<AnimatableProp, { targetValue: number; step: number }>>,
-    speedMs = 100,
-  ): Promise<void> {
-    const remaining = new Map(Object.entries(targets) as [string, { targetValue: number; step: number }][]);
-    return new Promise<void>((resolve) => {
-      const interval = window.setInterval(() => {
-        const size = remaining.size;
-        let finished = 0;
-
-        for (const [prop, anim] of remaining) {
-          const cur = (this.blindsSettings as unknown as Record<string, number>)[prop];
-          const dir = cur < anim.targetValue ? 1 : -1;
-          const next = cur + anim.step * dir;
-          (this.blindsSettings as unknown as Record<string, number>)[prop] = next;
-
-          const reached = dir === -1 ? next <= anim.targetValue : next >= anim.targetValue;
-          if (reached) {
-            finished++;
-            remaining.delete(prop);
-          }
-        }
-
-        this.renderBlinds();
-
-        if (finished >= size) {
-          clearInterval(interval);
-          resolve();
-        }
-      }, speedMs);
-    });
-  }
-
-  private runBlindsAnimation() {
-    this.stepAnimation({ blindsOpenDeg: { targetValue: 75, step: 5 } }, 150).then(() => {
-      this.stepAnimation({
-        blindsOpenDeg: { targetValue: 80, step: 1 },
-        numBlindsCollapsed: { targetValue: NUM_BLINDS * 0.7, step: 1 },
-        blindsSkewDeg: { targetValue: 5, step: 1 },
-        skewDirection: { targetValue: -1, step: 1 },
-      });
-    });
-  }
-
-  // -- API integration ------------------------------------------------------
-
-  private shouldFetchLocation(): boolean {
-    if (!this.state.location.lastFetched) return true;
-    return Date.now() - this.state.location.lastFetched >= IP_RATE_LIMIT;
-  }
-
-  private shouldFetchWeather(): boolean {
-    if (!this.state.weather.lastFetched) return true;
-    if (this.state.weather.units !== this.resolvedUnits) return true;
-    if (!this.isSameDate(new Date(this.state.weather.lastFetched), new Date())) return true;
-    return Date.now() - this.state.weather.lastFetched >= WEATHER_RATE_LIMIT;
-  }
-
-  private async fetchLocation(): Promise<void> {
-    if (!this.shouldFetchLocation() && this.state.location.lat != null) return;
-    const key = this.getAttribute("ipregistry-key");
-    if (!key) return;
-
-    try {
-      const res = await fetch(`https://api.ipregistry.co/?key=${key}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      this.state.location.lat = data.location.latitude;
-      this.state.location.lng = data.location.longitude;
-      this.state.location.country = data.location.country?.code ?? null;
-      this.state.location.lastFetched = Date.now();
-      this.saveState();
-    } catch {
-      /* silently degrade */
-    }
-  }
-
-  private async fetchWeather(): Promise<void> {
-    const owKey = this.getAttribute("openweather-key");
-    const ipKey = this.getAttribute("ipregistry-key");
-    if (!owKey || !ipKey) return;
-
-    if (!this.shouldFetchWeather()) {
-      this.isDataFetched = true;
-      this.renderWeatherEffects();
-      this.updateWeatherText();
-      this.updateGradient();
-      return;
-    }
-
-    await this.fetchLocation();
-    const { lat, lng } = this.state.location;
-    if (lat == null || lng == null) return;
-
-    try {
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?units=${this.resolvedUnits}&lat=${lat}&lon=${lng}&appid=${owKey}`,
-      );
-      if (!res.ok) return;
-      const data = await res.json();
-
-      this.state.weather.current = { ...data.weather[0], temp: data.main.temp };
-      this.state.weather.sunrise = data.sys.sunrise * 1000;
-      this.state.weather.sunset = data.sys.sunset * 1000;
-      this.state.weather.units = this.resolvedUnits;
-      this.state.weather.lastFetched = Date.now();
-      this.saveState();
-      this.isDataFetched = true;
-
-      this.renderWeatherEffects();
-      this.updateWeatherText();
-      this.updateGradient();
-
-      this.dispatchEvent(new CustomEvent("live-window:weather-update", { detail: { weather: this.state.weather } }));
-    } catch {
-      /* silently degrade */
-    }
-  }
 }
-
-// ---------------------------------------------------------------------------
-// Register
-// ---------------------------------------------------------------------------
 
 customElements.define("live-window", LiveWindowElement);
