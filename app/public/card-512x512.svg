@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <!-- Neon glow filter: tight inner + wide outer bloom -->
+    <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <!-- Wide outer bloom -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="25" result="blur-wide"/>
+      <feColorMatrix in="blur-wide" type="matrix"
+        values="0 0 0 0 0.106
+                0 0 0 0 0.894
+                0 0 0 0 0.549
+                0 0 0 0.6 0" result="glow-wide"/>
+      <!-- Tight inner glow -->
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur-tight"/>
+      <feColorMatrix in="blur-tight" type="matrix"
+        values="0 0 0 0 0.106
+                0 0 0 0 0.894
+                0 0 0 0 0.549
+                0 0 0 0.9 0" result="glow-tight"/>
+      <!-- Compose: wide glow + tight glow + sharp original -->
+      <feMerge>
+        <feMergeNode in="glow-wide"/>
+        <feMergeNode in="glow-tight"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="#030a12"/>
+
+  <!-- Artistic <3 mark with neon glow -->
+  <g filter="url(#neon-glow)">
+    <!-- < chevron: expressive, sweeping strokes -->
+    <polyline
+      points="220,126 140,256 220,386"
+      fill="none" stroke="#1be48c" stroke-width="22"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 3 numeral: flowing curves -->
+    <path
+      d="M270 126 L340 126 Q370 126 370 156 L370 216 Q370 256 340 256 L300 256
+         M340 256 Q370 256 370 286 L370 356 Q370 386 340 386 L270 386"
+      fill="none" stroke="#1be48c" stroke-width="22"
+      stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

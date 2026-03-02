@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
+import sitemap from "@astrojs/sitemap";
 import astroExpressiveCode from "astro-expressive-code";
 import pagefind from "astro-pagefind";
 import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
@@ -17,9 +18,13 @@ const r2BaseUrl = (env.PUBLIC_R2_BASE_URL || "").replace(/\/$/, "");
 const mediaBranch = process.env.CF_PAGES_BRANCH || "main";
 const mediaBaseUrl = r2BaseUrl ? `${r2BaseUrl}/${mediaBranch}` : "";
 
+// Use Cloudflare Pages deploy URL on preview branches so OG images resolve correctly
+const site = mediaBranch === "main" || !process.env.CF_PAGES_URL ? "https://thalida.com" : process.env.CF_PAGES_URL;
+
 export default defineConfig({
-  site: "https://thalida.com",
+  site,
   integrations: [
+    sitemap(),
     astroExpressiveCode({
       themes: ["houston"],
       styleOverrides: {

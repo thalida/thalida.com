@@ -82,6 +82,46 @@ try {
   // Content could not be rendered
 }
 
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://thalida.com";
+
+// Resolve cover image to absolute URL for OG
+let ogImageUrl: string | undefined;
+if (entry.data.coverImage) {
+  ogImageUrl = new URL(entry.data.coverImage.src, siteUrl).toString();
+}
+
+// Article JSON-LD for non-recipe posts
+let articleJsonLd: string | null = null;
+if (collection !== "recipes") {
+  articleJsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/${collection}/post/${id}`,
+    },
+    headline: entry.data.title,
+    description: entry.data.description,
+    keywords: entry.data.tags?.join(", ") ?? "",
+    articleSection: collection,
+    author: {
+      "@type": "Person",
+      name: "Thalida Noel",
+      url: `${siteUrl}/about`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "thalida.com",
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/android-chrome-192x192.png`,
+      },
+    },
+    datePublished: entry.data.publishedOn?.toISOString(),
+    dateModified: (entry.data.updatedOn ?? entry.data.publishedOn)?.toISOString(),
+  });
+}
+
 const pageTitle = entry.data.title as string;
 
 /** Convert ISO 8601 duration (e.g. "PT1H30M") to human-readable text. */
@@ -108,8 +148,18 @@ const recipeMeta =
     : [];
 ---
 
-<BaseLayout title={`${pageTitle} · thalida`} activeCollection={collection}>
+<BaseLayout
+  title={`${pageTitle} · thalida`}
+  activeCollection={collection}
+  description={entry.data.description}
+  ogImage={ogImageUrl}
+  ogType="article"
+  publishedOn={entry.data.publishedOn}
+  updatedOn={entry.data.updatedOn}
+  tags={entry.data.tags}
+>
   {recipeJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={recipeJsonLd} />}
+  {articleJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={articleJsonLd} />}
   <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
     <meta data-pagefind-meta={`collection:${collection}`} />
     <meta data-pagefind-meta={`category:${entry.data.category || ""}`} />

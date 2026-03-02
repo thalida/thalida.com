@@ -8,6 +8,46 @@ import meRainbow from "@assets/about/me-rainbow.png";
 ---
 
 <BaseLayout title="about · thalida" activePage="about">
+  <script
+    is:inline
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Thalida Noel",
+      alternateName: "thalida",
+      url: "https://thalida.com/about",
+      image: "https://thalida.com/card-512x512.png",
+      jobTitle: "Engineering Manager, Creative Technologist",
+      description:
+        "Queer, first-generation Trinidadian-American engineer based in New York. Building for the web since 2007.",
+      worksFor: {
+        "@type": "Organization",
+        name: "Zapier",
+        url: "https://zapier.com",
+      },
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: "Capitol Technology University",
+        url: "https://www.captechu.edu/",
+      },
+      sameAs: ["https://github.com/thalida", "https://linkedin.com/in/thalida/"],
+      knowsAbout: [
+        "Product Engineering",
+        "Creative Technology",
+        "Engineering Management",
+        "Web Development",
+        "Software Architecture",
+      ],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "New York",
+        addressRegion: "NY",
+        addressCountry: "US",
+      },
+    })}
+  />
   <article class="font-body max-w-3xl mx-auto">
     <h2 class="m-0 mb-2 font-display font-bold text-neon text-display-sm tracking-tighter leading-none">About</h2>
     <hr />

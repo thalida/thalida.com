@@ -108,6 +108,7 @@ jobs:
           PUBLIC_OPENWEATHER_KEY: ${{ secrets.PUBLIC_OPENWEATHER_KEY }}
           PUBLIC_IPREGISTRY_KEY: ${{ secrets.PUBLIC_IPREGISTRY_KEY }}
           CF_PAGES_BRANCH: ${{ steps.branch.outputs.name }}
+          CF_PAGES_URL: ${{ github.event_name == 'push' && 'https://thalida.com' || format('https://{0}.{1}.pages.dev', steps.branch.outputs.name, vars.CLOUDFLARE_PAGES_PROJECT) }}
         run: just app::build-pages
 
       - name: Deploy to Cloudflare Pages

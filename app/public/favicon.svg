@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="20" fill="#030a12"/>
+  <!-- < chevron (stroked to match 3) -->
+  <polyline points="48,34 22,64 48,94" fill="none" stroke="#1be48c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 3 numeral (stroked) -->
+  <path d="M62 34 L90 34 Q102 34 102 46 L102 54 Q102 64 90 64 L76 64 M90 64 Q102 64 102 74 L102 84 Q102 94 90 94 L62 94" fill="none" stroke="#1be48c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
