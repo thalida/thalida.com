@@ -13,6 +13,7 @@ describe("parseHexColor", () => {
   it("returns null for invalid hex", () => {
     expect(parseHexColor("abc")).toBeNull();
     expect(parseHexColor("")).toBeNull();
+    expect(parseHexColor("zzzzzz")).toBeNull();
   });
 });
 

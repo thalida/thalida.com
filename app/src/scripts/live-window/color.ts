@@ -5,8 +5,8 @@ import type { RGB } from "./types";
  * Returns null if the string is not a valid 6-digit hex color.
  */
 export function parseHexColor(hex: string): RGB | null {
-  const cleaned = hex.replace("#", "");
-  if (cleaned.length !== 6) return null;
+  const cleaned = hex.startsWith("#") ? hex.slice(1) : hex;
+  if (!/^[0-9a-fA-F]{6}$/.test(cleaned)) return null;
   return {
     r: parseInt(cleaned.slice(0, 2), 16),
     g: parseInt(cleaned.slice(2, 4), 16),
