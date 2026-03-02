@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { SKY_PHASES, calculatePhaseTimestamps, getDefaultSunTimes, blendGradient } from "../sky-gradient";
+import {
+  SKY_PHASES,
+  calculatePhaseTimestamps,
+  getDefaultSunTimes,
+  blendGradient,
+  getCurrentSkyGradient,
+} from "../sky-gradient";
 import type { SkyGradient } from "../sky-gradient";
 
 describe("SKY_PHASES", () => {
@@ -134,5 +140,58 @@ describe("blendGradient", () => {
   it("clamps t above 1 to 1", () => {
     const result = blendGradient(a, b, 1.5);
     expect(result.zenith).toEqual({ r: 100, g: 200, b: 50 });
+  });
+});
+
+describe("getCurrentSkyGradient", () => {
+  // Fixed sunrise 7:00 AM, sunset 7:00 PM
+  const today = new Date();
+  today.setHours(7, 0, 0, 0);
+  const sunrise = today.getTime();
+  today.setHours(19, 0, 0, 0);
+  const sunset = today.getTime();
+
+  it("returns night gradient at midnight", () => {
+    const midnight = new Date(sunrise);
+    midnight.setHours(0, 0, 0, 0);
+    const result = getCurrentSkyGradient(midnight.getTime(), sunrise, sunset);
+    // At midnight we are between night (0) and astronomicalDawn (1),
+    // but at the very start so it should be close to night
+    expect(result.zenith.r).toBeLessThan(15);
+    expect(result.zenith.b).toBeLessThan(50);
+  });
+
+  it("returns midday-like gradient at solar noon", () => {
+    const noon = (sunrise + sunset) / 2; // solar noon = 1:00 PM for 7AM-7PM
+    const result = getCurrentSkyGradient(noon, sunrise, sunset);
+    // Midday phase: bright blue zenith
+    expect(result.zenith).toEqual(SKY_PHASES[8].gradient.zenith);
+  });
+
+  it("returns sunrise gradient at sunrise time", () => {
+    const result = getCurrentSkyGradient(sunrise, sunrise, sunset);
+    expect(result.zenith).toEqual(SKY_PHASES[4].gradient.zenith);
+  });
+
+  it("returns sunset gradient at sunset time", () => {
+    const result = getCurrentSkyGradient(sunset, sunrise, sunset);
+    expect(result.zenith).toEqual(SKY_PHASES[12].gradient.zenith);
+  });
+
+  it("uses default sun times when sunrise/sunset are null", () => {
+    const { sunrise: defSr, sunset: defSs } = getDefaultSunTimes();
+    const noon = (defSr + defSs) / 2;
+    const result = getCurrentSkyGradient(noon, null as unknown as number, null as unknown as number);
+    // Should still return a valid gradient (using defaults)
+    expect(result.zenith.r).toBeGreaterThanOrEqual(0);
+    expect(result.zenith.r).toBeLessThanOrEqual(255);
+  });
+
+  it("wraps correctly for time after astronomical dusk", () => {
+    // 11:00 PM — well past astronomical dusk, should be night-like
+    const late = new Date(sunrise);
+    late.setHours(23, 0, 0, 0);
+    const result = getCurrentSkyGradient(late.getTime(), sunrise, sunset);
+    expect(result.zenith.r).toBeLessThan(15);
   });
 });

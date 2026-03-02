@@ -258,3 +258,45 @@ export function blendGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGra
     horizon: blendColor(a.horizon, b.horizon, clamped),
   };
 }
+
+/**
+ * Returns the interpolated sky gradient for a given moment in time.
+ * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
+ */
+export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
+  let sr = sunrise;
+  let ss = sunset;
+  if (sr == null || ss == null) {
+    const defaults = getDefaultSunTimes();
+    sr = defaults.sunrise;
+    ss = defaults.sunset;
+  }
+
+  const timestamps = calculatePhaseTimestamps(sr, ss);
+
+  // Find which two phases bracket the current time.
+  // If before the first phase or after the last, we're in the night->night wrap.
+  let phaseIdx = 0;
+  for (let i = timestamps.length - 1; i >= 0; i--) {
+    if (now >= timestamps[i]) {
+      phaseIdx = i;
+      break;
+    }
+  }
+
+  const nextIdx = (phaseIdx + 1) % SKY_PHASES.length;
+  const phaseStart = timestamps[phaseIdx];
+  const phaseEnd =
+    nextIdx === 0
+      ? (() => {
+          const eod = new Date(now);
+          eod.setHours(23, 59, 59, 999);
+          return eod.getTime();
+        })()
+      : timestamps[nextIdx];
+
+  const duration = phaseEnd - phaseStart;
+  const t = duration > 0 ? (now - phaseStart) / duration : 0;
+
+  return blendGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
+}
