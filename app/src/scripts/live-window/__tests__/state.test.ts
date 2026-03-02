@@ -21,8 +21,9 @@ describe("loadState", () => {
     Reflect.deleteProperty(store, STORAGE_KEY);
   });
 
-  it("returns DEFAULT_STATE when nothing is stored", () => {
-    expect(loadState()).toEqual(DEFAULT_STATE);
+  it("returns default store when nothing is stored", () => {
+    const result = loadState();
+    expect(result.store).toEqual(DEFAULT_STATE);
   });
 
   it("returns stored state when version matches", () => {
@@ -33,15 +34,23 @@ describe("loadState", () => {
     };
     store[STORAGE_KEY] = JSON.stringify(saved);
     const result = loadState();
-    expect(result.location.lat).toBe(40);
-    expect(result.location.country).toBe("US");
+    expect(result.store.location.lat).toBe(40);
+    expect(result.store.location.country).toBe("US");
   });
 
-  it("returns DEFAULT_STATE and clears storage when version mismatches", () => {
+  it("returns default store and clears storage when version mismatches", () => {
     store[STORAGE_KEY] = JSON.stringify({ _v: 0, location: { lat: 99 } });
     const result = loadState();
-    expect(result).toEqual(DEFAULT_STATE);
+    expect(result.store).toEqual(DEFAULT_STATE);
     expect(store[STORAGE_KEY]).toBeUndefined();
+  });
+
+  it("has computed, ref, and attrs sections", () => {
+    const result = loadState();
+    expect(result.computed).toBeDefined();
+    expect(result.computed.phase).toBeDefined();
+    expect(result.ref).toBeDefined();
+    expect(result.attrs).toBeDefined();
   });
 });
 
@@ -51,13 +60,26 @@ describe("saveState", () => {
   });
 
   it("round-trips through loadState", () => {
-    const state = {
-      ...DEFAULT_STATE,
-      location: { ...DEFAULT_STATE.location, lat: 51.5, lng: -0.1, country: "GB" },
-    };
+    const state = loadState();
+    state.store.location = { ...state.store.location, lat: 51.5, lng: -0.1, country: "GB" };
     saveState(state);
     const loaded = loadState();
-    expect(loaded.location.lat).toBe(51.5);
-    expect(loaded.location.country).toBe("GB");
+    expect(loaded.store.location.lat).toBe(51.5);
+    expect(loaded.store.location.country).toBe("GB");
+  });
+
+  it("does not persist computed or ref data", () => {
+    const state = loadState();
+    state.ref.currentGradient = {
+      zenith: { r: 1, g: 2, b: 3 },
+      upper: { r: 4, g: 5, b: 6 },
+      lower: { r: 7, g: 8, b: 9 },
+      horizon: { r: 10, g: 11, b: 12 },
+    };
+    saveState(state);
+    const raw = JSON.parse(store[STORAGE_KEY]);
+    expect(raw.currentGradient).toBeUndefined();
+    expect(raw.ref).toBeUndefined();
+    expect(raw.computed).toBeUndefined();
   });
 });
