@@ -29,7 +29,7 @@ const {
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://thalida.com";
 const canonicalUrl = Astro.props.url ?? new URL(Astro.url.pathname, siteUrl).toString();
-const ogImage = image ?? `${siteUrl}/card-512x512.png`;
+const ogImage = image ?? `${siteUrl}/card-1200x630.png`;
 ---
 
 {/* Basic meta */}
