@@ -3,36 +3,23 @@
     <!-- Neon glow filter: tight inner + wide outer bloom -->
     <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
       <!-- Wide outer bloom -->
-      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur-wide"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="35" result="blur-wide"/>
       <feColorMatrix in="blur-wide" type="matrix"
         values="0 0 0 0 0.106
                 0 0 0 0 0.894
                 0 0 0 0 0.549
-                0 0 0 0.5 0" result="glow-wide"/>
+                0 0 0 0.6 0" result="glow-wide"/>
       <!-- Tight inner glow -->
-      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur-tight"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur-tight"/>
       <feColorMatrix in="blur-tight" type="matrix"
         values="0 0 0 0 0.106
                 0 0 0 0 0.894
                 0 0 0 0 0.549
-                0 0 0 0.8 0" result="glow-tight"/>
+                0 0 0 0.9 0" result="glow-tight"/>
       <!-- Compose: wide glow + tight glow + sharp original -->
       <feMerge>
         <feMergeNode in="glow-wide"/>
         <feMergeNode in="glow-tight"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <!-- Subtle glow for text -->
-    <filter id="text-glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur"/>
-      <feColorMatrix in="blur" type="matrix"
-        values="0 0 0 0 0.91
-                0 0 0 0 0.94
-                0 0 0 0 0.97
-                0 0 0 0.3 0" result="glow"/>
-      <feMerge>
-        <feMergeNode in="glow"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
@@ -45,25 +32,14 @@
   <g filter="url(#neon-glow)">
     <!-- < chevron: expressive, sweeping strokes -->
     <polyline
-      points="560,140 430,280 560,420"
-      fill="none" stroke="#1be48c" stroke-width="18"
+      points="565,175 435,315 565,455"
+      fill="none" stroke="#1be48c" stroke-width="26"
       stroke-linecap="round" stroke-linejoin="round"/>
     <!-- 3 numeral: flowing curves -->
     <path
-      d="M620 140 L720 140 Q760 140 760 180 L760 240 Q760 280 720 280 L670 280
-         M720 280 Q760 280 760 320 L760 380 Q760 420 720 420 L620 420"
-      fill="none" stroke="#1be48c" stroke-width="18"
+      d="M625 175 L725 175 Q765 175 765 215 L765 275 Q765 315 725 315 L675 315
+         M725 315 Q765 315 765 355 L765 415 Q765 455 725 455 L625 455"
+      fill="none" stroke="#1be48c" stroke-width="26"
       stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-
-  <!-- Site name -->
-  <text
-    x="600" y="530"
-    text-anchor="middle"
-    font-family="'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif"
-    font-weight="500"
-    font-size="36"
-    fill="#e8f0f8"
-    filter="url(#text-glow)"
-    letter-spacing="4">thalida.com</text>
 </svg>
