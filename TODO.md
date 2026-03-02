@@ -12,7 +12,7 @@
 - [x] ask for all things to be componentized
 - [x] muted style tags on cards
 - [x] show date on all cards (month + year)
-- [ ] window coloring
+- [x] window coloring
 - [x] date on the right
 - [x] proper recipe formatting
 - [x] remove "recipe" tag

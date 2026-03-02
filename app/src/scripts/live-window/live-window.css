@@ -638,7 +638,7 @@
   width: 90px;
   height: 40px;
   border-radius: 8px;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-family: var(--clock-font);
   color: var(--clock-text-color);
   text-shadow:
@@ -678,7 +678,7 @@
   justify-content: center;
   align-items: center;
   margin-left: 3px;
-  font-size: 8px;
+  font-size: 0.5rem;
   line-height: 1.1;
   letter-spacing: 0.5px;
 }
@@ -707,11 +707,15 @@
 
 .current-weather-text {
   font-family: var(--weather-text-font, var(--primary-font));
-  font-size: var(--weather-text-size, 18px);
+  font-size: var(--weather-text-size, 0.75rem);
   width: var(--live-window-width);
   text-align: center;
-  margin: var(--weather-text-margin, 30px 0);
+  margin: var(--weather-text-margin, 12px 0);
   color: var(--weather-text-color);
-  text-transform: var(--weather-text-transform, none);
-  letter-spacing: var(--weather-text-letter-spacing, normal);
+  text-shadow:
+    0 0 6px color-mix(in srgb, var(--weather-text-color) 70%, transparent),
+    0 0 16px color-mix(in srgb, var(--weather-text-color) 40%, transparent),
+    0 0 32px color-mix(in srgb, var(--weather-text-color) 20%, transparent);
+  text-transform: var(--weather-text-transform, uppercase);
+  letter-spacing: var(--weather-text-letter-spacing, 0.08em);
 }
