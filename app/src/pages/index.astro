@@ -22,7 +22,8 @@ const siteAge = new Date().getFullYear() - 2007;
 <BaseLayout activePage="">
   {/* ── Hero ── */}
   <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
-    <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark"></live-window>
+    <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark" bg-color="#030a12"
+    ></live-window>
     <div class="max-w-xl">
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
         <span data-home="greeting">Hey</span>, I'm&nbsp;Thalida
@@ -148,7 +149,6 @@ const siteAge = new Date().getFullYear() - 2007;
     --blinds-color: var(--color-midnight);
     --clock-text-color: #e74c3c;
     --weather-text-font: "Space Grotesk", sans-serif;
-    --weather-text-color: var(--color-teal);
   }
 
   /* Timeline: horizontal scroll */

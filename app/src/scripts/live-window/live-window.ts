@@ -86,6 +86,7 @@ class LiveWindowElement extends HTMLElement {
     "hide-weather-text",
     "temp-unit",
     "theme",
+    "bg-color",
   ];
 
   private shadow: ShadowRoot;
@@ -160,6 +161,11 @@ class LiveWindowElement extends HTMLElement {
 
     if (name === "temp-unit") {
       this.fetchWeather();
+      return;
+    }
+
+    if (name === "bg-color") {
+      this.renderSkyColor();
       return;
     }
 
@@ -335,6 +341,102 @@ class LiveWindowElement extends HTMLElement {
 
   // -- Sky colour gradient --------------------------------------------------
 
+  private get bgColor(): RGB {
+    const attr = this.getAttribute("bg-color");
+    if (attr) {
+      const hex = attr.replace("#", "");
+      if (hex.length === 6) {
+        return {
+          r: parseInt(hex.slice(0, 2), 16),
+          g: parseInt(hex.slice(2, 4), 16),
+          b: parseInt(hex.slice(4, 6), 16),
+        };
+      }
+    }
+    // Auto-detect from parent's computed background
+    const computed = getComputedStyle(this).backgroundColor;
+    const match = computed.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (match) return { r: +match[1], g: +match[2], b: +match[3] };
+    return { r: 0, g: 0, b: 0 };
+  }
+
+  private relativeLuminance(c: RGB): number {
+    const toLinear = (v: number) => {
+      const s = v / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    };
+    return 0.2126 * toLinear(c.r) + 0.7152 * toLinear(c.g) + 0.0722 * toLinear(c.b);
+  }
+
+  private contrastRatio(a: RGB, b: RGB): number {
+    const la = this.relativeLuminance(a);
+    const lb = this.relativeLuminance(b);
+    const lighter = Math.max(la, lb);
+    const darker = Math.min(la, lb);
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  private getReadableColor(color: RGB, minContrast = 4.5): RGB {
+    const bg = this.bgColor;
+    if (this.contrastRatio(color, bg) >= minContrast) return color;
+
+    // Convert to HSL, then increase lightness until contrast is met
+    const r = color.r / 255;
+    const g = color.g / 255;
+    const b = color.b / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+
+    let h = 0;
+    let s = 0;
+    if (max !== min) {
+      const d = max - min;
+      s = (max + min) / 2 > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) h = ((g - b) / (max - min) + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / (max - min) + 2) / 6;
+      else h = ((r - g) / (max - min) + 4) / 6;
+    }
+
+    const hueToRgb = (p: number, q: number, t: number) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
+    const hslToRgb = (l: number): RGB => {
+      if (s === 0) {
+        const v = Math.round(l * 255);
+        return { r: v, g: v, b: v };
+      }
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      return {
+        r: Math.round(hueToRgb(p, q, h + 1 / 3) * 255),
+        g: Math.round(hueToRgb(p, q, h) * 255),
+        b: Math.round(hueToRgb(p, q, h - 1 / 3) * 255),
+      };
+    };
+
+    // Binary search for the minimum lightness that meets the contrast ratio
+    let lo = (max + min) / 2;
+    let hi = 1;
+    let result = hslToRgb(hi);
+    for (let i = 0; i < 16; i++) {
+      const mid = (lo + hi) / 2;
+      const candidate = hslToRgb(mid);
+      if (this.contrastRatio(candidate, bg) >= minContrast) {
+        result = candidate;
+        hi = mid;
+      } else {
+        lo = mid;
+      }
+    }
+    return result;
+  }
+
   private getColorBlend(start: RGB, end: RGB, distance: number): RGB {
     return {
       r: Math.round(start.r + (end.r - start.r) * distance),
@@ -466,6 +568,8 @@ class LiveWindowElement extends HTMLElement {
     const s = this.gradient.start;
     const e = this.gradient.end;
     this.skyColorEl.style.background = `linear-gradient(180deg, rgb(${s.r},${s.g},${s.b}), rgb(${e.r},${e.g},${e.b}))`;
+    const tc = this.getReadableColor(e);
+    this.style.setProperty("--weather-text-color", `rgb(${tc.r},${tc.g},${tc.b})`);
   }
 
   // -- Weather effects ------------------------------------------------------

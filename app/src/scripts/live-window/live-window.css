@@ -12,7 +12,7 @@
   --window-sky-color-default: #0e1a3a;
   --color-text-red: #e74c3c;
   --clock-text-color: var(--color-text-red);
-  --weather-text-color: #1a1a2e;
+  --weather-text-color: var(--window-sky-color-default);
   --primary-font: system-ui, -apple-system, sans-serif;
   --clock-font: "Squada One", sans-serif;
 }
@@ -23,7 +23,6 @@
     --blinds-color: #c4b5a0;
     --window-clock-bg: #0d0d1a;
     --window-sky-color-default: #060d1f;
-    --weather-text-color: #f0f0f0;
   }
 }
 
@@ -32,7 +31,6 @@
   --blinds-color: #c4b5a0;
   --window-clock-bg: #0d0d1a;
   --window-sky-color-default: #060d1f;
-  --weather-text-color: #f0f0f0;
 }
 
 /* ---- Scene ---- */
