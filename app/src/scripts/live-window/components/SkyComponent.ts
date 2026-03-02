@@ -1,9 +1,10 @@
 import type { SceneComponent, LiveWindowState } from "../types";
 import { GradientLayer } from "./sky/GradientLayer";
+import { StarsLayer } from "./sky/StarsLayer";
 import { WeatherLayer } from "./sky/WeatherLayer";
 
 export class SkyComponent implements SceneComponent {
-  private children: SceneComponent[] = [new GradientLayer(), new WeatherLayer()];
+  private children: SceneComponent[] = [new GradientLayer(), new StarsLayer(), new WeatherLayer()];
 
   mount(container: HTMLElement): void {
     container.className = "sky";
