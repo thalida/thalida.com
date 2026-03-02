@@ -164,3 +164,75 @@ export const SKY_PHASES: SkyPhase[] = [
     },
   },
 ];
+
+const MIN30 = 30 * 60_000;
+const MIN60 = 60 * 60_000;
+const MIN90 = 90 * 60_000;
+
+/**
+ * Returns default sunrise (6:00 AM) and sunset (6:00 PM) for today.
+ * Used as fallback when weather API data is unavailable.
+ */
+export function getDefaultSunTimes(): { sunrise: number; sunset: number } {
+  const now = new Date();
+  const sr = new Date(now);
+  sr.setHours(6, 0, 0, 0);
+  const ss = new Date(now);
+  ss.setHours(18, 0, 0, 0);
+  return { sunrise: sr.getTime(), sunset: ss.getTime() };
+}
+
+/**
+ * Calculates the timestamp for each of the 16 sky phases based on
+ * sunrise and sunset times.
+ *
+ * Phase indices:
+ *  0: night           — midnight (start of day)
+ *  1: astronomicalDawn — sunrise - 90min
+ *  2: nauticalDawn     — sunrise - 60min
+ *  3: civilDawn        — sunrise - 30min
+ *  4: sunrise          — sunrise
+ *  5: goldenHourAm     — sunrise + 30min
+ *  6: earlyMorning     — sunrise + 60min (golden AM end)
+ *  7: lateMorning      — 1/4 of daylight core
+ *  8: midday           — solar noon (midpoint of sunrise & sunset)
+ *  9: earlyAfternoon   — 3/4 of daylight core
+ * 10: lateAfternoon    — sunset - 60min (golden PM start)
+ * 11: goldenHourPm     — sunset - 30min
+ * 12: sunset           — sunset
+ * 13: civilDusk        — sunset + 30min
+ * 14: nauticalDusk     — sunset + 60min
+ * 15: astronomicalDusk — sunset + 90min
+ */
+export function calculatePhaseTimestamps(sunrise: number, sunset: number): number[] {
+  const midnight = new Date(sunrise);
+  midnight.setHours(0, 0, 0, 0);
+
+  const goldenAmEnd = sunrise + MIN60; // end of golden hour AM / start of early morning
+  const goldenPmStart = sunset - MIN60; // start of golden hour PM / end of late afternoon
+  const solarNoon = (sunrise + sunset) / 2;
+
+  // Daylight core: from goldenAmEnd to goldenPmStart
+  const coreStart = goldenAmEnd;
+  const coreEnd = goldenPmStart;
+  const coreDuration = coreEnd - coreStart;
+
+  return [
+    midnight.getTime(), //  0: night
+    sunrise - MIN90, //  1: astronomicalDawn
+    sunrise - MIN60, //  2: nauticalDawn
+    sunrise - MIN30, //  3: civilDawn
+    sunrise, //  4: sunrise
+    sunrise + MIN30, //  5: goldenHourAm
+    goldenAmEnd, //  6: earlyMorning
+    coreStart + coreDuration / 4, //  7: lateMorning
+    solarNoon, //  8: midday
+    coreStart + (coreDuration * 3) / 4, //  9: earlyAfternoon
+    goldenPmStart, // 10: lateAfternoon
+    sunset - MIN30, // 11: goldenHourPm
+    sunset, // 12: sunset
+    sunset + MIN30, // 13: civilDusk
+    sunset + MIN60, // 14: nauticalDusk
+    sunset + MIN90, // 15: astronomicalDusk
+  ];
+}
