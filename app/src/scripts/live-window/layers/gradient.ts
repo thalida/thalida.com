@@ -1,15 +1,6 @@
-export interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
+import type { RGB, SkyGradient, SkyLayer, PhaseInfo } from "../types";
 
-export interface SkyGradient {
-  zenith: RGB;
-  upper: RGB;
-  lower: RGB;
-  horizon: RGB;
-}
+export type { RGB, SkyGradient } from "../types";
 
 interface SkyPhase {
   name: string;
@@ -316,4 +307,32 @@ export function getCurrentSkyGradient(now: number, sunrise: number | null, sunse
   const t = duration > 0 ? (now - phaseStart) / duration : 0;
 
   return blendGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
+}
+
+export class GradientLayer implements SkyLayer {
+  public currentGradient: SkyGradient | null = null;
+  private el: HTMLElement | null = null;
+
+  mount(container: HTMLElement): void {
+    this.el = container;
+    this.el.className = "sky-layer sky-color";
+    this.el.style.position = "absolute";
+    this.el.style.top = "0";
+    this.el.style.left = "0";
+    this.el.style.width = "100%";
+    this.el.style.height = "100%";
+  }
+
+  update(phase: PhaseInfo): void {
+    this.currentGradient = getCurrentSkyGradient(phase.now, phase.sunrise, phase.sunset);
+    if (!this.el || !this.currentGradient) return;
+    const { zenith, upper, lower, horizon } = this.currentGradient;
+    this.el.style.background = `linear-gradient(180deg, rgb(${zenith.r},${zenith.g},${zenith.b}), rgb(${upper.r},${upper.g},${upper.b}), rgb(${lower.r},${lower.g},${lower.b}), rgb(${horizon.r},${horizon.g},${horizon.b}))`;
+  }
+
+  destroy(): void {
+    if (this.el) this.el.innerHTML = "";
+    this.el = null;
+    this.currentGradient = null;
+  }
 }

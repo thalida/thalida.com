@@ -5,8 +5,8 @@ import {
   getDefaultSunTimes,
   blendGradient,
   getCurrentSkyGradient,
-} from "../sky-gradient";
-import type { SkyGradient } from "../sky-gradient";
+} from "../layers/gradient";
+import type { SkyGradient } from "../types";
 
 describe("SKY_PHASES", () => {
   it("has exactly 16 phases", () => {

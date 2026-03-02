@@ -1,5 +1,5 @@
-import { getCurrentSkyGradient } from "./sky-gradient";
-import type { RGB, SkyGradient } from "./sky-gradient";
+import { getCurrentSkyGradient } from "./layers/gradient";
+import type { RGB, SkyGradient } from "./layers/gradient";
 
 interface WeatherCurrent {
   main: string;
