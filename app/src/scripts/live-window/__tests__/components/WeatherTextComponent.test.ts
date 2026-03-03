@@ -44,6 +44,7 @@ function makeState(overrides?: {
       bgColor: { r: 0, g: 0, b: 0 },
       resolvedUnits: "metric",
       timezone: null,
+      label: null,
     },
   };
 }

@@ -53,6 +53,7 @@ export interface StoreState {
     lat: number | null;
     lng: number | null;
     country: string | null;
+    name: string | null;
   };
   weather: {
     lastFetched: number | null;
@@ -82,6 +83,7 @@ export interface LiveWindowState {
     bgColor: RGB;
     resolvedUnits: string;
     timezone: string | null;
+    label: string | null;
   };
 }
 

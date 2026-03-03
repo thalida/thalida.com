@@ -26,6 +26,7 @@ function makeState(hours: number): LiveWindowState {
       bgColor: { r: 0, g: 0, b: 0 },
       resolvedUnits: "metric",
       timezone: null,
+      label: null,
     },
   };
 }

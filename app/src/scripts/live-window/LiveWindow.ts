@@ -150,6 +150,7 @@ class LiveWindowElement extends HTMLElement {
       bgColor: this.getBgColor(),
       resolvedUnits: resolveUnits(this.getAttribute("temp-unit"), this.state.store.location.country),
       timezone: this.getAttribute("timezone") || null,
+      label: this.getAttribute("label") || null,
     };
   }
 
@@ -233,6 +234,7 @@ class LiveWindowElement extends HTMLElement {
           lat: parseFloat(explicitLat),
           lng: parseFloat(explicitLng),
           country: null,
+          name: null,
           lastFetched: Date.now(),
         },
       };

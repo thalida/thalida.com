@@ -5,7 +5,7 @@ export const CACHE_VERSION = 2;
 const STORAGE_KEY = "liveWindowStore";
 
 export const DEFAULT_STORE: StoreState = {
-  location: { lastFetched: null, lat: null, lng: null, country: null },
+  location: { lastFetched: null, lat: null, lng: null, country: null, name: null },
   weather: { lastFetched: null, units: null, current: null, sunrise: null, sunset: null },
 };
 
@@ -25,6 +25,7 @@ export function createDefaultState(store?: StoreState): LiveWindowState {
       bgColor: { r: 0, g: 0, b: 0 },
       resolvedUnits: "metric",
       timezone: null,
+      label: null,
     },
   };
 }

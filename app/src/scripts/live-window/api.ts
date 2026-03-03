@@ -61,6 +61,7 @@ export async function fetchLocation(key: string, state: StoreState): Promise<Sto
         lat: data.location.latitude,
         lng: data.location.longitude,
         country: data.location.country?.code ?? null,
+        name: data.location.city ?? null,
         lastFetched: Date.now(),
       },
     };
@@ -86,6 +87,10 @@ export async function fetchWeather(
 
     const newState: StoreState = {
       ...state,
+      location: {
+        ...state.location,
+        name: data.name ?? state.location.name,
+      },
       weather: {
         current: { ...data.weather[0], temp: data.main.temp },
         sunrise: data.sys.sunrise * 1000,
