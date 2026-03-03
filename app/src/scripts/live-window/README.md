@@ -63,11 +63,32 @@ Override these on the `<live-window>` element to customise appearance:
 
 ### Sky Gradient
 
-The sky color is a smooth gradient that transitions through 8 color
-phases across the day (midnight, dawn, sunrise, midday, afternoon,
-dusk, sunset, night). When weather data is available, sunrise and
-sunset times from the API define the phase boundaries. Without weather
-data, a simpler hour-of-day mapping is used as a fallback.
+The sky color is a 4-stop vertical gradient (`zenith → upper → lower → horizon`)
+that transitions through 16 color phases across the day — from deep
+night through dawn, sunrise, morning, midday, afternoon, golden hour,
+sunset, dusk, and back to night. When weather data is available,
+sunrise and sunset times from the API anchor the phase boundaries.
+Without weather data, fixed hour-of-day offsets are used as a fallback.
+
+
+### SkyLayer System
+
+The sky is rendered by composable **layers** that stack inside the
+`.sky` container. Each layer implements the `SkyLayer` interface
+(`mount`, `update`, `destroy`) and receives a `PhaseInfo` object on
+every update with the current time, phase index, interpolation factor,
+sun position, and weather data.
+
+Current layers (bottom to top):
+
+1. **GradientLayer** — renders the sky color gradient
+2. **WeatherLayer** — renders clouds, rain, snow, lightning, mist
+
+Adding a new layer (e.g. stars, moon, sun):
+
+1. Create `layers/<name>.ts` implementing `SkyLayer`
+2. Register it in the `layers` array in `live-window.ts`
+3. Add styles to `live-window.css`
 
 
 ### Weather Effects
@@ -150,10 +171,19 @@ the host page.
 
 ## Files
 
-| File              | Purpose                                          |
-| ----------------- | ------------------------------------------------ |
-| `live-window.ts`  | Web Component class, all logic                   |
-| `live-window.css` | All styles (loaded into Shadow DOM via `<link>`) |
+| File                 | Purpose                                              |
+| -------------------- | ---------------------------------------------------- |
+| `live-window.ts`     | Web Component orchestrator, lifecycle, intervals     |
+| `live-window.css`    | All styles (loaded into Shadow DOM via `<link>`)     |
+| `types.ts`           | Shared interfaces: RGB, SkyGradient, PhaseInfo, etc. |
+| `color.ts`           | WCAG contrast, luminance, readable color (pure fns)  |
+| `state.ts`           | localStorage persistence, cache versioning           |
+| `api.ts`             | IP geolocation + OpenWeather fetch + rate limiting   |
+| `clock.ts`           | Clock rendering + time format logic                  |
+| `blinds.ts`          | Blinds animation + rendering                         |
+| `phase-info.ts`      | PhaseInfo builder + sun position calculation         |
+| `layers/gradient.ts` | GradientLayer: sky color gradient (16 phases)        |
+| `layers/weather.ts`  | WeatherLayer: clouds, rain, snow, lightning, mist    |
 
 
 ## Example

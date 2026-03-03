@@ -12,7 +12,7 @@
 - [x] ask for all things to be componentized
 - [x] muted style tags on cards
 - [x] show date on all cards (month + year)
-- [ ] window coloring
+- [x] window coloring
 - [x] date on the right
 - [x] proper recipe formatting
 - [x] remove "recipe" tag
@@ -30,3 +30,5 @@
 - [x] chatting as is misaligned from input by 2 px
 - [ ] audit all links
 - [ ] audit all tests - mock [moderation] skipped: OPENAI_API_KEY not set
+- [ ] Fix top-[35px]
+- [x] Add moon and sun layers to sky component
