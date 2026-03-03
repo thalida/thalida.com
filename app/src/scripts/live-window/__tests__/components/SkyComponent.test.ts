@@ -36,7 +36,7 @@ describe("SkyComponent", () => {
   });
 
   it("mounts child layers as divs inside container", () => {
-    expect(container.children.length).toBe(3);
+    expect(container.children.length).toBe(5);
   });
 
   it("populates state.ref.currentGradient after update", () => {
