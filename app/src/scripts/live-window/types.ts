@@ -81,6 +81,7 @@ export interface LiveWindowState {
     hideWeatherText: boolean;
     bgColor: RGB;
     resolvedUnits: string;
+    timezone: string | null;
   };
 }
 

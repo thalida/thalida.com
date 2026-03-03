@@ -18,6 +18,7 @@ function makeState(overrides?: Partial<LiveWindowState>): LiveWindowState {
       hideWeatherText: false,
       bgColor: { r: 0, g: 0, b: 0 },
       resolvedUnits: "metric",
+      timezone: null,
     },
     ...overrides,
   };
