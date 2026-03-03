@@ -85,9 +85,14 @@ export function getStarsOpacity(phaseIndex: number, t: number): number {
 }
 
 /**
- * Returns today's date seed as YYYYMMDD integer.
+ * Returns the current "star night" seed as YYYYMMDD integer.
+ *
+ * The seed rolls over at noon instead of midnight so that the entire
+ * night (sunset → sunrise) shares the same star field.  Before noon
+ * the previous calendar day's seed is used; after noon the current
+ * day's seed kicks in — but stars are invisible during the day anyway.
  */
 export function todaySeed(): number {
-  const d = new Date();
+  const d = new Date(Date.now() - 12 * 60 * 60 * 1000);
   return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
 }

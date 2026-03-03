@@ -125,10 +125,29 @@ describe("getStarsOpacity", () => {
 });
 
 describe("todaySeed", () => {
-  it("returns YYYYMMDD integer for the current date", () => {
+  it("returns today's date when called after noon", () => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date(2026, 2, 15)); // March 15, 2026
+    vi.setSystemTime(new Date(2026, 2, 15, 14, 0)); // March 15, 2026 at 2 PM
     expect(todaySeed()).toBe(20260315);
+    vi.useRealTimers();
+  });
+
+  it("returns previous day's date when called before noon", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date(2026, 2, 15, 2, 0)); // March 15, 2026 at 2 AM
+    expect(todaySeed()).toBe(20260314);
+    vi.useRealTimers();
+  });
+
+  it("keeps the same seed from evening through next morning", () => {
+    vi.useFakeTimers();
+    // 8 PM on March 15
+    vi.setSystemTime(new Date(2026, 2, 15, 20, 0));
+    const eveningSeed = todaySeed();
+    // 4 AM on March 16
+    vi.setSystemTime(new Date(2026, 2, 16, 4, 0));
+    const morningSeed = todaySeed();
+    expect(eveningSeed).toBe(morningSeed);
     vi.useRealTimers();
   });
 });
