@@ -126,6 +126,26 @@
   }
 }
 
+/* ---- Sun ---- */
+
+.sun-layer {
+  z-index: 1;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.sun {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffd700;
+  box-shadow:
+    0 0 15px 8px rgba(255, 215, 0, 0.4),
+    0 0 30px 15px rgba(255, 165, 0, 0.2);
+  transform: translate(-50%, -50%);
+}
+
 /* ---- Weather effects ---- */
 
 .weather {
