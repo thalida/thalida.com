@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ClockComponent } from "../../components/ClockComponent";
 import type { LiveWindowState } from "../../types";
 import { DEFAULT_STATE } from "../../state";
@@ -79,5 +79,37 @@ describe("ClockComponent", () => {
     expect(tick?.hour).toBeLessThan(24);
     expect(tick?.minute).toBeGreaterThanOrEqual(0);
     expect(tick?.minute).toBeLessThan(60);
+  });
+
+  describe("timezone support", () => {
+    it("displays time in the specified timezone", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2025-06-15T12:00:00Z"));
+
+      const state = makeState();
+      state.attrs.timezone = "Asia/Tokyo"; // UTC+9 → 21:00
+
+      clock.update(state);
+
+      const hourEl = container.querySelector(".clock-hour") as HTMLElement;
+      expect(hourEl.textContent).toBe("21");
+
+      vi.useRealTimers();
+    });
+
+    it("falls back to local time when timezone is null", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2025-06-15T12:00:00Z"));
+
+      const state = makeState();
+      state.attrs.timezone = null;
+
+      clock.update(state);
+
+      const hourEl = container.querySelector(".clock-hour") as HTMLElement;
+      expect(hourEl.textContent).toBeTruthy();
+
+      vi.useRealTimers();
+    });
   });
 });

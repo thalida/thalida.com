@@ -38,10 +38,27 @@ export class ClockComponent implements SceneComponent {
 
     this.clockEl.hidden = state.attrs.hideClock;
 
-    const now = new Date();
-    const raw = now.getHours();
+    let raw: number;
+    let m: number;
+
+    if (state.attrs.timezone) {
+      const fmt = new Intl.DateTimeFormat("en-US", {
+        timeZone: state.attrs.timezone,
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+      const parts = fmt.formatToParts(new Date());
+      raw = parseInt(parts.find((p) => p.type === "hour")?.value ?? "0", 10);
+      if (raw === 24) raw = 0;
+      m = parseInt(parts.find((p) => p.type === "minute")?.value ?? "0", 10);
+    } else {
+      const now = new Date();
+      raw = now.getHours();
+      m = now.getMinutes();
+    }
+
     let h = raw;
-    const m = now.getMinutes();
     const use12Hour = state.attrs.use12Hour;
 
     if (use12Hour) {
