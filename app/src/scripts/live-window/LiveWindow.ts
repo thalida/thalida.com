@@ -3,7 +3,7 @@ import { loadState, saveState } from "./state";
 import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather } from "./api";
 import { parseHexColor, parseComputedColor } from "./utils/color";
 import { buildPhaseInfo } from "./utils/phase";
-import { getTimezoneAdjustedNow } from "./utils/timezone";
+import { getTimezoneAdjustedNow, shiftTimestampToTimezone } from "./utils/timezone";
 import { SkyComponent } from "./components/SkyComponent";
 import { BlindsComponent } from "./components/BlindsComponent";
 import { ClockComponent } from "./components/ClockComponent";
@@ -156,8 +156,22 @@ class LiveWindowElement extends HTMLElement {
   }
 
   private refreshComputed() {
-    const now = this.state.attrs.timezone ? getTimezoneAdjustedNow(this.state.attrs.timezone) : Date.now();
-    this.state.computed.phase = buildPhaseInfo(this.state.store, now);
+    const tz = this.state.attrs.timezone;
+    const now = tz ? getTimezoneAdjustedNow(tz) : Date.now();
+
+    let store = this.state.store;
+    if (tz && store.weather.sunrise != null && store.weather.sunset != null) {
+      store = {
+        ...store,
+        weather: {
+          ...store.weather,
+          sunrise: shiftTimestampToTimezone(store.weather.sunrise, tz),
+          sunset: shiftTimestampToTimezone(store.weather.sunset, tz),
+        },
+      };
+    }
+
+    this.state.computed.phase = buildPhaseInfo(store, now);
   }
 
   private getBgColor(): RGB {

@@ -1,13 +1,13 @@
 /**
- * Returns a Date.now()-like timestamp that, when passed to `new Date()`,
- * produces local-looking hours/minutes matching the given IANA timezone.
+ * Shifts a UTC millisecond timestamp so that, when passed to `new Date()`,
+ * the resulting hours/minutes match the given IANA timezone's wall clock.
  *
- * This is used so that all existing phase/clock code (which calls
+ * This is used so that all phase/clock code (which calls
  * `new Date(now).getHours()`) works correctly for remote timezones
  * without modifying every consumer.
  */
-export function getTimezoneAdjustedNow(timezone: string): number {
-  const now = new Date();
+export function shiftTimestampToTimezone(utcMs: number, timezone: string): number {
+  const date = new Date(utcMs);
 
   const formatter = new Intl.DateTimeFormat("en-US", {
     timeZone: timezone,
@@ -20,7 +20,7 @@ export function getTimezoneAdjustedNow(timezone: string): number {
     hour12: false,
   });
 
-  const parts = formatter.formatToParts(now);
+  const parts = formatter.formatToParts(date);
   const get = (type: Intl.DateTimeFormatPartTypes): number => {
     const part = parts.find((p) => p.type === type);
     if (!part) {
@@ -40,4 +40,12 @@ export function getTimezoneAdjustedNow(timezone: string): number {
   );
 
   return shifted.getTime();
+}
+
+/**
+ * Returns a Date.now()-like timestamp that, when passed to `new Date()`,
+ * produces local-looking hours/minutes matching the given IANA timezone.
+ */
+export function getTimezoneAdjustedNow(timezone: string): number {
+  return shiftTimestampToTimezone(Date.now(), timezone);
 }
