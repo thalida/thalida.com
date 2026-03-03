@@ -31,4 +31,4 @@
 - [ ] audit all links
 - [ ] audit all tests - mock [moderation] skipped: OPENAI_API_KEY not set
 - [ ] Fix top-[35px]
-- [ ] Add moon and sun layers to sky component
+- [x] Add moon and sun layers to sky component

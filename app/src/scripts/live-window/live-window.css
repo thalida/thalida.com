@@ -146,6 +146,32 @@
   transform: translate(-50%, -50%);
 }
 
+/* ---- Moon ---- */
+
+.moon-layer {
+  z-index: 1;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.moon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e8e8d0;
+  box-shadow: 0 0 8px 4px rgba(232, 232, 208, 0.3);
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+}
+
+.moon-shadow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: var(--window-sky-color-default);
+}
+
 /* ---- Weather effects ---- */
 
 .weather {
