@@ -1,11 +1,11 @@
 import type { StoreState, LiveWindowState } from "./types";
 import { buildPhaseInfo } from "./utils/phase";
 
-export const CACHE_VERSION = 2;
+export const CACHE_VERSION = 3;
 const STORAGE_KEY = "liveWindowStore";
 
 export const DEFAULT_STORE: StoreState = {
-  location: { lastFetched: null, lat: null, lng: null, country: null, name: null },
+  location: { lastFetched: null, lat: null, lng: null, country: null, name: null, timezone: null },
   weather: { lastFetched: null, units: null, current: null, sunrise: null, sunset: null },
 };
 

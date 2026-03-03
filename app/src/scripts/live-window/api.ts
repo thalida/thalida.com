@@ -62,6 +62,7 @@ export async function fetchLocation(key: string, state: StoreState): Promise<Sto
         lng: data.location.longitude,
         country: data.location.country?.code ?? null,
         name: data.location.city ?? null,
+        timezone: data.time_zone?.id ?? null,
         lastFetched: Date.now(),
       },
     };

@@ -150,7 +150,7 @@ class LiveWindowElement extends HTMLElement {
       hideWeatherText: this.hasAttribute("hide-weather-text"),
       bgColor: this.getBgColor(),
       resolvedUnits: resolveUnits(this.getAttribute("temp-unit"), this.state.store.location.country),
-      timezone: this.getAttribute("timezone") || null,
+      timezone: this.getAttribute("timezone") || this.state.store.location.timezone || null,
       label: this.getAttribute("label") || null,
     };
   }

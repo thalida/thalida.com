@@ -54,6 +54,7 @@ export interface StoreState {
     lng: number | null;
     country: string | null;
     name: string | null;
+    timezone: string | null;
   };
   weather: {
     lastFetched: number | null;

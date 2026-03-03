@@ -18,17 +18,17 @@ export class InfoPanelComponent implements SceneComponent {
     wrapper.appendChild(location);
     this.locationEl = location;
 
-    const coords = document.createElement("p");
-    coords.className = "info-panel-coords";
-    coords.hidden = true;
-    wrapper.appendChild(coords);
-    this.coordsEl = coords;
-
     const weather = document.createElement("p");
     weather.className = "info-panel-weather";
     weather.hidden = true;
     wrapper.appendChild(weather);
     this.weatherEl = weather;
+
+    const coords = document.createElement("p");
+    coords.className = "info-panel-coords";
+    coords.hidden = true;
+    wrapper.appendChild(coords);
+    this.coordsEl = coords;
 
     container.appendChild(wrapper);
   }

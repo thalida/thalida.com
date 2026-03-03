@@ -772,16 +772,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   width: var(--live-window-width);
   margin: var(--info-panel-margin, 12px 0);
-  font-family: var(--info-panel-font, var(--primary-font));
+  font-family: var(--info-panel-font, "IBM Plex Mono", monospace);
   color: var(--info-panel-color, #ffffff);
+}
+
+.info-panel-weather {
+  font-size: var(--info-panel-weather-size, 0.7rem);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-transform: var(--info-panel-weather-transform, uppercase);
 }
 
 .info-panel-location {
   font-size: var(--info-panel-location-size, 0.85rem);
-  font-weight: 600;
+  font-weight: 400;
   margin: 0;
   letter-spacing: 0.02em;
 }
@@ -791,13 +799,6 @@
   margin: 0;
   opacity: 0.7;
   letter-spacing: 0.04em;
-}
-
-.info-panel-weather {
-  font-size: var(--info-panel-weather-size, 0.7rem);
-  margin: 4px 0 0;
-  letter-spacing: 0.06em;
-  text-transform: var(--info-panel-weather-transform, uppercase);
 }
 
 .info-panel-location[hidden],
