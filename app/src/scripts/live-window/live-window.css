@@ -136,13 +136,13 @@
 
 .sun {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #ffd700;
   box-shadow:
-    0 0 15px 8px rgba(255, 215, 0, 0.4),
-    0 0 30px 15px rgba(255, 165, 0, 0.2);
+    0 0 18px 10px rgba(255, 215, 0, 0.4),
+    0 0 36px 18px rgba(255, 165, 0, 0.2);
   transform: translate(-50%, -50%);
 }
 
@@ -156,11 +156,11 @@
 
 .moon {
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: #e8e8d0;
-  box-shadow: 0 0 8px 4px rgba(232, 232, 208, 0.3);
+  box-shadow: 0 0 10px 5px rgba(232, 232, 208, 0.3);
   overflow: hidden;
   transform: translate(-50%, -50%);
 }
