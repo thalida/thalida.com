@@ -31,12 +31,12 @@ describe("getSunAngle", () => {
 
 describe("getMoonPhase", () => {
   it("returns ~0 on a known new moon date", () => {
-    const newMoon = new Date(2025, 0, 29, 12, 0).getTime();
+    const newMoon = Date.UTC(2025, 0, 29, 12, 36);
     expect(getMoonPhase(newMoon)).toBeCloseTo(0, 1);
   });
 
   it("returns ~0.5 approximately 14.76 days after new moon (full moon)", () => {
-    const newMoon = new Date(2025, 0, 29, 12, 0).getTime();
+    const newMoon = Date.UTC(2025, 0, 29, 12, 36);
     const fullMoon = newMoon + 14.765 * 24 * 60 * 60 * 1000;
     expect(getMoonPhase(fullMoon)).toBeCloseTo(0.5, 1);
   });
@@ -48,8 +48,8 @@ describe("getMoonPhase", () => {
   });
 
   it("cycles back near 0 after ~29.53 days", () => {
-    const start = new Date(2025, 0, 29, 12, 0).getTime();
-    const oneMonth = start + 29.53 * 24 * 60 * 60 * 1000;
+    const start = Date.UTC(2025, 0, 29, 12, 36);
+    const oneMonth = start + 29.53059 * 24 * 60 * 60 * 1000;
     expect(getMoonPhase(oneMonth)).toBeCloseTo(0, 1);
   });
 });
