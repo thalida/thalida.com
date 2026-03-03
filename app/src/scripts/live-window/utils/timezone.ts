@@ -29,11 +29,12 @@ export function getTimezoneAdjustedNow(timezone: string): number {
     return parseInt(part.value, 10);
   };
 
+  const hour = get("hour");
   const shifted = new Date(
     get("year"),
     get("month") - 1,
     get("day"),
-    get("hour") === 24 ? 0 : get("hour"),
+    hour === 24 ? 0 : hour,
     get("minute"),
     get("second"),
   );
