@@ -24,22 +24,17 @@ const cities = [
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
     {
       cities.map((city) => (
-        <div class="flex flex-col items-center gap-3">
+        <div class="flex flex-col items-center">
           <live-window
             openweather-key={openweatherKey}
             latitude={String(city.lat)}
             longitude={String(city.lng)}
             timezone={city.tz}
             temp-unit={city.unit}
+            label={city.name}
             theme="dark"
             bg-color="#030a12"
           />
-          <div class="text-center">
-            <h2 class="font-heading font-semibold text-text text-base m-0">{city.name}</h2>
-            <p class="font-body text-2xs text-muted m-0 mt-1">
-              {city.lat.toFixed(2)}°, {city.lng.toFixed(2)}° · {city.tz}
-            </p>
-          </div>
         </div>
       ))
     }
@@ -55,6 +50,5 @@ const cities = [
     --window-color: var(--color-midnight);
     --blinds-color: var(--color-midnight);
     --clock-text-color: #e74c3c;
-    --weather-text-font: "Space Grotesk", sans-serif;
   }
 </style>

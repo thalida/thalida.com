@@ -7,7 +7,7 @@ import { getTimezoneAdjustedNow } from "./utils/timezone";
 import { SkyComponent } from "./components/SkyComponent";
 import { BlindsComponent } from "./components/BlindsComponent";
 import { ClockComponent } from "./components/ClockComponent";
-import { WeatherTextComponent } from "./components/WeatherTextComponent";
+import { InfoPanelComponent } from "./components/InfoPanelComponent";
 
 import STYLES_URL from "./live-window.css?url";
 
@@ -24,6 +24,7 @@ class LiveWindowElement extends HTMLElement {
     "latitude",
     "longitude",
     "timezone",
+    "label",
   ];
 
   private shadow: ShadowRoot;
@@ -32,7 +33,7 @@ class LiveWindowElement extends HTMLElement {
   private skyComponent = new SkyComponent();
   private blindsComponent = new BlindsComponent();
   private clockComponent = new ClockComponent();
-  private weatherTextComponent = new WeatherTextComponent();
+  private infoPanelComponent = new InfoPanelComponent();
 
   private components: SceneComponent[];
 
@@ -44,7 +45,7 @@ class LiveWindowElement extends HTMLElement {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
     this.state = loadState();
-    this.components = [this.skyComponent, this.blindsComponent, this.clockComponent, this.weatherTextComponent];
+    this.components = [this.skyComponent, this.blindsComponent, this.clockComponent, this.infoPanelComponent];
   }
 
   // -- Lifecycle --------------------------------------------------------------
@@ -77,9 +78,9 @@ class LiveWindowElement extends HTMLElement {
       this.clockComponent.update(this.state);
       return;
     }
-    if (name === "hide-weather-text" || name === "bg-color") {
+    if (name === "hide-weather-text" || name === "bg-color" || name === "label") {
       this.refreshAttrs();
-      this.weatherTextComponent.update(this.state);
+      this.infoPanelComponent.update(this.state);
       return;
     }
     if (name === "temp-unit") {
@@ -132,10 +133,10 @@ class LiveWindowElement extends HTMLElement {
     liveWindow.appendChild(clockContainer);
     this.clockComponent.mount(clockContainer);
 
-    // Mount weather text (outside .live-window, inside .scene)
-    const weatherTextContainer = document.createElement("div");
-    scene.appendChild(weatherTextContainer);
-    this.weatherTextComponent.mount(weatherTextContainer);
+    // Mount info panel (outside .live-window, inside .scene)
+    const infoPanelContainer = document.createElement("div");
+    scene.appendChild(infoPanelContainer);
+    this.infoPanelComponent.mount(infoPanelContainer);
 
     this.shadow.appendChild(scene);
   }

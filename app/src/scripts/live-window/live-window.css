@@ -12,7 +12,6 @@
   --window-sky-color-default: #0e1a3a;
   --color-text-red: #e74c3c;
   --clock-text-color: var(--color-text-red);
-  --weather-text-color: var(--window-sky-color-default);
   --primary-font: system-ui, -apple-system, sans-serif;
   --clock-font: "Squada One", sans-serif;
 }
@@ -767,23 +766,42 @@
   color: var(--clock-text-color);
 }
 
-/* ---- Weather text ---- */
+/* ---- Info panel ---- */
 
-.current-weather-text[hidden] {
-  display: none;
+.info-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: var(--live-window-width);
+  margin: var(--info-panel-margin, 12px 0);
+  font-family: var(--info-panel-font, var(--primary-font));
+  color: var(--info-panel-color, #ffffff);
 }
 
-.current-weather-text {
-  font-family: var(--weather-text-font, var(--primary-font));
-  font-size: var(--weather-text-size, 0.75rem);
-  width: var(--live-window-width);
-  text-align: center;
-  margin: var(--weather-text-margin, 12px 0);
-  color: var(--weather-text-color);
-  text-shadow:
-    0 0 6px color-mix(in srgb, var(--weather-text-color) 70%, transparent),
-    0 0 16px color-mix(in srgb, var(--weather-text-color) 40%, transparent),
-    0 0 32px color-mix(in srgb, var(--weather-text-color) 20%, transparent);
-  text-transform: var(--weather-text-transform, uppercase);
-  letter-spacing: var(--weather-text-letter-spacing, 0.08em);
+.info-panel-location {
+  font-size: var(--info-panel-location-size, 0.85rem);
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.info-panel-coords {
+  font-size: var(--info-panel-coords-size, 0.65rem);
+  margin: 0;
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+}
+
+.info-panel-weather {
+  font-size: var(--info-panel-weather-size, 0.7rem);
+  margin: 4px 0 0;
+  letter-spacing: 0.06em;
+  text-transform: var(--info-panel-weather-transform, uppercase);
+}
+
+.info-panel-location[hidden],
+.info-panel-coords[hidden],
+.info-panel-weather[hidden] {
+  display: none;
 }
