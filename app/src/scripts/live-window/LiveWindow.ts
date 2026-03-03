@@ -250,6 +250,7 @@ class LiveWindowElement extends HTMLElement {
           lng: parseFloat(explicitLng),
           country: null,
           name: null,
+          timezone: null,
           lastFetched: Date.now(),
         },
       };
