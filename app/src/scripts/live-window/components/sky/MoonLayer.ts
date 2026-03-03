@@ -38,13 +38,36 @@ export class MoonLayer implements SceneComponent {
     }
     this.el.style.opacity = pos.visible ? "1" : "0";
 
-    // Render lunar phase via shadow overlay scaleX.
-    // moonPhase 0 = new (fully shadowed), 0.5 = full (no shadow).
-    // scaleX: 1 at new moon, 0 at first quarter, -1 at full,
-    //         0 at last quarter, back to 1.
+    // Render lunar phase using rotateY for a natural elliptical terminator.
+    // The shadow disc rotates in 3D; backface-visibility:hidden hides it
+    // once it passes 90°. The shadow color swaps at the quarter boundaries
+    // to correctly render all four phase quadrants.
     if (this.shadow) {
-      const scaleX = Math.cos(moonPhase * 2 * Math.PI);
-      this.shadow.style.transform = `scaleX(${scaleX.toFixed(3)})`;
+      const skyColor = "var(--window-sky-color-default)";
+      const litColor = "#e8e8d0";
+      let rotation: number;
+      let color: string;
+
+      if (moonPhase <= 0.25) {
+        // New → First Quarter: dark disc rotates away, revealing right side
+        color = skyColor;
+        rotation = (moonPhase / 0.25) * 180;
+      } else if (moonPhase <= 0.5) {
+        // First Quarter → Full: lit disc rotates in, covering left dark side
+        color = litColor;
+        rotation = ((moonPhase - 0.25) / 0.25) * 180;
+      } else if (moonPhase <= 0.75) {
+        // Full → Last Quarter: dark disc rotates in from right
+        color = skyColor;
+        rotation = 180 - ((moonPhase - 0.5) / 0.25) * 180;
+      } else {
+        // Last Quarter → New: lit disc rotates away, revealing right dark side
+        color = litColor;
+        rotation = 180 - ((moonPhase - 0.75) / 0.25) * 180;
+      }
+
+      this.shadow.style.background = color;
+      this.shadow.style.transform = `rotateY(${rotation.toFixed(1)}deg)`;
     }
   }
 

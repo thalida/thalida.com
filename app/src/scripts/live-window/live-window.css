@@ -169,7 +169,7 @@
   position: absolute;
   inset: -1px;
   border-radius: 50%;
-  background: var(--window-sky-color-default);
+  backface-visibility: hidden;
 }
 
 /* ---- Weather effects ---- */

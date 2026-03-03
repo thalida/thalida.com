@@ -61,12 +61,12 @@ describe("MoonLayer", () => {
     vi.useRealTimers();
   });
 
-  it("updates moon-shadow scaleX based on lunar phase", () => {
+  it("updates moon-shadow with rotateY based on lunar phase", () => {
     layer.update(makeState(0));
     const shadow = container.querySelector(".moon-shadow") as HTMLElement;
     expect(shadow).toBeTruthy();
-    // Shadow should have a transform with scaleX
-    expect(shadow.style.transform).toContain("scaleX");
+    // Shadow should have a rotateY transform for phase rendering
+    expect(shadow.style.transform).toContain("rotateY");
   });
 
   it("clears DOM on destroy", () => {
