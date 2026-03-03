@@ -3,6 +3,7 @@ import { loadState, saveState } from "./state";
 import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather } from "./api";
 import { parseHexColor, parseComputedColor } from "./utils/color";
 import { buildPhaseInfo } from "./utils/phase";
+import { getTimezoneAdjustedNow } from "./utils/timezone";
 import { SkyComponent } from "./components/SkyComponent";
 import { BlindsComponent } from "./components/BlindsComponent";
 import { ClockComponent } from "./components/ClockComponent";
@@ -20,6 +21,9 @@ class LiveWindowElement extends HTMLElement {
     "temp-unit",
     "theme",
     "bg-color",
+    "latitude",
+    "longitude",
+    "timezone",
   ];
 
   private shadow: ShadowRoot;
@@ -83,6 +87,11 @@ class LiveWindowElement extends HTMLElement {
       this.doFetchWeather();
       return;
     }
+    if (name === "latitude" || name === "longitude" || name === "timezone") {
+      this.refreshAttrs();
+      this.doFetchWeather();
+      return;
+    }
     if (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key") && !this.weatherInterval) {
       this.startWeatherPolling();
     }
@@ -140,11 +149,13 @@ class LiveWindowElement extends HTMLElement {
       hideWeatherText: this.hasAttribute("hide-weather-text"),
       bgColor: this.getBgColor(),
       resolvedUnits: resolveUnits(this.getAttribute("temp-unit"), this.state.store.location.country),
+      timezone: this.getAttribute("timezone") || null,
     };
   }
 
   private refreshComputed() {
-    this.state.computed.phase = buildPhaseInfo(this.state.store, Date.now());
+    const now = this.state.attrs.timezone ? getTimezoneAdjustedNow(this.state.attrs.timezone) : Date.now();
+    this.state.computed.phase = buildPhaseInfo(this.state.store, now);
   }
 
   private getBgColor(): RGB {
@@ -166,7 +177,12 @@ class LiveWindowElement extends HTMLElement {
     this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
     this.skyInterval = window.setInterval(() => this.updateAll(), 15 * 60 * 1000);
 
-    if (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key")) {
+    const hasExplicitCoords = this.getAttribute("latitude") != null && this.getAttribute("longitude") != null;
+
+    if (
+      (hasExplicitCoords && this.getAttribute("openweather-key")) ||
+      (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key"))
+    ) {
       this.startWeatherPolling();
     }
   }
@@ -204,24 +220,49 @@ class LiveWindowElement extends HTMLElement {
 
   private async doFetchWeather(): Promise<void> {
     const owKey = this.getAttribute("openweather-key");
-    const ipKey = this.getAttribute("ipregistry-key");
-    if (!owKey || !ipKey) return;
+    if (!owKey) return;
 
-    if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
+    const explicitLat = this.getAttribute("latitude");
+    const explicitLng = this.getAttribute("longitude");
+    const hasExplicitCoords = explicitLat != null && explicitLng != null;
+
+    if (hasExplicitCoords) {
+      this.state.store = {
+        ...this.state.store,
+        location: {
+          lat: parseFloat(explicitLat),
+          lng: parseFloat(explicitLng),
+          country: null,
+          lastFetched: Date.now(),
+        },
+      };
+    } else {
+      const ipKey = this.getAttribute("ipregistry-key");
+      if (!ipKey) return;
+
+      if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
+        this.updateAll();
+        return;
+      }
+
+      this.state.store = await fetchLocation(ipKey, this.state.store);
+      saveState(this.state);
+    }
+
+    this.refreshAttrs();
+    const units = this.state.attrs.resolvedUnits;
+
+    if (!shouldFetchWeather(this.state.store, units) && !hasExplicitCoords) {
       this.updateAll();
       return;
     }
 
-    this.state.store = await fetchLocation(ipKey, this.state.store);
-    saveState(this.state);
-
-    // Re-resolve units after location fetch — country may have changed
-    this.refreshAttrs();
-    const units = this.state.attrs.resolvedUnits;
-
     const result = await fetchWeather(owKey, this.state.store, units);
     this.state.store = result.state;
-    saveState(this.state);
+
+    if (!hasExplicitCoords) {
+      saveState(this.state);
+    }
 
     if (result.changed) {
       this.updateAll();
