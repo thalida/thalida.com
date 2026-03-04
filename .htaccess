@@ -32,22 +32,13 @@ AddOutputFilterByType DEFLATE font/otf
 AddOutputFilterByType DEFLATE image/svg+xml
 AddOutputFilter DEFLATE css js
 
-#RewriteEngine ON
+RewriteEngine ON
+
+# Route /res/posts/<id> to the mock data handler
+RewriteRule ^res/posts/([a-zA-Z0-9_-]+)$ /res/posts/index.php?id=$1 [L,QSA]
+
 #RewriteRule ^([a-z]+)([/]?)$ /index.php?page=$1 [L] #Main Page
 #RewriteRule ^([a-z]+)/(\d+)([/]?)$ /index.php?page=$1&id=$2 [L]
 
-# Adaptive-Images -----------------------------------------------------------------------------------
-
-  # Add any directories you wish to omit from the Adaptive-Images process on a new line, as follows:
-  # RewriteCond %{REQUEST_URI} !ignore-this-directory
-  # RewriteCond %{REQUEST_URI} !and-ignore-this-directory-too
-  RewriteCond %{REQUEST_URI} !assets
-
-  # don't apply the AI behaviour to images inside AI's cache folder:
-  RewriteCond %{REQUEST_URI} !ai-cache
-
-  # Send any GIF, JPG, or PNG request that IS NOT stored inside one of the above directories
-  # to adaptive-images.php so we can select appropriately sized versions
-  RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
-
+# Adaptive-Images (disabled for archival deployment)
   # END Adaptive-Images -------------------------------------------------------------------------------

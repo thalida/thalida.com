@@ -296,8 +296,13 @@ appServices.service('SceneService',
         }.bind(this);
 
         this.setCoords = function( position ){
-            if( typeof position.coords !== 'undefined')
+            if( typeof position !== 'undefined' && typeof position.coords !== 'undefined')
                 this.extend(this.data, { lat: position.coords.latitude, long: position.coords.longitude });
+
+            // Default to Washington, D.C. if geolocation unavailable (archival mock data)
+            if( this.data.lat === null || this.data.long === null ) {
+                this.extend(this.data, { lat: 38.9072, long: -77.0369 });
+            }
 
             sessionStorage.location = this.data.lat + ',' + this.data.long;
 
@@ -357,6 +362,8 @@ appServices.service('SceneService',
             var	breakpoints = this._breakpoints,
                 array = _.clone(breakpoints.array),
                 data = {};
+
+            if (!array) return {key: 0, elapsedTime: 0, duration: 1};
 
             data.newKey = _.sortedIndex(array, time);
             data.startKey = (data.newKey - 1 >= 0) ? data.newKey - 1 : array.length - 1,

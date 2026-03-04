@@ -1,0 +1,7 @@
+.git
+.venv
+.mypy_cache
+.claude
+.DS_Store
+node_modules
+error_log
