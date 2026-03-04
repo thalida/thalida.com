@@ -1,7 +1,9 @@
 import { validateUsername, setAdminUsername, LS_ADMIN_TOKEN_KEY } from "@components/Chat/chat-utils";
 import { truncateMiddle, formatMessageTime, renderNotice } from "@components/Chat/chat-render";
+import { createIdleManager } from "@components/Chat/chat-idle";
 
 const RECONNECT_DELAY_MS = 3000;
+const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 
 const CLIENT_MESSAGE_TYPE = {
   JOIN: "join",
@@ -80,6 +82,7 @@ let adminUsername: string | null = null;
 let isOwner = false;
 let pendingRename = false;
 let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let idleManager: ReturnType<typeof createIdleManager> | null = null;
 
 const usernameInput = document.querySelector('[data-chat="username-input"]') as HTMLInputElement;
 const usernameRow = document.querySelector('[data-chat="username-row"]') as HTMLLabelElement;
@@ -302,6 +305,7 @@ function connect(): void {
 }
 
 function scheduleReconnect(): void {
+  if (idleManager?.isIdle) return;
   if (reconnectTimer) return;
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
@@ -433,4 +437,29 @@ async function fetchConfig(): Promise<void> {
 fetchConfig().then(() => {
   loadIdentity();
   connect();
+
+  idleManager = createIdleManager({
+    timeoutMs: IDLE_TIMEOUT_MS,
+    onIdle() {
+      if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+      }
+      ws?.close();
+    },
+    onActive() {
+      connect();
+    },
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    idleManager?.handleVisibilityChange(document.hidden);
+  });
+
+  const chatEl = document.querySelector('[data-chat="panel"]');
+  if (chatEl) {
+    for (const event of ["mousemove", "keydown", "touchstart"] as const) {
+      chatEl.addEventListener(event, () => idleManager?.handleActivity(), { passive: true });
+    }
+  }
 });
