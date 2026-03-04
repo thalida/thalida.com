@@ -340,7 +340,7 @@ appServices.service('LiveDataService', ['$http', '$interval', '$q', '$rootScope'
             if( time >= this._breakpoints.afternoon - Utils.toSeconds('01:00:00') ){
                 data.greeting = 'Greetings';
                 data.name = 'Brunch Master';
-                data.message = 'It&rsquo;s almost lunch time... did you just get up? Lucky. Anyway, eat some brunch, and check out my site!';	
+                data.message = 'It\u2019s almost lunch time... did you just get up? Lucky. Anyway, eat some brunch, and check out my site!';	
             }else{
                 data.greeting = 'Good Morning';
                 data.name = 'Early Bird';
@@ -357,7 +357,7 @@ appServices.service('LiveDataService', ['$http', '$interval', '$q', '$rootScope'
         }else{
             data.greeting = 'Greetings';
             data.name = 'Night Owl';
-            data.message = 'Burning the night oil I see. Well, you&rsquo;ve landed in my home, take a chance to explore a bit. Then, go to sleep!';
+            data.message = 'Burning the night oil I see. Well, you\u2019ve landed in my home, take a chance to explore a bit. Then, go to sleep!';
         }
 
         data = $.extend(true, data, this.get('person'));

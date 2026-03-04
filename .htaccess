@@ -32,7 +32,14 @@ AddOutputFilterByType DEFLATE font/otf
 AddOutputFilterByType DEFLATE image/svg+xml
 AddOutputFilter DEFLATE css js
 
-#RewriteEngine ON
+RewriteEngine ON
+
+# Disable trailing-slash redirect for res/posts (prevents http:// mixed-content redirect)
+DirectorySlash Off
+
+# Serve project data
+RewriteRule ^res/posts/?$ /res/posts/index.php [L]
+
 #RewriteRule ^([a-z]+)([/]?)$ /index.php?page=$1 [L] #Main Page
 #RewriteRule ^([a-z]+)/(\d+)([/]?)$ /index.php?page=$1&id=$2 [L]
 
@@ -41,13 +48,9 @@ AddOutputFilter DEFLATE css js
   # Add any directories you wish to omit from the Adaptive-Images process on a new line, as follows:
   # RewriteCond %{REQUEST_URI} !ignore-this-directory
   # RewriteCond %{REQUEST_URI} !and-ignore-this-directory-too
-  RewriteCond %{REQUEST_URI} !assets
-
-  # don't apply the AI behaviour to images inside AI's cache folder:
-  RewriteCond %{REQUEST_URI} !ai-cache
-
-  # Send any GIF, JPG, or PNG request that IS NOT stored inside one of the above directories
-  # to adaptive-images.php so we can select appropriately sized versions
-  RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
+  # Adaptive-Images disabled — GD extension not available in this container
+  # RewriteCond %{REQUEST_URI} !assets
+  # RewriteCond %{REQUEST_URI} !ai-cache
+  # RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
 
   # END Adaptive-Images -------------------------------------------------------------------------------
