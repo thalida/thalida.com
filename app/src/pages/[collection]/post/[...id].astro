@@ -8,7 +8,7 @@ import CardTags from "@components/Card/CardTags.astro";
 type AnyEntry = CollectionEntry<CollectionName>;
 
 export async function getStaticPaths() {
-  const routable = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
+  const routable = new Set(COLLECTION_NAMES.filter((name) => name !== "links"));
   const paths: Array<{
     params: { collection: string; id: string };
     props: { entry: AnyEntry };

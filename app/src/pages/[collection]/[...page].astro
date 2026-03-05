@@ -2,9 +2,10 @@
 import type { GetStaticPathsOptions } from "astro";
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
-import { getNavData, type NavItem } from "@lib/nav-data";
+import { getNavData } from "@lib/nav-data";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
 import { PAGE_SIZE } from "@lib/constants";
+import type { CollectionPage, CollectionPageProps } from "@lib/collection-types";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const navData = await getNavData();
@@ -24,17 +25,8 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 }
 
 const { collection } = Astro.params as { collection: CollectionName };
-const page = Astro.props.page as {
-  data: NavItem[];
-  start: number;
-  end: number;
-  total: number;
-  currentPage: number;
-  lastPage: number;
-  size: number;
-  url: { current: string; prev: string | undefined; next: string | undefined };
-};
-const { title, allCategories } = Astro.props as { title: string; allCategories: string[] };
+const page = Astro.props.page as CollectionPage;
+const { title, allCategories } = Astro.props as CollectionPageProps;
 ---
 
 <BaseLayout
