@@ -105,7 +105,6 @@ jobs:
         env:
           PUBLIC_R2_BASE_URL: ${{ vars.PUBLIC_R2_BASE_URL }}
           PUBLIC_CHAT_WS_URL: ${{ github.event_name == 'push' && vars.PUBLIC_CHAT_WS_URL || vars.PUBLIC_CHAT_WS_URL_PREVIEW }}
-          PUBLIC_OPENWEATHER_KEY: ${{ secrets.PUBLIC_OPENWEATHER_KEY }}
           PUBLIC_API_BASE_URL: ${{ github.event_name == 'push' && vars.PUBLIC_API_BASE_URL || vars.PUBLIC_API_BASE_URL_PREVIEW }}
           CF_PAGES_BRANCH: ${{ steps.branch.outputs.name }}
           CF_PAGES_URL: ${{ github.event_name == 'push' && 'https://thalida.com' || format('https://{0}.{1}.pages.dev', steps.branch.outputs.name, vars.CLOUDFLARE_PAGES_PROJECT) }}
