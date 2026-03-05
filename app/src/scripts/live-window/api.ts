@@ -72,7 +72,7 @@ export async function fetchLocation(apiUrl: string, state: StoreState): Promise<
 }
 
 export async function fetchWeather(
-  owKey: string,
+  apiUrl: string,
   state: StoreState,
   units: string,
 ): Promise<{ state: StoreState; changed: boolean }> {
@@ -80,18 +80,16 @@ export async function fetchWeather(
   if (lat == null || lng == null) return { state, changed: false };
 
   try {
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${lat}&lon=${lng}&appid=${owKey}`,
-    );
+    const res = await fetch(`${apiUrl}/weather?units=${units}&lat=${lat}&lon=${lng}`);
     if (!res.ok) return { state, changed: false };
     const data = await res.json();
 
     const newState: StoreState = {
       ...state,
       weather: {
-        current: { ...data.weather[0], temp: data.main.temp },
-        sunrise: data.sys.sunrise * 1000,
-        sunset: data.sys.sunset * 1000,
+        current: { main: data.main, description: data.description, icon: data.icon, temp: data.temp },
+        sunrise: data.sunrise * 1000,
+        sunset: data.sunset * 1000,
         units,
         lastFetched: Date.now(),
       },

@@ -13,7 +13,6 @@ import STYLES_URL from "./live-window.css?url";
 
 class LiveWindowElement extends HTMLElement {
   static observedAttributes = [
-    "openweather-key",
     "api-url",
     "time-format",
     "hide-clock",
@@ -93,7 +92,7 @@ class LiveWindowElement extends HTMLElement {
       this.doFetchWeather();
       return;
     }
-    if (this.getAttribute("openweather-key") && this.getAttribute("api-url") && !this.weatherInterval) {
+    if (this.getAttribute("api-url") && !this.weatherInterval) {
       this.startWeatherPolling();
     }
   }
@@ -193,12 +192,7 @@ class LiveWindowElement extends HTMLElement {
     this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
     this.skyInterval = window.setInterval(() => this.updateAll(), 15 * 60 * 1000);
 
-    const hasExplicitCoords = this.getAttribute("latitude") != null && this.getAttribute("longitude") != null;
-
-    if (
-      (hasExplicitCoords && this.getAttribute("openweather-key")) ||
-      (this.getAttribute("openweather-key") && this.getAttribute("api-url"))
-    ) {
+    if (this.getAttribute("api-url")) {
       this.startWeatherPolling();
     }
   }
@@ -235,8 +229,8 @@ class LiveWindowElement extends HTMLElement {
   // -- API --------------------------------------------------------------------
 
   private async doFetchWeather(): Promise<void> {
-    const owKey = this.getAttribute("openweather-key");
-    if (!owKey) return;
+    const apiUrl = this.getAttribute("api-url");
+    if (!apiUrl) return;
 
     const explicitLat = this.getAttribute("latitude");
     const explicitLng = this.getAttribute("longitude");
@@ -255,9 +249,6 @@ class LiveWindowElement extends HTMLElement {
         },
       };
     } else {
-      const apiUrl = this.getAttribute("api-url");
-      if (!apiUrl) return;
-
       if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
         this.updateAll();
         return;
@@ -275,7 +266,7 @@ class LiveWindowElement extends HTMLElement {
       return;
     }
 
-    const result = await fetchWeather(owKey, this.state.store, units);
+    const result = await fetchWeather(apiUrl, this.state.store, units);
     this.state.store = result.state;
 
     if (!hasExplicitCoords) {
