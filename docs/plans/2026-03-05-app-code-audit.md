@@ -359,48 +359,49 @@ Development/testing page with 8 live-window instances. Built and deployed, acces
 
 ## Summary Table
 
-| ID | Finding | Category | Severity | File(s) | Recommendation |
-|----|---------|----------|----------|---------|----------------|
-| SEC-1 | No CSP headers | Security | Medium | BaseLayout, public/ | Add `_headers` file with CSP |
-| SEC-2 | Admin token as plaintext in localStorage | Security | Medium | login.astro, chat-client.ts | Use short-lived session tokens |
-| SEC-3 | Token over unencrypted WebSocket | Security | Medium | chat-client.ts, Chat.astro | Enforce `wss://`, auth during handshake |
-| SEC-4 | WebSocket messages parsed without validation | Security | Medium | chat-client.ts:212 | try/catch + runtime validation |
-| SEC-5 | CSS selector injection via message ID | Security | Low | chat-client.ts:250 | Use `CSS.escape()` |
-| SEC-6 | Open redirect via chat context path | Security | Low | chat-client.ts:142-149 | Validate path starts with `/` |
-| SEC-7 | No SRI on external CDN | Security | Low | BaseLayout.astro | Add `integrity` attribute |
-| SEC-8 | Unsandboxed Spotify iframe | Security | Low | SpotifyPlayer.astro | Add `sandbox` attribute |
-| SEC-9 | Unvalidated API responses | Security | Low | api.ts:54-101 | Validate response shapes |
-| SEC-10 | innerHTML used to clear messages | Security | Low | chat-client.ts:221 | Use `replaceChildren()` |
-| READ-1 | 90-line if/else-if message handler | Readability | High | chat-client.ts:211-296 | Dispatch map pattern |
-| READ-2 | 7 module-level mutable variables | Readability | Medium | chat-client.ts:78-85 | State object or factory function |
-| READ-3 | CommandPalette.ts 333 lines, no modules | Readability | Medium | CommandPalette.ts | Extract data/rendering logic |
-| READ-4 | nav-data.ts mixes 4 concerns | Readability | Medium | nav-data.ts | Split out format-utils.ts |
-| READ-5 | Double-cast in BlindsComponent | Readability | Medium | BlindsComponent.ts:124,127 | Typed accessor or keyof indexing |
-| READ-6 | `slot` function name is misleading | Readability | Medium | chat-client.ts, CommandPalette.ts | Rename to `el` or `query` |
-| READ-7 | Magic numbers without comments | Readability | Medium | stars.ts, WeatherLayer.ts, card-utils.ts | Add inline comments |
-| READ-8 | Duplicated logic across files | Readability | Medium | Multiple (5 instances) | Extract shared utilities |
-| READ-9 | Inconsistent hardcoded colors | Readability | Low | Chat.astro, astro.config, index.astro | Use theme tokens or add comments |
-| TEST-1 | Pure functions with zero test coverage | Testability | High | 5 files (recipe, cards, metadata, nav, api) | Write unit tests |
-| TEST-2 | chat-client.ts is completely untestable | Testability | High | chat-client.ts | Refactor to `initChat()` pattern |
-| TEST-3 | Async fetch functions untested | Testability | Medium | api.ts:48-102 | Add tests with mocked fetch |
-| TEST-4 | Mislocated/misnamed test file | Testability | Medium | scripts/__tests__/chat-logic.test.ts | Move to Chat/__tests__/chat-utils.test.ts |
-| TEST-5 | makeState() duplicated across 7 tests | Testability | Medium | live-window __tests__/ | Extract shared test helper |
-| TEST-6 | No coverage configuration | Testability | Medium | vitest.config.ts | Add coverage config |
-| TEST-7 | Vitest/TSConfig alias mismatch | Testability | Medium | vitest.config.ts, tsconfig.json | Use vite-tsconfig-paths |
-| TEST-8 | Manual localStorage mock | Testability | Medium | state.test.ts:5-16 | Use jsdom built-in or vi.stubGlobal |
-| TEST-9 | Weak assertion in clock test | Testability | Low | ClockComponent.test.ts:111 | Assert specific expected value |
-| TEST-10 | Missing edge cases | Testability | Low | chat-render.test.ts | Add boundary tests |
-| MAINT-1 | Page template duplication | Maintainability | High | [...page].astro (2 files) | Extract shared types/constants |
-| MAINT-2 | No error handling for JSON.parse | Maintainability | High | chat-client.ts:212 | try/catch |
-| MAINT-3 | LS_ADMIN_TOKEN_KEY in 3 locations | Maintainability | Medium | chat-utils, login, logout | Shared constants.ts |
-| MAINT-4 | Hardcoded routable collection set | Maintainability | Medium | post/[...id].astro:11 | Derive from COLLECTION_NAMES |
-| MAINT-5 | Unsafe querySelector casts | Maintainability | Medium | chat-client.ts:87-110 | Null guard or descriptive helper |
-| MAINT-6 | Shared mutable state in GradientLayer | Maintainability | Medium | GradientLayer.ts:15 | Document or restructure |
-| MAINT-7 | Silent error swallowing | Maintainability | Medium | state.ts:48-59 | Add console.debug logging |
-| MAINT-8 | Inconsistent API URL fallbacks | Maintainability | Low | 4 files | Centralize in site-config.ts |
-| MAINT-9 | allTags computed but unused | Maintainability | Low | nav-data.ts:27,96 | Remove or consume |
-| MAINT-10 | Dead code (CSS, exports, schema fields) | Maintainability | Low | Multiple (7 items) | Remove |
-| MAINT-11 | Test page shipped to production | Maintainability | Medium | live-window-test.astro | Move or gate |
-| MAINT-12 | Build deps listed as runtime | Maintainability | Low | package.json | Move to devDependencies |
+| ID | Finding | Category | Severity | Status |
+|----|---------|----------|----------|--------|
+| SEC-1 | No CSP headers | Security | Medium | FIXED |
+| SEC-2 | Admin token plaintext in localStorage | Security | Medium | Open |
+| SEC-3 | Token over unencrypted WebSocket | Security | Medium | Open |
+| SEC-4 | WebSocket messages parsed without validation | Security | Medium | FIXED |
+| SEC-5 | CSS selector injection via message ID | Security | Low | FIXED |
+| SEC-6 | Open redirect via chat context path | Security | Low | FIXED |
+| SEC-7 | No SRI on external CDN | Security | Low | Open |
+| SEC-8 | Unsandboxed Spotify iframe | Security | Low | Open |
+| SEC-9 | Unvalidated API responses | Security | Low | Open |
+| SEC-10 | innerHTML used to clear messages | Security | Low | FIXED |
+| READ-1 | 90-line if/else-if message handler | Readability | High | FIXED |
+| READ-2 | 7 module-level mutable variables | Readability | Medium | FIXED |
+| READ-3 | CommandPalette.ts 333 lines, no modules | Readability | Medium | Open |
+| READ-4 | nav-data.ts mixes 4 concerns | Readability | Medium | FIXED |
+| READ-5 | Double-cast in BlindsComponent | Readability | Medium | Open |
+| READ-6 | `slot` function name is misleading | Readability | Medium | Open |
+| READ-7 | Magic numbers without comments | Readability | Medium | Open |
+| READ-8 | Duplicated logic across files | Readability | Medium | FIXED |
+| READ-9 | Inconsistent hardcoded colors | Readability | Low | Open |
+| TEST-1 | Pure functions with zero test coverage | Testability | High | FIXED |
+| TEST-2 | chat-client.ts completely untestable | Testability | High | FIXED |
+| TEST-3 | Async fetch functions untested | Testability | Medium | Open |
+| TEST-4 | Mislocated/misnamed test file | Testability | Medium | Open |
+| TEST-5 | makeState() duplicated across 7 tests | Testability | Medium | Open |
+| TEST-6 | No coverage configuration | Testability | Medium | Open |
+| TEST-7 | Vitest/TSConfig alias mismatch | Testability | Medium | Open |
+| TEST-8 | Manual localStorage mock | Testability | Medium | Open |
+| TEST-9 | Weak assertion in clock test | Testability | Low | Open |
+| TEST-10 | Missing edge cases | Testability | Low | Open |
+| MAINT-1 | Page template duplication | Maintainability | High | FIXED |
+| MAINT-2 | No error handling for JSON.parse | Maintainability | High | FIXED |
+| MAINT-3 | LS_ADMIN_TOKEN_KEY in 3 locations | Maintainability | Medium | FIXED |
+| MAINT-4 | Hardcoded routable collection set | Maintainability | Medium | FIXED |
+| MAINT-5 | Unsafe querySelector casts | Maintainability | Medium | FIXED |
+| MAINT-6 | Shared mutable state in GradientLayer | Maintainability | Medium | Open |
+| MAINT-7 | Silent error swallowing | Maintainability | Medium | Open |
+| MAINT-8 | Inconsistent API URL fallbacks | Maintainability | Low | Open |
+| MAINT-9 | allTags computed but unused | Maintainability | Low | Open |
+| MAINT-10 | Dead code (CSS, exports, schema fields) | Maintainability | Low | Open |
+| MAINT-11 | Test page shipped to production | Maintainability | Medium | Open |
+| MAINT-12 | Build deps listed as runtime | Maintainability | Low | Open |
 
-**Totals: 0 High-severity security issues, 4 High-severity code quality issues, 18 Medium, 14 Low — 36 findings total.**
+**Totals: 36 findings — 15 FIXED, 21 Open
+(0 High remaining, 10 Medium open, 11 Low open).**
