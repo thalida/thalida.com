@@ -2,7 +2,8 @@
 import { SPOTIFY_PLAYLIST_ID } from "@lib/site-config";
 ---
 
-<div class="mt-auto pt-3 scale-[0.88] origin-bottom-left mr-[-12%]">
+<!-- mr-[-10%] compensates for scale-90 + origin-bottom-left leaving 10% dead space on the right -->
+<div class="mt-auto pt-3 scale-90 origin-bottom-left mr-[-10%]">
   <iframe
     data-testid="embed-iframe"
     title="Spotify playlist"
