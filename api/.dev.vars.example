@@ -9,3 +9,7 @@ ADMIN_SECRET=
 # Get one at https://platform.openai.com/api-keys
 # Leave blank to disable moderation locally (all messages will pass through).
 OPENAI_API_KEY=
+
+# IP Registry API key for geolocation (used by /location endpoint).
+# Get one at https://ipregistry.co/
+IPREGISTRY_KEY=

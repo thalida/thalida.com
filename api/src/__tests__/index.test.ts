@@ -97,6 +97,24 @@ describe("Worker routing", () => {
     });
   });
 
+  // ── Location Endpoint ──────────────────────────────────────────
+
+  describe("GET /location", () => {
+    it("returns 503 when IPREGISTRY_KEY is not configured", async () => {
+      const resp = await SELF.fetch("https://fake-host/location");
+      expect(resp.status).toBe(503);
+      const body = (await resp.json()) as { error: string };
+      expect(body.error).toBe("Location service not configured");
+    });
+
+    it("includes CORS headers", async () => {
+      const resp = await SELF.fetch("https://fake-host/location", {
+        headers: { Origin: "https://thalida.com" },
+      });
+      expect(resp.headers.get("Access-Control-Allow-Origin")).toBe("https://thalida.com");
+    });
+  });
+
   // ── Failure States ───────────────────────────────────────────────
 
   describe("failure states", () => {

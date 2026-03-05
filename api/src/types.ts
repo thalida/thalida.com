@@ -212,6 +212,7 @@ export interface Env {
   ADMIN_SECRET: string;
   ALLOWED_ORIGIN: string;
   OPENAI_API_KEY?: string;
+  IPREGISTRY_KEY?: string;
 }
 
 export interface AuthRequest {

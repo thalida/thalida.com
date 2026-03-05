@@ -2,7 +2,7 @@ export { ChatRoom } from "./chat-room";
 export type * from "./types";
 
 import type { Env } from "./types";
-import { handleCors, handleWebSocket, handleAuth, handleConfig, handleHealthCheck } from "./api";
+import { handleCors, handleWebSocket, handleAuth, handleConfig, handleHealthCheck, handleLocation } from "./api";
 
 export default {
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
@@ -16,6 +16,8 @@ export default {
       return handleAuth(env, request);
     } else if (url.pathname === "/config") {
       return handleConfig(env, request);
+    } else if (url.pathname === "/location") {
+      return handleLocation(env, request);
     } else if (url.pathname === "/") {
       return handleHealthCheck(env, request);
     } else {

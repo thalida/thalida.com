@@ -45,24 +45,24 @@ export function shouldFetchWeather(state: StoreState, units: string): boolean {
 // Fetch functions (return new state instead of mutating)
 // ---------------------------------------------------------------------------
 
-export async function fetchLocation(key: string, state: StoreState): Promise<StoreState> {
+export async function fetchLocation(apiUrl: string, state: StoreState): Promise<StoreState> {
   if (!shouldFetchLocation(state) && state.location.lat != null) {
     return state;
   }
 
   try {
-    const res = await fetch(`https://api.ipregistry.co/?key=${key}`);
+    const res = await fetch(`${apiUrl}/location`);
     if (!res.ok) return state;
     const data = await res.json();
 
     return {
       ...state,
       location: {
-        lat: data.location.latitude,
-        lng: data.location.longitude,
-        country: data.location.country?.code ?? null,
-        name: data.location.city ?? null,
-        timezone: data.time_zone?.id ?? null,
+        lat: data.lat,
+        lng: data.lng,
+        country: data.country ?? null,
+        name: data.name ?? null,
+        timezone: data.timezone ?? null,
         lastFetched: Date.now(),
       },
     };

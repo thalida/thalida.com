@@ -14,7 +14,7 @@ import STYLES_URL from "./live-window.css?url";
 class LiveWindowElement extends HTMLElement {
   static observedAttributes = [
     "openweather-key",
-    "ipregistry-key",
+    "api-url",
     "time-format",
     "hide-clock",
     "hide-weather-text",
@@ -93,7 +93,7 @@ class LiveWindowElement extends HTMLElement {
       this.doFetchWeather();
       return;
     }
-    if (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key") && !this.weatherInterval) {
+    if (this.getAttribute("openweather-key") && this.getAttribute("api-url") && !this.weatherInterval) {
       this.startWeatherPolling();
     }
   }
@@ -197,7 +197,7 @@ class LiveWindowElement extends HTMLElement {
 
     if (
       (hasExplicitCoords && this.getAttribute("openweather-key")) ||
-      (this.getAttribute("openweather-key") && this.getAttribute("ipregistry-key"))
+      (this.getAttribute("openweather-key") && this.getAttribute("api-url"))
     ) {
       this.startWeatherPolling();
     }
@@ -255,15 +255,15 @@ class LiveWindowElement extends HTMLElement {
         },
       };
     } else {
-      const ipKey = this.getAttribute("ipregistry-key");
-      if (!ipKey) return;
+      const apiUrl = this.getAttribute("api-url");
+      if (!apiUrl) return;
 
       if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
         this.updateAll();
         return;
       }
 
-      this.state.store = await fetchLocation(ipKey, this.state.store);
+      this.state.store = await fetchLocation(apiUrl, this.state.store);
       saveState(this.state);
     }
 

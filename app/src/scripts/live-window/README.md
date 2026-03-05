@@ -14,10 +14,10 @@ Include the component script and add the element to your HTML:
 <!-- or the built JS file -->
 <script src="live-window.js"></script>
 
-<live-window openweather-key="YOUR_OPENWEATHER_KEY" ipregistry-key="YOUR_IPREGISTRY_KEY"></live-window>
+<live-window openweather-key="YOUR_OPENWEATHER_KEY" api-url="https://your-api.example.com"></live-window>
 ```
 
-Both API keys are optional. Without them the component still renders a
+Both attributes are optional. Without them the component still renders a
 time-based sky gradient and clock — it just won't show real weather data.
 
 
@@ -26,7 +26,7 @@ time-based sky gradient and clock — it just won't show real weather data.
 | Attribute           | Values                          | Default    | Description                            |
 | ------------------- | ------------------------------- | ---------- | -------------------------------------- |
 | `openweather-key`   | API key string                  | _(none)_   | [OpenWeather][ow] API key for weather  |
-| `ipregistry-key`    | API key string                  | _(none)_   | [IP Registry][ipr] API key for geoloc  |
+| `api-url`           | URL string                      | _(none)_   | Base URL for the geolocation API proxy |
 | `time-format`       | `"12"` / `"24"`                 | `"24"`     | Clock display format (12h shows AM/PM) |
 | `temp-unit`         | `"F"` / `"C"` / `"auto"`        | `"auto"`   | Temp unit; `"auto"` uses user country  |
 | `hide-clock`        | boolean attribute               | _(absent)_ | Hides the clock when present           |
@@ -34,7 +34,6 @@ time-based sky gradient and clock — it just won't show real weather data.
 | `theme`             | `"light"` / `"dark"` / `"auto"` | `"auto"`   | Color theme; `"auto"` follows OS pref  |
 
 [ow]: https://openweathermap.org/api
-[ipr]: https://ipregistry.co/
 
 All attributes are reactive — changing them at runtime immediately
 updates the component.
@@ -93,10 +92,10 @@ Adding a new layer (e.g. stars, moon, sun):
 
 ### Weather Effects
 
-When an OpenWeather API key and IP Registry key are both provided:
+When an OpenWeather API key and API URL are both provided:
 
-1. **Geolocation** — IP Registry determines the user's lat/lng and
-   country code.
+1. **Geolocation** — The API proxy (`/location`) determines the user's
+   lat/lng and country code.
 2. **Weather fetch** — OpenWeather returns current conditions,
    temperature, sunrise, and sunset.
 3. **Visual effects** — The weather icon code maps to CSS-animated
@@ -110,7 +109,7 @@ When an OpenWeather API key and IP Registry key are both provided:
 
 The `temp-unit` attribute controls which units are sent to the
 OpenWeather API (`units=metric` or `units=imperial`). In `"auto"`
-mode, the country code from IP Registry is checked against a list of
+mode, the country code from the location API is checked against a list of
 imperial countries (US, Liberia, Myanmar). The resolved unit is also
 cached — if the unit changes (e.g. user switches from auto to
 explicit), stale cached data is invalidated and a fresh fetch is made.
@@ -178,7 +177,7 @@ the host page.
 | `types.ts`           | Shared interfaces: RGB, SkyGradient, PhaseInfo, etc. |
 | `color.ts`           | WCAG contrast, luminance, readable color (pure fns)  |
 | `state.ts`           | localStorage persistence, cache versioning           |
-| `api.ts`             | IP geolocation + OpenWeather fetch + rate limiting   |
+| `api.ts`             | Geolocation proxy + OpenWeather fetch + rate limiting|
 | `clock.ts`           | Clock rendering + time format logic                  |
 | `blinds.ts`          | Blinds animation + rendering                         |
 | `phase-info.ts`      | PhaseInfo builder + sun position calculation         |
@@ -189,7 +188,7 @@ the host page.
 ## Example
 
 ```html
-<live-window openweather-key="abc123" ipregistry-key="xyz789" time-format="12" temp-unit="auto"></live-window>
+<live-window openweather-key="abc123" api-url="https://api.example.com" time-format="12" temp-unit="auto"></live-window>
 
 <style>
   live-window {
