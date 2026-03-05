@@ -52,6 +52,11 @@ when it clicks, mildly infuriating when it doesn't. But now it clicks.
 
 ## Let's Chat
 
+<img
+src="/content/versions/2026-neon-playground/chat.png"
+alt="Chat panel showing multiple users with color-animal usernames"
+style="float: right; max-height: 500px; margin: 0 0 1rem 1.5rem;" />
+
 The headline feature of v2026 is the chat. Not a contact form. Not a
 comments section. A live, real-time, WebSocket-powered chat that lives
 in the sidebar of every page.
