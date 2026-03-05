@@ -12,9 +12,9 @@ const navData = await getNavData();
 // Collections to feature on homepage (exclude versions - shown as timeline)
 const featuredCollections = COLLECTION_NAMES.filter((name) => name !== "versions");
 
-// Timeline: all versions sorted chronologically (oldest first)
-const versions = [...navData.versions.items].reverse();
-const latestYear = versions.at(-1)?.category || "";
+// Timeline: all versions sorted newest first
+const versions = [...navData.versions.items];
+const latestYear = versions.at(0)?.category || "";
 const siteAge = new Date().getFullYear() - 2007;
 ---
 
