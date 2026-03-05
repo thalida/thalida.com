@@ -79,6 +79,8 @@ to talk to each other. The circle of life.
 
 ## Stargazing
 
+![Live window showing London at night and Tokyo during the day](2026-neon-playground/live-window.png)
+
 The live window has been a signature feature of thalida.com since
 2018 — a little animated scene that shows the actual weather and time at
 the visitor's location. For v2026, we tore it down and rebuilt it from
@@ -93,7 +95,30 @@ from the actual time of day. Stars twinkle procedurally. The **sun**
 traces an arc across the sky based on real sunrise and sunset data, not
 some hardcoded animation. And the **moon** — this is the part where I
 got to do math, which I genuinely enjoy — tracks its actual phase using
-a synodic month of 29.53 days from a known new moon epoch.
+a synodic month of 29.53 days from a known new moon epoch:
+
+```typescript
+/** Synodic month in milliseconds (29.53059 days). */
+const SYNODIC_MS = 29.53059 * 24 * 60 * 60 * 1000;
+
+/** Known new moon: January 29, 2025 12:36 UTC. */
+const NEW_MOON_EPOCH = Date.UTC(2025, 0, 29, 12, 36);
+
+/**
+ * Returns the current lunar phase as 0–1.
+ * 0 = new moon, ~0.25 = first quarter,
+ * ~0.5 = full moon, ~0.75 = last quarter.
+ */
+export function getMoonPhase(now: number): number {
+  const elapsed = now - NEW_MOON_EPOCH;
+  const phase = (elapsed / SYNODIC_MS) % 1;
+  return phase < 0 ? phase + 1 : phase;
+}
+```
+
+That's it. The entire moon phase tracker. One real-world epoch, one
+astronomical constant, and a modulo operation. Sometimes the best code
+is the code that trusts the math.
 
 You can also view the sky for different timezones and world cities,
 which means the celestial positioning adjusts for wherever you're
