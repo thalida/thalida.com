@@ -45,24 +45,24 @@ export function shouldFetchWeather(state: StoreState, units: string): boolean {
 // Fetch functions (return new state instead of mutating)
 // ---------------------------------------------------------------------------
 
-export async function fetchLocation(key: string, state: StoreState): Promise<StoreState> {
+export async function fetchLocation(apiUrl: string, state: StoreState): Promise<StoreState> {
   if (!shouldFetchLocation(state) && state.location.lat != null) {
     return state;
   }
 
   try {
-    const res = await fetch(`https://api.ipregistry.co/?key=${key}`);
+    const res = await fetch(`${apiUrl}/location`);
     if (!res.ok) return state;
     const data = await res.json();
 
     return {
       ...state,
       location: {
-        lat: data.location.latitude,
-        lng: data.location.longitude,
-        country: data.location.country?.code ?? null,
-        name: data.location.city ?? null,
-        timezone: data.time_zone?.id ?? null,
+        lat: data.lat,
+        lng: data.lng,
+        country: data.country ?? null,
+        name: data.name ?? null,
+        timezone: data.timezone ?? null,
         lastFetched: Date.now(),
       },
     };
@@ -72,7 +72,7 @@ export async function fetchLocation(key: string, state: StoreState): Promise<Sto
 }
 
 export async function fetchWeather(
-  owKey: string,
+  apiUrl: string,
   state: StoreState,
   units: string,
 ): Promise<{ state: StoreState; changed: boolean }> {
@@ -80,22 +80,16 @@ export async function fetchWeather(
   if (lat == null || lng == null) return { state, changed: false };
 
   try {
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?units=${units}&lat=${lat}&lon=${lng}&appid=${owKey}`,
-    );
+    const res = await fetch(`${apiUrl}/weather?units=${units}&lat=${lat}&lon=${lng}`);
     if (!res.ok) return { state, changed: false };
     const data = await res.json();
 
     const newState: StoreState = {
       ...state,
-      location: {
-        ...state.location,
-        name: data.name ?? state.location.name,
-      },
       weather: {
-        current: { ...data.weather[0], temp: data.main.temp },
-        sunrise: data.sys.sunrise * 1000,
-        sunset: data.sys.sunset * 1000,
+        current: { main: data.main, description: data.description, icon: data.icon, temp: data.temp },
+        sunrise: data.sunrise * 1000,
+        sunset: data.sunset * 1000,
         units,
         lastFetched: Date.now(),
       },

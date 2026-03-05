@@ -68,7 +68,11 @@ async function combineYamlFiles({ filename, pattern, base }: { filename: string;
     }
   }
 
-  await fs.writeFile(outputPath, stringifyYaml(allEntries));
+  const newContent = stringifyYaml(allEntries);
+  const existing = await fs.readFile(outputPath, "utf-8").catch(() => "");
+  if (newContent !== existing) {
+    await fs.writeFile(outputPath, newContent);
+  }
 
   return file(outputPath);
 }

@@ -11,6 +11,8 @@ export default defineWorkersConfig({
           bindings: {
             ADMIN_SECRET: "test-admin-secret",
             OPENAI_API_KEY: "",
+            IPREGISTRY_KEY: "",
+            OPENWEATHER_KEY: "",
             ALLOWED_ORIGIN: "https://thalida.com",
           },
         },

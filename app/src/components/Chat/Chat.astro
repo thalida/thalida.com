@@ -1,5 +1,6 @@
 ---
-const wsUrl = import.meta.env.PUBLIC_CHAT_WS_URL || "ws://localhost:8787/ws";
+const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
+const wsUrl = apiBaseUrl.replace(/^http(s?):/, "ws$1:") + "/ws";
 ---
 
 <aside

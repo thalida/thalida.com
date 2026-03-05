@@ -5,8 +5,7 @@ import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import Card from "@components/Card/Card.astro";
 import SectionHeader from "@components/SectionHeader/SectionHeader.astro";
 
-const openweatherKey = import.meta.env.PUBLIC_OPENWEATHER_KEY || "";
-const ipregistryKey = import.meta.env.PUBLIC_IPREGISTRY_KEY || "";
+const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "";
 
 const navData = await getNavData();
 
@@ -22,8 +21,7 @@ const siteAge = new Date().getFullYear() - 2007;
 <BaseLayout activePage="">
   {/* ── Hero ── */}
   <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
-    <live-window openweather-key={openweatherKey} ipregistry-key={ipregistryKey} theme="dark" bg-color="#030a12"
-    ></live-window>
+    <live-window api-url={apiBaseUrl} theme="dark" bg-color="#030a12"></live-window>
     <div class="max-w-xl">
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
         <span data-home="greeting">Hey</span>, I'm&nbsp;Thalida
