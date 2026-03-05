@@ -139,7 +139,7 @@ function appendMessage(msg: ChatMessage): void {
 
   slot("time").textContent = formatMessageTime(msg.timestamp);
 
-  if (msg.context) {
+  if (msg.context && msg.context.path.startsWith("/")) {
     const pageLink = slot("page") as HTMLAnchorElement;
     pageLink.href = msg.context.path;
     pageLink.textContent = truncateMiddle(msg.context.path, 25);
@@ -209,7 +209,13 @@ function connect(): void {
   });
 
   ws.addEventListener("message", (event) => {
-    const data = JSON.parse(event.data) as ServerMessage;
+    let data: ServerMessage;
+    try {
+      data = JSON.parse(event.data) as ServerMessage;
+    } catch {
+      console.warn("[chat] received malformed message");
+      return;
+    }
 
     if (data.type === SERVER_MESSAGE_TYPE.JOINED) {
       isOwner = data.isOwner;
@@ -218,7 +224,7 @@ function connect(): void {
       updateAdminUI();
       setBlocked(data.isBlocked);
     } else if (data.type === SERVER_MESSAGE_TYPE.HISTORY) {
-      messagesEl.innerHTML = "";
+      messagesEl.replaceChildren();
       for (const msg of data.messages) {
         appendMessage(msg);
       }
@@ -247,7 +253,7 @@ function connect(): void {
 
       appendSystemMessage(data.message);
     } else if (data.type === SERVER_MESSAGE_TYPE.REMOVE) {
-      const el = messagesEl.querySelector(`[data-msg-id="${data.id}"]`);
+      const el = messagesEl.querySelector(`[data-msg-id="${CSS.escape(data.id)}"]`);
       if (el) el.remove();
     } else if (data.type === SERVER_MESSAGE_TYPE.RENAME) {
       const usernameEls = messagesEl.querySelectorAll<HTMLElement>('[data-chat="username"]');
