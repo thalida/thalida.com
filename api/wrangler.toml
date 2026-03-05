@@ -17,6 +17,7 @@ ALLOWED_ORIGIN = "https://thalida.com"
 # Set ADMIN_SECRET via `wrangler secret put ADMIN_SECRET`
 # Set OPENAI_API_KEY via `wrangler secret put OPENAI_API_KEY`
 # Set IPREGISTRY_KEY via `wrangler secret put IPREGISTRY_KEY`
+# Set OPENWEATHER_KEY via `wrangler secret put OPENWEATHER_KEY`
 
 # ─── Preview environment (deployed via GitHub Actions on PRs) ─────────
 [env.preview]
@@ -38,3 +39,4 @@ new_sqlite_classes = ["ChatRoom"]
 #   wrangler secret put ADMIN_SECRET --env preview
 #   wrangler secret put OPENAI_API_KEY --env preview
 #   wrangler secret put IPREGISTRY_KEY --env preview
+#   wrangler secret put OPENWEATHER_KEY --env preview

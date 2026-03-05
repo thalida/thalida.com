@@ -119,6 +119,17 @@ export async function handleWeather(env: Env, request: Request): Promise<Respons
     return _jsonResponse({ error: "lat and lon query params required" }, 400, headers);
   }
 
+  const latNum = Number(lat);
+  const lonNum = Number(lon);
+  if (Number.isNaN(latNum) || Number.isNaN(lonNum) || latNum < -90 || latNum > 90 || lonNum < -180 || lonNum > 180) {
+    return _jsonResponse({ error: "lat must be -90..90 and lon must be -180..180" }, 400, headers);
+  }
+
+  const ALLOWED_UNITS = ["metric", "imperial", "standard"];
+  if (!ALLOWED_UNITS.includes(units)) {
+    return _jsonResponse({ error: `units must be one of: ${ALLOWED_UNITS.join(", ")}` }, 400, headers);
+  }
+
   try {
     const res = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?units=${encodeURIComponent(units)}&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&appid=${env.OPENWEATHER_KEY}`,
