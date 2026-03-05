@@ -37,11 +37,9 @@ serve env="dev":
         echo "ERROR: Could not get tunnel URL after 30s. Check that port 8787 is running."
         exit 1
     fi
-    WS_URL="wss://${URL#https://}/ws"
-    echo "PUBLIC_CHAT_WS_URL=$WS_URL" > "$APP_DIR/.env.production"
+    echo "PUBLIC_API_BASE_URL=$URL" > "$APP_DIR/.env.production"
     echo ""
     echo "API tunnel:  $URL"
-    echo "WS URL:      $WS_URL"
     echo "Written to app/.env.production — now run 'just app::serve --env preview' in another terminal"
     echo "Press Ctrl+C to stop (removes app/.env.production)"
     echo ""

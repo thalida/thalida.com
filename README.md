@@ -58,12 +58,12 @@ Run `just` to see all available commands.
 
 ### Frontend (`app/.env.development`)
 
-| Variable             | Default                  | Description                    |
-| -------------------- | ------------------------ | ------------------------------ |
-| `PUBLIC_CHAT_WS_URL` | `ws://localhost:8787/ws` | WebSocket URL for the chat API |
-| `PUBLIC_R2_BASE_URL` | _(empty)_                | R2 public URL for media        |
+| Variable              | Default                 | Description                                               |
+| --------------------- | ----------------------- | --------------------------------------------------------- |
+| `PUBLIC_API_BASE_URL` | `http://localhost:8787` | Base URL of the API worker (WS URL derived automatically) |
+| `PUBLIC_R2_BASE_URL`  | _(empty)_               | R2 public URL for media                                   |
 
-`PUBLIC_CHAT_WS_URL` tunnel URL is auto-written to `.env.production`
+`PUBLIC_API_BASE_URL` tunnel URL is auto-written to `.env.production`
 by `just api::serve --env preview`. `PUBLIC_R2_BASE_URL` is empty for
 local dev (uses local files) and set in Cloudflare Pages for deploys.
 
@@ -207,13 +207,13 @@ Connect the repo to Cloudflare Pages via the dashboard:
    - **Build output directory**: `dist`
 4. Set environment variables (Settings > Environment Variables):
    - **Production**:
-     - `PUBLIC_CHAT_WS_URL` =
-       `wss://thalida-chat-api.<subdomain>.workers.dev/ws`
+     - `PUBLIC_API_BASE_URL` =
+       `https://thalida-chat-api.<subdomain>.workers.dev`
      - `PUBLIC_R2_BASE_URL` =
        `https://pub-xxxx.r2.dev` (your R2 public URL)
    - **Preview**:
-     - `PUBLIC_CHAT_WS_URL` =
-       `wss://thalida-chat-api-preview.<subdomain>.workers.dev/ws`
+     - `PUBLIC_API_BASE_URL` =
+       `https://thalida-chat-api-preview.<subdomain>.workers.dev`
      - `PUBLIC_R2_BASE_URL` =
        `https://pub-xxxx.r2.dev` (same R2 public URL)
 5. Under Build watch paths, add include path: `app/**` (avoids
@@ -234,12 +234,12 @@ variables > Actions:
 
 **Variables:**
 
-| Variable                     | Description                   |
-| ---------------------------- | ----------------------------- |
-| `PUBLIC_R2_BASE_URL`         | R2 public URL                 |
-| `CLOUDFLARE_PAGES_PROJECT`   | Cloudflare Pages project name |
-| `PUBLIC_CHAT_WS_URL`         | Production chat WebSocket URL |
-| `PUBLIC_CHAT_WS_URL_PREVIEW` | Preview chat WebSocket URL    |
+| Variable                      | Description                   |
+| ----------------------------- | ----------------------------- |
+| `PUBLIC_R2_BASE_URL`          | R2 public URL                 |
+| `CLOUDFLARE_PAGES_PROJECT`    | Cloudflare Pages project name |
+| `PUBLIC_API_BASE_URL`         | Production API base URL       |
+| `PUBLIC_API_BASE_URL_PREVIEW` | Preview API base URL          |
 
 
 ### One-time setup: Production Worker secrets
