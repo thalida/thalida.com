@@ -88,10 +88,6 @@ export async function fetchWeather(
 
     const newState: StoreState = {
       ...state,
-      location: {
-        ...state.location,
-        name: data.name ?? state.location.name,
-      },
       weather: {
         current: { ...data.weather[0], temp: data.main.temp },
         sunrise: data.sys.sunrise * 1000,
