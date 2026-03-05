@@ -36,6 +36,20 @@ describe("truncateMiddle", () => {
   it("handles single-segment paths", () => {
     expect(truncateMiddle("/about", 3)).toContain("/\u2026/");
   });
+
+  it("handles maxLen of 0", () => {
+    const result = truncateMiddle("/projects/page", 0);
+    expect(result).toContain("/\u2026/");
+  });
+
+  it("handles negative maxLen", () => {
+    const result = truncateMiddle("/projects/page", -5);
+    expect(result).toContain("/\u2026/");
+  });
+
+  it("handles empty string", () => {
+    expect(truncateMiddle("", 10)).toBe("");
+  });
 });
 
 // -- formatMessageTime -------------------------------------------------------
@@ -52,6 +66,18 @@ describe("formatMessageTime", () => {
     const overADay = Date.now() - 25 * 60 * 60 * 1000;
     const result = formatMessageTime(overADay);
     // Should contain a month abbreviation
+    expect(result).toMatch(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/);
+  });
+
+  it("treats exactly 24 hours ago as recent (time only)", () => {
+    const exactly24h = Date.now() - 24 * 60 * 60 * 1000 + 1;
+    const result = formatMessageTime(exactly24h);
+    expect(result).not.toMatch(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/);
+  });
+
+  it("treats 24 hours + 1ms as old (includes date)", () => {
+    const justOver24h = Date.now() - 24 * 60 * 60 * 1000 - 1;
+    const result = formatMessageTime(justOver24h);
     expect(result).toMatch(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/);
   });
 });

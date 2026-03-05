@@ -72,7 +72,14 @@ export interface LiveWindowState {
   computed: {
     phase: PhaseInfo;
   };
-  /** Written by components during update(), read by downstream components */
+  /**
+   * Transient references written by components during update() and read by
+   * downstream components in the same cycle. Not persisted to localStorage.
+   *
+   * Ordering contract: GradientLayer writes `currentGradient` first (it is
+   * the first child of SkyComponent). Subsequent layers or components may
+   * read it to adapt their visuals to the current sky color.
+   */
   ref: {
     currentGradient?: SkyGradient;
   };

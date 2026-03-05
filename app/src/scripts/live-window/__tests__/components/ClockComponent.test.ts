@@ -24,11 +24,19 @@ describe("ClockComponent", () => {
   });
 
   it("updates time display on update", () => {
-    clock.update(makeState());
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2025-06-15T14:30:00Z"));
+
+    const state = makeState();
+    state.attrs.timezone = "UTC";
+    clock.update(state);
+
     const hourEl = container.querySelector(".clock-hour") as HTMLElement;
     const minuteEl = container.querySelector(".clock-minute") as HTMLElement;
-    expect(hourEl.textContent).toBeTruthy();
-    expect(minuteEl.textContent).toBeTruthy();
+    expect(hourEl.textContent).toBe("14");
+    expect(minuteEl.textContent).toBe("30");
+
+    vi.useRealTimers();
   });
 
   it("hides ampm when in 24-hour mode", () => {
@@ -85,15 +93,18 @@ describe("ClockComponent", () => {
 
     it("falls back to local time when timezone is null", () => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date("2025-06-15T12:00:00Z"));
+      const fakeDate = new Date("2025-06-15T12:00:00Z");
+      vi.setSystemTime(fakeDate);
 
       const state = makeState();
       state.attrs.timezone = null;
 
       clock.update(state);
 
+      const localHour = fakeDate.getHours();
+      const expected = `${localHour < 10 ? "0" : ""}${localHour}`;
       const hourEl = container.querySelector(".clock-hour") as HTMLElement;
-      expect(hourEl.textContent).toBeTruthy();
+      expect(hourEl.textContent).toBe(expected);
 
       vi.useRealTimers();
     });

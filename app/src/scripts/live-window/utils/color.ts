@@ -24,6 +24,10 @@ export function parseComputedColor(computed: string): RGB | null {
   return { r: +match[1], g: +match[2], b: +match[3] };
 }
 
+// --- WCAG contrast utilities ---
+// Not currently used in production but kept for future accessibility features
+// (e.g. adapting text color to dynamic sky gradients). Test-covered.
+
 /**
  * Calculate the relative luminance of an RGB color per WCAG 2.0.
  * Returns a value between 0 (black) and 1 (white).

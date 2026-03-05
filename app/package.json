@@ -36,13 +36,14 @@
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/he": "^1.2.3",
-    "he": "^1.2.0",
     "@types/node": "^25.3.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^1.6.0",
+    "he": "^1.2.0",
     "jsdom": "^28.1.0",
     "typescript-eslint": "^8.55.0",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18",
     "yaml": "^2.8.2"
   }

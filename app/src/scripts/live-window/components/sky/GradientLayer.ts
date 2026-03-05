@@ -12,6 +12,7 @@ export class GradientLayer implements SceneComponent {
   update(state: LiveWindowState): void {
     const { phase } = state.computed;
     const gradient = getCurrentSkyGradient(phase.now, phase.sunrise, phase.sunset);
+    // Expose to downstream components (see LiveWindowState.ref ordering contract)
     state.ref.currentGradient = gradient;
 
     if (!this.el) return;

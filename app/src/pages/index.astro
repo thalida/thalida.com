@@ -5,7 +5,9 @@ import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import Card from "@components/Card/Card.astro";
 import SectionHeader from "@components/SectionHeader/SectionHeader.astro";
 
-const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "";
+import { API_BASE_URL } from "@lib/constants";
+
+const apiBaseUrl = API_BASE_URL;
 
 const navData = await getNavData();
 
@@ -20,6 +22,7 @@ const siteAge = new Date().getFullYear() - 2007;
 <BaseLayout activePage="">
   {/* ── Hero ── */}
   <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
+    {/* bg-color must be a hex literal (HTML attribute); matches --color-midnight */}
     <live-window api-url={apiBaseUrl} theme="dark" bg-color="#030a12"></live-window>
     <div class="max-w-xl">
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
@@ -140,7 +143,7 @@ const siteAge = new Date().getFullYear() - 2007;
   live-window {
     --window-color: var(--color-midnight);
     --blinds-color: var(--color-midnight);
-    --clock-text-color: #e74c3c;
+    --clock-text-color: var(--color-error);
     --weather-text-font: "Space Grotesk", sans-serif;
   }
 
@@ -164,12 +167,6 @@ const siteAge = new Date().getFullYear() - 2007;
   .home-timeline__track::before {
     content: "";
     @apply absolute border-t border-border top-9 left-0 right-0;
-  }
-
-  /* Timeline: current version glow */
-  .home-timeline__item--current .home-timeline__thumb {
-    @apply border-neon;
-    box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
   }
 
   /* Timeline: name font size */

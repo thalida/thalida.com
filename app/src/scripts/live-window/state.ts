@@ -9,9 +9,6 @@ export const DEFAULT_STORE: StoreState = {
   weather: { lastFetched: null, units: null, current: null, sunrise: null, sunset: null },
 };
 
-/** Alias for backward compat with tests referencing DEFAULT_STATE */
-export const DEFAULT_STATE = DEFAULT_STORE;
-
 export function createDefaultState(store?: StoreState): LiveWindowState {
   const s = store ?? DEFAULT_STORE;
   return {

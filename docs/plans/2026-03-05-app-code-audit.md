@@ -369,39 +369,39 @@ Development/testing page with 8 live-window instances. Built and deployed, acces
 | SEC-6 | Open redirect via chat context path | Security | Low | FIXED |
 | SEC-7 | No SRI on external CDN | Security | Low | FIXED |
 | SEC-8 | Unsandboxed Spotify iframe | Security | Low | FIXED |
-| SEC-9 | Unvalidated API responses | Security | Low | Open |
+| SEC-9 | Unvalidated API responses | Security | Low | FIXED |
 | SEC-10 | innerHTML used to clear messages | Security | Low | FIXED |
 | READ-1 | 90-line if/else-if message handler | Readability | High | FIXED |
 | READ-2 | 7 module-level mutable variables | Readability | Medium | FIXED |
-| READ-3 | CommandPalette.ts 333 lines, no modules | Readability | Medium | Open |
+| READ-3 | CommandPalette.ts 333 lines, no modules | Readability | Medium | FIXED |
 | READ-4 | nav-data.ts mixes 4 concerns | Readability | Medium | FIXED |
 | READ-5 | Double-cast in BlindsComponent | Readability | Medium | FIXED |
 | READ-6 | `slot` function name is misleading | Readability | Medium | FIXED |
 | READ-7 | Magic numbers without comments | Readability | Medium | FIXED |
 | READ-8 | Duplicated logic across files | Readability | Medium | FIXED |
-| READ-9 | Inconsistent hardcoded colors | Readability | Low | Open |
+| READ-9 | Inconsistent hardcoded colors | Readability | Low | FIXED |
 | TEST-1 | Pure functions with zero test coverage | Testability | High | FIXED |
 | TEST-2 | chat-client.ts completely untestable | Testability | High | FIXED |
-| TEST-3 | Async fetch functions untested | Testability | Medium | Open |
+| TEST-3 | Async fetch functions untested | Testability | Medium | FIXED |
 | TEST-4 | Mislocated/misnamed test file | Testability | Medium | FIXED |
 | TEST-5 | makeState() duplicated across 7 tests | Testability | Medium | FIXED |
 | TEST-6 | No coverage configuration | Testability | Medium | FIXED |
-| TEST-7 | Vitest/TSConfig alias mismatch | Testability | Medium | Open |
+| TEST-7 | Vitest/TSConfig alias mismatch | Testability | Medium | FIXED |
 | TEST-8 | Manual localStorage mock | Testability | Medium | FIXED |
-| TEST-9 | Weak assertion in clock test | Testability | Low | Open |
-| TEST-10 | Missing edge cases | Testability | Low | Open |
+| TEST-9 | Weak assertion in clock test | Testability | Low | FIXED |
+| TEST-10 | Missing edge cases | Testability | Low | FIXED |
 | MAINT-1 | Page template duplication | Maintainability | High | FIXED |
 | MAINT-2 | No error handling for JSON.parse | Maintainability | High | FIXED |
 | MAINT-3 | LS_ADMIN_TOKEN_KEY in 3 locations | Maintainability | Medium | FIXED |
 | MAINT-4 | Hardcoded routable collection set | Maintainability | Medium | FIXED |
 | MAINT-5 | Unsafe querySelector casts | Maintainability | Medium | FIXED |
-| MAINT-6 | Shared mutable state in GradientLayer | Maintainability | Medium | Open |
+| MAINT-6 | Shared mutable state in GradientLayer | Maintainability | Medium | FIXED |
 | MAINT-7 | Silent error swallowing | Maintainability | Medium | FIXED |
-| MAINT-8 | Inconsistent API URL fallbacks | Maintainability | Low | Open |
+| MAINT-8 | Inconsistent API URL fallbacks | Maintainability | Low | FIXED |
 | MAINT-9 | allTags computed but unused | Maintainability | Low | FIXED |
-| MAINT-10 | Dead code (CSS, exports, schema fields) | Maintainability | Low | Open |
+| MAINT-10 | Dead code (CSS, exports, schema fields) | Maintainability | Low | FIXED |
 | MAINT-11 | Test page shipped to production | Maintainability | Medium | FIXED |
 | MAINT-12 | Build deps listed as runtime | Maintainability | Low | FIXED |
 
-**Totals: 41 findings — 29 FIXED, 12 Open
-(0 High remaining, 6 Medium open, 6 Low open).**
+**Totals: 41 findings — 39 FIXED, 2 Open
+(0 High remaining, 2 Medium open [SEC-2, SEC-3 — require API-side changes], 0 Low open).**

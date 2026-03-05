@@ -1,5 +1,7 @@
 ---
-const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
+import { API_BASE_URL } from "@lib/constants";
+
+const apiBaseUrl = API_BASE_URL;
 const wsUrl = apiBaseUrl.replace(/^http(s?):/, "ws$1:") + "/ws";
 ---
 
@@ -129,11 +131,5 @@ const wsUrl = apiBaseUrl.replace(/^http(s?):/, "ws$1:") + "/ws";
   .chat-username-input:read-only {
     border-bottom: none;
     cursor: default;
-  }
-  .chat-delete-confirm {
-    color: #f87171;
-  }
-  .chat-flag-confirm {
-    color: #facc15;
   }
 </style>

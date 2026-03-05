@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildPhaseInfo, calculateSunPosition } from "../utils/phase";
-import { DEFAULT_STATE } from "../state";
+import { DEFAULT_STORE } from "../state";
 import type { StoreState } from "../types";
 
 describe("calculateSunPosition", () => {
@@ -55,8 +55,8 @@ describe("buildPhaseInfo", () => {
     const noon = today.getTime();
 
     const state: StoreState = {
-      ...DEFAULT_STATE,
-      weather: { ...DEFAULT_STATE.weather, sunrise, sunset },
+      ...DEFAULT_STORE,
+      weather: { ...DEFAULT_STORE.weather, sunrise, sunset },
     };
     const info = buildPhaseInfo(state, noon);
     expect(info.isDaytime).toBe(true);
@@ -75,8 +75,8 @@ describe("buildPhaseInfo", () => {
     const night = today.getTime();
 
     const state: StoreState = {
-      ...DEFAULT_STATE,
-      weather: { ...DEFAULT_STATE.weather, sunrise, sunset },
+      ...DEFAULT_STORE,
+      weather: { ...DEFAULT_STORE.weather, sunrise, sunset },
     };
     const info = buildPhaseInfo(state, night);
     expect(info.isDaytime).toBe(false);
@@ -85,16 +85,16 @@ describe("buildPhaseInfo", () => {
   it("uses default sun times when sunrise/sunset are null", () => {
     const today = new Date();
     today.setHours(12, 0, 0, 0);
-    const info = buildPhaseInfo(DEFAULT_STATE, today.getTime());
+    const info = buildPhaseInfo(DEFAULT_STORE, today.getTime());
     expect(info.phaseIndex).toBeGreaterThanOrEqual(0);
     expect(info.phaseIndex).toBeLessThan(16);
   });
 
   it("populates weather info from state", () => {
     const state: StoreState = {
-      ...DEFAULT_STATE,
+      ...DEFAULT_STORE,
       weather: {
-        ...DEFAULT_STATE.weather,
+        ...DEFAULT_STORE.weather,
         current: { main: "Clouds", description: "scattered clouds", icon: "03d", temp: 22 },
       },
     };

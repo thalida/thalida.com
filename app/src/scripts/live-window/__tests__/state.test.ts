@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { loadState, saveState, DEFAULT_STATE, CACHE_VERSION } from "../state";
+import { loadState, saveState, DEFAULT_STORE, CACHE_VERSION } from "../state";
 
 const STORAGE_KEY = "liveWindowStore";
 
@@ -10,7 +10,7 @@ describe("loadState", () => {
 
   it("returns default store when nothing is stored", () => {
     const result = loadState();
-    expect(result.store).toEqual(DEFAULT_STATE);
+    expect(result.store).toEqual(DEFAULT_STORE);
   });
 
   it("returns stored state when version matches", () => {
@@ -28,7 +28,7 @@ describe("loadState", () => {
   it("returns default store and clears storage when version mismatches", () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ _v: 0, location: { lat: 99 } }));
     const result = loadState();
-    expect(result.store).toEqual(DEFAULT_STATE);
+    expect(result.store).toEqual(DEFAULT_STORE);
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 

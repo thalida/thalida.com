@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 
-import { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
+import { LS_ADMIN_TOKEN_KEY, API_BASE_URL } from "@lib/constants";
 
-const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
+const apiBase = API_BASE_URL;
 ---
 
 <BaseLayout title="login · thalida" noindex>
@@ -25,7 +25,7 @@ const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
         >
           Log in
         </button>
-        <p data-login="error" class="login-error m-0 text-error text-sm" hidden></p>
+        <p data-login="error" class="m-0 text-error text-sm" hidden></p>
       </form>
       <p class="mt-6 m-0">
         <a href="/" class="text-teal text-sm no-underline hover:text-neon">&larr; back to chat</a>
