@@ -12,7 +12,7 @@ coverImageAlt: "Animated window effect showing weather and time"
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
-| Jul 2025 - Present | [Github](https://github.com/thalida/thalida.com) | [Live](https://2025.v.thalida.com) |
+| Jul 2025 - Feb 2026 | [Github](https://github.com/thalida/thalida.com/tree/v-2025) | [Live](https://2025.v.thalida.com) |
 
 
 ## Goals
