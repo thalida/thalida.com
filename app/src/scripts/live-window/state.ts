@@ -45,8 +45,8 @@ export function loadState(): LiveWindowState {
         };
       }
     }
-  } catch {
-    /* ignore */
+  } catch (e) {
+    console.debug("[live-window] failed to load state from localStorage", e);
   }
   return createDefaultState(store);
 }
@@ -54,7 +54,7 @@ export function loadState(): LiveWindowState {
 export function saveState(state: LiveWindowState): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ _v: CACHE_VERSION, ...state.store }));
-  } catch {
-    /* ignore */
+  } catch (e) {
+    console.debug("[live-window] failed to save state to localStorage", e);
   }
 }

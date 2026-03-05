@@ -18,5 +18,10 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     include: ["src/**/__tests__/**/*.test.{ts,mjs}"],
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{ts,mjs}"],
+      exclude: ["src/**/__tests__/**", "src/**/*.d.ts", "src/**/*.astro", "src/env.d.ts"],
+    },
   },
 });

@@ -73,29 +73,29 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     if (msg.clientId) root.dataset.clientId = msg.clientId;
     if (msg.isOwn) root.dataset.own = "";
 
-    const slot = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
+    const el = (name: string) => root.querySelector(`[data-chat="${name}"]`) as HTMLElement;
 
-    const usernameEl = slot("username");
+    const usernameEl = el("username");
     usernameEl.textContent = msg.username;
     const isCurrentUser = msg.isOwn && msg.username === state.username;
     if (isCurrentUser) usernameEl.dataset.own = "";
     else if (isAdminMsg) usernameEl.dataset.admin = "";
 
-    slot("time").textContent = formatMessageTime(msg.timestamp);
+    el("time").textContent = formatMessageTime(msg.timestamp);
 
     if (msg.context && msg.context.path.startsWith("/")) {
-      const pageLink = slot("page") as HTMLAnchorElement;
+      const pageLink = el("page") as HTMLAnchorElement;
       pageLink.href = msg.context.path;
       pageLink.textContent = truncateMiddle(msg.context.path, 25);
       pageLink.title = msg.context.path;
       pageLink.hidden = false;
-      slot("at-sep").hidden = false;
+      el("at-sep").hidden = false;
     }
 
-    slot("text").textContent = msg.text;
+    el("text").textContent = msg.text;
 
     if (state.isOwner) {
-      const deleteBtn = slot("delete-btn") as HTMLButtonElement;
+      const deleteBtn = el("delete-btn") as HTMLButtonElement;
       deleteBtn.hidden = false;
 
       const snippet = msg.text.length > 50 ? msg.text.slice(0, 50) + "\u2026" : msg.text;
@@ -107,7 +107,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
         }
       });
 
-      const flagBtn = slot("flag-btn") as HTMLButtonElement;
+      const flagBtn = el("flag-btn") as HTMLButtonElement;
       if (!isAdminMsg) {
         flagBtn.hidden = false;
       }

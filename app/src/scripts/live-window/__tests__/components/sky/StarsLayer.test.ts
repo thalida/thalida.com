@@ -1,35 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { StarsLayer } from "../../../components/sky/StarsLayer";
-import type { LiveWindowState } from "../../../types";
-import { buildPhaseInfo } from "../../../utils/phase";
-import { DEFAULT_STATE } from "../../../state";
+import { makeTestState } from "../../helpers";
 
-function makeState(hours: number): LiveWindowState {
-  const store = {
-    ...DEFAULT_STATE,
-    weather: {
-      ...DEFAULT_STATE.weather,
-      // Use explicit sunrise/sunset for predictable phases
-      sunrise: new Date().setHours(6, 0, 0, 0),
-      sunset: new Date().setHours(18, 0, 0, 0),
-    },
-  };
-  const now = new Date();
-  now.setHours(hours, 0, 0, 0);
-  return {
-    store,
-    computed: { phase: buildPhaseInfo(store, now.getTime()) },
-    ref: {},
-    attrs: {
-      use12Hour: false,
-      hideClock: false,
-      hideWeatherText: false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: null,
-      label: null,
-    },
-  };
+function makeState(hours: number) {
+  return makeTestState({ hours, sunrise: 6, sunset: 18 });
 }
 
 describe("StarsLayer", () => {

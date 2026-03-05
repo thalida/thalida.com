@@ -24,7 +24,6 @@ export type NavCollection = {
   name: string;
   title: string;
   items: NavItem[];
-  allTags: string[];
   allCategories: string[];
 };
 
@@ -56,7 +55,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
     );
 
-    const tagsSet = new Set<string>();
     const categoriesSet = new Set<string>();
     const items: NavItem[] = [];
 
@@ -67,7 +65,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageSrc = optimized.src;
       }
 
-      if (entry.data.tags) entry.data.tags.forEach((t: string) => tagsSet.add(t));
       if (entry.data.category) categoriesSet.add(entry.data.category);
 
       const isLink = name === "links";
@@ -93,7 +90,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       name,
       title: collectionMeta[name].title,
       items,
-      allTags: [...tagsSet].sort(),
       allCategories: [...categoriesSet].sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b))),
     };
   }

@@ -1,8 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { InfoPanelComponent } from "../../components/InfoPanelComponent";
-import type { LiveWindowState } from "../../types";
-import { DEFAULT_STATE } from "../../state";
-import { buildPhaseInfo } from "../../utils/phase";
+import { makeTestState } from "../helpers";
 
 function makeState(overrides?: {
   hideWeatherText?: boolean;
@@ -14,43 +12,31 @@ function makeState(overrides?: {
   lat?: number | null;
   lng?: number | null;
   timezone?: string | null;
-}): LiveWindowState {
+}) {
   const hasWeather = overrides?.temp != null;
-  const store = {
-    ...DEFAULT_STATE,
-    location: {
-      ...DEFAULT_STATE.location,
-      lat: overrides?.lat ?? null,
-      lng: overrides?.lng ?? null,
-      name: overrides?.locationName ?? null,
+  return makeTestState({
+    hideWeatherText: overrides?.hideWeatherText,
+    timezone: overrides?.timezone,
+    label: overrides?.label,
+    store: {
+      location: {
+        lat: overrides?.lat ?? null,
+        lng: overrides?.lng ?? null,
+        name: overrides?.locationName ?? null,
+      },
+      weather: {
+        units: "metric",
+        current: hasWeather
+          ? {
+              main: "Clouds",
+              description: overrides?.description ?? "scattered clouds",
+              icon: overrides?.icon ?? "03d",
+              temp: overrides?.temp ?? 0,
+            }
+          : null,
+      },
     },
-    weather: {
-      ...DEFAULT_STATE.weather,
-      units: "metric",
-      current: hasWeather
-        ? {
-            main: "Clouds",
-            description: overrides?.description ?? "scattered clouds",
-            icon: overrides?.icon ?? "03d",
-            temp: overrides?.temp ?? 0,
-          }
-        : null,
-    },
-  };
-  return {
-    store,
-    computed: { phase: buildPhaseInfo(store, Date.now()) },
-    ref: {},
-    attrs: {
-      use12Hour: false,
-      hideClock: false,
-      hideWeatherText: overrides?.hideWeatherText ?? false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: overrides?.timezone ?? null,
-      label: overrides?.label ?? null,
-    },
-  };
+  });
 }
 
 describe("InfoPanelComponent", () => {

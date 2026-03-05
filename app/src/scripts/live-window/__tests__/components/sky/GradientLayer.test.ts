@@ -1,28 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { GradientLayer } from "../../../components/sky/GradientLayer";
-import type { LiveWindowState } from "../../../types";
-import { buildPhaseInfo } from "../../../utils/phase";
-import { DEFAULT_STATE } from "../../../state";
+import { makeTestState } from "../../helpers";
 
-function makeState(overrides?: Partial<LiveWindowState>): LiveWindowState {
-  const store = overrides?.store ?? DEFAULT_STATE;
-  const today = new Date();
-  today.setHours(12, 0, 0, 0);
-  return {
-    store,
-    computed: { phase: buildPhaseInfo(store, today.getTime()) },
-    ref: {},
-    attrs: {
-      use12Hour: false,
-      hideClock: false,
-      hideWeatherText: false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: null,
-      label: null,
-    },
-    ...overrides,
-  };
+function makeState() {
+  return makeTestState({ hours: 12 });
 }
 
 describe("GradientLayer", () => {

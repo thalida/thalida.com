@@ -121,10 +121,11 @@ export class BlindsComponent implements SceneComponent {
         let finished = 0;
 
         for (const [prop, anim] of remaining) {
-          const cur = (this.blindsState as unknown as Record<string, number>)[prop];
+          const key = prop as AnimatableProp;
+          const cur = this.blindsState[key];
           const dir = cur < anim.targetValue ? 1 : -1;
           const next = cur + anim.step * dir;
-          (this.blindsState as unknown as Record<string, number>)[prop] = next;
+          this.blindsState[key] = next;
 
           const reached = dir === -1 ? next <= anim.targetValue : next >= anim.targetValue;
           if (reached) {

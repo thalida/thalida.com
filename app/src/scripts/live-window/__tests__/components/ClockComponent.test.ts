@@ -1,24 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ClockComponent } from "../../components/ClockComponent";
-import type { LiveWindowState } from "../../types";
-import { DEFAULT_STATE } from "../../state";
-import { buildPhaseInfo } from "../../utils/phase";
+import { makeTestState } from "../helpers";
 
-function makeState(use12Hour = false): LiveWindowState {
-  return {
-    store: DEFAULT_STATE,
-    computed: { phase: buildPhaseInfo(DEFAULT_STATE, Date.now()) },
-    ref: {},
-    attrs: {
-      use12Hour,
-      hideClock: false,
-      hideWeatherText: false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: null,
-      label: null,
-    },
-  };
+function makeState(use12Hour = false) {
+  return makeTestState({ use12Hour });
 }
 
 describe("ClockComponent", () => {

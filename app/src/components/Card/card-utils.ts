@@ -15,12 +15,13 @@ export function pickColor(str: string): string {
   return PLACEHOLDER_COLORS[Math.abs(hash) % PLACEHOLDER_COLORS.length];
 }
 
+/** Generates a repeating SVG tile pattern with the title text for card placeholder backgrounds. */
 export function tileSvg(title: string): string {
   const label = title.toUpperCase() + " ";
   const escaped = label.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  const charW = 6.8;
+  const charW = 6.8; // approximate width of one character at font-size 10 with letter-spacing 0.6
   const w = Math.ceil(label.length * charW);
-  const h = 34;
+  const h = 34; // tile height in px — accommodates two offset rows of text (y=12 and y=29)
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">` +
     `<text x="0" y="12" font-family="sans-serif" font-weight="700" font-size="10" letter-spacing="0.6" fill="rgba(3,10,18,0.18)">${escaped}</text>` +
