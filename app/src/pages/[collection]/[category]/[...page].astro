@@ -4,9 +4,9 @@ import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
 import { getNavData, categoryDisplay, type NavItem } from "@lib/nav-data";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
+import { PAGE_SIZE } from "@lib/constants";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const PAGE_SIZE = 50;
   const navData = await getNavData();
   const pages = COLLECTION_NAMES.flatMap((collection) => {
     const collectionData = navData[collection];

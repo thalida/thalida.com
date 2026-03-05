@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 
+import { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
+
 const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
-const LS_ADMIN_TOKEN_KEY = "admin_token";
 ---
 
 <BaseLayout title="login · thalida" noindex>

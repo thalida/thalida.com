@@ -1,3 +1,5 @@
+import { categoryDisplay, formatDate } from "@lib/format-utils";
+
 interface SearchItem {
   id: string;
   collection: string;
@@ -169,17 +171,6 @@ function initCommandPalette() {
   const cpRowExternalTpl = document.querySelector('[data-cp="row-external-tpl"]') as HTMLTemplateElement;
   const cpEmptyTpl = document.querySelector('[data-cp="empty-tpl"]') as HTMLTemplateElement;
 
-  function formatCategory(raw: string): string {
-    return raw
-      .split("-")
-      .map((p: string) => (p !== "and" ? p.charAt(0).toUpperCase() + p.slice(1) : p))
-      .join(" ");
-  }
-
-  function formatDateClient(iso: string) {
-    return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short" });
-  }
-
   function populateMeta(slot: (name: string) => HTMLElement, collectionLabel: string, catDisplay: string) {
     if (!collectionLabel && !catDisplay) return;
     slot("meta").hidden = false;
@@ -201,7 +192,7 @@ function initCommandPalette() {
     root.dataset.index = String(idx);
 
     const collectionLabel = showCollection ? item.collectionTitle : "";
-    const catDisplay = item.category ? formatCategory(item.category) : "";
+    const catDisplay = item.category ? categoryDisplay(item.category) : "";
     populateMeta(slot, collectionLabel, catDisplay);
 
     slot("title").textContent = item.title;
@@ -232,7 +223,7 @@ function initCommandPalette() {
         slot("cover-placeholder").hidden = false;
         slot("initial").textContent = item.title.charAt(0);
       }
-      slot("date").textContent = formatDateClient(item.publishedOn);
+      slot("date").textContent = formatDate(item.publishedOn);
     }
 
     return frag;

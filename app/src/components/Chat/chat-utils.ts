@@ -1,4 +1,4 @@
-export const LS_ADMIN_TOKEN_KEY = "admin_token";
+export { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
 
 export const COLORS = [
   "red",

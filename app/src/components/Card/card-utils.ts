@@ -1,7 +1,3 @@
-import { categoryDisplay } from "@lib/nav-data";
-
-export { categoryDisplay };
-
 export const PLACEHOLDER_COLORS = [
   "#39FF14" /* neon green */,
   "#00E5A0" /* teal */,
