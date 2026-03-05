@@ -10,6 +10,10 @@ coverImageAlt: "Animated window effect showing weather and time"
 
 ![Screenshot of the 2025 site](<2025-astro-animated/Screenshot 2025-07-03 at 16.48.24.png>)
 
+| Year | GitHub | Link |
+| ---- | ------ | ---- |
+| Jul 2025 - Present | [Github](https://github.com/thalida/thalida.com) | [Live](https://2025.v.thalida.com) |
+
 
 ## Goals
 
