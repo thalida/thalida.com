@@ -102,3 +102,52 @@ export async function handleLocation(env: Env, request: Request): Promise<Respon
     return _jsonResponse({ error: "Location lookup failed" }, 502, headers);
   }
 }
+
+export async function handleWeather(env: Env, request: Request): Promise<Response> {
+  const headers = _corsHeaders(env, request);
+
+  if (!env.OPENWEATHER_KEY) {
+    return _jsonResponse({ error: "Weather service not configured" }, 503, headers);
+  }
+
+  const url = new URL(request.url);
+  const lat = url.searchParams.get("lat");
+  const lon = url.searchParams.get("lon");
+  const units = url.searchParams.get("units") || "metric";
+
+  if (!lat || !lon) {
+    return _jsonResponse({ error: "lat and lon query params required" }, 400, headers);
+  }
+
+  try {
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?units=${encodeURIComponent(units)}&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&appid=${env.OPENWEATHER_KEY}`,
+    );
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`[weather] OpenWeather error ${res.status}: ${body}`);
+      return _jsonResponse({ error: "Upstream weather service error" }, 502, headers);
+    }
+
+    const data = (await res.json()) as {
+      weather?: Array<{ main?: string; description?: string; icon?: string }>;
+      main?: { temp?: number };
+      sys?: { sunrise?: number; sunset?: number };
+    };
+
+    return _jsonResponse(
+      {
+        main: data.weather?.[0]?.main ?? null,
+        description: data.weather?.[0]?.description ?? null,
+        icon: data.weather?.[0]?.icon ?? null,
+        temp: data.main?.temp ?? null,
+        sunrise: data.sys?.sunrise ?? null,
+        sunset: data.sys?.sunset ?? null,
+      },
+      200,
+      headers,
+    );
+  } catch {
+    return _jsonResponse({ error: "Weather lookup failed" }, 502, headers);
+  }
+}

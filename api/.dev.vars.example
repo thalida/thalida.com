@@ -13,3 +13,7 @@ OPENAI_API_KEY=
 # IP Registry API key for geolocation (used by /location endpoint).
 # Get one at https://ipregistry.co/
 IPREGISTRY_KEY=
+
+# OpenWeather API key for weather data (used by /weather endpoint).
+# Get one at https://openweathermap.org/api
+OPENWEATHER_KEY=

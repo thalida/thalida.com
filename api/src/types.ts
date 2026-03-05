@@ -213,6 +213,7 @@ export interface Env {
   ALLOWED_ORIGIN: string;
   OPENAI_API_KEY?: string;
   IPREGISTRY_KEY?: string;
+  OPENWEATHER_KEY?: string;
 }
 
 export interface AuthRequest {
