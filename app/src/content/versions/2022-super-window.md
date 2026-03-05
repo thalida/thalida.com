@@ -12,7 +12,7 @@ coverImageAlt: A screenshot of the thalida.com homepage, showcasing a Notion-bac
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
-| Jan 2022 - Jul 2025 | [Github](https://github.com/thalida/thalida.com/tree/v-2022) | [Live](https://thalida.com) |
+| Jan 2022 - Jul 2025 | [Github](https://github.com/thalida/thalida.com/tree/v-2022) | [Live](https://2022.v.thalida.com) |
 
 
 ## 💡Idea
