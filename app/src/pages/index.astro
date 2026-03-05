@@ -12,9 +12,8 @@ const navData = await getNavData();
 // Collections to feature on homepage (exclude versions - shown as timeline)
 const featuredCollections = COLLECTION_NAMES.filter((name) => name !== "versions");
 
-// Timeline: all versions sorted chronologically (oldest first)
-const versions = [...navData.versions.items].reverse();
-const latestYear = versions.at(-1)?.category || "";
+// Timeline: all versions sorted newest first
+const versions = [...navData.versions.items];
 const siteAge = new Date().getFullYear() - 2007;
 ---
 
@@ -65,16 +64,12 @@ const siteAge = new Date().getFullYear() - 2007;
           versions.map((version) => {
             const year = version.category || "";
             const name = version.title.replace(/^\d{4}:\s*/, "");
-            const isCurrent = year === latestYear;
             return (
               <a
                 href={`/versions/post/${version.id}`}
-                class:list={[
-                  "group flex flex-col items-center no-underline relative shrink-0 w-25",
-                  { "home-timeline__item--current": isCurrent },
-                ]}
+                class="group flex flex-col items-center no-underline relative shrink-0 w-25"
               >
-                <div class="home-timeline__thumb w-25 h-17.5 rounded overflow-hidden bg-surface border border-border relative z-10 group-hover:border-teal">
+                <div class="home-timeline__thumb w-25 h-17.5 rounded overflow-hidden bg-surface border-2 border-border relative z-10 group-hover:border-teal transition-colors duration-200">
                   {version.coverImageSrc ? (
                     <img
                       class="block w-full h-full object-cover"
