@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
-import { getLinkMetadataMap, getFaviconUrl } from "./link-metadata";
+import { getLinkMetadataMap } from "./link-metadata";
 
 const COVER_IMAGE_WIDTH = 400;
 
@@ -81,7 +81,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         publishedOn: entry.data.publishedOn.toISOString(),
         coverImageSrc,
         coverImageAlt: entry.data.coverImageAlt,
-        faviconUrl: isLink ? getFaviconUrl(entry.id) : undefined,
+        faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
         metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
       });
     }

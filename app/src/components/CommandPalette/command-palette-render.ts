@@ -51,11 +51,11 @@ export function renderItem(
       img.onerror = () => {
         img.hidden = true;
         slot("favicon-placeholder").hidden = false;
-        slot("initial").textContent = item.title.charAt(0);
+        slot("initial").textContent = domain.charAt(0);
       };
     } else {
       slot("favicon-placeholder").hidden = false;
-      slot("initial").textContent = item.title.charAt(0);
+      slot("initial").textContent = domain.charAt(0);
     }
   } else {
     if (item.coverImageSrc) {
