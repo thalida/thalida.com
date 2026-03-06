@@ -1,6 +1,6 @@
 import { SELF, fetchMock } from "cloudflare:test";
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { handleWeather, handleLocation } from "../api";
+import { handleWeather, handleLocation } from "../proxy";
 import type { Env } from "../types";
 
 describe("Worker routing", () => {
@@ -159,33 +159,34 @@ describe("Worker routing", () => {
 
   describe("weather input validation (direct handler)", () => {
     const env = { OPENWEATHER_KEY: "test-key", ALLOWED_ORIGIN: "https://thalida.com" } as Env;
+    const headers = {} as Record<string, string>;
 
     it("returns 400 when lat/lon are missing", async () => {
-      const resp = await handleWeather(env, new Request("https://fake/weather"));
+      const resp = await handleWeather(env, new Request("https://fake/weather"), headers);
       expect(resp.status).toBe(400);
       const body = (await resp.json()) as { error: string };
       expect(body.error).toBe("lat and lon query params required");
     });
 
     it("returns 400 for lat out of range", async () => {
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=999&lon=0"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=999&lon=0"), headers);
       expect(resp.status).toBe(400);
       const body = (await resp.json()) as { error: string };
       expect(body.error).toContain("lat must be -90..90");
     });
 
     it("returns 400 for lon out of range", async () => {
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=0&lon=999"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=0&lon=999"), headers);
       expect(resp.status).toBe(400);
     });
 
     it("returns 400 for non-numeric lat/lon", async () => {
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=abc&lon=0"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=abc&lon=0"), headers);
       expect(resp.status).toBe(400);
     });
 
     it("returns 400 for invalid units", async () => {
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74&units=kelvin"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74&units=kelvin"), headers);
       expect(resp.status).toBe(400);
       const body = (await resp.json()) as { error: string };
       expect(body.error).toContain("units must be one of");
@@ -200,6 +201,7 @@ describe("Worker routing", () => {
       IPREGISTRY_KEY: "test-ipregistry-key",
       ALLOWED_ORIGIN: "https://thalida.com",
     } as Env;
+    const headers = {} as Record<string, string>;
 
     beforeAll(() => {
       fetchMock.activate();
@@ -220,7 +222,7 @@ describe("Worker routing", () => {
           sys: { sunrise: 1700000000, sunset: 1700040000 },
         });
 
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"), headers);
       expect(resp.status).toBe(200);
       const body = (await resp.json()) as Record<string, unknown>;
       expect(body).toMatchObject({
@@ -239,7 +241,7 @@ describe("Worker routing", () => {
         .intercept({ path: /\/data\/2\.5\/weather/ })
         .reply(500, "Internal Error");
 
-      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"));
+      const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"), headers);
       expect(resp.status).toBe(502);
     });
 
@@ -255,7 +257,7 @@ describe("Worker routing", () => {
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "8.8.8.8" },
       });
-      const resp = await handleLocation(env, req);
+      const resp = await handleLocation(env, req, headers);
       expect(resp.status).toBe(200);
       const body = (await resp.json()) as Record<string, unknown>;
       expect(body).toMatchObject({
@@ -273,7 +275,7 @@ describe("Worker routing", () => {
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "8.8.8.8" },
       });
-      const resp = await handleLocation(env, req);
+      const resp = await handleLocation(env, req, headers);
       expect(resp.status).toBe(502);
     });
 
@@ -289,7 +291,7 @@ describe("Worker routing", () => {
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "192.168.1.1" },
       });
-      const resp = await handleLocation(env, req);
+      const resp = await handleLocation(env, req, headers);
       expect(resp.status).toBe(200);
     });
   });
