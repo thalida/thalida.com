@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 
-import { LS_ADMIN_TOKEN_KEY, API_BASE_URL } from "@lib/constants";
+import { SS_SESSION_TOKEN_KEY, API_BASE_URL } from "@lib/constants";
 
 const apiBase = API_BASE_URL;
 ---
@@ -34,7 +34,7 @@ const apiBase = API_BASE_URL;
   </div>
 </BaseLayout>
 
-<script is:inline define:vars={{ apiBase, LS_ADMIN_TOKEN_KEY }}>
+<script is:inline define:vars={{ apiBase, SS_SESSION_TOKEN_KEY }}>
   const form = document.querySelector('[data-login="form"]');
   const input = document.querySelector('[data-login="secret"]');
   const errorEl = document.querySelector('[data-login="error"]');
@@ -47,6 +47,7 @@ const apiBase = API_BASE_URL;
     errorEl.hidden = true;
     form.querySelector("button").disabled = true;
 
+    let sessionToken;
     try {
       const resp = await fetch(`${apiBase}/auth`, {
         method: "POST",
@@ -58,6 +59,8 @@ const apiBase = API_BASE_URL;
         errorEl.hidden = false;
         return;
       }
+      const data = await resp.json();
+      sessionToken = data.sessionToken;
     } catch {
       errorEl.textContent = "Could not reach the API. Is the server running?";
       errorEl.hidden = false;
@@ -66,7 +69,10 @@ const apiBase = API_BASE_URL;
       form.querySelector("button").disabled = false;
     }
 
-    localStorage.setItem(LS_ADMIN_TOKEN_KEY, secret);
+    // Clear any legacy localStorage token
+    localStorage.removeItem("admin_token");
+    // Store session token in sessionStorage (tab-scoped, clears on close)
+    sessionStorage.setItem(SS_SESSION_TOKEN_KEY, sessionToken);
     window.location.href = "/";
   });
 </script>

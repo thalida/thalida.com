@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { beforeAll, describe, it, expect } from "vitest";
 import type { ChatMessage, ServerMessage } from "../types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../types";
 
@@ -27,8 +27,25 @@ function send(ws: WebSocket, data: Record<string, unknown>): void {
   ws.send(JSON.stringify(data));
 }
 
+/**
+ * Wait for async operations (broadcasts, storage writes, moderation) to settle.
+ * Cloudflare vitest-pool-workers doesn't expose a waitOnIO() primitive, so we
+ * use a fixed delay. 100ms is sufficient for mocked fetch + in-memory ops.
+ */
 async function flush(): Promise<void> {
-  await new Promise((r) => setTimeout(r, 200));
+  await new Promise((r) => setTimeout(r, 100));
+}
+
+/** Get a session token from the /auth endpoint using the raw admin password. */
+async function getSessionToken(rawPassword: string): Promise<string | null> {
+  const resp = await SELF.fetch("https://fake-host/auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token: rawPassword }),
+  });
+  if (!resp.ok) return null;
+  const body = (await resp.json()) as { sessionToken?: string };
+  return body.sessionToken ?? null;
 }
 
 async function connectAndJoin(options?: {
@@ -41,7 +58,14 @@ async function connectAndJoin(options?: {
   await flush();
 
   const data: Record<string, unknown> = { clientId: options?.clientId ?? crypto.randomUUID() };
-  if (options?.token) data.token = options.token;
+
+  // If a raw admin password is provided, exchange it for a session token first
+  if (options?.token) {
+    const sessionToken = await getSessionToken(options.token);
+    if (sessionToken) data.token = sessionToken;
+    else data.token = options.token; // pass through for invalid-token tests
+  }
+
   send(ws, { type: CLIENT_MESSAGE_TYPE.JOIN, data });
   await flush();
 
@@ -70,6 +94,16 @@ async function connectAndJoin(options?: {
 // ── tests ────────────────────────────────────────────────────────────
 
 describe("ChatRoom Durable Object", () => {
+  // Warm up the Durable Object runtime to absorb the "index.ts changed" invalidation
+  // that occurs on the first DO fetch when vitest-pool-workers detects a recompilation.
+  beforeAll(async () => {
+    try {
+      await SELF.fetch("https://fake-host/ws", { headers: { Upgrade: "websocket" } });
+    } catch {
+      // Expected: DO invalidation error on first fetch after recompilation
+    }
+  });
+
   // ── Key Flows ────────────────────────────────────────────────────
 
   describe("key flows", () => {
@@ -503,7 +537,7 @@ describe("ChatRoom Durable Object", () => {
       adminWs.close();
     });
 
-    it("non-admin delete request is silently ignored", async () => {
+    it("non-admin delete request returns UNAUTHORIZED error", async () => {
       const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "del-sender" });
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "del-hacker" });
 
@@ -524,6 +558,9 @@ describe("ChatRoom Durable Object", () => {
 
       const remove = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
       expect(remove).toBeUndefined();
+
+      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.UNAUTHORIZED });
 
       ws1.close();
       ws2.close();
@@ -569,7 +606,7 @@ describe("ChatRoom Durable Object", () => {
       adminWs.close();
     });
 
-    it("non-admin delete_by_user is silently ignored", async () => {
+    it("non-admin delete_by_user returns UNAUTHORIZED error", async () => {
       const { ws: ws1 } = await connectAndJoin({ username: "dbu-poster" });
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "dbu-hacker" });
 
@@ -583,6 +620,9 @@ describe("ChatRoom Durable Object", () => {
 
       const removes = msgs2.filter((m) => m.type === SERVER_MESSAGE_TYPE.REMOVE);
       expect(removes).toHaveLength(0);
+
+      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.UNAUTHORIZED });
 
       ws1.close();
       ws2.close();
@@ -628,7 +668,7 @@ describe("ChatRoom Durable Object", () => {
       userWs.close();
     });
 
-    it("non-admin flag request is silently ignored", async () => {
+    it("non-admin flag request returns UNAUTHORIZED error", async () => {
       const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ username: "flag-target" });
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ username: "flag-hacker" });
 
@@ -651,6 +691,9 @@ describe("ChatRoom Durable Object", () => {
       expect(flagged).toBeUndefined();
       const blocked = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.BLOCKED);
       expect(blocked).toBeUndefined();
+
+      const error = msgs2.find((m) => m.type === SERVER_MESSAGE_TYPE.ERROR);
+      expect(error).toMatchObject({ type: SERVER_MESSAGE_TYPE.ERROR, code: SERVER_ERROR_CODE.UNAUTHORIZED });
 
       ws1.close();
       ws2.close();

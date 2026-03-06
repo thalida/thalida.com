@@ -2,6 +2,11 @@ import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
 
 export default defineWorkersConfig({
   test: {
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.ts"],
+      exclude: ["src/__tests__/**"],
+    },
     poolOptions: {
       workers: {
         isolatedStorage: false,

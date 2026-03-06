@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
-import { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
+import { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 ---
 
 <BaseLayout title="logging out… · thalida" noindex>
@@ -8,8 +8,10 @@ import { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
     <p class="font-body text-text text-sm">Logging out&hellip;</p>
   </div>
 
-  <script is:inline define:vars={{ LS_ADMIN_TOKEN_KEY }}>
-    localStorage.removeItem(LS_ADMIN_TOKEN_KEY);
+  <script is:inline define:vars={{ SS_SESSION_TOKEN_KEY }}>
+    sessionStorage.removeItem(SS_SESSION_TOKEN_KEY);
+    // Clear legacy localStorage token if present
+    localStorage.removeItem("admin_token");
     window.location.href = "/";
   </script>
 

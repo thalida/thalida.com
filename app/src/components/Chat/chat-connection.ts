@@ -1,7 +1,7 @@
 import type { ServerMessage, ChatMessage, MessageContext, ClientModAction } from "./chat-types";
 import { CLIENT_MESSAGE_TYPE, SERVER_MESSAGE_TYPE } from "./chat-types";
 import { validateUsername, setAdminUsername } from "./chat-utils";
-import { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
+import { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 import { truncateMiddle, formatMessageTime, renderNotice } from "./chat-render";
 import { createIdleManager } from "./chat-idle";
 import type { ChatElements } from "./chat-dom";
@@ -39,8 +39,8 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
   // Identity
   // ---------------------------------------------------------------------------
 
-  function getAdminToken(): string | null {
-    return localStorage.getItem(LS_ADMIN_TOKEN_KEY);
+  function getSessionToken(): string | null {
+    return sessionStorage.getItem(SS_SESSION_TOKEN_KEY);
   }
 
   function loadIdentity(): void {
@@ -237,6 +237,10 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
       if (el) el.remove();
     },
 
+    [SERVER_MESSAGE_TYPE.CLEAR]() {
+      els.messages.replaceChildren();
+    },
+
     [SERVER_MESSAGE_TYPE.RENAME](data) {
       if (data.type !== "rename") return;
       const usernameEls = els.messages.querySelectorAll<HTMLElement>('[data-chat="username"]');
@@ -309,7 +313,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
   function sendJoin(): void {
     if (!state.ws || state.ws.readyState !== WebSocket.OPEN) return;
 
-    const token = getAdminToken();
+    const token = getSessionToken();
     const data: Record<string, string> = {};
     if (state.clientId) data.clientId = state.clientId;
     if (token) data.token = token;
@@ -321,7 +325,13 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
       return;
     }
 
-    state.ws = new WebSocket(wsUrl);
+    // Enforce wss:// for non-localhost connections (SEC-3)
+    const url = new URL(wsUrl);
+    if (url.protocol === "ws:" && url.hostname !== "localhost" && !url.hostname.startsWith("127.")) {
+      url.protocol = "wss:";
+    }
+
+    state.ws = new WebSocket(url.toString());
 
     state.ws.addEventListener("open", () => {
       sendJoin();

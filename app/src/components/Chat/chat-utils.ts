@@ -1,4 +1,4 @@
-export { LS_ADMIN_TOKEN_KEY } from "@lib/constants";
+export { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 
 let _adminUsername: string | null = null;
 

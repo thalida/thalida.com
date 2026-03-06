@@ -20,6 +20,7 @@ export const SERVER_MESSAGE_TYPE = {
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
+  CLEAR: "clear",
   MESSAGE: "message",
   RENAME: "rename",
 } as const;
@@ -44,6 +45,7 @@ export type ServerMessage =
   | { type: "status"; isOwnerOnline: boolean; userCount: number; onlineUsernames: string[] }
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
+  | { type: "clear" }
   | { type: "warning"; code: string; message: string }
   | { type: "blocked"; code: string; message: string }
   | { type: "unblocked"; clientId: string }

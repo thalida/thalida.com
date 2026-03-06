@@ -37,19 +37,25 @@ No CSP header is configured anywhere. The site loads external resources (Google 
 
 **Recommendation:** Create a `public/_headers` file for Cloudflare Pages with `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and `Referrer-Policy`. Start with `Content-Security-Policy-Report-Only` to validate before enforcing. Note: `is:inline` scripts in `login.astro`/`logout.astro` will require `'unsafe-inline'` or switching to external scripts.
 
-### SEC-2: Admin Token Stored as Plaintext in localStorage
+### SEC-2: Admin Token Stored as Plaintext in localStorage — FIXED
 **Severity: Medium** | `src/pages/login.astro:68`, `src/components/Chat/chat-client.ts:97-99`
 
 The raw admin password is stored in localStorage indefinitely. Any XSS, browser extension, or shared device access exposes the credential. No expiration mechanism exists.
 
 **Recommendation:** Have the `/auth` API return a short-lived session token (JWT or opaque) instead of trusting the raw password. Consider `sessionStorage` to scope the credential to the tab. Add a TTL mechanism.
 
-### SEC-3: Admin Token Sent Over Potentially Unencrypted WebSocket
+**Resolution:** API `/auth` now returns an HMAC-SHA256 session token (24h TTL) instead of echoing the raw password. App stores the token in `sessionStorage` (tab-scoped, clears on close). Login/logout pages clear legacy `localStorage` tokens. See `api/src/session.ts`, `app/src/pages/login.astro`, `app/src/components/Chat/chat-connection.ts`.
+
+### SEC-3: Admin Token Sent Over Potentially Unencrypted WebSocket — FIXED
 **Severity: Medium** | `src/components/Chat/chat-client.ts:72-74,190-198`, `src/components/Chat/Chat.astro:2-3`
 
 The WebSocket fallback is `ws://` (not `wss://`). The token is sent in the message body on every reconnection rather than during the handshake. Production likely uses `wss://` via the `PUBLIC_API_BASE_URL`, but there is no enforcement.
 
 **Recommendation:** Enforce `wss://` for non-localhost environments. Consider authenticating during the WebSocket upgrade handshake.
+
+**Resolution:** App now enforces `wss://` for non-localhost WebSocket connections.
+API validates `Origin` header on WebSocket upgrades, rejecting disallowed origins with 403.
+See `app/src/components/Chat/chat-connection.ts`, `api/src/api.ts:handleWebSocket`.
 
 ### SEC-4: WebSocket Messages Parsed Without Validation
 **Severity: Medium** | `src/components/Chat/chat-client.ts:212`
@@ -362,8 +368,8 @@ Development/testing page with 8 live-window instances. Built and deployed, acces
 | ID | Finding | Category | Severity | Status |
 |----|---------|----------|----------|--------|
 | SEC-1 | No CSP headers | Security | Medium | FIXED |
-| SEC-2 | Admin token plaintext in localStorage | Security | Medium | Open |
-| SEC-3 | Token over unencrypted WebSocket | Security | Medium | Open |
+| SEC-2 | Admin token plaintext in localStorage | Security | Medium | FIXED |
+| SEC-3 | Token over unencrypted WebSocket | Security | Medium | FIXED |
 | SEC-4 | WebSocket messages parsed without validation | Security | Medium | FIXED |
 | SEC-5 | CSS selector injection via message ID | Security | Low | FIXED |
 | SEC-6 | Open redirect via chat context path | Security | Low | FIXED |
@@ -403,5 +409,4 @@ Development/testing page with 8 live-window instances. Built and deployed, acces
 | MAINT-11 | Test page shipped to production | Maintainability | Medium | FIXED |
 | MAINT-12 | Build deps listed as runtime | Maintainability | Low | FIXED |
 
-**Totals: 41 findings — 39 FIXED, 2 Open
-(0 High remaining, 2 Medium open [SEC-2, SEC-3 — require API-side changes], 0 Low open).**
+**Totals: 41 findings — 41 FIXED, 0 Open.**
