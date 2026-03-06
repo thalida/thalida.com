@@ -188,6 +188,7 @@ class LiveWindowElement extends HTMLElement {
   private startUpdates() {
     this.refreshAttrs();
     this.updateAll();
+    this.openBlinds();
 
     this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
     this.skyInterval = window.setInterval(() => this.updateAll(), 15 * 60 * 1000);
@@ -226,7 +227,17 @@ class LiveWindowElement extends HTMLElement {
     for (const c of this.components) c.update(this.state);
   }
 
-  // -- API --------------------------------------------------------------------
+  // -- Public API -------------------------------------------------------------
+
+  openBlinds(): void {
+    this.blindsComponent.openBlinds();
+  }
+
+  closeBlinds(): void {
+    this.blindsComponent.closeBlinds();
+  }
+
+  // -- Weather API ------------------------------------------------------------
 
   private async doFetchWeather(): Promise<void> {
     const apiUrl = this.getAttribute("api-url");

@@ -130,8 +130,14 @@ const siteAge = new Date().getFullYear() - 2007;
     const { signal } = homeAC;
 
     updateGreeting();
-    const lw = document.querySelector("live-window");
-    if (lw) lw.addEventListener("live-window:clock-update", updateGreeting, { signal });
+    const lw = document.querySelector("live-window") as
+      | (HTMLElement & { openBlinds(): void; closeBlinds(): void })
+      | null;
+    if (lw) {
+      lw.addEventListener("live-window:clock-update", updateGreeting, { signal });
+      document.addEventListener("chat:idle", () => lw.closeBlinds(), { signal });
+      document.addEventListener("chat:active", () => lw.openBlinds(), { signal });
+    }
 
     const timeline = document.querySelector(".home-timeline");
     if (timeline) {
