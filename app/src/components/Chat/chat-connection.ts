@@ -9,11 +9,13 @@ import type { ChatElements } from "./chat-dom";
 const RECONNECT_DELAY_MS = 3000;
 const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 const LS_CLIENT_ID_KEY = "chat_client_id";
+const LS_CLIENT_TOKEN_KEY = "chat_client_token";
 
 interface ChatClientState {
   ws: WebSocket | null;
   username: string | null;
   clientId: string | null;
+  clientToken: string | null;
   adminUsername: string | null;
   isOwner: boolean;
   pendingRename: boolean;
@@ -28,6 +30,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     ws: null,
     username: null,
     clientId: null,
+    clientToken: null,
     adminUsername: null,
     isOwner: false,
     pendingRename: false,
@@ -45,10 +48,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
 
   function loadIdentity(): void {
     state.clientId = localStorage.getItem(LS_CLIENT_ID_KEY);
-    if (!state.clientId) {
-      state.clientId = crypto.randomUUID();
-      localStorage.setItem(LS_CLIENT_ID_KEY, state.clientId);
-    }
+    state.clientToken = localStorage.getItem(LS_CLIENT_TOKEN_KEY);
   }
 
   // ---------------------------------------------------------------------------
@@ -186,6 +186,17 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
       state.isOwner = data.isOwner;
       state.username = data.username;
       els.usernameInput.value = data.username;
+
+      // Store server-issued identity credentials (only present on first visit)
+      if (data.clientId) {
+        state.clientId = data.clientId;
+        localStorage.setItem(LS_CLIENT_ID_KEY, data.clientId);
+      }
+      if (data.clientToken) {
+        state.clientToken = data.clientToken;
+        localStorage.setItem(LS_CLIENT_TOKEN_KEY, data.clientToken);
+      }
+
       updateAdminUI();
       setBlocked(data.isBlocked);
     },
@@ -316,6 +327,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     const token = getSessionToken();
     const data: Record<string, string> = {};
     if (state.clientId) data.clientId = state.clientId;
+    if (state.clientToken) data.clientToken = state.clientToken;
     if (token) data.token = token;
     state.ws.send(JSON.stringify({ type: CLIENT_MESSAGE_TYPE.JOIN, data }));
   }
