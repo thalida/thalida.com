@@ -42,7 +42,7 @@ export function isAllowedOrigin(env: Env, origin: string): boolean {
   );
 }
 
-function corsHeaders(env: Env, request: Request): Record<string, string> {
+export function corsHeaders(env: Env, request: Request): Record<string, string> {
   const origin = request.headers.get("Origin") ?? "";
   return {
     "Access-Control-Allow-Origin": isAllowedOrigin(env, origin) ? origin : "",

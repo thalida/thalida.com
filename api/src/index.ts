@@ -10,6 +10,7 @@ import {
   handleHealthCheck,
   handleLocation,
   handleWeather,
+  corsHeaders,
 } from "./api";
 
 export default {
@@ -31,7 +32,7 @@ export default {
     } else if (url.pathname === "/") {
       return handleHealthCheck(env, request);
     } else {
-      return new Response("Not found", { status: 404 });
+      return new Response("Not found", { status: 404, headers: corsHeaders(env, request) });
     }
   },
 } satisfies ExportedHandler<Env>;

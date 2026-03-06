@@ -306,5 +306,13 @@ describe("Worker routing", () => {
       const resp = await SELF.fetch("https://fake-host/unknown-path");
       expect(resp.status).toBe(404);
     });
+
+    it("returns CORS headers on 404", async () => {
+      const resp = await SELF.fetch("https://fake-host/nonexistent", {
+        headers: { Origin: "https://thalida.com" },
+      });
+      expect(resp.status).toBe(404);
+      expect(resp.headers.get("Access-Control-Allow-Origin")).toBe("https://thalida.com");
+    });
   });
 });
