@@ -110,7 +110,8 @@ describe("Worker routing", () => {
       expect(resp.status).toBe(403);
     });
 
-    it("WebSocket upgrade allows configured origin", async () => {
+    // Retry: Cloudflare vitest-pool-workers invalidates the DO on first run after source changes
+    it("WebSocket upgrade allows configured origin", { retry: 2 }, async () => {
       const resp = await SELF.fetch("https://fake-host/ws", {
         headers: {
           Upgrade: "websocket",
