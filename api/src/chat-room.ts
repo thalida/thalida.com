@@ -24,7 +24,7 @@ import {
   MIN_USERNAME_LENGTH,
   generateRandomUsername,
 } from "./config";
-import { verifySessionToken } from "./session";
+import { verifySessionToken, createClientToken, verifyClientToken } from "./session";
 
 // Rate limiting: max 5 messages per second per connection
 const RATE_LIMIT_WINDOW_MS = 1000;
@@ -162,14 +162,40 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private async handleJoin(ws: WebSocket, { token, clientId }: ClientJoinData): Promise<void> {
+  private async handleJoin(ws: WebSocket, { token, clientId, clientToken }: ClientJoinData): Promise<void> {
     // Verify admin via session token (HMAC-based, constant-time verification)
     let isOwner = false;
     if (typeof token === "string" && token.length > 0) {
       isOwner = await verifySessionToken(token, this.env.ADMIN_SECRET);
     }
 
-    const resolvedClientId = clientId ?? crypto.randomUUID();
+    // Resolve client identity:
+    // - If clientId + clientToken provided and valid -> returning user
+    // - Otherwise -> new user, server generates identity
+    let resolvedClientId: string;
+    let isNewClient = true;
+
+    if (
+      typeof clientId === "string" &&
+      clientId.length > 0 &&
+      typeof clientToken === "string" &&
+      clientToken.length > 0
+    ) {
+      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.ADMIN_SECRET);
+      if (tokenValid && (await this.storage.hasClient(clientId))) {
+        resolvedClientId = clientId;
+        isNewClient = false;
+      } else {
+        resolvedClientId = crypto.randomUUID();
+      }
+    } else {
+      resolvedClientId = crypto.randomUUID();
+    }
+
+    const resolvedClientToken = isNewClient
+      ? await createClientToken(resolvedClientId, this.env.ADMIN_SECRET)
+      : undefined;
+
     const isBlocked = !isOwner && this.storage.isBlocked(resolvedClientId);
 
     let name: string;
@@ -182,7 +208,6 @@ export class ChatRoom implements DurableObject {
         await this.storage.setClientMapping(resolvedClientId, name); // update lastSeen
       } else {
         name = generateRandomUsername();
-        // Ensure generated name isn't taken
         while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
           name = generateRandomUsername();
         }
@@ -200,7 +225,14 @@ export class ChatRoom implements DurableObject {
     });
 
     const connInfo = this.connections.get(ws);
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked });
+    this.send(ws, {
+      type: SERVER_MESSAGE_TYPE.JOINED,
+      isOwner,
+      username: name,
+      isBlocked,
+      // Only return credentials on first visit (new clients)
+      ...(isNewClient ? { clientId: resolvedClientId, clientToken: resolvedClientToken } : {}),
+    });
     if (connInfo) this.sendHistory(ws, connInfo);
     this.broadcastStatus();
   }
