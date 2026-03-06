@@ -2,7 +2,8 @@
 import type { GetStaticPathsOptions } from "astro";
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
-import { getNavData, categoryDisplay } from "@lib/nav-data";
+import { getNavData } from "@lib/nav-data";
+import { categoryDisplay } from "@lib/format-utils";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
 import { PAGE_SIZE } from "@lib/constants";
 import type { CollectionPage, CollectionPageProps } from "@lib/collection-types";
