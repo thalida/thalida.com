@@ -39,6 +39,7 @@ export class ChatRoom implements DurableObject {
   private messageTimes: Map<WebSocket, number[]> = new Map();
 
   private readonly adminUsername: string;
+  private lastCleanupAt = 0;
 
   constructor(
     private state: DurableObjectState,
@@ -81,9 +82,13 @@ export class ChatRoom implements DurableObject {
 
     await this.storage.loadBlockedClients();
     await this.storage.loadMessages();
-    this.storage.cleanupExpiredClients().catch((err) => {
-      console.error("[clients] cleanup error:", err);
-    });
+    const now = Date.now();
+    if (now - this.lastCleanupAt > 60_000) {
+      this.lastCleanupAt = now;
+      this.storage.cleanupExpiredClients().catch((err) => {
+        console.error("[clients] cleanup error:", err);
+      });
+    }
 
     const [client, server] = Object.values(new WebSocketPair());
 

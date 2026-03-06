@@ -70,8 +70,8 @@ export class ChatStorage {
         this.storage.sql.exec(`INSERT OR IGNORE INTO clients SELECT * FROM client_mappings`);
         this.storage.sql.exec(`DROP TABLE client_mappings`);
       }
-    } catch {
-      // Table doesn't exist, nothing to migrate
+    } catch (err) {
+      console.error("[storage] client_mappings migration error:", err);
     }
 
     this.schemaReady = true;
