@@ -132,7 +132,7 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    const data = (msg.data ?? {}) as Record<string, unknown>;
+    const data: unknown = msg.data ?? {};
 
     // READ-API-3: await async handlers for clarity
     switch (msg.type) {
@@ -154,9 +154,11 @@ export class ChatRoom implements DurableObject {
       case CLIENT_MESSAGE_TYPE.DELETE_BY_USER:
         this.handleDeleteByUser(ws, data as ClientDeleteByUserData);
         break;
-      case CLIENT_MESSAGE_TYPE.UNBLOCK:
-        this.handleUnblock(ws, String(data.clientId ?? ""));
+      case CLIENT_MESSAGE_TYPE.UNBLOCK: {
+        const d = data as Record<string, unknown>;
+        this.handleUnblock(ws, String(d.clientId ?? ""));
         break;
+      }
     }
   }
 
