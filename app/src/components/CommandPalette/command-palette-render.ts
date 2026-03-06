@@ -48,6 +48,11 @@ export function renderItem(
       const img = slot("favicon-img") as HTMLImageElement;
       img.src = item.faviconUrl;
       img.hidden = false;
+      img.onerror = () => {
+        img.hidden = true;
+        slot("favicon-placeholder").hidden = false;
+        slot("initial").textContent = item.title.charAt(0);
+      };
     } else {
       slot("favicon-placeholder").hidden = false;
       slot("initial").textContent = item.title.charAt(0);
