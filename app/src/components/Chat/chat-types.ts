@@ -41,7 +41,7 @@ export type ServerMessage =
       timestamp: number;
       context?: MessageContext;
     }
-  | { type: "joined"; isOwner: boolean; username: string; isBlocked: boolean }
+  | { type: "joined"; isOwner: boolean; username: string; isBlocked: boolean; clientId?: string; clientToken?: string }
   | { type: "status"; isOwnerOnline: boolean; userCount: number; onlineUsernames: string[] }
   | { type: "error"; code: string; message: string }
   | { type: "remove"; id: string }
