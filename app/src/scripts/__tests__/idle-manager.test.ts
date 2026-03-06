@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createIdleManager } from "@components/Chat/chat-idle";
+import { createIdleManager } from "@scripts/idle-manager";
 
 describe("createIdleManager", () => {
   beforeEach(() => {

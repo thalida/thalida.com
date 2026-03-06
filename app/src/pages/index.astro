@@ -135,8 +135,8 @@ const siteAge = new Date().getFullYear() - 2007;
       | null;
     if (lw) {
       lw.addEventListener("live-window:clock-update", updateGreeting, { signal });
-      document.addEventListener("chat:idle", () => lw.closeBlinds(), { signal });
-      document.addEventListener("chat:active", () => lw.openBlinds(), { signal });
+      document.addEventListener("site:idle", () => lw.closeBlinds(), { signal });
+      document.addEventListener("site:active", () => lw.openBlinds(), { signal });
     }
 
     const timeline = document.querySelector(".home-timeline");

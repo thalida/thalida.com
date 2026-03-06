@@ -1,7 +1,13 @@
+import { createIdleManager } from "@scripts/idle-manager";
+
+const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+
 let layoutAC: AbortController | null = null;
+let idleManager: ReturnType<typeof createIdleManager> | null = null;
 
 function initResponsiveUI() {
   layoutAC?.abort();
+  idleManager?.destroy();
   layoutAC = new AbortController();
   const { signal } = layoutAC;
 
@@ -100,6 +106,24 @@ function initResponsiveUI() {
     },
     { signal },
   );
+
+  // Global idle detection — broadcasts site:idle / site:active for all consumers
+  idleManager = createIdleManager({
+    timeoutMs: IDLE_TIMEOUT_MS,
+    onIdle() {
+      document.dispatchEvent(new CustomEvent("site:idle"));
+    },
+    onActive() {
+      document.dispatchEvent(new CustomEvent("site:active"));
+    },
+  });
+
+  document.addEventListener("visibilitychange", () => idleManager?.handleVisibilityChange(document.hidden), {
+    signal,
+  });
+  for (const event of ["mousemove", "keydown", "touchstart"] as const) {
+    document.addEventListener(event, () => idleManager?.handleActivity(), { passive: true, signal });
+  }
 }
 
 document.addEventListener("astro:page-load", initResponsiveUI);

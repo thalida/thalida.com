@@ -3,13 +3,11 @@ import { CLIENT_MESSAGE_TYPE, SERVER_MESSAGE_TYPE } from "./chat-types";
 import { validateUsername, setAdminUsername } from "./chat-utils";
 import { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 import { truncateMiddle, formatMessageTime, renderNotice } from "./chat-render";
-import { createIdleManager } from "./chat-idle";
 import type { ChatElements } from "./chat-dom";
 
 const RECONNECT_BASE_MS = 3000;
 const RECONNECT_MAX_MS = 60_000;
 const RECONNECT_MAX_ATTEMPTS = 20;
-const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 const LS_CLIENT_ID_KEY = "chat_client_id";
 const LS_CLIENT_TOKEN_KEY = "chat_client_token";
 
@@ -23,7 +21,7 @@ interface ChatClientState {
   pendingRename: boolean;
   reconnectTimer: ReturnType<typeof setTimeout> | null;
   reconnectAttempts: number;
-  idleManager: ReturnType<typeof createIdleManager> | null;
+  isIdle: boolean;
   onlineUsernames: Set<string>;
 }
 
@@ -40,7 +38,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     pendingRename: false,
     reconnectTimer: null,
     reconnectAttempts: 0,
-    idleManager: null,
+    isIdle: false,
     onlineUsernames: new Set(),
   };
 
@@ -397,7 +395,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
   }
 
   function scheduleReconnect(): void {
-    if (state.idleManager?.isIdle) return;
+    if (state.isIdle) return;
     if (state.reconnectTimer) return;
     if (state.reconnectAttempts >= RECONNECT_MAX_ATTEMPTS) return;
 
@@ -505,31 +503,18 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     loadIdentity();
     connect();
 
-    state.idleManager = createIdleManager({
-      timeoutMs: IDLE_TIMEOUT_MS,
-      onIdle() {
-        document.dispatchEvent(new CustomEvent("chat:idle"));
-        if (state.reconnectTimer) {
-          clearTimeout(state.reconnectTimer);
-          state.reconnectTimer = null;
-        }
-        state.ws?.close();
-      },
-      onActive() {
-        document.dispatchEvent(new CustomEvent("chat:active"));
-        connect();
-      },
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      state.idleManager?.handleVisibilityChange(document.hidden);
-    });
-
-    const chatEl = document.querySelector('[data-chat="panel"]');
-    if (chatEl) {
-      for (const event of ["mousemove", "keydown", "touchstart"] as const) {
-        chatEl.addEventListener(event, () => state.idleManager?.handleActivity(), { passive: true });
+    document.addEventListener("site:idle", () => {
+      state.isIdle = true;
+      if (state.reconnectTimer) {
+        clearTimeout(state.reconnectTimer);
+        state.reconnectTimer = null;
       }
-    }
+      state.ws?.close();
+    });
+
+    document.addEventListener("site:active", () => {
+      state.isIdle = false;
+      connect();
+    });
   });
 }
