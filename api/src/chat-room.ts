@@ -326,7 +326,7 @@ export class ChatRoom implements DurableObject {
       ...(context?.path && /^\/[-a-z0-9._/]*$/.test(context.path) ? { context } : {}),
     };
 
-    this.storage.addMessage(message);
+    if (!this.storage.addMessage(message)) return;
     this.broadcastMessage(message);
 
     this.moderate(message, ws).catch((err) => {
@@ -528,7 +528,12 @@ export class ChatRoom implements DurableObject {
 
   private sendHistory(ws: WebSocket, viewer: ConnectionInfo): void {
     const messages = this.storage.getMessages().map((m) => this.sanitizeMessage(m, viewer));
-    ws.send(JSON.stringify({ type: SERVER_MESSAGE_TYPE.HISTORY, messages }));
+    try {
+      ws.send(JSON.stringify({ type: SERVER_MESSAGE_TYPE.HISTORY, messages }));
+    } catch {
+      this.spectators.delete(ws);
+      this.connections.delete(ws);
+    }
   }
 
   private broadcastMessage(message: ChatMessage): void {

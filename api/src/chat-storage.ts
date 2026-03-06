@@ -226,8 +226,7 @@ export class ChatStorage {
     return this.messages.find((m) => m.id === id);
   }
 
-  addMessage(message: ChatMessage): void {
-    this.messages.push(message);
+  addMessage(message: ChatMessage): boolean {
     try {
       this.storage.sql.exec(
         `INSERT INTO messages (id, client_id, username, text, context_path, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
@@ -242,93 +241,103 @@ export class ChatStorage {
     } catch (err) {
       this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to persist message:", err);
+      return false;
     }
+    this.messages.push(message);
+    return true;
   }
 
   removeMessage(id: string): boolean {
     const idx = this.messages.findIndex((m) => m.id === id);
     if (idx === -1) return false;
-    this.messages.splice(idx, 1);
     try {
       this.storage.sql.exec(`DELETE FROM messages WHERE id = ?`, id);
       this._lastSaveError = null;
     } catch (err) {
       this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to delete message:", err);
+      return false;
     }
+    this.messages.splice(idx, 1);
     return true;
   }
 
   removeMessagesByClient(clientId: string): ChatMessage[] {
     const removed = this.messages.filter((m) => m.clientId === clientId);
-    this.messages = this.messages.filter((m) => m.clientId !== clientId);
+    if (removed.length === 0) return [];
     try {
       this.storage.sql.exec(`DELETE FROM messages WHERE client_id = ?`, clientId);
       this._lastSaveError = null;
     } catch (err) {
       this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to delete messages by client:", err);
+      return [];
     }
+    this.messages = this.messages.filter((m) => m.clientId !== clientId);
     return removed;
   }
 
   renameMessagesForClient(clientId: string, newUsername: string): void {
-    for (const msg of this.messages) {
-      if (msg.clientId === clientId) {
-        msg.username = newUsername;
-      }
-    }
     try {
       this.storage.sql.exec(`UPDATE messages SET username = ? WHERE client_id = ?`, newUsername, clientId);
       this._lastSaveError = null;
     } catch (err) {
       this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to rename messages:", err);
+      return;
+    }
+    for (const msg of this.messages) {
+      if (msg.clientId === clientId) {
+        msg.username = newUsername;
+      }
     }
   }
 
   /** Clears all messages from storage. Returns the IDs of removed messages. */
   clearAllMessages(): string[] {
-    const ids = this.messages.map((m) => m.id);
-    this.messages = [];
+    const removedIds = this.messages.map((m) => m.id);
     try {
       this.storage.sql.exec(`DELETE FROM messages`);
       this._lastSaveError = null;
     } catch (err) {
       this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to clear messages:", err);
+      return [];
     }
-    return ids;
+    this.messages = [];
+    return removedIds;
   }
 
   // ── Blocked Clients ────────────────────────────────────────────────
 
   blockClient(clientId: string, username: string): void {
-    const blockedAt = Date.now();
-    this.blockedEntries.set(clientId, { username, blockedAt });
+    const now = Date.now();
     try {
       this.storage.sql.exec(
         `INSERT OR REPLACE INTO blocked_clients (client_id, username, created_at) VALUES (?, ?, ?)`,
         clientId,
         username,
-        this.toISOString(blockedAt),
+        this.toISOString(now),
       );
       this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `blockedClients: ${err}`;
+      this._lastSaveError = `blocked_clients: ${err}`;
       console.error("[storage] failed to persist blocked client:", err);
+      return;
     }
+    this.blockedEntries.set(clientId, { username, blockedAt: now });
   }
 
   unblockClient(clientId: string): void {
-    this.blockedEntries.delete(clientId);
     try {
       this.storage.sql.exec(`DELETE FROM blocked_clients WHERE client_id = ?`, clientId);
       this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `blockedClients: ${err}`;
+      this._lastSaveError = `blocked_clients: ${err}`;
       console.error("[storage] failed to delete blocked client:", err);
+      return;
     }
+    this.blockedEntries.delete(clientId);
   }
 
   isBlocked(clientId: string): boolean {
