@@ -50,17 +50,23 @@ export function createIdleManager(options: IdleManagerOptions): IdleManager {
       } else {
         clearIdleTimer();
         wake();
+        startIdleTimer();
       }
     },
 
     handleActivity() {
       wake();
+      startIdleTimer();
     },
 
     destroy() {
       clearIdleTimer();
     },
   };
+
+  // Start the inactivity timer immediately so idle fires even without
+  // any visibility change (e.g. user loads the page and walks away).
+  startIdleTimer();
 
   return manager;
 }
