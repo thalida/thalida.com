@@ -49,6 +49,17 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
   function loadIdentity(): void {
     state.clientId = localStorage.getItem(LS_CLIENT_ID_KEY);
     state.clientToken = localStorage.getItem(LS_CLIENT_TOKEN_KEY);
+
+    // One-time cleanup: remove stale clientId from old client-side generation
+    // (server won't trust it without a signed token)
+    if (state.clientId && !state.clientToken) {
+      localStorage.removeItem(LS_CLIENT_ID_KEY);
+      state.clientId = null;
+    }
+
+    // Remove legacy keys
+    localStorage.removeItem("admin_token");
+    localStorage.removeItem("chat_username");
   }
 
   // ---------------------------------------------------------------------------

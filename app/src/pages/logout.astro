@@ -10,8 +10,6 @@ import { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 
   <script is:inline define:vars={{ SS_SESSION_TOKEN_KEY }}>
     sessionStorage.removeItem(SS_SESSION_TOKEN_KEY);
-    // Clear legacy localStorage token if present
-    localStorage.removeItem("admin_token");
     window.location.href = "/";
   </script>
 

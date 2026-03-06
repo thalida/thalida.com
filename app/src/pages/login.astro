@@ -69,8 +69,6 @@ const apiBase = API_BASE_URL;
       form.querySelector("button").disabled = false;
     }
 
-    // Clear any legacy localStorage token
-    localStorage.removeItem("admin_token");
     // Store session token in sessionStorage (tab-scoped, clears on close)
     sessionStorage.setItem(SS_SESSION_TOKEN_KEY, sessionToken);
     window.location.href = "/";
