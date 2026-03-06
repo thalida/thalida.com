@@ -24,6 +24,7 @@ interface ChatClientState {
   reconnectTimer: ReturnType<typeof setTimeout> | null;
   reconnectAttempts: number;
   idleManager: ReturnType<typeof createIdleManager> | null;
+  onlineUsernames: Set<string>;
 }
 
 export function createChatClient(els: ChatElements, wsUrl: string): void {
@@ -40,6 +41,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     reconnectTimer: null,
     reconnectAttempts: 0,
     idleManager: null,
+    onlineUsernames: new Set(),
   };
 
   // ---------------------------------------------------------------------------
@@ -109,6 +111,10 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
 
     el("text").textContent = msg.text;
 
+    if (state.onlineUsernames.has(msg.username)) {
+      (el("status-dot") as HTMLElement).dataset.online = "";
+    }
+
     if (state.isOwner) {
       const deleteBtn = el("delete-btn") as HTMLButtonElement;
       deleteBtn.hidden = false;
@@ -155,12 +161,12 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     (els.userCount.querySelector('[data-chat="viewer-count"]') as HTMLElement).textContent = String(userCount);
     els.userCount.title = `${userCount} online`;
 
-    const onlineSet = new Set(onlineUsernames);
+    state.onlineUsernames = new Set(onlineUsernames);
     for (const row of els.messages.querySelectorAll<HTMLElement>("[data-msg-id]")) {
       const dot = row.querySelector<HTMLElement>('[data-chat="status-dot"]');
       const usernameEl = row.querySelector<HTMLElement>('[data-chat="username"]');
       if (!dot || !usernameEl) continue;
-      if (onlineSet.has(usernameEl.textContent ?? "")) {
+      if (state.onlineUsernames.has(usernameEl.textContent ?? "")) {
         dot.dataset.online = "";
       } else {
         delete dot.dataset.online;
