@@ -21,6 +21,7 @@ import {
   MAX_MESSAGE_LENGTH,
   MAX_USERNAME_LENGTH,
   MAX_USERNAME_RETRIES,
+  MAX_USERNAME_SUFFIX,
   MAX_WARNINGS,
   MIN_USERNAME_LENGTH,
   generateRandomUsername,
@@ -44,7 +45,7 @@ export class ChatRoom implements DurableObject {
     private env: Env,
   ) {
     this.storage = new ChatStorage(state.storage);
-    this.adminUsername = env.ADMIN_USERNAME || DEFAULT_ADMIN_USERNAME;
+    this.adminUsername = (env.ADMIN_USERNAME || DEFAULT_ADMIN_USERNAME).toLowerCase();
   }
 
   // ── Rate Limiting ───────────────────────────────────────────────────
@@ -144,20 +145,26 @@ export class ChatRoom implements DurableObject {
         await this.handleRename(ws, data as ClientRenameData);
         break;
       case CLIENT_MESSAGE_TYPE.MESSAGE:
-        this.handleChatMessage(ws, data as ClientChatData);
+        await this.handleChatMessage(ws, data as ClientChatData);
         break;
-      case CLIENT_MESSAGE_TYPE.DELETE:
-        this.handleDelete(ws, data as ClientDeleteData);
+      case CLIENT_MESSAGE_TYPE.DELETE: {
+        const d = data as Record<string, unknown>;
+        await this.handleDelete(ws, { id: String(d.id ?? "") });
         break;
-      case CLIENT_MESSAGE_TYPE.FLAG:
-        this.handleFlag(ws, data as ClientFlagData);
+      }
+      case CLIENT_MESSAGE_TYPE.FLAG: {
+        const d = data as Record<string, unknown>;
+        await this.handleFlag(ws, { id: String(d.id ?? "") });
         break;
-      case CLIENT_MESSAGE_TYPE.DELETE_BY_USER:
-        this.handleDeleteByUser(ws, data as ClientDeleteByUserData);
+      }
+      case CLIENT_MESSAGE_TYPE.DELETE_BY_USER: {
+        const d = data as Record<string, unknown>;
+        await this.handleDeleteByUser(ws, { clientId: String(d.clientId ?? "") });
         break;
+      }
       case CLIENT_MESSAGE_TYPE.UNBLOCK: {
         const d = data as Record<string, unknown>;
-        this.handleUnblock(ws, String(d.clientId ?? ""));
+        await this.handleUnblock(ws, String(d.clientId ?? ""));
         break;
       }
     }
@@ -213,13 +220,20 @@ export class ChatRoom implements DurableObject {
         while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
           retries++;
           if (retries >= MAX_USERNAME_RETRIES) {
-            // Exhausted base names — append numeric suffix
+            // Exhausted base names — append numeric suffix with bounded attempts
             let suffix = 1;
             const baseName = generateRandomUsername();
             name = `${baseName}-${suffix}`;
-            while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+            while (
+              suffix <= MAX_USERNAME_SUFFIX &&
+              (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values()))
+            ) {
               suffix++;
               name = `${baseName}-${suffix}`;
+            }
+            if (suffix > MAX_USERNAME_SUFFIX) {
+              // Absolute fallback: use a UUID-based name
+              name = `user-${crypto.randomUUID().slice(0, 8)}`;
             }
             break;
           }
@@ -293,7 +307,7 @@ export class ChatRoom implements DurableObject {
     this.broadcastStatus();
   }
 
-  private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
+  private async handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): Promise<void> {
     const info = this.connections.get(ws);
     if (!info) return;
 
@@ -323,7 +337,7 @@ export class ChatRoom implements DurableObject {
       username: info.username,
       text,
       timestamp: Date.now(),
-      ...(context?.path && /^\/[-a-z0-9._/]*$/.test(context.path) ? { context } : {}),
+      ...(context?.path && /^\/[-a-z0-9._/]*$/.test(context.path) ? { context: { path: context.path } } : {}),
     };
 
     if (!this.storage.addMessage(message)) return;
@@ -334,7 +348,7 @@ export class ChatRoom implements DurableObject {
     });
   }
 
-  private handleUnblock(ws: WebSocket, clientId: string): void {
+  private async handleUnblock(ws: WebSocket, clientId: string): Promise<void> {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can unblock users.");
@@ -362,7 +376,7 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private handleDelete(ws: WebSocket, { id }: ClientDeleteData): void {
+  private async handleDelete(ws: WebSocket, { id }: ClientDeleteData): Promise<void> {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can delete messages.");
@@ -373,7 +387,7 @@ export class ChatRoom implements DurableObject {
     this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
   }
 
-  private handleFlag(ws: WebSocket, { id }: ClientFlagData): void {
+  private async handleFlag(ws: WebSocket, { id }: ClientFlagData): Promise<void> {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can flag users.");
@@ -403,7 +417,7 @@ export class ChatRoom implements DurableObject {
     });
   }
 
-  private handleDeleteByUser(ws: WebSocket, { clientId: targetClientId }: ClientDeleteByUserData): void {
+  private async handleDeleteByUser(ws: WebSocket, { clientId: targetClientId }: ClientDeleteByUserData): Promise<void> {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can delete user messages.");
