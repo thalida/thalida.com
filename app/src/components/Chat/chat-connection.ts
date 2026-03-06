@@ -228,6 +228,10 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
       for (const msg of data.messages) {
         appendMessage(msg);
       }
+      // Ensure scroll sticks after browser layout completes
+      requestAnimationFrame(() => {
+        els.messages.scrollTop = els.messages.scrollHeight;
+      });
     },
 
     [SERVER_MESSAGE_TYPE.MESSAGE](data) {
