@@ -1,13 +1,6 @@
 import type { BlockedEntry, ChatMessage, ConnectionInfo } from "./types";
 import { MESSAGE_RETENTION_MS, RESERVATION_DURATION_MS } from "./config";
 
-// Legacy KV keys — used only during one-time KV→SQL migration
-const LEGACY_MESSAGES_KEY = "messages";
-const LEGACY_BLOCKED_CLIENTS_KEY = "blockedClients";
-const LEGACY_BLOCKED_KEY = "blockedIps"; // v1 key
-const LEGACY_SCHEMA_VERSION_KEY = "schemaVersion";
-const LEGACY_CLIENT_PREFIX = "client:";
-
 interface ClientMapping {
   username: string;
   lastSeen: number;
@@ -19,11 +12,10 @@ export class ChatStorage {
   private messagesLoaded = false;
   private blockedClientsLoaded = false;
   private schemaReady = false;
-  private migrationDone = false;
 
   constructor(private storage: DurableObjectStorage) {}
 
-  // ── Schema & Migration ──────────────────────────────────────────────
+  // ── Schema ────────────────────────────────────────────────────────
 
   private ensureSchema(): void {
     if (this.schemaReady) return;
@@ -55,89 +47,7 @@ export class ChatStorage {
       CREATE INDEX IF NOT EXISTS idx_clients_last_seen_at ON clients (last_seen_at);
     `);
 
-    // Migrate from old table name if it exists
-    try {
-      const cursor = this.storage.sql.exec<{ name: string }>(
-        `SELECT name FROM sqlite_master WHERE type='table' AND name='client_mappings'`,
-      );
-      for (const _row of cursor) {
-        this.storage.sql.exec(`INSERT OR IGNORE INTO clients SELECT * FROM client_mappings`);
-        this.storage.sql.exec(`DROP TABLE client_mappings`);
-      }
-    } catch (err) {
-      console.error("[storage] client_mappings migration error:", err);
-    }
-
     this.schemaReady = true;
-  }
-
-  /**
-   * Migrate legacy KV data into SQL tables, then delete KV keys.
-   * Runs once per DO instance lifetime on first boot after deploy.
-   */
-  private async migrateFromKV(): Promise<void> {
-    if (this.migrationDone) return;
-    this.migrationDone = true;
-
-    // Quick check: if the primary legacy key is absent, skip all KV reads
-    const hasLegacyMessages = await this.storage.get(LEGACY_MESSAGES_KEY);
-    const hasLegacyBlocked = await this.storage.get(LEGACY_BLOCKED_CLIENTS_KEY);
-    const hasLegacyBlockedV1 = await this.storage.get(LEGACY_BLOCKED_KEY);
-    if (!hasLegacyMessages && !hasLegacyBlocked && !hasLegacyBlockedV1) return;
-
-    // ── blocked clients (v1 "blockedIps" + v2 "blockedClients") ──
-    const legacyBlocked = (hasLegacyBlocked ?? hasLegacyBlockedV1) as unknown;
-    if (Array.isArray(legacyBlocked)) {
-      for (const entry of legacyBlocked) {
-        if (entry && typeof entry === "object" && "clientId" in entry) {
-          const e = entry as { clientId: string; username: string; blockedAt: number };
-          this.storage.sql.exec(
-            `INSERT OR REPLACE INTO blocked_clients (client_id, username, created_at) VALUES (?, ?, ?)`,
-            e.clientId,
-            e.username,
-            new Date(e.blockedAt).toISOString(),
-          );
-        }
-      }
-    }
-
-    // ── messages ──
-    if (Array.isArray(hasLegacyMessages)) {
-      for (const m of hasLegacyMessages as ChatMessage[]) {
-        this.storage.sql.exec(
-          `INSERT OR REPLACE INTO messages (id, client_id, username, text, context_path, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
-          m.id,
-          m.clientId,
-          m.username,
-          m.text,
-          m.context?.path ?? null,
-          new Date(m.timestamp).toISOString(),
-        );
-      }
-    }
-
-    // ── client mappings ──
-    const legacyClients = await this.storage.list<ClientMapping>({ prefix: LEGACY_CLIENT_PREFIX });
-    for (const [key, value] of legacyClients) {
-      const clientId = key.slice(LEGACY_CLIENT_PREFIX.length);
-      this.storage.sql.exec(
-        `INSERT OR REPLACE INTO clients (client_id, username, last_seen_at) VALUES (?, ?, ?)`,
-        clientId,
-        value.username,
-        new Date(value.lastSeen).toISOString(),
-      );
-    }
-
-    // ── delete old KV keys ──
-    await this.storage.delete([
-      LEGACY_MESSAGES_KEY,
-      LEGACY_BLOCKED_CLIENTS_KEY,
-      LEGACY_BLOCKED_KEY,
-      LEGACY_SCHEMA_VERSION_KEY,
-    ]);
-    if (legacyClients.size > 0) {
-      await this.storage.delete([...legacyClients.keys()]);
-    }
   }
 
   // ── Helpers ────────────────────────────────────────────────────────
@@ -156,7 +66,6 @@ export class ChatStorage {
     if (this.blockedClientsLoaded) return;
 
     this.ensureSchema();
-    await this.migrateFromKV();
 
     const cursor = this.storage.sql.exec<{
       client_id: string;
