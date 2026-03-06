@@ -508,6 +508,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     state.idleManager = createIdleManager({
       timeoutMs: IDLE_TIMEOUT_MS,
       onIdle() {
+        document.dispatchEvent(new CustomEvent("chat:idle"));
         if (state.reconnectTimer) {
           clearTimeout(state.reconnectTimer);
           state.reconnectTimer = null;
@@ -515,6 +516,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
         state.ws?.close();
       },
       onActive() {
+        document.dispatchEvent(new CustomEvent("chat:active"));
         connect();
       },
     });
