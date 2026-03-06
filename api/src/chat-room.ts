@@ -176,34 +176,12 @@ export class ChatRoom implements DurableObject {
   }
 
   private async handleJoin(ws: WebSocket, { token, clientId, clientToken }: ClientJoinData): Promise<void> {
-    // Verify admin via session token (HMAC-based, constant-time verification)
     let isOwner = false;
     if (typeof token === "string" && token.length > 0) {
       isOwner = await verifySessionToken(token, this.env.SIGNING_SECRET);
     }
 
-    // Resolve client identity:
-    // - If clientId + clientToken provided and valid -> returning user
-    // - Otherwise -> new user, server generates identity
-    let resolvedClientId: string;
-    let isNewClient = true;
-
-    if (
-      typeof clientId === "string" &&
-      clientId.length > 0 &&
-      typeof clientToken === "string" &&
-      clientToken.length > 0
-    ) {
-      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.SIGNING_SECRET);
-      if (tokenValid && (await this.storage.hasClient(clientId))) {
-        resolvedClientId = clientId;
-        isNewClient = false;
-      } else {
-        resolvedClientId = crypto.randomUUID();
-      }
-    } else {
-      resolvedClientId = crypto.randomUUID();
-    }
+    const { resolvedClientId, isNewClient } = await this.resolveClientIdentity(clientId, clientToken);
 
     const resolvedClientToken = isNewClient
       ? await createClientToken(resolvedClientId, this.env.SIGNING_SECRET)
@@ -211,42 +189,7 @@ export class ChatRoom implements DurableObject {
 
     const isBlocked = !isOwner && this.storage.isBlocked(resolvedClientId);
 
-    let name: string;
-    if (isOwner) {
-      name = this.adminUsername;
-    } else {
-      const mapping = await this.storage.getClientMapping(resolvedClientId);
-      if (mapping) {
-        name = mapping.username;
-        await this.storage.setClientMapping(resolvedClientId, name); // update lastSeen
-      } else {
-        name = generateRandomUsername();
-        let retries = 0;
-        while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
-          retries++;
-          if (retries >= MAX_USERNAME_RETRIES) {
-            // Exhausted base names — append numeric suffix with bounded attempts
-            let suffix = 1;
-            const baseName = generateRandomUsername();
-            name = `${baseName}-${suffix}`;
-            while (
-              suffix <= MAX_USERNAME_SUFFIX &&
-              (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values()))
-            ) {
-              suffix++;
-              name = `${baseName}-${suffix}`;
-            }
-            if (suffix > MAX_USERNAME_SUFFIX) {
-              // Absolute fallback: use a UUID-based name
-              name = `user-${crypto.randomUUID().slice(0, 8)}`;
-            }
-            break;
-          }
-          name = generateRandomUsername();
-        }
-        await this.storage.setClientMapping(resolvedClientId, name);
-      }
-    }
+    const name = isOwner ? this.adminUsername : await this.resolveUsername(resolvedClientId);
 
     this.spectators.delete(ws);
     this.connections.set(ws, {
@@ -263,11 +206,61 @@ export class ChatRoom implements DurableObject {
       isOwner,
       username: name,
       isBlocked,
-      // Only return credentials on first visit (new clients)
       ...(isNewClient ? { clientId: resolvedClientId, clientToken: resolvedClientToken } : {}),
     });
     if (connInfo) this.sendHistory(ws, connInfo);
     this.broadcastStatus();
+  }
+
+  private async resolveClientIdentity(
+    clientId: unknown,
+    clientToken: unknown,
+  ): Promise<{ resolvedClientId: string; isNewClient: boolean }> {
+    if (
+      typeof clientId === "string" &&
+      clientId.length > 0 &&
+      typeof clientToken === "string" &&
+      clientToken.length > 0
+    ) {
+      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.SIGNING_SECRET);
+      if (tokenValid && (await this.storage.hasClient(clientId))) {
+        return { resolvedClientId: clientId, isNewClient: false };
+      }
+    }
+    return { resolvedClientId: crypto.randomUUID(), isNewClient: true };
+  }
+
+  private async resolveUsername(resolvedClientId: string): Promise<string> {
+    const mapping = await this.storage.getClientMapping(resolvedClientId);
+    if (mapping) {
+      await this.storage.setClientMapping(resolvedClientId, mapping.username);
+      return mapping.username;
+    }
+
+    let name = generateRandomUsername();
+    let retries = 0;
+    while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+      retries++;
+      if (retries >= MAX_USERNAME_RETRIES) {
+        let suffix = 1;
+        const baseName = generateRandomUsername();
+        name = `${baseName}-${suffix}`;
+        while (
+          suffix <= MAX_USERNAME_SUFFIX &&
+          (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values()))
+        ) {
+          suffix++;
+          name = `${baseName}-${suffix}`;
+        }
+        if (suffix > MAX_USERNAME_SUFFIX) {
+          name = `user-${crypto.randomUUID().slice(0, 8)}`;
+        }
+        break;
+      }
+      name = generateRandomUsername();
+    }
+    await this.storage.setClientMapping(resolvedClientId, name);
+    return name;
   }
 
   private async handleRename(ws: WebSocket, { username }: ClientRenameData): Promise<void> {
