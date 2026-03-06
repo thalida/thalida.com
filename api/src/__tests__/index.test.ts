@@ -100,6 +100,14 @@ describe("Worker routing", () => {
       expect(allowed === "" || allowed === null).toBe(true);
     });
 
+    it("rejects WebSocket upgrade with no Origin header", async () => {
+      const resp = await SELF.fetch("https://fake-host/ws", {
+        headers: { Upgrade: "websocket" },
+      });
+      expect(resp.status).toBe(403);
+      expect(await resp.text()).toBe("Forbidden origin");
+    });
+
     it("WebSocket upgrade rejects disallowed Origin", async () => {
       const resp = await SELF.fetch("https://fake-host/ws", {
         headers: {

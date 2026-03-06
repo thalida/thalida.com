@@ -71,8 +71,8 @@ export async function handleWebSocket(env: Env, request: Request): Promise<Respo
   }
 
   // Validate WebSocket origin (SEC-API-1)
-  const origin = request.headers.get("Origin") ?? "";
-  if (origin && !isAllowedOrigin(env, origin)) {
+  const origin = request.headers.get("Origin");
+  if (!origin || !isAllowedOrigin(env, origin)) {
     return new Response("Forbidden origin", { status: 403 });
   }
 

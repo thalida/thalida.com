@@ -7,7 +7,7 @@ import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "../
 
 async function openWs(): Promise<WebSocket> {
   const resp = await SELF.fetch("https://fake-host/ws", {
-    headers: { Upgrade: "websocket" },
+    headers: { Upgrade: "websocket", Origin: "https://thalida.com" },
   });
   const ws = resp.webSocket;
   if (!ws) throw new Error("No WebSocket returned");
@@ -120,7 +120,7 @@ describe("ChatRoom Durable Object", () => {
   // that occurs on the first DO fetch when vitest-pool-workers detects a recompilation.
   beforeAll(async () => {
     try {
-      await SELF.fetch("https://fake-host/ws", { headers: { Upgrade: "websocket" } });
+      await SELF.fetch("https://fake-host/ws", { headers: { Upgrade: "websocket", Origin: "https://thalida.com" } });
     } catch {
       // Expected: DO invalidation error on first fetch after recompilation
     }
