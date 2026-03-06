@@ -6,7 +6,9 @@ import { truncateMiddle, formatMessageTime, renderNotice } from "./chat-render";
 import { createIdleManager } from "./chat-idle";
 import type { ChatElements } from "./chat-dom";
 
-const RECONNECT_DELAY_MS = 3000;
+const RECONNECT_BASE_MS = 3000;
+const RECONNECT_MAX_MS = 60_000;
+const RECONNECT_MAX_ATTEMPTS = 20;
 const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 const LS_CLIENT_ID_KEY = "chat_client_id";
 const LS_CLIENT_TOKEN_KEY = "chat_client_token";
@@ -20,6 +22,7 @@ interface ChatClientState {
   isOwner: boolean;
   pendingRename: boolean;
   reconnectTimer: ReturnType<typeof setTimeout> | null;
+  reconnectAttempts: number;
   idleManager: ReturnType<typeof createIdleManager> | null;
 }
 
@@ -35,6 +38,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     isOwner: false,
     pendingRename: false,
     reconnectTimer: null,
+    reconnectAttempts: 0,
     idleManager: null,
   };
 
@@ -357,6 +361,7 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
     state.ws = new WebSocket(url.toString());
 
     state.ws.addEventListener("open", () => {
+      state.reconnectAttempts = 0;
       sendJoin();
     });
 
@@ -384,10 +389,14 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
   function scheduleReconnect(): void {
     if (state.idleManager?.isIdle) return;
     if (state.reconnectTimer) return;
+    if (state.reconnectAttempts >= RECONNECT_MAX_ATTEMPTS) return;
+
+    const delay = Math.min(RECONNECT_BASE_MS * Math.pow(2, state.reconnectAttempts), RECONNECT_MAX_MS);
+    state.reconnectAttempts++;
     state.reconnectTimer = setTimeout(() => {
       state.reconnectTimer = null;
       connect();
-    }, RECONNECT_DELAY_MS);
+    }, delay);
   }
 
   // ---------------------------------------------------------------------------
