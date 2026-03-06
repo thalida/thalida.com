@@ -1,15 +1,6 @@
-export interface SearchItem {
-  id: string;
-  collection: string;
-  collectionTitle: string;
-  title: string;
-  description?: string;
-  tags?: string[];
-  category?: string;
-  coverImageSrc?: string;
-  publishedOn: string;
-  faviconUrl?: string;
-}
+import type { NavItem } from "@lib/nav-data";
+
+export type SearchItem = NavItem & { collectionTitle: string };
 
 export interface NavCollectionData {
   title: string;

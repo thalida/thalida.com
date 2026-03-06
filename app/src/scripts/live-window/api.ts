@@ -21,10 +21,6 @@ export function resolveUnits(attr: string | null, country: string | null): "metr
   return "metric";
 }
 
-export function tempSymbol(units: "metric" | "imperial"): string {
-  return units === "imperial" ? "°F" : "°C";
-}
-
 // ---------------------------------------------------------------------------
 // Rate-limit guards
 // ---------------------------------------------------------------------------

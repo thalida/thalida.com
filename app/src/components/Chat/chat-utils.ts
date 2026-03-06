@@ -1,5 +1,3 @@
-export { SS_SESSION_TOKEN_KEY } from "@lib/constants";
-
 let _adminUsername: string | null = null;
 
 export function setAdminUsername(name: string): void {

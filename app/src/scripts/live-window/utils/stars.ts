@@ -1,8 +1,6 @@
 import type { Star } from "../types";
 import { SKY_PHASES } from "./sky-gradient";
 
-export type { Star } from "../types";
-
 /**
  * Mulberry32 PRNG — deterministic random from a 32-bit seed.
  * Returns a function that produces values in [0, 1).
