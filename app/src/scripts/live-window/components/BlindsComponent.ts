@@ -25,6 +25,7 @@ export class BlindsComponent implements SceneComponent {
   };
 
   private animationStarted = false;
+  private animationInterval: number | null = null;
 
   mount(container: HTMLElement): void {
     this.containerEl = container;
@@ -49,6 +50,10 @@ export class BlindsComponent implements SceneComponent {
   }
 
   destroy(): void {
+    if (this.animationInterval != null) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
     if (this.containerEl) this.containerEl.innerHTML = "";
     this.containerEl = null;
     this.blindsEl = null;
@@ -116,7 +121,7 @@ export class BlindsComponent implements SceneComponent {
   ): Promise<void> {
     const remaining = new Map(Object.entries(targets) as [string, { targetValue: number; step: number }][]);
     return new Promise<void>((resolve) => {
-      const interval = window.setInterval(() => {
+      this.animationInterval = window.setInterval(() => {
         const size = remaining.size;
         let finished = 0;
 
@@ -137,7 +142,10 @@ export class BlindsComponent implements SceneComponent {
         this.renderBlinds();
 
         if (finished >= size) {
-          clearInterval(interval);
+          if (this.animationInterval != null) {
+            clearInterval(this.animationInterval);
+            this.animationInterval = null;
+          }
           resolve();
         }
       }, speedMs);
