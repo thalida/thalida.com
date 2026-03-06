@@ -510,6 +510,17 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
         state.reconnectTimer = null;
       }
       state.ws?.close();
+      if (state.username) {
+        state.onlineUsernames.delete(state.username);
+        for (const row of els.messages.querySelectorAll<HTMLElement>("[data-msg-id]")) {
+          const dot = row.querySelector<HTMLElement>('[data-chat="status-dot"]');
+          const usernameEl = row.querySelector<HTMLElement>('[data-chat="username"]');
+          if (!dot || !usernameEl) continue;
+          if (usernameEl.textContent === state.username) {
+            delete dot.dataset.online;
+          }
+        }
+      }
     });
 
     document.addEventListener("site:active", () => {
