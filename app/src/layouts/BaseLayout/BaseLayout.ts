@@ -70,6 +70,11 @@ function initResponsiveUI() {
     chatOverlay?.classList.add("open");
     chatOverlayBackdrop?.classList.add("visible");
     document.body.classList.add("overflow-hidden");
+    // Scroll chat to bottom after overlay is visible
+    requestAnimationFrame(() => {
+      const msgs = chatOverlayContent?.querySelector<HTMLElement>('[data-chat="messages"]');
+      if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    });
   }
 
   chatFab?.addEventListener("click", openChat, { signal });

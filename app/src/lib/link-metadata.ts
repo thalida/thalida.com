@@ -8,6 +8,7 @@ const CONCURRENCY = 10;
 export type LinkMetadata = {
   metaTitle?: string;
   metaDescription?: string;
+  faviconUrl?: string;
   fetchedAt: number;
 };
 
@@ -46,18 +47,42 @@ function parseMetadata(html: string): Pick<LinkMetadata, "metaTitle" | "metaDesc
   };
 }
 
-async function fetchMetadata(url: string): Promise<LinkMetadata> {
+async function validateFavicon(url: string): Promise<string | undefined> {
+  const faviconUrl = getFaviconUrl(url);
+  if (!faviconUrl) return undefined;
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-    const res = await fetch(url, {
+    const res = await fetch(faviconUrl, {
+      method: "HEAD",
       signal: controller.signal,
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; thalida.com-bot/1.0)" },
+      redirect: "follow",
     });
     clearTimeout(timer);
-    if (!res.ok) return { fetchedAt: Date.now() };
-    const html = await res.text();
-    return { ...parseMetadata(html), fetchedAt: Date.now() };
+    return res.ok ? faviconUrl : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+async function fetchMetadata(url: string): Promise<LinkMetadata> {
+  try {
+    const [pageResult, faviconUrl] = await Promise.all([
+      (async () => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+        const res = await fetch(url, {
+          signal: controller.signal,
+          headers: { "User-Agent": "Mozilla/5.0 (compatible; thalida.com-bot/1.0)" },
+        });
+        clearTimeout(timer);
+        if (!res.ok) return {};
+        const html = await res.text();
+        return parseMetadata(html);
+      })(),
+      validateFavicon(url),
+    ]);
+    return { ...pageResult, faviconUrl, fetchedAt: Date.now() };
   } catch {
     return { fetchedAt: Date.now() };
   }
@@ -73,6 +98,7 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
   }
 
   const toFetch = urls.filter((url) => !cache[url]);
+  const toRevalidateFavicon = urls.filter((url) => cache[url] && !("faviconUrl" in cache[url]));
 
   for (let i = 0; i < toFetch.length; i += CONCURRENCY) {
     const batch = toFetch.slice(i, i + CONCURRENCY);
@@ -82,7 +108,15 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
     }
   }
 
-  if (toFetch.length > 0) {
+  for (let i = 0; i < toRevalidateFavicon.length; i += CONCURRENCY) {
+    const batch = toRevalidateFavicon.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(batch.map(async (url) => ({ url, faviconUrl: await validateFavicon(url) })));
+    for (const { url, faviconUrl } of results) {
+      cache[url] = { ...cache[url], faviconUrl };
+    }
+  }
+
+  if (toFetch.length > 0 || toRevalidateFavicon.length > 0) {
     await fs.mkdir(".generated", { recursive: true });
     await fs.writeFile(CACHE_PATH, JSON.stringify(cache, null, 2));
   }

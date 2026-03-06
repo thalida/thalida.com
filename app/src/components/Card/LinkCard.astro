@@ -29,17 +29,27 @@ const displayUrl = (() => {
   <h3 class="m-0 font-heading font-bold text-text leading-snug flex gap-2 text-base">
     {
       item.faviconUrl ? (
-        <img
-          class="shrink-0 inline-block rounded-sm mt-0.75 w-4 h-4 object-contain"
-          src={item.faviconUrl}
-          alt=""
-          width="16"
-          height="16"
-          loading="lazy"
-        />
+        <span class="shrink-0 inline-block mt-0.75 w-4 h-4" data-favicon>
+          <img
+            class="inline-block rounded-sm w-4 h-4 object-contain"
+            src={item.faviconUrl}
+            alt=""
+            width="16"
+            height="16"
+            loading="lazy"
+            onerror="this.hidden=true;this.parentElement.querySelector('[data-favicon-fallback]').hidden=false"
+          />
+          <span
+            hidden
+            data-favicon-fallback
+            class="font-display font-bold uppercase text-xs w-4 text-center gradient-text"
+          >
+            {displayUrl.charAt(0)}
+          </span>
+        </span>
       ) : (
         <span class="shrink-0 font-display font-bold uppercase text-xs w-4 text-center gradient-text mt-0.75">
-          {item.title.charAt(0)}
+          {displayUrl.charAt(0)}
         </span>
       )
     }
