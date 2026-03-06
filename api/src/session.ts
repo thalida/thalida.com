@@ -54,6 +54,28 @@ export async function verifySessionToken(token: string, adminSecret: string): Pr
 }
 
 /**
+ * Create an HMAC-based client identity token: hex_hmac of the clientId.
+ * Permanent — no timestamp, no expiry. Deterministic for a given clientId + secret.
+ */
+export async function createClientToken(clientId: string, secret: string): Promise<string> {
+  const key = await getHmacKey(secret);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(clientId));
+  return bufToHex(new Uint8Array(sig));
+}
+
+/**
+ * Verify an HMAC-based client identity token.
+ * Returns true if the token matches the clientId.
+ * Uses crypto.subtle.verify which is constant-time.
+ */
+export async function verifyClientToken(clientId: string, token: string, secret: string): Promise<boolean> {
+  const key = await getHmacKey(secret);
+  const tokenBytes = hexToBuf(token);
+  if (!tokenBytes) return false;
+  return crypto.subtle.verify("HMAC", key, tokenBytes, new TextEncoder().encode(clientId));
+}
+
+/**
  * Timing-safe string comparison using HMAC digests.
  * Prevents timing attacks on secret comparisons.
  */
