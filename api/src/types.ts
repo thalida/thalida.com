@@ -37,6 +37,7 @@ export const CLIENT_MESSAGE_TYPE = {
 export interface ClientJoinData {
   token?: string;
   clientId?: string;
+  clientToken?: string;
 }
 
 export interface ClientChatData {
@@ -149,6 +150,8 @@ export interface ServerJoinedMessage {
   isOwner: boolean;
   username: string;
   isBlocked: boolean;
+  clientId?: string;
+  clientToken?: string;
 }
 
 // ── Server → Client: Admin Responses ─────────────────────────────────
