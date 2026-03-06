@@ -18,16 +18,10 @@ export class ChatStorage {
   private blockedEntries: Map<string, { username: string; blockedAt: number }> = new Map();
   private messagesLoaded = false;
   private blockedClientsLoaded = false;
-  private _lastSaveError: string | null = null;
   private schemaReady = false;
   private migrationDone = false;
 
   constructor(private storage: DurableObjectStorage) {}
-
-  /** Last storage save error, if any. Cleared on next successful save. */
-  get lastSaveError(): string | null {
-    return this._lastSaveError;
-  }
 
   // ── Schema & Migration ──────────────────────────────────────────────
 
@@ -237,9 +231,7 @@ export class ChatStorage {
         message.context?.path ?? null,
         this.toISOString(message.timestamp),
       );
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to persist message:", err);
       return false;
     }
@@ -252,9 +244,7 @@ export class ChatStorage {
     if (idx === -1) return false;
     try {
       this.storage.sql.exec(`DELETE FROM messages WHERE id = ?`, id);
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to delete message:", err);
       return false;
     }
@@ -267,9 +257,7 @@ export class ChatStorage {
     if (removed.length === 0) return [];
     try {
       this.storage.sql.exec(`DELETE FROM messages WHERE client_id = ?`, clientId);
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to delete messages by client:", err);
       return [];
     }
@@ -280,9 +268,7 @@ export class ChatStorage {
   renameMessagesForClient(clientId: string, newUsername: string): void {
     try {
       this.storage.sql.exec(`UPDATE messages SET username = ? WHERE client_id = ?`, newUsername, clientId);
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to rename messages:", err);
       return;
     }
@@ -293,19 +279,14 @@ export class ChatStorage {
     }
   }
 
-  /** Clears all messages from storage. Returns the IDs of removed messages. */
-  clearAllMessages(): string[] {
-    const removedIds = this.messages.map((m) => m.id);
+  clearAllMessages(): void {
     try {
       this.storage.sql.exec(`DELETE FROM messages`);
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `messages: ${err}`;
       console.error("[storage] failed to clear messages:", err);
-      return [];
+      return;
     }
     this.messages = [];
-    return removedIds;
   }
 
   // ── Blocked Clients ────────────────────────────────────────────────
@@ -319,9 +300,7 @@ export class ChatStorage {
         username,
         this.toISOString(now),
       );
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `blocked_clients: ${err}`;
       console.error("[storage] failed to persist blocked client:", err);
       return;
     }
@@ -331,9 +310,7 @@ export class ChatStorage {
   unblockClient(clientId: string): void {
     try {
       this.storage.sql.exec(`DELETE FROM blocked_clients WHERE client_id = ?`, clientId);
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `blocked_clients: ${err}`;
       console.error("[storage] failed to delete blocked client:", err);
       return;
     }
@@ -373,9 +350,7 @@ export class ChatStorage {
         username,
         new Date().toISOString(),
       );
-      this._lastSaveError = null;
     } catch (err) {
-      this._lastSaveError = `clientMappings: ${err}`;
       console.error("[storage] failed to persist client mapping:", err);
     }
   }

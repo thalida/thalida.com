@@ -1,6 +1,5 @@
 export interface ModerationResult {
   flagged: boolean;
-  categories: Record<string, boolean>;
 }
 
 export async function callModerationAPI(apiKey: string, text: string, retries = 3): Promise<ModerationResult | null> {
