@@ -1,4 +1,4 @@
-const SESSION_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+import { SESSION_TOKEN_TTL_MS } from "./config";
 
 async function getHmacKey(secret: string): Promise<CryptoKey> {
   return crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, [

@@ -1,9 +1,6 @@
 import type { Env, AuthRequest } from "./types";
 import { createSessionToken, timingSafeEqual } from "./session";
-
-// Auth rate limiting: max 10 failed attempts per IP in 5-min window
-const AUTH_RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
-const AUTH_RATE_LIMIT_MAX_FAILURES = 10;
+import { AUTH_RATE_LIMIT_WINDOW_MS, AUTH_RATE_LIMIT_MAX_FAILURES } from "./config";
 const authFailures = new Map<string, number[]>();
 
 function isAuthRateLimited(ip: string): boolean {

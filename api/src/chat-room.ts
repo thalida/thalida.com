@@ -18,6 +18,8 @@ import type {
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
 import {
   ADMIN_USERNAME as DEFAULT_ADMIN_USERNAME,
+  CHAT_RATE_LIMIT_MAX_MESSAGES,
+  CHAT_RATE_LIMIT_WINDOW_MS,
   MAX_MESSAGE_LENGTH,
   MAX_USERNAME_LENGTH,
   MAX_USERNAME_RETRIES,
@@ -27,10 +29,6 @@ import {
   generateRandomUsername,
 } from "./config";
 import { verifySessionToken, createClientToken, verifyClientToken } from "./session";
-
-// Rate limiting: max 5 messages per second per connection
-const RATE_LIMIT_WINDOW_MS = 1000;
-const RATE_LIMIT_MAX_MESSAGES = 5;
 
 export class ChatRoom implements DurableObject {
   private storage: ChatStorage;
@@ -60,12 +58,12 @@ export class ChatRoom implements DurableObject {
     }
 
     // Remove timestamps outside the window
-    const cutoff = now - RATE_LIMIT_WINDOW_MS;
+    const cutoff = now - CHAT_RATE_LIMIT_WINDOW_MS;
     while (times.length > 0 && times[0] < cutoff) {
       times.shift();
     }
 
-    if (times.length >= RATE_LIMIT_MAX_MESSAGES) {
+    if (times.length >= CHAT_RATE_LIMIT_MAX_MESSAGES) {
       return true;
     }
 
