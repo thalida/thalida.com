@@ -1,6 +1,6 @@
 import type { SceneComponent, LiveWindowState, RGB } from "./types";
 import { loadState, saveState } from "./state";
-import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather } from "./api";
+import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather, locationChanged } from "./api";
 import { parseHexColor, parseComputedColor } from "./utils/color";
 import { buildPhaseInfo } from "./utils/phase";
 import { getTimezoneAdjustedNow, shiftTimestampToTimezone } from "./utils/timezone";
@@ -235,6 +235,7 @@ class LiveWindowElement extends HTMLElement {
     const explicitLat = this.getAttribute("latitude");
     const explicitLng = this.getAttribute("longitude");
     const hasExplicitCoords = explicitLat != null && explicitLng != null;
+    let ipChanged = false;
 
     if (hasExplicitCoords) {
       this.state.store = {
@@ -249,19 +250,16 @@ class LiveWindowElement extends HTMLElement {
         },
       };
     } else {
-      if (!shouldFetchWeather(this.state.store, this.state.attrs.resolvedUnits)) {
-        this.updateAll();
-        return;
-      }
-
+      const prevStore = this.state.store;
       this.state.store = await fetchLocation(apiUrl, this.state.store);
+      ipChanged = locationChanged(prevStore, this.state.store);
       saveState(this.state);
     }
 
     this.refreshAttrs();
     const units = this.state.attrs.resolvedUnits;
 
-    if (!shouldFetchWeather(this.state.store, units) && !hasExplicitCoords) {
+    if (!ipChanged && !shouldFetchWeather(this.state.store, units) && !hasExplicitCoords) {
       this.updateAll();
       return;
     }

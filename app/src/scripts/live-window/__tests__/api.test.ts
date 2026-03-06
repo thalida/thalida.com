@@ -1,11 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   resolveUnits,
-  shouldFetchLocation,
   shouldFetchWeather,
   fetchLocation,
   fetchWeather,
-  IP_RATE_LIMIT,
+  locationChanged,
   WEATHER_RATE_LIMIT,
 } from "../api";
 import { DEFAULT_STORE } from "../state";
@@ -51,25 +50,34 @@ describe("resolveUnits", () => {
   });
 });
 
-describe("shouldFetchLocation", () => {
-  it("returns true when never fetched", () => {
-    expect(shouldFetchLocation(DEFAULT_STORE)).toBe(true);
-  });
-
-  it("returns false when recently fetched", () => {
+describe("locationChanged", () => {
+  it("returns false when lat/lng are the same", () => {
     const state: StoreState = {
       ...DEFAULT_STORE,
-      location: { ...DEFAULT_STORE.location, lastFetched: Date.now() },
+      location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 },
     };
-    expect(shouldFetchLocation(state)).toBe(false);
+    expect(locationChanged(state, state)).toBe(false);
   });
 
-  it("returns true when rate limit exceeded", () => {
-    const state: StoreState = {
-      ...DEFAULT_STORE,
-      location: { ...DEFAULT_STORE.location, lastFetched: Date.now() - IP_RATE_LIMIT - 1 },
-    };
-    expect(shouldFetchLocation(state)).toBe(true);
+  it("returns true when lat changes", () => {
+    const prev: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 51.5, lng: -74.0 } };
+    expect(locationChanged(prev, next)).toBe(true);
+  });
+
+  it("returns true when lng changes", () => {
+    const prev: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -0.1 } };
+    expect(locationChanged(prev, next)).toBe(true);
+  });
+
+  it("returns false when both are null", () => {
+    expect(locationChanged(DEFAULT_STORE, DEFAULT_STORE)).toBe(false);
+  });
+
+  it("returns true when going from null to a value", () => {
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    expect(locationChanged(DEFAULT_STORE, next)).toBe(true);
   });
 });
 
@@ -149,7 +157,10 @@ describe("fetchLocation", () => {
     expect(result).toBe(DEFAULT_STORE);
   });
 
-  it("skips fetch when rate-limited and location already exists", async () => {
+  it("always fetches even when location already exists", async () => {
+    const mockData = { lat: 51.5, lng: -0.1, country: "GB", name: "London", timezone: "Europe/London" };
+    vi.mocked(fetch).mockResolvedValue({ ok: true, json: () => Promise.resolve(mockData) } as Response);
+
     const state: StoreState = {
       ...DEFAULT_STORE,
       location: { lat: 1, lng: 2, country: "GB", name: "London", timezone: "Europe/London", lastFetched: Date.now() },
@@ -157,8 +168,9 @@ describe("fetchLocation", () => {
 
     const result = await fetchLocation(apiUrl, state);
 
-    expect(fetch).not.toHaveBeenCalled();
-    expect(result).toBe(state);
+    expect(fetch).toHaveBeenCalledWith(`${apiUrl}/location`);
+    expect(result.location.lat).toBe(51.5);
+    expect(result.location.lng).toBe(-0.1);
   });
 
   it("handles missing optional fields with null fallbacks", async () => {

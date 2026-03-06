@@ -1,6 +1,5 @@
 import type { StoreState } from "./types";
 
-export const IP_RATE_LIMIT = 30 * 60_000;
 export const WEATHER_RATE_LIMIT = 30 * 60_000;
 
 export const IMPERIAL_COUNTRIES = new Set(["US", "LR", "MM"]);
@@ -25,11 +24,6 @@ export function resolveUnits(attr: string | null, country: string | null): "metr
 // Rate-limit guards
 // ---------------------------------------------------------------------------
 
-export function shouldFetchLocation(state: StoreState): boolean {
-  if (!state.location.lastFetched) return true;
-  return Date.now() - state.location.lastFetched >= IP_RATE_LIMIT;
-}
-
 export function shouldFetchWeather(state: StoreState, units: string): boolean {
   if (!state.weather.lastFetched) return true;
   if (state.weather.units !== units) return true;
@@ -41,11 +35,11 @@ export function shouldFetchWeather(state: StoreState, units: string): boolean {
 // Fetch functions (return new state instead of mutating)
 // ---------------------------------------------------------------------------
 
-export async function fetchLocation(apiUrl: string, state: StoreState): Promise<StoreState> {
-  if (!shouldFetchLocation(state) && state.location.lat != null) {
-    return state;
-  }
+export function locationChanged(prev: StoreState, next: StoreState): boolean {
+  return prev.location.lat !== next.location.lat || prev.location.lng !== next.location.lng;
+}
 
+export async function fetchLocation(apiUrl: string, state: StoreState): Promise<StoreState> {
   try {
     const res = await fetch(`${apiUrl}/location`);
     if (!res.ok) return state;
