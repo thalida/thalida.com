@@ -42,7 +42,11 @@ export const TOOLBAR_NAV_ORDER: NavEntry[] = [
   { type: "collection", collection: "guides" },
 ];
 
+let cachedNavData: Record<string, NavCollection> | null = null;
+
 export async function getNavData(): Promise<Record<string, NavCollection>> {
+  if (cachedNavData) return cachedNavData;
+
   const data: Record<string, NavCollection> = {};
 
   const linkEntries = await getCollection("links", ({ data }) => !data.draft);
@@ -94,5 +98,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
     };
   }
 
+  cachedNavData = data;
   return data;
 }
