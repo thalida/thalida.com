@@ -49,6 +49,13 @@ export class BlindsComponent implements SceneComponent {
 
   destroy(): void {
     this.cancelAnimation();
+    this.isOpen = false;
+    this.blindsState = {
+      numBlindsCollapsed: 0,
+      blindsOpenDeg: 20,
+      blindsSkewDeg: 0,
+      skewDirection: 0,
+    };
     if (this.containerEl) this.containerEl.innerHTML = "";
     this.containerEl = null;
     this.blindsEl = null;
@@ -77,7 +84,7 @@ export class BlindsComponent implements SceneComponent {
     this.isOpen = false;
     this.cancelAnimation();
 
-    this.stepAnimation(
+    void this.stepAnimation(
       {
         numBlindsCollapsed: { targetValue: 0, step: 1 },
         blindsOpenDeg: { targetValue: 20, step: 3 },
