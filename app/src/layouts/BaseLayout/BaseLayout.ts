@@ -1,4 +1,10 @@
+let layoutAC: AbortController | null = null;
+
 function initResponsiveUI() {
+  layoutAC?.abort();
+  layoutAC = new AbortController();
+  const { signal } = layoutAC;
+
   const menuBtn = document.querySelector<HTMLElement>('[data-layout="menu-btn"]');
   const navPanel = document.querySelector<HTMLElement>('[data-layout="nav-panel"]');
   const navBackdrop = document.querySelector<HTMLElement>('[data-layout="nav-backdrop"]');
@@ -40,7 +46,6 @@ function initResponsiveUI() {
     closeChat();
   }
 
-  // Nav slide-down panel toggle
   function toggleNav() {
     const willOpen = !navPanel?.classList.contains("open");
     closeAll();
@@ -51,13 +56,12 @@ function initResponsiveUI() {
     }
   }
 
-  menuBtn?.addEventListener("click", toggleNav);
+  menuBtn?.addEventListener("click", toggleNav, { signal });
 
-  navBackdrop?.addEventListener("click", closeNav);
+  navBackdrop?.addEventListener("click", closeNav, { signal });
 
-  // Close nav when a nav link is clicked
   navPanel?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", closeNav);
+    link.addEventListener("click", closeNav, { signal });
   });
 
   function openChat() {
@@ -68,25 +72,29 @@ function initResponsiveUI() {
     document.body.classList.add("overflow-hidden");
   }
 
-  // Mobile chat FAB
-  chatFab?.addEventListener("click", openChat);
+  chatFab?.addEventListener("click", openChat, { signal });
 
-  // Close chat overlay
   const chatOverlayClose = document.querySelector<HTMLElement>('[data-chat="overlay-close"]');
-  chatOverlayClose?.addEventListener("click", closeChat);
-  chatOverlayBackdrop?.addEventListener("click", closeChat);
+  chatOverlayClose?.addEventListener("click", closeChat, { signal });
+  chatOverlayBackdrop?.addEventListener("click", closeChat, { signal });
 
-  // Close nav panel when resizing past xl breakpoint (sidebar becomes visible)
   const xlQuery = window.matchMedia("(min-width: 1280px)");
-  xlQuery.addEventListener("change", (e) => {
-    if (e.matches) closeNav();
-  });
+  xlQuery.addEventListener(
+    "change",
+    (e) => {
+      if (e.matches) closeNav();
+    },
+    { signal },
+  );
 
-  // Move chat back to sidebar when resizing past lg breakpoint
   const lgQuery = window.matchMedia("(min-width: 1024px)");
-  lgQuery.addEventListener("change", (e) => {
-    if (e.matches) closeChat();
-  });
+  lgQuery.addEventListener(
+    "change",
+    (e) => {
+      if (e.matches) closeChat();
+    },
+    { signal },
+  );
 }
 
 document.addEventListener("astro:page-load", initResponsiveUI);

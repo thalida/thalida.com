@@ -96,7 +96,6 @@ async function makeCollection(collectionName: CollectionName) {
     schema: ({ image }) =>
       z.object({
         title: z.string(),
-        subtitle: z.string().optional(),
         link: z.string().optional(),
         coverImage: image().optional(),
         coverImageAlt: z.string().optional(),
@@ -106,7 +105,6 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        rating: z.coerce.number().optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),

@@ -1,21 +1,26 @@
 import type { SceneComponent, LiveWindowState } from "../../types";
 
+/**
+ * Maps OpenWeatherMap icon codes to visual effects.
+ * Icon format: two-digit condition code + "d" (day) or "n" (night).
+ * See https://openweathermap.org/weather-conditions for full reference.
+ */
 export const ICON_WEATHER_MAP: Record<string, string[]> = {
-  "02d": ["cloudSm"],
+  "02d": ["cloudSm"], // few clouds
   "02n": ["cloudSm"],
-  "03d": ["cloudSm", "cloudMd"],
+  "03d": ["cloudSm", "cloudMd"], // scattered clouds
   "03n": ["cloudSm", "cloudMd"],
-  "04d": ["cloudSm", "cloudMd", "cloudLg"],
+  "04d": ["cloudSm", "cloudMd", "cloudLg"], // overcast
   "04n": ["cloudSm", "cloudMd", "cloudLg"],
-  "09d": ["cloudMd", "lightRain"],
+  "09d": ["cloudMd", "lightRain"], // drizzle
   "09n": ["cloudMd", "lightRain"],
-  "10d": ["cloudMd", "cloudLg", "rain"],
+  "10d": ["cloudMd", "cloudLg", "rain"], // rain
   "10n": ["cloudMd", "cloudLg", "rain"],
-  "11d": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
+  "11d": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"], // thunderstorm
   "11n": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
-  "13d": ["snow"],
+  "13d": ["snow"], // snow
   "13n": ["snow"],
-  "50d": ["mist"],
+  "50d": ["mist"], // mist/fog
   "50n": ["mist"],
 };
 

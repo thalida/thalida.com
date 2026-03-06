@@ -24,7 +24,6 @@ export type NavCollection = {
   name: string;
   title: string;
   items: NavItem[];
-  allTags: string[];
   allCategories: string[];
 };
 
@@ -56,7 +55,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
     );
 
-    const tagsSet = new Set<string>();
     const categoriesSet = new Set<string>();
     const items: NavItem[] = [];
 
@@ -67,7 +65,6 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageSrc = optimized.src;
       }
 
-      if (entry.data.tags) entry.data.tags.forEach((t: string) => tagsSet.add(t));
       if (entry.data.category) categoriesSet.add(entry.data.category);
 
       const isLink = name === "links";
@@ -93,24 +90,9 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       name,
       title: collectionMeta[name].title,
       items,
-      allTags: [...tagsSet].sort(),
       allCategories: [...categoriesSet].sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b))),
     };
   }
 
   return data;
-}
-
-export function isValidDate(isoString: string): boolean {
-  const d = new Date(isoString);
-  return !isNaN(d.getTime()) && d.getFullYear() > 1970;
-}
-
-export function formatDate(isoString: string): string {
-  return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short" });
-}
-
-export function categoryDisplay(categoryName: string): string {
-  const parts = categoryName.split("-");
-  return parts.map((part) => (part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part)).join(" ");
 }

@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # generated content (combined YAML)
 app/.generated/
+
+# claude code
+.claude/worktrees/

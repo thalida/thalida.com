@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 
+if (import.meta.env.PROD) {
+  return Astro.redirect("/404");
+}
+
 const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "";
 
 const cities = [

@@ -1,7 +1,5 @@
 import type { RGB, SkyGradient } from "../types";
 
-export type { RGB, SkyGradient } from "../types";
-
 interface SkyPhase {
   name: string;
   gradient: SkyGradient;

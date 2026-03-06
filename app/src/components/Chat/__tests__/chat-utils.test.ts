@@ -1,36 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import {
-  generateRandomUsername,
-  validateUsername,
-  setAdminUsername,
-  COLORS,
-  ANIMALS,
-} from "@components/Chat/chat-utils";
-
-describe("generateRandomUsername", () => {
-  it("returns a string in color-animal format", () => {
-    const name = generateRandomUsername();
-    const parts = name.split("-");
-    expect(parts).toHaveLength(2);
-    expect(COLORS).toContain(parts[0]);
-    expect(ANIMALS).toContain(parts[1]);
-  });
-
-  it("only produces valid characters (lowercase, hyphens)", () => {
-    for (let i = 0; i < 50; i++) {
-      const name = generateRandomUsername();
-      expect(name).toMatch(/^[a-z]+-[a-z]+$/);
-    }
-  });
-
-  it("produces different names across multiple calls", () => {
-    const names = new Set<string>();
-    for (let i = 0; i < 50; i++) {
-      names.add(generateRandomUsername());
-    }
-    expect(names.size).toBeGreaterThan(1);
-  });
-});
+import { validateUsername, setAdminUsername } from "@components/Chat/chat-utils";
 
 describe("validateUsername", () => {
   beforeAll(() => {

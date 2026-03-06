@@ -9,9 +9,6 @@ export const DEFAULT_STORE: StoreState = {
   weather: { lastFetched: null, units: null, current: null, sunrise: null, sunset: null },
 };
 
-/** Alias for backward compat with tests referencing DEFAULT_STATE */
-export const DEFAULT_STATE = DEFAULT_STORE;
-
 export function createDefaultState(store?: StoreState): LiveWindowState {
   const s = store ?? DEFAULT_STORE;
   return {
@@ -45,8 +42,8 @@ export function loadState(): LiveWindowState {
         };
       }
     }
-  } catch {
-    /* ignore */
+  } catch (e) {
+    console.debug("[live-window] failed to load state from localStorage", e);
   }
   return createDefaultState(store);
 }
@@ -54,7 +51,7 @@ export function loadState(): LiveWindowState {
 export function saveState(state: LiveWindowState): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ _v: CACHE_VERSION, ...state.store }));
-  } catch {
-    /* ignore */
+  } catch (e) {
+    console.debug("[live-window] failed to save state to localStorage", e);
   }
 }

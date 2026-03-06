@@ -1,15 +1,15 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
-const LS_ADMIN_TOKEN_KEY = "admin_token";
+import { SS_SESSION_TOKEN_KEY } from "@lib/constants";
 ---
 
 <BaseLayout title="logging out… · thalida" noindex>
-  <div class="flex items-center justify-center min-h-[calc(100vh-6rem)]">
+  <div class="flex items-center justify-center min-h-full">
     <p class="font-body text-text text-sm">Logging out&hellip;</p>
   </div>
 
-  <script is:inline define:vars={{ LS_ADMIN_TOKEN_KEY }}>
-    localStorage.removeItem(LS_ADMIN_TOKEN_KEY);
+  <script is:inline define:vars={{ SS_SESSION_TOKEN_KEY }}>
+    sessionStorage.removeItem(SS_SESSION_TOKEN_KEY);
     window.location.href = "/";
   </script>
 

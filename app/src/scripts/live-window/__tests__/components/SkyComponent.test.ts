@@ -1,26 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { SkyComponent } from "../../components/SkyComponent";
-import type { LiveWindowState } from "../../types";
-import { DEFAULT_STATE } from "../../state";
-import { buildPhaseInfo } from "../../utils/phase";
+import { makeTestState } from "../helpers";
 
-function makeState(): LiveWindowState {
-  const today = new Date();
-  today.setHours(12, 0, 0, 0);
-  return {
-    store: DEFAULT_STATE,
-    computed: { phase: buildPhaseInfo(DEFAULT_STATE, today.getTime()) },
-    ref: {},
-    attrs: {
-      use12Hour: false,
-      hideClock: false,
-      hideWeatherText: false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: null,
-      label: null,
-    },
-  };
+function makeState() {
+  return makeTestState({ hours: 12 });
 }
 
 describe("SkyComponent", () => {

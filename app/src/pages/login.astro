@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 
-const apiBase = import.meta.env.PUBLIC_API_BASE_URL || "http://localhost:8787";
-const LS_ADMIN_TOKEN_KEY = "admin_token";
+import { SS_SESSION_TOKEN_KEY, API_BASE_URL } from "@lib/constants";
+
+const apiBase = API_BASE_URL;
 ---
 
 <BaseLayout title="login · thalida" noindex>
-  <div class="flex items-center justify-center min-h-[calc(100vh-6rem)]">
+  <div class="flex items-center justify-center min-h-full">
     <div class="max-w-90 w-full p-8">
       <h1 class="m-0 mb-6 font-display font-bold text-neon text-2xl">Login</h1>
       <form data-login="form" class="flex flex-col gap-3">
@@ -24,7 +25,7 @@ const LS_ADMIN_TOKEN_KEY = "admin_token";
         >
           Log in
         </button>
-        <p data-login="error" class="login-error m-0 text-error text-sm" hidden></p>
+        <p data-login="error" class="m-0 text-error text-sm" hidden></p>
       </form>
       <p class="mt-6 m-0">
         <a href="/" class="text-teal text-sm no-underline hover:text-neon">&larr; back to chat</a>
@@ -33,7 +34,7 @@ const LS_ADMIN_TOKEN_KEY = "admin_token";
   </div>
 </BaseLayout>
 
-<script is:inline define:vars={{ apiBase, LS_ADMIN_TOKEN_KEY }}>
+<script is:inline define:vars={{ apiBase, SS_SESSION_TOKEN_KEY }}>
   const form = document.querySelector('[data-login="form"]');
   const input = document.querySelector('[data-login="secret"]');
   const errorEl = document.querySelector('[data-login="error"]');
@@ -46,6 +47,7 @@ const LS_ADMIN_TOKEN_KEY = "admin_token";
     errorEl.hidden = true;
     form.querySelector("button").disabled = true;
 
+    let sessionToken;
     try {
       const resp = await fetch(`${apiBase}/auth`, {
         method: "POST",
@@ -57,6 +59,8 @@ const LS_ADMIN_TOKEN_KEY = "admin_token";
         errorEl.hidden = false;
         return;
       }
+      const data = await resp.json();
+      sessionToken = data.sessionToken;
     } catch {
       errorEl.textContent = "Could not reach the API. Is the server running?";
       errorEl.hidden = false;
@@ -65,7 +69,8 @@ const LS_ADMIN_TOKEN_KEY = "admin_token";
       form.querySelector("button").disabled = false;
     }
 
-    localStorage.setItem(LS_ADMIN_TOKEN_KEY, secret);
+    // Store session token in sessionStorage (tab-scoped, clears on close)
+    sessionStorage.setItem(SS_SESSION_TOKEN_KEY, sessionToken);
     window.location.href = "/";
   });
 </script>

@@ -34,11 +34,10 @@ export const CLIENT_MESSAGE_TYPE = {
   UNBLOCK: "unblock",
 } as const;
 
-export type ClientMessageType = (typeof CLIENT_MESSAGE_TYPE)[keyof typeof CLIENT_MESSAGE_TYPE];
-
 export interface ClientJoinData {
   token?: string;
   clientId?: string;
+  clientToken?: string;
 }
 
 export interface ClientChatData {
@@ -66,15 +65,6 @@ export interface ClientRenameData {
   username: string;
 }
 
-export type ClientMessage =
-  | { type: "join"; data: ClientJoinData }
-  | { type: "rename"; data: ClientRenameData }
-  | { type: "message"; data: ClientChatData }
-  | { type: "delete"; data: ClientDeleteData }
-  | { type: "flag"; data: ClientFlagData }
-  | { type: "delete_by_user"; data: ClientDeleteByUserData }
-  | { type: "unblock"; data: ClientUnblockData };
-
 // ── Server → Client ─────────────────────────────────────────────────
 
 export const SERVER_MESSAGE_TYPE = {
@@ -89,6 +79,7 @@ export const SERVER_MESSAGE_TYPE = {
   STATUS: "status",
   HISTORY: "history",
   REMOVE: "remove",
+  CLEAR: "clear",
   MESSAGE: "message",
   RENAME: "rename",
 } as const;
@@ -142,10 +133,15 @@ export interface ServerBroadcastRemoveMessage {
   id: string;
 }
 
+export interface ServerBroadcastClearMessage {
+  type: "clear";
+}
+
 export type ServerBroadcast =
   | ServerBroadcastStatusMessage
   | ServerBroadcastHistoryMessage
-  | ServerBroadcastRemoveMessage;
+  | ServerBroadcastRemoveMessage
+  | ServerBroadcastClearMessage;
 
 // ── Server → Client: Join Acknowledgment ─────────────────────────────
 
@@ -154,6 +150,8 @@ export interface ServerJoinedMessage {
   isOwner: boolean;
   username: string;
   isBlocked: boolean;
+  clientId?: string;
+  clientToken?: string;
 }
 
 // ── Server → Client: Admin Responses ─────────────────────────────────
@@ -209,8 +207,10 @@ export type ServerMessage =
 
 export interface Env {
   CHAT_ROOM: DurableObjectNamespace;
-  ADMIN_SECRET: string;
+  ADMIN_PASSWORD: string;
+  SIGNING_SECRET: string;
   ALLOWED_ORIGIN: string;
+  ADMIN_USERNAME?: string;
   OPENAI_API_KEY?: string;
   IPREGISTRY_KEY?: string;
   OPENWEATHER_KEY?: string;

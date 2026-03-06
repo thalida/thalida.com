@@ -1,22 +1,15 @@
 import { defineConfig } from "vitest/config";
-import { fileURLToPath } from "node:url";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@/": fileURLToPath(new URL("./src/", import.meta.url)),
-      "@components": fileURLToPath(new URL("./src/components", import.meta.url)),
-      "@layouts": fileURLToPath(new URL("./src/layouts", import.meta.url)),
-      "@lib": fileURLToPath(new URL("./src/lib", import.meta.url)),
-      "@assets": fileURLToPath(new URL("./src/assets", import.meta.url)),
-      "@pages": fileURLToPath(new URL("./src/pages", import.meta.url)),
-      "@plugins": fileURLToPath(new URL("./src/plugins", import.meta.url)),
-      "@scripts": fileURLToPath(new URL("./src/scripts", import.meta.url)),
-      "@styles": fileURLToPath(new URL("./src/styles", import.meta.url)),
-    },
-  },
+  plugins: [tsconfigPaths()],
   test: {
     environment: "jsdom",
     include: ["src/**/__tests__/**/*.test.{ts,mjs}"],
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.{ts,mjs}"],
+      exclude: ["src/**/__tests__/**", "src/**/*.d.ts", "src/**/*.astro", "src/env.d.ts"],
+    },
   },
 });

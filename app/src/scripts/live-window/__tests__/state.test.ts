@@ -1,29 +1,16 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { loadState, saveState, DEFAULT_STATE, CACHE_VERSION } from "../state";
-
-// Mock localStorage
-const store: Record<string, string> = {};
-const localStorageMock = {
-  getItem: (key: string) => store[key] ?? null,
-  setItem: (key: string, value: string) => {
-    store[key] = value;
-  },
-  removeItem: (key: string) => {
-    Reflect.deleteProperty(store, key);
-  },
-};
-Object.defineProperty(globalThis, "localStorage", { value: localStorageMock });
+import { loadState, saveState, DEFAULT_STORE, CACHE_VERSION } from "../state";
 
 const STORAGE_KEY = "liveWindowStore";
 
 describe("loadState", () => {
   beforeEach(() => {
-    Reflect.deleteProperty(store, STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
   });
 
   it("returns default store when nothing is stored", () => {
     const result = loadState();
-    expect(result.store).toEqual(DEFAULT_STATE);
+    expect(result.store).toEqual(DEFAULT_STORE);
   });
 
   it("returns stored state when version matches", () => {
@@ -32,17 +19,17 @@ describe("loadState", () => {
       location: { lastFetched: 1000, lat: 40, lng: -74, country: "US" },
       weather: { lastFetched: 2000, units: "imperial", current: null, sunrise: null, sunset: null },
     };
-    store[STORAGE_KEY] = JSON.stringify(saved);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
     const result = loadState();
     expect(result.store.location.lat).toBe(40);
     expect(result.store.location.country).toBe("US");
   });
 
   it("returns default store and clears storage when version mismatches", () => {
-    store[STORAGE_KEY] = JSON.stringify({ _v: 0, location: { lat: 99 } });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ _v: 0, location: { lat: 99 } }));
     const result = loadState();
-    expect(result.store).toEqual(DEFAULT_STATE);
-    expect(store[STORAGE_KEY]).toBeUndefined();
+    expect(result.store).toEqual(DEFAULT_STORE);
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
   it("has computed, ref, and attrs sections", () => {
@@ -56,7 +43,7 @@ describe("loadState", () => {
 
 describe("saveState", () => {
   beforeEach(() => {
-    Reflect.deleteProperty(store, STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
   });
 
   it("round-trips through loadState", () => {
@@ -77,7 +64,7 @@ describe("saveState", () => {
       horizon: { r: 10, g: 11, b: 12 },
     };
     saveState(state);
-    const raw = JSON.parse(store[STORAGE_KEY]);
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}");
     expect(raw.currentGradient).toBeUndefined();
     expect(raw.ref).toBeUndefined();
     expect(raw.computed).toBeUndefined();

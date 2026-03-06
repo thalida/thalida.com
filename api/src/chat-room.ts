@@ -1,5 +1,6 @@
-import { v7 as uuidv7 } from "uuid";
 import { dispatch } from "./commands";
+import { ChatStorage } from "./chat-storage";
+import { callModerationAPI } from "./chat-moderation";
 import type {
   BlockedEntry,
   Env,
@@ -9,7 +10,6 @@ import type {
   ClientDeleteData,
   ClientFlagData,
   ClientJoinData,
-  ClientMessage,
   ClientRenameData,
   ConnectionInfo,
   ServerErrorCode,
@@ -17,170 +17,58 @@ import type {
 } from "./types";
 import { CLIENT_MESSAGE_TYPE, SERVER_ERROR_CODE, SERVER_MESSAGE_TYPE } from "./types";
 import {
-  ADMIN_USERNAME,
+  ADMIN_USERNAME as DEFAULT_ADMIN_USERNAME,
+  CHAT_RATE_LIMIT_MAX_MESSAGES,
+  CHAT_RATE_LIMIT_WINDOW_MS,
   MAX_MESSAGE_LENGTH,
   MAX_USERNAME_LENGTH,
-  MESSAGE_RETENTION_MS,
+  MAX_USERNAME_RETRIES,
+  MAX_USERNAME_SUFFIX,
   MAX_WARNINGS,
   MIN_USERNAME_LENGTH,
-  RESERVATION_DURATION_MS,
   generateRandomUsername,
 } from "./config";
-
-const BLOCKED_IPS_KEY = "blockedIps";
-const MESSAGES_KEY = "messages";
-const CLIENT_PREFIX = "client:";
-
-interface ClientMapping {
-  username: string;
-  lastSeen: number;
-}
+import { verifySessionToken, createClientToken, verifyClientToken } from "./session";
 
 export class ChatRoom implements DurableObject {
-  private messages: ChatMessage[] = [];
+  private storage: ChatStorage;
   private connections: Map<WebSocket, ConnectionInfo> = new Map();
   private spectators: Set<WebSocket> = new Set();
-  private blockedEntries: Map<string, { username: string; blockedAt: number }> = new Map();
-  private messagesLoaded = false;
-  private blockedIpsLoaded = false;
+  private messageTimes: Map<WebSocket, number[]> = new Map();
+
+  private readonly adminUsername: string;
+  private lastCleanupAt = 0;
 
   constructor(
     private state: DurableObjectState,
     private env: Env,
-  ) {}
-
-  // ── Storage: Load ───────────────────────────────────────────────────
-
-  private async loadBlockedClients(): Promise<void> {
-    if (this.blockedIpsLoaded) return;
-    const stored = await this.state.storage.get<unknown>(BLOCKED_IPS_KEY);
-    if (Array.isArray(stored)) {
-      for (const entry of stored) {
-        if (entry && typeof entry === "object" && "clientId" in entry) {
-          const e = entry as { clientId: string; username: string; blockedAt: number };
-          this.blockedEntries.set(e.clientId, { username: e.username, blockedAt: e.blockedAt });
-        }
-      }
-    }
-    this.blockedIpsLoaded = true;
+  ) {
+    this.storage = new ChatStorage(state.storage);
+    this.adminUsername = (env.ADMIN_USERNAME || DEFAULT_ADMIN_USERNAME).toLowerCase();
   }
 
-  private async loadMessages(): Promise<void> {
-    if (this.messagesLoaded) return;
-    const stored = await this.state.storage.get<ChatMessage[]>(MESSAGES_KEY);
-    if (Array.isArray(stored)) {
-      this.messages = stored;
-    }
-    this.pruneExpiredMessages();
-    this.messagesLoaded = true;
-  }
+  // ── Rate Limiting ───────────────────────────────────────────────────
 
-  // ── Storage: Save (fire-and-forget) ────────────────────────────────
-
-  private saveMessages(): void {
-    this.pruneExpiredMessages();
-    this.state.storage.put(MESSAGES_KEY, this.messages).catch((err) => {
-      console.error("[storage] failed to persist messages:", err);
-    });
-  }
-
-  private saveBlockedClients(): void {
-    const entries = [...this.blockedEntries.entries()].map(([clientId, info]) => ({
-      clientId,
-      username: info.username,
-      blockedAt: info.blockedAt,
-    }));
-    this.state.storage.put(BLOCKED_IPS_KEY, entries).catch((err) => {
-      console.error("[storage] failed to persist blocked clients:", err);
-    });
-  }
-
-  private pruneExpiredMessages(): void {
-    const cutoff = Date.now() - MESSAGE_RETENTION_MS;
-    this.messages = this.messages.filter((m) => m.timestamp >= cutoff);
-  }
-
-  // ── Data Mutations (mutate + save) ─────────────────────────────────
-
-  private addMessage(message: ChatMessage): void {
-    this.messages.push(message);
-    this.saveMessages();
-  }
-
-  private removeMessage(id: string): boolean {
-    const idx = this.messages.findIndex((m) => m.id === id);
-    if (idx === -1) return false;
-    this.messages.splice(idx, 1);
-    this.saveMessages();
-    return true;
-  }
-
-  private removeMessagesByClient(clientId: string): ChatMessage[] {
-    const removed = this.messages.filter((m) => m.clientId === clientId);
-    this.messages = this.messages.filter((m) => m.clientId !== clientId);
-    this.saveMessages();
-    return removed;
-  }
-
-  private renameMessagesForClient(clientId: string, newUsername: string): void {
-    for (const msg of this.messages) {
-      if (msg.clientId === clientId) {
-        msg.username = newUsername;
-      }
-    }
-    this.saveMessages();
-  }
-
-  private blockClient(clientId: string, username: string): void {
-    this.blockedEntries.set(clientId, { username, blockedAt: Date.now() });
-    this.saveBlockedClients();
-  }
-
-  private unblockClient(clientId: string): void {
-    this.blockedEntries.delete(clientId);
-    this.saveBlockedClients();
-  }
-
-  private async getClientMapping(clientId: string): Promise<ClientMapping | undefined> {
-    return this.state.storage.get<ClientMapping>(`${CLIENT_PREFIX}${clientId}`);
-  }
-
-  private async setClientMapping(clientId: string, username: string): Promise<void> {
-    await this.state.storage.put<ClientMapping>(`${CLIENT_PREFIX}${clientId}`, {
-      username,
-      lastSeen: Date.now(),
-    });
-  }
-
-  private async isUsernameTaken(username: string, excludeClientId: string): Promise<boolean> {
-    // Check active connections first
-    for (const info of this.connections.values()) {
-      if (info.username === username && info.clientId !== excludeClientId) {
-        return true;
-      }
-    }
-    // Check stored mappings
-    const all = await this.state.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
-    for (const [key, value] of all) {
-      const cid = key.slice(CLIENT_PREFIX.length);
-      if (cid !== excludeClientId && value.username === username) {
-        const expired = Date.now() - value.lastSeen > RESERVATION_DURATION_MS;
-        if (!expired) return true;
-      }
-    }
-    return false;
-  }
-
-  private async cleanupExpiredClients(): Promise<void> {
-    const all = await this.state.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
-    const expired: string[] = [];
+  private isRateLimited(ws: WebSocket): boolean {
     const now = Date.now();
-    for (const [key, value] of all) {
-      if (now - value.lastSeen > RESERVATION_DURATION_MS) {
-        expired.push(key);
-      }
+    let times = this.messageTimes.get(ws);
+    if (!times) {
+      times = [];
+      this.messageTimes.set(ws, times);
     }
-    if (expired.length > 0) await this.state.storage.delete(expired);
+
+    // Remove timestamps outside the window
+    const cutoff = now - CHAT_RATE_LIMIT_WINDOW_MS;
+    while (times.length > 0 && times[0] < cutoff) {
+      times.shift();
+    }
+
+    if (times.length >= CHAT_RATE_LIMIT_MAX_MESSAGES) {
+      return true;
+    }
+
+    times.push(now);
+    return false;
   }
 
   // ── Public API ───────────────────────────────────────────────────────
@@ -190,11 +78,17 @@ export class ChatRoom implements DurableObject {
       return new Response("Expected WebSocket", { status: 426 });
     }
 
-    await this.loadBlockedClients();
-    await this.loadMessages();
-    this.cleanupExpiredClients().catch((err) => {
-      console.error("[clients] cleanup error:", err);
-    });
+    await this.storage.loadBlockedClients();
+    await this.storage.loadMessages();
+    const now = Date.now();
+    if (now - this.lastCleanupAt > 60_000) {
+      this.lastCleanupAt = now;
+      try {
+        this.storage.cleanupExpiredClients();
+      } catch (err) {
+        console.error("[clients] cleanup error:", err);
+      }
+    }
 
     const [client, server] = Object.values(new WebSocketPair());
 
@@ -220,12 +114,19 @@ export class ChatRoom implements DurableObject {
 
   // ── Message Handlers ─────────────────────────────────────────────────
 
-  private handleMessage(ws: WebSocket, raw: string | ArrayBuffer): void {
-    let msg: ClientMessage;
+  private async handleMessage(ws: WebSocket, raw: string | ArrayBuffer): Promise<void> {
+    let parsed: unknown;
     try {
-      msg = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw)) as ClientMessage;
+      parsed = JSON.parse(typeof raw === "string" ? raw : new TextDecoder().decode(raw));
     } catch {
       this.sendError(ws, SERVER_ERROR_CODE.INVALID_MESSAGE, "Invalid JSON.");
+      return;
+    }
+
+    // Runtime validation (SEC-API-5): verify msg shape before processing
+    const msg = parsed as Record<string, unknown>;
+    if (!msg || typeof msg !== "object" || typeof msg.type !== "string") {
+      this.sendError(ws, SERVER_ERROR_CODE.INVALID_MESSAGE, "Invalid message format.");
       return;
     }
 
@@ -238,53 +139,57 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
+    const data: unknown = msg.data ?? {};
+
+    // READ-API-3: await async handlers for clarity
     switch (msg.type) {
       case CLIENT_MESSAGE_TYPE.JOIN:
-        this.handleJoin(ws, msg.data);
+        await this.handleJoin(ws, data as ClientJoinData);
         break;
       case CLIENT_MESSAGE_TYPE.RENAME:
-        this.handleRename(ws, msg.data);
+        await this.handleRename(ws, data as ClientRenameData);
         break;
       case CLIENT_MESSAGE_TYPE.MESSAGE:
-        this.handleChatMessage(ws, msg.data);
+        await this.handleChatMessage(ws, data as ClientChatData);
         break;
-      case CLIENT_MESSAGE_TYPE.DELETE:
-        this.handleDelete(ws, msg.data);
+      case CLIENT_MESSAGE_TYPE.DELETE: {
+        const d = data as Record<string, unknown>;
+        await this.handleDelete(ws, { id: String(d.id ?? "") });
         break;
-      case CLIENT_MESSAGE_TYPE.FLAG:
-        this.handleFlag(ws, msg.data);
+      }
+      case CLIENT_MESSAGE_TYPE.FLAG: {
+        const d = data as Record<string, unknown>;
+        await this.handleFlag(ws, { id: String(d.id ?? "") });
         break;
-      case CLIENT_MESSAGE_TYPE.DELETE_BY_USER:
-        this.handleDeleteByUser(ws, msg.data);
+      }
+      case CLIENT_MESSAGE_TYPE.DELETE_BY_USER: {
+        const d = data as Record<string, unknown>;
+        await this.handleDeleteByUser(ws, { clientId: String(d.clientId ?? "") });
         break;
-      case CLIENT_MESSAGE_TYPE.UNBLOCK:
-        this.handleUnblock(ws, msg.data.clientId);
+      }
+      case CLIENT_MESSAGE_TYPE.UNBLOCK: {
+        const d = data as Record<string, unknown>;
+        await this.handleUnblock(ws, String(d.clientId ?? ""));
         break;
+      }
     }
   }
 
-  private async handleJoin(ws: WebSocket, { token, clientId }: ClientJoinData): Promise<void> {
-    const isOwner = typeof token === "string" && token.length > 0 && token === this.env.ADMIN_SECRET;
-    const resolvedClientId = clientId ?? crypto.randomUUID();
-    const isBlocked = !isOwner && this.blockedEntries.has(resolvedClientId);
-
-    let name: string;
-    if (isOwner) {
-      name = ADMIN_USERNAME;
-    } else {
-      const mapping = await this.getClientMapping(resolvedClientId);
-      if (mapping) {
-        name = mapping.username;
-        await this.setClientMapping(resolvedClientId, name); // update lastSeen
-      } else {
-        name = generateRandomUsername();
-        // Ensure generated name isn't taken
-        while (await this.isUsernameTaken(name, resolvedClientId)) {
-          name = generateRandomUsername();
-        }
-        await this.setClientMapping(resolvedClientId, name);
-      }
+  private async handleJoin(ws: WebSocket, { token, clientId, clientToken }: ClientJoinData): Promise<void> {
+    let isOwner = false;
+    if (typeof token === "string" && token.length > 0) {
+      isOwner = await verifySessionToken(token, this.env.SIGNING_SECRET);
     }
+
+    const { resolvedClientId, isNewClient } = await this.resolveClientIdentity(clientId, clientToken);
+
+    const resolvedClientToken = isNewClient
+      ? await createClientToken(resolvedClientId, this.env.SIGNING_SECRET)
+      : undefined;
+
+    const isBlocked = !isOwner && this.storage.isBlocked(resolvedClientId);
+
+    const name = isOwner ? this.adminUsername : await this.resolveUsername(resolvedClientId);
 
     this.spectators.delete(ws);
     this.connections.set(ws, {
@@ -296,9 +201,66 @@ export class ChatRoom implements DurableObject {
     });
 
     const connInfo = this.connections.get(ws);
-    this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner, username: name, isBlocked });
+    this.send(ws, {
+      type: SERVER_MESSAGE_TYPE.JOINED,
+      isOwner,
+      username: name,
+      isBlocked,
+      ...(isNewClient ? { clientId: resolvedClientId, clientToken: resolvedClientToken } : {}),
+    });
     if (connInfo) this.sendHistory(ws, connInfo);
     this.broadcastStatus();
+  }
+
+  private async resolveClientIdentity(
+    clientId: unknown,
+    clientToken: unknown,
+  ): Promise<{ resolvedClientId: string; isNewClient: boolean }> {
+    if (
+      typeof clientId === "string" &&
+      clientId.length > 0 &&
+      typeof clientToken === "string" &&
+      clientToken.length > 0
+    ) {
+      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.SIGNING_SECRET);
+      if (tokenValid && this.storage.hasClient(clientId)) {
+        return { resolvedClientId: clientId, isNewClient: false };
+      }
+    }
+    return { resolvedClientId: crypto.randomUUID(), isNewClient: true };
+  }
+
+  private async resolveUsername(resolvedClientId: string): Promise<string> {
+    const mapping = this.storage.getClientMapping(resolvedClientId);
+    if (mapping) {
+      this.storage.setClientMapping(resolvedClientId, mapping.username);
+      return mapping.username;
+    }
+
+    let name = generateRandomUsername();
+    let retries = 0;
+    while (this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+      retries++;
+      if (retries >= MAX_USERNAME_RETRIES) {
+        let suffix = 1;
+        const baseName = generateRandomUsername();
+        name = `${baseName}-${suffix}`;
+        while (
+          suffix <= MAX_USERNAME_SUFFIX &&
+          this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())
+        ) {
+          suffix++;
+          name = `${baseName}-${suffix}`;
+        }
+        if (suffix > MAX_USERNAME_SUFFIX) {
+          name = `user-${crypto.randomUUID().slice(0, 8)}`;
+        }
+        break;
+      }
+      name = generateRandomUsername();
+    }
+    this.storage.setClientMapping(resolvedClientId, name);
+    return name;
   }
 
   private async handleRename(ws: WebSocket, { username }: ClientRenameData): Promise<void> {
@@ -324,28 +286,38 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    if (name.includes(ADMIN_USERNAME)) {
+    if (name.includes(this.adminUsername)) {
       this.sendError(ws, SERVER_ERROR_CODE.RESERVED_USERNAME, "That name contains a reserved word.");
       return;
     }
 
-    if (await this.isUsernameTaken(name, info.clientId)) {
+    if (this.storage.isUsernameTaken(name, info.clientId, this.connections.values())) {
       this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
       return;
     }
 
     const oldUsername = info.username;
-    await this.setClientMapping(info.clientId, name);
-    this.renameMessagesForClient(info.clientId, name);
+    this.storage.setClientMapping(info.clientId, name);
+    this.storage.renameMessagesForClient(info.clientId, name);
     info.username = name;
     this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });
     this.send(ws, { type: SERVER_MESSAGE_TYPE.JOINED, isOwner: false, username: name, isBlocked: info.isBlocked });
     this.broadcastStatus();
   }
 
-  private handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): void {
+  private async handleChatMessage(ws: WebSocket, { text: rawText, context }: ClientChatData): Promise<void> {
     const info = this.connections.get(ws);
     if (!info) return;
+
+    // Rate limiting (SEC-API-3)
+    if (this.isRateLimited(ws)) {
+      this.sendWarning(
+        ws,
+        SERVER_ERROR_CODE.MODERATION_WARNING,
+        "You are sending messages too quickly. Please slow down.",
+      );
+      return;
+    }
 
     const text = String(rawText ?? "")
       .trim()
@@ -358,15 +330,15 @@ export class ChatRoom implements DurableObject {
 
     const message: ChatMessage = {
       type: SERVER_MESSAGE_TYPE.MESSAGE,
-      id: uuidv7(),
+      id: `${Date.now().toString(36)}-${crypto.randomUUID().slice(0, 8)}`,
       clientId: info.clientId,
       username: info.username,
       text,
       timestamp: Date.now(),
-      ...(context?.path && /^\/[-a-z0-9._/]*$/.test(context.path) ? { context } : {}),
+      ...(context?.path && /^\/[-a-z0-9._/]*$/.test(context.path) ? { context: { path: context.path } } : {}),
     };
 
-    this.addMessage(message);
+    if (!this.storage.addMessage(message)) return;
     this.broadcastMessage(message);
 
     this.moderate(message, ws).catch((err) => {
@@ -374,14 +346,14 @@ export class ChatRoom implements DurableObject {
     });
   }
 
-  private handleUnblock(ws: WebSocket, clientId: string): void {
+  private async handleUnblock(ws: WebSocket, clientId: string): Promise<void> {
     const info = this.connections.get(ws);
     if (!info?.isOwner) {
       this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can unblock users.");
       return;
     }
 
-    this.unblockClient(clientId);
+    this.storage.unblockClient(clientId);
     this.send(ws, { type: SERVER_MESSAGE_TYPE.UNBLOCKED, clientId });
 
     for (const [sock, connInfo] of this.connections) {
@@ -402,25 +374,31 @@ export class ChatRoom implements DurableObject {
     }
   }
 
-  private handleDelete(ws: WebSocket, { id }: ClientDeleteData): void {
+  private async handleDelete(ws: WebSocket, { id }: ClientDeleteData): Promise<void> {
     const info = this.connections.get(ws);
-    if (!info?.isOwner) return;
+    if (!info?.isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can delete messages.");
+      return;
+    }
 
-    if (!this.removeMessage(id)) return;
+    if (!this.storage.removeMessage(id)) return;
     this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
   }
 
-  private handleFlag(ws: WebSocket, { id }: ClientFlagData): void {
+  private async handleFlag(ws: WebSocket, { id }: ClientFlagData): Promise<void> {
     const info = this.connections.get(ws);
-    if (!info?.isOwner) return;
+    if (!info?.isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can flag users.");
+      return;
+    }
 
-    const message = this.messages.find((m) => m.id === id);
+    const message = this.storage.findMessage(id);
     if (!message) return;
 
     const targetClientId = message.clientId;
     if (!targetClientId) return;
 
-    this.blockClient(targetClientId, message.username);
+    this.storage.blockClient(targetClientId, message.username);
 
     for (const [targetWs, connInfo] of this.connections) {
       if (connInfo.clientId === targetClientId && !connInfo.isOwner) {
@@ -437,11 +415,14 @@ export class ChatRoom implements DurableObject {
     });
   }
 
-  private handleDeleteByUser(ws: WebSocket, { clientId: targetClientId }: ClientDeleteByUserData): void {
+  private async handleDeleteByUser(ws: WebSocket, { clientId: targetClientId }: ClientDeleteByUserData): Promise<void> {
     const info = this.connections.get(ws);
-    if (!info?.isOwner) return;
+    if (!info?.isOwner) {
+      this.sendError(ws, SERVER_ERROR_CODE.UNAUTHORIZED, "Only the owner can delete user messages.");
+      return;
+    }
 
-    for (const msg of this.removeMessagesByClient(targetClientId)) {
+    for (const msg of this.storage.removeMessagesByClient(targetClientId)) {
       this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id: msg.id });
     }
   }
@@ -455,13 +436,13 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    const result = await this.callModerationAPI(apiKey, message.text);
+    const result = await callModerationAPI(apiKey, message.text);
     if (!result) return;
 
     const flagged = result.flagged ?? false;
     if (!flagged) return;
 
-    this.removeMessage(message.id);
+    this.storage.removeMessage(message.id);
     this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id: message.id });
 
     this.addWarning(senderWs);
@@ -475,7 +456,7 @@ export class ChatRoom implements DurableObject {
 
     if (info.warnings >= MAX_WARNINGS) {
       info.isBlocked = true;
-      this.blockClient(info.clientId, info.username);
+      this.storage.blockClient(info.clientId, info.username);
       this.sendBlocked(ws);
     } else {
       const remaining = MAX_WARNINGS - info.warnings;
@@ -485,51 +466,6 @@ export class ChatRoom implements DurableObject {
         `Your message was removed for violating community guidelines. ${remaining} warning${remaining !== 1 ? "s" : ""} remaining before you are blocked.`,
       );
     }
-  }
-
-  private async callModerationAPI(
-    apiKey: string,
-    text: string,
-    retries = 3,
-  ): Promise<{ flagged: boolean; categories: Record<string, boolean> } | null> {
-    for (let attempt = 0; attempt < retries; attempt++) {
-      const response = await fetch("https://api.openai.com/v1/moderations", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "omni-moderation-latest",
-          input: text,
-        }),
-      });
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get("retry-after");
-        const waitMs = retryAfter ? Number(retryAfter) * 1000 : 1000 * 2 ** attempt;
-        console.warn(`[moderation] rate limited (429), retrying in ${waitMs}ms (attempt ${attempt + 1}/${retries})`);
-        await new Promise((r) => setTimeout(r, waitMs));
-        continue;
-      }
-
-      if (!response.ok) {
-        const body = await response.text();
-        console.error(`[moderation] OpenAI API error ${response.status}: ${body}`);
-        return null;
-      }
-
-      const result = (await response.json()) as {
-        results: Array<{
-          flagged: boolean;
-          categories: Record<string, boolean>;
-        }>;
-      };
-      return result.results?.[0] ?? null;
-    }
-
-    console.error("[moderation] exhausted retries after 429s");
-    return null;
   }
 
   // ── Command Interface ──────────────────────────────────────────────
@@ -543,20 +479,12 @@ export class ChatRoom implements DurableObject {
   }
 
   getBlockedEntries(): BlockedEntry[] {
-    return [...this.blockedEntries.entries()].map(([clientId, info]) => ({
-      clientId,
-      username: info.username,
-      blockedAt: info.blockedAt,
-    }));
+    return this.storage.getBlockedEntries();
   }
 
   clearMessages(): void {
-    const ids = this.messages.map((m) => m.id);
-    this.messages = [];
-    this.saveMessages();
-    for (const id of ids) {
-      this.broadcast({ type: SERVER_MESSAGE_TYPE.REMOVE, id });
-    }
+    this.storage.clearAllMessages();
+    this.broadcast({ type: SERVER_MESSAGE_TYPE.CLEAR });
   }
 
   // ── Sanitization ────────────────────────────────────────────────────
@@ -575,6 +503,7 @@ export class ChatRoom implements DurableObject {
   private removeConnection(ws: WebSocket): void {
     this.spectators.delete(ws);
     this.connections.delete(ws);
+    this.messageTimes.delete(ws);
     this.broadcastStatus();
   }
 
@@ -610,8 +539,13 @@ export class ChatRoom implements DurableObject {
   }
 
   private sendHistory(ws: WebSocket, viewer: ConnectionInfo): void {
-    const messages = this.messages.map((m) => this.sanitizeMessage(m, viewer));
-    ws.send(JSON.stringify({ type: SERVER_MESSAGE_TYPE.HISTORY, messages }));
+    const messages = this.storage.getMessages().map((m) => this.sanitizeMessage(m, viewer));
+    try {
+      ws.send(JSON.stringify({ type: SERVER_MESSAGE_TYPE.HISTORY, messages }));
+    } catch {
+      this.spectators.delete(ws);
+      this.connections.delete(ws);
+    }
   }
 
   private broadcastMessage(message: ChatMessage): void {

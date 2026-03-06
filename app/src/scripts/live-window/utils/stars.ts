@@ -1,6 +1,5 @@
 import type { Star } from "../types";
-
-export type { Star } from "../types";
+import { SKY_PHASES } from "./sky-gradient";
 
 /**
  * Mulberry32 PRNG — deterministic random from a 32-bit seed.
@@ -61,15 +60,24 @@ export function generateStars(seed: number, count = 40): Star[] {
   return stars;
 }
 
-/** Phase-index to base star opacity (before interpolation). */
+/**
+ * Phase-index to base star opacity (before interpolation).
+ *
+ * Phase indices correspond to sky phases (see SKY_PHASES in sky-gradient.ts):
+ *  0 = night (full stars), 1 = astronomical dawn, 2 = nautical dawn,
+ *  3 = civil dawn (stars fading), 4–12 = daytime (no stars),
+ *  13 = civil dusk (stars appearing), 14 = nautical dusk, 15 = astronomical dusk.
+ *
+ * Unlisted indices default to 0 (no stars visible during daytime phases).
+ */
 const PHASE_OPACITY: Record<number, number> = {
-  0: 1.0,
-  1: 0.7,
-  2: 0.4,
-  3: 0.1,
-  13: 0.1,
-  14: 0.4,
-  15: 0.7,
+  0: 1.0, // night — full brightness
+  1: 0.7, // astronomical dawn — fading
+  2: 0.4, // nautical dawn — dim
+  3: 0.1, // civil dawn — barely visible
+  13: 0.1, // civil dusk — just appearing
+  14: 0.4, // nautical dusk — growing
+  15: 0.7, // astronomical dusk — bright
 };
 
 /**
@@ -79,7 +87,7 @@ const PHASE_OPACITY: Record<number, number> = {
 export function getStarsOpacity(phaseIndex: number, t: number): number {
   const clamped = Math.max(0, Math.min(1, t));
   const current = PHASE_OPACITY[phaseIndex] ?? 0;
-  const nextPhase = (phaseIndex + 1) % 16;
+  const nextPhase = (phaseIndex + 1) % SKY_PHASES.length;
   const next = PHASE_OPACITY[nextPhase] ?? 0;
   return current + (next - current) * clamped;
 }

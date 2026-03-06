@@ -27,18 +27,19 @@ export default defineConfig({
     sitemap(),
     astroExpressiveCode({
       themes: ["houston"],
+      // Colors match theme.css tokens (CSS vars can't be used in JS config)
       styleOverrides: {
-        codeBackground: "#0d1f2d",
-        borderColor: "#152535",
+        codeBackground: "#0d1f2d", // --color-surface
+        borderColor: "#152535", // between --color-surface and --color-border
         borderRadius: "0.375rem",
         codeFontFamily: "'IBM Plex Mono', monospace",
         frames: {
-          editorActiveTabBackground: "#0d1f2d",
-          editorActiveTabForeground: "#e8f0f8",
-          editorTabBarBackground: "#030a12",
+          editorActiveTabBackground: "#0d1f2d", // --color-surface
+          editorActiveTabForeground: "#e8f0f8", // --color-text
+          editorTabBarBackground: "#030a12", // --color-midnight
           editorTabBarBorderBottom: "#152535",
-          terminalBackground: "#0d1f2d",
-          terminalTitlebarBackground: "#030a12",
+          terminalBackground: "#0d1f2d", // --color-surface
+          terminalTitlebarBackground: "#030a12", // --color-midnight
           terminalTitlebarBorderBottom: "#152535",
         },
       },

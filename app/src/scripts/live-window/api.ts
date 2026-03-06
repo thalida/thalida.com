@@ -21,10 +21,6 @@ export function resolveUnits(attr: string | null, country: string | null): "metr
   return "metric";
 }
 
-export function tempSymbol(units: "metric" | "imperial"): string {
-  return units === "imperial" ? "°F" : "°C";
-}
-
 // ---------------------------------------------------------------------------
 // Rate-limit guards
 // ---------------------------------------------------------------------------
@@ -55,14 +51,16 @@ export async function fetchLocation(apiUrl: string, state: StoreState): Promise<
     if (!res.ok) return state;
     const data = await res.json();
 
+    if (typeof data.lat !== "number" || typeof data.lng !== "number") return state;
+
     return {
       ...state,
       location: {
         lat: data.lat,
         lng: data.lng,
-        country: data.country ?? null,
-        name: data.name ?? null,
-        timezone: data.timezone ?? null,
+        country: typeof data.country === "string" ? data.country : null,
+        name: typeof data.name === "string" ? data.name : null,
+        timezone: typeof data.timezone === "string" ? data.timezone : null,
         lastFetched: Date.now(),
       },
     };
@@ -84,10 +82,19 @@ export async function fetchWeather(
     if (!res.ok) return { state, changed: false };
     const data = await res.json();
 
+    if (typeof data.sunrise !== "number" || typeof data.sunset !== "number") {
+      return { state, changed: false };
+    }
+
     const newState: StoreState = {
       ...state,
       weather: {
-        current: { main: data.main, description: data.description, icon: data.icon, temp: data.temp },
+        current: {
+          main: typeof data.main === "string" ? data.main : "",
+          description: typeof data.description === "string" ? data.description : "",
+          icon: typeof data.icon === "string" ? data.icon : "",
+          temp: typeof data.temp === "number" ? data.temp : 0,
+        },
         sunrise: data.sunrise * 1000,
         sunset: data.sunset * 1000,
         units,

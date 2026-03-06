@@ -8,7 +8,7 @@ import CardTags from "@components/Card/CardTags.astro";
 type AnyEntry = CollectionEntry<CollectionName>;
 
 export async function getStaticPaths() {
-  const routable = new Set(["projects", "guides", "gallery", "recipes", "versions"]);
+  const routable = new Set(COLLECTION_NAMES.filter((name) => name !== "links"));
   const paths: Array<{
     params: { collection: string; id: string };
     props: { entry: AnyEntry };
@@ -235,7 +235,7 @@ const recipeMeta =
     @apply font-heading text-text;
   }
   .post-content :global(.heading-anchor) {
-    @apply opacity-0 ml-[0.35rem] text-muted no-underline font-normal transition-opacity duration-150;
+    @apply opacity-0 ml-1.5 text-muted no-underline font-normal transition-opacity duration-150;
   }
   .post-content :global(h2:hover .heading-anchor),
   .post-content :global(h3:hover .heading-anchor),

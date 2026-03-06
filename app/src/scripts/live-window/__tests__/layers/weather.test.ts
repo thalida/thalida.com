@@ -1,31 +1,15 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { WeatherLayer, ICON_WEATHER_MAP } from "../../components/sky/WeatherLayer";
-import type { LiveWindowState } from "../../types";
-import { DEFAULT_STATE } from "../../state";
-import { buildPhaseInfo } from "../../utils/phase";
+import { makeTestState } from "../helpers";
 
-function makeState(icon: string | null): LiveWindowState {
-  const store = {
-    ...DEFAULT_STATE,
-    weather: {
-      ...DEFAULT_STATE.weather,
-      current: icon ? { main: "Test", description: "test", icon, temp: 20 } : null,
+function makeState(icon: string | null) {
+  return makeTestState({
+    store: {
+      weather: {
+        current: icon ? { main: "Test", description: "test", icon, temp: 20 } : null,
+      },
     },
-  };
-  return {
-    store,
-    computed: { phase: buildPhaseInfo(store, Date.now()) },
-    ref: {},
-    attrs: {
-      use12Hour: false,
-      hideClock: false,
-      hideWeatherText: false,
-      bgColor: { r: 0, g: 0, b: 0 },
-      resolvedUnits: "metric",
-      timezone: null,
-      label: null,
-    },
-  };
+  });
 }
 
 describe("ICON_WEATHER_MAP", () => {
