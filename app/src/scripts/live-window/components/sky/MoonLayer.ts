@@ -1,5 +1,6 @@
 import type { SceneComponent, LiveWindowState } from "../../types";
 import { getSunAngle, getMoonPhase, getMoonAngle, getArcPosition } from "../../utils/celestial";
+import { getDefaultSunTimes } from "../../utils/sky-gradient";
 
 export class MoonLayer implements SceneComponent {
   private el: HTMLElement | null = null;
@@ -15,8 +16,9 @@ export class MoonLayer implements SceneComponent {
     if (!this.el) return;
 
     const { sunrise, sunset, now } = state.computed.phase;
-    const sr = sunrise ?? new Date(now).setHours(6, 0, 0, 0);
-    const ss = sunset ?? new Date(now).setHours(18, 0, 0, 0);
+    const defaults = getDefaultSunTimes();
+    const sr = sunrise ?? defaults.sunrise;
+    const ss = sunset ?? defaults.sunset;
 
     const sunAngle = getSunAngle(now, sr, ss);
     const moonPhase = getMoonPhase(now);
