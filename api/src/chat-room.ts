@@ -83,9 +83,11 @@ export class ChatRoom implements DurableObject {
     const now = Date.now();
     if (now - this.lastCleanupAt > 60_000) {
       this.lastCleanupAt = now;
-      this.storage.cleanupExpiredClients().catch((err) => {
+      try {
+        this.storage.cleanupExpiredClients();
+      } catch (err) {
         console.error("[clients] cleanup error:", err);
-      });
+      }
     }
 
     const [client, server] = Object.values(new WebSocketPair());
@@ -221,7 +223,7 @@ export class ChatRoom implements DurableObject {
       clientToken.length > 0
     ) {
       const tokenValid = await verifyClientToken(clientId, clientToken, this.env.SIGNING_SECRET);
-      if (tokenValid && (await this.storage.hasClient(clientId))) {
+      if (tokenValid && this.storage.hasClient(clientId)) {
         return { resolvedClientId: clientId, isNewClient: false };
       }
     }
@@ -229,15 +231,15 @@ export class ChatRoom implements DurableObject {
   }
 
   private async resolveUsername(resolvedClientId: string): Promise<string> {
-    const mapping = await this.storage.getClientMapping(resolvedClientId);
+    const mapping = this.storage.getClientMapping(resolvedClientId);
     if (mapping) {
-      await this.storage.setClientMapping(resolvedClientId, mapping.username);
+      this.storage.setClientMapping(resolvedClientId, mapping.username);
       return mapping.username;
     }
 
     let name = generateRandomUsername();
     let retries = 0;
-    while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+    while (this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
       retries++;
       if (retries >= MAX_USERNAME_RETRIES) {
         let suffix = 1;
@@ -245,7 +247,7 @@ export class ChatRoom implements DurableObject {
         name = `${baseName}-${suffix}`;
         while (
           suffix <= MAX_USERNAME_SUFFIX &&
-          (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values()))
+          this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())
         ) {
           suffix++;
           name = `${baseName}-${suffix}`;
@@ -257,7 +259,7 @@ export class ChatRoom implements DurableObject {
       }
       name = generateRandomUsername();
     }
-    await this.storage.setClientMapping(resolvedClientId, name);
+    this.storage.setClientMapping(resolvedClientId, name);
     return name;
   }
 
@@ -289,13 +291,13 @@ export class ChatRoom implements DurableObject {
       return;
     }
 
-    if (await this.storage.isUsernameTaken(name, info.clientId, this.connections.values())) {
+    if (this.storage.isUsernameTaken(name, info.clientId, this.connections.values())) {
       this.sendError(ws, SERVER_ERROR_CODE.TAKEN_USERNAME, "That name is already taken.");
       return;
     }
 
     const oldUsername = info.username;
-    await this.storage.setClientMapping(info.clientId, name);
+    this.storage.setClientMapping(info.clientId, name);
     this.storage.renameMessagesForClient(info.clientId, name);
     info.username = name;
     this.broadcast({ type: SERVER_MESSAGE_TYPE.RENAME, oldUsername, newUsername: name });

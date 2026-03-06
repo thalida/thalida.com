@@ -331,7 +331,7 @@ export class ChatStorage {
 
   // ── Client Mappings ────────────────────────────────────────────────
 
-  async getClientMapping(clientId: string): Promise<ClientMapping | undefined> {
+  getClientMapping(clientId: string): ClientMapping | undefined {
     const cursor = this.storage.sql.exec<{
       username: string;
       last_seen_at: string;
@@ -342,7 +342,7 @@ export class ChatStorage {
     return undefined;
   }
 
-  async setClientMapping(clientId: string, username: string): Promise<void> {
+  setClientMapping(clientId: string, username: string): void {
     try {
       this.storage.sql.exec(
         `INSERT OR REPLACE INTO clients (client_id, username, last_seen_at) VALUES (?, ?, ?)`,
@@ -355,11 +355,7 @@ export class ChatStorage {
     }
   }
 
-  async isUsernameTaken(
-    username: string,
-    excludeClientId: string,
-    activeConnections: Iterable<ConnectionInfo>,
-  ): Promise<boolean> {
+  isUsernameTaken(username: string, excludeClientId: string, activeConnections: Iterable<ConnectionInfo>): boolean {
     // Check active connections first
     for (const info of activeConnections) {
       if (info.username === username && info.clientId !== excludeClientId) {
@@ -380,7 +376,7 @@ export class ChatStorage {
     return false;
   }
 
-  async cleanupExpiredClients(): Promise<void> {
+  cleanupExpiredClients(): void {
     const cutoff = this.toISOString(Date.now() - RESERVATION_DURATION_MS);
     try {
       this.storage.sql.exec(`DELETE FROM clients WHERE last_seen_at < ?`, cutoff);
@@ -389,7 +385,7 @@ export class ChatStorage {
     }
   }
 
-  async hasClient(clientId: string): Promise<boolean> {
+  hasClient(clientId: string): boolean {
     const cursor = this.storage.sql.exec<{ found: number }>(
       `SELECT 1 AS found FROM clients WHERE client_id = ? LIMIT 1`,
       clientId,
