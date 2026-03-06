@@ -123,15 +123,20 @@ const siteAge = new Date().getFullYear() - 2007;
     el.dataset.atEnd = String(atEnd);
   }
 
+  let homeAC: AbortController | null = null;
   document.addEventListener("astro:page-load", () => {
+    homeAC?.abort();
+    homeAC = new AbortController();
+    const { signal } = homeAC;
+
     updateGreeting();
     const lw = document.querySelector("live-window");
-    if (lw) lw.addEventListener("live-window:clock-update", updateGreeting);
+    if (lw) lw.addEventListener("live-window:clock-update", updateGreeting, { signal });
 
     const timeline = document.querySelector(".home-timeline");
     if (timeline) {
       updateTimelineShadows();
-      timeline.addEventListener("scroll", updateTimelineShadows, { passive: true });
+      timeline.addEventListener("scroll", updateTimelineShadows, { passive: true, signal });
     }
   });
 </script>

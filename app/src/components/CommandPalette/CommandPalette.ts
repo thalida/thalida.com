@@ -8,7 +8,13 @@ declare global {
   }
 }
 
+let cpAC: AbortController | null = null;
+
 function initCommandPalette() {
+  cpAC?.abort();
+  cpAC = new AbortController();
+  const { signal } = cpAC;
+
   const overlay = document.querySelector('[data-cp="overlay"]') as HTMLElement;
   const input = document.querySelector('[data-cp="input"]') as HTMLInputElement;
   const resultsContainer = document.querySelector('[data-cp="results"]') as HTMLElement;
@@ -92,65 +98,85 @@ function initCommandPalette() {
   }
 
   // Input handlers
-  input.addEventListener("input", () => renderResults(input.value));
+  input.addEventListener("input", () => renderResults(input.value), { signal });
 
   // Collection select change
-  collectionSelect.addEventListener("change", () => {
-    renderResults(input.value);
-    input.focus();
-  });
+  collectionSelect.addEventListener(
+    "change",
+    () => {
+      renderResults(input.value);
+      input.focus();
+    },
+    { signal },
+  );
 
-  input.addEventListener("keydown", (e) => {
-    const items = resultsContainer.querySelectorAll(".cp-row");
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
-      updateSelection();
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      selectedIndex = Math.max(selectedIndex - 1, 0);
-      updateSelection();
-    } else if (e.key === "Enter" && selectedIndex >= 0 && items[selectedIndex]) {
-      e.preventDefault();
-      close();
-      (items[selectedIndex] as HTMLAnchorElement).click();
-    } else if (e.key === "Escape") {
-      close();
-    }
-  });
+  input.addEventListener(
+    "keydown",
+    (e) => {
+      const items = resultsContainer.querySelectorAll(".cp-row");
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+        updateSelection();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, 0);
+        updateSelection();
+      } else if (e.key === "Enter" && selectedIndex >= 0 && items[selectedIndex]) {
+        e.preventDefault();
+        close();
+        (items[selectedIndex] as HTMLAnchorElement).click();
+      } else if (e.key === "Escape") {
+        close();
+      }
+    },
+    { signal },
+  );
 
   // Close on backdrop click
-  backdrop?.addEventListener("click", close);
+  backdrop?.addEventListener("click", close, { signal });
 
   // Global keyboard shortcut (Cmd+K / Ctrl+K)
-  document.addEventListener("keydown", (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-      e.preventDefault();
-      if (isOpen()) {
-        close();
-      } else {
-        open();
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        if (isOpen()) {
+          close();
+        } else {
+          open();
+        }
       }
-    }
-  });
+    },
+    { signal },
+  );
 
   // Sidebar search button click (multiple instances due to responsive layout)
   document.querySelectorAll('[data-nav="search-btn"]').forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (!isOpen()) {
-        open();
-      }
-    });
+    btn.addEventListener(
+      "click",
+      () => {
+        if (!isOpen()) {
+          open();
+        }
+      },
+      { signal },
+    );
   });
 
   // Toolbar search button click
   const tabletSearchBtn = document.querySelector<HTMLElement>('[data-layout="search-btn"]');
   if (tabletSearchBtn) {
-    tabletSearchBtn.addEventListener("click", () => {
-      if (!isOpen()) {
-        open();
-      }
-    });
+    tabletSearchBtn.addEventListener(
+      "click",
+      () => {
+        if (!isOpen()) {
+          open();
+        }
+      },
+      { signal },
+    );
   }
 }
 
