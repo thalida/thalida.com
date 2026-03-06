@@ -24,9 +24,9 @@ function hexToBuf(hex: string): Uint8Array | null {
  * Create an HMAC-based session token: "timestamp.hex_hmac".
  * Stateless — the server verifies by recomputing the HMAC.
  */
-export async function createSessionToken(adminSecret: string): Promise<string> {
+export async function createSessionToken(secret: string): Promise<string> {
   const timestamp = Date.now().toString();
-  const key = await getHmacKey(adminSecret);
+  const key = await getHmacKey(secret);
   const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(timestamp));
   return `${timestamp}.${bufToHex(new Uint8Array(sig))}`;
 }
@@ -36,7 +36,7 @@ export async function createSessionToken(adminSecret: string): Promise<string> {
  * Returns true if the token is valid and not expired.
  * Uses crypto.subtle.verify which is constant-time.
  */
-export async function verifySessionToken(token: string, adminSecret: string): Promise<boolean> {
+export async function verifySessionToken(token: string, secret: string): Promise<boolean> {
   const dotIdx = token.indexOf(".");
   if (dotIdx === -1) return false;
 
@@ -46,7 +46,7 @@ export async function verifySessionToken(token: string, adminSecret: string): Pr
   const ts = Number(timestamp);
   if (Number.isNaN(ts) || Date.now() - ts > SESSION_TOKEN_TTL_MS) return false;
 
-  const key = await getHmacKey(adminSecret);
+  const key = await getHmacKey(secret);
   const hmacBytes = hexToBuf(hmac);
   if (!hmacBytes) return false;
 

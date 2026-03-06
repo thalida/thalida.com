@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { generateRandomUsername, COLORS, ANIMALS, ADMIN_USERNAME } from "../config";
+import { generateRandomUsername, COLORS, ANIMALS, ADMIN_USERNAME, MAX_USERNAME_RETRIES } from "../config";
 
 describe("config", () => {
   describe("generateRandomUsername", () => {
@@ -48,6 +48,10 @@ describe("config", () => {
 
     it("ANIMALS array is non-empty", () => {
       expect(ANIMALS.length).toBeGreaterThan(0);
+    });
+
+    it("MAX_USERNAME_RETRIES is a positive number", () => {
+      expect(MAX_USERNAME_RETRIES).toBeGreaterThan(0);
     });
   });
 });

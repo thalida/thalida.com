@@ -1,9 +1,13 @@
 # Copy this file to .dev.vars and fill in the values.
 # .dev.vars is gitignored and used by Wrangler for local development.
 
-# Secret used to authenticate as the site owner (thalida).
+# Password used to authenticate as the site owner (thalida).
 # Pick any string. Log in via the "admin login" button in the chat panel.
-ADMIN_SECRET=
+ADMIN_PASSWORD=
+
+# Secret key used for HMAC signing (session tokens, client identity tokens).
+# Pick any random string — must be different from ADMIN_PASSWORD.
+SIGNING_SECRET=
 
 # OpenAI API key for chat content moderation (free Moderation API).
 # Get one at https://platform.openai.com/api-keys

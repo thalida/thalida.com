@@ -192,8 +192,8 @@ describe("ChatRoom Durable Object", () => {
       ws2.close();
     });
 
-    it("owner joins with valid ADMIN_SECRET token and receives joined message", async () => {
-      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
+    it("owner joins with valid ADMIN_PASSWORD token and receives joined message", async () => {
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-password" });
 
       const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -205,7 +205,7 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("owner username is forced to 'thalida' regardless of input", async () => {
-      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-password" });
 
       const joined = msgs.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -222,8 +222,8 @@ describe("ChatRoom Durable Object", () => {
     });
 
     it("multiple owner sessions can share the 'thalida' username", async () => {
-      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ token: "test-admin-secret" });
-      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ token: "test-admin-secret" });
+      const { ws: ws1, msgs: msgs1 } = await connectAndJoin({ token: "test-admin-password" });
+      const { ws: ws2, msgs: msgs2 } = await connectAndJoin({ token: "test-admin-password" });
 
       const joined1 = msgs1.find((m) => m.type === SERVER_MESSAGE_TYPE.JOINED);
       expect(joined1).toMatchObject({ type: SERVER_MESSAGE_TYPE.JOINED, isOwner: true, username: "thalida" });
@@ -387,7 +387,7 @@ describe("ChatRoom Durable Object", () => {
   describe("Blocking", () => {
     it("admin can unblock a client via unblock message", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
       adminMsgs.length = 0;
 
@@ -405,7 +405,7 @@ describe("ChatRoom Durable Object", () => {
 
   describe("admin commands", () => {
     it("admin /help returns help message with command list", async () => {
-      const { ws, msgs } = await connectAndJoin({ token: "test-admin-secret" });
+      const { ws, msgs } = await connectAndJoin({ token: "test-admin-password" });
       msgs.length = 0;
 
       send(ws, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "/help" } });
@@ -425,7 +425,7 @@ describe("ChatRoom Durable Object", () => {
 
     it("/help is not broadcast to other users", async () => {
       const { ws: adminWs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
       const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin({ username: "viewer" });
       otherMsgs.length = 0;
@@ -467,7 +467,7 @@ describe("ChatRoom Durable Object", () => {
         username: troublemakerName,
       } = await connectAndJoin({ username: "troublemaker" });
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "bad stuff" } });
@@ -503,7 +503,7 @@ describe("ChatRoom Durable Object", () => {
 
     it("admin unknown /command sends as regular chat message", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
       const { ws: otherWs, msgs: otherMsgs } = await connectAndJoin({ username: "cmd-viewer" });
 
@@ -530,7 +530,7 @@ describe("ChatRoom Durable Object", () => {
     it("admin can delete a message by ID", async () => {
       const { ws: userWs, msgs: userMsgs } = await connectAndJoin({ username: "chatter" });
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       userMsgs.length = 0;
@@ -590,7 +590,7 @@ describe("ChatRoom Durable Object", () => {
 
     it("delete of nonexistent message ID is silently ignored", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       adminMsgs.length = 0;
@@ -607,7 +607,7 @@ describe("ChatRoom Durable Object", () => {
     it("admin can delete all messages from a client", async () => {
       const { ws: userWs, clientId } = await connectAndJoin({ username: "bulk-poster" });
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "spam 1" } });
@@ -656,7 +656,7 @@ describe("ChatRoom Durable Object", () => {
     it("admin can flag a user, which blocks their IP and responds with FLAGGED", async () => {
       const { ws: userWs, msgs: userMsgs, username: badUserName } = await connectAndJoin({ username: "bad-user" });
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       userMsgs.length = 0;
@@ -722,7 +722,7 @@ describe("ChatRoom Durable Object", () => {
 
     it("flagging nonexistent message ID is silently ignored", async () => {
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       adminMsgs.length = 0;
@@ -918,7 +918,7 @@ describe("ChatRoom Durable Object", () => {
     it("flag works after user has renamed", async () => {
       const { ws: userWs, msgs: userMsgs } = await connectAndJoin({ username: "original" });
       const { ws: adminWs, msgs: adminMsgs } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
       });
 
       send(userWs, { type: CLIENT_MESSAGE_TYPE.MESSAGE, data: { text: "bad content" } });
@@ -1000,7 +1000,7 @@ describe("ChatRoom Durable Object", () => {
 
       // Login as admin with same clientId
       const { ws: ws2, msgs: msgs2 } = await connectAndJoin({
-        token: "test-admin-secret",
+        token: "test-admin-password",
         clientId,
         clientToken,
       });

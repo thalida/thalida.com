@@ -20,7 +20,7 @@ describe("Worker routing", () => {
       const resp = await SELF.fetch("https://fake-host/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: "test-admin-secret" }),
+        body: JSON.stringify({ token: "test-admin-password" }),
       });
       expect(resp.status).toBe(200);
       const body = (await resp.json()) as { sessionToken?: string };

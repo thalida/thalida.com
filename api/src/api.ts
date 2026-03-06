@@ -96,9 +96,9 @@ export async function handleAuth(env: Env, request: Request): Promise<Response> 
     if (
       typeof body.token === "string" &&
       body.token.length > 0 &&
-      (await timingSafeEqual(body.token, env.ADMIN_SECRET))
+      (await timingSafeEqual(body.token, env.ADMIN_PASSWORD))
     ) {
-      const sessionToken = await createSessionToken(env.ADMIN_SECRET);
+      const sessionToken = await createSessionToken(env.SIGNING_SECRET);
       return jsonResponse({ sessionToken }, 200, headers);
     }
 

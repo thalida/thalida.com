@@ -14,7 +14,8 @@ export default defineWorkersConfig({
         wrangler: { configPath: "./wrangler.toml" },
         miniflare: {
           bindings: {
-            ADMIN_SECRET: "test-admin-secret",
+            ADMIN_PASSWORD: "test-admin-password",
+            SIGNING_SECRET: "test-signing-secret",
             OPENAI_API_KEY: "",
             IPREGISTRY_KEY: "",
             OPENWEATHER_KEY: "",

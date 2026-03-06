@@ -20,6 +20,7 @@ import {
   ADMIN_USERNAME as DEFAULT_ADMIN_USERNAME,
   MAX_MESSAGE_LENGTH,
   MAX_USERNAME_LENGTH,
+  MAX_USERNAME_RETRIES,
   MAX_WARNINGS,
   MIN_USERNAME_LENGTH,
   generateRandomUsername,
@@ -166,7 +167,7 @@ export class ChatRoom implements DurableObject {
     // Verify admin via session token (HMAC-based, constant-time verification)
     let isOwner = false;
     if (typeof token === "string" && token.length > 0) {
-      isOwner = await verifySessionToken(token, this.env.ADMIN_SECRET);
+      isOwner = await verifySessionToken(token, this.env.SIGNING_SECRET);
     }
 
     // Resolve client identity:
@@ -181,7 +182,7 @@ export class ChatRoom implements DurableObject {
       typeof clientToken === "string" &&
       clientToken.length > 0
     ) {
-      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.ADMIN_SECRET);
+      const tokenValid = await verifyClientToken(clientId, clientToken, this.env.SIGNING_SECRET);
       if (tokenValid && (await this.storage.hasClient(clientId))) {
         resolvedClientId = clientId;
         isNewClient = false;
@@ -193,7 +194,7 @@ export class ChatRoom implements DurableObject {
     }
 
     const resolvedClientToken = isNewClient
-      ? await createClientToken(resolvedClientId, this.env.ADMIN_SECRET)
+      ? await createClientToken(resolvedClientId, this.env.SIGNING_SECRET)
       : undefined;
 
     const isBlocked = !isOwner && this.storage.isBlocked(resolvedClientId);
@@ -208,7 +209,20 @@ export class ChatRoom implements DurableObject {
         await this.storage.setClientMapping(resolvedClientId, name); // update lastSeen
       } else {
         name = generateRandomUsername();
+        let retries = 0;
         while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+          retries++;
+          if (retries >= MAX_USERNAME_RETRIES) {
+            // Exhausted base names — append numeric suffix
+            let suffix = 1;
+            const baseName = generateRandomUsername();
+            name = `${baseName}-${suffix}`;
+            while (await this.storage.isUsernameTaken(name, resolvedClientId, this.connections.values())) {
+              suffix++;
+              name = `${baseName}-${suffix}`;
+            }
+            break;
+          }
           name = generateRandomUsername();
         }
         await this.storage.setClientMapping(resolvedClientId, name);

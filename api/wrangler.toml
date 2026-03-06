@@ -14,7 +14,8 @@ new_sqlite_classes = ["ChatRoom"]
 [vars]
 ALLOWED_ORIGIN = "https://thalida.com"
 
-# Set ADMIN_SECRET via `wrangler secret put ADMIN_SECRET`
+# Set ADMIN_PASSWORD via `wrangler secret put ADMIN_PASSWORD`
+# Set SIGNING_SECRET via `wrangler secret put SIGNING_SECRET`
 # Set OPENAI_API_KEY via `wrangler secret put OPENAI_API_KEY`
 # Set IPREGISTRY_KEY via `wrangler secret put IPREGISTRY_KEY`
 # Set OPENWEATHER_KEY via `wrangler secret put OPENWEATHER_KEY`
@@ -36,7 +37,8 @@ tag = "v1"
 new_sqlite_classes = ["ChatRoom"]
 
 # Set preview secrets once:
-#   wrangler secret put ADMIN_SECRET --env preview
+#   wrangler secret put ADMIN_PASSWORD --env preview
+#   wrangler secret put SIGNING_SECRET --env preview
 #   wrangler secret put OPENAI_API_KEY --env preview
 #   wrangler secret put IPREGISTRY_KEY --env preview
 #   wrangler secret put OPENWEATHER_KEY --env preview

@@ -207,7 +207,8 @@ export type ServerMessage =
 
 export interface Env {
   CHAT_ROOM: DurableObjectNamespace;
-  ADMIN_SECRET: string;
+  ADMIN_PASSWORD: string;
+  SIGNING_SECRET: string;
   ALLOWED_ORIGIN: string;
   ADMIN_USERNAME?: string;
   OPENAI_API_KEY?: string;
