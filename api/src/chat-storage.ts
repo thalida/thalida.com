@@ -1,12 +1,12 @@
 import type { BlockedEntry, ChatMessage, ConnectionInfo } from "./types";
 import { MESSAGE_RETENTION_MS, RESERVATION_DURATION_MS } from "./config";
 
-const SCHEMA_VERSION_KEY = "schemaVersion";
-const CURRENT_SCHEMA_VERSION = 2; // v1: blockedIps key, v2: blockedClients key
-const BLOCKED_CLIENTS_KEY = "blockedClients";
-const LEGACY_BLOCKED_KEY = "blockedIps";
-const MESSAGES_KEY = "messages";
-const CLIENT_PREFIX = "client:";
+// Legacy KV keys — used only during one-time KV→SQL migration
+const LEGACY_MESSAGES_KEY = "messages";
+const LEGACY_BLOCKED_CLIENTS_KEY = "blockedClients";
+const LEGACY_BLOCKED_KEY = "blockedIps"; // v1 key
+const LEGACY_SCHEMA_VERSION_KEY = "schemaVersion";
+const LEGACY_CLIENT_PREFIX = "client:";
 
 interface ClientMapping {
   username: string;
@@ -19,6 +19,8 @@ export class ChatStorage {
   private messagesLoaded = false;
   private blockedClientsLoaded = false;
   private _lastSaveError: string | null = null;
+  private schemaReady = false;
+  private migrationDone = false;
 
   constructor(private storage: DurableObjectStorage) {}
 
@@ -27,48 +29,190 @@ export class ChatStorage {
     return this._lastSaveError;
   }
 
+  // ── Schema & Migration ──────────────────────────────────────────────
+
+  private ensureSchema(): void {
+    if (this.schemaReady) return;
+
+    this.storage.sql.exec(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id TEXT PRIMARY KEY,
+        client_id TEXT NOT NULL,
+        username TEXT NOT NULL,
+        text TEXT NOT NULL,
+        context_path TEXT,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_messages_client_id ON messages (client_id);
+      CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages (created_at);
+
+      CREATE TABLE IF NOT EXISTS blocked_clients (
+        client_id TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS clients (
+        client_id TEXT PRIMARY KEY,
+        username TEXT NOT NULL,
+        last_seen_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+      );
+      CREATE INDEX IF NOT EXISTS idx_clients_username ON clients (username);
+      CREATE INDEX IF NOT EXISTS idx_clients_last_seen_at ON clients (last_seen_at);
+    `);
+
+    // Migrate from old table name if it exists
+    try {
+      const cursor = this.storage.sql.exec<{ name: string }>(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='client_mappings'`,
+      );
+      for (const _row of cursor) {
+        this.storage.sql.exec(`INSERT OR IGNORE INTO clients SELECT * FROM client_mappings`);
+        this.storage.sql.exec(`DROP TABLE client_mappings`);
+      }
+    } catch {
+      // Table doesn't exist, nothing to migrate
+    }
+
+    this.schemaReady = true;
+  }
+
+  /**
+   * Migrate legacy KV data into SQL tables, then delete KV keys.
+   * Runs once per DO instance lifetime on first boot after deploy.
+   */
+  private async migrateFromKV(): Promise<void> {
+    if (this.migrationDone) return;
+    this.migrationDone = true;
+
+    // Quick check: if the primary legacy key is absent, skip all KV reads
+    const hasLegacyMessages = await this.storage.get(LEGACY_MESSAGES_KEY);
+    const hasLegacyBlocked = await this.storage.get(LEGACY_BLOCKED_CLIENTS_KEY);
+    const hasLegacyBlockedV1 = await this.storage.get(LEGACY_BLOCKED_KEY);
+    if (!hasLegacyMessages && !hasLegacyBlocked && !hasLegacyBlockedV1) return;
+
+    // ── blocked clients (v1 "blockedIps" + v2 "blockedClients") ──
+    const legacyBlocked = (hasLegacyBlocked ?? hasLegacyBlockedV1) as unknown;
+    if (Array.isArray(legacyBlocked)) {
+      for (const entry of legacyBlocked) {
+        if (entry && typeof entry === "object" && "clientId" in entry) {
+          const e = entry as { clientId: string; username: string; blockedAt: number };
+          this.storage.sql.exec(
+            `INSERT OR REPLACE INTO blocked_clients (client_id, username, created_at) VALUES (?, ?, ?)`,
+            e.clientId,
+            e.username,
+            new Date(e.blockedAt).toISOString(),
+          );
+        }
+      }
+    }
+
+    // ── messages ──
+    if (Array.isArray(hasLegacyMessages)) {
+      for (const m of hasLegacyMessages as ChatMessage[]) {
+        this.storage.sql.exec(
+          `INSERT OR REPLACE INTO messages (id, client_id, username, text, context_path, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
+          m.id,
+          m.clientId,
+          m.username,
+          m.text,
+          m.context?.path ?? null,
+          new Date(m.timestamp).toISOString(),
+        );
+      }
+    }
+
+    // ── client mappings ──
+    const legacyClients = await this.storage.list<ClientMapping>({ prefix: LEGACY_CLIENT_PREFIX });
+    for (const [key, value] of legacyClients) {
+      const clientId = key.slice(LEGACY_CLIENT_PREFIX.length);
+      this.storage.sql.exec(
+        `INSERT OR REPLACE INTO clients (client_id, username, last_seen_at) VALUES (?, ?, ?)`,
+        clientId,
+        value.username,
+        new Date(value.lastSeen).toISOString(),
+      );
+    }
+
+    // ── delete old KV keys ──
+    await this.storage.delete([
+      LEGACY_MESSAGES_KEY,
+      LEGACY_BLOCKED_CLIENTS_KEY,
+      LEGACY_BLOCKED_KEY,
+      LEGACY_SCHEMA_VERSION_KEY,
+    ]);
+    if (legacyClients.size > 0) {
+      await this.storage.delete([...legacyClients.keys()]);
+    }
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────
+
+  private toISOString(ms: number): string {
+    return new Date(ms).toISOString();
+  }
+
+  private fromISOString(iso: string): number {
+    return new Date(iso).getTime();
+  }
+
   // ── Loading ────────────────────────────────────────────────────────
 
   async loadBlockedClients(): Promise<void> {
     if (this.blockedClientsLoaded) return;
 
-    // Run migrations if needed (MAINT-API-4)
-    const version = (await this.storage.get<number>(SCHEMA_VERSION_KEY)) ?? 1;
-    if (version < CURRENT_SCHEMA_VERSION) {
-      await this.migrate(version);
+    this.ensureSchema();
+    await this.migrateFromKV();
+
+    const cursor = this.storage.sql.exec<{
+      client_id: string;
+      username: string;
+      created_at: string;
+    }>(`SELECT client_id, username, created_at FROM blocked_clients`);
+    for (const row of cursor) {
+      this.blockedEntries.set(row.client_id, {
+        username: row.username,
+        blockedAt: this.fromISOString(row.created_at),
+      });
     }
 
-    const stored = await this.storage.get<unknown>(BLOCKED_CLIENTS_KEY);
-    if (Array.isArray(stored)) {
-      for (const entry of stored) {
-        if (entry && typeof entry === "object" && "clientId" in entry) {
-          const e = entry as { clientId: string; username: string; blockedAt: number };
-          this.blockedEntries.set(e.clientId, { username: e.username, blockedAt: e.blockedAt });
-        }
-      }
-    }
     this.blockedClientsLoaded = true;
-  }
-
-  private async migrate(fromVersion: number): Promise<void> {
-    if (fromVersion < 2) {
-      // v1 → v2: Rename blockedIps → blockedClients
-      const legacy = await this.storage.get<unknown>(LEGACY_BLOCKED_KEY);
-      if (legacy) {
-        await this.storage.put(BLOCKED_CLIENTS_KEY, legacy);
-        await this.storage.delete(LEGACY_BLOCKED_KEY);
-      }
-    }
-    await this.storage.put(SCHEMA_VERSION_KEY, CURRENT_SCHEMA_VERSION);
   }
 
   async loadMessages(): Promise<void> {
     if (this.messagesLoaded) return;
-    const stored = await this.storage.get<ChatMessage[]>(MESSAGES_KEY);
-    if (Array.isArray(stored)) {
-      this.messages = stored;
+
+    this.ensureSchema();
+
+    // Prune expired messages from SQL
+    const cutoff = this.toISOString(Date.now() - MESSAGE_RETENTION_MS);
+    this.storage.sql.exec(`DELETE FROM messages WHERE created_at < ?`, cutoff);
+
+    const cursor = this.storage.sql.exec<{
+      id: string;
+      client_id: string;
+      username: string;
+      text: string;
+      context_path: string | null;
+      created_at: string;
+    }>(`SELECT id, client_id, username, text, context_path, created_at FROM messages ORDER BY created_at`);
+
+    this.messages = [];
+    for (const row of cursor) {
+      const msg: ChatMessage = {
+        type: "message",
+        id: row.id,
+        clientId: row.client_id,
+        username: row.username,
+        text: row.text,
+        timestamp: this.fromISOString(row.created_at),
+      };
+      if (row.context_path) {
+        msg.context = { path: row.context_path };
+      }
+      this.messages.push(msg);
     }
-    this.pruneExpiredMessages();
+
     this.messagesLoaded = true;
   }
 
@@ -84,21 +228,47 @@ export class ChatStorage {
 
   addMessage(message: ChatMessage): void {
     this.messages.push(message);
-    this.saveMessages();
+    try {
+      this.storage.sql.exec(
+        `INSERT INTO messages (id, client_id, username, text, context_path, created_at) VALUES (?, ?, ?, ?, ?, ?)`,
+        message.id,
+        message.clientId,
+        message.username,
+        message.text,
+        message.context?.path ?? null,
+        this.toISOString(message.timestamp),
+      );
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `messages: ${err}`;
+      console.error("[storage] failed to persist message:", err);
+    }
   }
 
   removeMessage(id: string): boolean {
     const idx = this.messages.findIndex((m) => m.id === id);
     if (idx === -1) return false;
     this.messages.splice(idx, 1);
-    this.saveMessages();
+    try {
+      this.storage.sql.exec(`DELETE FROM messages WHERE id = ?`, id);
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `messages: ${err}`;
+      console.error("[storage] failed to delete message:", err);
+    }
     return true;
   }
 
   removeMessagesByClient(clientId: string): ChatMessage[] {
     const removed = this.messages.filter((m) => m.clientId === clientId);
     this.messages = this.messages.filter((m) => m.clientId !== clientId);
-    this.saveMessages();
+    try {
+      this.storage.sql.exec(`DELETE FROM messages WHERE client_id = ?`, clientId);
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `messages: ${err}`;
+      console.error("[storage] failed to delete messages by client:", err);
+    }
     return removed;
   }
 
@@ -108,27 +278,57 @@ export class ChatStorage {
         msg.username = newUsername;
       }
     }
-    this.saveMessages();
+    try {
+      this.storage.sql.exec(`UPDATE messages SET username = ? WHERE client_id = ?`, newUsername, clientId);
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `messages: ${err}`;
+      console.error("[storage] failed to rename messages:", err);
+    }
   }
 
   /** Clears all messages from storage. Returns the IDs of removed messages. */
   clearAllMessages(): string[] {
     const ids = this.messages.map((m) => m.id);
     this.messages = [];
-    this.saveMessages();
+    try {
+      this.storage.sql.exec(`DELETE FROM messages`);
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `messages: ${err}`;
+      console.error("[storage] failed to clear messages:", err);
+    }
     return ids;
   }
 
   // ── Blocked Clients ────────────────────────────────────────────────
 
   blockClient(clientId: string, username: string): void {
-    this.blockedEntries.set(clientId, { username, blockedAt: Date.now() });
-    this.saveBlockedClients();
+    const blockedAt = Date.now();
+    this.blockedEntries.set(clientId, { username, blockedAt });
+    try {
+      this.storage.sql.exec(
+        `INSERT OR REPLACE INTO blocked_clients (client_id, username, created_at) VALUES (?, ?, ?)`,
+        clientId,
+        username,
+        this.toISOString(blockedAt),
+      );
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `blockedClients: ${err}`;
+      console.error("[storage] failed to persist blocked client:", err);
+    }
   }
 
   unblockClient(clientId: string): void {
     this.blockedEntries.delete(clientId);
-    this.saveBlockedClients();
+    try {
+      this.storage.sql.exec(`DELETE FROM blocked_clients WHERE client_id = ?`, clientId);
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `blockedClients: ${err}`;
+      console.error("[storage] failed to delete blocked client:", err);
+    }
   }
 
   isBlocked(clientId: string): boolean {
@@ -146,14 +346,29 @@ export class ChatStorage {
   // ── Client Mappings ────────────────────────────────────────────────
 
   async getClientMapping(clientId: string): Promise<ClientMapping | undefined> {
-    return this.storage.get<ClientMapping>(`${CLIENT_PREFIX}${clientId}`);
+    const cursor = this.storage.sql.exec<{
+      username: string;
+      last_seen_at: string;
+    }>(`SELECT username, last_seen_at FROM clients WHERE client_id = ?`, clientId);
+    for (const row of cursor) {
+      return { username: row.username, lastSeen: this.fromISOString(row.last_seen_at) };
+    }
+    return undefined;
   }
 
   async setClientMapping(clientId: string, username: string): Promise<void> {
-    await this.storage.put<ClientMapping>(`${CLIENT_PREFIX}${clientId}`, {
-      username,
-      lastSeen: Date.now(),
-    });
+    try {
+      this.storage.sql.exec(
+        `INSERT OR REPLACE INTO clients (client_id, username, last_seen_at) VALUES (?, ?, ?)`,
+        clientId,
+        username,
+        new Date().toISOString(),
+      );
+      this._lastSaveError = null;
+    } catch (err) {
+      this._lastSaveError = `clientMappings: ${err}`;
+      console.error("[storage] failed to persist client mapping:", err);
+    }
   }
 
   async isUsernameTaken(
@@ -167,64 +382,37 @@ export class ChatStorage {
         return true;
       }
     }
-    // Check stored mappings
-    const all = await this.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
-    for (const [key, value] of all) {
-      const cid = key.slice(CLIENT_PREFIX.length);
-      if (cid !== excludeClientId && value.username === username) {
-        const expired = Date.now() - value.lastSeen > RESERVATION_DURATION_MS;
-        if (!expired) return true;
-      }
+    // Check stored mappings via SQL
+    const cutoff = this.toISOString(Date.now() - RESERVATION_DURATION_MS);
+    const cursor = this.storage.sql.exec<{ found: number }>(
+      `SELECT 1 AS found FROM clients WHERE username = ? AND client_id != ? AND last_seen_at >= ? LIMIT 1`,
+      username,
+      excludeClientId,
+      cutoff,
+    );
+    for (const _row of cursor) {
+      return true;
     }
     return false;
   }
 
   async cleanupExpiredClients(): Promise<void> {
-    const all = await this.storage.list<ClientMapping>({ prefix: CLIENT_PREFIX });
-    const expired: string[] = [];
-    const now = Date.now();
-    for (const [key, value] of all) {
-      if (now - value.lastSeen > RESERVATION_DURATION_MS) {
-        expired.push(key);
-      }
+    const cutoff = this.toISOString(Date.now() - RESERVATION_DURATION_MS);
+    try {
+      this.storage.sql.exec(`DELETE FROM clients WHERE last_seen_at < ?`, cutoff);
+    } catch (err) {
+      console.error("[storage] failed to cleanup expired clients:", err);
     }
-    if (expired.length > 0) await this.storage.delete(expired);
   }
 
-  // ── Private ────────────────────────────────────────────────────────
-
-  private pruneExpiredMessages(): void {
-    const cutoff = Date.now() - MESSAGE_RETENTION_MS;
-    this.messages = this.messages.filter((m) => m.timestamp >= cutoff);
-  }
-
-  private saveMessages(): void {
-    this.pruneExpiredMessages();
-    this.storage
-      .put(MESSAGES_KEY, this.messages)
-      .then(() => {
-        this._lastSaveError = null;
-      })
-      .catch((err) => {
-        this._lastSaveError = `messages: ${err}`;
-        console.error("[storage] failed to persist messages:", err);
-      });
-  }
-
-  private saveBlockedClients(): void {
-    const entries = [...this.blockedEntries.entries()].map(([clientId, info]) => ({
+  async hasClient(clientId: string): Promise<boolean> {
+    const cursor = this.storage.sql.exec<{ found: number }>(
+      `SELECT 1 AS found FROM clients WHERE client_id = ? LIMIT 1`,
       clientId,
-      username: info.username,
-      blockedAt: info.blockedAt,
-    }));
-    this.storage
-      .put(BLOCKED_CLIENTS_KEY, entries)
-      .then(() => {
-        this._lastSaveError = null;
-      })
-      .catch((err) => {
-        this._lastSaveError = `blockedClients: ${err}`;
-        console.error("[storage] failed to persist blocked clients:", err);
-      });
+    );
+    for (const _row of cursor) {
+      return true;
+    }
+    return false;
   }
 }
