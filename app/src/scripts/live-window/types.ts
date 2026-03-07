@@ -84,6 +84,8 @@ export interface LiveWindowState {
     currentGradient?: SkyGradient;
     /** True once celestial position data is reliable (weather fetched or no API). */
     celestialReady?: boolean;
+    /** Override timestamp set by playground controls; used by ClockComponent. */
+    nowOverride?: number;
   };
   /** Derived from web component attributes each cycle */
   attrs: {
@@ -94,6 +96,13 @@ export interface LiveWindowState {
     resolvedUnits: string;
     timezone: string | null;
     label: string | null;
+    // Override attributes (dev playground)
+    overrideTime: string | null;
+    overrideWeather: string | null;
+    overrideWeatherDescription: string | null;
+    overrideSunrise: string | null;
+    overrideSunset: string | null;
+    tickSpeed: number;
   };
 }
 

@@ -60,6 +60,12 @@ export function makeTestState(overrides?: {
       resolvedUnits: overrides?.resolvedUnits ?? "metric",
       timezone: overrides?.timezone ?? null,
       label: overrides?.label ?? null,
+      overrideTime: null,
+      overrideWeather: null,
+      overrideWeatherDescription: null,
+      overrideSunrise: null,
+      overrideSunset: null,
+      tickSpeed: 1,
     },
   };
 }

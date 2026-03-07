@@ -41,7 +41,11 @@ export class ClockComponent implements SceneComponent {
     let raw: number;
     let m: number;
 
-    if (state.attrs.timezone) {
+    if (state.ref.nowOverride != null) {
+      const d = new Date(state.ref.nowOverride);
+      raw = d.getHours();
+      m = d.getMinutes();
+    } else if (state.attrs.timezone) {
       const fmt = new Intl.DateTimeFormat("en-US", {
         timeZone: state.attrs.timezone,
         hour: "2-digit",

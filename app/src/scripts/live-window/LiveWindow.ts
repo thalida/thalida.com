@@ -24,6 +24,12 @@ class LiveWindowElement extends HTMLElement {
     "longitude",
     "timezone",
     "label",
+    "override-time",
+    "override-weather",
+    "override-weather-description",
+    "override-sunrise",
+    "override-sunset",
+    "tick-speed",
   ];
 
   private shadow: ShadowRoot;
@@ -39,6 +45,10 @@ class LiveWindowElement extends HTMLElement {
   private clockInterval: number | null = null;
   private skyInterval: number | null = null;
   private weatherInterval: number | null = null;
+
+  private virtualTime: number | null = null;
+  private virtualTimeAnchorReal: number | null = null;
+  private virtualTimePlaying = false;
 
   constructor() {
     super();
@@ -71,6 +81,19 @@ class LiveWindowElement extends HTMLElement {
 
   attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null) {
     if (oldVal === newVal) return;
+
+    if (
+      name === "override-time" ||
+      name === "override-weather" ||
+      name === "override-weather-description" ||
+      name === "override-sunrise" ||
+      name === "override-sunset" ||
+      name === "tick-speed"
+    ) {
+      this.refreshAttrs();
+      this.handleOverrideChange();
+      return;
+    }
 
     if (name === "time-format" || name === "hide-clock") {
       this.refreshAttrs();
@@ -143,6 +166,9 @@ class LiveWindowElement extends HTMLElement {
   // -- State ------------------------------------------------------------------
 
   private refreshAttrs() {
+    const tickSpeedRaw = this.getAttribute("tick-speed");
+    const tickSpeed = tickSpeedRaw ? Math.max(1, Math.min(1000, parseFloat(tickSpeedRaw))) : 1;
+
     this.state.attrs = {
       use12Hour: this.getAttribute("time-format") === "12",
       hideClock: this.hasAttribute("hide-clock"),
@@ -151,21 +177,71 @@ class LiveWindowElement extends HTMLElement {
       resolvedUnits: resolveUnits(this.getAttribute("temp-unit"), this.state.store.location.country),
       timezone: this.getAttribute("timezone") || this.state.store.location.timezone || null,
       label: this.getAttribute("label") || null,
+      overrideTime: this.getAttribute("override-time"),
+      overrideWeather: this.getAttribute("override-weather"),
+      overrideWeatherDescription: this.getAttribute("override-weather-description"),
+      overrideSunrise: this.getAttribute("override-sunrise"),
+      overrideSunset: this.getAttribute("override-sunset"),
+      tickSpeed,
     };
   }
 
   private refreshComputed() {
+    const { overrideWeather, overrideWeatherDescription, overrideSunrise, overrideSunset } = this.state.attrs;
     const tz = this.state.attrs.timezone;
-    const now = tz ? getTimezoneAdjustedNow(tz) : Date.now();
+    const now = this.getNow();
 
     let store = this.state.store;
-    if (tz && store.weather.sunrise != null && store.weather.sunset != null) {
+
+    // Apply sunrise/sunset overrides
+    const srOverride = overrideSunrise ? this.parseTimeToTimestamp(overrideSunrise) : null;
+    const ssOverride = overrideSunset ? this.parseTimeToTimestamp(overrideSunset) : null;
+    if (srOverride != null || ssOverride != null) {
+      store = {
+        ...store,
+        weather: {
+          ...store.weather,
+          sunrise: srOverride ?? store.weather.sunrise,
+          sunset: ssOverride ?? store.weather.sunset,
+        },
+      };
+    } else if (tz && store.weather.sunrise != null && store.weather.sunset != null) {
       store = {
         ...store,
         weather: {
           ...store.weather,
           sunrise: shiftTimestampToTimezone(store.weather.sunrise, tz),
           sunset: shiftTimestampToTimezone(store.weather.sunset, tz),
+        },
+      };
+    }
+
+    // Apply weather overrides
+    if (overrideWeather) {
+      const isDaytime = now >= (store.weather.sunrise ?? 0) && now <= (store.weather.sunset ?? 0);
+      const suffix = isDaytime ? "d" : "n";
+      const iconBase = overrideWeather.replace(/[dn]$/, "");
+      store = {
+        ...store,
+        weather: {
+          ...store.weather,
+          current: {
+            main: overrideWeather,
+            description: overrideWeatherDescription ?? "",
+            icon: iconBase + suffix,
+            temp: store.weather.current?.temp ?? 20,
+          },
+        },
+      };
+    } else if (overrideWeatherDescription && store.weather.current) {
+      store = {
+        ...store,
+        weather: {
+          ...store.weather,
+          current: {
+            ...store.weather.current,
+            description: overrideWeatherDescription,
+          },
         },
       };
     }
@@ -223,6 +299,8 @@ class LiveWindowElement extends HTMLElement {
 
   private updateClock() {
     this.refreshAttrs();
+    const now = this.getNow();
+    this.state.ref.nowOverride = this.hasAnyOverride() ? now : undefined;
     this.clockComponent.update(this.state);
     const tick = this.clockComponent.lastTick;
     if (tick) {
@@ -233,10 +311,95 @@ class LiveWindowElement extends HTMLElement {
   private updateAll() {
     this.refreshAttrs();
     this.refreshComputed();
+    const now = this.getNow();
+    this.state.ref.nowOverride = this.hasAnyOverride() ? now : undefined;
     for (const c of this.components) c.update(this.state);
   }
 
+  // -- Override / Virtual Clock -----------------------------------------------
+
+  /** Parse "HH:MM" into a timestamp for today at that time. */
+  private parseTimeToTimestamp(hhmm: string): number | null {
+    const match = hhmm.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return null;
+    const d = new Date();
+    d.setHours(parseInt(match[1], 10), parseInt(match[2], 10), 0, 0);
+    return d.getTime();
+  }
+
+  private handleOverrideChange() {
+    const { overrideTime, tickSpeed } = this.state.attrs;
+
+    if (tickSpeed > 1 && this.virtualTimePlaying) {
+      this.virtualTime = overrideTime ? (this.parseTimeToTimestamp(overrideTime) ?? Date.now()) : Date.now();
+      this.virtualTimeAnchorReal = Date.now();
+    } else if (overrideTime) {
+      this.virtualTime = this.parseTimeToTimestamp(overrideTime) ?? null;
+      this.virtualTimeAnchorReal = null;
+    } else {
+      this.virtualTime = null;
+      this.virtualTimeAnchorReal = null;
+    }
+
+    this.updateAll();
+  }
+
+  private hasAnyOverride(): boolean {
+    const a = this.state.attrs;
+    return !!(a.overrideTime || a.overrideWeather || a.overrideSunrise || a.overrideSunset || a.tickSpeed > 1);
+  }
+
+  /** Returns the effective "now" timestamp, accounting for overrides and virtual clock. */
+  private getNow(): number {
+    const { overrideTime, tickSpeed, timezone } = this.state.attrs;
+
+    // Virtual clock advancing
+    if (this.virtualTimePlaying && this.virtualTime != null && this.virtualTimeAnchorReal != null) {
+      const realElapsed = Date.now() - this.virtualTimeAnchorReal;
+      let vt = this.virtualTime + realElapsed * tickSpeed;
+
+      // Wrap past midnight back to 00:00 (same day)
+      const dayStart = new Date(this.virtualTime);
+      dayStart.setHours(0, 0, 0, 0);
+      const dayEnd = dayStart.getTime() + 24 * 60 * 60 * 1000;
+      if (vt >= dayEnd) {
+        vt = dayStart.getTime() + ((vt - dayStart.getTime()) % (24 * 60 * 60 * 1000));
+      }
+      return vt;
+    }
+
+    // Static override time
+    if (this.virtualTime != null) {
+      return this.virtualTime;
+    }
+
+    // Static override from attribute (not yet parsed by handleOverrideChange)
+    if (overrideTime) {
+      return this.parseTimeToTimestamp(overrideTime) ?? (timezone ? getTimezoneAdjustedNow(timezone) : Date.now());
+    }
+
+    // Normal real time
+    return timezone ? getTimezoneAdjustedNow(timezone) : Date.now();
+  }
+
   // -- Public API -------------------------------------------------------------
+
+  playVirtualClock(): void {
+    if (this.virtualTimePlaying) return;
+    this.virtualTimePlaying = true;
+    const { overrideTime } = this.state.attrs;
+    this.virtualTime = overrideTime
+      ? (this.parseTimeToTimestamp(overrideTime) ?? Date.now())
+      : (this.virtualTime ?? Date.now());
+    this.virtualTimeAnchorReal = Date.now();
+  }
+
+  pauseVirtualClock(): void {
+    if (!this.virtualTimePlaying) return;
+    this.virtualTime = this.getNow();
+    this.virtualTimeAnchorReal = null;
+    this.virtualTimePlaying = false;
+  }
 
   openBlinds(): void {
     this.blindsComponent.openBlinds();
