@@ -1,7 +1,7 @@
 import type { StoreState, LiveWindowState } from "./types";
 import { buildPhaseInfo } from "./utils/phase";
 
-export const CACHE_VERSION = 5;
+export const CACHE_VERSION = 6;
 const STORAGE_KEY = "liveWindowStore";
 
 export const DEFAULT_STORE: StoreState = {
