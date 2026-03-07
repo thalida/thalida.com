@@ -245,6 +245,33 @@
   }
 }
 
+@keyframes precipitate-light-wind {
+  from {
+    transform: translate3d(-3%, -50%, 0);
+  }
+  to {
+    transform: translate3d(3%, 0%, 0);
+  }
+}
+
+@keyframes precipitate-wind {
+  from {
+    transform: translate3d(-8%, -50%, 0);
+  }
+  to {
+    transform: translate3d(8%, 0%, 0);
+  }
+}
+
+@keyframes precipitate-strong-wind {
+  from {
+    transform: translate3d(-15%, -50%, 0);
+  }
+  to {
+    transform: translate3d(15%, 0%, 0);
+  }
+}
+
 @keyframes sway-sm {
   0% {
     transform: translateX(-2px);
@@ -283,50 +310,139 @@
 
 .weather .lightning {
   position: absolute;
-  top: 60px;
+  top: 0;
   left: 50%;
-  width: 50px;
-  height: 5px;
-  background: yellow;
-  border-radius: 10px;
-  animation: 2s linear infinite lightning-flash;
+  width: 3px;
+  height: 100%;
+  pointer-events: none;
+  filter: blur(0.5px);
 }
 
-@keyframes lightning-flash {
-  0% {
-    opacity: 1;
-  }
-  10% {
-    opacity: 0;
-  }
-  60% {
-    opacity: 1;
-  }
+/* Bolt shape via clip-path — jagged zigzag */
+.weather .lightning::before {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fffbe6;
+  clip-path: polygon(50% 0%, 35% 30%, 55% 32%, 30% 65%, 52% 67%, 25% 100%, 55% 60%, 38% 58%, 60% 28%, 42% 26%);
 }
 
-.weather .lightning::before,
+/* Glow behind the bolt */
 .weather .lightning::after {
   content: "";
   position: absolute;
-  width: 5px;
-  background: yellow;
-  border-radius: 10px;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 30%;
+  filter: blur(8px);
 }
 
-.weather .lightning::before {
+/* Distant: small, dim, slow */
+.weather .lightning-distant {
+  animation: lightning-flash-distant 4s linear infinite;
+}
+
+.weather .lightning-distant::before {
+  width: 12px;
+  height: 60px;
+}
+
+.weather .lightning-distant::after {
+  width: 20px;
+  height: 65px;
+  background: rgba(255, 255, 200, 0.15);
+}
+
+/* Standard: medium bolt with glow */
+.weather .lightning-standard {
+  animation: lightning-flash-standard 2.5s linear infinite;
+}
+
+.weather .lightning-standard::before {
+  width: 18px;
   height: 100px;
-  top: -94px;
-  left: -2px;
-  transform: rotateZ(35deg);
-  transform-origin: bottom right;
 }
 
-.weather .lightning::after {
-  height: 200px;
-  top: -1px;
-  right: -4px;
-  transform: rotateZ(35deg);
-  transform-origin: top left;
+.weather .lightning-standard::after {
+  width: 30px;
+  height: 105px;
+  background: rgba(255, 255, 200, 0.25);
+}
+
+/* Intense: large bolt, bright glow, fast double-flash */
+.weather .lightning-intense {
+  animation: lightning-flash-intense 1.5s linear infinite;
+}
+
+.weather .lightning-intense::before {
+  width: 24px;
+  height: 130px;
+}
+
+.weather .lightning-intense::after {
+  width: 40px;
+  height: 135px;
+  background: rgba(255, 255, 200, 0.35);
+}
+
+/* Secondary bolt offset for intense variant */
+.weather .lightning-secondary {
+  left: 25%;
+  animation-delay: -0.3s;
+  opacity: 0.7;
+}
+
+.weather .lightning-secondary::before {
+  width: 14px;
+  height: 80px;
+  top: 15%;
+}
+
+.weather .lightning-secondary::after {
+  width: 24px;
+  height: 85px;
+  top: 15%;
+}
+
+/* Lightning flash animations */
+@keyframes lightning-flash-distant {
+  0%,
+  8%,
+  100% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes lightning-flash-standard {
+  0%,
+  10%,
+  100% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+}
+
+@keyframes lightning-flash-intense {
+  0%,
+  8%,
+  16%,
+  100% {
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  12% {
+    opacity: 0.9;
+  }
 }
 
 /* Atmosphere */
@@ -360,6 +476,70 @@
   }
   100% {
     transform: translate(0%, 20%);
+  }
+}
+
+/* Atmosphere particles */
+
+.atmo-particle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(4px);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.atmo-float {
+  animation-name: atmo-float;
+  animation-direction: alternate;
+}
+
+.atmo-swirl {
+  animation-name: atmo-swirl;
+  filter: blur(1px);
+}
+
+.atmo-fall {
+  animation-name: atmo-fall;
+  animation-timing-function: linear;
+}
+
+@keyframes atmo-float {
+  0% {
+    transform: translate(-10%, 5%) scale(1);
+  }
+  50% {
+    transform: translate(10%, -5%) scale(1.1);
+  }
+  100% {
+    transform: translate(-10%, 5%) scale(1);
+  }
+}
+
+@keyframes atmo-swirl {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(15px, -10px) rotate(90deg);
+  }
+  50% {
+    transform: translate(-5px, 5px) rotate(180deg);
+  }
+  75% {
+    transform: translate(10px, 10px) rotate(270deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes atmo-fall {
+  0% {
+    transform: translate(-5px, -20%);
+  }
+  100% {
+    transform: translate(5px, 100%);
   }
 }
 

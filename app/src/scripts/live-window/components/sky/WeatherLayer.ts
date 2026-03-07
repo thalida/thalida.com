@@ -661,6 +661,38 @@ export class WeatherLayer implements SceneComponent {
     return out;
   }
 
+  /** Generate atmosphere particles (mist wisps, dust, ash, etc.) with deterministic placement. */
+  static atmosphereParticleHTML(config: AtmosphereParticleConfig): string {
+    const sRange = config.sizeRange[1] - config.sizeRange[0];
+    const opRange = config.opacityRange[1] - config.opacityRange[0];
+
+    let out = "";
+    for (let i = 0; i < config.count; i++) {
+      const h = ((i + 1) * 2654435761) >>> 0;
+      const left = h % 100;
+      const top = ((h >>> 8) ^ (i * 37)) % 80;
+      const size = config.sizeRange[0] + (h % (sRange + 1));
+      const opacity = (config.opacityRange[0] + ((h >>> 4) % (opRange + 1))) / 100;
+      const dur = parseFloat(config.speed) + ((h >>> 12) % 30) / 10;
+      const delay = -((h >>> 16) % 80) / 10;
+
+      out += `<div class="atmo-particle atmo-${config.drift}" style="left:${left}%;top:${top}%;width:${size}px;height:${size}px;opacity:${opacity};background:${config.color};animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></div>`;
+    }
+    return out;
+  }
+
+  /** Generate lightning bolt HTML based on variant intensity. */
+  static lightningHTML(variant: LightningVariant): string {
+    switch (variant) {
+      case "distant":
+        return '<div class="lightning lightning-distant"></div>';
+      case "intense":
+        return '<div class="lightning lightning-intense"></div><div class="lightning lightning-intense lightning-secondary"></div>';
+      default:
+        return '<div class="lightning lightning-standard"></div>';
+    }
+  }
+
   mount(container: HTMLElement): void {
     this.el = container;
     this.el.className = "sky-layer weather";
@@ -702,7 +734,7 @@ export class WeatherLayer implements SceneComponent {
 
     // Lightning
     if (config.lightning) {
-      html += '<div class="lightning"></div>';
+      html += WeatherLayer.lightningHTML(config.lightning);
     }
 
     // Atmosphere
@@ -715,13 +747,27 @@ export class WeatherLayer implements SceneComponent {
       }
     }
 
+    // Atmosphere particles
+    if (config.atmosphereParticles) {
+      html += WeatherLayer.atmosphereParticleHTML(config.atmosphereParticles);
+    }
+
     // Precipitation layers
+    const precipAnim =
+      config.wind === "strong"
+        ? "precipitate-strong-wind"
+        : config.wind === "moderate"
+          ? "precipitate-wind"
+          : config.wind === "light"
+            ? "precipitate-light-wind"
+            : "precipitate";
+
     for (const precipLayer of config.precip) {
       const precipConfig = PRECIP_CONFIG[precipLayer.type];
       if (!precipConfig) continue;
       const count = Math.round(precipConfig.count * precipLayer.intensityScale);
       const particles = WeatherLayer.particleHTML(precipConfig, count);
-      html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed}">`;
+      html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed};animation-name:${precipAnim}">`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += "</div>";
