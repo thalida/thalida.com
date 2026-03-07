@@ -3,28 +3,32 @@ title: thisisalso.me
 description: A site to house ideas and notes, made for me by me. External consumption welcome, but not my primary focus.
 publishedOn: 2019-03-23
 tags: [blog, experiment, python, quill.js]
-coverImage: thisisalsome/Screen_Shot_2022-02-20_at_18.06.51.png
-coverImageAlt: A screenshot of the thisisalso.me website, showing a collection of notes
+coverImage: thisisalsome/notes-dashboard.png
+coverImageAlt: thisisalso.me dashboard showing a grid of colorful note cards for projects like Scroller, unpack, Drive Templates, Slack Logging, and revibed
 category: website
 ---
 
-![Screen Shot 2022-02-20 at 18.06.51.png](thisisalsome/Screen_Shot_2022-02-20_at_18.06.51.png)
+![thisisalso.me dashboard showing colorful note cards for various projects organized in a grid](thisisalsome/notes-dashboard.png)
 
 | Links                                                |                                     |
 | ---------------------------------------------------- | ----------------------------------- |
 | [Github →](https://github.com/thalida/thisisalso.me) | [Website →](https://thisisalso.me/) |
 
-## 🧠🌩️ Brainstorm
+
+## Brainstorm
+
 
 ## Screenshots
 
-![Screen Shot 2022-02-20 at 18.06.51.png](thisisalsome/Screen_Shot_2022-02-20_at_18.06.51.png)
+![thisisalso.me dashboard with project note cards in a colorful grid layout](thisisalsome/notes-dashboard.png)
 
-![Screen Shot 2022-02-20 at 18.13.38.png](thisisalsome/Screen_Shot_2022-02-20_at_18.13.38.png)
+![Write mode editor with empty text area, rich text toolbar, and color palette options](thisisalsome/write-editor-empty.png)
 
-![Screen Shot 2022-02-20 at 18.12.36.png](thisisalsome/Screen_Shot_2022-02-20_at_18.12.36.png)
+![Rich text editor toolbar showing heading, formatting, media, list, alignment, and color options](thisisalsome/editor-toolbar.png)
 
-## 🎨 Design
+
+## Design
+
 
 ### Inspiration
 

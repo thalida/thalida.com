@@ -4,23 +4,25 @@ description: A 9x9 Tic Tac Toe Game
 publishedOn: 2017-12-26
 updatedOn: 2017-12-26
 tags: [game, vue]
-coverImage: tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png
-coverImageAlt: A screenshot of the Tic-Tac-Toe Cubed game
+coverImage: tictactoe-cubed/gameplay-in-progress.png
+coverImageAlt: Tic-Tac-Toe Cubed game mid-match showing a 9x9 grid with X and O pieces, an active center sub-grid highlighted in orange, and O's turn indicator
 category: game
 ---
 
-![Screen Shot 2022-02-20 at 16.55.40.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40.png)
+![Tic-Tac-Toe Cubed 9x9 grid mid-game with X and O pieces and highlighted active sub-grid](tictactoe-cubed/gameplay-in-progress.png)
 
 | Links                                                 |                                                        |
 | ----------------------------------------------------- | ------------------------------------------------------ |
 | [Github →](https://github.com/thalida/TicTacToeCubed) | [Website →](http://thalida.github.io/tictactoe-cubed/) |
 
-## ✅ ToDo
+
+## ToDo
 
 - [ ] Remake using svelte
 
+
 ## Iterations
 
-![Screen Shot 2022-02-20 at 16.55.40.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.55.40%201.png)
+![Tic-Tac-Toe Cubed alternate view of 9x9 grid gameplay with pieces placed across sub-grids](tictactoe-cubed/gameplay-in-progress-alt.png)
 
-![Screen Shot 2022-02-20 at 16.58.57.png](tictactoe-cubed/Screen_Shot_2022-02-20_at_16.58.57.png)
+![Tic-Tic-Toe Cubed lobby showing empty grid, waiting to start, with player names JasonKing20 as X and Thalida Noel as O](tictactoe-cubed/lobby-waiting.png)
