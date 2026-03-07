@@ -1,22 +1,22 @@
 ---
 title: Design Trends
 description: A collection of design trends and inspirations from various sources.
-coverImage: design-trends/628F8A28-14EB-4319-A350-14674058490D.jpeg
-coverImageAlt: A collection of design trends and inspirations from various sources.
+coverImage: design-trends/design-trends-moss-creative-desktop.jpeg
+coverImageAlt: Moss creative workspace landing page featuring colorful header bar and call-to-action to join waitlist
 publishedOn: 2022-02-01
 category: design
 ---
 
 ## 2022
 
-![628F8A28-14EB-4319-A350-14674058490D.jpeg](design-trends/628F8A28-14EB-4319-A350-14674058490D.jpeg)
+![Moss creative workspace landing page featuring colorful header bar and call-to-action to join waitlist](design-trends/design-trends-moss-creative-desktop.jpeg)
 
 [Moss | Where ideas grow](https://mossworkspace.com/)
 
-![5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg](design-trends/5DB19519-EEB8-4ADB-BB7E-6802E0A1B0E6.jpeg)
+![Sunroom app design featuring floral archway portal in desert with branding and social media links](design-trends/design-trends-sunroom-app.jpeg)
 
 [Home - Sunroom](https://sunroom.so/)
 
-![3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg](design-trends/3BB80C54-C2F0-4EBB-9A75-72A960B248FC.jpeg)
+![Volv app interface showing retro television with colorful gradient display and future of media messaging](design-trends/design-trends-volv-future-media.jpeg)
 
 [Welcome to the world of Volv](https://volvmedia.com/)
