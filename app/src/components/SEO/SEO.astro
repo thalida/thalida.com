@@ -29,7 +29,7 @@ const {
 
 const siteUrl = Astro.url.origin;
 const canonicalUrl = Astro.props.url ?? new URL(Astro.url.pathname, siteUrl).toString();
-const ogImage = image ?? `${siteUrl}/card-1200x630.png`;
+const ogImage = image ?? `${siteUrl}/meta/og-card-1200x630.png`;
 ---
 
 {/* Basic meta */}
@@ -64,8 +64,8 @@ const ogImage = image ?? `${siteUrl}/card-1200x630.png`;
 
 {/* Favicons */}
 <link rel="icon" href="/favicon.ico" sizes="32x32" />
-<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="icon" href="/meta/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/meta/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
 
 {/* Sitemap */}
