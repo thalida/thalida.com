@@ -105,13 +105,6 @@ if (import.meta.env.PROD) {
       <fieldset class="control-group">
         <legend>Display</legend>
         <div class="control-row">
-          <label for="theme-toggle">Theme</label>
-          <select id="theme-toggle">
-            <option value="dark" selected>Dark</option>
-            <option value="">Light</option>
-          </select>
-        </div>
-        <div class="control-row">
           <label for="clock-toggle">Clock</label>
           <select id="clock-toggle">
             <option value="show" selected>Show</option>
@@ -123,20 +116,6 @@ if (import.meta.env.PROD) {
           <select id="format-toggle">
             <option value="24" selected>24h</option>
             <option value="12">12h</option>
-          </select>
-        </div>
-        <div class="control-row">
-          <label for="weather-text-toggle">Weather text</label>
-          <select id="weather-text-toggle">
-            <option value="show" selected>Show</option>
-            <option value="hide">Hide</option>
-          </select>
-        </div>
-        <div class="control-row">
-          <label for="temp-toggle">Temp unit</label>
-          <select id="temp-toggle">
-            <option value="C" selected>°C</option>
-            <option value="F">°F</option>
           </select>
         </div>
       </fieldset>
@@ -161,11 +140,8 @@ if (import.meta.env.PROD) {
     const intensitySelect = document.getElementById("intensity-select") as HTMLSelectElement;
     const sunriseInput = document.getElementById("sunrise-input") as HTMLInputElement;
     const sunsetInput = document.getElementById("sunset-input") as HTMLInputElement;
-    const themeToggle = document.getElementById("theme-toggle") as HTMLSelectElement;
     const clockToggle = document.getElementById("clock-toggle") as HTMLSelectElement;
     const formatToggle = document.getElementById("format-toggle") as HTMLSelectElement;
-    const weatherTextToggle = document.getElementById("weather-text-toggle") as HTMLSelectElement;
-    const tempToggle = document.getElementById("temp-toggle") as HTMLSelectElement;
     const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
 
     // -- Time controls --
@@ -270,14 +246,6 @@ if (import.meta.env.PROD) {
 
     // -- Display controls --
 
-    themeToggle.addEventListener("change", () => {
-      if (themeToggle.value) {
-        win.setAttribute("theme", themeToggle.value);
-      } else {
-        win.removeAttribute("theme");
-      }
-    });
-
     clockToggle.addEventListener("change", () => {
       if (clockToggle.value === "hide") {
         win.setAttribute("hide-clock", "");
@@ -292,18 +260,6 @@ if (import.meta.env.PROD) {
       } else {
         win.removeAttribute("time-format");
       }
-    });
-
-    weatherTextToggle.addEventListener("change", () => {
-      if (weatherTextToggle.value === "hide") {
-        win.setAttribute("hide-weather-text", "");
-      } else {
-        win.removeAttribute("hide-weather-text");
-      }
-    });
-
-    tempToggle.addEventListener("change", () => {
-      win.setAttribute("temp-unit", tempToggle.value);
     });
 
     // -- Reset --
@@ -326,16 +282,10 @@ if (import.meta.env.PROD) {
       win.setAttribute("override-sunrise", "06:00");
       win.setAttribute("override-sunset", "18:00");
 
-      themeToggle.value = "dark";
-      win.setAttribute("theme", "dark");
       clockToggle.value = "show";
       win.removeAttribute("hide-clock");
       formatToggle.value = "24";
       win.removeAttribute("time-format");
-      weatherTextToggle.value = "show";
-      win.removeAttribute("hide-weather-text");
-      tempToggle.value = "C";
-      win.setAttribute("temp-unit", "C");
     });
 
     // Initialize at noon
