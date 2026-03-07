@@ -371,11 +371,28 @@
   pointer-events: none;
 }
 
-/* Weather-type overrides */
+/* Cloud color by density × time-of-day */
 
-.weather-11d .cloud,
-.weather-11n .cloud {
-  background: rgb(50, 55, 72);
+/* Day: light/medium = white (default), heavy = cool gray, storm = dark slate */
+.weather-clouds-heavy .cloud {
+  background: #c5c9d6;
+}
+
+.weather-clouds-storm .cloud {
+  background: #585e78;
+}
+
+/* Night: silver-blue → deep blue-gray → near-indigo */
+.weather-night .cloud {
+  background: #6a7292;
+}
+
+.weather-night.weather-clouds-heavy .cloud {
+  background: #404862;
+}
+
+.weather-night.weather-clouds-storm .cloud {
+  background: #252b48;
 }
 
 /* Snow accumulation */
@@ -622,6 +639,8 @@
   margin: 0;
   letter-spacing: 0.06em;
   text-transform: var(--info-panel-weather-transform, uppercase);
+  text-align: center;
+  white-space: nowrap;
 }
 
 .info-panel-location {

@@ -418,7 +418,11 @@ export class WeatherLayer implements SceneComponent {
     const config = WEATHER_EFFECTS[weatherId];
     const icon = state.computed.phase.weather.icon;
     let cls = "sky-layer weather";
-    if (icon) cls += ` weather-${icon}`;
+    if (icon) {
+      cls += ` weather-${icon}`;
+      if (icon.endsWith("n")) cls += " weather-night";
+    }
+    if (config.clouds !== "none") cls += ` weather-clouds-${config.clouds}`;
     this.el.className = cls;
 
     let html = "";
