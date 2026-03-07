@@ -1,7 +1,7 @@
 import type { SceneComponent, LiveWindowState, RGB } from "../../types";
 import { getSunAngle, getMoonPhase, getMoonAngle, getArcPosition } from "../../utils/celestial";
 import { lerpColor } from "../../utils/color";
-import { getDefaultSunTimes } from "../../utils/sky-gradient";
+import { getSunTimesWithDefaults } from "../../utils/sky-gradient";
 
 /** Moon diameter in px — set on .moon via --moon-diameter CSS custom property. */
 const MOON_DIAMETER = 22;
@@ -27,9 +27,7 @@ export class MoonLayer implements SceneComponent {
     if (!this.el) return;
 
     const { sunrise, sunset, now } = state.computed.phase;
-    const defaults = getDefaultSunTimes();
-    const sr = sunrise ?? defaults.sunrise;
-    const ss = sunset ?? defaults.sunset;
+    const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(sunrise, sunset);
 
     const sunAngle = getSunAngle(now, sr, ss);
     const realMoonPhase = getMoonPhase(now);

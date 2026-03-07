@@ -177,6 +177,20 @@ export function getDefaultSunTimes(): { sunrise: number; sunset: number } {
 }
 
 /**
+ * Returns sunrise/sunset timestamps with fallback to defaults.
+ * Consolidates the null-check-and-fallback pattern used by multiple consumers.
+ */
+export function getSunTimesWithDefaults(
+  sunrise: number | null | undefined,
+  sunset: number | null | undefined,
+): { sunrise: number; sunset: number } {
+  if (sunrise != null && sunset != null) {
+    return { sunrise, sunset };
+  }
+  return getDefaultSunTimes();
+}
+
+/**
  * Calculates the timestamp for each of the 16 sky phases based on
  * sunrise and sunset times.
  *
@@ -301,14 +315,7 @@ export function lerpGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGrad
  * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
  */
 export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
-  let sr = sunrise;
-  let ss = sunset;
-  if (sr == null || ss == null) {
-    const defaults = getDefaultSunTimes();
-    sr = defaults.sunrise;
-    ss = defaults.sunset;
-  }
-
+  const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(sunrise, sunset);
   const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
   return lerpGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
 }

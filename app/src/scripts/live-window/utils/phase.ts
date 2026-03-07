@@ -1,5 +1,5 @@
 import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "../types";
-import { getDefaultSunTimes, findPhasePosition } from "./sky-gradient";
+import { getSunTimesWithDefaults, findPhasePosition } from "./sky-gradient";
 
 const MAX_SUN_ALTITUDE = 90;
 const AZIMUTH_EAST = 90;
@@ -25,13 +25,7 @@ export function calculateSunPosition(now: number, sunrise: number, sunset: numbe
 }
 
 export function buildPhaseInfo(state: StoreState, now: number): PhaseInfo {
-  let sr = state.weather.sunrise;
-  let ss = state.weather.sunset;
-  if (sr == null || ss == null) {
-    const defaults = getDefaultSunTimes();
-    sr = defaults.sunrise;
-    ss = defaults.sunset;
-  }
+  const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(state.weather.sunrise, state.weather.sunset);
 
   const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
 
