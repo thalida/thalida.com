@@ -10,7 +10,8 @@ const OPEN_SWING_DEG = 75;
 const OPEN_SWING_STEP = 5;
 const OPEN_SPEED_MS = 150;
 
-// Open animation: final settled position (randomized per open)
+// Final collapse ratio: between MIN_COLLAPSE_RATIO and MIN_COLLAPSE_RATIO + COLLAPSE_RATIO_RANGE
+// (e.g., 0.7 to 0.95 = 70–95% of blinds collapse upward when opened)
 const MIN_COLLAPSE_RATIO = 0.7;
 const COLLAPSE_RATIO_RANGE = 0.25;
 const MIN_SKEW_DEG = 2;
@@ -159,6 +160,8 @@ export class BlindsComponent implements SceneComponent {
       <div class="rod"></div>
     `;
 
+    // Double requestAnimationFrame ensures the browser has fully computed layout
+    // before we measure element positions for the string height calculation
     requestAnimationFrame(() => requestAnimationFrame(() => this.updateStrings()));
   }
 
@@ -214,14 +217,22 @@ export class BlindsComponent implements SceneComponent {
     });
   }
 
+  /**
+   * Compute the skew + rotation transform for an individual open blind slat.
+   * The total skew is distributed linearly across open blinds, creating a
+   * perspective-like fan effect. blindIndex counts from the top (0 = topmost open slat).
+   */
   private getSkewAndRotateTransform(blindIndex: number): string {
     const state = this.blindsState;
+    // Count from bottom: currBlind = 1 for the bottom slat
     const currBlind = NUM_BLINDS - blindIndex;
     const numOpen = NUM_BLINDS - state.numBlindsCollapsed;
+    // Each open slat gets an equal fraction of the total skew
     const skewSteps = numOpen > 0 ? state.blindsSkewDeg / numOpen : 0;
 
     let skewDeg = 0;
     if (state.skewDirection !== 0 && state.blindsSkewDeg >= 0) {
+      // Linearly distribute skew: topmost open slat gets full skew, bottom gets zero
       skewDeg = state.blindsSkewDeg - (currBlind - state.numBlindsCollapsed - 1) * skewSteps;
     }
 
@@ -233,6 +244,7 @@ export class BlindsComponent implements SceneComponent {
     const state = this.blindsState;
     let skewDeg = 0;
     if (state.skewDirection !== 0 && state.blindsSkewDeg >= 0) {
+      // Collapsed group and slat bar sit at the midpoint of the total skew
       skewDeg = state.blindsSkewDeg / 2;
     }
     return `skewY(${skewDeg * state.skewDirection}deg)`;

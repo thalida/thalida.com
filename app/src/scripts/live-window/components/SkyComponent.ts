@@ -6,6 +6,8 @@ import { MoonLayer } from "./sky/MoonLayer";
 import { WeatherLayer } from "./sky/WeatherLayer";
 
 export class SkyComponent implements SceneComponent {
+  // Order matters: GradientLayer must be first because it writes state.ref.currentGradient,
+  // which MoonLayer and WeatherLayer read during the same update cycle.
   private children: SceneComponent[] = [
     new GradientLayer(),
     new StarsLayer(),
