@@ -17,7 +17,7 @@ This was my first time using the multicolor 3D printer, and I was really happy w
 
 <div class="flex flex-col items-center justify-center">
   <video width="320" height="240" controls>
-    <source src="/content/projects/homer-bathroom/IMG_2810.MOV" type="video/mp4">
+    <source src="/content/projects/homer-bathroom/bathroom-reveal.mov" type="video/mp4">
   </video>
 </div>
 
