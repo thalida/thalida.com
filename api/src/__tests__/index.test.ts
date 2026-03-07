@@ -217,7 +217,7 @@ describe("Worker routing", () => {
         .get("https://api.openweathermap.org")
         .intercept({ path: /\/data\/2\.5\/weather/ })
         .reply(200, {
-          weather: [{ main: "Clear", description: "clear sky", icon: "01d" }],
+          weather: [{ id: 800, main: "Clear", description: "clear sky", icon: "01d" }],
           main: { temp: 22.5 },
           sys: { sunrise: 1700000000, sunset: 1700040000 },
         });
@@ -226,6 +226,7 @@ describe("Worker routing", () => {
       expect(resp.status).toBe(200);
       const body = (await resp.json()) as Record<string, unknown>;
       expect(body).toMatchObject({
+        id: 800,
         main: "Clear",
         description: "clear sky",
         icon: "01d",

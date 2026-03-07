@@ -89,13 +89,14 @@ export async function handleWeather(
     }
 
     const data = (await res.json()) as {
-      weather?: Array<{ main?: string; description?: string; icon?: string }>;
+      weather?: Array<{ id?: number; main?: string; description?: string; icon?: string }>;
       main?: { temp?: number };
       sys?: { sunrise?: number; sunset?: number };
     };
 
     return jsonResponse(
       {
+        id: data.weather?.[0]?.id ?? null,
         main: data.weather?.[0]?.main ?? null,
         description: data.weather?.[0]?.description ?? null,
         icon: data.weather?.[0]?.icon ?? null,
