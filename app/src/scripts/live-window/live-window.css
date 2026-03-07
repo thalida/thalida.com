@@ -451,11 +451,11 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 120%;
+  width: 100%;
   filter: blur(12px);
   border-radius: 40% 40% 0 0;
-  animation: 5s linear infinite alternate atmosphere-roll;
-  transform: translate(0, 0);
+  animation: 6s ease-in-out infinite alternate atmosphere-pulse;
+  transform-origin: center bottom;
 }
 
 .weather .atmosphere-lg {
@@ -470,12 +470,14 @@
   height: 0;
 }
 
-@keyframes atmosphere-roll {
+@keyframes atmosphere-pulse {
   0% {
-    transform: translate(-20%, 0%);
+    transform: scale(1);
+    opacity: var(--atmo-opacity);
   }
   100% {
-    transform: translate(0%, 20%);
+    transform: scale(1.05);
+    opacity: calc(var(--atmo-opacity) * 0.9);
   }
 }
 

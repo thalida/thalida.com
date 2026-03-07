@@ -761,7 +761,7 @@ export class WeatherLayer implements SceneComponent {
       const sizes = ["lg", "md", "sm"];
       for (let i = 0; i < layers; i++) {
         const size = sizes[i] ?? "sm";
-        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:linear-gradient(to top, ${color}, transparent);opacity:${opacity}"></div>`;
+        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:linear-gradient(to top, ${color}, transparent);--atmo-opacity:${opacity};opacity:${opacity}"></div>`;
       }
     }
 
