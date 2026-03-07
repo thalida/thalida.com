@@ -449,7 +449,7 @@ export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   761: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust, atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl }),
   762: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.volcanicAsh, atmosphereParticles: ATMO_PARTICLE_CONFIG.ashFall }),
   771: fx("heavy", [p("heavyRain")], { atmosphere: ATMOSPHERE_CONFIG.squalls, wind: "strong" }),
-  781: fx("storm", [p("extremeRain")], {
+  781: fx("storm", [p("heavyRain")], {
     atmosphere: ATMOSPHERE_CONFIG.tornado,
     wind: "strong",
     atmosphereParticles: ATMO_PARTICLE_CONFIG.debrisSwirl,
