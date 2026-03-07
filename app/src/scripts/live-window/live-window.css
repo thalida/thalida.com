@@ -291,66 +291,64 @@
 /* Precipitation */
 
 .weather .droplets {
-  display: flex;
-  flex-flow: column nowrap;
   position: absolute;
-  left: -25%;
-  top: -100%;
-  width: 150%;
-  height: 300%;
-  transform: rotateZ(-45deg) translate(0%, -48%);
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 200%;
+  transform: translateY(-50%);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-name: precipitate;
 }
 
 .weather .droplets-half {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-evenly;
+  position: relative;
   width: 100%;
-  flex: 0 0 50%;
+  height: 50%;
 }
 
 @keyframes precipitate {
   0% {
-    transform: rotateZ(-45deg) translate(0%, -48%);
+    transform: translateY(-50%);
   }
   100% {
-    transform: rotateZ(-45deg) translate(0%, 2%);
+    transform: translateY(0%);
   }
 }
 
-.weather .droplet-row {
-  width: 100%;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
-  margin: 5% 0;
+@keyframes sway-sm {
+  0% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(2px);
+  }
 }
 
-.weather .droplet {
-  display: block;
-  flex-shrink: 0;
+@keyframes sway {
+  0% {
+    transform: translateX(-4px);
+  }
+  100% {
+    transform: translateX(4px);
+  }
 }
 
-.weather .droplet-1 {
-  margin: 1% 10%;
+@keyframes sway-lg {
+  0% {
+    transform: translateX(-7px);
+  }
+  100% {
+    transform: translateX(7px);
+  }
 }
-.weather .droplet-2 {
-  margin: 2% 10%;
-}
-.weather .droplet-3 {
-  margin: 3% 10%;
-}
-.weather .droplet-4 {
-  margin: 4% 10%;
-}
-.weather .droplet-5 {
-  margin: 5% 10%;
-}
-.weather .droplet-6 {
-  margin: 6% 10%;
+
+.particle {
+  position: absolute;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 /* Lightning */
@@ -451,38 +449,11 @@
   right: 20%;
 }
 
-.weather-09d .droplets,
-.weather-09n .droplets {
-  animation-duration: 6s;
-}
-
-.weather-09d .droplet,
-.weather-09n .droplet {
-  width: 3px;
-  height: 9px;
-  background: #28afff;
-  border-radius: 3px;
-  opacity: 0.7;
-}
-
 .weather-10d .cloud-md,
 .weather-10n .cloud-md {
   top: 40%;
   left: 10%;
   right: unset;
-}
-
-.weather-10d .droplets,
-.weather-10n .droplets {
-  animation-duration: 2s;
-}
-
-.weather-10d .droplet,
-.weather-10n .droplet {
-  width: 4px;
-  height: 9px;
-  background: #28afff;
-  border-radius: 3px;
 }
 
 .weather-11d .cloud,
@@ -513,32 +484,6 @@
   top: -10%;
   left: 10%;
   right: unset;
-}
-
-.weather-11d .droplets,
-.weather-11n .droplets {
-  animation-duration: 3s;
-}
-
-.weather-11d .droplet,
-.weather-11n .droplet {
-  width: 4px;
-  height: 9px;
-  background: #28afff;
-  border-radius: 3px;
-}
-
-.weather-13d .droplets,
-.weather-13n .droplets {
-  animation-duration: 6s;
-}
-
-.weather-13d .droplet,
-.weather-13n .droplet {
-  width: 6px;
-  height: 6px;
-  background: #fff;
-  border-radius: 50%;
 }
 
 /* Snow accumulation */

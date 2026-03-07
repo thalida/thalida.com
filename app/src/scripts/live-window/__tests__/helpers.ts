@@ -51,7 +51,7 @@ export function makeTestState(overrides?: {
   return {
     store,
     computed: { phase: buildPhaseInfo(store, now.getTime()) },
-    ref: {},
+    ref: { celestialReady: true },
     attrs: {
       use12Hour: overrides?.use12Hour ?? false,
       hideClock: overrides?.hideClock ?? false,

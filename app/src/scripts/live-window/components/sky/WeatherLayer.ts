@@ -24,8 +24,124 @@ export const ICON_WEATHER_MAP: Record<string, string[]> = {
   "50n": ["mist"],
 };
 
+const SWAY_NAMES = ["sway-sm", "sway", "sway-lg"] as const;
+
+export interface PrecipConfig {
+  count: number;
+  /** CSS animation-duration for the falling container */
+  fallSpeed: string;
+  /** round = circle (snow/sleet), drop = elongated raindrop */
+  shape: "round" | "drop";
+  /** Width range [min, max] in px */
+  sizeW: [number, number];
+  /** Height = width × aspectRatio (1 for round, >1 for elongated) */
+  aspectRatio: number;
+  color: string;
+  /** Opacity range [min, max] as 0–100 integers */
+  opacityRange: [number, number];
+  /** Whether particles sway side-to-side */
+  hasSway: boolean;
+}
+
+export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
+  lightRain: {
+    count: 28,
+    fallSpeed: "6s",
+    shape: "drop",
+    sizeW: [2, 3],
+    aspectRatio: 3,
+    color: "#28afff",
+    opacityRange: [50, 70],
+    hasSway: false,
+  },
+  rain: {
+    count: 35,
+    fallSpeed: "2s",
+    shape: "drop",
+    sizeW: [3, 4],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [70, 100],
+    hasSway: false,
+  },
+  thunderstorm: {
+    count: 40,
+    fallSpeed: "3s",
+    shape: "drop",
+    sizeW: [3, 4],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [70, 100],
+    hasSway: false,
+  },
+  snow: {
+    count: 32,
+    fallSpeed: "6s",
+    shape: "round",
+    sizeW: [3, 7],
+    aspectRatio: 1,
+    color: "#fff",
+    opacityRange: [50, 100],
+    hasSway: true,
+  },
+  sleet: {
+    count: 30,
+    fallSpeed: "5s",
+    shape: "round",
+    sizeW: [3, 6],
+    aspectRatio: 1,
+    color: "#a0cfff",
+    opacityRange: [50, 90],
+    hasSway: true,
+  },
+};
+
+/**
+ * Derive a particle-count multiplier from the OWM description.
+ * Descriptions include intensity words like "light rain", "heavy snow",
+ * "very heavy rain", "extreme rain" — we scale particle density accordingly.
+ */
+export function intensityMultiplier(description: string): number {
+  const d = description.toLowerCase();
+  if (d.includes("extreme")) return 1.8;
+  if (d.includes("very heavy")) return 1.6;
+  if (d.includes("heavy")) return 1.4;
+  if (d.includes("light")) return 0.6;
+  return 1.0;
+}
+
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
+
+  /** Generate scattered particles with deterministic pseudo-random placement. */
+  static particleHTML(config: PrecipConfig, count?: number): string {
+    const n = count ?? config.count;
+    const wRange = config.sizeW[1] - config.sizeW[0];
+    const opRange = config.opacityRange[1] - config.opacityRange[0];
+    const radius = config.shape === "round" ? "50%" : "40%";
+
+    let out = "";
+    for (let i = 0; i < n; i++) {
+      // Deterministic hash per index (Knuth multiplicative)
+      const h = ((i + 1) * 2654435761) >>> 0;
+      const left = h % 100;
+      const top = ((h >>> 8) ^ (i * 37)) % 100;
+      const w = config.sizeW[0] + (h % (wRange + 1));
+      const height = Math.round(w * config.aspectRatio);
+      const opacity = (config.opacityRange[0] + ((h >>> 4) % (opRange + 1))) / 100;
+
+      let animStyle = "";
+      if (config.hasSway) {
+        const sway = SWAY_NAMES[i % 3];
+        const dur = (2 + ((h >>> 12) % 18) / 10).toFixed(1);
+        const delay = (-((h >>> 16) % 40) / 10).toFixed(1);
+        animStyle = `animation-name:${sway};animation-duration:${dur}s;animation-delay:${delay}s`;
+      }
+
+      out += `<div class="particle" style="left:${left}%;top:${top}%;width:${w}px;height:${height}px;opacity:${opacity};background:${config.color};border-radius:${radius};${animStyle}"></div>`;
+    }
+    return out;
+  }
 
   mount(container: HTMLElement): void {
     this.el = container;
@@ -35,7 +151,12 @@ export class WeatherLayer implements SceneComponent {
   update(state: LiveWindowState): void {
     if (!this.el) return;
     const icon = state.computed.phase.weather.icon;
-    this.el.className = "sky-layer weather" + (icon ? ` weather-${icon}` : "");
+    const desc = (state.computed.phase.weather.description ?? "").toLowerCase();
+    const isSleet = icon?.startsWith("13") && (desc.includes("sleet") || desc.includes("rain and snow"));
+
+    let cls = "sky-layer weather";
+    if (icon) cls += ` weather-${icon}`;
+    this.el.className = cls;
 
     if (!icon) {
       this.el.innerHTML = "";
@@ -44,7 +165,13 @@ export class WeatherLayer implements SceneComponent {
 
     const effects = ICON_WEATHER_MAP[icon] ?? [];
     const has = (k: string) => effects.includes(k);
-    const showDroplets = has("lightRain") || has("rain") || has("thunderstorm") || has("snow");
+
+    // Determine precipitation type from effects + weather description
+    let precipToken: string | null = null;
+    if (has("lightRain")) precipToken = "lightRain";
+    else if (has("rain")) precipToken = "rain";
+    else if (has("thunderstorm")) precipToken = "thunderstorm";
+    else if (has("snow")) precipToken = isSleet ? "sleet" : "snow";
 
     let html = "";
     if (has("cloudLg")) html += '<div class="cloud cloud-lg"></div>';
@@ -54,19 +181,13 @@ export class WeatherLayer implements SceneComponent {
     if (has("mist")) {
       html += '<div class="mist mist-lg"></div><div class="mist mist-md"></div><div class="mist mist-sm"></div>';
     }
-    if (showDroplets) {
-      html += '<div class="droplets">';
-      for (let h = 0; h < 2; h++) {
-        html += '<div class="droplets-half">';
-        for (let i = 0; i < 6; i++) {
-          html += `<div class="droplet-row droplet-row-${i + 1}">`;
-          for (let j = 0; j < 6; j++) {
-            html += `<div class="droplet droplet-${j + 1}"></div>`;
-          }
-          html += "</div>";
-        }
-        html += "</div>";
-      }
+    if (precipToken) {
+      const config = PRECIP_CONFIG[precipToken];
+      const count = Math.round(config.count * intensityMultiplier(desc));
+      const particles = WeatherLayer.particleHTML(config, count);
+      html += `<div class="droplets" style="animation-duration:${config.fallSpeed}">`;
+      html += `<div class="droplets-half">${particles}</div>`;
+      html += `<div class="droplets-half">${particles}</div>`;
       html += "</div>";
     }
     if (has("snow")) {
