@@ -24,12 +24,12 @@ const apiBaseUrl = API_BASE_URL;
             <option value="">Auto (IP-based)</option>
             <option value="30.0444,31.2357" data-tz="Africa/Cairo">Cairo, Egypt</option>
             <option value="51.5074,-0.1278" data-tz="Europe/London">London, United Kingdom</option>
+            <option value="1.2905,103.8520" data-tz="Asia/Singapore">Marina Bay, Singapore</option>
             <option value="19.076,72.8777" data-tz="Asia/Kolkata">Mumbai, India</option>
             <option value="40.7128,-74.0060" data-tz="America/New_York">New York, United States</option>
             <option value="64.1466,-21.9426" data-tz="Atlantic/Reykjavik">Reykjavik, Iceland</option>
             <option value="-22.9068,-43.1729" data-tz="America/Sao_Paulo">Rio de Janeiro, Brazil</option>
             <option value="-23.5505,-46.6333" data-tz="America/Sao_Paulo">São Paulo, Brazil</option>
-            <option value="1.2905,103.8520" data-tz="Asia/Singapore">Marina Bay, Singapore</option>
             <option value="-33.8688,151.2093" data-tz="Australia/Sydney">Sydney, Australia</option>
             <option value="35.6762,139.6503" data-tz="Asia/Tokyo">Tokyo, Japan</option>
             <option value="custom">Custom...</option>
@@ -830,14 +830,13 @@ const apiBaseUrl = API_BASE_URL;
   }
 
   .search-result-item {
-    padding: 0.5rem;
+    padding: 0.5rem 0.75rem;
     font-size: 0.75rem;
     color: var(--color-text);
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.125rem;
   }
 
   .search-result-item:hover {
