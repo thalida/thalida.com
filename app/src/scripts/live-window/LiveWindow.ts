@@ -2,7 +2,16 @@ import type { SceneComponent, LiveWindowState, RGB } from "./types";
 import { loadState, saveState } from "./state";
 import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather, locationChanged } from "./api";
 import { parseHexColor, parseComputedColor } from "./utils/color";
-import { ONE_DAY_MS, ONE_HOUR_MS, CLOCK_INTERVAL_MS, SKY_UPDATE_INTERVAL_MS } from "./utils/constants";
+import {
+  ONE_DAY_MS,
+  ONE_HOUR_MS,
+  CLOCK_INTERVAL_MS,
+  SKY_UPDATE_INTERVAL_MS,
+  MIN_TICK_SPEED,
+  MAX_TICK_SPEED,
+  DEFAULT_TEMP_CELSIUS,
+  DEFAULT_BG_COLOR,
+} from "./utils/constants";
 import { buildPhaseInfo } from "./utils/phase";
 import { getTimezoneAdjustedNow, shiftTimestampToTimezone } from "./utils/timezone";
 import { SkyComponent } from "./components/SkyComponent";
@@ -71,6 +80,37 @@ const WEATHER_DESCRIPTIONS: Record<number, string> = {
   804: "overcast clouds",
 };
 
+/** Google Fonts stylesheet URL for the clock font. */
+const FONT_STYLESHEET_URL = "https://fonts.googleapis.com/css2?family=Squada+One&display=swap";
+
+/** Data attribute used to detect/mark the font <link> element in the host document. */
+const FONT_DATA_ATTR = "data-live-window-font";
+
+/**
+ * OpenWeatherMap weather group ID → icon code.
+ * The group is derived as Math.floor(weatherId / 100).
+ */
+const WEATHER_GROUP_ICON: Record<number, string> = {
+  2: "11", // Thunderstorm
+  3: "09", // Drizzle → shower rain icon
+  5: "10", // Rain
+  6: "13", // Snow
+  7: "50", // Atmosphere (fog/mist)
+  8: "01", // Clear/Clouds (overridden below for specific cloud IDs)
+};
+
+/**
+ * Specific OWM weather IDs for cloud coverage → icon code.
+ * These override the group-level mapping above.
+ */
+const CLOUD_COVERAGE_ICON: Record<number, string> = {
+  800: "01", // Clear sky
+  801: "02", // Few clouds (11-25%)
+  802: "03", // Scattered clouds (25-50%)
+  803: "04", // Broken clouds (51-84%)
+  804: "04", // Overcast clouds (85-100%)
+};
+
 class LiveWindowElement extends HTMLElement {
   static observedAttributes = [
     "api-url",
@@ -120,11 +160,13 @@ class LiveWindowElement extends HTMLElement {
   // -- Lifecycle --------------------------------------------------------------
 
   connectedCallback() {
-    if (!document.querySelector("link[data-live-window-font]")) {
+    if (!document.querySelector(`link[${FONT_DATA_ATTR}]`)) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://fonts.googleapis.com/css2?family=Squada+One&display=swap";
-      link.setAttribute("data-live-window-font", "");
+      link.href = FONT_STYLESHEET_URL;
+      link.setAttribute(FONT_DATA_ATTR, "");
+      // Font loaded in host document <head> because Shadow DOM can't load
+      // external @font-face stylesheets internally
       document.head.appendChild(link);
     }
 
@@ -227,7 +269,7 @@ class LiveWindowElement extends HTMLElement {
 
   private refreshAttrs() {
     const tickSpeedRaw = this.getAttribute("tick-speed");
-    const tickSpeed = tickSpeedRaw ? Math.max(1, Math.min(1000, parseFloat(tickSpeedRaw))) : 1;
+    const tickSpeed = tickSpeedRaw ? Math.max(MIN_TICK_SPEED, Math.min(MAX_TICK_SPEED, parseFloat(tickSpeedRaw))) : 1;
 
     this.state.attrs = {
       use12Hour: this.getAttribute("time-format") === "12",
@@ -248,30 +290,30 @@ class LiveWindowElement extends HTMLElement {
 
   private refreshComputed() {
     const { overrideWeather, overrideSunrise, overrideSunset } = this.state.attrs;
-    const tz = this.state.attrs.timezone;
+    const timezone = this.state.attrs.timezone;
     const now = this.getNow();
 
     let store = this.state.store;
 
     // Apply sunrise/sunset overrides
-    const srOverride = overrideSunrise ? this.parseTimeToTimestamp(overrideSunrise) : null;
-    const ssOverride = overrideSunset ? this.parseTimeToTimestamp(overrideSunset) : null;
-    if (srOverride != null || ssOverride != null) {
+    const sunriseOverride = overrideSunrise ? this.parseTimeToTimestamp(overrideSunrise) : null;
+    const sunsetOverride = overrideSunset ? this.parseTimeToTimestamp(overrideSunset) : null;
+    if (sunriseOverride != null || sunsetOverride != null) {
       store = {
         ...store,
         weather: {
           ...store.weather,
-          sunrise: srOverride ?? store.weather.sunrise,
-          sunset: ssOverride ?? store.weather.sunset,
+          sunrise: sunriseOverride ?? store.weather.sunrise,
+          sunset: sunsetOverride ?? store.weather.sunset,
         },
       };
-    } else if (tz && store.weather.sunrise != null && store.weather.sunset != null) {
+    } else if (timezone && store.weather.sunrise != null && store.weather.sunset != null) {
       store = {
         ...store,
         weather: {
           ...store.weather,
-          sunrise: shiftTimestampToTimezone(store.weather.sunrise, tz),
-          sunset: shiftTimestampToTimezone(store.weather.sunset, tz),
+          sunrise: shiftTimestampToTimezone(store.weather.sunrise, timezone),
+          sunset: shiftTimestampToTimezone(store.weather.sunset, timezone),
         },
       };
     }
@@ -280,24 +322,6 @@ class LiveWindowElement extends HTMLElement {
     if (overrideWeather) {
       const weatherId = parseInt(overrideWeather, 10);
       const isDaytime = now >= (store.weather.sunrise ?? 0) && now <= (store.weather.sunset ?? 0);
-      // Derive icon from weather ID group for day/night
-      const iconMap: Record<number, string> = {
-        2: "11",
-        3: "09",
-        5: "10",
-        6: "13",
-        7: "50",
-        8: "01",
-      };
-      const group = Math.floor(weatherId / 100);
-      const iconBase = iconMap[group] ?? "01";
-      // Special cases for cloud coverage icons
-      let icon: string;
-      if (weatherId === 800) icon = "01";
-      else if (weatherId === 801) icon = "02";
-      else if (weatherId === 802) icon = "03";
-      else if (weatherId === 803 || weatherId === 804) icon = "04";
-      else icon = iconBase;
 
       store = {
         ...store,
@@ -307,8 +331,8 @@ class LiveWindowElement extends HTMLElement {
             id: weatherId,
             main: WEATHER_DESCRIPTIONS[weatherId]?.split(" ")[0] ?? "Unknown",
             description: WEATHER_DESCRIPTIONS[weatherId] ?? "",
-            icon: icon + (isDaytime ? "d" : "n"),
-            temp: store.weather.current?.temp ?? 20,
+            icon: this.deriveWeatherIcon(weatherId, isDaytime),
+            temp: store.weather.current?.temp ?? DEFAULT_TEMP_CELSIUS,
           },
         },
       };
@@ -324,7 +348,7 @@ class LiveWindowElement extends HTMLElement {
       if (parsed) return parsed;
     }
     const computed = getComputedStyle(this).backgroundColor;
-    return parseComputedColor(computed) ?? { r: 0, g: 0, b: 0 };
+    return parseComputedColor(computed) ?? DEFAULT_BG_COLOR;
   }
 
   // -- Updates ----------------------------------------------------------------
@@ -424,7 +448,15 @@ class LiveWindowElement extends HTMLElement {
     return !!(a.overrideTime || a.overrideWeather || a.overrideSunrise || a.overrideSunset || a.tickSpeed > 1);
   }
 
-  /** Returns the effective "now" timestamp, accounting for overrides and virtual clock. */
+  /**
+   * Returns the effective "now" timestamp, accounting for overrides and virtual clock.
+   *
+   * Four modes (checked in order):
+   * 1. Virtual clock advancing — virtualTime + scaled elapsed real time, wraps at midnight
+   * 2. Static virtual time — frozen at virtualTime (paused virtual clock)
+   * 3. Override time attribute — parsed from "HH:MM" string
+   * 4. Normal real time — Date.now() with optional timezone shift
+   */
   private getNow(): number {
     const { overrideTime, tickSpeed, timezone } = this.state.attrs;
 
@@ -455,6 +487,15 @@ class LiveWindowElement extends HTMLElement {
 
     // Normal real time
     return timezone ? getTimezoneAdjustedNow(timezone) : Date.now();
+  }
+
+  /**
+   * Derive the OWM icon code from a weather ID + day/night flag.
+   * First checks specific cloud-coverage IDs, then falls back to group-level mapping.
+   */
+  private deriveWeatherIcon(weatherId: number, isDaytime: boolean): string {
+    const iconBase = CLOUD_COVERAGE_ICON[weatherId] ?? WEATHER_GROUP_ICON[Math.floor(weatherId / 100)] ?? "01";
+    return iconBase + (isDaytime ? "d" : "n");
   }
 
   // -- Public API -------------------------------------------------------------
