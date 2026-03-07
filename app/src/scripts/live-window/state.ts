@@ -1,8 +1,12 @@
 import type { StoreState, LiveWindowState } from "./types";
 import { buildPhaseInfo } from "./utils/phase";
 
+/**
+ * Cache version — increment when the stored shape changes.
+ * v6: Added timezone to location, overrideMoonPhase to attrs.
+ */
 export const CACHE_VERSION = 6;
-const STORAGE_KEY = "liveWindowStore";
+export const STORAGE_KEY = "liveWindowStore";
 
 export const DEFAULT_STORE: StoreState = {
   location: { lastFetched: null, lat: null, lng: null, country: null, name: null, timezone: null },

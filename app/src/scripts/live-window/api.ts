@@ -1,6 +1,7 @@
 import type { StoreState } from "./types";
+import { THIRTY_MINUTES_MS } from "./utils/constants";
 
-export const WEATHER_RATE_LIMIT = 30 * 60_000;
+export const WEATHER_RATE_LIMIT = THIRTY_MINUTES_MS;
 
 export const IMPERIAL_COUNTRIES = new Set(["US", "LR", "MM"]);
 
