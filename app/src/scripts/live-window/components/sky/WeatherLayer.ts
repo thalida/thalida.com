@@ -183,7 +183,8 @@ export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
 };
 
 export interface AtmosphereConfig {
-  color: string;
+  /** [day, night] color pair — interpolated by sun altitude like clouds. */
+  color: [string, string];
   opacity: number;
   layers: number;
 }
@@ -192,7 +193,8 @@ export type WindLevel = "none" | "light" | "moderate" | "strong";
 
 export interface AtmosphereParticleConfig {
   count: number;
-  color: string;
+  /** [day, night] color pair — interpolated by sun altitude like clouds. */
+  color: [string, string];
   /** Size range [min, max] in px */
   sizeRange: [number, number];
   /** Opacity range [min, max] as 0-100 integers */
@@ -212,23 +214,23 @@ export interface AtmosphereParticleConfig {
 export type LightningVariant = "distant" | "standard" | "intense";
 
 export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
-  mist: { color: "#c8c8c8", opacity: 0.15, layers: 2 },
-  fog: { color: "#b0b0b0", opacity: 0.35, layers: 3 },
-  smoke: { color: "#8b7355", opacity: 0.3, layers: 3 },
-  haze: { color: "#d4c89a", opacity: 0.2, layers: 2 },
-  sand: { color: "#c4a050", opacity: 0.3, layers: 3 },
-  dust: { color: "#8a7560", opacity: 0.22, layers: 2 },
-  dustWhirls: { color: "#c4a86a", opacity: 0.35, layers: 3 },
-  volcanicAsh: { color: "#555555", opacity: 0.4, layers: 3 },
-  squalls: { color: "#888888", opacity: 0.3, layers: 3 },
-  tornado: { color: "#666666", opacity: 0.45, layers: 3 },
-  stormDark: { color: "#1a1a2e", opacity: 0.2, layers: 2 },
+  mist: { color: ["#c8c8c8", "#5a6280"], opacity: 0.15, layers: 2 },
+  fog: { color: ["#b0b0b0", "#485070"], opacity: 0.35, layers: 3 },
+  smoke: { color: ["#8b7355", "#3e3548"], opacity: 0.3, layers: 3 },
+  haze: { color: ["#d4c89a", "#5a5570"], opacity: 0.2, layers: 2 },
+  sand: { color: ["#c4a050", "#5a4838"], opacity: 0.3, layers: 3 },
+  dust: { color: ["#8a7560", "#423840"], opacity: 0.22, layers: 2 },
+  dustWhirls: { color: ["#c4a86a", "#5a4838"], opacity: 0.35, layers: 3 },
+  volcanicAsh: { color: ["#555555", "#2a2a38"], opacity: 0.4, layers: 3 },
+  squalls: { color: ["#888888", "#3a4058"], opacity: 0.3, layers: 3 },
+  tornado: { color: ["#666666", "#2a3048"], opacity: 0.45, layers: 3 },
+  stormDark: { color: ["#1a1a2e", "#0e0e1a"], opacity: 0.2, layers: 2 },
 };
 
 export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   mistWisps: {
     count: 6,
-    color: "#d0d0d0",
+    color: ["#d0d0d0", "#687890"],
     sizeRange: [40, 80],
     opacityRange: [8, 20],
     speed: "16s",
@@ -238,7 +240,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   fogBanks: {
     count: 4,
-    color: "#c0c0c0",
+    color: ["#c0c0c0", "#586880"],
     sizeRange: [100, 160],
     opacityRange: [20, 40],
     speed: "22s",
@@ -248,7 +250,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   smokeWisps: {
     count: 10,
-    color: "#7a6548",
+    color: ["#7a6548", "#3a3040"],
     sizeRange: [35, 65],
     opacityRange: [15, 35],
     speed: "11s",
@@ -258,7 +260,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   dustSwirl: {
     count: 20,
-    color: "#a08860",
+    color: ["#a08860", "#504838"],
     sizeRange: [2, 5],
     opacityRange: [30, 55],
     speed: "5s",
@@ -266,7 +268,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   sandSwirl: {
     count: 28,
-    color: "#c4a050",
+    color: ["#c4a050", "#5a4838"],
     sizeRange: [2, 4],
     opacityRange: [40, 65],
     speed: "3.5s",
@@ -274,7 +276,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   ashFall: {
     count: 18,
-    color: "#444",
+    color: ["#444444", "#222238"],
     sizeRange: [3, 6],
     opacityRange: [35, 65],
     speed: "7s",
@@ -282,7 +284,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   debrisSwirl: {
     count: 15,
-    color: "#5a5040",
+    color: ["#5a5040", "#2a2830"],
     sizeRange: [3, 8],
     opacityRange: [30, 55],
     speed: "4s",
@@ -290,7 +292,7 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   },
   iceGlint: {
     count: 12,
-    color: "#e0f0ff",
+    color: ["#e0f0ff", "#8898b8"],
     sizeRange: [1, 3],
     opacityRange: [40, 80],
     speed: "3s",
@@ -472,7 +474,7 @@ export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   801: fx("light", []),
   802: fx("medium", []),
   803: fx("heavy", []),
-  804: fx("storm", []),
+  804: fx("heavy", []),
 };
 
 /**
@@ -601,24 +603,48 @@ export function getCloudColor(
   return color;
 }
 
+/** Compute an atmosphere color from its [day, night] pair, with optional sunset tinting. */
+export function getAtmosphereColor(colors: [string, string], sunAltitude: number, skyGradient?: SkyGradient): string {
+  const [day, night] = colors;
+  const dayFactor = getDaylightFactor(sunAltitude);
+  let color = lerpHex(night, day, dayFactor);
+
+  if (skyGradient) {
+    const glowFactor = getHorizonGlowFactor(sunAltitude);
+    if (glowFactor > 0) {
+      const warmColor = rgbToHex({
+        r: Math.round((skyGradient.upper.r + skyGradient.lower.r) / 2),
+        g: Math.round((skyGradient.upper.g + skyGradient.lower.g) / 2),
+        b: Math.round((skyGradient.upper.b + skyGradient.lower.b) / 2),
+      });
+      color = lerpHex(color, warmColor, glowFactor * 0.25);
+    }
+  }
+
+  return color;
+}
+
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
   private lastWeatherId: number | null = null;
   private lastCloudColor: string | null = null;
+  private lastAtmoColor: string | null = null;
+  private lastAtmoParticleColor: string | null = null;
 
   /**
    * Generate procedural clouds with deterministic pseudo-random placement.
    * Each cloud is a compound shape: a square body with flat-bottom border-radius
    * + 1-2 side extensions (like the old pseudo-elements), all bottom-aligned.
    */
-  static cloudHTML(density: Exclude<CloudDensity, "none">): string {
+  static cloudHTML(density: Exclude<CloudDensity, "none">, startIdx = 0, endIdx?: number): string {
     const config = CLOUD_CONFIGS[density];
+    const end = endIdx ?? config.count;
     const sizeRange = config.sizeRange[1] - config.sizeRange[0];
     const opRange = config.opacityRange[1] - config.opacityRange[0];
     const ySpan = config.yRange[1] - config.yRange[0];
 
     let out = "";
-    for (let i = 0; i < config.count; i++) {
+    for (let i = startIdx; i < end; i++) {
       const h = ((i + 1) * 2654435761) >>> 0;
       const h2 = ((i + 1) * 1597334677) >>> 0; // independent hash for Y
       const left = ((i * 0.618033 + 0.3) % 1) * 110 - 5;
@@ -696,7 +722,7 @@ export class WeatherLayer implements SceneComponent {
       const w = ar >= 1 ? size : Math.round(size * ar);
       const ht = ar >= 1 ? Math.round(size / ar) : size;
 
-      out += `<div class="atmo-particle atmo-${config.drift}" style="left:${left}%;top:${top}%;width:${w}px;height:${ht}px;opacity:${opacity};background:${config.color};border-radius:${radius};filter:blur(${blur}px);animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></div>`;
+      out += `<div class="atmo-particle atmo-${config.drift}" style="left:${left}%;top:${top}%;width:${w}px;height:${ht}px;opacity:${opacity};border-radius:${radius};filter:blur(${blur}px);animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></div>`;
     }
     return out;
   }
@@ -728,24 +754,45 @@ export class WeatherLayer implements SceneComponent {
         this.el.innerHTML = "";
         this.lastWeatherId = null;
         this.lastCloudColor = null;
+        this.lastAtmoColor = null;
+        this.lastAtmoParticleColor = null;
       }
       return;
     }
 
     const config = WEATHER_EFFECTS[weatherId];
+    const sunAlt = state.computed.phase.sun.altitude;
+    const gradient = state.ref.currentGradient;
 
     // Smooth cloud color based on sun altitude, density, and sky gradient
     let cloudColor: string | null = null;
     if (config.clouds !== "none") {
-      cloudColor = getCloudColor(config.clouds, state.computed.phase.sun.altitude, state.ref.currentGradient);
+      cloudColor = getCloudColor(config.clouds, sunAlt, gradient);
     }
 
-    // Skip full rebuild if weather hasn't changed
+    // Atmosphere colors based on sun altitude
+    let atmoColor: string | null = null;
+    if (config.atmosphere) {
+      atmoColor = getAtmosphereColor(config.atmosphere.color, sunAlt, gradient);
+    }
+    let atmoParticleColor: string | null = null;
+    if (config.atmosphereParticles) {
+      atmoParticleColor = getAtmosphereColor(config.atmosphereParticles.color, sunAlt, gradient);
+    }
+
+    // Skip full rebuild if weather hasn't changed — only update colors
     if (weatherId === this.lastWeatherId) {
-      // Only update cloud color if it changed
       if (cloudColor !== null && cloudColor !== this.lastCloudColor) {
         this.el.style.setProperty("--cloud-color", cloudColor);
         this.lastCloudColor = cloudColor;
+      }
+      if (atmoColor !== null && atmoColor !== this.lastAtmoColor) {
+        this.el.style.setProperty("--atmo-color", atmoColor);
+        this.lastAtmoColor = atmoColor;
+      }
+      if (atmoParticleColor !== null && atmoParticleColor !== this.lastAtmoParticleColor) {
+        this.el.style.setProperty("--atmo-particle-color", atmoParticleColor);
+        this.lastAtmoParticleColor = atmoParticleColor;
       }
       return;
     }
@@ -753,6 +800,8 @@ export class WeatherLayer implements SceneComponent {
     // Full rebuild — weather ID changed
     this.lastWeatherId = weatherId;
     this.lastCloudColor = cloudColor;
+    this.lastAtmoColor = atmoColor;
+    this.lastAtmoParticleColor = atmoParticleColor;
 
     let cls = "sky-layer weather";
     if (config.clouds !== "none") cls += ` weather-clouds-${config.clouds}`;
@@ -760,6 +809,12 @@ export class WeatherLayer implements SceneComponent {
 
     if (cloudColor !== null) {
       this.el.style.setProperty("--cloud-color", cloudColor);
+    }
+    if (atmoColor !== null) {
+      this.el.style.setProperty("--atmo-color", atmoColor);
+    }
+    if (atmoParticleColor !== null) {
+      this.el.style.setProperty("--atmo-particle-color", atmoParticleColor);
     }
 
     let html = "";
@@ -770,32 +825,19 @@ export class WeatherLayer implements SceneComponent {
       html += `<div class="sky-darken" style="opacity:${darken.toFixed(2)}"></div>`;
     }
 
-    // Clouds
+    // Back clouds (behind lightning + precipitation)
     if (config.clouds !== "none") {
-      html += WeatherLayer.cloudHTML(config.clouds);
+      const total = CLOUD_CONFIGS[config.clouds].count;
+      const backCount = Math.ceil(total * 0.4);
+      html += WeatherLayer.cloudHTML(config.clouds, 0, backCount);
     }
 
-    // Lightning
+    // Lightning (between cloud layers)
     if (config.lightning) {
       html += WeatherLayer.lightningHTML(config.lightning);
     }
 
-    // Atmosphere
-    if (config.atmosphere) {
-      const { color, opacity, layers } = config.atmosphere;
-      const sizes = ["lg", "md", "sm"];
-      for (let i = 0; i < layers; i++) {
-        const size = sizes[i] ?? "sm";
-        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:linear-gradient(to top, ${color}, transparent);--atmo-opacity:${opacity};opacity:${opacity}"></div>`;
-      }
-    }
-
-    // Atmosphere particles
-    if (config.atmosphereParticles) {
-      html += WeatherLayer.atmosphereParticleHTML(config.atmosphereParticles);
-    }
-
-    // Precipitation layers
+    // Precipitation layers (between cloud layers)
     const skewDeg = config.wind === "strong" ? 15 : config.wind === "moderate" ? 8 : config.wind === "light" ? 3 : 0;
 
     for (const precipLayer of config.precip) {
@@ -810,6 +852,28 @@ export class WeatherLayer implements SceneComponent {
       html += "</div>";
     }
 
+    // Front clouds (in front of lightning + precipitation)
+    if (config.clouds !== "none") {
+      const total = CLOUD_CONFIGS[config.clouds].count;
+      const backCount = Math.ceil(total * 0.4);
+      html += WeatherLayer.cloudHTML(config.clouds, backCount);
+    }
+
+    // Atmosphere
+    if (config.atmosphere) {
+      const { opacity, layers } = config.atmosphere;
+      const sizes = ["lg", "md", "sm"];
+      for (let i = 0; i < layers; i++) {
+        const size = sizes[i] ?? "sm";
+        html += `<div class="atmosphere-layer atmosphere-${size}" style="--atmo-opacity:${opacity};opacity:${opacity}"></div>`;
+      }
+    }
+
+    // Atmosphere particles
+    if (config.atmosphereParticles) {
+      html += WeatherLayer.atmosphereParticleHTML(config.atmosphereParticles);
+    }
+
     this.el.innerHTML = html;
   }
 
@@ -818,5 +882,7 @@ export class WeatherLayer implements SceneComponent {
     this.el = null;
     this.lastWeatherId = null;
     this.lastCloudColor = null;
+    this.lastAtmoColor = null;
+    this.lastAtmoParticleColor = null;
   }
 }

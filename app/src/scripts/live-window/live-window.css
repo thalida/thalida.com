@@ -425,6 +425,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
+  background: linear-gradient(to top, var(--atmo-color, transparent), transparent);
   filter: blur(12px);
   border-radius: 40% 40% 0 0;
   animation: 6s ease-in-out infinite alternate atmosphere-pulse;
@@ -458,6 +459,7 @@
 
 .atmo-particle {
   position: absolute;
+  background: var(--atmo-particle-color, transparent);
   border-radius: 50%;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
@@ -523,12 +525,18 @@
 
 @keyframes atmo-rise {
   0% {
-    transform: translate(3px, 20%) scale(1);
+    transform: translate(3px, 20%) scale(0.8);
+    opacity: 0;
+  }
+  15% {
     opacity: 1;
   }
+  80% {
+    opacity: 0.5;
+  }
   100% {
-    transform: translate(-3px, -30%) scale(1.1);
-    opacity: 0.3;
+    transform: translate(-3px, -30%) scale(1.2);
+    opacity: 0;
   }
 }
 
