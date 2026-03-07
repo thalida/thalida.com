@@ -1,5 +1,5 @@
 import type { SkyGradient } from "../../../types";
-import type { CloudDensity, WeatherEffectConfig } from "./weather-types";
+import type { CloudDensity, LightningVariant, WeatherEffectConfig } from "./weather-types";
 import { rgbToHex, lerpHex } from "../../../utils/color";
 import { smoothstep } from "../../../utils/math";
 import { CLOUD_COLORS, SKY_TINT_STRENGTH } from "./weather-configs";
@@ -17,7 +17,7 @@ const GLOW_PEAK_ALTITUDE = 2;
 const ATMOSPHERE_GLOW_TINT = 0.25;
 
 // Sky darken contributions per cloud density
-const CLOUD_DARKEN: Record<string, number> = {
+const CLOUD_DARKEN: Record<Exclude<CloudDensity, "none">, number> = {
   light: 0.05,
   medium: 0.12,
   heavy: 0.22,
@@ -25,7 +25,7 @@ const CLOUD_DARKEN: Record<string, number> = {
 };
 
 const PRECIP_DARKEN_PER_UNIT = 0.05;
-const LIGHTNING_DARKEN: Record<string, number> = { intense: 0.16, distant: 0.06, standard: 0.12 };
+const LIGHTNING_DARKEN: Record<LightningVariant, number> = { intense: 0.16, distant: 0.06, standard: 0.12 };
 const ATMOSPHERE_DARKEN_FACTOR = 0.3;
 const MAX_SKY_DARKEN = 0.55;
 
@@ -56,6 +56,15 @@ export function getHorizonGlowFactor(sunAltitude: number): number {
   return smoothstep(t);
 }
 
+/** Average the upper and lower sky gradient bands — gives the dominant sky color at cloud altitude. */
+function averageSkyBands(skyGradient: SkyGradient): string {
+  return rgbToHex({
+    r: Math.round((skyGradient.upper.r + skyGradient.lower.r) / 2),
+    g: Math.round((skyGradient.upper.g + skyGradient.lower.g) / 2),
+    b: Math.round((skyGradient.upper.b + skyGradient.lower.b) / 2),
+  });
+}
+
 /** Compute the cloud color for a given density, sun altitude, and optional sky gradient. */
 export function getCloudColor(
   density: Exclude<CloudDensity, "none">,
@@ -70,12 +79,7 @@ export function getCloudColor(
   if (skyGradient) {
     const glowFactor = getHorizonGlowFactor(sunAltitude);
     if (glowFactor > 0) {
-      // Average the upper and lower sky bands — gives the dominant sky color at cloud altitude
-      const warmColor = rgbToHex({
-        r: Math.round((skyGradient.upper.r + skyGradient.lower.r) / 2),
-        g: Math.round((skyGradient.upper.g + skyGradient.lower.g) / 2),
-        b: Math.round((skyGradient.upper.b + skyGradient.lower.b) / 2),
-      });
+      const warmColor = averageSkyBands(skyGradient);
       const tintStrength = glowFactor * SKY_TINT_STRENGTH[density];
       color = lerpHex(color, warmColor, tintStrength);
     }
@@ -93,11 +97,7 @@ export function getAtmosphereColor(colors: [string, string], sunAltitude: number
   if (skyGradient) {
     const glowFactor = getHorizonGlowFactor(sunAltitude);
     if (glowFactor > 0) {
-      const warmColor = rgbToHex({
-        r: Math.round((skyGradient.upper.r + skyGradient.lower.r) / 2),
-        g: Math.round((skyGradient.upper.g + skyGradient.lower.g) / 2),
-        b: Math.round((skyGradient.upper.b + skyGradient.lower.b) / 2),
-      });
+      const warmColor = averageSkyBands(skyGradient);
       color = lerpHex(color, warmColor, glowFactor * ATMOSPHERE_GLOW_TINT);
     }
   }
