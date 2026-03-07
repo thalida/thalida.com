@@ -588,6 +588,21 @@ describe("WeatherLayer", () => {
     expect(droplets.style.animationDuration).toBe(PRECIP_CONFIG.rain.fallSpeed);
   });
 
+  it("does not rebuild innerHTML when weather and color are unchanged", () => {
+    layer.update(makeState(501));
+    const firstHTML = container.innerHTML;
+    // Second update with same state should not change innerHTML
+    layer.update(makeState(501));
+    expect(container.innerHTML).toBe(firstHTML);
+  });
+
+  it("rebuilds innerHTML when weather id changes", () => {
+    layer.update(makeState(501));
+    const firstHTML = container.innerHTML;
+    layer.update(makeState(601));
+    expect(container.innerHTML).not.toBe(firstHTML);
+  });
+
   it("cleans up on destroy", () => {
     layer.update(makeState(501));
     layer.destroy();

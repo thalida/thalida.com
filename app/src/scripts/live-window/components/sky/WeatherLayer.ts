@@ -603,6 +603,8 @@ export function getCloudColor(
 
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
+  private lastWeatherId: number | null = null;
+  private lastCloudColor: string | null = null;
 
   /**
    * Generate procedural clouds with deterministic pseudo-random placement.
@@ -721,20 +723,43 @@ export class WeatherLayer implements SceneComponent {
     const weatherId = state.computed.phase.weather.id;
 
     if (!weatherId || !WEATHER_EFFECTS[weatherId]) {
-      this.el.className = "sky-layer weather";
-      this.el.innerHTML = "";
+      if (this.lastWeatherId !== null) {
+        this.el.className = "sky-layer weather";
+        this.el.innerHTML = "";
+        this.lastWeatherId = null;
+        this.lastCloudColor = null;
+      }
       return;
     }
 
     const config = WEATHER_EFFECTS[weatherId];
+
+    // Smooth cloud color based on sun altitude, density, and sky gradient
+    let cloudColor: string | null = null;
+    if (config.clouds !== "none") {
+      cloudColor = getCloudColor(config.clouds, state.computed.phase.sun.altitude, state.ref.currentGradient);
+    }
+
+    // Skip full rebuild if weather hasn't changed
+    if (weatherId === this.lastWeatherId) {
+      // Only update cloud color if it changed
+      if (cloudColor !== null && cloudColor !== this.lastCloudColor) {
+        this.el.style.setProperty("--cloud-color", cloudColor);
+        this.lastCloudColor = cloudColor;
+      }
+      return;
+    }
+
+    // Full rebuild — weather ID changed
+    this.lastWeatherId = weatherId;
+    this.lastCloudColor = cloudColor;
+
     let cls = "sky-layer weather";
     if (config.clouds !== "none") cls += ` weather-clouds-${config.clouds}`;
     this.el.className = cls;
 
-    // Smooth cloud color based on sun altitude, density, and sky gradient
-    if (config.clouds !== "none") {
-      const color = getCloudColor(config.clouds, state.computed.phase.sun.altitude, state.ref.currentGradient);
-      this.el.style.setProperty("--cloud-color", color);
+    if (cloudColor !== null) {
+      this.el.style.setProperty("--cloud-color", cloudColor);
     }
 
     let html = "";
@@ -791,5 +816,7 @@ export class WeatherLayer implements SceneComponent {
   destroy(): void {
     if (this.el) this.el.innerHTML = "";
     this.el = null;
+    this.lastWeatherId = null;
+    this.lastCloudColor = null;
   }
 }
