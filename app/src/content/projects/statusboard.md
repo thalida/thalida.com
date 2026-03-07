@@ -18,6 +18,13 @@ into the health and performance of web services. It allows users to track servic
 performance metrics, and issues, making it easier to maintain service reliability and transparency.
 
 
+## Logo Explorations
+
+![Grid of Statusboard logo design iterations showing circular icon variations in green, red, white, and black on different colored backgrounds](statusboard/logo-explorations-grid.png)
+
+![Larger view of Statusboard logo variations showing text lockups and abstract circular icon options in multiple color schemes](statusboard/logo-explorations-large.png)
+
+
 ## Mockups
 
 |     |     |

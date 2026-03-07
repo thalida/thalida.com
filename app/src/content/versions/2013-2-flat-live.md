@@ -37,6 +37,16 @@ really blink if I showed these concepts around as ideas for the next version of 
 ![Dark portfolio section for night visitors showing Greetings, Night Owl heading with project thumbnails](2013-2-flat-live/night-owl-projects-portfolio.png)
 
 
+## Alternative Direction
+
+Before switching to the card-based design, I explored an illustration-based direction
+with a window scene — a concept that would resurface years later in the 2018 version.
+
+![Design mockup showing an illustrated window scene with city skyline, potted plant, and warm coral and mint color palette](2013-2-flat-live/mockup-illustrated-window-warm.png)
+
+![Same illustrated window mockup with blue interactive markers overlaid showing responsive design breakpoints](2013-2-flat-live/mockup-illustrated-window-interactive.png)
+
+
 ## “Final” Designs
 
 Somewhere between these concepts and the final designs below I made a very drastic switch back to

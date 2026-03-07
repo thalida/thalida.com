@@ -9,6 +9,8 @@ category: craft
 
 ![3D-printed Homer Simpson bushes meme on a dark green bathroom wall above a light switch plate](homer-bathroom/homer-wall-art-with-light-switch.jpeg)
 
+![Homer Simpson wall art visible from the hallway on a dark green bathroom wall with cream trim](homer-bathroom/homer-wall-art-from-hallway.jpeg)
+
 After painting my bathroom, I wanted to add some fun art to the walls. I realized the Homer Simpson bushes gif
 was perfect for the space, since it'd feel like Homer was trying to escape being stuck with you in the bathroom.
 

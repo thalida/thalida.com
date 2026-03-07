@@ -55,6 +55,10 @@ with [Matter JS](https://brm.io/matter-js/).
 src="/content/versions/2025-astro-animated/weather-digital.gif"
 alt="Animated GIF of the Astro Animated live weather scene with glowing segmented digital clock and rain particles" />
 
+<img
+src="/content/versions/2025-astro-animated/weather-analog.gif"
+alt="Animated GIF of the Astro Animated analog clock with weather effects including snow, fog, and wind" />
+
 The window effect is customizable, users can switch between analog and digital clocks,
 change the time, and choose between different weather effects
 

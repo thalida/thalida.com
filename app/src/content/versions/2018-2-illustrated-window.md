@@ -139,6 +139,12 @@ a separate library with it's own soon.
 
 ![Animated illustrated window showing snowy dark blue night sky with white snowflakes](2018-2-illustrated-window/snow.gif)
 
+![Animated illustrated window showing foggy atmosphere with translucent bokeh circles and analog clock](2018-2-illustrated-window/fog.gif)
+
+![Animated illustrated window showing rain with water droplets accumulating below the analog clock](2018-2-illustrated-window/rain.gif)
+
+![Animated illustrated window showing wind with particles and debris floating around the analog clock](2018-2-illustrated-window/wind.gif)
+
 The weather uses your current locations time and weather data in order to render a view of
 "outside". Even though the site is minimal elsewhere, I wanted to retain this live and
 dynamic to you aspect.
