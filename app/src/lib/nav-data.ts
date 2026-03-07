@@ -13,6 +13,7 @@ export type NavItem = {
   description?: string;
   tags?: string[];
   category?: string;
+  originalCategory?: string;
   publishedOn: string; // ISO string for JSON serialization
   coverImageSrc?: string;
   coverImageAlt?: string;
@@ -69,10 +70,12 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageSrc = optimized.src;
       }
 
-      if (entry.data.category) categoriesSet.add(entry.data.category);
-
       const isLink = name === "links";
       const linkMeta = isLink ? linkMetadataMap[entry.id] : undefined;
+      const isDead = isLink && linkMeta?.dead === true;
+
+      const category = isDead ? "dead-links" : entry.data.category;
+      if (category) categoriesSet.add(category);
 
       items.push({
         id: entry.id,
@@ -81,7 +84,8 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         href: entry.data.link,
         description: entry.data.description,
         tags: entry.data.tags,
-        category: entry.data.category,
+        category,
+        originalCategory: isDead ? entry.data.category : undefined,
         publishedOn: entry.data.publishedOn.toISOString(),
         coverImageSrc,
         coverImageAlt: entry.data.coverImageAlt,
