@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { WeatherLayer, ICON_WEATHER_MAP, PRECIP_CONFIG, intensityMultiplier } from "../../components/sky/WeatherLayer";
+import {
+  WeatherLayer,
+  ICON_WEATHER_MAP,
+  PRECIP_CONFIG,
+  intensityMultiplier,
+  ATMOSPHERE_CONFIG,
+} from "../../components/sky/WeatherLayer";
 import { makeTestState } from "../helpers";
 
 function makeState(icon: string | null, description = "test", main = "Test") {
@@ -39,12 +45,27 @@ describe("ICON_WEATHER_MAP", () => {
 });
 
 describe("PRECIP_CONFIG", () => {
-  it("defines configs for all precipitation types", () => {
+  it("defines configs for all precipitation types including new ones", () => {
     expect(PRECIP_CONFIG.lightRain).toBeDefined();
     expect(PRECIP_CONFIG.rain).toBeDefined();
     expect(PRECIP_CONFIG.thunderstorm).toBeDefined();
     expect(PRECIP_CONFIG.snow).toBeDefined();
     expect(PRECIP_CONFIG.sleet).toBeDefined();
+    expect(PRECIP_CONFIG.drizzle).toBeDefined();
+    expect(PRECIP_CONFIG.showerRain).toBeDefined();
+    expect(PRECIP_CONFIG.freezingRain).toBeDefined();
+    expect(PRECIP_CONFIG.lightSnow).toBeDefined();
+    expect(PRECIP_CONFIG.heavySnow).toBeDefined();
+    expect(PRECIP_CONFIG.showerSnow).toBeDefined();
+  });
+
+  it("drizzle is slower than lightRain", () => {
+    const speed = (s: string) => parseFloat(s);
+    expect(speed(PRECIP_CONFIG.drizzle.fallSpeed)).toBeGreaterThan(speed(PRECIP_CONFIG.lightRain.fallSpeed));
+  });
+
+  it("freezingRain has blue-white color distinct from regular rain", () => {
+    expect(PRECIP_CONFIG.freezingRain.color).not.toBe(PRECIP_CONFIG.rain.color);
   });
 
   it("rain is fastest, snow is slowest", () => {
@@ -210,5 +231,38 @@ describe("WeatherLayer", () => {
     layer.update(makeState("10d"));
     layer.destroy();
     expect(container.innerHTML).toBe("");
+  });
+});
+
+describe("ATMOSPHERE_CONFIG", () => {
+  it("defines configs for all atmosphere types", () => {
+    expect(ATMOSPHERE_CONFIG.mist).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.fog).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.smoke).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.haze).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.dust).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.dustWhirls).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.volcanicAsh).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.squalls).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.tornado).toBeDefined();
+  });
+
+  it("fog is denser than mist", () => {
+    expect(ATMOSPHERE_CONFIG.fog.opacity).toBeGreaterThan(ATMOSPHERE_CONFIG.mist.opacity);
+  });
+
+  it("smoke has brownish color distinct from mist grey", () => {
+    expect(ATMOSPHERE_CONFIG.smoke.color).not.toBe(ATMOSPHERE_CONFIG.mist.color);
+  });
+
+  it("each config has required fields", () => {
+    for (const key of Object.keys(ATMOSPHERE_CONFIG)) {
+      const config = ATMOSPHERE_CONFIG[key];
+      expect(config).toHaveProperty("color");
+      expect(config).toHaveProperty("opacity");
+      expect(config).toHaveProperty("layers");
+      expect(config.layers).toBeGreaterThanOrEqual(1);
+      expect(config.layers).toBeLessThanOrEqual(3);
+    }
   });
 });

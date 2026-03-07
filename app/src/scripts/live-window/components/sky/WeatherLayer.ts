@@ -94,6 +94,84 @@ export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
     opacityRange: [50, 90],
     hasSway: true,
   },
+  drizzle: {
+    count: 22,
+    fallSpeed: "8s",
+    shape: "drop",
+    sizeW: [1, 2],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [30, 55],
+    hasSway: false,
+  },
+  showerRain: {
+    count: 38,
+    fallSpeed: "1.5s",
+    shape: "drop",
+    sizeW: [3, 5],
+    aspectRatio: 3,
+    color: "#28afff",
+    opacityRange: [75, 100],
+    hasSway: false,
+  },
+  freezingRain: {
+    count: 30,
+    fallSpeed: "3s",
+    shape: "drop",
+    sizeW: [2, 4],
+    aspectRatio: 2,
+    color: "#b8deff",
+    opacityRange: [60, 90],
+    hasSway: false,
+  },
+  lightSnow: {
+    count: 20,
+    fallSpeed: "8s",
+    shape: "round",
+    sizeW: [2, 5],
+    aspectRatio: 1,
+    color: "#fff",
+    opacityRange: [40, 80],
+    hasSway: true,
+  },
+  heavySnow: {
+    count: 45,
+    fallSpeed: "4s",
+    shape: "round",
+    sizeW: [4, 9],
+    aspectRatio: 1,
+    color: "#fff",
+    opacityRange: [60, 100],
+    hasSway: true,
+  },
+  showerSnow: {
+    count: 40,
+    fallSpeed: "3s",
+    shape: "round",
+    sizeW: [3, 7],
+    aspectRatio: 1,
+    color: "#fff",
+    opacityRange: [55, 95],
+    hasSway: true,
+  },
+};
+
+export interface AtmosphereConfig {
+  color: string;
+  opacity: number;
+  layers: number;
+}
+
+export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
+  mist: { color: "#c8c8c8", opacity: 0.15, layers: 2 },
+  fog: { color: "#b0b0b0", opacity: 0.35, layers: 3 },
+  smoke: { color: "#8b7355", opacity: 0.3, layers: 3 },
+  haze: { color: "#d4c89a", opacity: 0.2, layers: 2 },
+  dust: { color: "#c4a86a", opacity: 0.25, layers: 2 },
+  dustWhirls: { color: "#c4a86a", opacity: 0.35, layers: 3 },
+  volcanicAsh: { color: "#555555", opacity: 0.4, layers: 3 },
+  squalls: { color: "#888888", opacity: 0.3, layers: 3 },
+  tornado: { color: "#666666", opacity: 0.45, layers: 3 },
 };
 
 /**
