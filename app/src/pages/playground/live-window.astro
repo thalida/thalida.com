@@ -247,7 +247,7 @@ const apiBaseUrl = API_BASE_URL;
 <script src="../../scripts/live-window/LiveWindow.ts"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const win = document.getElementById("preview-window")!;
     const timeMode = document.getElementById("time-mode") as HTMLSelectElement;
     const timeOverrideControls = document.getElementById("time-override-controls") as HTMLDivElement;
