@@ -401,38 +401,30 @@
   transform-origin: top left;
 }
 
-/* Mist */
+/* Atmosphere */
 
-.weather .mist {
+.weather .atmosphere-layer {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 120%;
-  animation: 5s linear infinite alternate mist-roll;
+  animation: 5s linear infinite alternate atmosphere-roll;
   transform: translate(0, 0);
 }
 
-.weather .mist-lg {
+.weather .atmosphere-lg {
   height: 45%;
-  opacity: 0.1;
-  background: rgb(128, 128, 128);
-  box-shadow: 0 -10px 20px 10px rgb(128, 128, 128);
 }
 
-.weather .mist-md {
+.weather .atmosphere-md {
   height: 20%;
-  opacity: 0.2;
-  background: rgb(128, 128, 128);
-  box-shadow: 0 -10px 40px 30px rgb(128, 128, 128);
 }
 
-.weather .mist-sm {
+.weather .atmosphere-sm {
   height: 0;
-  opacity: 0.4;
-  box-shadow: 0 -10px 30px 20px rgb(128, 128, 128);
 }
 
-@keyframes mist-roll {
+@keyframes atmosphere-roll {
   0% {
     transform: translate(-20%, 0%);
   }
