@@ -29,7 +29,7 @@
 - [x] fix link card styling
 - [x] chatting as is misaligned from input by 2 px
 - [ ] audit all links
-- [ ] audit all image names and alt tags
+- [x] audit all image names and alt tags
 - [x] audit all tests - mock [moderation] skipped: OPENAI_API_KEY not set
 - [x] Fix top-[35px]
 - [x] Add moon and sun layers to sky component
