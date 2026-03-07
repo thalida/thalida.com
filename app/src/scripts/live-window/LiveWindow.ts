@@ -583,9 +583,9 @@ class LiveWindowElement extends HTMLElement {
     }
 
     this.markCelestialReady();
+    this.updateAll();
 
     if (result.changed) {
-      this.updateAll();
       this.dispatchEvent(
         new CustomEvent("live-window:weather-update", {
           detail: { weather: this.state.store.weather },
