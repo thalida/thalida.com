@@ -3,44 +3,50 @@ title: Builder’s Guide
 description: "A Minecraft Cookbook: Figure out the recipes and resources you’ll need for your next build!"
 publishedOn: 2021-12-23
 tags: [minecraft, python, vue]
-coverImage: builders-guide/Screen_Shot_2022-02-19_at_19.08.28.png
-coverImageAlt: A screenshot of the Builder's Guide app, showing a Minecraft recipe and resources
+coverImage: builders-guide/splash-page-with-minecraft-items.png
+coverImageAlt: Builder's Guide splash page showing the title "builder's guide — A Minecraft Cookbook" with floating 3D Minecraft item blocks surrounding a green "Plan your build" button.
 category: website
 ---
 
-![Screen Shot 2022-02-19 at 19.08.28.png](builders-guide/Screen_Shot_2022-02-19_at_19.08.28.png)
+![Builder's Guide splash page showing the title "builder's guide — A Minecraft Cookbook" with floating 3D Minecraft item blocks surrounding a green "Plan your build" button](builders-guide/splash-page-with-minecraft-items.png)
 
 | Links                                                 |                                                |
 | ----------------------------------------------------- | ---------------------------------------------- |
 | [Github →](https://github.com/thalida/builders-guide) | [Website →](https://builders-guide.app/splash) |
 
+
 ## 🧠🌩 Brainstorm
+
 
 ### Name Exploration
 
-|                                                              |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Paper.2020.me.63.png](builders-guide/Paper.2020.me.63.png) | ![Paper.2020.me.64.png](builders-guide/Paper.2020.me.64.png) |
-| ![Paper.2020.me.66.png](builders-guide/Paper.2020.me.66.png) | ![Paper.2020.me.65.png](builders-guide/Paper.2020.me.65.png) |
-| ![Paper.2020.me.67.png](builders-guide/Paper.2020.me.67.png) |                                                              |
+| | |
+| --- | --- |
+| ![Brainstorm of names like "minecraft cookbook," "crafting guide," and "shopping list"](builders-guide/sketch-name-brainstorm-cookbook.png) | ![More name ideas: "cookbook," "chef craft," "builder's guide," "game cook"](builders-guide/sketch-name-brainstorm-variations.png) |
+| ![Logo sketches for "builder's guide," "building block," and "bg"/"bb"](builders-guide/sketch-name-brainstorm-logo-and-type.png) | ![Brainstorm of "builder's guide/book," "building block" with cube logos](builders-guide/sketch-name-brainstorm-builders-guide.png) |
+| ![Final name lockup: "builder's guide" in various typographic styles](builders-guide/sketch-name-brainstorm-final-lockup.png) | |
+
 
 ### Color Exploration
 
-![Paper.2020.me.68.png](builders-guide/Paper.2020.me.68.png)
+![Color palette exploration with dots in greens, blues, pinks, and earth tones, plus logo icon variations](builders-guide/sketch-color-palette-exploration.png)
+
 
 ## 🎨 Design
 
+
 ### Paper Sketches
 
-|                                                              |                                                              |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Paper.2020.me.59.png](builders-guide/Paper.2020.me.59.png) | ![Paper.2020.me.58.png](builders-guide/Paper.2020.me.58.png) |
-| ![Paper.2020.me.60.png](builders-guide/Paper.2020.me.60.png) | ![Paper.2020.me.61.png](builders-guide/Paper.2020.me.61.png) |
-| ![Paper.2020.me.62.png](builders-guide/Paper.2020.me.62.png) |                                                              |
+| | |
+| --- | --- |
+| ![Six splash page concepts with colorful backgrounds and Minecraft item icons](builders-guide/sketch-splash-page-concepts.png) | ![User flow wireframes titled "Minecraft Calculator" with page navigation arrows](builders-guide/sketch-user-flow-wireframes.png) |
+| ![Item search and list UI with search bars, item grids, and remove buttons](builders-guide/sketch-item-search-and-list-ui.png) | ![Recipe tree structures showing ingredient breakdowns for a torch](builders-guide/sketch-recipe-tree-and-ingredients.png) |
+| ![Shopping list UI concepts with item counts and inventory tracking](builders-guide/sketch-shopping-list-item-counts.png) | |
+
 
 ### Mockups
 
-|                                                                         |                                                        |
-| ----------------------------------------------------------------------- | ------------------------------------------------------ |
-| ![Splash.png](builders-guide/Splash.png)                                | ![Items: Empty.png](builders-guide/Items_Empty.png)    |
-| ![Recipe Tree: Collpased.png](builders-guide/Recipe_Tree_Collpased.png) | ![Shopping List.png](builders-guide/Shopping_List.png) |
+| | |
+| --- | --- |
+| ![Mockup of splash page with Minecraft blocks and "Plan your build" button](builders-guide/mockup-splash-page.png) | ![Mockup of Build Selection screen with search bar and random pick option](builders-guide/mockup-build-selection-empty.png) |
+| ![Mockup of Build Recipes screen with Dark Prismarine Slab recipe options](builders-guide/mockup-recipe-tree-collapsed.png) | ![Mockup of Shopping List with raw ingredients and build process steps](builders-guide/mockup-shopping-list.png) |
