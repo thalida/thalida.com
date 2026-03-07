@@ -3,24 +3,26 @@ title: Live Window Image Generator
 description: Generate a live window SVG with semi-accurate sky color and weather for any location
 publishedOn: 2024-03-15
 updatedOn: 2024-03-17
-coverImage: live-window-image-generator/Screenshot 2025-07-02 at 22.04.40.png
-coverImageAlt: A screenshot of a generated live window
+coverImage: live-window-image-generator/generated-window-preview.png
+coverImageAlt: Generated live window SVG showing an arched window frame with a purple night sky, clouds, and text reading "New York, 76.05°F, Few Clouds"
 category: tool
 ---
 
-![Screenshot 2025-07-02 at 22.04.40.png](<live-window-image-generator/Screenshot 2025-07-02 at 22.04.40.png>)
+![Generated live window SVG showing an arched window with purple sky, clouds, and New York weather info](live-window-image-generator/generated-window-preview.png)
 
 | Links                                              |                                                        |
 | -------------------------------------------------- | ------------------------------------------------------ |
 | [Github →](https://github.com/thalida/live-window) | [API Docs →](https://livewindow-api.onrender.com/api/) |
+
 
 ## Usage
 
 Embed the image into your HTML or Markdown Document:
 
 ```html
-<img src="https://livewindow-api.onrender.com/api/" />
+<img src="https://livewindow-api.onrender.com/api/" alt="Live window showing current weather for your location" />
 ```
+
 
 ### API Options
 
@@ -30,13 +32,15 @@ Embed the image into your HTML or Markdown Document:
 | lang      | Description language                        | `af`, `al`, `ar`, `az`, `bg`, `ca`, `cz`, `da`, `de`, `el`, `en`, `eu`, `fa`, `fi`, `fr`, `gl`, `he`, `hi`, `hr`, `hu`, `id`, `it`, `ja`, `kr`, `la`, `lt`, `mk`, `no`, `nl`, `pl`, `pt`, `pt_br`, `ro`, `ru`, `sv`, `se`, `sk`, `sl`, `sp`, `es`, `sr`, `th`, `tr`, `ua`, `uk`, `vi`, `zh_cn`, `zh_tw`, `zu` | `en`                               |
 | location  | Location latitude and longitude coordinates | Any lat,lng                                                                                                                                                                                                                                                                                                   | `40.7128,-74.0060` (New York City) |
 
+
 ## Examples
 
 | Window                                                                                                | API Request                                                                                                                                                                                          |
 | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial" />       | **New York, USA (°F)** <br /> [https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial](https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial) |
-| <img src="https://livewindow-api.onrender.com/api/?location=10.6603,-61.5086" />                      | **Port of Spain, Trinidad & Tobago (°C)** <br /> [https://live-window.tunl.sh/api/?location=10.6603,-61.5086](https://live-window.tunl.sh/api/?location=10.6603,-61.5086)                            |
-| <img src="https://livewindow-api.onrender.com/api/?units=standard&location=48.8566,2.3522&lang=fr" /> | **Paris, France (K)** <br /> [https://live-window.tunl.sh/api/?units=standard&location=48.8566,2.3522&lang=fr](https://live-window.tunl.sh/api/?units=standard&location=48.8566,2.3522&lang=fr)      |
+| <img src="https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial" alt="Live window showing current weather for New York in Fahrenheit" /> | **New York, USA (°F)** <br /> [https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial](https://livewindow-api.onrender.com/api/?location=40.7128,-74.0060&units=imperial) |
+| <img src="https://livewindow-api.onrender.com/api/?location=10.6603,-61.5086" alt="Live window showing current weather for Port of Spain, Trinidad" /> | **Port of Spain, Trinidad & Tobago (°C)** <br /> [https://live-window.tunl.sh/api/?location=10.6603,-61.5086](https://live-window.tunl.sh/api/?location=10.6603,-61.5086)                            |
+| <img src="https://livewindow-api.onrender.com/api/?units=standard&location=48.8566,2.3522&lang=fr" alt="Live window showing current weather for Paris in Kelvin with French labels" /> | **Paris, France (K)** <br /> [https://live-window.tunl.sh/api/?units=standard&location=48.8566,2.3522&lang=fr](https://live-window.tunl.sh/api/?units=standard&location=48.8566,2.3522&lang=fr)      |
+
 
 ## FAQs
 
@@ -51,8 +55,10 @@ You can use this tool to find your coordinates:
 <details>
   <summary>How do you embed the custom font?</summary>
 
-In order for the custom font to show when the image is downloaded or included in Github Markdown, the font needs to be encoded directly into the styles.
-Note: You can generate the base 64 encoding for any font here: <https://amio.github.io/embedded-google-fonts/>
+In order for the custom font to show when the image is downloaded or included in Github
+Markdown, the font needs to be encoded directly into the styles.
+Note: You can generate the base 64 encoding for any font here:
+<https://amio.github.io/embedded-google-fonts/>
 
 ```html
 <svg>
@@ -74,12 +80,15 @@ Note: You can generate the base 64 encoding for any font here: <https://amio.git
 
 </details>
 
+
 ## Ideas, Improvements, and Iterations
 
 - [ ] Support any google font
 - [ ] Support hiding location and/or current weather
 
+
 ## How It's Made
+
 
 ### Frameworks, Tools, and Services
 
@@ -88,6 +97,7 @@ Note: You can generate the base 64 encoding for any font here: <https://amio.git
 - API Docs: [Stoplight Elements](https://github.com/stoplightio/elements)
 - Hosting & Deployment: [Render](https://render.com/)
 - Designed In: [Figma](https://www.figma.com/)
+
 
 ### Credits
 

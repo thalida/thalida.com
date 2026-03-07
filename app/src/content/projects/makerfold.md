@@ -3,21 +3,23 @@ title: MakerFold
 description: A platform for Makers to share their progress, plans, and ideas.
 publishedOn: 2015-05-11
 tags: [project, design]
-coverImage: makerfold/makefold.png
-coverImageAlt: A platform for Makers to share their progress, plans, and ideas.
+coverImage: makerfold/dashboard-reminder-bot.png
+coverImageAlt: MakerFold dashboard showing a Reminder Bot profile page with activity feed, follower counts, and project updates on a dark theme
 category: app
 ---
 
-## 🎨 Design
+## 🎨 Design
+
 
 ### Branding
 
-![All Large Icons.png](makerfold/All_Large_Icons.png)
+![MakerFold app icon with blue geometric overlapping shapes on white](makerfold/app-icon.png)
 
-![Maker + Fold.png](makerfold/Maker__Fold.png)
+![MakerFold wordmark logo in black sans-serif text reading "Maker Fold"](makerfold/wordmark-logo.png)
+
 
 ### Mockups
 
-![makefold.png](makerfold/makefold.png)
+![MakerFold dashboard showing a Reminder Bot profile with activity feed and project updates](makerfold/dashboard-reminder-bot.png)
 
-![makefold2.png](makerfold/makefold2.png)
+![MakerFold discover page showing featured projects in a card grid with filter tabs](makerfold/discover-featured-projects.png)

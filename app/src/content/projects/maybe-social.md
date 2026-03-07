@@ -3,34 +3,39 @@ title: maybe.social
 description: An analysed aggregated feed of my social media activity.
 publishedOn: 2019-01-06
 tags: [blog, experiment]
-coverImage: maybe-social/Screen_Shot_2022-02-20_at_20.08.10.png
-coverImageAlt: An analysed aggregated feed of my social media activity.
+coverImage: maybe-social/post-analysis-teddy-bear.png
+coverImageAlt: Post analysis view showing a teddy bear photo with NSFW score, dominant colors, and content labels including "stuffed toy" and "plush"
 category: website
 ---
 
-![Screen Shot 2022-02-20 at 20.08.10.png](maybe-social/Screen_Shot_2022-02-20_at_20.08.10.png)
+![Post analysis showing a teddy bear photo with NSFW score, dominant colors, and content labels](maybe-social/post-analysis-teddy-bear.png)
 
 | Links                                               |     |
 | --------------------------------------------------- | --- |
 | [Github →](https://github.com/thalida/maybe.social) |     |
 
-## 🧠🌩 Brainstorm
+
+## 🧠🌩 Brainstorm
 
 - Use sentiment analysis to describe my social media posts
 - Automatically pull dominant colors from photos (and analyze over time?)
 
-## 🎨 Design
+
+## 🎨 Design
+
 
 ### Mockups
 
+
 #### **V1**
 
-|                                          |                                                |
-| ---------------------------------------- | ---------------------------------------------- |
-| ![Landing.png](maybe-social/Landing.png) | ![Image post.png](maybe-social/Image_post.png) |
+|     |     |
+| --- | --- |
+| ![V1 landing mockup showing "Creating art is work" text posts and photos in a masonry layout](maybe-social/mockup-v1-landing.png) | ![V1 image post detail showing a journal photo with NSFW scores, dominant colors, labels, and text analysis](maybe-social/mockup-v1-image-post.png) |
+
 
 #### **V2**
 
-|                                    |                                                              |
-| ---------------------------------- | ------------------------------------------------------------ |
-| ![List.png](maybe-social/List.png) | ![View - Teddy Bear.png](maybe-social/View_-_Teddy_Bear.png) |
+|     |     |
+| --- | --- |
+| ![V2 post list showing recent posts with dates on a dark purple gradient background](maybe-social/mockup-v2-post-list.png) | ![V2 post detail showing a teddy bear photo with analysis scores and dominant color palette](maybe-social/mockup-v2-post-detail.png) |
