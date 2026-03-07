@@ -829,33 +829,6 @@ const apiBaseUrl = API_BASE_URL;
     overflow-y: auto;
   }
 
-  .search-result-item {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
-    color: var(--color-text);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-  }
-
-  .search-result-item:hover {
-    background: var(--color-midnight-light, #1a2a3a);
-  }
-
-  .search-result-empty,
-  .search-result-error {
-    cursor: default;
-    color: var(--color-muted);
-    font-style: italic;
-  }
-
-  .search-result-coords {
-    font-family: var(--font-mono, monospace);
-    font-size: 0.625rem;
-    color: var(--color-muted);
-  }
-
   .coords-display {
     font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
@@ -913,5 +886,34 @@ const apiBaseUrl = API_BASE_URL;
   .reset-btn:hover {
     background: #e74c3c;
     color: white;
+  }
+</style>
+
+<style is:global>
+  .search-result-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .search-result-item:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+  }
+
+  .search-result-empty,
+  .search-result-error {
+    cursor: default;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+
+  .search-result-coords {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.625rem;
+    color: var(--color-muted);
   }
 </style>
