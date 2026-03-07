@@ -1,7 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { loadState, saveState, DEFAULT_STORE, CACHE_VERSION } from "../state";
-
-const STORAGE_KEY = "liveWindowStore";
+import { loadState, saveState, DEFAULT_STORE, CACHE_VERSION, STORAGE_KEY } from "../state";
 
 describe("loadState", () => {
   beforeEach(() => {

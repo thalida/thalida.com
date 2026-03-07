@@ -3,8 +3,9 @@ import {
   SKY_PHASES,
   calculatePhaseTimestamps,
   getDefaultSunTimes,
-  blendGradient,
+  lerpGradient,
   getCurrentSkyGradient,
+  findPhasePosition,
 } from "../utils/sky-gradient";
 import type { SkyGradient } from "../types";
 
@@ -126,7 +127,7 @@ describe("calculatePhaseTimestamps", () => {
   });
 });
 
-describe("blendGradient", () => {
+describe("lerpGradient", () => {
   const a: SkyGradient = {
     zenith: { r: 0, g: 0, b: 0 },
     upper: { r: 0, g: 0, b: 0 },
@@ -141,19 +142,19 @@ describe("blendGradient", () => {
   };
 
   it("returns first gradient at t=0", () => {
-    const result = blendGradient(a, b, 0);
+    const result = lerpGradient(a, b, 0);
     expect(result.zenith).toEqual({ r: 0, g: 0, b: 0 });
     expect(result.horizon).toEqual({ r: 0, g: 0, b: 0 });
   });
 
   it("returns second gradient at t=1", () => {
-    const result = blendGradient(a, b, 1);
+    const result = lerpGradient(a, b, 1);
     expect(result.zenith).toEqual({ r: 100, g: 200, b: 50 });
     expect(result.horizon).toEqual({ r: 255, g: 255, b: 255 });
   });
 
   it("returns midpoint at t=0.5", () => {
-    const result = blendGradient(a, b, 0.5);
+    const result = lerpGradient(a, b, 0.5);
     expect(result.zenith).toEqual({ r: 50, g: 100, b: 25 });
     expect(result.upper).toEqual({ r: 100, g: 50, b: 75 });
     expect(result.lower).toEqual({ r: 25, g: 25, b: 125 });
@@ -161,12 +162,12 @@ describe("blendGradient", () => {
   });
 
   it("clamps t below 0 to 0", () => {
-    const result = blendGradient(a, b, -0.5);
+    const result = lerpGradient(a, b, -0.5);
     expect(result.zenith).toEqual({ r: 0, g: 0, b: 0 });
   });
 
   it("clamps t above 1 to 1", () => {
-    const result = blendGradient(a, b, 1.5);
+    const result = lerpGradient(a, b, 1.5);
     expect(result.zenith).toEqual({ r: 100, g: 200, b: 50 });
   });
 });
@@ -221,5 +222,51 @@ describe("getCurrentSkyGradient", () => {
     late.setHours(23, 0, 0, 0);
     const result = getCurrentSkyGradient(late.getTime(), sunrise, sunset);
     expect(result.zenith.r).toBeLessThan(15);
+  });
+});
+
+describe("findPhasePosition", () => {
+  const today = new Date();
+  today.setHours(7, 0, 0, 0);
+  const sunrise = today.getTime();
+  today.setHours(19, 0, 0, 0);
+  const sunset = today.getTime();
+
+  it("returns night phase at midnight", () => {
+    const midnight = new Date(sunrise);
+    midnight.setHours(0, 0, 0, 0);
+    const { phaseIdx } = findPhasePosition(midnight.getTime(), sunrise, sunset);
+    expect(phaseIdx).toBe(0);
+  });
+
+  it("returns sunrise phase at sunrise", () => {
+    const { phaseIdx } = findPhasePosition(sunrise, sunrise, sunset);
+    expect(phaseIdx).toBe(4);
+  });
+
+  it("returns midday phase at solar noon", () => {
+    const noon = (sunrise + sunset) / 2;
+    const { phaseIdx } = findPhasePosition(noon, sunrise, sunset);
+    expect(phaseIdx).toBe(8);
+  });
+
+  it("returns sunset phase at sunset", () => {
+    const { phaseIdx } = findPhasePosition(sunset, sunrise, sunset);
+    expect(phaseIdx).toBe(12);
+  });
+
+  it("t is between 0 and 1", () => {
+    const noon = (sunrise + sunset) / 2;
+    const { t } = findPhasePosition(noon, sunrise, sunset);
+    expect(t).toBeGreaterThanOrEqual(0);
+    expect(t).toBeLessThanOrEqual(1);
+  });
+
+  it("wraps nextIdx from 15 to 0", () => {
+    const late = new Date(sunrise);
+    late.setHours(23, 0, 0, 0);
+    const { phaseIdx, nextIdx } = findPhasePosition(late.getTime(), sunrise, sunset);
+    expect(phaseIdx).toBe(15);
+    expect(nextIdx).toBe(0);
   });
 });

@@ -21,6 +21,7 @@ export interface SunPosition {
 }
 
 export interface WeatherInfo {
+  id: number | null;
   icon: string | null;
   main: string | null;
   description: string | null;
@@ -41,6 +42,7 @@ export interface PhaseInfo {
 }
 
 export interface WeatherCurrent {
+  id: number;
   main: string;
   description: string;
   icon: string;
@@ -82,6 +84,10 @@ export interface LiveWindowState {
    */
   ref: {
     currentGradient?: SkyGradient;
+    /** True once celestial position data is reliable (weather fetched or no API). */
+    celestialReady?: boolean;
+    /** Override timestamp set by playground controls; used by ClockComponent. */
+    nowOverride?: number;
   };
   /** Derived from web component attributes each cycle */
   attrs: {
@@ -92,6 +98,13 @@ export interface LiveWindowState {
     resolvedUnits: string;
     timezone: string | null;
     label: string | null;
+    // Override attributes (dev playground)
+    overrideTime: string | null;
+    overrideWeather: string | null;
+    overrideSunrise: string | null;
+    overrideSunset: string | null;
+    overrideMoonPhase: number | null;
+    tickSpeed: number;
   };
 }
 

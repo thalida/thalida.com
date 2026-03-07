@@ -41,7 +41,11 @@ export class ClockComponent implements SceneComponent {
     let raw: number;
     let m: number;
 
-    if (state.attrs.timezone) {
+    if (state.ref.nowOverride != null) {
+      const d = new Date(state.ref.nowOverride);
+      raw = d.getHours();
+      m = d.getMinutes();
+    } else if (state.attrs.timezone) {
       const fmt = new Intl.DateTimeFormat("en-US", {
         timeZone: state.attrs.timezone,
         hour: "2-digit",
@@ -50,6 +54,7 @@ export class ClockComponent implements SceneComponent {
       });
       const parts = fmt.formatToParts(new Date());
       raw = parseInt(parts.find((p) => p.type === "hour")?.value ?? "0", 10);
+      // Intl.DateTimeFormat returns 24 for midnight in hour12:false mode in some locales
       if (raw === 24) raw = 0;
       m = parseInt(parts.find((p) => p.type === "minute")?.value ?? "0", 10);
     } else {
@@ -65,8 +70,8 @@ export class ClockComponent implements SceneComponent {
       h = raw % 12 || 12;
     }
 
-    if (this.hourEl) this.hourEl.textContent = `${h < 10 ? "0" : ""}${h}`;
-    if (this.minuteEl) this.minuteEl.textContent = `${m < 10 ? "0" : ""}${m}`;
+    if (this.hourEl) this.hourEl.textContent = String(h).padStart(2, "0");
+    if (this.minuteEl) this.minuteEl.textContent = String(m).padStart(2, "0");
 
     if (this.ampmEl) {
       this.ampmEl.hidden = !use12Hour;

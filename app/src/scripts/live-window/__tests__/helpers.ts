@@ -51,7 +51,7 @@ export function makeTestState(overrides?: {
   return {
     store,
     computed: { phase: buildPhaseInfo(store, now.getTime()) },
-    ref: {},
+    ref: { celestialReady: true },
     attrs: {
       use12Hour: overrides?.use12Hour ?? false,
       hideClock: overrides?.hideClock ?? false,
@@ -60,6 +60,12 @@ export function makeTestState(overrides?: {
       resolvedUnits: overrides?.resolvedUnits ?? "metric",
       timezone: overrides?.timezone ?? null,
       label: overrides?.label ?? null,
+      overrideTime: null,
+      overrideWeather: null,
+      overrideSunrise: null,
+      overrideSunset: null,
+      overrideMoonPhase: null,
+      tickSpeed: 1,
     },
   };
 }

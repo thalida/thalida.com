@@ -1,6 +1,6 @@
 import type { SceneComponent, LiveWindowState } from "../../types";
 import { getSunAngle, getArcPosition } from "../../utils/celestial";
-import { getDefaultSunTimes } from "../../utils/sky-gradient";
+import { getSunTimesWithDefaults } from "../../utils/sky-gradient";
 
 export class SunLayer implements SceneComponent {
   private el: HTMLElement | null = null;
@@ -15,9 +15,7 @@ export class SunLayer implements SceneComponent {
     if (!this.el) return;
 
     const { sunrise, sunset, now } = state.computed.phase;
-    const defaults = getDefaultSunTimes();
-    const sr = sunrise ?? defaults.sunrise;
-    const ss = sunset ?? defaults.sunset;
+    const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(sunrise, sunset);
 
     const angle = getSunAngle(now, sr, ss);
     const pos = getArcPosition(angle);
@@ -32,7 +30,8 @@ export class SunLayer implements SceneComponent {
       this.sun.style.left = `${pos.x}%`;
       this.sun.style.top = `${pos.y}%`;
     }
-    this.el.style.opacity = pos.visible ? "1" : "0";
+    const show = pos.visible && state.ref.celestialReady;
+    this.el.style.opacity = show ? "1" : "0";
   }
 
   destroy(): void {

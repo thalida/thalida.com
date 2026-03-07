@@ -1,9 +1,12 @@
 import type { Star } from "../types";
+import { clamp01 } from "./math";
+import { TWELVE_HOURS_MS } from "./constants";
 import { SKY_PHASES } from "./sky-gradient";
 
 /**
  * Mulberry32 PRNG — deterministic random from a 32-bit seed.
  * Returns a function that produces values in [0, 1).
+ * @see https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
  */
 export function mulberry32(seed: number): () => number {
   let s = seed | 0;
@@ -11,48 +14,51 @@ export function mulberry32(seed: number): () => number {
     s = (s + 0x6d2b79f5) | 0;
     let t = Math.imul(s ^ (s >>> 15), 1 | s);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    return ((t ^ (t >>> 14)) >>> 0) / 2 ** 32;
   };
 }
+
+const DEFAULT_STAR_COUNT = 40;
+const STAR_FIELD_WIDTH = 100;
+const STAR_FIELD_HEIGHT = 70;
+const TWINKLE_DURATION_MIN = 2;
+const TWINKLE_DURATION_RANGE = 3;
+const TWINKLE_DELAY_MAX = 5;
+
+// Star tiers: probability thresholds and visual properties
+const DIM_THRESHOLD = 0.6;
+const MEDIUM_THRESHOLD = 0.9;
+
+const STAR_TIERS = {
+  dim: { sizeMin: 1, sizeRange: 0.5, opacityMin: 0.4, opacityRange: 0.2, glowMin: 0, glowRange: 0 },
+  medium: { sizeMin: 1.5, sizeRange: 1, opacityMin: 0.6, opacityRange: 0.2, glowMin: 2, glowRange: 2 },
+  bright: { sizeMin: 2.5, sizeRange: 1, opacityMin: 0.8, opacityRange: 0.2, glowMin: 4, glowRange: 4 },
+} as const;
 
 /**
  * Generates a star field from a date-based seed.
  * Seed should be YYYYMMDD as an integer (e.g. 20260302).
  */
-export function generateStars(seed: number, count = 40): Star[] {
+export function generateStars(seed: number, count = DEFAULT_STAR_COUNT): Star[] {
   const rng = mulberry32(seed);
   const stars: Star[] = [];
 
   for (let i = 0; i < count; i++) {
     const roll = rng();
-    let size: number;
-    let baseOpacity: number;
-    let glowSize: number;
+    const tier =
+      roll < DIM_THRESHOLD ? STAR_TIERS.dim : roll < MEDIUM_THRESHOLD ? STAR_TIERS.medium : STAR_TIERS.bright;
 
-    if (roll < 0.6) {
-      // Dim (60%)
-      size = 1 + rng() * 0.5;
-      baseOpacity = 0.4 + rng() * 0.2;
-      glowSize = 0;
-    } else if (roll < 0.9) {
-      // Medium (30%)
-      size = 1.5 + rng() * 1;
-      baseOpacity = 0.6 + rng() * 0.2;
-      glowSize = 2 + rng() * 2;
-    } else {
-      // Bright (10%)
-      size = 2.5 + rng() * 1;
-      baseOpacity = 0.8 + rng() * 0.2;
-      glowSize = 4 + rng() * 4;
-    }
+    const size = tier.sizeMin + rng() * tier.sizeRange;
+    const baseOpacity = tier.opacityMin + rng() * tier.opacityRange;
+    const glowSize = tier.glowMin + rng() * tier.glowRange;
 
     stars.push({
-      x: rng() * 100,
-      y: rng() * 70,
+      x: rng() * STAR_FIELD_WIDTH,
+      y: rng() * STAR_FIELD_HEIGHT,
       size,
       baseOpacity,
-      twinkleDuration: 2 + rng() * 3,
-      twinkleDelay: rng() * 5,
+      twinkleDuration: TWINKLE_DURATION_MIN + rng() * TWINKLE_DURATION_RANGE,
+      twinkleDelay: rng() * TWINKLE_DELAY_MAX,
       glowSize,
     });
   }
@@ -85,7 +91,7 @@ const PHASE_OPACITY: Record<number, number> = {
  * Smoothly blends between the current phase opacity and the next phase opacity.
  */
 export function getStarsOpacity(phaseIndex: number, t: number): number {
-  const clamped = Math.max(0, Math.min(1, t));
+  const clamped = clamp01(t);
   const current = PHASE_OPACITY[phaseIndex] ?? 0;
   const nextPhase = (phaseIndex + 1) % SKY_PHASES.length;
   const next = PHASE_OPACITY[nextPhase] ?? 0;
@@ -101,6 +107,6 @@ export function getStarsOpacity(phaseIndex: number, t: number): number {
  * day's seed kicks in — but stars are invisible during the day anyway.
  */
 export function todaySeed(): number {
-  const d = new Date(Date.now() - 12 * 60 * 60 * 1000);
-  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  const d = new Date(Date.now() - TWELVE_HOURS_MS);
+  return d.getFullYear() * 10_000 + (d.getMonth() + 1) * 100 + d.getDate();
 }

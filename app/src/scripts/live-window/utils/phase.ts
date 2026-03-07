@@ -1,5 +1,9 @@
 import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "../types";
-import { SKY_PHASES, getDefaultSunTimes, calculatePhaseTimestamps } from "./sky-gradient";
+import { getSunTimesWithDefaults, findPhasePosition } from "./sky-gradient";
+
+const MAX_SUN_ALTITUDE = 90;
+const AZIMUTH_EAST = 90;
+const AZIMUTH_RANGE = 180;
 
 export function calculateSunPosition(now: number, sunrise: number, sunset: number): SunPosition {
   const isDaytime = now >= sunrise && now <= sunset;
@@ -12,53 +16,25 @@ export function calculateSunPosition(now: number, sunrise: number, sunset: numbe
   const progress = dayDuration > 0 ? (now - sunrise) / dayDuration : 0;
 
   // Altitude: sine curve peaking at solar noon
-  const maxAltitude = 90;
-  const altitude = maxAltitude * Math.sin(progress * Math.PI);
+  const altitude = MAX_SUN_ALTITUDE * Math.sin(progress * Math.PI);
 
-  // Azimuth: linear interpolation from 90 (east) to 270 (west)
-  const azimuth = 90 + progress * 180;
+  // Azimuth: linear interpolation from east (90°) to west (270°)
+  const azimuth = AZIMUTH_EAST + progress * AZIMUTH_RANGE;
 
   return { altitude, azimuth, progress };
 }
 
 export function buildPhaseInfo(state: StoreState, now: number): PhaseInfo {
-  let sr = state.weather.sunrise;
-  let ss = state.weather.sunset;
-  if (sr == null || ss == null) {
-    const defaults = getDefaultSunTimes();
-    sr = defaults.sunrise;
-    ss = defaults.sunset;
-  }
+  const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(state.weather.sunrise, state.weather.sunset);
 
-  const timestamps = calculatePhaseTimestamps(sr, ss);
-
-  let phaseIdx = 0;
-  for (let i = timestamps.length - 1; i >= 0; i--) {
-    if (now >= timestamps[i]) {
-      phaseIdx = i;
-      break;
-    }
-  }
-
-  const nextIdx = (phaseIdx + 1) % SKY_PHASES.length;
-  const phaseStart = timestamps[phaseIdx];
-  const phaseEnd =
-    nextIdx === 0
-      ? (() => {
-          const eod = new Date(now);
-          eod.setHours(23, 59, 59, 999);
-          return eod.getTime();
-        })()
-      : timestamps[nextIdx];
-
-  const duration = phaseEnd - phaseStart;
-  const t = duration > 0 ? (now - phaseStart) / duration : 0;
+  const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
 
   const isDaytime = now >= sr && now <= ss;
   const sun = calculateSunPosition(now, sr, ss);
 
   const current = state.weather.current;
   const weather: WeatherInfo = {
+    id: current?.id ?? null,
     icon: current?.icon ?? null,
     main: current?.main ?? null,
     description: current?.description ?? null,

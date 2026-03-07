@@ -1,4 +1,5 @@
 import type { RGB } from "../types";
+import { lerp } from "./math";
 
 /**
  * Parse a 6-digit hex color string (with or without leading #) into RGB.
@@ -31,6 +32,7 @@ export function parseComputedColor(computed: string): RGB | null {
 /**
  * Calculate the relative luminance of an RGB color per WCAG 2.0.
  * Returns a value between 0 (black) and 1 (white).
+ * @see https://www.w3.org/TR/WCAG20/#relativeluminancedef
  */
 export function relativeLuminance(c: RGB): number {
   const toLinear = (v: number) => {
@@ -68,6 +70,7 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
 
+  // Standard RGB → HSL conversion
   let h = 0;
   let s = 0;
   if (max !== min) {
@@ -104,7 +107,8 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
     };
   };
 
-  // Binary search for the minimum lightness that meets the contrast ratio
+  // Binary search for minimum lightness meeting contrast ratio
+  // 16 iterations → precision ~0.002% of lightness range
   let lo = (max + min) / 2;
   let hi = 1;
   let result = hslToRgb(hi);
@@ -119,4 +123,28 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
     }
   }
   return result;
+}
+
+// --- Color interpolation utilities ---
+
+/** Convert RGB to 6-digit hex string with leading #. */
+export function rgbToHex(c: RGB): string {
+  return `#${c.r.toString(16).padStart(2, "0")}${c.g.toString(16).padStart(2, "0")}${c.b.toString(16).padStart(2, "0")}`;
+}
+
+/** Linearly interpolate two RGB colors. */
+export function lerpColor(a: RGB, b: RGB, t: number): RGB {
+  return {
+    r: Math.round(lerp(a.r, b.r, t)),
+    g: Math.round(lerp(a.g, b.g, t)),
+    b: Math.round(lerp(a.b, b.b, t)),
+  };
+}
+
+/** Linearly interpolate two hex color strings by factor t (0→a, 1→b). */
+export function lerpHex(a: string, b: string, t: number): string {
+  const ac = parseHexColor(a);
+  const bc = parseHexColor(b);
+  if (!ac || !bc) return a;
+  return rgbToHex(lerpColor(ac, bc, t));
 }

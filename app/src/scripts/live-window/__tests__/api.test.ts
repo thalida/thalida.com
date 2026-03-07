@@ -1,11 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   resolveUnits,
-  shouldFetchLocation,
   shouldFetchWeather,
   fetchLocation,
   fetchWeather,
-  IP_RATE_LIMIT,
+  locationChanged,
   WEATHER_RATE_LIMIT,
 } from "../api";
 import { DEFAULT_STORE } from "../state";
@@ -51,25 +50,34 @@ describe("resolveUnits", () => {
   });
 });
 
-describe("shouldFetchLocation", () => {
-  it("returns true when never fetched", () => {
-    expect(shouldFetchLocation(DEFAULT_STORE)).toBe(true);
-  });
-
-  it("returns false when recently fetched", () => {
+describe("locationChanged", () => {
+  it("returns false when lat/lng are the same", () => {
     const state: StoreState = {
       ...DEFAULT_STORE,
-      location: { ...DEFAULT_STORE.location, lastFetched: Date.now() },
+      location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 },
     };
-    expect(shouldFetchLocation(state)).toBe(false);
+    expect(locationChanged(state, state)).toBe(false);
   });
 
-  it("returns true when rate limit exceeded", () => {
-    const state: StoreState = {
-      ...DEFAULT_STORE,
-      location: { ...DEFAULT_STORE.location, lastFetched: Date.now() - IP_RATE_LIMIT - 1 },
-    };
-    expect(shouldFetchLocation(state)).toBe(true);
+  it("returns true when lat changes", () => {
+    const prev: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 51.5, lng: -74.0 } };
+    expect(locationChanged(prev, next)).toBe(true);
+  });
+
+  it("returns true when lng changes", () => {
+    const prev: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -0.1 } };
+    expect(locationChanged(prev, next)).toBe(true);
+  });
+
+  it("returns false when both are null", () => {
+    expect(locationChanged(DEFAULT_STORE, DEFAULT_STORE)).toBe(false);
+  });
+
+  it("returns true when going from null to a value", () => {
+    const next: StoreState = { ...DEFAULT_STORE, location: { ...DEFAULT_STORE.location, lat: 40.7, lng: -74.0 } };
+    expect(locationChanged(DEFAULT_STORE, next)).toBe(true);
   });
 });
 
@@ -149,7 +157,10 @@ describe("fetchLocation", () => {
     expect(result).toBe(DEFAULT_STORE);
   });
 
-  it("skips fetch when rate-limited and location already exists", async () => {
+  it("always fetches even when location already exists", async () => {
+    const mockData = { lat: 51.5, lng: -0.1, country: "GB", name: "London", timezone: "Europe/London" };
+    vi.mocked(fetch).mockResolvedValue({ ok: true, json: () => Promise.resolve(mockData) } as Response);
+
     const state: StoreState = {
       ...DEFAULT_STORE,
       location: { lat: 1, lng: 2, country: "GB", name: "London", timezone: "Europe/London", lastFetched: Date.now() },
@@ -157,8 +168,9 @@ describe("fetchLocation", () => {
 
     const result = await fetchLocation(apiUrl, state);
 
-    expect(fetch).not.toHaveBeenCalled();
-    expect(result).toBe(state);
+    expect(fetch).toHaveBeenCalledWith(`${apiUrl}/location`);
+    expect(result.location.lat).toBe(51.5);
+    expect(result.location.lng).toBe(-0.1);
   });
 
   it("handles missing optional fields with null fallbacks", async () => {
@@ -210,6 +222,7 @@ describe("fetchWeather", () => {
 
   it("returns updated state on successful response", async () => {
     const mockData = {
+      id: 800,
       main: "Clear",
       description: "clear sky",
       icon: "01d",
@@ -223,7 +236,7 @@ describe("fetchWeather", () => {
 
     expect(fetch).toHaveBeenCalledWith(`${apiUrl}/weather?units=imperial&lat=40.7&lon=-74`);
     expect(changed).toBe(true);
-    expect(state.weather.current).toEqual({ main: "Clear", description: "clear sky", icon: "01d", temp: 72 });
+    expect(state.weather.current).toEqual({ id: 800, main: "Clear", description: "clear sky", icon: "01d", temp: 72 });
     expect(state.weather.sunrise).toBe(1700000000000);
     expect(state.weather.sunset).toBe(1700040000000);
     expect(state.weather.units).toBe("imperial");
@@ -256,7 +269,7 @@ describe("fetchWeather", () => {
   });
 
   it("rejects response with missing sunrise/sunset", async () => {
-    const mockData = { main: "Clear", description: "clear", icon: "01d", temp: 20 };
+    const mockData = { id: 800, main: "Clear", description: "clear", icon: "01d", temp: 20 };
     vi.mocked(fetch).mockResolvedValue({ ok: true, json: () => Promise.resolve(mockData) } as Response);
 
     const { state, changed } = await fetchWeather(apiUrl, stateWithLocation, "metric");
@@ -279,6 +292,6 @@ describe("fetchWeather", () => {
     const { state, changed } = await fetchWeather(apiUrl, stateWithLocation, "metric");
 
     expect(changed).toBe(true);
-    expect(state.weather.current).toEqual({ main: "", description: "", icon: "", temp: 0 });
+    expect(state.weather.current).toEqual({ id: 0, main: "", description: "", icon: "", temp: 0 });
   });
 });

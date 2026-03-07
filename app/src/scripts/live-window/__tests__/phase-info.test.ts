@@ -95,7 +95,7 @@ describe("buildPhaseInfo", () => {
       ...DEFAULT_STORE,
       weather: {
         ...DEFAULT_STORE.weather,
-        current: { main: "Clouds", description: "scattered clouds", icon: "03d", temp: 22 },
+        current: { id: 802, main: "Clouds", description: "scattered clouds", icon: "03d", temp: 22 },
       },
     };
     const info = buildPhaseInfo(state, Date.now());

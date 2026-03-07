@@ -70,7 +70,7 @@ Without weather data, fixed hour-of-day offsets are used as a fallback.
 ### SkyLayer System
 
 The sky is rendered by composable **layers** that stack inside the
-`.sky` container. Each layer implements the `SkyLayer` interface
+`.sky` container. Each layer implements the `SceneComponent` interface
 (`mount`, `update`, `destroy`) and receives a `PhaseInfo` object on
 every update with the current time, phase index, interpolation factor,
 sun position, and weather data.
@@ -78,12 +78,15 @@ sun position, and weather data.
 Current layers (bottom to top):
 
 1. **GradientLayer** — renders the sky color gradient
-2. **WeatherLayer** — renders clouds, rain, snow, lightning, mist
+2. **StarsLayer** — renders procedurally generated stars with twinkle animation
+3. **SunLayer** — positions the sun along a celestial arc
+4. **MoonLayer** — positions the moon with lunar phase shadow
+5. **WeatherLayer** — renders clouds, rain, snow, lightning, mist
 
-Adding a new layer (e.g. stars, moon, sun):
+Adding a new layer:
 
-1. Create `layers/<name>.ts` implementing `SkyLayer`
-2. Register it in the `layers` array in `live-window.ts`
+1. Create `components/sky/<Name>Layer.ts` implementing `SceneComponent`
+2. Register it in the `children` array in `SkyComponent.ts`
 3. Add styles to `live-window.css`
 
 
@@ -167,19 +170,30 @@ the host page.
 
 ## Files
 
-| File                 | Purpose                                              |
-| -------------------- | ---------------------------------------------------- |
-| `live-window.ts`     | Web Component orchestrator, lifecycle, intervals     |
-| `live-window.css`    | All styles (loaded into Shadow DOM via `<link>`)     |
-| `types.ts`           | Shared interfaces: RGB, SkyGradient, PhaseInfo, etc. |
-| `color.ts`           | WCAG contrast, luminance, readable color (pure fns)  |
-| `state.ts`           | localStorage persistence, cache versioning           |
-| `api.ts`             | Location + weather fetch via Worker + rate limiting  |
-| `clock.ts`           | Clock rendering + time format logic                  |
-| `blinds.ts`          | Blinds animation + rendering                         |
-| `phase-info.ts`      | PhaseInfo builder + sun position calculation         |
-| `layers/gradient.ts` | GradientLayer: sky color gradient (16 phases)        |
-| `layers/weather.ts`  | WeatherLayer: clouds, rain, snow, lightning, mist    |
+| File                                | Purpose                                              |
+| ----------------------------------- | ---------------------------------------------------- |
+| `LiveWindow.ts`                     | Web Component orchestrator, lifecycle, intervals     |
+| `live-window.css`                   | All styles (loaded into Shadow DOM via `<link>`)     |
+| `types.ts`                          | Shared interfaces: RGB, SkyGradient, PhaseInfo, etc. |
+| `state.ts`                          | localStorage persistence, cache versioning           |
+| `api.ts`                            | Location + weather fetch via Worker + rate limiting  |
+| `components/ClockComponent.ts`      | Clock rendering + time format logic                  |
+| `components/BlindsComponent.ts`     | Blinds animation + rendering                         |
+| `components/InfoPanelComponent.ts`  | Location, weather text, and coords display           |
+| `components/SkyComponent.ts`        | Sky layer orchestrator (ordering + lifecycle)        |
+| `components/sky/GradientLayer.ts`   | Sky color gradient (16 phases)                       |
+| `components/sky/StarsLayer.ts`      | Procedural star field with twinkle                   |
+| `components/sky/SunLayer.ts`        | Sun positioning along celestial arc                  |
+| `components/sky/MoonLayer.ts`       | Moon positioning with lunar phase shadow             |
+| `components/sky/WeatherLayer.ts`    | Clouds, rain, snow, lightning, mist                  |
+| `utils/celestial.ts`                | Sun/moon angle + arc position math                   |
+| `utils/color.ts`                    | WCAG contrast, luminance, hex/RGB conversion         |
+| `utils/constants.ts`                | Shared numeric/timing constants                      |
+| `utils/math.ts`                     | clamp01, lerp, smoothstep, knuthHash                 |
+| `utils/phase.ts`                    | PhaseInfo builder + sun position calculation         |
+| `utils/sky-gradient.ts`             | 16-phase sky gradient, phase timestamps              |
+| `utils/stars.ts`                    | Star field generation, Mulberry32 PRNG               |
+| `utils/timezone.ts`                 | Timezone-shifted timestamp utilities                 |
 
 
 ## Example

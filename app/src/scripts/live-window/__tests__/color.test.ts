@@ -1,5 +1,14 @@
 import { describe, it, expect } from "vitest";
-import { relativeLuminance, contrastRatio, getReadableColor, parseHexColor, parseComputedColor } from "../utils/color";
+import {
+  relativeLuminance,
+  contrastRatio,
+  getReadableColor,
+  parseHexColor,
+  parseComputedColor,
+  rgbToHex,
+  lerpColor,
+  lerpHex,
+} from "../utils/color";
 
 describe("parseHexColor", () => {
   it("parses 6-digit hex with #", () => {
@@ -63,5 +72,48 @@ describe("getReadableColor", () => {
     const result = getReadableColor(darkBlue, darkBg);
     // Result should have higher contrast than original
     expect(contrastRatio(result, darkBg)).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+describe("rgbToHex", () => {
+  it("converts RGB to hex string", () => {
+    expect(rgbToHex({ r: 255, g: 128, b: 0 })).toBe("#ff8000");
+  });
+
+  it("pads single-digit channels with leading zero", () => {
+    expect(rgbToHex({ r: 0, g: 0, b: 0 })).toBe("#000000");
+    expect(rgbToHex({ r: 1, g: 2, b: 3 })).toBe("#010203");
+  });
+});
+
+describe("lerpColor", () => {
+  it("returns first color at t=0", () => {
+    expect(lerpColor({ r: 0, g: 0, b: 0 }, { r: 100, g: 200, b: 50 }, 0)).toEqual({ r: 0, g: 0, b: 0 });
+  });
+
+  it("returns second color at t=1", () => {
+    expect(lerpColor({ r: 0, g: 0, b: 0 }, { r: 100, g: 200, b: 50 }, 1)).toEqual({ r: 100, g: 200, b: 50 });
+  });
+
+  it("returns midpoint at t=0.5", () => {
+    expect(lerpColor({ r: 0, g: 0, b: 0 }, { r: 100, g: 200, b: 50 }, 0.5)).toEqual({ r: 50, g: 100, b: 25 });
+  });
+});
+
+describe("lerpHex", () => {
+  it("interpolates two hex colors", () => {
+    expect(lerpHex("#000000", "#ff8000", 0.5)).toBe("#804000");
+  });
+
+  it("returns first color at t=0", () => {
+    expect(lerpHex("#ff0000", "#0000ff", 0)).toBe("#ff0000");
+  });
+
+  it("returns second color at t=1", () => {
+    expect(lerpHex("#ff0000", "#0000ff", 1)).toBe("#0000ff");
+  });
+
+  it("returns first color for invalid hex input", () => {
+    expect(lerpHex("#ff0000", "invalid", 0.5)).toBe("#ff0000");
   });
 });

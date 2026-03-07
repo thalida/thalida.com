@@ -2,6 +2,27 @@ import type { SceneComponent, LiveWindowState } from "../types";
 
 const NUM_BLINDS = 20;
 
+// Blinds animation: resting / initial state
+const INITIAL_OPEN_DEG = 20;
+
+// Open animation: first swing wide, then settle
+const OPEN_SWING_DEG = 75;
+const OPEN_SWING_STEP = 5;
+const OPEN_SPEED_MS = 150;
+
+// Final collapse ratio: between MIN_COLLAPSE_RATIO and MIN_COLLAPSE_RATIO + COLLAPSE_RATIO_RANGE
+// (e.g., 0.7 to 0.95 = 70–95% of blinds collapse upward when opened)
+const MIN_COLLAPSE_RATIO = 0.7;
+const COLLAPSE_RATIO_RANGE = 0.25;
+const MIN_SKEW_DEG = 2;
+const SKEW_RANGE_DEG = 8;
+const FINAL_OPEN_DEG_MIN = 78;
+const FINAL_OPEN_DEG_RANGE = 7;
+
+// Close animation
+const CLOSE_STEP = 3;
+const CLOSE_SPEED_MS = 80;
+
 interface BlindsState {
   numBlindsCollapsed: number;
   blindsOpenDeg: number;
@@ -19,13 +40,14 @@ export class BlindsComponent implements SceneComponent {
 
   private blindsState: BlindsState = {
     numBlindsCollapsed: 0,
-    blindsOpenDeg: 20,
+    blindsOpenDeg: INITIAL_OPEN_DEG,
     blindsSkewDeg: 0,
     skewDirection: 0,
   };
 
-  private animationStarted = false;
+  private isOpen = false;
   private animationInterval: number | null = null;
+  private animationResolve: (() => void) | null = null;
 
   mount(container: HTMLElement): void {
     this.containerEl = container;
@@ -43,22 +65,71 @@ export class BlindsComponent implements SceneComponent {
   }
 
   update(_state: LiveWindowState): void {
-    if (!this.animationStarted) {
-      this.animationStarted = true;
-      this.runAnimation();
-    }
+    // Blinds animation is driven by openBlinds/closeBlinds, not the update cycle.
   }
 
   destroy(): void {
-    if (this.animationInterval != null) {
-      clearInterval(this.animationInterval);
-      this.animationInterval = null;
-    }
+    this.cancelAnimation();
+    this.isOpen = false;
+    this.blindsState = {
+      numBlindsCollapsed: 0,
+      blindsOpenDeg: INITIAL_OPEN_DEG,
+      blindsSkewDeg: 0,
+      skewDirection: 0,
+    };
     if (this.containerEl) this.containerEl.innerHTML = "";
     this.containerEl = null;
     this.blindsEl = null;
     this.stringLeftEl = null;
     this.stringRightEl = null;
+  }
+
+  openBlinds(): void {
+    if (this.isOpen) return;
+    this.isOpen = true;
+    this.cancelAnimation();
+
+    this.stepAnimation({ blindsOpenDeg: { targetValue: OPEN_SWING_DEG, step: OPEN_SWING_STEP } }, OPEN_SPEED_MS).then(
+      () => {
+        if (!this.isOpen) return;
+        const collapseRatio = MIN_COLLAPSE_RATIO + Math.random() * COLLAPSE_RATIO_RANGE;
+        const skewAmount = MIN_SKEW_DEG + Math.random() * SKEW_RANGE_DEG;
+        const openDeg = FINAL_OPEN_DEG_MIN + Math.random() * FINAL_OPEN_DEG_RANGE;
+        this.stepAnimation({
+          blindsOpenDeg: { targetValue: openDeg, step: 1 },
+          numBlindsCollapsed: { targetValue: Math.round(NUM_BLINDS * collapseRatio), step: 1 },
+          blindsSkewDeg: { targetValue: skewAmount, step: 1 },
+          skewDirection: { targetValue: Math.random() < 0.5 ? -1 : 1, step: 1 },
+        });
+      },
+    );
+  }
+
+  closeBlinds(): void {
+    if (!this.isOpen) return;
+    this.isOpen = false;
+    this.cancelAnimation();
+
+    void this.stepAnimation(
+      {
+        numBlindsCollapsed: { targetValue: 0, step: 1 },
+        blindsOpenDeg: { targetValue: INITIAL_OPEN_DEG, step: CLOSE_STEP },
+        blindsSkewDeg: { targetValue: 0, step: 1 },
+        skewDirection: { targetValue: 0, step: 1 },
+      },
+      CLOSE_SPEED_MS,
+    );
+  }
+
+  private cancelAnimation(): void {
+    if (this.animationInterval != null) {
+      clearInterval(this.animationInterval);
+      this.animationInterval = null;
+    }
+    if (this.animationResolve) {
+      this.animationResolve();
+      this.animationResolve = null;
+    }
   }
 
   private renderBlinds(): void {
@@ -89,6 +160,8 @@ export class BlindsComponent implements SceneComponent {
       <div class="rod"></div>
     `;
 
+    // Double requestAnimationFrame ensures the browser has fully computed layout
+    // before we measure element positions for the string height calculation
     requestAnimationFrame(() => requestAnimationFrame(() => this.updateStrings()));
   }
 
@@ -104,23 +177,13 @@ export class BlindsComponent implements SceneComponent {
     if (this.stringRightEl) this.stringRightEl.style.height = `${mr.getBoundingClientRect().top - winTop}px`;
   }
 
-  private runAnimation(): void {
-    this.stepAnimation({ blindsOpenDeg: { targetValue: 75, step: 5 } }, 150).then(() => {
-      this.stepAnimation({
-        blindsOpenDeg: { targetValue: 80, step: 1 },
-        numBlindsCollapsed: { targetValue: NUM_BLINDS * 0.7, step: 1 },
-        blindsSkewDeg: { targetValue: 5, step: 1 },
-        skewDirection: { targetValue: -1, step: 1 },
-      });
-    });
-  }
-
   private stepAnimation(
     targets: Partial<Record<AnimatableProp, { targetValue: number; step: number }>>,
     speedMs = 100,
   ): Promise<void> {
     const remaining = new Map(Object.entries(targets) as [string, { targetValue: number; step: number }][]);
     return new Promise<void>((resolve) => {
+      this.animationResolve = resolve;
       this.animationInterval = window.setInterval(() => {
         const size = remaining.size;
         let finished = 0;
@@ -134,6 +197,7 @@ export class BlindsComponent implements SceneComponent {
 
           const reached = dir === -1 ? next <= anim.targetValue : next >= anim.targetValue;
           if (reached) {
+            this.blindsState[key] = anim.targetValue;
             finished++;
             remaining.delete(prop);
           }
@@ -146,20 +210,29 @@ export class BlindsComponent implements SceneComponent {
             clearInterval(this.animationInterval);
             this.animationInterval = null;
           }
+          this.animationResolve = null;
           resolve();
         }
       }, speedMs);
     });
   }
 
+  /**
+   * Compute the skew + rotation transform for an individual open blind slat.
+   * The total skew is distributed linearly across open blinds, creating a
+   * perspective-like fan effect. blindIndex counts from the top (0 = topmost open slat).
+   */
   private getSkewAndRotateTransform(blindIndex: number): string {
     const state = this.blindsState;
+    // Count from bottom: currBlind = 1 for the bottom slat
     const currBlind = NUM_BLINDS - blindIndex;
     const numOpen = NUM_BLINDS - state.numBlindsCollapsed;
+    // Each open slat gets an equal fraction of the total skew
     const skewSteps = numOpen > 0 ? state.blindsSkewDeg / numOpen : 0;
 
     let skewDeg = 0;
     if (state.skewDirection !== 0 && state.blindsSkewDeg >= 0) {
+      // Linearly distribute skew: topmost open slat gets full skew, bottom gets zero
       skewDeg = state.blindsSkewDeg - (currBlind - state.numBlindsCollapsed - 1) * skewSteps;
     }
 
@@ -171,6 +244,7 @@ export class BlindsComponent implements SceneComponent {
     const state = this.blindsState;
     let skewDeg = 0;
     if (state.skewDirection !== 0 && state.blindsSkewDeg >= 0) {
+      // Collapsed group and slat bar sit at the midpoint of the total skew
       skewDeg = state.blindsSkewDeg / 2;
     }
     return `skewY(${skewDeg * state.skewDirection}deg)`;

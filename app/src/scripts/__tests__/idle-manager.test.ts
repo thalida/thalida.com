@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { createIdleManager } from "@components/Chat/chat-idle";
+import { createIdleManager } from "@scripts/idle-manager";
 
 describe("createIdleManager", () => {
   beforeEach(() => {
@@ -33,8 +33,7 @@ describe("createIdleManager", () => {
     vi.advanceTimersByTime(3000);
     manager.handleVisibilityChange(false); // visible again
 
-    vi.advanceTimersByTime(5000);
-
+    vi.advanceTimersByTime(3000); // 3s into new timer, not yet 5s
     expect(onIdle).not.toHaveBeenCalled();
 
     manager.destroy();
@@ -80,15 +79,50 @@ describe("createIdleManager", () => {
     manager.destroy();
   });
 
-  it("does not start timer when tab is visible", () => {
+  it("goes idle after inactivity timeout even with tab visible", () => {
     const onIdle = vi.fn();
     const onActive = vi.fn();
     const manager = createIdleManager({ onIdle, onActive, timeoutMs: 5000 });
 
-    manager.handleVisibilityChange(false); // visible
-    vi.advanceTimersByTime(10000);
+    // No visibility change, no user activity — just wait
+    vi.advanceTimersByTime(5000);
+
+    expect(onIdle).toHaveBeenCalledOnce();
+
+    manager.destroy();
+  });
+
+  it("resets inactivity timer on user activity", () => {
+    const onIdle = vi.fn();
+    const onActive = vi.fn();
+    const manager = createIdleManager({ onIdle, onActive, timeoutMs: 5000 });
+
+    vi.advanceTimersByTime(3000);
+    manager.handleActivity(); // reset timer
+    vi.advanceTimersByTime(3000); // 3s after reset, not yet 5s
 
     expect(onIdle).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(2000); // now 5s after reset
+    expect(onIdle).toHaveBeenCalledOnce();
+
+    manager.destroy();
+  });
+
+  it("restarts inactivity timer when tab becomes visible", () => {
+    const onIdle = vi.fn();
+    const onActive = vi.fn();
+    const manager = createIdleManager({ onIdle, onActive, timeoutMs: 5000 });
+
+    manager.handleVisibilityChange(true); // hidden
+    vi.advanceTimersByTime(3000);
+    manager.handleVisibilityChange(false); // visible — restarts timer
+
+    vi.advanceTimersByTime(4999);
+    expect(onIdle).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(1);
+    expect(onIdle).toHaveBeenCalledOnce();
 
     manager.destroy();
   });

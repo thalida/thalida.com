@@ -1,0 +1,726 @@
+---
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import { API_BASE_URL } from "@lib/constants";
+
+if (import.meta.env.PROD) {
+  return Astro.redirect("/404");
+}
+
+const apiBaseUrl = API_BASE_URL;
+---
+
+<BaseLayout>
+  <div class="playground">
+    <div class="playground-window">
+      <live-window id="preview-window" api-url={apiBaseUrl} theme="dark" bg-color="#030a12"></live-window>
+    </div>
+    <div class="playground-controls" id="controls">
+      <h2 class="controls-title">Live Window Playground</h2>
+
+      <fieldset class="control-group">
+        <legend>Location</legend>
+        <div class="control-row">
+          <label for="location-select">Preset</label>
+          <select id="location-select">
+            <option value="">Auto (IP-based)</option>
+            <option value="40.7128,-74.0060" data-tz="America/New_York">New York, US</option>
+            <option value="51.5074,-0.1278" data-tz="Europe/London">London, UK</option>
+            <option value="35.6762,139.6503" data-tz="Asia/Tokyo">Tokyo, JP</option>
+            <option value="-33.8688,151.2093" data-tz="Australia/Sydney">Sydney, AU</option>
+            <option value="64.1466,-21.9426" data-tz="Atlantic/Reykjavik">Reykjavik, IS</option>
+            <option value="1.3521,103.8198" data-tz="Asia/Singapore">Singapore, SG</option>
+            <option value="-22.9068,-43.1729" data-tz="America/Sao_Paulo">Rio de Janeiro, BR</option>
+            <option value="30.0444,31.2357" data-tz="Africa/Cairo">Cairo, EG</option>
+            <option value="custom">Custom...</option>
+          </select>
+        </div>
+        <div id="custom-coords" class="custom-coords" hidden>
+          <div class="control-row">
+            <label for="lat-input">Latitude</label>
+            <input type="number" id="lat-input" step="0.0001" min="-90" max="90" placeholder="40.7128" />
+          </div>
+          <div class="control-row">
+            <label for="lng-input">Longitude</label>
+            <input type="number" id="lng-input" step="0.0001" min="-180" max="180" placeholder="-74.0060" />
+          </div>
+          <div class="control-row">
+            <label for="tz-input">Timezone (IANA)</label>
+            <input type="text" id="tz-input" placeholder="America/New_York" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Weather</legend>
+        <div class="control-row">
+          <label for="weather-select">Condition</label>
+          <select id="weather-select">
+            <option value="">Live</option>
+            <optgroup label="Clear / Clouds">
+              <option value="800">800 - Clear Sky</option>
+              <option value="801">801 - Few Clouds</option>
+              <option value="802">802 - Scattered Clouds</option>
+              <option value="803">803 - Broken Clouds</option>
+              <option value="804">804 - Overcast</option>
+            </optgroup>
+            <optgroup label="Thunderstorm">
+              <option value="200">200 - Thunderstorm + Light Rain</option>
+              <option value="201">201 - Thunderstorm + Rain</option>
+              <option value="202">202 - Thunderstorm + Heavy Rain</option>
+              <option value="210">210 - Light Thunderstorm</option>
+              <option value="211">211 - Thunderstorm</option>
+              <option value="212">212 - Heavy Thunderstorm</option>
+              <option value="221">221 - Ragged Thunderstorm</option>
+              <option value="230">230 - Thunderstorm + Light Drizzle</option>
+              <option value="231">231 - Thunderstorm + Drizzle</option>
+              <option value="232">232 - Thunderstorm + Heavy Drizzle</option>
+            </optgroup>
+            <optgroup label="Drizzle">
+              <option value="300">300 - Light Drizzle</option>
+              <option value="301">301 - Drizzle</option>
+              <option value="302">302 - Heavy Drizzle</option>
+              <option value="310">310 - Light Drizzle Rain</option>
+              <option value="311">311 - Drizzle Rain</option>
+              <option value="312">312 - Heavy Drizzle Rain</option>
+              <option value="313">313 - Shower Rain + Drizzle</option>
+              <option value="314">314 - Heavy Shower Rain + Drizzle</option>
+              <option value="321">321 - Shower Drizzle</option>
+            </optgroup>
+            <optgroup label="Rain">
+              <option value="500">500 - Light Rain</option>
+              <option value="501">501 - Moderate Rain</option>
+              <option value="502">502 - Heavy Rain</option>
+              <option value="503">503 - Very Heavy Rain</option>
+              <option value="504">504 - Extreme Rain</option>
+              <option value="511">511 - Freezing Rain</option>
+              <option value="520">520 - Light Shower Rain</option>
+              <option value="521">521 - Shower Rain</option>
+              <option value="522">522 - Heavy Shower Rain</option>
+              <option value="531">531 - Ragged Shower Rain</option>
+            </optgroup>
+            <optgroup label="Snow">
+              <option value="600">600 - Light Snow</option>
+              <option value="601">601 - Snow</option>
+              <option value="602">602 - Heavy Snow</option>
+              <option value="611">611 - Sleet</option>
+              <option value="612">612 - Light Shower Sleet</option>
+              <option value="613">613 - Shower Sleet</option>
+              <option value="615">615 - Light Rain + Snow</option>
+              <option value="616">616 - Rain + Snow</option>
+              <option value="620">620 - Light Shower Snow</option>
+              <option value="621">621 - Shower Snow</option>
+              <option value="622">622 - Heavy Shower Snow</option>
+            </optgroup>
+            <optgroup label="Atmosphere">
+              <option value="701">701 - Mist</option>
+              <option value="711">711 - Smoke</option>
+              <option value="721">721 - Haze</option>
+              <option value="731">731 - Sand/Dust Whirls</option>
+              <option value="741">741 - Fog</option>
+              <option value="751">751 - Sand</option>
+              <option value="761">761 - Dust</option>
+              <option value="762">762 - Volcanic Ash</option>
+              <option value="771">771 - Squalls</option>
+              <option value="781">781 - Tornado</option>
+            </optgroup>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Time</legend>
+        <div class="control-row">
+          <label for="time-mode">Mode</label>
+          <select id="time-mode">
+            <option value="live" selected>Live</option>
+            <option value="override">Override</option>
+          </select>
+        </div>
+        <div id="time-override-controls" hidden>
+          <div class="control-row">
+            <label for="time-slider">Time of day</label>
+            <output id="time-display">12:00</output>
+          </div>
+          <input type="range" id="time-slider" min="0" max="1439" value="720" step="1" />
+          <div class="phase-buttons">
+            <button data-phase-hour="0" data-phase-min="0">Night</button>
+            <button data-phase-hour="4" data-phase-min="30">Astro Dawn</button>
+            <button data-phase-hour="5" data-phase-min="0">Nautical Dawn</button>
+            <button data-phase-hour="5" data-phase-min="30">Civil Dawn</button>
+            <button data-phase-hour="6" data-phase-min="0">Sunrise</button>
+            <button data-phase-hour="6" data-phase-min="30">Golden AM</button>
+            <button data-phase-hour="7" data-phase-min="0">Early Morning</button>
+            <button data-phase-hour="9" data-phase-min="0">Late Morning</button>
+            <button data-phase-hour="12" data-phase-min="0">Midday</button>
+            <button data-phase-hour="15" data-phase-min="0">Early Afternoon</button>
+            <button data-phase-hour="17" data-phase-min="0">Late Afternoon</button>
+            <button data-phase-hour="17" data-phase-min="30">Golden PM</button>
+            <button data-phase-hour="18" data-phase-min="0">Sunset</button>
+            <button data-phase-hour="18" data-phase-min="30">Civil Dusk</button>
+            <button data-phase-hour="19" data-phase-min="0">Nautical Dusk</button>
+            <button data-phase-hour="19" data-phase-min="30">Astro Dusk</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group" id="sun-moon-group" hidden>
+        <legend>Sun / Moon</legend>
+        <div class="control-row">
+          <label for="sunrise-input">Sunrise</label>
+          <input type="time" id="sunrise-input" value="06:00" />
+        </div>
+        <div class="control-row">
+          <label for="sunset-input">Sunset</label>
+          <input type="time" id="sunset-input" value="18:00" />
+        </div>
+        <div class="control-row">
+          <label for="moon-slider">Moon phase</label>
+          <output id="moon-display">Auto</output>
+        </div>
+        <input type="range" id="moon-slider" min="0" max="100" value="-1" step="1" />
+        <div class="phase-buttons">
+          <button data-moon="-1">Auto</button>
+          <button data-moon="0">New</button>
+          <button data-moon="25">First Quarter</button>
+          <button data-moon="50">Full</button>
+          <button data-moon="75">Last Quarter</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group" id="tick-speed-group" hidden>
+        <legend>Tick Speed</legend>
+        <div class="control-row">
+          <label for="speed-slider">Multiplier</label>
+          <output id="speed-display">1x</output>
+        </div>
+        <input type="range" id="speed-slider" min="1" max="1000" value="1" step="1" />
+        <div class="speed-presets">
+          <button data-speed="1">1x</button>
+          <button data-speed="10">10x</button>
+          <button data-speed="100">100x</button>
+          <button data-speed="720">720x</button>
+        </div>
+        <div class="playback-controls">
+          <button id="play-btn">Play</button>
+          <button id="pause-btn">Pause</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Display</legend>
+        <div class="control-row">
+          <label for="clock-toggle">Clock</label>
+          <select id="clock-toggle">
+            <option value="show" selected>Show</option>
+            <option value="hide">Hide</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label for="format-toggle">Time format</label>
+          <select id="format-toggle">
+            <option value="24" selected>24h</option>
+            <option value="12">12h</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <button id="reset-btn" class="reset-btn">Reset All</button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/live-window/LiveWindow.ts"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const win = document.getElementById("preview-window")!;
+    const timeMode = document.getElementById("time-mode") as HTMLSelectElement;
+    const timeOverrideControls = document.getElementById("time-override-controls") as HTMLDivElement;
+    const timeSlider = document.getElementById("time-slider") as HTMLInputElement;
+    const timeDisplay = document.getElementById("time-display") as HTMLOutputElement;
+    const tickSpeedGroup = document.getElementById("tick-speed-group") as HTMLFieldSetElement;
+    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
+    const speedDisplay = document.getElementById("speed-display") as HTMLOutputElement;
+    const playBtn = document.getElementById("play-btn") as HTMLButtonElement;
+    const pauseBtn = document.getElementById("pause-btn") as HTMLButtonElement;
+    const weatherSelect = document.getElementById("weather-select") as HTMLSelectElement;
+    const sunMoonGroup = document.getElementById("sun-moon-group") as HTMLFieldSetElement;
+    const sunriseInput = document.getElementById("sunrise-input") as HTMLInputElement;
+    const sunsetInput = document.getElementById("sunset-input") as HTMLInputElement;
+    const clockToggle = document.getElementById("clock-toggle") as HTMLSelectElement;
+    const formatToggle = document.getElementById("format-toggle") as HTMLSelectElement;
+    const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
+    const locationSelect = document.getElementById("location-select") as HTMLSelectElement;
+    const customCoords = document.getElementById("custom-coords") as HTMLDivElement;
+    const latInput = document.getElementById("lat-input") as HTMLInputElement;
+    const lngInput = document.getElementById("lng-input") as HTMLInputElement;
+    const tzInput = document.getElementById("tz-input") as HTMLInputElement;
+
+    // -- Helpers --
+
+    function minutesToHHMM(minutes: number): string {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    }
+
+    // -- Time mode --
+
+    function setTimeMode(mode: "live" | "override") {
+      const isLive = mode === "live";
+      timeMode.value = mode;
+      timeOverrideControls.hidden = isLive;
+      tickSpeedGroup.hidden = isLive;
+      sunMoonGroup.hidden = isLive;
+
+      if (isLive) {
+        win.removeAttribute("override-time");
+        win.removeAttribute("override-sunrise");
+        win.removeAttribute("override-sunset");
+        win.removeAttribute("override-moon-phase");
+        win.setAttribute("tick-speed", "1");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (win as any).pauseVirtualClock();
+        playBtn.classList.remove("active");
+        pauseBtn.classList.remove("active");
+      } else {
+        // Sync slider to the current live time before showing override controls
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const phase = (win as any).state?.computed?.phase;
+        if (phase?.now) {
+          const d = new Date(phase.now);
+          const mins = d.getHours() * 60 + d.getMinutes();
+          timeSlider.value = String(mins);
+          timeDisplay.textContent = minutesToHHMM(mins);
+        }
+        setTime(parseInt(timeSlider.value, 10));
+        win.setAttribute("override-sunrise", sunriseInput.value);
+        win.setAttribute("override-sunset", sunsetInput.value);
+      }
+    }
+
+    timeMode.addEventListener("change", () => {
+      setTimeMode(timeMode.value as "live" | "override");
+    });
+
+    // -- Time override controls --
+
+    function setTime(minutes: number) {
+      const hhmm = minutesToHHMM(minutes);
+      timeSlider.value = String(minutes);
+      timeDisplay.textContent = hhmm;
+      win.setAttribute("override-time", hhmm);
+    }
+
+    timeSlider.addEventListener("input", () => {
+      setTime(parseInt(timeSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-phase-hour]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const h = parseInt((btn as HTMLElement).dataset.phaseHour!, 10);
+        const m = parseInt((btn as HTMLElement).dataset.phaseMin!, 10);
+        setTime(h * 60 + m);
+      });
+    });
+
+    // -- Tick speed controls --
+
+    function setSpeed(speed: number) {
+      speedSlider.value = String(speed);
+      speedDisplay.textContent = `${speed}x`;
+      win.setAttribute("tick-speed", String(speed));
+    }
+
+    speedSlider.addEventListener("input", () => {
+      setSpeed(parseInt(speedSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-speed]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSpeed(parseInt((btn as HTMLElement).dataset.speed!, 10));
+      });
+    });
+
+    playBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).playVirtualClock();
+      playBtn.classList.add("active");
+      pauseBtn.classList.remove("active");
+    });
+
+    pauseBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).pauseVirtualClock();
+      pauseBtn.classList.add("active");
+      playBtn.classList.remove("active");
+
+      // Sync the time slider to where virtual clock stopped
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const phase = (win as any).state?.computed?.phase;
+      if (phase?.now) {
+        const d = new Date(phase.now);
+        const mins = d.getHours() * 60 + d.getMinutes();
+        timeSlider.value = String(mins);
+        timeDisplay.textContent = minutesToHHMM(mins);
+      }
+    });
+
+    // -- Weather controls --
+
+    function updateWeather() {
+      const value = weatherSelect.value;
+      if (value) {
+        win.setAttribute("override-weather", value);
+      } else {
+        win.removeAttribute("override-weather");
+      }
+    }
+
+    weatherSelect.addEventListener("change", updateWeather);
+    updateWeather();
+
+    // -- Location controls --
+
+    function updateLocation() {
+      const value = locationSelect.value;
+      const option = locationSelect.selectedOptions[0];
+
+      if (value === "") {
+        // Auto (IP-based) — clear all explicit overrides, let API handle it
+        win.removeAttribute("latitude");
+        win.removeAttribute("longitude");
+        win.removeAttribute("timezone");
+        win.removeAttribute("label");
+        customCoords.hidden = true;
+      } else if (value === "custom") {
+        customCoords.hidden = false;
+        win.removeAttribute("label");
+        applyCustomCoords();
+      } else {
+        customCoords.hidden = true;
+        const [lat, lng] = value.split(",");
+        const tz = option?.dataset.tz ?? null;
+        const label = option?.textContent?.trim() ?? null;
+        win.setAttribute("latitude", lat);
+        win.setAttribute("longitude", lng);
+        if (tz) win.setAttribute("timezone", tz);
+        else win.removeAttribute("timezone");
+        if (label) win.setAttribute("label", label);
+        else win.removeAttribute("label");
+      }
+    }
+
+    function applyCustomCoords() {
+      const lat = latInput.value;
+      const lng = lngInput.value;
+      const tz = tzInput.value.trim();
+      if (lat && lng) {
+        win.setAttribute("latitude", lat);
+        win.setAttribute("longitude", lng);
+      }
+      if (tz) win.setAttribute("timezone", tz);
+      else win.removeAttribute("timezone");
+    }
+
+    locationSelect.addEventListener("change", updateLocation);
+    latInput.addEventListener("change", applyCustomCoords);
+    lngInput.addEventListener("change", applyCustomCoords);
+    tzInput.addEventListener("change", applyCustomCoords);
+
+    // -- Sun/Moon controls --
+
+    const moonSlider = document.getElementById("moon-slider") as HTMLInputElement;
+    const moonDisplay = document.getElementById("moon-display") as HTMLOutputElement;
+
+    const MOON_LABELS: Record<string, string> = {
+      "0": "New Moon",
+      "25": "First Quarter",
+      "50": "Full Moon",
+      "75": "Last Quarter",
+    };
+
+    function setMoonPhase(value: number) {
+      moonSlider.value = String(value);
+      if (value < 0) {
+        moonDisplay.textContent = "Auto";
+        win.removeAttribute("override-moon-phase");
+      } else {
+        const phase = value / 100;
+        moonDisplay.textContent = MOON_LABELS[String(value)] ?? `${value}%`;
+        win.setAttribute("override-moon-phase", String(phase));
+      }
+    }
+
+    moonSlider.addEventListener("input", () => {
+      setMoonPhase(parseInt(moonSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-moon]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setMoonPhase(parseInt((btn as HTMLElement).dataset.moon!, 10));
+      });
+    });
+
+    sunriseInput.addEventListener("change", () => {
+      win.setAttribute("override-sunrise", sunriseInput.value);
+    });
+
+    sunsetInput.addEventListener("change", () => {
+      win.setAttribute("override-sunset", sunsetInput.value);
+    });
+
+    // -- Display controls --
+
+    clockToggle.addEventListener("change", () => {
+      if (clockToggle.value === "hide") {
+        win.setAttribute("hide-clock", "");
+      } else {
+        win.removeAttribute("hide-clock");
+      }
+    });
+
+    formatToggle.addEventListener("change", () => {
+      if (formatToggle.value === "12") {
+        win.setAttribute("time-format", "12");
+      } else {
+        win.removeAttribute("time-format");
+      }
+    });
+
+    // -- Reset --
+
+    resetBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).pauseVirtualClock();
+      playBtn.classList.remove("active");
+      pauseBtn.classList.remove("active");
+
+      // Reset location
+      locationSelect.value = "";
+      updateLocation();
+      latInput.value = "";
+      lngInput.value = "";
+      tzInput.value = "";
+
+      // Reset to live time mode
+      setTimeMode("live");
+      setSpeed(1);
+
+      // Reset weather to live
+      weatherSelect.value = "";
+      updateWeather();
+
+      // Reset sun/moon defaults (applied when switching to override)
+      sunriseInput.value = "06:00";
+      sunsetInput.value = "18:00";
+      setMoonPhase(-1);
+
+      // Reset display
+      clockToggle.value = "show";
+      win.removeAttribute("hide-clock");
+      formatToggle.value = "24";
+      win.removeAttribute("time-format");
+    });
+
+    // Initialize in live mode (real time, real weather)
+    setTimeMode("live");
+  });
+</script>
+
+<style>
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+
+  .playground {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  .playground-window {
+    flex: 0 0 auto;
+    position: sticky;
+    top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .playground-controls {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .controls-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-neon);
+    margin: 0;
+  }
+
+  live-window {
+    --window-color: var(--color-midnight);
+    --blinds-color: var(--color-midnight);
+    --clock-text-color: #e74c3c;
+  }
+
+  .control-group {
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .control-group[hidden] {
+    display: none;
+  }
+
+  .control-group legend {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-neon);
+    padding: 0 0.5rem;
+  }
+
+  .control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .control-row label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .control-row output {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .phase-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .phase-buttons button {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .phase-buttons button:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+    color: var(--color-text);
+  }
+
+  .speed-presets,
+  .playback-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .playback-controls button,
+  .speed-presets button {
+    flex: 1;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .playback-controls button:hover,
+  .speed-presets button:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+    color: var(--color-text);
+  }
+
+  .playback-controls button.active {
+    background: var(--color-neon);
+    color: var(--color-background);
+    border-color: var(--color-neon);
+  }
+
+  select {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .control-row select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .custom-coords {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  input[type="number"],
+  input[type="text"] {
+    width: 7rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  input[type="time"] {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .reset-btn {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid #e74c3c;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #e74c3c;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .reset-btn:hover {
+    background: #e74c3c;
+    color: white;
+  }
+</style>

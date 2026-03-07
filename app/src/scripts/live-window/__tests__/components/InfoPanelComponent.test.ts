@@ -28,6 +28,7 @@ function makeState(overrides?: {
         units: "metric",
         current: hasWeather
           ? {
+              id: 802,
               main: "Clouds",
               description: overrides?.description ?? "scattered clouds",
               icon: overrides?.icon ?? "03d",

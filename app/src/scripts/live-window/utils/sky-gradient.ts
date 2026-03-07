@@ -1,4 +1,7 @@
-import type { RGB, SkyGradient } from "../types";
+import type { SkyGradient } from "../types";
+import { clamp01 } from "./math";
+import { lerpColor } from "./color";
+import { THIRTY_MINUTES_MS, ONE_HOUR_MS, NINETY_MINUTES_MS } from "./constants";
 
 interface SkyPhase {
   name: string;
@@ -154,21 +157,34 @@ export const SKY_PHASES: SkyPhase[] = [
   },
 ];
 
-const MIN30 = 30 * 60_000;
-const MIN60 = 60 * 60_000;
-const MIN90 = 90 * 60_000;
+const DEFAULT_SUNRISE_HOUR = 6;
+const DEFAULT_SUNSET_HOUR = 18;
 
 /**
- * Returns default sunrise (6:00 AM) and sunset (6:00 PM) for today.
+ * Returns default sunrise and sunset for today.
  * Used as fallback when weather API data is unavailable.
  */
 export function getDefaultSunTimes(): { sunrise: number; sunset: number } {
   const now = new Date();
   const sr = new Date(now);
-  sr.setHours(6, 0, 0, 0);
+  sr.setHours(DEFAULT_SUNRISE_HOUR, 0, 0, 0);
   const ss = new Date(now);
-  ss.setHours(18, 0, 0, 0);
+  ss.setHours(DEFAULT_SUNSET_HOUR, 0, 0, 0);
   return { sunrise: sr.getTime(), sunset: ss.getTime() };
+}
+
+/**
+ * Returns sunrise/sunset timestamps with fallback to defaults.
+ * Consolidates the null-check-and-fallback pattern used by multiple consumers.
+ */
+export function getSunTimesWithDefaults(
+  sunrise: number | null | undefined,
+  sunset: number | null | undefined,
+): { sunrise: number; sunset: number } {
+  if (sunrise != null && sunset != null) {
+    return { sunrise, sunset };
+  }
+  return getDefaultSunTimes();
 }
 
 /**
@@ -197,8 +213,8 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
   const midnight = new Date(sunrise);
   midnight.setHours(0, 0, 0, 0);
 
-  const goldenAmEnd = sunrise + MIN60; // end of golden hour AM / start of early morning
-  const goldenPmStart = sunset - MIN60; // start of golden hour PM / end of late afternoon
+  const goldenAmEnd = sunrise + ONE_HOUR_MS; // end of golden hour AM / start of early morning
+  const goldenPmStart = sunset - ONE_HOUR_MS; // start of golden hour PM / end of late afternoon
   const solarNoon = (sunrise + sunset) / 2;
 
   // Daylight core: from goldenAmEnd to goldenPmStart
@@ -208,21 +224,21 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
 
   const raw = [
     midnight.getTime(), //  0: night
-    sunrise - MIN90, //  1: astronomicalDawn
-    sunrise - MIN60, //  2: nauticalDawn
-    sunrise - MIN30, //  3: civilDawn
+    sunrise - NINETY_MINUTES_MS, //  1: astronomicalDawn
+    sunrise - ONE_HOUR_MS, //  2: nauticalDawn
+    sunrise - THIRTY_MINUTES_MS, //  3: civilDawn
     sunrise, //  4: sunrise
-    sunrise + MIN30, //  5: goldenHourAm
+    sunrise + THIRTY_MINUTES_MS, //  5: goldenHourAm
     goldenAmEnd, //  6: earlyMorning
     coreStart + coreDuration / 4, //  7: lateMorning
     solarNoon, //  8: midday
     coreStart + (coreDuration * 3) / 4, //  9: earlyAfternoon
     goldenPmStart, // 10: lateAfternoon
-    sunset - MIN30, // 11: goldenHourPm
+    sunset - THIRTY_MINUTES_MS, // 11: goldenHourPm
     sunset, // 12: sunset
-    sunset + MIN30, // 13: civilDusk
-    sunset + MIN60, // 14: nauticalDusk
-    sunset + MIN90, // 15: astronomicalDusk
+    sunset + THIRTY_MINUTES_MS, // 13: civilDusk
+    sunset + ONE_HOUR_MS, // 14: nauticalDusk
+    sunset + NINETY_MINUTES_MS, // 15: astronomicalDusk
   ];
 
   // At extreme latitudes, phases can overlap or go out of order.
@@ -243,45 +259,19 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
   return raw;
 }
 
-function blendChannel(a: number, b: number, t: number): number {
-  return Math.round(a + (b - a) * t);
-}
-
-function blendColor(a: RGB, b: RGB, t: number): RGB {
-  return {
-    r: blendChannel(a.r, b.r, t),
-    g: blendChannel(a.g, b.g, t),
-    b: blendChannel(a.b, b.b, t),
-  };
-}
-
-export function blendGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGradient {
-  const clamped = Math.max(0, Math.min(1, t));
-  return {
-    zenith: blendColor(a.zenith, b.zenith, clamped),
-    upper: blendColor(a.upper, b.upper, clamped),
-    lower: blendColor(a.lower, b.lower, clamped),
-    horizon: blendColor(a.horizon, b.horizon, clamped),
-  };
+export interface PhasePosition {
+  phaseIdx: number;
+  nextIdx: number;
+  t: number;
 }
 
 /**
- * Returns the interpolated sky gradient for a given moment in time.
- * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
+ * Find the current phase index, next phase index, and interpolation factor
+ * for a given timestamp and sunrise/sunset.
  */
-export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
-  let sr = sunrise;
-  let ss = sunset;
-  if (sr == null || ss == null) {
-    const defaults = getDefaultSunTimes();
-    sr = defaults.sunrise;
-    ss = defaults.sunset;
-  }
+export function findPhasePosition(now: number, sunrise: number, sunset: number): PhasePosition {
+  const timestamps = calculatePhaseTimestamps(sunrise, sunset);
 
-  const timestamps = calculatePhaseTimestamps(sr, ss);
-
-  // Find which two phases bracket the current time.
-  // If before the first phase or after the last, we're in the night->night wrap.
   let phaseIdx = 0;
   for (let i = timestamps.length - 1; i >= 0; i--) {
     if (now >= timestamps[i]) {
@@ -292,17 +282,32 @@ export function getCurrentSkyGradient(now: number, sunrise: number | null, sunse
 
   const nextIdx = (phaseIdx + 1) % SKY_PHASES.length;
   const phaseStart = timestamps[phaseIdx];
-  const phaseEnd =
-    nextIdx === 0
-      ? (() => {
-          const eod = new Date(now);
-          eod.setHours(23, 59, 59, 999);
-          return eod.getTime();
-        })()
-      : timestamps[nextIdx];
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999);
+  const phaseEnd = nextIdx === 0 ? endOfDay.getTime() : timestamps[nextIdx];
 
   const duration = phaseEnd - phaseStart;
   const t = duration > 0 ? (now - phaseStart) / duration : 0;
 
-  return blendGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
+  return { phaseIdx, nextIdx, t };
+}
+
+export function lerpGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGradient {
+  const clamped = clamp01(t);
+  return {
+    zenith: lerpColor(a.zenith, b.zenith, clamped),
+    upper: lerpColor(a.upper, b.upper, clamped),
+    lower: lerpColor(a.lower, b.lower, clamped),
+    horizon: lerpColor(a.horizon, b.horizon, clamped),
+  };
+}
+
+/**
+ * Returns the interpolated sky gradient for a given moment in time.
+ * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
+ */
+export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
+  const { sunrise: sr, sunset: ss } = getSunTimesWithDefaults(sunrise, sunset);
+  const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
+  return lerpGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
 }
