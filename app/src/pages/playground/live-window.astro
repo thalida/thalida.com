@@ -15,6 +15,7 @@ const apiBaseUrl = API_BASE_URL;
     </div>
     <div class="playground-controls" id="controls">
       <h2 class="controls-title">Live Window Playground</h2>
+      <a href="/projects/post/live-window" class="back-link">Read the blog post &rarr;</a>
 
       <fieldset class="control-group">
         <legend>Location</legend>
@@ -680,6 +681,17 @@ const apiBaseUrl = API_BASE_URL;
     font-weight: 700;
     color: var(--color-neon);
     margin: 0;
+  }
+
+  .back-link {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--color-neon);
   }
 
   live-window {

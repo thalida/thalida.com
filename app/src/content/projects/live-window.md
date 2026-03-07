@@ -14,7 +14,7 @@ category: website
 
 | Links |  |
 | --- | --- |
-| [Github →](https://github.com/thalida/thalida.com) | [Playground →](https://thalida.com/playground/live-window) |
+| [Github →](https://github.com/thalida/thalida.com) | [Playground →](/playground/live-window) |
 
 
 ## What Is It?
