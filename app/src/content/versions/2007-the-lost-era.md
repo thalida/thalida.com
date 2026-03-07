@@ -4,11 +4,11 @@ description: A period of lost data and designs from thalida.com.
 publishedOn: 2007-09-16
 category: "2007"
 tags: [jquery, mootools, php]
-coverImage: 2007-the-lost-era/Screenshot 2025-07-02 at 13.56.39.png
-coverImageAlt: Screenshot of the lost era of thalida.com, showcasing early web design elements and features.
+coverImage: 2007-the-lost-era/lost-era-centered-title-layout.png
+coverImageAlt: "Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar"
 ---
 
-![The Lost Era](<2007-the-lost-era/Screenshot 2025-07-02 at 13.56.39.png>)
+![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](2007-the-lost-era/lost-era-centered-title-layout.png)
 
 | **Year(s)**                 |     |     |
 | --------------------------- | --- | --- |
@@ -31,4 +31,4 @@ The following history is all gathered from various designs I had saved on a flas
 I've pulled together some screenshots from the lost era of thalida.com, showcasing the designs and features that were
 part of this period.
 
-![The Lost Era](<2007-the-lost-era/Screenshot 2025-07-02 at 13.56.39.png>)
+![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](2007-the-lost-era/lost-era-centered-title-layout.png)

@@ -4,11 +4,11 @@ description: Oh so very very sepia
 publishedOn: 2012-01-01
 category: "2012"
 tags: [php]
-coverImage: 2012-brown-minimal/Untitled.png
-coverImageAlt: Screenshot of the Brown & Minimal design of thalida.com, featuring a sepia-toned background and minimalistic layout.
+coverImage: 2012-brown-minimal/brown-minimal-3d-tilted-mockup.png
+coverImageAlt: "3D tilted dark brown portfolio layout with isometric perspective showing multiple sections and information cards"
 ---
 
-![Untitled](2012-brown-minimal/Untitled.png)
+![3D tilted dark brown portfolio layout with isometric perspective showing multiple sections and information cards](2012-brown-minimal/brown-minimal-3d-tilted-mockup.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -22,13 +22,13 @@ Site Design #8 is the oldest existing version of my site. The first seven versio
 
 ## **Designs**
 
-![Untitled](2012-brown-minimal/Untitled%201.png)
+![Dark brown portfolio page with navigation menu, content sections, portfolio project cards with white images, and right-aligned text blocks](2012-brown-minimal/brown-minimal-full-page-layout.png)
 
 My first design had a very simple dark background
 
 _I was going through a “brown” phase._
 
-![Untitled](2012-brown-minimal/Untitled%202.png)
+![Dark brown portfolio layout with right sidebar featuring navigation, centered content area with portfolio images and descriptive text](2012-brown-minimal/brown-minimal-right-column-layout.png)
 
 I was messing around with the idea of having a background image or pattern, and I thought it'd be cool to use a photo
 of a page in my notebook as the background of the site.
