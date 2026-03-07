@@ -1,4 +1,6 @@
-import type { RGB, SkyGradient } from "../types";
+import type { SkyGradient } from "../types";
+import { clamp01 } from "./math";
+import { lerpColor } from "./color";
 
 interface SkyPhase {
   name: string;
@@ -243,45 +245,19 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
   return raw;
 }
 
-function blendChannel(a: number, b: number, t: number): number {
-  return Math.round(a + (b - a) * t);
-}
-
-function blendColor(a: RGB, b: RGB, t: number): RGB {
-  return {
-    r: blendChannel(a.r, b.r, t),
-    g: blendChannel(a.g, b.g, t),
-    b: blendChannel(a.b, b.b, t),
-  };
-}
-
-export function blendGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGradient {
-  const clamped = Math.max(0, Math.min(1, t));
-  return {
-    zenith: blendColor(a.zenith, b.zenith, clamped),
-    upper: blendColor(a.upper, b.upper, clamped),
-    lower: blendColor(a.lower, b.lower, clamped),
-    horizon: blendColor(a.horizon, b.horizon, clamped),
-  };
+export interface PhasePosition {
+  phaseIdx: number;
+  nextIdx: number;
+  t: number;
 }
 
 /**
- * Returns the interpolated sky gradient for a given moment in time.
- * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
+ * Find the current phase index, next phase index, and interpolation factor
+ * for a given timestamp and sunrise/sunset.
  */
-export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
-  let sr = sunrise;
-  let ss = sunset;
-  if (sr == null || ss == null) {
-    const defaults = getDefaultSunTimes();
-    sr = defaults.sunrise;
-    ss = defaults.sunset;
-  }
+export function findPhasePosition(now: number, sunrise: number, sunset: number): PhasePosition {
+  const timestamps = calculatePhaseTimestamps(sunrise, sunset);
 
-  const timestamps = calculatePhaseTimestamps(sr, ss);
-
-  // Find which two phases bracket the current time.
-  // If before the first phase or after the last, we're in the night->night wrap.
   let phaseIdx = 0;
   for (let i = timestamps.length - 1; i >= 0; i--) {
     if (now >= timestamps[i]) {
@@ -304,5 +280,32 @@ export function getCurrentSkyGradient(now: number, sunrise: number | null, sunse
   const duration = phaseEnd - phaseStart;
   const t = duration > 0 ? (now - phaseStart) / duration : 0;
 
-  return blendGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
+  return { phaseIdx, nextIdx, t };
+}
+
+export function lerpGradient(a: SkyGradient, b: SkyGradient, t: number): SkyGradient {
+  const clamped = clamp01(t);
+  return {
+    zenith: lerpColor(a.zenith, b.zenith, clamped),
+    upper: lerpColor(a.upper, b.upper, clamped),
+    lower: lerpColor(a.lower, b.lower, clamped),
+    horizon: lerpColor(a.horizon, b.horizon, clamped),
+  };
+}
+
+/**
+ * Returns the interpolated sky gradient for a given moment in time.
+ * Falls back to default sun times (6AM/6PM) when sunrise/sunset are unavailable.
+ */
+export function getCurrentSkyGradient(now: number, sunrise: number | null, sunset: number | null): SkyGradient {
+  let sr = sunrise;
+  let ss = sunset;
+  if (sr == null || ss == null) {
+    const defaults = getDefaultSunTimes();
+    sr = defaults.sunrise;
+    ss = defaults.sunset;
+  }
+
+  const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
+  return lerpGradient(SKY_PHASES[phaseIdx].gradient, SKY_PHASES[nextIdx].gradient, t);
 }

@@ -1,4 +1,5 @@
 import type { RGB } from "../types";
+import { lerp } from "./math";
 
 /**
  * Parse a 6-digit hex color string (with or without leading #) into RGB.
@@ -119,4 +120,28 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
     }
   }
   return result;
+}
+
+// --- Color interpolation utilities ---
+
+/** Convert RGB to 6-digit hex string with leading #. */
+export function rgbToHex(c: RGB): string {
+  return `#${c.r.toString(16).padStart(2, "0")}${c.g.toString(16).padStart(2, "0")}${c.b.toString(16).padStart(2, "0")}`;
+}
+
+/** Linearly interpolate two RGB colors. */
+export function lerpColor(a: RGB, b: RGB, t: number): RGB {
+  return {
+    r: Math.round(lerp(a.r, b.r, t)),
+    g: Math.round(lerp(a.g, b.g, t)),
+    b: Math.round(lerp(a.b, b.b, t)),
+  };
+}
+
+/** Linearly interpolate two hex color strings by factor t (0→a, 1→b). */
+export function lerpHex(a: string, b: string, t: number): string {
+  const ac = parseHexColor(a);
+  const bc = parseHexColor(b);
+  if (!ac || !bc) return a;
+  return rgbToHex(lerpColor(ac, bc, t));
 }

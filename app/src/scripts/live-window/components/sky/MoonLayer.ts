@@ -1,14 +1,7 @@
 import type { SceneComponent, LiveWindowState, RGB } from "../../types";
 import { getSunAngle, getMoonPhase, getMoonAngle, getArcPosition } from "../../utils/celestial";
+import { lerpColor } from "../../utils/color";
 import { getDefaultSunTimes } from "../../utils/sky-gradient";
-
-function lerpColor(a: RGB, b: RGB, t: number): RGB {
-  return {
-    r: Math.round(a.r + (b.r - a.r) * t),
-    g: Math.round(a.g + (b.g - a.g) * t),
-    b: Math.round(a.b + (b.b - a.b) * t),
-  };
-}
 
 export class MoonLayer implements SceneComponent {
   private el: HTMLElement | null = null;

@@ -1,4 +1,5 @@
 import type { Star } from "../types";
+import { clamp01 } from "./math";
 import { SKY_PHASES } from "./sky-gradient";
 
 /**
@@ -85,7 +86,7 @@ const PHASE_OPACITY: Record<number, number> = {
  * Smoothly blends between the current phase opacity and the next phase opacity.
  */
 export function getStarsOpacity(phaseIndex: number, t: number): number {
-  const clamped = Math.max(0, Math.min(1, t));
+  const clamped = clamp01(t);
   const current = PHASE_OPACITY[phaseIndex] ?? 0;
   const nextPhase = (phaseIndex + 1) % SKY_PHASES.length;
   const next = PHASE_OPACITY[nextPhase] ?? 0;

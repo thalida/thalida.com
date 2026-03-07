@@ -1,5 +1,5 @@
 import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "../types";
-import { SKY_PHASES, getDefaultSunTimes, calculatePhaseTimestamps } from "./sky-gradient";
+import { getDefaultSunTimes, findPhasePosition } from "./sky-gradient";
 
 export function calculateSunPosition(now: number, sunrise: number, sunset: number): SunPosition {
   const isDaytime = now >= sunrise && now <= sunset;
@@ -30,29 +30,7 @@ export function buildPhaseInfo(state: StoreState, now: number): PhaseInfo {
     ss = defaults.sunset;
   }
 
-  const timestamps = calculatePhaseTimestamps(sr, ss);
-
-  let phaseIdx = 0;
-  for (let i = timestamps.length - 1; i >= 0; i--) {
-    if (now >= timestamps[i]) {
-      phaseIdx = i;
-      break;
-    }
-  }
-
-  const nextIdx = (phaseIdx + 1) % SKY_PHASES.length;
-  const phaseStart = timestamps[phaseIdx];
-  const phaseEnd =
-    nextIdx === 0
-      ? (() => {
-          const eod = new Date(now);
-          eod.setHours(23, 59, 59, 999);
-          return eod.getTime();
-        })()
-      : timestamps[nextIdx];
-
-  const duration = phaseEnd - phaseStart;
-  const t = duration > 0 ? (now - phaseStart) / duration : 0;
+  const { phaseIdx, nextIdx, t } = findPhasePosition(now, sr, ss);
 
   const isDaytime = now >= sr && now <= ss;
   const sun = calculateSunPosition(now, sr, ss);
