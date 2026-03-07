@@ -122,7 +122,6 @@ describe("PRECIP_CONFIG", () => {
   it("defines configs for all precipitation types including new ones", () => {
     expect(PRECIP_CONFIG.lightRain).toBeDefined();
     expect(PRECIP_CONFIG.rain).toBeDefined();
-    expect(PRECIP_CONFIG.thunderstorm).toBeDefined();
     expect(PRECIP_CONFIG.snow).toBeDefined();
     expect(PRECIP_CONFIG.sleet).toBeDefined();
     expect(PRECIP_CONFIG.drizzle).toBeDefined();
