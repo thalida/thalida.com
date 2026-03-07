@@ -70,11 +70,14 @@ export class BlindsComponent implements SceneComponent {
 
     this.stepAnimation({ blindsOpenDeg: { targetValue: 75, step: 5 } }, 150).then(() => {
       if (!this.isOpen) return;
+      const collapseRatio = 0.7 + Math.random() * 0.25; // 70%–95% open height
+      const skewAmount = 2 + Math.random() * 8; // 2–10 degrees
+      const openDeg = 78 + Math.random() * 7; // 78–85 degree rotation
       this.stepAnimation({
-        blindsOpenDeg: { targetValue: 80, step: 1 },
-        numBlindsCollapsed: { targetValue: NUM_BLINDS * 0.7, step: 1 },
-        blindsSkewDeg: { targetValue: 5, step: 1 },
-        skewDirection: { targetValue: -1, step: 1 },
+        blindsOpenDeg: { targetValue: openDeg, step: 1 },
+        numBlindsCollapsed: { targetValue: Math.round(NUM_BLINDS * collapseRatio), step: 1 },
+        blindsSkewDeg: { targetValue: skewAmount, step: 1 },
+        skewDirection: { targetValue: Math.random() < 0.5 ? -1 : 1, step: 1 },
       });
     });
   }
