@@ -312,14 +312,9 @@ export class WeatherLayer implements SceneComponent {
     if (config.atmosphere) {
       const { color, opacity, layers } = config.atmosphere;
       const sizes = ["lg", "md", "sm"];
-      const shadows: Record<string, string> = {
-        lg: `0 -10px 20px 10px ${color}`,
-        md: `0 -10px 40px 30px ${color}`,
-        sm: `0 -10px 30px 20px ${color}`,
-      };
       for (let i = 0; i < layers; i++) {
         const size = sizes[i] ?? "sm";
-        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:${color};opacity:${opacity};box-shadow:${shadows[size]}"></div>`;
+        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:${color};opacity:${opacity}"></div>`;
       }
     }
 
