@@ -5,18 +5,26 @@ publishedOn: 2026-03-07
 coverImage: live-window/cover.png
 coverImageAlt: Live window showing a sunset sky over Reykjavik, Iceland with clouds, a setting sun, and a digital clock reading 18:20
 tags: [typescript, web-component, canvas, weather, astro]
-category: website
+category: app
 ---
+
+<div class="flex flex-col items-center justify-center">
+  <img
+    src="/content/projects/live-window/cover.png"
+    alt="Live window showing a sunset sky over Reykjavik, Iceland with clouds and a setting sun"
+    style="max-height: 500px; width: auto;"
+  />
+</div>
+
+| Links |  |
+| --- | --- |
+| [Github →](https://github.com/thalida/thalida.com) | [Playground →](/playground/live-window) |
 
 > [!NOTE]
 > This post was co-written with Claude (AI). The live window itself
 > was built collaboratively — Thalida designed the vision and user
 > experience, Claude helped with implementation, architecture, and
 > writing this post.
-
-| Links |  |
-| --- | --- |
-| [Github →](https://github.com/thalida/thalida.com) | [Playground →](/playground/live-window) |
 
 
 ## What Is It?
