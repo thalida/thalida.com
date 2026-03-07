@@ -677,6 +677,9 @@ export class WeatherLayer implements SceneComponent {
   static atmosphereParticleHTML(config: AtmosphereParticleConfig): string {
     const sRange = config.sizeRange[1] - config.sizeRange[0];
     const opRange = config.opacityRange[1] - config.opacityRange[0];
+    const ar = config.aspectRatio ?? 1;
+    const blur = config.blur ?? 4;
+    const radius = config.borderRadius ?? "50%";
 
     let out = "";
     for (let i = 0; i < config.count; i++) {
@@ -688,7 +691,10 @@ export class WeatherLayer implements SceneComponent {
       const dur = parseFloat(config.speed) + ((h >>> 12) % 30) / 10;
       const delay = -((h >>> 16) % 80) / 10;
 
-      out += `<div class="atmo-particle atmo-${config.drift}" style="left:${left}%;top:${top}%;width:${size}px;height:${size}px;opacity:${opacity};background:${config.color};animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></div>`;
+      const w = ar >= 1 ? size : Math.round(size * ar);
+      const ht = ar >= 1 ? Math.round(size / ar) : size;
+
+      out += `<div class="atmo-particle atmo-${config.drift}" style="left:${left}%;top:${top}%;width:${w}px;height:${ht}px;opacity:${opacity};background:${config.color};border-radius:${radius};filter:blur(${blur}px);animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></div>`;
     }
     return out;
   }

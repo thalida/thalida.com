@@ -396,6 +396,25 @@ describe("WeatherLayer.atmosphereParticleHTML", () => {
     const b = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.fogBanks);
     expect(a).toBe(b);
   });
+
+  it("renders blur and aspect ratio from config", () => {
+    const html = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.mistWisps);
+    // mistWisps has aspectRatio: 4, blur: 30
+    expect(html).toContain("filter:blur(30px)");
+    // Height should differ from width (aspect ratio applied)
+    // For a particle with e.g. width 40px, height = 40/4 = 10px
+    expect(html).not.toMatch(/width:(\d+)px;height:\1px/);
+  });
+
+  it("renders rise drift class for smoke", () => {
+    const html = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.smokeWisps);
+    expect(html).toContain("atmo-rise");
+  });
+
+  it("uses default blur when not specified", () => {
+    const html = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.dustSwirl);
+    expect(html).toContain("filter:blur(4px)");
+  });
 });
 
 describe("WeatherLayer", () => {
