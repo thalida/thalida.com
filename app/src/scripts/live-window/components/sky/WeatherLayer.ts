@@ -199,8 +199,14 @@ export interface AtmosphereParticleConfig {
   opacityRange: [number, number];
   /** CSS animation duration for particle motion */
   speed: string;
-  /** Motion type: float = horizontal drift, swirl = circular, fall = downward */
-  drift: "float" | "swirl" | "fall";
+  /** Motion type: float = horizontal drift, swirl = circular, fall = downward, rise = upward */
+  drift: "float" | "swirl" | "fall" | "rise";
+  /** Width/height ratio. >1 = horizontal elongation, <1 = vertical. Default 1. */
+  aspectRatio?: number;
+  /** Blur radius in px. Default 4. */
+  blur?: number;
+  /** CSS border-radius. Default "50%". */
+  borderRadius?: string;
 }
 
 export type LightningVariant = "distant" | "standard" | "intense";
@@ -223,26 +229,32 @@ export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
   mistWisps: {
     count: 6,
     color: "#d0d0d0",
-    sizeRange: [20, 45],
-    opacityRange: [12, 30],
-    speed: "14s",
+    sizeRange: [40, 80],
+    opacityRange: [8, 20],
+    speed: "16s",
     drift: "float",
+    aspectRatio: 4,
+    blur: 30,
   },
   fogBanks: {
     count: 4,
     color: "#c0c0c0",
-    sizeRange: [35, 70],
-    opacityRange: [25, 50],
-    speed: "18s",
+    sizeRange: [100, 160],
+    opacityRange: [20, 40],
+    speed: "22s",
     drift: "float",
+    aspectRatio: 1.3,
+    blur: 50,
   },
   smokeWisps: {
     count: 10,
     color: "#7a6548",
-    sizeRange: [25, 55],
-    opacityRange: [18, 40],
+    sizeRange: [35, 65],
+    opacityRange: [15, 35],
     speed: "11s",
-    drift: "float",
+    drift: "rise",
+    aspectRatio: 0.8,
+    blur: 25,
   },
   dustSwirl: {
     count: 20,

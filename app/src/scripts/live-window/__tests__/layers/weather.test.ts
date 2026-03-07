@@ -312,7 +312,7 @@ describe("ATMO_PARTICLE_CONFIG", () => {
       expect(config.count).toBeGreaterThan(0);
       expect(config.sizeRange[0]).toBeLessThan(config.sizeRange[1]);
       expect(config.opacityRange[0]).toBeLessThan(config.opacityRange[1]);
-      expect(["float", "swirl", "fall"]).toContain(config.drift);
+      expect(["float", "swirl", "fall", "rise"]).toContain(config.drift);
     }
   });
 
@@ -503,7 +503,7 @@ describe("WeatherLayer", () => {
     layer.update(makeState(711));
     const el = container.querySelector(".atmosphere-lg") as HTMLElement;
     expect(el.getAttribute("style")).toContain("#8b7355");
-    expect(container.querySelector(".atmo-float")).toBeTruthy();
+    expect(container.querySelector(".atmo-rise")).toBeTruthy();
   });
 
   it("renders swirling particles for dust whirls (731)", () => {
