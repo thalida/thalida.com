@@ -11,13 +11,25 @@
  * (roughly 3π/2 through 0 to π/2, i.e. above the horizon).
  */
 
+import { ONE_DAY_MS } from "./constants";
+
 const TWO_PI = 2 * Math.PI;
+const HALF_PI = Math.PI / 2;
+const THREE_HALF_PI = (3 * Math.PI) / 2;
 
 /** Synodic month in milliseconds (29.53059 days). */
-const SYNODIC_MS = 29.53059 * 24 * 60 * 60 * 1000;
+const SYNODIC_MS = 29.53059 * ONE_DAY_MS;
 
 /** Known new moon: January 29, 2025 12:36 UTC. */
 const NEW_MOON_EPOCH = Date.UTC(2025, 0, 29, 12, 36);
+
+// Arc position constants — map celestial angle to window coordinates
+const DEFAULT_ARC_X = 50;
+const DEFAULT_ARC_Y = 100;
+const ARC_X_MIN = 10;
+const ARC_X_RANGE = 80;
+const ARC_Y_BASE = 85;
+const ARC_Y_AMPLITUDE = 42;
 
 /**
  * Returns the sun's angle on the celestial circle.
@@ -26,9 +38,8 @@ const NEW_MOON_EPOCH = Date.UTC(2025, 0, 29, 12, 36);
  */
 export function getSunAngle(now: number, sunrise: number, sunset: number): number {
   const solarNoon = (sunrise + sunset) / 2;
-  const dayMs = 24 * 60 * 60 * 1000;
   const elapsed = now - solarNoon;
-  const angle = ((elapsed / dayMs) * TWO_PI) % TWO_PI;
+  const angle = ((elapsed / ONE_DAY_MS) * TWO_PI) % TWO_PI;
   return angle < 0 ? angle + TWO_PI : angle;
 }
 
@@ -70,18 +81,18 @@ export interface ArcPosition {
  */
 export function getArcPosition(angle: number): ArcPosition {
   const a = ((angle % TWO_PI) + TWO_PI) % TWO_PI;
-  const visible = a <= Math.PI / 2 || a >= (3 * Math.PI) / 2;
+  const visible = a <= HALF_PI || a >= THREE_HALF_PI;
 
   if (!visible) {
-    return { x: 50, y: 100, visible: false };
+    return { x: DEFAULT_ARC_X, y: DEFAULT_ARC_Y, visible: false };
   }
 
-  let shifted = a + Math.PI / 2;
+  let shifted = a + HALF_PI;
   if (shifted >= TWO_PI) shifted -= TWO_PI;
   const progress = shifted / Math.PI;
 
-  const x = 10 + progress * 80;
-  const y = 85 - Math.sin(progress * Math.PI) * 42;
+  const x = ARC_X_MIN + progress * ARC_X_RANGE;
+  const y = ARC_Y_BASE - Math.sin(progress * Math.PI) * ARC_Y_AMPLITUDE;
 
   return { x, y, visible };
 }

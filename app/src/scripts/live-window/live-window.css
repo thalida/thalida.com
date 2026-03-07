@@ -155,8 +155,8 @@
 
 .moon {
   position: absolute;
-  width: 22px;
-  height: 22px;
+  width: var(--moon-diameter, 22px);
+  height: var(--moon-diameter, 22px);
   border-radius: 50%;
   background: #e8e8d0;
   overflow: hidden;

@@ -1,6 +1,10 @@
 import type { StoreState, PhaseInfo, SunPosition, WeatherInfo } from "../types";
 import { getDefaultSunTimes, findPhasePosition } from "./sky-gradient";
 
+const MAX_SUN_ALTITUDE = 90;
+const AZIMUTH_EAST = 90;
+const AZIMUTH_RANGE = 180;
+
 export function calculateSunPosition(now: number, sunrise: number, sunset: number): SunPosition {
   const isDaytime = now >= sunrise && now <= sunset;
 
@@ -12,11 +16,10 @@ export function calculateSunPosition(now: number, sunrise: number, sunset: numbe
   const progress = dayDuration > 0 ? (now - sunrise) / dayDuration : 0;
 
   // Altitude: sine curve peaking at solar noon
-  const maxAltitude = 90;
-  const altitude = maxAltitude * Math.sin(progress * Math.PI);
+  const altitude = MAX_SUN_ALTITUDE * Math.sin(progress * Math.PI);
 
-  // Azimuth: linear interpolation from 90 (east) to 270 (west)
-  const azimuth = 90 + progress * 180;
+  // Azimuth: linear interpolation from east (90°) to west (270°)
+  const azimuth = AZIMUTH_EAST + progress * AZIMUTH_RANGE;
 
   return { altitude, azimuth, progress };
 }

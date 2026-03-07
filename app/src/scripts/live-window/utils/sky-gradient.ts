@@ -160,16 +160,19 @@ const MIN30 = 30 * 60_000;
 const MIN60 = 60 * 60_000;
 const MIN90 = 90 * 60_000;
 
+const DEFAULT_SUNRISE_HOUR = 6;
+const DEFAULT_SUNSET_HOUR = 18;
+
 /**
- * Returns default sunrise (6:00 AM) and sunset (6:00 PM) for today.
+ * Returns default sunrise and sunset for today.
  * Used as fallback when weather API data is unavailable.
  */
 export function getDefaultSunTimes(): { sunrise: number; sunset: number } {
   const now = new Date();
   const sr = new Date(now);
-  sr.setHours(6, 0, 0, 0);
+  sr.setHours(DEFAULT_SUNRISE_HOUR, 0, 0, 0);
   const ss = new Date(now);
-  ss.setHours(18, 0, 0, 0);
+  ss.setHours(DEFAULT_SUNSET_HOUR, 0, 0, 0);
   return { sunrise: sr.getTime(), sunset: ss.getTime() };
 }
 

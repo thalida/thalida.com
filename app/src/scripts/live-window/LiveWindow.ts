@@ -2,6 +2,7 @@ import type { SceneComponent, LiveWindowState, RGB } from "./types";
 import { loadState, saveState } from "./state";
 import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather, locationChanged } from "./api";
 import { parseHexColor, parseComputedColor } from "./utils/color";
+import { ONE_DAY_MS, ONE_HOUR_MS, CLOCK_INTERVAL_MS, SKY_UPDATE_INTERVAL_MS } from "./utils/constants";
 import { buildPhaseInfo } from "./utils/phase";
 import { getTimezoneAdjustedNow, shiftTimestampToTimezone } from "./utils/timezone";
 import { SkyComponent } from "./components/SkyComponent";
@@ -332,8 +333,8 @@ class LiveWindowElement extends HTMLElement {
     this.refreshAttrs();
     this.updateAll();
 
-    this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
-    this.skyInterval = window.setInterval(() => this.updateAll(), 10 * 1000);
+    this.clockInterval = window.setInterval(() => this.updateClock(), CLOCK_INTERVAL_MS);
+    this.skyInterval = window.setInterval(() => this.updateAll(), SKY_UPDATE_INTERVAL_MS);
 
     if (this.getAttribute("api-url")) {
       // Blinds open after first weather fetch (see markCelestialReady)
@@ -345,7 +346,7 @@ class LiveWindowElement extends HTMLElement {
 
   private startWeatherPolling() {
     this.doFetchWeather();
-    this.weatherInterval = window.setInterval(() => this.doFetchWeather(), 60 * 60 * 1000);
+    this.weatherInterval = window.setInterval(() => this.doFetchWeather(), ONE_HOUR_MS);
   }
 
   private stopUpdates() {
@@ -435,9 +436,9 @@ class LiveWindowElement extends HTMLElement {
       // Wrap past midnight back to 00:00 (same day)
       const dayStart = new Date(this.virtualTime);
       dayStart.setHours(0, 0, 0, 0);
-      const dayEnd = dayStart.getTime() + 24 * 60 * 60 * 1000;
+      const dayEnd = dayStart.getTime() + ONE_DAY_MS;
       if (vt >= dayEnd) {
-        vt = dayStart.getTime() + ((vt - dayStart.getTime()) % (24 * 60 * 60 * 1000));
+        vt = dayStart.getTime() + ((vt - dayStart.getTime()) % ONE_DAY_MS);
       }
       return vt;
     }

@@ -3,6 +3,16 @@ import { getSunAngle, getMoonPhase, getMoonAngle, getArcPosition } from "../../u
 import { lerpColor } from "../../utils/color";
 import { getDefaultSunTimes } from "../../utils/sky-gradient";
 
+/** Moon diameter in px — set on .moon via --moon-diameter CSS custom property. */
+const MOON_DIAMETER = 22;
+const MOON_GLOW_OPACITY = 0.3;
+const MOON_GLOW_SPREAD_MIN = 5;
+const MOON_GLOW_SPREAD_RANGE = 5;
+
+// Sky gradient sampling positions for moon shadow color
+const GRADIENT_STOP_UPPER = 0.35;
+const GRADIENT_STOP_LOWER = 0.65;
+
 export class MoonLayer implements SceneComponent {
   private el: HTMLElement | null = null;
   private moon: HTMLElement | null = null;
@@ -31,6 +41,7 @@ export class MoonLayer implements SceneComponent {
     if (!this.moon) {
       this.moon = document.createElement("div");
       this.moon.className = "moon";
+      this.moon.style.setProperty("--moon-diameter", `${MOON_DIAMETER}px`);
       this.shadow = document.createElement("div");
       this.shadow.className = "moon-shadow";
       this.moon.appendChild(this.shadow);
@@ -53,13 +64,12 @@ export class MoonLayer implements SceneComponent {
       const g = state.ref.currentGradient;
       const skyColor = g ? this.sampleSkyAt(g, pos.y / 100) : "rgb(14,26,58)";
 
-      const moonDia = 22; // must match CSS .moon width/height
       let dx: number;
 
       if (moonPhase <= 0.5) {
-        dx = -(moonPhase * 2) * moonDia;
+        dx = -(moonPhase * 2) * MOON_DIAMETER;
       } else {
-        dx = (1 - moonPhase) * 2 * moonDia;
+        dx = (1 - moonPhase) * 2 * MOON_DIAMETER;
       }
 
       this.shadow.style.background = skyColor;
@@ -70,8 +80,8 @@ export class MoonLayer implements SceneComponent {
     // litAmount: 0 at new moon (phase 0), 1 at full moon (phase 0.5), 0 at next new moon (phase 1)
     if (this.moon) {
       const litAmount = moonPhase <= 0.5 ? moonPhase * 2 : (1 - moonPhase) * 2;
-      const glowOpacity = (0.3 * litAmount).toFixed(2);
-      const glowSpread = Math.round(5 + 5 * litAmount);
+      const glowOpacity = (MOON_GLOW_OPACITY * litAmount).toFixed(2);
+      const glowSpread = Math.round(MOON_GLOW_SPREAD_MIN + MOON_GLOW_SPREAD_RANGE * litAmount);
       this.moon.style.boxShadow = `0 0 10px ${glowSpread}px rgba(232, 232, 208, ${glowOpacity})`;
     }
   }
@@ -80,12 +90,12 @@ export class MoonLayer implements SceneComponent {
   private sampleSkyAt(g: { zenith: RGB; upper: RGB; lower: RGB; horizon: RGB }, yNorm: number): string {
     // The gradient has 4 stops at roughly 0%, 35%, 65%, 100%
     let c: RGB;
-    if (yNorm <= 0.35) {
-      c = lerpColor(g.zenith, g.upper, yNorm / 0.35);
-    } else if (yNorm <= 0.65) {
-      c = lerpColor(g.upper, g.lower, (yNorm - 0.35) / 0.3);
+    if (yNorm <= GRADIENT_STOP_UPPER) {
+      c = lerpColor(g.zenith, g.upper, yNorm / GRADIENT_STOP_UPPER);
+    } else if (yNorm <= GRADIENT_STOP_LOWER) {
+      c = lerpColor(g.upper, g.lower, (yNorm - GRADIENT_STOP_UPPER) / (GRADIENT_STOP_LOWER - GRADIENT_STOP_UPPER));
     } else {
-      c = lerpColor(g.lower, g.horizon, (yNorm - 0.65) / 0.35);
+      c = lerpColor(g.lower, g.horizon, (yNorm - GRADIENT_STOP_LOWER) / (1 - GRADIENT_STOP_LOWER));
     }
     return `rgb(${c.r},${c.g},${c.b})`;
   }

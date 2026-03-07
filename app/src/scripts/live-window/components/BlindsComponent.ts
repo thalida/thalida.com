@@ -2,6 +2,26 @@ import type { SceneComponent, LiveWindowState } from "../types";
 
 const NUM_BLINDS = 20;
 
+// Blinds animation: resting / initial state
+const INITIAL_OPEN_DEG = 20;
+
+// Open animation: first swing wide, then settle
+const OPEN_SWING_DEG = 75;
+const OPEN_SWING_STEP = 5;
+const OPEN_SPEED_MS = 150;
+
+// Open animation: final settled position (randomized per open)
+const MIN_COLLAPSE_RATIO = 0.7;
+const COLLAPSE_RATIO_RANGE = 0.25;
+const MIN_SKEW_DEG = 2;
+const SKEW_RANGE_DEG = 8;
+const FINAL_OPEN_DEG_MIN = 78;
+const FINAL_OPEN_DEG_RANGE = 7;
+
+// Close animation
+const CLOSE_STEP = 3;
+const CLOSE_SPEED_MS = 80;
+
 interface BlindsState {
   numBlindsCollapsed: number;
   blindsOpenDeg: number;
@@ -19,7 +39,7 @@ export class BlindsComponent implements SceneComponent {
 
   private blindsState: BlindsState = {
     numBlindsCollapsed: 0,
-    blindsOpenDeg: 20,
+    blindsOpenDeg: INITIAL_OPEN_DEG,
     blindsSkewDeg: 0,
     skewDirection: 0,
   };
@@ -52,7 +72,7 @@ export class BlindsComponent implements SceneComponent {
     this.isOpen = false;
     this.blindsState = {
       numBlindsCollapsed: 0,
-      blindsOpenDeg: 20,
+      blindsOpenDeg: INITIAL_OPEN_DEG,
       blindsSkewDeg: 0,
       skewDirection: 0,
     };
@@ -68,18 +88,20 @@ export class BlindsComponent implements SceneComponent {
     this.isOpen = true;
     this.cancelAnimation();
 
-    this.stepAnimation({ blindsOpenDeg: { targetValue: 75, step: 5 } }, 150).then(() => {
-      if (!this.isOpen) return;
-      const collapseRatio = 0.7 + Math.random() * 0.25; // 70%–95% open height
-      const skewAmount = 2 + Math.random() * 8; // 2–10 degrees
-      const openDeg = 78 + Math.random() * 7; // 78–85 degree rotation
-      this.stepAnimation({
-        blindsOpenDeg: { targetValue: openDeg, step: 1 },
-        numBlindsCollapsed: { targetValue: Math.round(NUM_BLINDS * collapseRatio), step: 1 },
-        blindsSkewDeg: { targetValue: skewAmount, step: 1 },
-        skewDirection: { targetValue: Math.random() < 0.5 ? -1 : 1, step: 1 },
-      });
-    });
+    this.stepAnimation({ blindsOpenDeg: { targetValue: OPEN_SWING_DEG, step: OPEN_SWING_STEP } }, OPEN_SPEED_MS).then(
+      () => {
+        if (!this.isOpen) return;
+        const collapseRatio = MIN_COLLAPSE_RATIO + Math.random() * COLLAPSE_RATIO_RANGE;
+        const skewAmount = MIN_SKEW_DEG + Math.random() * SKEW_RANGE_DEG;
+        const openDeg = FINAL_OPEN_DEG_MIN + Math.random() * FINAL_OPEN_DEG_RANGE;
+        this.stepAnimation({
+          blindsOpenDeg: { targetValue: openDeg, step: 1 },
+          numBlindsCollapsed: { targetValue: Math.round(NUM_BLINDS * collapseRatio), step: 1 },
+          blindsSkewDeg: { targetValue: skewAmount, step: 1 },
+          skewDirection: { targetValue: Math.random() < 0.5 ? -1 : 1, step: 1 },
+        });
+      },
+    );
   }
 
   closeBlinds(): void {
@@ -90,11 +112,11 @@ export class BlindsComponent implements SceneComponent {
     void this.stepAnimation(
       {
         numBlindsCollapsed: { targetValue: 0, step: 1 },
-        blindsOpenDeg: { targetValue: 20, step: 3 },
+        blindsOpenDeg: { targetValue: INITIAL_OPEN_DEG, step: CLOSE_STEP },
         blindsSkewDeg: { targetValue: 0, step: 1 },
         skewDirection: { targetValue: 0, step: 1 },
       },
-      80,
+      CLOSE_SPEED_MS,
     );
   }
 
