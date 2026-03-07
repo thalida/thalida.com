@@ -245,33 +245,6 @@
   }
 }
 
-@keyframes precipitate-light-wind {
-  from {
-    transform: translate3d(-3%, -50%, 0);
-  }
-  to {
-    transform: translate3d(3%, 0%, 0);
-  }
-}
-
-@keyframes precipitate-wind {
-  from {
-    transform: translate3d(-8%, -50%, 0);
-  }
-  to {
-    transform: translate3d(8%, 0%, 0);
-  }
-}
-
-@keyframes precipitate-strong-wind {
-  from {
-    transform: translate3d(-15%, -50%, 0);
-  }
-  to {
-    transform: translate3d(15%, 0%, 0);
-  }
-}
-
 @keyframes sway-sm {
   0% {
     transform: translateX(-2px);

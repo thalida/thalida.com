@@ -771,21 +771,15 @@ export class WeatherLayer implements SceneComponent {
     }
 
     // Precipitation layers
-    const precipAnim =
-      config.wind === "strong"
-        ? "precipitate-strong-wind"
-        : config.wind === "moderate"
-          ? "precipitate-wind"
-          : config.wind === "light"
-            ? "precipitate-light-wind"
-            : "precipitate";
+    const skewDeg = config.wind === "strong" ? 15 : config.wind === "moderate" ? 8 : config.wind === "light" ? 3 : 0;
 
     for (const precipLayer of config.precip) {
       const precipConfig = PRECIP_CONFIG[precipLayer.type];
       if (!precipConfig) continue;
       const count = Math.round(precipConfig.count * precipLayer.intensityScale);
       const particles = WeatherLayer.particleHTML(precipConfig, count);
-      html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed};animation-name:${precipAnim}">`;
+      const skewStyle = skewDeg ? `transform:skewX(${skewDeg}deg);` : "";
+      html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed};animation-name:precipitate;${skewStyle}">`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += "</div>";

@@ -571,13 +571,15 @@ describe("WeatherLayer", () => {
   it("renders wind-driven precipitation for shower rain (521)", () => {
     layer.update(makeState(521));
     const droplets = container.querySelector(".droplets") as HTMLElement;
-    expect(droplets.style.animationName).toBe("precipitate-light-wind");
+    expect(droplets.style.animationName).toBe("precipitate");
+    expect(droplets.style.transform).toContain("skewX");
   });
 
   it("renders strong wind for squalls (771)", () => {
     layer.update(makeState(771));
     const droplets = container.querySelector(".droplets") as HTMLElement;
-    expect(droplets.style.animationName).toBe("precipitate-strong-wind");
+    expect(droplets.style.animationName).toBe("precipitate");
+    expect(droplets.style.transform).toContain("skewX");
   });
 
   it("sets fall speed inline on droplets container", () => {
