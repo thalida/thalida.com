@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import type { PrecipType } from "../../components/sky/WeatherLayer";
+import type { PrecipType } from "../../components/sky/weather";
+import { WeatherLayer } from "../../components/sky/WeatherLayer";
 import {
-  WeatherLayer,
   WEATHER_EFFECTS,
   PRECIP_CONFIG,
   ATMOSPHERE_CONFIG,
   ATMO_PARTICLE_CONFIG,
   CLOUD_CONFIGS,
-} from "../../components/sky/WeatherLayer";
+} from "../../components/sky/weather";
 import { makeTestState } from "../helpers";
 
 function makeState(weatherId: number | null) {

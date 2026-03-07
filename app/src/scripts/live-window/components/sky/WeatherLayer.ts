@@ -1,30 +1,22 @@
 import type { SceneComponent, LiveWindowState } from "../../types";
-import type { CloudDensity } from "./weather/weather-types";
+import type { CloudDensity, WindLevel } from "./weather/weather-types";
 import { WEATHER_EFFECTS, CLOUD_CONFIGS, PRECIP_CONFIG } from "./weather/weather-configs";
 import { getCloudColor, getAtmosphereColor, getSkyDarkenOpacity } from "./weather/weather-colors";
 import { cloudHTML, particleHTML, atmosphereParticleHTML, lightningHTML } from "./weather/weather-html";
 
-// Re-export types and configs so existing imports from WeatherLayer still work
-export type {
-  PrecipConfig,
-  PrecipType,
-  AtmosphereConfig,
-  WindLevel,
-  AtmosphereParticleConfig,
-  LightningVariant,
-  CloudDensity,
-  CloudConfig,
-  WeatherEffectConfig,
-  PrecipLayer,
-} from "./weather/weather-types";
-export {
-  PRECIP_CONFIG,
-  ATMOSPHERE_CONFIG,
-  ATMO_PARTICLE_CONFIG,
-  CLOUD_CONFIGS,
-  WEATHER_EFFECTS,
-} from "./weather/weather-configs";
-export { getDaylightFactor, getHorizonGlowFactor, getCloudColor, getAtmosphereColor } from "./weather/weather-colors";
+/** Fraction of clouds rendered behind precipitation/lightning (rest go in front). */
+const BACK_CLOUD_RATIO = 0.4;
+
+/** Wind skew angle in degrees per wind level. */
+const WIND_SKEW_DEG: Record<WindLevel, number> = {
+  strong: 15,
+  moderate: 8,
+  light: 3,
+  none: 0,
+};
+
+/** CSS size classes for atmosphere layers, applied in order. */
+const ATMOSPHERE_SIZES = ["lg", "md", "sm"] as const;
 
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
@@ -127,7 +119,7 @@ export class WeatherLayer implements SceneComponent {
     // Back clouds (behind lightning + precipitation)
     if (config.clouds !== "none") {
       const total = CLOUD_CONFIGS[config.clouds as Exclude<CloudDensity, "none">].count;
-      const backCount = Math.ceil(total * 0.4);
+      const backCount = Math.ceil(total * BACK_CLOUD_RATIO);
       html += cloudHTML(config.clouds as Exclude<CloudDensity, "none">, 0, backCount);
     }
 
@@ -137,7 +129,7 @@ export class WeatherLayer implements SceneComponent {
     }
 
     // Precipitation layers (between cloud layers)
-    const skewDeg = config.wind === "strong" ? 15 : config.wind === "moderate" ? 8 : config.wind === "light" ? 3 : 0;
+    const skewDeg = WIND_SKEW_DEG[config.wind];
 
     for (const precipLayer of config.precip) {
       const precipConfig = PRECIP_CONFIG[precipLayer.type];
@@ -154,14 +146,14 @@ export class WeatherLayer implements SceneComponent {
     // Front clouds (in front of lightning + precipitation)
     if (config.clouds !== "none") {
       const total = CLOUD_CONFIGS[config.clouds as Exclude<CloudDensity, "none">].count;
-      const backCount = Math.ceil(total * 0.4);
+      const backCount = Math.ceil(total * BACK_CLOUD_RATIO);
       html += cloudHTML(config.clouds as Exclude<CloudDensity, "none">, backCount);
     }
 
     // Atmosphere
     if (config.atmosphere) {
       const { opacity, layers } = config.atmosphere;
-      const sizes = ["lg", "md", "sm"];
+      const sizes = ATMOSPHERE_SIZES;
       for (let i = 0; i < layers; i++) {
         const size = sizes[i] ?? "sm";
         html += `<div class="atmosphere-layer atmosphere-${size}" style="--atmo-opacity:${opacity};opacity:${opacity}"></div>`;

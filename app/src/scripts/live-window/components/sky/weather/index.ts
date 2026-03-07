@@ -1,5 +1,6 @@
 export type {
   PrecipConfig,
+  PrecipType,
   AtmosphereConfig,
   WindLevel,
   AtmosphereParticleConfig,
