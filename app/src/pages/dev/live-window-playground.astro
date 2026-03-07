@@ -67,7 +67,7 @@ if (import.meta.env.PROD) {
           <label for="weather-select">Condition</label>
         </div>
         <select id="weather-select">
-          <option value="">None (clear sky)</option>
+          <option value="01">None (clear sky)</option>
           <option value="02">Few Clouds</option>
           <option value="03">Scattered Clouds</option>
           <option value="04">Broken/Overcast Clouds</option>
@@ -242,12 +242,6 @@ if (import.meta.env.PROD) {
       const code = weatherSelect.value;
       const intensity = intensitySelect.value;
 
-      if (!code) {
-        win.removeAttribute("override-weather");
-        win.removeAttribute("override-weather-description");
-        return;
-      }
-
       win.setAttribute("override-weather", code + "d");
 
       const conditionName = weatherSelect.options[weatherSelect.selectedIndex].text.toLowerCase();
@@ -257,6 +251,7 @@ if (import.meta.env.PROD) {
 
     weatherSelect.addEventListener("change", updateWeather);
     intensitySelect.addEventListener("change", updateWeather);
+    updateWeather(); // set initial clear sky override
 
     // -- Sun/Moon controls --
 
@@ -317,10 +312,9 @@ if (import.meta.env.PROD) {
       setTime(720);
       setSpeed(1);
 
-      weatherSelect.value = "";
+      weatherSelect.value = "01";
       intensitySelect.value = "";
-      win.removeAttribute("override-weather");
-      win.removeAttribute("override-weather-description");
+      updateWeather();
 
       sunriseInput.value = "06:00";
       sunsetInput.value = "18:00";
