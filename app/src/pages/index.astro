@@ -46,7 +46,7 @@ const siteAge = new Date().getFullYear() - 2007;
   {
     featuredCollections.map((collectionName) => {
       const collection = navData[collectionName];
-      const items = collection.items.slice(0, 3);
+      const items = collection.items.filter((item) => item.category !== "dead-links").slice(0, 3);
       if (items.length === 0) return null;
       return (
         <section class="mt-16" aria-label={collection.title}>

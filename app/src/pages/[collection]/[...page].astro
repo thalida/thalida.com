@@ -12,7 +12,11 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const pages = COLLECTION_NAMES.flatMap((collection) => {
     const collectionData = navData[collection];
     if (!collectionData) return [];
-    return paginate(collectionData.items, {
+    const items =
+      collection === "links"
+        ? collectionData.items.filter((item) => item.category !== "dead-links")
+        : collectionData.items;
+    return paginate(items, {
       pageSize: PAGE_SIZE,
       params: { collection },
       props: {
