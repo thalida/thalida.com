@@ -75,6 +75,7 @@ if (import.meta.env.PROD) {
           <option value="10">Rain</option>
           <option value="11">Thunderstorm</option>
           <option value="13">Snow</option>
+          <option value="13:sleet">Sleet</option>
           <option value="50">Mist</option>
         </select>
         <div class="control-row" style="margin-top: 0.75rem">
@@ -239,12 +240,16 @@ if (import.meta.env.PROD) {
     // -- Weather controls --
 
     function updateWeather() {
-      const code = weatherSelect.value;
+      const raw = weatherSelect.value;
       const intensity = intensitySelect.value;
+
+      // Sleet uses snow icon code (13) with a "sleet" description
+      const isSleet = raw === "13:sleet";
+      const code = isSleet ? "13" : raw;
 
       win.setAttribute("override-weather", code + "d");
 
-      const conditionName = weatherSelect.options[weatherSelect.selectedIndex].text.toLowerCase();
+      const conditionName = isSleet ? "sleet" : weatherSelect.options[weatherSelect.selectedIndex].text.toLowerCase();
       const desc = intensity ? `${intensity} ${conditionName}` : conditionName;
       win.setAttribute("override-weather-description", desc);
     }
@@ -344,12 +349,14 @@ if (import.meta.env.PROD) {
   .playground {
     display: flex;
     gap: 2rem;
-    min-height: calc(100vh - 4rem);
+    align-items: flex-start;
     padding: 1rem;
   }
 
   .playground-window {
     flex: 0 0 auto;
+    position: sticky;
+    top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -358,8 +365,6 @@ if (import.meta.env.PROD) {
 
   .playground-controls {
     flex: 1;
-    overflow-y: auto;
-    max-height: calc(100vh - 4rem);
     padding: 1rem;
     display: flex;
     flex-direction: column;
