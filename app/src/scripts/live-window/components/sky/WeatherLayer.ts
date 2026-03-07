@@ -120,6 +120,66 @@ export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
     opacityRange: [55, 95],
     hasSway: true,
   },
+  drizzleLight: {
+    count: 16,
+    fallSpeed: "10s",
+    shape: "drop",
+    sizeW: [1, 2],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [30, 55],
+    hasSway: false,
+  },
+  drizzleHeavy: {
+    count: 28,
+    fallSpeed: "6s",
+    shape: "drop",
+    sizeW: [2, 4],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [55, 80],
+    hasSway: false,
+  },
+  showerDrizzle: {
+    count: 25,
+    fallSpeed: "4s",
+    shape: "drop",
+    sizeW: [2, 3],
+    aspectRatio: 3,
+    color: "#28afff",
+    opacityRange: [45, 70],
+    hasSway: false,
+  },
+  heavyRain: {
+    count: 42,
+    fallSpeed: "1.8s",
+    shape: "drop",
+    sizeW: [4, 5],
+    aspectRatio: 2.5,
+    color: "#28afff",
+    opacityRange: [80, 100],
+    hasSway: false,
+  },
+  extremeRain: {
+    count: 50,
+    fallSpeed: "1.2s",
+    shape: "drop",
+    sizeW: [4, 6],
+    aspectRatio: 2,
+    color: "#28afff",
+    opacityRange: [85, 100],
+    hasSway: false,
+  },
+  showerSleet: {
+    count: 35,
+    fallSpeed: "3s",
+    shape: "round",
+    sizeW: [3, 6],
+    aspectRatio: 1,
+    color: "#a0cfff",
+    opacityRange: [55, 90],
+    hasSway: true,
+  },
 };
 
 export interface AtmosphereConfig {
@@ -128,17 +188,102 @@ export interface AtmosphereConfig {
   layers: number;
 }
 
+export type WindLevel = "none" | "light" | "moderate" | "strong";
+
+export interface AtmosphereParticleConfig {
+  count: number;
+  color: string;
+  /** Size range [min, max] in px */
+  sizeRange: [number, number];
+  /** Opacity range [min, max] as 0-100 integers */
+  opacityRange: [number, number];
+  /** CSS animation duration for particle motion */
+  speed: string;
+  /** Motion type: float = horizontal drift, swirl = circular, fall = downward */
+  drift: "float" | "swirl" | "fall";
+}
+
+export type LightningVariant = "distant" | "standard" | "intense";
+
 export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
   mist: { color: "#c8c8c8", opacity: 0.15, layers: 2 },
   fog: { color: "#b0b0b0", opacity: 0.35, layers: 3 },
   smoke: { color: "#8b7355", opacity: 0.3, layers: 3 },
   haze: { color: "#d4c89a", opacity: 0.2, layers: 2 },
-  dust: { color: "#c4a86a", opacity: 0.25, layers: 2 },
+  sand: { color: "#c4a050", opacity: 0.3, layers: 3 },
+  dust: { color: "#8a7560", opacity: 0.22, layers: 2 },
   dustWhirls: { color: "#c4a86a", opacity: 0.35, layers: 3 },
   volcanicAsh: { color: "#555555", opacity: 0.4, layers: 3 },
   squalls: { color: "#888888", opacity: 0.3, layers: 3 },
   tornado: { color: "#666666", opacity: 0.45, layers: 3 },
   stormDark: { color: "#1a1a2e", opacity: 0.2, layers: 2 },
+};
+
+export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
+  mistWisps: {
+    count: 6,
+    color: "#d0d0d0",
+    sizeRange: [20, 45],
+    opacityRange: [12, 30],
+    speed: "14s",
+    drift: "float",
+  },
+  fogBanks: {
+    count: 4,
+    color: "#c0c0c0",
+    sizeRange: [35, 70],
+    opacityRange: [25, 50],
+    speed: "18s",
+    drift: "float",
+  },
+  smokeWisps: {
+    count: 10,
+    color: "#7a6548",
+    sizeRange: [25, 55],
+    opacityRange: [18, 40],
+    speed: "11s",
+    drift: "float",
+  },
+  dustSwirl: {
+    count: 20,
+    color: "#a08860",
+    sizeRange: [2, 5],
+    opacityRange: [30, 55],
+    speed: "5s",
+    drift: "swirl",
+  },
+  sandSwirl: {
+    count: 28,
+    color: "#c4a050",
+    sizeRange: [2, 4],
+    opacityRange: [40, 65],
+    speed: "3.5s",
+    drift: "swirl",
+  },
+  ashFall: {
+    count: 18,
+    color: "#444",
+    sizeRange: [3, 6],
+    opacityRange: [35, 65],
+    speed: "7s",
+    drift: "fall",
+  },
+  debrisSwirl: {
+    count: 15,
+    color: "#5a5040",
+    sizeRange: [3, 8],
+    opacityRange: [30, 55],
+    speed: "4s",
+    drift: "swirl",
+  },
+  iceGlint: {
+    count: 12,
+    color: "#e0f0ff",
+    sizeRange: [1, 3],
+    opacityRange: [40, 80],
+    speed: "3s",
+    drift: "float",
+  },
 };
 
 export type CloudDensity = "none" | "light" | "medium" | "heavy" | "storm";
@@ -199,8 +344,10 @@ const CLOUD_SHAPES: CloudShape[] = [
 export interface WeatherEffectConfig {
   clouds: CloudDensity;
   precip: PrecipLayer[];
-  lightning: boolean;
+  lightning: LightningVariant | false;
   atmosphere: AtmosphereConfig | null;
+  wind: WindLevel;
+  atmosphereParticles: AtmosphereParticleConfig | null;
 }
 
 export interface PrecipLayer {
@@ -211,13 +358,20 @@ export interface PrecipLayer {
 function fx(
   clouds: WeatherEffectConfig["clouds"],
   precip: PrecipLayer[],
-  opts?: { lightning?: boolean; atmosphere?: AtmosphereConfig },
+  opts?: {
+    lightning?: LightningVariant;
+    atmosphere?: AtmosphereConfig;
+    wind?: WindLevel;
+    atmosphereParticles?: AtmosphereParticleConfig;
+  },
 ): WeatherEffectConfig {
   return {
     clouds,
     precip,
     lightning: opts?.lightning ?? false,
     atmosphere: opts?.atmosphere ?? null,
+    wind: opts?.wind ?? "none",
+    atmosphereParticles: opts?.atmosphereParticles ?? null,
   };
 }
 
@@ -226,67 +380,87 @@ function p(type: string, intensityScale = 1.0): PrecipLayer {
 }
 
 export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
-  // 2xx Thunderstorm — light variants use heavy clouds, heavy variants add dark atmosphere
-  200: fx("heavy", [p("lightRain", 0.6)], { lightning: true }),
-  201: fx("storm", [p("rain")], { lightning: true }),
-  202: fx("storm", [p("rain", 1.4)], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
-  210: fx("heavy", [], { lightning: true }),
-  211: fx("storm", [], { lightning: true }),
-  212: fx("storm", [], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
-  221: fx("storm", [p("lightRain", 0.4)], { lightning: true }),
-  230: fx("heavy", [p("drizzle")], { lightning: true }),
-  231: fx("storm", [p("drizzle", 1.4)], { lightning: true }),
-  232: fx("storm", [p("drizzle", 1.8)], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
+  // 2xx Thunderstorm
+  200: fx("heavy", [p("lightRain", 0.6)], { lightning: "distant" }),
+  201: fx("storm", [p("rain")], { lightning: "standard" }),
+  202: fx("storm", [p("heavyRain")], {
+    lightning: "intense",
+    atmosphere: ATMOSPHERE_CONFIG.stormDark,
+    wind: "moderate",
+  }),
+  210: fx("heavy", [], { lightning: "distant" }),
+  211: fx("storm", [], { lightning: "standard" }),
+  212: fx("storm", [], { lightning: "intense", atmosphere: ATMOSPHERE_CONFIG.stormDark }),
+  221: fx("storm", [p("lightRain", 0.4)], { lightning: "standard" }),
+  230: fx("heavy", [p("drizzle")], { lightning: "standard" }),
+  231: fx("storm", [p("drizzle", 1.4)], { lightning: "standard" }),
+  232: fx("storm", [p("drizzle", 1.8)], {
+    lightning: "intense",
+    atmosphere: ATMOSPHERE_CONFIG.stormDark,
+    wind: "moderate",
+  }),
+
   // 3xx Drizzle
-  300: fx("medium", [p("drizzle", 0.6)]),
+  300: fx("light", [p("drizzleLight")]),
   301: fx("medium", [p("drizzle")]),
-  302: fx("medium", [p("drizzle", 1.4)]),
+  302: fx("medium", [p("drizzleHeavy")]),
   310: fx("medium", [p("drizzle", 0.6), p("lightRain", 0.4)]),
   311: fx("medium", [p("drizzle", 0.7), p("lightRain", 0.7)]),
-  312: fx("medium", [p("drizzle"), p("rain", 0.7)]),
-  313: fx("medium", [p("showerRain", 0.7), p("drizzle", 0.5)]),
-  314: fx("heavy", [p("showerRain", 1.2), p("drizzle", 0.6)]),
-  321: fx("medium", [p("drizzle", 1.2)]),
+  312: fx("medium", [p("drizzleHeavy", 0.8), p("rain", 0.7)]),
+  313: fx("medium", [p("showerRain", 0.7), p("drizzle", 0.5)], { wind: "light" }),
+  314: fx("heavy", [p("showerRain", 1.2), p("drizzleHeavy", 0.6)], { wind: "moderate" }),
+  321: fx("medium", [p("showerDrizzle")], { wind: "light" }),
+
   // 5xx Rain
   500: fx("medium", [p("lightRain", 0.6)]),
   501: fx("medium", [p("rain")]),
-  502: fx("heavy", [p("rain", 1.4)]),
-  503: fx("heavy", [p("rain", 1.6)]),
-  504: fx("heavy", [p("rain", 1.8)]),
-  511: fx("heavy", [p("freezingRain")]),
-  520: fx("medium", [p("showerRain", 0.6)]),
-  521: fx("medium", [p("showerRain")]),
-  522: fx("heavy", [p("showerRain", 1.4)]),
+  502: fx("heavy", [p("heavyRain")]),
+  503: fx("heavy", [p("heavyRain", 1.3)], { wind: "light" }),
+  504: fx("storm", [p("extremeRain")], { wind: "moderate", atmosphere: ATMOSPHERE_CONFIG.stormDark }),
+  511: fx("heavy", [p("freezingRain")], { atmosphereParticles: ATMO_PARTICLE_CONFIG.iceGlint }),
+  520: fx("medium", [p("showerRain", 0.6)], { wind: "light" }),
+  521: fx("medium", [p("showerRain")], { wind: "light" }),
+  522: fx("heavy", [p("showerRain", 1.4)], { wind: "moderate" }),
   531: fx("medium", [p("showerRain", 0.5), p("lightRain", 0.3)]),
+
   // 6xx Snow
   600: fx("medium", [p("lightSnow", 0.6)]),
   601: fx("medium", [p("snow")]),
   602: fx("heavy", [p("heavySnow", 1.4)]),
   611: fx("medium", [p("sleet")]),
-  612: fx("medium", [p("sleet", 0.6)]),
-  613: fx("medium", [p("sleet", 1.2)]),
+  612: fx("medium", [p("showerSleet", 0.6)], { wind: "light" }),
+  613: fx("medium", [p("showerSleet")], { wind: "light" }),
   615: fx("medium", [p("lightRain", 0.5), p("lightSnow", 0.5)]),
   616: fx("heavy", [p("rain", 0.7), p("snow", 0.7)]),
-  620: fx("medium", [p("showerSnow", 0.6)]),
-  621: fx("medium", [p("showerSnow")]),
-  622: fx("heavy", [p("showerSnow", 1.4)]),
+  620: fx("medium", [p("showerSnow", 0.6)], { wind: "light" }),
+  621: fx("medium", [p("showerSnow")], { wind: "light" }),
+  622: fx("heavy", [p("showerSnow", 1.4)], { wind: "moderate" }),
+
   // 7xx Atmosphere
-  701: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.mist }),
-  711: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.smoke }),
+  701: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.mist, atmosphereParticles: ATMO_PARTICLE_CONFIG.mistWisps }),
+  711: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.smoke, atmosphereParticles: ATMO_PARTICLE_CONFIG.smokeWisps }),
   721: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.haze }),
-  731: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dustWhirls }),
-  741: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.fog }),
-  751: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust }),
-  761: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust }),
-  762: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.volcanicAsh }),
-  771: fx("heavy", [], { atmosphere: ATMOSPHERE_CONFIG.squalls }),
-  781: fx("heavy", [], { atmosphere: ATMOSPHERE_CONFIG.tornado }),
+  731: fx("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.dustWhirls,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl,
+  }),
+  741: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.fog, atmosphereParticles: ATMO_PARTICLE_CONFIG.fogBanks }),
+  751: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.sand, atmosphereParticles: ATMO_PARTICLE_CONFIG.sandSwirl }),
+  761: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust, atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl }),
+  762: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.volcanicAsh, atmosphereParticles: ATMO_PARTICLE_CONFIG.ashFall }),
+  771: fx("heavy", [p("heavyRain")], { atmosphere: ATMOSPHERE_CONFIG.squalls, wind: "strong" }),
+  781: fx("storm", [p("extremeRain")], {
+    atmosphere: ATMOSPHERE_CONFIG.tornado,
+    wind: "strong",
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.debrisSwirl,
+  }),
+
   // 800+ Clear/Clouds
   800: fx("none", []),
   801: fx("light", []),
   802: fx("medium", []),
   803: fx("heavy", []),
-  804: fx("heavy", []),
+  804: fx("storm", []),
 };
 
 /**
@@ -316,7 +490,7 @@ function getSkyDarkenOpacity(config: WeatherEffectConfig): number {
   }
 
   if (config.lightning) {
-    opacity += 0.12;
+    opacity += config.lightning === "intense" ? 0.16 : config.lightning === "distant" ? 0.06 : 0.12;
   }
 
   if (config.atmosphere) {
