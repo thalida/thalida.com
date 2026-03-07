@@ -619,7 +619,7 @@ export class WeatherLayer implements SceneComponent {
     for (let i = 0; i < config.count; i++) {
       const h = ((i + 1) * 2654435761) >>> 0;
       const h2 = ((i + 1) * 1597334677) >>> 0; // independent hash for Y
-      const left = (h % 110) - 5;
+      const left = ((i * 0.618033 + 0.3) % 1) * 110 - 5;
       const top = config.yRange[0] + (h2 % (ySpan + 1));
       const size = config.sizeRange[0] + (h % (sizeRange + 1));
       const opacity = (config.opacityRange[0] + ((h >>> 4) % (opRange + 1))) / 100;

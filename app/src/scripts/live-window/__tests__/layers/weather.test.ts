@@ -341,6 +341,15 @@ describe("WeatherLayer.cloudHTML", () => {
     const heavy = WeatherLayer.cloudHTML("heavy").match(/class="cloud"/g)?.length ?? 0;
     expect(storm).toBeGreaterThan(heavy);
   });
+
+  it("distributes clouds across full width range", () => {
+    const html = WeatherLayer.cloudHTML("storm");
+    const leftValues = [...html.matchAll(/left:([\d.-]+)%/g)].map((m) => parseFloat(m[1]));
+    // With 9 storm clouds, at least one should be past 70%
+    expect(leftValues.some((l) => l > 70)).toBe(true);
+    // And at least one in the first third
+    expect(leftValues.some((l) => l < 35)).toBe(true);
+  });
 });
 
 describe("WeatherLayer.particleHTML", () => {
