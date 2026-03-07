@@ -1,6 +1,7 @@
 import type { SceneComponent, LiveWindowState, RGB } from "../../types";
 import { getSunAngle, getMoonPhase, getMoonAngle, getArcPosition } from "../../utils/celestial";
 import { lerpColor } from "../../utils/color";
+import { FALLBACK_NIGHT_SKY_RGB, MOON_GLOW_COLOR_RGB, MOON_GLOW_BLUR_PX } from "../../utils/constants";
 import { getSunTimesWithDefaults } from "../../utils/sky-gradient";
 
 /** Moon diameter in px — set on .moon via --moon-diameter CSS custom property. */
@@ -60,8 +61,13 @@ export class MoonLayer implements SceneComponent {
     if (this.shadow) {
       // Interpolate sky color at the moon's Y position for a seamless blend
       const g = state.ref.currentGradient;
-      const skyColor = g ? this.sampleSkyAt(g, pos.y / 100) : "rgb(14,26,58)";
+      const skyColor = g ? this.sampleSkyAt(g, pos.y / 100) : FALLBACK_NIGHT_SKY_RGB;
 
+      // Shadow displacement: maps phase 0–1 to a sliding shadow across the moon disc.
+      // phase 0 (new moon): dx = 0, shadow covers the full moon
+      // phase 0.25 (first quarter): dx = -MOON_DIAMETER/2, half lit from right
+      // phase 0.5 (full moon): dx = -MOON_DIAMETER, shadow fully off-screen
+      // phase 0.75 (last quarter): dx = MOON_DIAMETER/2, half lit from left
       let dx: number;
 
       if (moonPhase <= 0.5) {
@@ -75,12 +81,12 @@ export class MoonLayer implements SceneComponent {
     }
 
     // Scale glow with how much of the moon is lit
-    // litAmount: 0 at new moon (phase 0), 1 at full moon (phase 0.5), 0 at next new moon (phase 1)
     if (this.moon) {
+      // Lit fraction: 0 at new moon (phase 0), 1 at full moon (0.5), 0 at next new (1)
       const litAmount = moonPhase <= 0.5 ? moonPhase * 2 : (1 - moonPhase) * 2;
       const glowOpacity = (MOON_GLOW_OPACITY * litAmount).toFixed(2);
       const glowSpread = Math.round(MOON_GLOW_SPREAD_MIN + MOON_GLOW_SPREAD_RANGE * litAmount);
-      this.moon.style.boxShadow = `0 0 10px ${glowSpread}px rgba(232, 232, 208, ${glowOpacity})`;
+      this.moon.style.boxShadow = `0 0 ${MOON_GLOW_BLUR_PX}px ${glowSpread}px rgba(${MOON_GLOW_COLOR_RGB}, ${glowOpacity})`;
     }
   }
 
