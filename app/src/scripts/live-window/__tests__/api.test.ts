@@ -222,6 +222,7 @@ describe("fetchWeather", () => {
 
   it("returns updated state on successful response", async () => {
     const mockData = {
+      id: 800,
       main: "Clear",
       description: "clear sky",
       icon: "01d",
@@ -235,7 +236,7 @@ describe("fetchWeather", () => {
 
     expect(fetch).toHaveBeenCalledWith(`${apiUrl}/weather?units=imperial&lat=40.7&lon=-74`);
     expect(changed).toBe(true);
-    expect(state.weather.current).toEqual({ main: "Clear", description: "clear sky", icon: "01d", temp: 72 });
+    expect(state.weather.current).toEqual({ id: 800, main: "Clear", description: "clear sky", icon: "01d", temp: 72 });
     expect(state.weather.sunrise).toBe(1700000000000);
     expect(state.weather.sunset).toBe(1700040000000);
     expect(state.weather.units).toBe("imperial");
@@ -268,7 +269,7 @@ describe("fetchWeather", () => {
   });
 
   it("rejects response with missing sunrise/sunset", async () => {
-    const mockData = { main: "Clear", description: "clear", icon: "01d", temp: 20 };
+    const mockData = { id: 800, main: "Clear", description: "clear", icon: "01d", temp: 20 };
     vi.mocked(fetch).mockResolvedValue({ ok: true, json: () => Promise.resolve(mockData) } as Response);
 
     const { state, changed } = await fetchWeather(apiUrl, stateWithLocation, "metric");
@@ -291,6 +292,6 @@ describe("fetchWeather", () => {
     const { state, changed } = await fetchWeather(apiUrl, stateWithLocation, "metric");
 
     expect(changed).toBe(true);
-    expect(state.weather.current).toEqual({ main: "", description: "", icon: "", temp: 0 });
+    expect(state.weather.current).toEqual({ id: 0, main: "", description: "", icon: "", temp: 0 });
   });
 });

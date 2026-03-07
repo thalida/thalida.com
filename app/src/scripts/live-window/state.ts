@@ -25,7 +25,6 @@ export function createDefaultState(store?: StoreState): LiveWindowState {
       label: null,
       overrideTime: null,
       overrideWeather: null,
-      overrideWeatherDescription: null,
       overrideSunrise: null,
       overrideSunset: null,
       tickSpeed: 1,

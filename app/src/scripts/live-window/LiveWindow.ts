@@ -26,7 +26,6 @@ class LiveWindowElement extends HTMLElement {
     "label",
     "override-time",
     "override-weather",
-    "override-weather-description",
     "override-sunrise",
     "override-sunset",
     "tick-speed",
@@ -85,7 +84,6 @@ class LiveWindowElement extends HTMLElement {
     if (
       name === "override-time" ||
       name === "override-weather" ||
-      name === "override-weather-description" ||
       name === "override-sunrise" ||
       name === "override-sunset" ||
       name === "tick-speed"
@@ -179,7 +177,6 @@ class LiveWindowElement extends HTMLElement {
       label: this.getAttribute("label") || null,
       overrideTime: this.getAttribute("override-time"),
       overrideWeather: this.getAttribute("override-weather"),
-      overrideWeatherDescription: this.getAttribute("override-weather-description"),
       overrideSunrise: this.getAttribute("override-sunrise"),
       overrideSunset: this.getAttribute("override-sunset"),
       tickSpeed,
@@ -187,7 +184,7 @@ class LiveWindowElement extends HTMLElement {
   }
 
   private refreshComputed() {
-    const { overrideWeather, overrideWeatherDescription, overrideSunrise, overrideSunset } = this.state.attrs;
+    const { overrideWeather, overrideSunrise, overrideSunset } = this.state.attrs;
     const tz = this.state.attrs.timezone;
     const now = this.getNow();
 
@@ -218,29 +215,37 @@ class LiveWindowElement extends HTMLElement {
 
     // Apply weather overrides
     if (overrideWeather) {
+      const weatherId = parseInt(overrideWeather, 10);
       const isDaytime = now >= (store.weather.sunrise ?? 0) && now <= (store.weather.sunset ?? 0);
-      const suffix = isDaytime ? "d" : "n";
-      const iconBase = overrideWeather.replace(/[dn]$/, "");
-      store = {
-        ...store,
-        weather: {
-          ...store.weather,
-          current: {
-            main: overrideWeather,
-            description: overrideWeatherDescription ?? "",
-            icon: iconBase + suffix,
-            temp: store.weather.current?.temp ?? 20,
-          },
-        },
+      // Derive icon from weather ID group for day/night
+      const iconMap: Record<number, string> = {
+        2: "11",
+        3: "09",
+        5: "10",
+        6: "13",
+        7: "50",
+        8: "01",
       };
-    } else if (overrideWeatherDescription && store.weather.current) {
+      const group = Math.floor(weatherId / 100);
+      const iconBase = iconMap[group] ?? "01";
+      // Special cases for cloud coverage icons
+      let icon: string;
+      if (weatherId === 800) icon = "01";
+      else if (weatherId === 801) icon = "02";
+      else if (weatherId === 802) icon = "03";
+      else if (weatherId === 803 || weatherId === 804) icon = "04";
+      else icon = iconBase;
+
       store = {
         ...store,
         weather: {
           ...store.weather,
           current: {
-            ...store.weather.current,
-            description: overrideWeatherDescription,
+            id: weatherId,
+            main: overrideWeather,
+            description: "",
+            icon: icon + (isDaytime ? "d" : "n"),
+            temp: store.weather.current?.temp ?? 20,
           },
         },
       };

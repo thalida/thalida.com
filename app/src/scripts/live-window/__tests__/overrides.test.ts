@@ -15,19 +15,19 @@ describe("override attributes", () => {
   });
 
   describe("override-weather", () => {
-    it("injects weather icon into phase info", () => {
+    it("injects weather id into phase info", () => {
       const state = makeTestState({
         hours: 12,
         sunrise: 6,
         sunset: 18,
         store: {
           weather: {
-            current: { main: "Rain", description: "heavy rain", icon: "10d", temp: 15 },
+            current: { id: 501, main: "Rain", description: "moderate rain", icon: "10d", temp: 15 },
           },
         },
       });
+      expect(state.computed.phase.weather.id).toBe(501);
       expect(state.computed.phase.weather.icon).toBe("10d");
-      expect(state.computed.phase.weather.description).toBe("heavy rain");
     });
   });
 

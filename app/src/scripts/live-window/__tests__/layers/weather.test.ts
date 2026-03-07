@@ -6,7 +6,7 @@ function makeState(icon: string | null, description = "test", main = "Test") {
   return makeTestState({
     store: {
       weather: {
-        current: icon ? { main, description, icon, temp: 20 } : null,
+        current: icon ? { id: 800, main, description, icon, temp: 20 } : null,
       },
     },
   });
