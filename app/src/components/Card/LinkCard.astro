@@ -23,7 +23,7 @@ const displayUrl = (() => {
 
 <a href={href} class="item-card flex flex-col gap-1 p-3" target="_blank" rel="noopener">
   <div class="flex items-center gap-2">
-    <CardCategory category={item.category} />
+    <CardCategory category={item.originalCategory ?? item.category} />
     {isValidDate(item.publishedOn) && <span class="text-dim text-2xs ml-auto">{formatDate(item.publishedOn)}</span>}
   </div>
   <h3 class="m-0 font-heading font-bold text-text leading-snug flex gap-2 text-base">
