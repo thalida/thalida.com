@@ -77,7 +77,7 @@ describe("getArcPosition", () => {
   it("returns visible=true and y near top at angle 0 (zenith)", () => {
     const pos = getArcPosition(0);
     expect(pos.visible).toBe(true);
-    expect(pos.y).toBeLessThan(20);
+    expect(pos.y).toBeLessThan(40);
   });
 
   it("returns visible=true at angle π/4 (between zenith and horizon)", () => {

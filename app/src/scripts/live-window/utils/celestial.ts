@@ -81,7 +81,7 @@ export function getArcPosition(angle: number): ArcPosition {
   const progress = shifted / Math.PI;
 
   const x = 10 + progress * 80;
-  const y = 70 - Math.sin(progress * Math.PI) * 60;
+  const y = 85 - Math.sin(progress * Math.PI) * 42;
 
   return { x, y, visible };
 }
