@@ -1,48 +1,92 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import { API_BASE_URL } from "@lib/constants";
 
 if (import.meta.env.PROD) {
   return Astro.redirect("/404");
 }
+
+const apiBaseUrl = API_BASE_URL;
 ---
 
 <BaseLayout>
   <div class="playground">
     <div class="playground-window">
-      <live-window id="preview-window" theme="dark" bg-color="#030a12" override-sunrise="06:00" override-sunset="18:00"
-      ></live-window>
+      <live-window id="preview-window" api-url={apiBaseUrl} theme="dark" bg-color="#030a12"></live-window>
     </div>
     <div class="playground-controls" id="controls">
       <h2 class="controls-title">Live Window Playground</h2>
 
       <fieldset class="control-group">
-        <legend>Time</legend>
+        <legend>Location</legend>
         <div class="control-row">
-          <label for="time-slider">Time of day</label>
-          <output id="time-display">12:00</output>
+          <label for="location-select">Preset</label>
         </div>
-        <input type="range" id="time-slider" min="0" max="1439" value="720" step="1" />
-        <div class="phase-buttons">
-          <button data-phase-hour="0" data-phase-min="0">Night</button>
-          <button data-phase-hour="4" data-phase-min="30">Astro Dawn</button>
-          <button data-phase-hour="5" data-phase-min="0">Nautical Dawn</button>
-          <button data-phase-hour="5" data-phase-min="30">Civil Dawn</button>
-          <button data-phase-hour="6" data-phase-min="0">Sunrise</button>
-          <button data-phase-hour="6" data-phase-min="30">Golden AM</button>
-          <button data-phase-hour="7" data-phase-min="0">Early Morning</button>
-          <button data-phase-hour="9" data-phase-min="0">Late Morning</button>
-          <button data-phase-hour="12" data-phase-min="0">Midday</button>
-          <button data-phase-hour="15" data-phase-min="0">Early Afternoon</button>
-          <button data-phase-hour="17" data-phase-min="0">Late Afternoon</button>
-          <button data-phase-hour="17" data-phase-min="30">Golden PM</button>
-          <button data-phase-hour="18" data-phase-min="0">Sunset</button>
-          <button data-phase-hour="18" data-phase-min="30">Civil Dusk</button>
-          <button data-phase-hour="19" data-phase-min="0">Nautical Dusk</button>
-          <button data-phase-hour="19" data-phase-min="30">Astro Dusk</button>
+        <select id="location-select">
+          <option value="">Auto (IP-based)</option>
+          <option value="40.7128,-74.0060" data-tz="America/New_York">New York, US</option>
+          <option value="51.5074,-0.1278" data-tz="Europe/London">London, UK</option>
+          <option value="35.6762,139.6503" data-tz="Asia/Tokyo">Tokyo, JP</option>
+          <option value="-33.8688,151.2093" data-tz="Australia/Sydney">Sydney, AU</option>
+          <option value="64.1466,-21.9426" data-tz="Atlantic/Reykjavik">Reykjavik, IS</option>
+          <option value="1.3521,103.8198" data-tz="Asia/Singapore">Singapore, SG</option>
+          <option value="-22.9068,-43.1729" data-tz="America/Sao_Paulo">Rio de Janeiro, BR</option>
+          <option value="30.0444,31.2357" data-tz="Africa/Cairo">Cairo, EG</option>
+          <option value="custom">Custom...</option>
+        </select>
+        <div id="custom-coords" class="custom-coords" hidden>
+          <div class="control-row">
+            <label for="lat-input">Latitude</label>
+            <input type="number" id="lat-input" step="0.0001" min="-90" max="90" placeholder="40.7128" />
+          </div>
+          <div class="control-row">
+            <label for="lng-input">Longitude</label>
+            <input type="number" id="lng-input" step="0.0001" min="-180" max="180" placeholder="-74.0060" />
+          </div>
+          <div class="control-row">
+            <label for="tz-input">Timezone (IANA)</label>
+            <input type="text" id="tz-input" placeholder="America/New_York" />
+          </div>
         </div>
       </fieldset>
 
       <fieldset class="control-group">
+        <legend>Time</legend>
+        <div class="control-row">
+          <label for="time-mode">Mode</label>
+          <select id="time-mode">
+            <option value="live" selected>Live</option>
+            <option value="override">Override</option>
+          </select>
+        </div>
+        <div id="time-override-controls" hidden>
+          <div class="control-row">
+            <label for="time-slider">Time of day</label>
+            <output id="time-display">12:00</output>
+          </div>
+          <input type="range" id="time-slider" min="0" max="1439" value="720" step="1" />
+          <div class="phase-buttons">
+            <button data-phase-hour="0" data-phase-min="0">Night</button>
+            <button data-phase-hour="4" data-phase-min="30">Astro Dawn</button>
+            <button data-phase-hour="5" data-phase-min="0">Nautical Dawn</button>
+            <button data-phase-hour="5" data-phase-min="30">Civil Dawn</button>
+            <button data-phase-hour="6" data-phase-min="0">Sunrise</button>
+            <button data-phase-hour="6" data-phase-min="30">Golden AM</button>
+            <button data-phase-hour="7" data-phase-min="0">Early Morning</button>
+            <button data-phase-hour="9" data-phase-min="0">Late Morning</button>
+            <button data-phase-hour="12" data-phase-min="0">Midday</button>
+            <button data-phase-hour="15" data-phase-min="0">Early Afternoon</button>
+            <button data-phase-hour="17" data-phase-min="0">Late Afternoon</button>
+            <button data-phase-hour="17" data-phase-min="30">Golden PM</button>
+            <button data-phase-hour="18" data-phase-min="0">Sunset</button>
+            <button data-phase-hour="18" data-phase-min="30">Civil Dusk</button>
+            <button data-phase-hour="19" data-phase-min="0">Nautical Dusk</button>
+            <button data-phase-hour="19" data-phase-min="30">Astro Dusk</button>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group" id="tick-speed-group" hidden>
         <legend>Tick Speed</legend>
         <div class="control-row">
           <label for="speed-slider">Multiplier</label>
@@ -67,7 +111,14 @@ if (import.meta.env.PROD) {
           <label for="weather-select">Condition</label>
         </div>
         <select id="weather-select">
-          <option value="">None (Clear Sky)</option>
+          <option value="">None (Live Weather)</option>
+          <optgroup label="Clear / Clouds">
+            <option value="800">800 - Clear Sky</option>
+            <option value="801">801 - Few Clouds</option>
+            <option value="802">802 - Scattered Clouds</option>
+            <option value="803">803 - Broken Clouds</option>
+            <option value="804">804 - Overcast</option>
+          </optgroup>
           <optgroup label="Thunderstorm">
             <option value="200">200 - Thunderstorm + Light Rain</option>
             <option value="201">201 - Thunderstorm + Rain</option>
@@ -128,16 +179,10 @@ if (import.meta.env.PROD) {
             <option value="771">771 - Squalls</option>
             <option value="781">781 - Tornado</option>
           </optgroup>
-          <optgroup label="Clouds">
-            <option value="801">801 - Few Clouds</option>
-            <option value="802">802 - Scattered Clouds</option>
-            <option value="803">803 - Broken Clouds</option>
-            <option value="804">804 - Overcast</option>
-          </optgroup>
         </select>
       </fieldset>
 
-      <fieldset class="control-group">
+      <fieldset class="control-group" id="sun-moon-group" hidden>
         <legend>Sun / Moon</legend>
         <div class="control-row">
           <label for="sunrise-input">Sunrise</label>
@@ -146,6 +191,18 @@ if (import.meta.env.PROD) {
         <div class="control-row">
           <label for="sunset-input">Sunset</label>
           <input type="time" id="sunset-input" value="18:00" />
+        </div>
+        <div class="control-row">
+          <label for="moon-slider">Moon phase</label>
+          <output id="moon-display">Auto</output>
+        </div>
+        <input type="range" id="moon-slider" min="0" max="100" value="-1" step="1" />
+        <div class="phase-buttons">
+          <button data-moon="-1">Auto</button>
+          <button data-moon="0">New</button>
+          <button data-moon="25">First Quarter</button>
+          <button data-moon="50">Full</button>
+          <button data-moon="75">Last Quarter</button>
         </div>
       </fieldset>
 
@@ -177,26 +234,76 @@ if (import.meta.env.PROD) {
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const win = document.getElementById("preview-window")!;
+    const timeMode = document.getElementById("time-mode") as HTMLSelectElement;
+    const timeOverrideControls = document.getElementById("time-override-controls") as HTMLDivElement;
     const timeSlider = document.getElementById("time-slider") as HTMLInputElement;
     const timeDisplay = document.getElementById("time-display") as HTMLOutputElement;
+    const tickSpeedGroup = document.getElementById("tick-speed-group") as HTMLFieldSetElement;
     const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
     const speedDisplay = document.getElementById("speed-display") as HTMLOutputElement;
     const playBtn = document.getElementById("play-btn") as HTMLButtonElement;
     const pauseBtn = document.getElementById("pause-btn") as HTMLButtonElement;
     const weatherSelect = document.getElementById("weather-select") as HTMLSelectElement;
+    const sunMoonGroup = document.getElementById("sun-moon-group") as HTMLFieldSetElement;
     const sunriseInput = document.getElementById("sunrise-input") as HTMLInputElement;
     const sunsetInput = document.getElementById("sunset-input") as HTMLInputElement;
     const clockToggle = document.getElementById("clock-toggle") as HTMLSelectElement;
     const formatToggle = document.getElementById("format-toggle") as HTMLSelectElement;
     const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
+    const locationSelect = document.getElementById("location-select") as HTMLSelectElement;
+    const customCoords = document.getElementById("custom-coords") as HTMLDivElement;
+    const latInput = document.getElementById("lat-input") as HTMLInputElement;
+    const lngInput = document.getElementById("lng-input") as HTMLInputElement;
+    const tzInput = document.getElementById("tz-input") as HTMLInputElement;
 
-    // -- Time controls --
+    // -- Helpers --
 
     function minutesToHHMM(minutes: number): string {
       const h = Math.floor(minutes / 60);
       const m = minutes % 60;
       return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
     }
+
+    // -- Time mode --
+
+    function setTimeMode(mode: "live" | "override") {
+      const isLive = mode === "live";
+      timeMode.value = mode;
+      timeOverrideControls.hidden = isLive;
+      tickSpeedGroup.hidden = isLive;
+      sunMoonGroup.hidden = isLive;
+
+      if (isLive) {
+        win.removeAttribute("override-time");
+        win.removeAttribute("override-sunrise");
+        win.removeAttribute("override-sunset");
+        win.removeAttribute("override-moon-phase");
+        win.setAttribute("tick-speed", "1");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (win as any).pauseVirtualClock();
+        playBtn.classList.remove("active");
+        pauseBtn.classList.remove("active");
+      } else {
+        // Sync slider to the current live time before showing override controls
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const phase = (win as any).state?.computed?.phase;
+        if (phase?.now) {
+          const d = new Date(phase.now);
+          const mins = d.getHours() * 60 + d.getMinutes();
+          timeSlider.value = String(mins);
+          timeDisplay.textContent = minutesToHHMM(mins);
+        }
+        setTime(parseInt(timeSlider.value, 10));
+        win.setAttribute("override-sunrise", sunriseInput.value);
+        win.setAttribute("override-sunset", sunsetInput.value);
+      }
+    }
+
+    timeMode.addEventListener("change", () => {
+      setTimeMode(timeMode.value as "live" | "override");
+    });
+
+    // -- Time override controls --
 
     function setTime(minutes: number) {
       const hhmm = minutesToHHMM(minutes);
@@ -271,9 +378,89 @@ if (import.meta.env.PROD) {
     }
 
     weatherSelect.addEventListener("change", updateWeather);
-    updateWeather(); // set initial state
+    updateWeather();
+
+    // -- Location controls --
+
+    function updateLocation() {
+      const value = locationSelect.value;
+      const option = locationSelect.selectedOptions[0];
+
+      if (value === "") {
+        // Auto (IP-based) — clear all explicit overrides, let API handle it
+        win.removeAttribute("latitude");
+        win.removeAttribute("longitude");
+        win.removeAttribute("timezone");
+        win.removeAttribute("label");
+        customCoords.hidden = true;
+      } else if (value === "custom") {
+        customCoords.hidden = false;
+        win.removeAttribute("label");
+        applyCustomCoords();
+      } else {
+        customCoords.hidden = true;
+        const [lat, lng] = value.split(",");
+        const tz = option?.dataset.tz ?? null;
+        const label = option?.textContent?.trim() ?? null;
+        win.setAttribute("latitude", lat);
+        win.setAttribute("longitude", lng);
+        if (tz) win.setAttribute("timezone", tz);
+        else win.removeAttribute("timezone");
+        if (label) win.setAttribute("label", label);
+        else win.removeAttribute("label");
+      }
+    }
+
+    function applyCustomCoords() {
+      const lat = latInput.value;
+      const lng = lngInput.value;
+      const tz = tzInput.value.trim();
+      if (lat && lng) {
+        win.setAttribute("latitude", lat);
+        win.setAttribute("longitude", lng);
+      }
+      if (tz) win.setAttribute("timezone", tz);
+      else win.removeAttribute("timezone");
+    }
+
+    locationSelect.addEventListener("change", updateLocation);
+    latInput.addEventListener("change", applyCustomCoords);
+    lngInput.addEventListener("change", applyCustomCoords);
+    tzInput.addEventListener("change", applyCustomCoords);
 
     // -- Sun/Moon controls --
+
+    const moonSlider = document.getElementById("moon-slider") as HTMLInputElement;
+    const moonDisplay = document.getElementById("moon-display") as HTMLOutputElement;
+
+    const MOON_LABELS: Record<string, string> = {
+      "0": "New Moon",
+      "25": "First Quarter",
+      "50": "Full Moon",
+      "75": "Last Quarter",
+    };
+
+    function setMoonPhase(value: number) {
+      moonSlider.value = String(value);
+      if (value < 0) {
+        moonDisplay.textContent = "Auto";
+        win.removeAttribute("override-moon-phase");
+      } else {
+        const phase = value / 100;
+        moonDisplay.textContent = MOON_LABELS[String(value)] ?? `${value}%`;
+        win.setAttribute("override-moon-phase", String(phase));
+      }
+    }
+
+    moonSlider.addEventListener("input", () => {
+      setMoonPhase(parseInt(moonSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-moon]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setMoonPhase(parseInt((btn as HTMLElement).dataset.moon!, 10));
+      });
+    });
 
     sunriseInput.addEventListener("change", () => {
       win.setAttribute("override-sunrise", sunriseInput.value);
@@ -309,25 +496,35 @@ if (import.meta.env.PROD) {
       playBtn.classList.remove("active");
       pauseBtn.classList.remove("active");
 
-      setTime(720);
+      // Reset location
+      locationSelect.value = "";
+      updateLocation();
+      latInput.value = "";
+      lngInput.value = "";
+      tzInput.value = "";
+
+      // Reset to live time mode
+      setTimeMode("live");
       setSpeed(1);
 
+      // Reset weather to live
       weatherSelect.value = "";
       updateWeather();
 
+      // Reset sun/moon defaults (applied when switching to override)
       sunriseInput.value = "06:00";
       sunsetInput.value = "18:00";
-      win.setAttribute("override-sunrise", "06:00");
-      win.setAttribute("override-sunset", "18:00");
+      setMoonPhase(-1);
 
+      // Reset display
       clockToggle.value = "show";
       win.removeAttribute("hide-clock");
       formatToggle.value = "24";
       win.removeAttribute("time-format");
     });
 
-    // Initialize at noon
-    setTime(720);
+    // Initialize in live mode (real time, real weather)
+    setTimeMode("live");
   });
 </script>
 
@@ -378,6 +575,10 @@ if (import.meta.env.PROD) {
     border-radius: 0.5rem;
     padding: 1rem;
     margin: 0;
+  }
+
+  .control-group[hidden] {
+    display: none;
   }
 
   .control-group legend {
@@ -466,6 +667,24 @@ if (import.meta.env.PROD) {
   select {
     width: 100%;
     padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .custom-coords {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  input[type="number"],
+  input[type="text"] {
+    width: 7rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     border: 1px solid var(--color-midnight-light, #1a2a3a);
     border-radius: 0.25rem;

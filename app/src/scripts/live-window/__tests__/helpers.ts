@@ -64,6 +64,7 @@ export function makeTestState(overrides?: {
       overrideWeather: null,
       overrideSunrise: null,
       overrideSunset: null,
+      overrideMoonPhase: null,
       tickSpeed: 1,
     },
   };

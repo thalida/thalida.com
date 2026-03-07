@@ -27,6 +27,7 @@ export function createDefaultState(store?: StoreState): LiveWindowState {
       overrideWeather: null,
       overrideSunrise: null,
       overrideSunset: null,
+      overrideMoonPhase: null,
       tickSpeed: 1,
     },
   };

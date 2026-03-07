@@ -11,6 +11,65 @@ import { InfoPanelComponent } from "./components/InfoPanelComponent";
 
 import STYLES_URL from "./live-window.css?url";
 
+/** OpenWeatherMap weather ID → human-readable description (lowercase, matching API format). */
+const WEATHER_DESCRIPTIONS: Record<number, string> = {
+  200: "thunderstorm with light rain",
+  201: "thunderstorm with rain",
+  202: "thunderstorm with heavy rain",
+  210: "light thunderstorm",
+  211: "thunderstorm",
+  212: "heavy thunderstorm",
+  221: "ragged thunderstorm",
+  230: "thunderstorm with light drizzle",
+  231: "thunderstorm with drizzle",
+  232: "thunderstorm with heavy drizzle",
+  300: "light intensity drizzle",
+  301: "drizzle",
+  302: "heavy intensity drizzle",
+  310: "light intensity drizzle rain",
+  311: "drizzle rain",
+  312: "heavy intensity drizzle rain",
+  313: "shower rain and drizzle",
+  314: "heavy shower rain and drizzle",
+  321: "shower drizzle",
+  500: "light rain",
+  501: "moderate rain",
+  502: "heavy intensity rain",
+  503: "very heavy rain",
+  504: "extreme rain",
+  511: "freezing rain",
+  520: "light intensity shower rain",
+  521: "shower rain",
+  522: "heavy intensity shower rain",
+  531: "ragged shower rain",
+  600: "light snow",
+  601: "snow",
+  602: "heavy snow",
+  611: "sleet",
+  612: "light shower sleet",
+  613: "shower sleet",
+  615: "light rain and snow",
+  616: "rain and snow",
+  620: "light shower snow",
+  621: "shower snow",
+  622: "heavy shower snow",
+  701: "mist",
+  711: "smoke",
+  721: "haze",
+  731: "sand/dust whirls",
+  741: "fog",
+  751: "sand",
+  761: "dust",
+  762: "volcanic ash",
+  771: "squalls",
+  781: "tornado",
+  800: "clear sky",
+  801: "few clouds",
+  802: "scattered clouds",
+  803: "broken clouds",
+  804: "overcast clouds",
+};
+
 class LiveWindowElement extends HTMLElement {
   static observedAttributes = [
     "api-url",
@@ -28,6 +87,7 @@ class LiveWindowElement extends HTMLElement {
     "override-weather",
     "override-sunrise",
     "override-sunset",
+    "override-moon-phase",
     "tick-speed",
   ];
 
@@ -86,6 +146,7 @@ class LiveWindowElement extends HTMLElement {
       name === "override-weather" ||
       name === "override-sunrise" ||
       name === "override-sunset" ||
+      name === "override-moon-phase" ||
       name === "tick-speed"
     ) {
       this.refreshAttrs();
@@ -179,6 +240,7 @@ class LiveWindowElement extends HTMLElement {
       overrideWeather: this.getAttribute("override-weather"),
       overrideSunrise: this.getAttribute("override-sunrise"),
       overrideSunset: this.getAttribute("override-sunset"),
+      overrideMoonPhase: this.parseMoonPhase(this.getAttribute("override-moon-phase")),
       tickSpeed,
     };
   }
@@ -242,8 +304,8 @@ class LiveWindowElement extends HTMLElement {
           ...store.weather,
           current: {
             id: weatherId,
-            main: overrideWeather,
-            description: "",
+            main: WEATHER_DESCRIPTIONS[weatherId]?.split(" ")[0] ?? "Unknown",
+            description: WEATHER_DESCRIPTIONS[weatherId] ?? "",
             icon: icon + (isDaytime ? "d" : "n"),
             temp: store.weather.current?.temp ?? 20,
           },
@@ -322,6 +384,13 @@ class LiveWindowElement extends HTMLElement {
   }
 
   // -- Override / Virtual Clock -----------------------------------------------
+
+  private parseMoonPhase(raw: string | null): number | null {
+    if (raw == null) return null;
+    const v = parseFloat(raw);
+    if (Number.isNaN(v)) return null;
+    return Math.max(0, Math.min(1, v));
+  }
 
   /** Parse "HH:MM" into a timestamp for today at that time. */
   private parseTimeToTimestamp(hhmm: string): number | null {

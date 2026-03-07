@@ -103,6 +103,7 @@ export interface LiveWindowState {
     overrideWeather: string | null;
     overrideSunrise: string | null;
     overrideSunset: string | null;
+    overrideMoonPhase: number | null;
     tickSpeed: number;
   };
 }

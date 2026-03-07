@@ -67,11 +67,12 @@ export class InfoPanelComponent implements SceneComponent {
 
   private updateWeather(state: LiveWindowState): void {
     if (!this.weatherEl) return;
-    const current = state.store.weather.current;
-    if (current && !state.attrs.hideWeatherText) {
+    const weather = state.computed.phase.weather;
+    if (weather.description && !state.attrs.hideWeatherText) {
       const units = state.attrs.resolvedUnits;
       const symbol = units === "imperial" ? "°F" : "°C";
-      this.weatherEl.textContent = `${Math.round(current.temp)}${symbol} · ${current.description}`;
+      const temp = weather.temp != null ? `${Math.round(weather.temp)}${symbol} · ` : "";
+      this.weatherEl.textContent = `${temp}${weather.description}`;
       this.weatherEl.hidden = false;
     } else {
       this.weatherEl.hidden = true;

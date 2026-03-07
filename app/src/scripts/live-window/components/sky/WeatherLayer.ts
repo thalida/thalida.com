@@ -64,10 +64,10 @@ export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
     count: 22,
     fallSpeed: "8s",
     shape: "drop",
-    sizeW: [1, 2],
+    sizeW: [2, 3],
     aspectRatio: 2.5,
     color: "#28afff",
-    opacityRange: [30, 55],
+    opacityRange: [40, 65],
     hasSway: false,
   },
   showerRain: {
@@ -138,6 +138,7 @@ export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
   volcanicAsh: { color: "#555555", opacity: 0.4, layers: 3 },
   squalls: { color: "#888888", opacity: 0.3, layers: 3 },
   tornado: { color: "#666666", opacity: 0.45, layers: 3 },
+  stormDark: { color: "#1a1a2e", opacity: 0.2, layers: 2 },
 };
 
 export type CloudDensity = "none" | "light" | "medium" | "heavy" | "storm";
@@ -227,17 +228,17 @@ function p(type: string, intensityScale = 1.0): PrecipLayer {
 }
 
 export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
-  // 2xx Thunderstorm
-  200: fx("storm", [p("lightRain", 0.6)], { lightning: true }),
+  // 2xx Thunderstorm — light variants use heavy clouds, heavy variants add dark atmosphere
+  200: fx("heavy", [p("lightRain", 0.6)], { lightning: true }),
   201: fx("storm", [p("rain")], { lightning: true }),
-  202: fx("storm", [p("rain", 1.4)], { lightning: true }),
-  210: fx("storm", [], { lightning: true }),
+  202: fx("storm", [p("rain", 1.4)], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
+  210: fx("heavy", [], { lightning: true }),
   211: fx("storm", [], { lightning: true }),
-  212: fx("storm", [], { lightning: true }),
+  212: fx("storm", [], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
   221: fx("storm", [], { lightning: true }),
-  230: fx("storm", [p("drizzle", 0.6)], { lightning: true }),
-  231: fx("storm", [p("drizzle")], { lightning: true }),
-  232: fx("storm", [p("drizzle", 1.4)], { lightning: true }),
+  230: fx("heavy", [p("drizzle")], { lightning: true }),
+  231: fx("storm", [p("drizzle", 1.4)], { lightning: true }),
+  232: fx("storm", [p("drizzle", 1.8)], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
   // 3xx Drizzle
   300: fx("medium", [p("drizzle", 0.6)]),
   301: fx("medium", [p("drizzle")]),
@@ -443,7 +444,7 @@ export class WeatherLayer implements SceneComponent {
       const sizes = ["lg", "md", "sm"];
       for (let i = 0; i < layers; i++) {
         const size = sizes[i] ?? "sm";
-        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:${color};opacity:${opacity}"></div>`;
+        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:linear-gradient(to top, ${color}, transparent);opacity:${opacity}"></div>`;
       }
     }
 

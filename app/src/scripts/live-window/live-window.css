@@ -159,7 +159,6 @@
   height: 22px;
   border-radius: 50%;
   background: #e8e8d0;
-  box-shadow: 0 0 10px 5px rgba(232, 232, 208, 0.3);
   overflow: hidden;
   transform: translate(-50%, -50%);
 }
@@ -168,7 +167,6 @@
   position: absolute;
   inset: -1px;
   border-radius: 50%;
-  backface-visibility: hidden;
 }
 
 /* ---- Weather effects ---- */
@@ -337,6 +335,8 @@
   bottom: 0;
   left: 0;
   width: 120%;
+  filter: blur(12px);
+  border-radius: 40% 40% 0 0;
   animation: 5s linear infinite alternate atmosphere-roll;
   transform: translate(0, 0);
 }
