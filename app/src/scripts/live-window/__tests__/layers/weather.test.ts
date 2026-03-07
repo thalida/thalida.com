@@ -4,6 +4,7 @@ import {
   WEATHER_EFFECTS,
   PRECIP_CONFIG,
   ATMOSPHERE_CONFIG,
+  ATMO_PARTICLE_CONFIG,
   CLOUD_CONFIGS,
 } from "../../components/sky/WeatherLayer";
 import { makeTestState } from "../helpers";
@@ -58,14 +59,24 @@ describe("WEATHER_EFFECTS", () => {
     }
   });
 
-  it("thunderstorm IDs have lightning", () => {
+  it("thunderstorm IDs have lightning variants", () => {
     for (const id of [200, 201, 202, 210, 211, 212, 221, 230, 231, 232]) {
-      expect(WEATHER_EFFECTS[id].lightning).toBe(true);
+      expect(WEATHER_EFFECTS[id].lightning).toBeTruthy();
     }
   });
 
+  it("light thunderstorms use distant lightning", () => {
+    expect(WEATHER_EFFECTS[200].lightning).toBe("distant");
+    expect(WEATHER_EFFECTS[210].lightning).toBe("distant");
+  });
+
+  it("heavy thunderstorms use intense lightning", () => {
+    expect(WEATHER_EFFECTS[202].lightning).toBe("intense");
+    expect(WEATHER_EFFECTS[212].lightning).toBe("intense");
+    expect(WEATHER_EFFECTS[232].lightning).toBe("intense");
+  });
+
   it("light thunderstorms have fewer clouds than heavy thunderstorms", () => {
-    // Light variants use heavy density, normal/heavy use storm density
     expect(WEATHER_EFFECTS[200].clouds).toBe("heavy");
     expect(WEATHER_EFFECTS[201].clouds).toBe("storm");
     expect(WEATHER_EFFECTS[202].clouds).toBe("storm");
@@ -78,7 +89,6 @@ describe("WEATHER_EFFECTS", () => {
     expect(WEATHER_EFFECTS[202].atmosphere).toBe(ATMOSPHERE_CONFIG.stormDark);
     expect(WEATHER_EFFECTS[212].atmosphere).toBe(ATMOSPHERE_CONFIG.stormDark);
     expect(WEATHER_EFFECTS[232].atmosphere).toBe(ATMOSPHERE_CONFIG.stormDark);
-    // Light/normal variants do not
     expect(WEATHER_EFFECTS[200].atmosphere).toBeNull();
     expect(WEATHER_EFFECTS[201].atmosphere).toBeNull();
     expect(WEATHER_EFFECTS[211].atmosphere).toBeNull();
@@ -108,14 +118,24 @@ describe("WEATHER_EFFECTS", () => {
   });
 
   it("non-atmosphere IDs do not have atmosphere configs", () => {
-    for (const id of [200, 300, 500, 600, 800]) {
+    for (const id of [300, 500, 600, 800]) {
       expect(WEATHER_EFFECTS[id].atmosphere).toBeNull();
     }
   });
 
-  it("squalls and tornado have heavy clouds", () => {
+  it("squalls have heavy clouds and tornado has storm clouds", () => {
     expect(WEATHER_EFFECTS[771].clouds).toBe("heavy");
-    expect(WEATHER_EFFECTS[781].clouds).toBe("heavy");
+    expect(WEATHER_EFFECTS[781].clouds).toBe("storm");
+  });
+
+  it("squalls and tornado have precipitation", () => {
+    expect(WEATHER_EFFECTS[771].precip.length).toBeGreaterThan(0);
+    expect(WEATHER_EFFECTS[781].precip.length).toBeGreaterThan(0);
+  });
+
+  it("squalls and tornado have strong wind", () => {
+    expect(WEATHER_EFFECTS[771].wind).toBe("strong");
+    expect(WEATHER_EFFECTS[781].wind).toBe("strong");
   });
 
   it("clear sky (800) has no effects", () => {
@@ -124,21 +144,69 @@ describe("WEATHER_EFFECTS", () => {
     expect(config.precip).toEqual([]);
     expect(config.lightning).toBe(false);
     expect(config.atmosphere).toBeNull();
+    expect(config.wind).toBe("none");
+    expect(config.atmosphereParticles).toBeNull();
+  });
+
+  it("804 (overcast) has storm density, more than 803 (broken)", () => {
+    expect(WEATHER_EFFECTS[803].clouds).toBe("heavy");
+    expect(WEATHER_EFFECTS[804].clouds).toBe("storm");
+  });
+
+  it("751 (sand) and 761 (dust) have distinct atmosphere configs", () => {
+    const sandAtmo = WEATHER_EFFECTS[751].atmosphere;
+    const dustAtmo = WEATHER_EFFECTS[761].atmosphere;
+    expect(sandAtmo).not.toBe(dustAtmo);
+    expect(sandAtmo?.color).not.toBe(dustAtmo?.color);
+  });
+
+  it("shower variants have wind", () => {
+    for (const id of [520, 521, 522, 620, 621, 622, 612, 613, 313, 314, 321]) {
+      expect(WEATHER_EFFECTS[id].wind).not.toBe("none");
+    }
+  });
+
+  it("non-shower rain/snow/drizzle have no wind", () => {
+    for (const id of [300, 301, 302, 500, 501, 600, 601, 611]) {
+      expect(WEATHER_EFFECTS[id].wind).toBe("none");
+    }
+  });
+
+  it("atmosphere codes have atmosphere particles except haze", () => {
+    for (const id of [701, 711, 731, 741, 751, 761, 762, 781]) {
+      expect(WEATHER_EFFECTS[id].atmosphereParticles).not.toBeNull();
+    }
+    expect(WEATHER_EFFECTS[721].atmosphereParticles).toBeNull();
+  });
+
+  it("freezing rain (511) has ice glint particles", () => {
+    expect(WEATHER_EFFECTS[511].atmosphereParticles).toBe(ATMO_PARTICLE_CONFIG.iceGlint);
   });
 });
 
 describe("PRECIP_CONFIG", () => {
-  it("defines configs for all precipitation types including new ones", () => {
-    expect(PRECIP_CONFIG.lightRain).toBeDefined();
-    expect(PRECIP_CONFIG.rain).toBeDefined();
-    expect(PRECIP_CONFIG.snow).toBeDefined();
-    expect(PRECIP_CONFIG.sleet).toBeDefined();
-    expect(PRECIP_CONFIG.drizzle).toBeDefined();
-    expect(PRECIP_CONFIG.showerRain).toBeDefined();
-    expect(PRECIP_CONFIG.freezingRain).toBeDefined();
-    expect(PRECIP_CONFIG.lightSnow).toBeDefined();
-    expect(PRECIP_CONFIG.heavySnow).toBeDefined();
-    expect(PRECIP_CONFIG.showerSnow).toBeDefined();
+  it("defines configs for all precipitation types", () => {
+    const expected = [
+      "lightRain",
+      "rain",
+      "snow",
+      "sleet",
+      "drizzle",
+      "showerRain",
+      "freezingRain",
+      "lightSnow",
+      "heavySnow",
+      "showerSnow",
+      "drizzleLight",
+      "drizzleHeavy",
+      "showerDrizzle",
+      "heavyRain",
+      "extremeRain",
+      "showerSleet",
+    ];
+    for (const key of expected) {
+      expect(PRECIP_CONFIG[key]).toBeDefined();
+    }
   });
 
   it("rain is fastest, snow is slowest", () => {
@@ -159,6 +227,27 @@ describe("PRECIP_CONFIG", () => {
   it("freezingRain has blue-white color distinct from regular rain", () => {
     expect(PRECIP_CONFIG.freezingRain.color).not.toBe(PRECIP_CONFIG.rain.color);
   });
+
+  it("drizzleLight is slower and smaller than drizzle", () => {
+    const speed = (s: string) => parseFloat(s);
+    expect(speed(PRECIP_CONFIG.drizzleLight.fallSpeed)).toBeGreaterThan(speed(PRECIP_CONFIG.drizzle.fallSpeed));
+    expect(PRECIP_CONFIG.drizzleLight.sizeW[1]).toBeLessThanOrEqual(PRECIP_CONFIG.drizzle.sizeW[0]);
+  });
+
+  it("heavyRain has bigger drops than rain", () => {
+    expect(PRECIP_CONFIG.heavyRain.sizeW[0]).toBeGreaterThan(PRECIP_CONFIG.rain.sizeW[0]);
+  });
+
+  it("extremeRain is fastest and densest", () => {
+    const speed = (s: string) => parseFloat(s);
+    expect(speed(PRECIP_CONFIG.extremeRain.fallSpeed)).toBeLessThan(speed(PRECIP_CONFIG.heavyRain.fallSpeed));
+    expect(PRECIP_CONFIG.extremeRain.count).toBeGreaterThan(PRECIP_CONFIG.heavyRain.count);
+  });
+
+  it("showerSleet is faster than regular sleet", () => {
+    const speed = (s: string) => parseFloat(s);
+    expect(speed(PRECIP_CONFIG.showerSleet.fallSpeed)).toBeLessThan(speed(PRECIP_CONFIG.sleet.fallSpeed));
+  });
 });
 
 describe("ATMOSPHERE_CONFIG", () => {
@@ -167,6 +256,7 @@ describe("ATMOSPHERE_CONFIG", () => {
     expect(ATMOSPHERE_CONFIG.fog).toBeDefined();
     expect(ATMOSPHERE_CONFIG.smoke).toBeDefined();
     expect(ATMOSPHERE_CONFIG.haze).toBeDefined();
+    expect(ATMOSPHERE_CONFIG.sand).toBeDefined();
     expect(ATMOSPHERE_CONFIG.dust).toBeDefined();
     expect(ATMOSPHERE_CONFIG.dustWhirls).toBeDefined();
     expect(ATMOSPHERE_CONFIG.volcanicAsh).toBeDefined();
@@ -183,6 +273,10 @@ describe("ATMOSPHERE_CONFIG", () => {
     expect(ATMOSPHERE_CONFIG.smoke.color).not.toBe(ATMOSPHERE_CONFIG.mist.color);
   });
 
+  it("sand and dust have distinct colors", () => {
+    expect(ATMOSPHERE_CONFIG.sand.color).not.toBe(ATMOSPHERE_CONFIG.dust.color);
+  });
+
   it("each config has required fields", () => {
     for (const key of Object.keys(ATMOSPHERE_CONFIG)) {
       const config = ATMOSPHERE_CONFIG[key];
@@ -192,6 +286,38 @@ describe("ATMOSPHERE_CONFIG", () => {
       expect(config.layers).toBeGreaterThanOrEqual(1);
       expect(config.layers).toBeLessThanOrEqual(3);
     }
+  });
+});
+
+describe("ATMO_PARTICLE_CONFIG", () => {
+  it("defines all atmosphere particle types", () => {
+    const expected = [
+      "mistWisps",
+      "fogBanks",
+      "smokeWisps",
+      "dustSwirl",
+      "sandSwirl",
+      "ashFall",
+      "debrisSwirl",
+      "iceGlint",
+    ];
+    for (const key of expected) {
+      expect(ATMO_PARTICLE_CONFIG[key]).toBeDefined();
+    }
+  });
+
+  it("each config has required fields", () => {
+    for (const key of Object.keys(ATMO_PARTICLE_CONFIG)) {
+      const config = ATMO_PARTICLE_CONFIG[key];
+      expect(config.count).toBeGreaterThan(0);
+      expect(config.sizeRange[0]).toBeLessThan(config.sizeRange[1]);
+      expect(config.opacityRange[0]).toBeLessThan(config.opacityRange[1]);
+      expect(["float", "swirl", "fall"]).toContain(config.drift);
+    }
+  });
+
+  it("dust and sand swirl particles have distinct colors", () => {
+    expect(ATMO_PARTICLE_CONFIG.dustSwirl.color).not.toBe(ATMO_PARTICLE_CONFIG.sandSwirl.color);
   });
 });
 
@@ -252,6 +378,26 @@ describe("WeatherLayer.particleHTML", () => {
   });
 });
 
+describe("WeatherLayer.atmosphereParticleHTML", () => {
+  it("generates the configured number of particles", () => {
+    const html = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.dustSwirl);
+    const matches = html.match(/class="atmo-particle/g);
+    expect(matches?.length).toBe(ATMO_PARTICLE_CONFIG.dustSwirl.count);
+  });
+
+  it("uses correct drift class", () => {
+    expect(WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.mistWisps)).toContain("atmo-float");
+    expect(WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.dustSwirl)).toContain("atmo-swirl");
+    expect(WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.ashFall)).toContain("atmo-fall");
+  });
+
+  it("produces deterministic output", () => {
+    const a = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.fogBanks);
+    const b = WeatherLayer.atmosphereParticleHTML(ATMO_PARTICLE_CONFIG.fogBanks);
+    expect(a).toBe(b);
+  });
+});
+
 describe("WeatherLayer", () => {
   let layer: WeatherLayer;
   let container: HTMLElement;
@@ -293,6 +439,13 @@ describe("WeatherLayer", () => {
     expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.medium.count);
   });
 
+  it("renders storm clouds for 804 (overcast), more than 803", () => {
+    layer.update(makeState(804));
+    const clouds = container.querySelectorAll(".cloud");
+    expect(clouds.length).toBe(CLOUD_CONFIGS.storm.count);
+    expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.heavy.count);
+  });
+
   it("renders rain particles for 501 (moderate rain)", () => {
     layer.update(makeState(501));
     expect(container.querySelector(".droplets")).toBeTruthy();
@@ -300,54 +453,67 @@ describe("WeatherLayer", () => {
     expect(container.querySelectorAll(".cloud").length).toBe(CLOUD_CONFIGS.medium.count);
   });
 
-  it("renders lightning for thunderstorm (201)", () => {
+  it("renders standard lightning for thunderstorm (201)", () => {
     layer.update(makeState(201));
-    expect(container.querySelector(".lightning")).toBeTruthy();
+    expect(container.querySelector(".lightning-standard")).toBeTruthy();
     expect(container.querySelector(".droplets")).toBeTruthy();
   });
 
-  it("renders heavy-density clouds for light thunderstorm (210)", () => {
+  it("renders distant lightning for light thunderstorm (210)", () => {
     layer.update(makeState(210));
-    expect(container.querySelector(".lightning")).toBeTruthy();
+    expect(container.querySelector(".lightning-distant")).toBeTruthy();
     expect(container.querySelector(".droplets")).toBeFalsy();
     const clouds = container.querySelectorAll(".cloud");
     expect(clouds.length).toBe(CLOUD_CONFIGS.heavy.count);
   });
 
+  it("renders intense lightning for heavy thunderstorm (212)", () => {
+    layer.update(makeState(212));
+    expect(container.querySelector(".lightning-intense")).toBeTruthy();
+    expect(container.querySelector(".lightning-secondary")).toBeTruthy();
+    expect(container.querySelector(".atmosphere-lg")).toBeTruthy();
+  });
+
   it("renders storm-density clouds for regular thunderstorm (211)", () => {
     layer.update(makeState(211));
-    expect(container.querySelector(".lightning")).toBeTruthy();
+    expect(container.querySelector(".lightning-standard")).toBeTruthy();
     const clouds = container.querySelectorAll(".cloud");
     expect(clouds.length).toBe(CLOUD_CONFIGS.storm.count);
     expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.heavy.count);
   });
 
-  it("renders dark atmosphere for heavy thunderstorm (212)", () => {
-    layer.update(makeState(212));
-    expect(container.querySelector(".lightning")).toBeTruthy();
-    expect(container.querySelector(".atmosphere-lg")).toBeTruthy();
-    const clouds = container.querySelectorAll(".cloud");
-    expect(clouds.length).toBe(CLOUD_CONFIGS.storm.count);
-  });
-
-  it("renders atmosphere layers for mist (701)", () => {
+  it("renders atmosphere layers for mist (701) with wisps", () => {
     layer.update(makeState(701));
     expect(container.querySelector(".atmosphere-lg")).toBeTruthy();
     expect(container.querySelector(".atmosphere-md")).toBeTruthy();
-    expect(container.querySelector(".atmosphere-sm")).toBeFalsy(); // mist only has 2 layers
+    expect(container.querySelector(".atmosphere-sm")).toBeFalsy();
+    expect(container.querySelector(".atmo-particle")).toBeTruthy();
+    expect(container.querySelector(".atmo-float")).toBeTruthy();
   });
 
-  it("renders 3 atmosphere layers for fog (741)", () => {
+  it("renders 3 atmosphere layers for fog (741) with fog banks", () => {
     layer.update(makeState(741));
     expect(container.querySelector(".atmosphere-lg")).toBeTruthy();
     expect(container.querySelector(".atmosphere-md")).toBeTruthy();
     expect(container.querySelector(".atmosphere-sm")).toBeTruthy();
+    expect(container.querySelector(".atmo-float")).toBeTruthy();
   });
 
   it("renders atmosphere with correct color for smoke (711)", () => {
     layer.update(makeState(711));
     const el = container.querySelector(".atmosphere-lg") as HTMLElement;
     expect(el.getAttribute("style")).toContain("#8b7355");
+    expect(container.querySelector(".atmo-float")).toBeTruthy();
+  });
+
+  it("renders swirling particles for dust whirls (731)", () => {
+    layer.update(makeState(731));
+    expect(container.querySelector(".atmo-swirl")).toBeTruthy();
+  });
+
+  it("renders falling particles for volcanic ash (762)", () => {
+    layer.update(makeState(762));
+    expect(container.querySelector(".atmo-fall")).toBeTruthy();
   });
 
   it("renders particles for 601 (snow)", () => {
@@ -367,10 +533,23 @@ describe("WeatherLayer", () => {
     expect(particle.getAttribute("style")).toContain("background:#a0cfff");
   });
 
-  it("renders freezing rain with distinct icy-blue color (511)", () => {
+  it("renders freezing rain with distinct icy-blue color and ice glint (511)", () => {
     layer.update(makeState(511));
     const particle = container.querySelector(".particle") as HTMLElement;
     expect(particle.getAttribute("style")).toContain("background:#7ec8f0");
+    expect(container.querySelector(".atmo-float")).toBeTruthy();
+  });
+
+  it("renders wind-driven precipitation for shower rain (521)", () => {
+    layer.update(makeState(521));
+    const droplets = container.querySelector(".droplets") as HTMLElement;
+    expect(droplets.style.animationName).toBe("precipitate-light-wind");
+  });
+
+  it("renders strong wind for squalls (771)", () => {
+    layer.update(makeState(771));
+    const droplets = container.querySelector(".droplets") as HTMLElement;
+    expect(droplets.style.animationName).toBe("precipitate-strong-wind");
   });
 
   it("sets fall speed inline on droplets container", () => {
