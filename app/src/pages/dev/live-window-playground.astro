@@ -67,26 +67,73 @@ if (import.meta.env.PROD) {
           <label for="weather-select">Condition</label>
         </div>
         <select id="weather-select">
-          <option value="01">None (clear sky)</option>
-          <option value="02">Few Clouds</option>
-          <option value="03">Scattered Clouds</option>
-          <option value="04">Broken/Overcast Clouds</option>
-          <option value="09">Drizzle</option>
-          <option value="10">Rain</option>
-          <option value="11">Thunderstorm</option>
-          <option value="13">Snow</option>
-          <option value="13:sleet">Sleet</option>
-          <option value="50">Mist</option>
-        </select>
-        <div class="control-row" style="margin-top: 0.75rem">
-          <label for="intensity-select">Intensity</label>
-        </div>
-        <select id="intensity-select">
-          <option value="light">Light</option>
-          <option value="" selected>Default</option>
-          <option value="heavy">Heavy</option>
-          <option value="very heavy">Very Heavy</option>
-          <option value="extreme">Extreme</option>
+          <option value="">None (Clear Sky)</option>
+          <optgroup label="Thunderstorm">
+            <option value="200">200 - Thunderstorm + Light Rain</option>
+            <option value="201">201 - Thunderstorm + Rain</option>
+            <option value="202">202 - Thunderstorm + Heavy Rain</option>
+            <option value="210">210 - Light Thunderstorm</option>
+            <option value="211">211 - Thunderstorm</option>
+            <option value="212">212 - Heavy Thunderstorm</option>
+            <option value="221">221 - Ragged Thunderstorm</option>
+            <option value="230">230 - Thunderstorm + Light Drizzle</option>
+            <option value="231">231 - Thunderstorm + Drizzle</option>
+            <option value="232">232 - Thunderstorm + Heavy Drizzle</option>
+          </optgroup>
+          <optgroup label="Drizzle">
+            <option value="300">300 - Light Drizzle</option>
+            <option value="301">301 - Drizzle</option>
+            <option value="302">302 - Heavy Drizzle</option>
+            <option value="310">310 - Light Drizzle Rain</option>
+            <option value="311">311 - Drizzle Rain</option>
+            <option value="312">312 - Heavy Drizzle Rain</option>
+            <option value="313">313 - Shower Rain + Drizzle</option>
+            <option value="314">314 - Heavy Shower Rain + Drizzle</option>
+            <option value="321">321 - Shower Drizzle</option>
+          </optgroup>
+          <optgroup label="Rain">
+            <option value="500">500 - Light Rain</option>
+            <option value="501">501 - Moderate Rain</option>
+            <option value="502">502 - Heavy Rain</option>
+            <option value="503">503 - Very Heavy Rain</option>
+            <option value="504">504 - Extreme Rain</option>
+            <option value="511">511 - Freezing Rain</option>
+            <option value="520">520 - Light Shower Rain</option>
+            <option value="521">521 - Shower Rain</option>
+            <option value="522">522 - Heavy Shower Rain</option>
+            <option value="531">531 - Ragged Shower Rain</option>
+          </optgroup>
+          <optgroup label="Snow">
+            <option value="600">600 - Light Snow</option>
+            <option value="601">601 - Snow</option>
+            <option value="602">602 - Heavy Snow</option>
+            <option value="611">611 - Sleet</option>
+            <option value="612">612 - Light Shower Sleet</option>
+            <option value="613">613 - Shower Sleet</option>
+            <option value="615">615 - Light Rain + Snow</option>
+            <option value="616">616 - Rain + Snow</option>
+            <option value="620">620 - Light Shower Snow</option>
+            <option value="621">621 - Shower Snow</option>
+            <option value="622">622 - Heavy Shower Snow</option>
+          </optgroup>
+          <optgroup label="Atmosphere">
+            <option value="701">701 - Mist</option>
+            <option value="711">711 - Smoke</option>
+            <option value="721">721 - Haze</option>
+            <option value="731">731 - Sand/Dust Whirls</option>
+            <option value="741">741 - Fog</option>
+            <option value="751">751 - Sand</option>
+            <option value="761">761 - Dust</option>
+            <option value="762">762 - Volcanic Ash</option>
+            <option value="771">771 - Squalls</option>
+            <option value="781">781 - Tornado</option>
+          </optgroup>
+          <optgroup label="Clouds">
+            <option value="801">801 - Few Clouds</option>
+            <option value="802">802 - Scattered Clouds</option>
+            <option value="803">803 - Broken Clouds</option>
+            <option value="804">804 - Overcast</option>
+          </optgroup>
         </select>
       </fieldset>
 
@@ -137,7 +184,6 @@ if (import.meta.env.PROD) {
     const playBtn = document.getElementById("play-btn") as HTMLButtonElement;
     const pauseBtn = document.getElementById("pause-btn") as HTMLButtonElement;
     const weatherSelect = document.getElementById("weather-select") as HTMLSelectElement;
-    const intensitySelect = document.getElementById("intensity-select") as HTMLSelectElement;
     const sunriseInput = document.getElementById("sunrise-input") as HTMLInputElement;
     const sunsetInput = document.getElementById("sunset-input") as HTMLInputElement;
     const clockToggle = document.getElementById("clock-toggle") as HTMLSelectElement;
@@ -216,23 +262,16 @@ if (import.meta.env.PROD) {
     // -- Weather controls --
 
     function updateWeather() {
-      const raw = weatherSelect.value;
-      const intensity = intensitySelect.value;
-
-      // Sleet uses snow icon code (13) with a "sleet" description
-      const isSleet = raw === "13:sleet";
-      const code = isSleet ? "13" : raw;
-
-      win.setAttribute("override-weather", code + "d");
-
-      const conditionName = isSleet ? "sleet" : weatherSelect.options[weatherSelect.selectedIndex].text.toLowerCase();
-      const desc = intensity ? `${intensity} ${conditionName}` : conditionName;
-      win.setAttribute("override-weather-description", desc);
+      const value = weatherSelect.value;
+      if (value) {
+        win.setAttribute("override-weather", value);
+      } else {
+        win.removeAttribute("override-weather");
+      }
     }
 
     weatherSelect.addEventListener("change", updateWeather);
-    intensitySelect.addEventListener("change", updateWeather);
-    updateWeather(); // set initial clear sky override
+    updateWeather(); // set initial state
 
     // -- Sun/Moon controls --
 
@@ -273,8 +312,7 @@ if (import.meta.env.PROD) {
       setTime(720);
       setSpeed(1);
 
-      weatherSelect.value = "01";
-      intensitySelect.value = "";
+      weatherSelect.value = "";
       updateWeather();
 
       sunriseInput.value = "06:00";
