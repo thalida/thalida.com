@@ -34,3 +34,5 @@
 - [x] Fix top-[35px]
 - [x] Add moon and sun layers to sky component
 - [x] Update site urls for older versions
+- [ ] show plan docs on site
+- [ ] add site footer
