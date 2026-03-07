@@ -441,7 +441,7 @@
 }
 
 .weather .atmosphere-sm {
-  height: 0;
+  height: 8%;
 }
 
 @keyframes atmosphere-pulse {

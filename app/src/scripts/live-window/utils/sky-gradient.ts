@@ -1,6 +1,7 @@
 import type { SkyGradient } from "../types";
 import { clamp01 } from "./math";
 import { lerpColor } from "./color";
+import { THIRTY_MINUTES_MS, ONE_HOUR_MS, NINETY_MINUTES_MS } from "./constants";
 
 interface SkyPhase {
   name: string;
@@ -156,10 +157,6 @@ export const SKY_PHASES: SkyPhase[] = [
   },
 ];
 
-const MIN30 = 30 * 60_000;
-const MIN60 = 60 * 60_000;
-const MIN90 = 90 * 60_000;
-
 const DEFAULT_SUNRISE_HOUR = 6;
 const DEFAULT_SUNSET_HOUR = 18;
 
@@ -216,8 +213,8 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
   const midnight = new Date(sunrise);
   midnight.setHours(0, 0, 0, 0);
 
-  const goldenAmEnd = sunrise + MIN60; // end of golden hour AM / start of early morning
-  const goldenPmStart = sunset - MIN60; // start of golden hour PM / end of late afternoon
+  const goldenAmEnd = sunrise + ONE_HOUR_MS; // end of golden hour AM / start of early morning
+  const goldenPmStart = sunset - ONE_HOUR_MS; // start of golden hour PM / end of late afternoon
   const solarNoon = (sunrise + sunset) / 2;
 
   // Daylight core: from goldenAmEnd to goldenPmStart
@@ -227,21 +224,21 @@ export function calculatePhaseTimestamps(sunrise: number, sunset: number): numbe
 
   const raw = [
     midnight.getTime(), //  0: night
-    sunrise - MIN90, //  1: astronomicalDawn
-    sunrise - MIN60, //  2: nauticalDawn
-    sunrise - MIN30, //  3: civilDawn
+    sunrise - NINETY_MINUTES_MS, //  1: astronomicalDawn
+    sunrise - ONE_HOUR_MS, //  2: nauticalDawn
+    sunrise - THIRTY_MINUTES_MS, //  3: civilDawn
     sunrise, //  4: sunrise
-    sunrise + MIN30, //  5: goldenHourAm
+    sunrise + THIRTY_MINUTES_MS, //  5: goldenHourAm
     goldenAmEnd, //  6: earlyMorning
     coreStart + coreDuration / 4, //  7: lateMorning
     solarNoon, //  8: midday
     coreStart + (coreDuration * 3) / 4, //  9: earlyAfternoon
     goldenPmStart, // 10: lateAfternoon
-    sunset - MIN30, // 11: goldenHourPm
+    sunset - THIRTY_MINUTES_MS, // 11: goldenHourPm
     sunset, // 12: sunset
-    sunset + MIN30, // 13: civilDusk
-    sunset + MIN60, // 14: nauticalDusk
-    sunset + MIN90, // 15: astronomicalDusk
+    sunset + THIRTY_MINUTES_MS, // 13: civilDusk
+    sunset + ONE_HOUR_MS, // 14: nauticalDusk
+    sunset + NINETY_MINUTES_MS, // 15: astronomicalDusk
   ];
 
   // At extreme latitudes, phases can overlap or go out of order.
@@ -285,14 +282,9 @@ export function findPhasePosition(now: number, sunrise: number, sunset: number):
 
   const nextIdx = (phaseIdx + 1) % SKY_PHASES.length;
   const phaseStart = timestamps[phaseIdx];
-  const phaseEnd =
-    nextIdx === 0
-      ? (() => {
-          const eod = new Date(now);
-          eod.setHours(23, 59, 59, 999);
-          return eod.getTime();
-        })()
-      : timestamps[nextIdx];
+  const endOfDay = new Date(now);
+  endOfDay.setHours(23, 59, 59, 999);
+  const phaseEnd = nextIdx === 0 ? endOfDay.getTime() : timestamps[nextIdx];
 
   const duration = phaseEnd - phaseStart;
   const t = duration > 0 ? (now - phaseStart) / duration : 0;

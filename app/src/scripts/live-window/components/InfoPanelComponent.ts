@@ -1,5 +1,7 @@
 import type { SceneComponent, LiveWindowState } from "../types";
 
+const TEMP_SYMBOL: Record<string, string> = { imperial: "°F", metric: "°C" };
+
 export class InfoPanelComponent implements SceneComponent {
   private containerEl: HTMLElement | null = null;
   private locationEl: HTMLParagraphElement | null = null;
@@ -70,7 +72,7 @@ export class InfoPanelComponent implements SceneComponent {
     const weather = state.computed.phase.weather;
     if (weather.description && !state.attrs.hideWeatherText) {
       const units = state.attrs.resolvedUnits;
-      const symbol = units === "imperial" ? "°F" : "°C";
+      const symbol = TEMP_SYMBOL[units] ?? "°C";
       const temp = weather.temp != null ? `${Math.round(weather.temp)}${symbol} · ` : "";
       this.weatherEl.textContent = `${temp}${weather.description}`;
       this.weatherEl.hidden = false;

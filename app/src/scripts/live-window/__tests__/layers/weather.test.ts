@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import type { PrecipType } from "../../components/sky/weather";
+import type { PrecipType, AtmosphereType, AtmosphereParticleType } from "../../components/sky/weather";
 import { WeatherLayer } from "../../components/sky/WeatherLayer";
 import {
   WEATHER_EFFECTS,
@@ -279,7 +279,7 @@ describe("ATMOSPHERE_CONFIG", () => {
   });
 
   it("each config has required fields", () => {
-    for (const key of Object.keys(ATMOSPHERE_CONFIG)) {
+    for (const key of Object.keys(ATMOSPHERE_CONFIG) as AtmosphereType[]) {
       const config = ATMOSPHERE_CONFIG[key];
       expect(config).toHaveProperty("color");
       expect(config).toHaveProperty("opacity");
@@ -302,13 +302,13 @@ describe("ATMO_PARTICLE_CONFIG", () => {
       "debrisSwirl",
       "iceGlint",
     ];
-    for (const key of expected) {
+    for (const key of expected as AtmosphereParticleType[]) {
       expect(ATMO_PARTICLE_CONFIG[key]).toBeDefined();
     }
   });
 
   it("each config has required fields", () => {
-    for (const key of Object.keys(ATMO_PARTICLE_CONFIG)) {
+    for (const key of Object.keys(ATMO_PARTICLE_CONFIG) as AtmosphereParticleType[]) {
       const config = ATMO_PARTICLE_CONFIG[key];
       expect(config.count).toBeGreaterThan(0);
       expect(config.sizeRange[0]).toBeLessThan(config.sizeRange[1]);

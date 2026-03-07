@@ -6,8 +6,8 @@ Lower the LiveWindow blinds when chat goes idle; raise them when the user become
 
 ## Event Flow
 
-1. **Chat dispatches events** — `chat-connection.ts` fires `chat:idle` and `chat:active` custom events on `document` from the existing idle manager's `onIdle` / `onActive` callbacks.
-2. **Homepage script listens** — `index.astro`'s script block listens for `chat:idle` and `chat:active` on `document`, calls `closeBlinds()` / `openBlinds()` on the `<live-window>` element.
+1. **Site-wide idle manager dispatches events** — `BaseLayout.ts` creates a site-wide idle manager that fires `site:idle` and `site:active` custom events on `document`.
+2. **Homepage script listens** — `index.astro`'s script block listens for `site:idle` and `site:active` on `document`, calls `closeBlinds()` / `openBlinds()` on the `<live-window>` element.
 3. **LiveWindow delegates** — `LiveWindowElement` exposes public `closeBlinds()` and `openBlinds()` methods that delegate to `BlindsComponent`.
 
 ## BlindsComponent Changes
@@ -26,7 +26,7 @@ Lower the LiveWindow blinds when chat goes idle; raise them when the user become
 
 ## Files Modified
 
-1. `app/src/components/Chat/chat-connection.ts` — dispatch `chat:idle` / `chat:active` custom events on `document`
+1. `app/src/scripts/idle-manager.ts` + `app/src/layouts/BaseLayout/BaseLayout.ts` — site-wide idle manager dispatching `site:idle` / `site:active` custom events on `document`
 2. `app/src/scripts/live-window/components/BlindsComponent.ts` — add `openBlinds()` / `closeBlinds()`, remove `animationStarted` flag, track `isOpen` state
 3. `app/src/scripts/live-window/LiveWindow.ts` — expose public `closeBlinds()` / `openBlinds()`, call `openBlinds()` in `startUpdates()`
-4. `app/src/pages/index.astro` — listen for `chat:idle` / `chat:active`, call methods on `<live-window>`
+4. `app/src/pages/index.astro` — listen for `site:idle` / `site:active`, call methods on `<live-window>`

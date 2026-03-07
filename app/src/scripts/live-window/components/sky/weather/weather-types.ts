@@ -90,6 +90,31 @@ export interface PrecipLayer {
   intensityScale: number;
 }
 
+/** Valid atmosphere config keys — must match ATMOSPHERE_CONFIG object keys. */
+export type AtmosphereType =
+  | "mist"
+  | "fog"
+  | "smoke"
+  | "haze"
+  | "sand"
+  | "dust"
+  | "dustWhirls"
+  | "volcanicAsh"
+  | "squalls"
+  | "tornado"
+  | "stormDark";
+
+/** Valid atmosphere particle config keys — must match ATMO_PARTICLE_CONFIG object keys. */
+export type AtmosphereParticleType =
+  | "mistWisps"
+  | "fogBanks"
+  | "smokeWisps"
+  | "dustSwirl"
+  | "sandSwirl"
+  | "ashFall"
+  | "debrisSwirl"
+  | "iceGlint";
+
 interface CloudShapeExt {
   side: "left" | "right";
   width: number;

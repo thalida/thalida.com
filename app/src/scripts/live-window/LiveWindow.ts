@@ -181,7 +181,11 @@ class LiveWindowElement extends HTMLElement {
     for (const c of this.components) c.destroy();
   }
 
-  attributeChangedCallback(name: string, oldVal: string | null, newVal: string | null) {
+  attributeChangedCallback(
+    name: (typeof LiveWindowElement.observedAttributes)[number],
+    oldVal: string | null,
+    newVal: string | null,
+  ) {
     if (oldVal === newVal) return;
 
     if (
@@ -318,25 +322,7 @@ class LiveWindowElement extends HTMLElement {
       };
     }
 
-    // Apply weather overrides
-    if (overrideWeather) {
-      const weatherId = parseInt(overrideWeather, 10);
-      const isDaytime = now >= (store.weather.sunrise ?? 0) && now <= (store.weather.sunset ?? 0);
-
-      store = {
-        ...store,
-        weather: {
-          ...store.weather,
-          current: {
-            id: weatherId,
-            main: WEATHER_DESCRIPTIONS[weatherId]?.split(" ")[0] ?? "Unknown",
-            description: WEATHER_DESCRIPTIONS[weatherId] ?? "",
-            icon: this.deriveWeatherIcon(weatherId, isDaytime),
-            temp: store.weather.current?.temp ?? DEFAULT_TEMP_CELSIUS,
-          },
-        },
-      };
-    }
+    store = this.applyWeatherOverrides(store, overrideWeather, now);
 
     this.state.computed.phase = buildPhaseInfo(store, now);
   }
@@ -487,6 +473,32 @@ class LiveWindowElement extends HTMLElement {
 
     // Normal real time
     return timezone ? getTimezoneAdjustedNow(timezone) : Date.now();
+  }
+
+  /** Apply weather ID override to the store, returning a new store with overridden current weather. */
+  private applyWeatherOverrides(
+    store: LiveWindowState["store"],
+    overrideWeather: string | null,
+    now: number,
+  ): LiveWindowState["store"] {
+    if (!overrideWeather) return store;
+
+    const weatherId = parseInt(overrideWeather, 10);
+    const isDaytime = now >= (store.weather.sunrise ?? 0) && now <= (store.weather.sunset ?? 0);
+
+    return {
+      ...store,
+      weather: {
+        ...store.weather,
+        current: {
+          id: weatherId,
+          main: WEATHER_DESCRIPTIONS[weatherId]?.split(" ")[0] ?? "Unknown",
+          description: WEATHER_DESCRIPTIONS[weatherId] ?? "",
+          icon: this.deriveWeatherIcon(weatherId, isDaytime),
+          temp: store.weather.current?.temp ?? DEFAULT_TEMP_CELSIUS,
+        },
+      },
+    };
   }
 
   /**

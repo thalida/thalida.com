@@ -2,7 +2,9 @@ import type {
   PrecipConfig,
   PrecipType,
   AtmosphereConfig,
+  AtmosphereType,
   AtmosphereParticleConfig,
+  AtmosphereParticleType,
   WindLevel,
   CloudDensity,
   CloudConfig,
@@ -177,7 +179,7 @@ export const PRECIP_CONFIG: Record<PrecipType, PrecipConfig> = {
   },
 };
 
-export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
+export const ATMOSPHERE_CONFIG: Record<AtmosphereType, AtmosphereConfig> = {
   mist: { color: ["#c8c8c8", "#5a6280"], opacity: 0.15, layers: 2 },
   fog: { color: ["#b0b0b0", "#485070"], opacity: 0.35, layers: 3 },
   smoke: { color: ["#8b7355", "#3e3548"], opacity: 0.3, layers: 3 },
@@ -191,7 +193,7 @@ export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
   stormDark: { color: ["#1a1a2e", "#0e0e1a"], opacity: 0.2, layers: 2 },
 };
 
-export const ATMO_PARTICLE_CONFIG: Record<string, AtmosphereParticleConfig> = {
+export const ATMO_PARTICLE_CONFIG: Record<AtmosphereParticleType, AtmosphereParticleConfig> = {
   mistWisps: {
     count: 6,
     color: ["#d0d0d0", "#687890"],
