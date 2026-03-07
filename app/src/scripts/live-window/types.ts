@@ -21,6 +21,7 @@ export interface SunPosition {
 }
 
 export interface WeatherInfo {
+  id: number | null;
   icon: string | null;
   main: string | null;
   description: string | null;
@@ -41,6 +42,7 @@ export interface PhaseInfo {
 }
 
 export interface WeatherCurrent {
+  id: number;
   main: string;
   description: string;
   icon: string;
@@ -99,7 +101,6 @@ export interface LiveWindowState {
     // Override attributes (dev playground)
     overrideTime: string | null;
     overrideWeather: string | null;
-    overrideWeatherDescription: string | null;
     overrideSunrise: string | null;
     overrideSunset: string | null;
     tickSpeed: number;

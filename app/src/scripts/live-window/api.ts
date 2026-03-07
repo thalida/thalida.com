@@ -84,6 +84,7 @@ export async function fetchWeather(
       ...state,
       weather: {
         current: {
+          id: typeof data.id === "number" ? data.id : 0,
           main: typeof data.main === "string" ? data.main : "",
           description: typeof data.description === "string" ? data.description : "",
           icon: typeof data.icon === "string" ? data.icon : "",

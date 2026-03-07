@@ -59,6 +59,7 @@ export function buildPhaseInfo(state: StoreState, now: number): PhaseInfo {
 
   const current = state.weather.current;
   const weather: WeatherInfo = {
+    id: current?.id ?? null,
     icon: current?.icon ?? null,
     main: current?.main ?? null,
     description: current?.description ?? null,

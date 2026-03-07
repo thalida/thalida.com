@@ -62,7 +62,6 @@ export function makeTestState(overrides?: {
       label: overrides?.label ?? null,
       overrideTime: null,
       overrideWeather: null,
-      overrideWeatherDescription: null,
       overrideSunrise: null,
       overrideSunset: null,
       tickSpeed: 1,
