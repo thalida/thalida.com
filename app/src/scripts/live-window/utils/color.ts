@@ -32,6 +32,7 @@ export function parseComputedColor(computed: string): RGB | null {
 /**
  * Calculate the relative luminance of an RGB color per WCAG 2.0.
  * Returns a value between 0 (black) and 1 (white).
+ * @see https://www.w3.org/TR/WCAG20/#relativeluminancedef
  */
 export function relativeLuminance(c: RGB): number {
   const toLinear = (v: number) => {
@@ -69,6 +70,7 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
 
+  // Standard RGB → HSL conversion
   let h = 0;
   let s = 0;
   if (max !== min) {
@@ -105,7 +107,8 @@ export function getReadableColor(color: RGB, bg: RGB, minContrast = 4.5): RGB {
     };
   };
 
-  // Binary search for the minimum lightness that meets the contrast ratio
+  // Binary search for minimum lightness meeting contrast ratio
+  // 16 iterations → precision ~0.002% of lightness range
   let lo = (max + min) / 2;
   let hi = 1;
   let result = hslToRgb(hi);

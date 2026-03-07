@@ -29,6 +29,7 @@ const DEFAULT_ARC_Y = 100;
 const ARC_X_MIN = 10;
 const ARC_X_RANGE = 80;
 const ARC_Y_BASE = 85;
+/** Maximum vertical travel from horizon to zenith, in percent of container height. */
 const ARC_Y_AMPLITUDE = 42;
 
 /**
@@ -39,6 +40,7 @@ const ARC_Y_AMPLITUDE = 42;
 export function getSunAngle(now: number, sunrise: number, sunset: number): number {
   const solarNoon = (sunrise + sunset) / 2;
   const elapsed = now - solarNoon;
+  // Map elapsed time since solar noon to a full rotation (one day = 2π)
   const angle = ((elapsed / ONE_DAY_MS) * TWO_PI) % TWO_PI;
   return angle < 0 ? angle + TWO_PI : angle;
 }
@@ -80,16 +82,19 @@ export interface ArcPosition {
  * Returns visible=false for angles in the lower semicircle (below horizon).
  */
 export function getArcPosition(angle: number): ArcPosition {
-  const a = ((angle % TWO_PI) + TWO_PI) % TWO_PI;
-  const visible = a <= HALF_PI || a >= THREE_HALF_PI;
+  // Normalize angle to [0, 2π)
+  const normalizedAngle = ((angle % TWO_PI) + TWO_PI) % TWO_PI;
+  const visible = normalizedAngle <= HALF_PI || normalizedAngle >= THREE_HALF_PI;
 
   if (!visible) {
     return { x: DEFAULT_ARC_X, y: DEFAULT_ARC_Y, visible: false };
   }
 
-  let shifted = a + HALF_PI;
-  if (shifted >= TWO_PI) shifted -= TWO_PI;
-  const progress = shifted / Math.PI;
+  // Rotate so the visible arc [3π/2 → 0 → π/2] maps to [0 → π]
+  // This makes the rising edge (3π/2) map to 0 and setting edge (π/2) map to π
+  let rotatedAngle = normalizedAngle + HALF_PI;
+  if (rotatedAngle >= TWO_PI) rotatedAngle -= TWO_PI;
+  const progress = rotatedAngle / Math.PI;
 
   const x = ARC_X_MIN + progress * ARC_X_RANGE;
   const y = ARC_Y_BASE - Math.sin(progress * Math.PI) * ARC_Y_AMPLITUDE;

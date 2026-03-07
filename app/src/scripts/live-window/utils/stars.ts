@@ -6,6 +6,7 @@ import { SKY_PHASES } from "./sky-gradient";
 /**
  * Mulberry32 PRNG — deterministic random from a 32-bit seed.
  * Returns a function that produces values in [0, 1).
+ * @see https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
  */
 export function mulberry32(seed: number): () => number {
   let s = seed | 0;
