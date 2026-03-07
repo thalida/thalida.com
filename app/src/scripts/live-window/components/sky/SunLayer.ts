@@ -32,7 +32,8 @@ export class SunLayer implements SceneComponent {
       this.sun.style.left = `${pos.x}%`;
       this.sun.style.top = `${pos.y}%`;
     }
-    this.el.style.opacity = pos.visible ? "1" : "0";
+    const show = pos.visible && state.ref.celestialReady;
+    this.el.style.opacity = show ? "1" : "0";
   }
 
   destroy(): void {

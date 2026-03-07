@@ -188,13 +188,15 @@ class LiveWindowElement extends HTMLElement {
   private startUpdates() {
     this.refreshAttrs();
     this.updateAll();
-    this.openBlinds();
 
     this.clockInterval = window.setInterval(() => this.updateClock(), 1000);
-    this.skyInterval = window.setInterval(() => this.updateAll(), 15 * 60 * 1000);
+    this.skyInterval = window.setInterval(() => this.updateAll(), 10 * 1000);
 
     if (this.getAttribute("api-url")) {
+      // Blinds open after first weather fetch (see markCelestialReady)
       this.startWeatherPolling();
+    } else {
+      this.markCelestialReady();
     }
   }
 
@@ -210,6 +212,13 @@ class LiveWindowElement extends HTMLElement {
     this.clockInterval = null;
     this.skyInterval = null;
     this.weatherInterval = null;
+  }
+
+  private markCelestialReady() {
+    if (this.state.ref.celestialReady) return;
+    this.state.ref.celestialReady = true;
+    this.updateAll();
+    this.openBlinds();
   }
 
   private updateClock() {
@@ -271,7 +280,7 @@ class LiveWindowElement extends HTMLElement {
     const units = this.state.attrs.resolvedUnits;
 
     if (!ipChanged && !shouldFetchWeather(this.state.store, units) && !hasExplicitCoords) {
-      this.updateAll();
+      this.markCelestialReady();
       return;
     }
 
@@ -281,6 +290,8 @@ class LiveWindowElement extends HTMLElement {
     if (!hasExplicitCoords) {
       saveState(this.state);
     }
+
+    this.markCelestialReady();
 
     if (result.changed) {
       this.updateAll();

@@ -24,6 +24,7 @@ export class MoonLayer implements SceneComponent {
     const moonPhase = getMoonPhase(now);
     const moonAngle = getMoonAngle(sunAngle, moonPhase);
     const pos = getArcPosition(moonAngle);
+    const sunPos = getArcPosition(sunAngle);
 
     if (!this.moon) {
       this.moon = document.createElement("div");
@@ -38,7 +39,9 @@ export class MoonLayer implements SceneComponent {
       this.moon.style.left = `${pos.x}%`;
       this.moon.style.top = `${pos.y}%`;
     }
-    this.el.style.opacity = pos.visible ? "1" : "0";
+    // Hide moon when sun is above the horizon to avoid both being visible
+    const showMoon = pos.visible && !sunPos.visible && state.ref.celestialReady;
+    this.el.style.opacity = showMoon ? "1" : "0";
 
     // Render lunar phase using rotateY for a natural elliptical terminator.
     // The shadow disc rotates in 3D; backface-visibility:hidden hides it

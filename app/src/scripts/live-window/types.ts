@@ -82,6 +82,8 @@ export interface LiveWindowState {
    */
   ref: {
     currentGradient?: SkyGradient;
+    /** True once celestial position data is reliable (weather fetched or no API). */
+    celestialReady?: boolean;
   };
   /** Derived from web component attributes each cycle */
   attrs: {
