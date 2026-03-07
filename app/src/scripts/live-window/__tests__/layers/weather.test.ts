@@ -101,22 +101,6 @@ describe("WEATHER_EFFECTS", () => {
     }
   });
 
-  it("snow IDs (600-602, 615-622) have snow accumulation", () => {
-    for (const id of [600, 601, 602, 615, 616, 620, 621, 622]) {
-      expect(WEATHER_EFFECTS[id].snowAccumulation).toBe(true);
-    }
-  });
-
-  it("sleet IDs (611-613) do not have snow accumulation", () => {
-    for (const id of [611, 612, 613]) {
-      expect(WEATHER_EFFECTS[id].snowAccumulation).toBe(false);
-    }
-  });
-
-  it("freezing rain (511) has snow accumulation", () => {
-    expect(WEATHER_EFFECTS[511].snowAccumulation).toBe(true);
-  });
-
   it("atmosphere IDs have atmosphere configs", () => {
     for (const id of [701, 711, 721, 731, 741, 751, 761, 762, 771, 781]) {
       expect(WEATHER_EFFECTS[id].atmosphere).not.toBeNull();
@@ -140,7 +124,6 @@ describe("WEATHER_EFFECTS", () => {
     expect(config.precip).toEqual([]);
     expect(config.lightning).toBe(false);
     expect(config.atmosphere).toBeNull();
-    expect(config.snowAccumulation).toBe(false);
   });
 });
 
@@ -367,15 +350,8 @@ describe("WeatherLayer", () => {
     expect(el.getAttribute("style")).toContain("#8b7355");
   });
 
-  it("renders snow accumulation and particles for 601 (snow)", () => {
+  it("renders particles for 601 (snow)", () => {
     layer.update(makeState(601));
-    expect(container.querySelector(".snow-sill")).toBeTruthy();
-    expect(container.querySelector(".droplets")).toBeTruthy();
-  });
-
-  it("does not render snow accumulation for 611 (sleet)", () => {
-    layer.update(makeState(611));
-    expect(container.querySelector(".snow-sill")).toBeFalsy();
     expect(container.querySelector(".droplets")).toBeTruthy();
   });
 
@@ -383,7 +359,6 @@ describe("WeatherLayer", () => {
     layer.update(makeState(615));
     const droplets = container.querySelectorAll(".droplets");
     expect(droplets.length).toBe(2);
-    expect(container.querySelector(".snow-sill")).toBeTruthy();
   });
 
   it("renders sleet particles with blue color (611)", () => {
@@ -392,11 +367,10 @@ describe("WeatherLayer", () => {
     expect(particle.getAttribute("style")).toContain("background:#a0cfff");
   });
 
-  it("renders freezing rain with blue-white color (511)", () => {
+  it("renders freezing rain with distinct icy-blue color (511)", () => {
     layer.update(makeState(511));
     const particle = container.querySelector(".particle") as HTMLElement;
-    expect(particle.getAttribute("style")).toContain("background:#b8deff");
-    expect(container.querySelector(".snow-sill")).toBeTruthy();
+    expect(particle.getAttribute("style")).toContain("background:#7ec8f0");
   });
 
   it("sets fall speed inline on droplets container", () => {

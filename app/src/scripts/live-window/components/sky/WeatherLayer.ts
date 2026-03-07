@@ -1,4 +1,4 @@
-import type { SceneComponent, LiveWindowState } from "../../types";
+import type { SceneComponent, LiveWindowState, SkyGradient, RGB } from "../../types";
 
 const SWAY_NAMES = ["sway-sm", "sway", "sway-lg"] as const;
 
@@ -81,13 +81,13 @@ export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
     hasSway: false,
   },
   freezingRain: {
-    count: 30,
-    fallSpeed: "3s",
+    count: 32,
+    fallSpeed: "2.5s",
     shape: "drop",
-    sizeW: [2, 4],
-    aspectRatio: 2,
-    color: "#b8deff",
-    opacityRange: [60, 90],
+    sizeW: [2, 3],
+    aspectRatio: 3.5,
+    color: "#7ec8f0",
+    opacityRange: [65, 95],
     hasSway: false,
   },
   lightSnow: {
@@ -201,7 +201,6 @@ export interface WeatherEffectConfig {
   precip: PrecipLayer[];
   lightning: boolean;
   atmosphere: AtmosphereConfig | null;
-  snowAccumulation: boolean;
 }
 
 export interface PrecipLayer {
@@ -212,14 +211,13 @@ export interface PrecipLayer {
 function fx(
   clouds: WeatherEffectConfig["clouds"],
   precip: PrecipLayer[],
-  opts?: { lightning?: boolean; atmosphere?: AtmosphereConfig; snowAccumulation?: boolean },
+  opts?: { lightning?: boolean; atmosphere?: AtmosphereConfig },
 ): WeatherEffectConfig {
   return {
     clouds,
     precip,
     lightning: opts?.lightning ?? false,
     atmosphere: opts?.atmosphere ?? null,
-    snowAccumulation: opts?.snowAccumulation ?? false,
   };
 }
 
@@ -235,7 +233,7 @@ export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   210: fx("heavy", [], { lightning: true }),
   211: fx("storm", [], { lightning: true }),
   212: fx("storm", [], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
-  221: fx("storm", [], { lightning: true }),
+  221: fx("storm", [p("lightRain", 0.4)], { lightning: true }),
   230: fx("heavy", [p("drizzle")], { lightning: true }),
   231: fx("storm", [p("drizzle", 1.4)], { lightning: true }),
   232: fx("storm", [p("drizzle", 1.8)], { lightning: true, atmosphere: ATMOSPHERE_CONFIG.stormDark }),
@@ -255,23 +253,23 @@ export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   502: fx("heavy", [p("rain", 1.4)]),
   503: fx("heavy", [p("rain", 1.6)]),
   504: fx("heavy", [p("rain", 1.8)]),
-  511: fx("heavy", [p("freezingRain")], { snowAccumulation: true }),
+  511: fx("heavy", [p("freezingRain")]),
   520: fx("medium", [p("showerRain", 0.6)]),
   521: fx("medium", [p("showerRain")]),
   522: fx("heavy", [p("showerRain", 1.4)]),
-  531: fx("medium", [p("showerRain")]),
+  531: fx("medium", [p("showerRain", 0.5), p("lightRain", 0.3)]),
   // 6xx Snow
-  600: fx("medium", [p("lightSnow", 0.6)], { snowAccumulation: true }),
-  601: fx("medium", [p("snow")], { snowAccumulation: true }),
-  602: fx("heavy", [p("heavySnow", 1.4)], { snowAccumulation: true }),
+  600: fx("medium", [p("lightSnow", 0.6)]),
+  601: fx("medium", [p("snow")]),
+  602: fx("heavy", [p("heavySnow", 1.4)]),
   611: fx("medium", [p("sleet")]),
   612: fx("medium", [p("sleet", 0.6)]),
   613: fx("medium", [p("sleet", 1.2)]),
-  615: fx("medium", [p("lightRain", 0.5), p("lightSnow", 0.5)], { snowAccumulation: true }),
-  616: fx("heavy", [p("rain", 0.7), p("snow", 0.7)], { snowAccumulation: true }),
-  620: fx("medium", [p("showerSnow", 0.6)], { snowAccumulation: true }),
-  621: fx("medium", [p("showerSnow")], { snowAccumulation: true }),
-  622: fx("heavy", [p("showerSnow", 1.4)], { snowAccumulation: true }),
+  615: fx("medium", [p("lightRain", 0.5), p("lightSnow", 0.5)]),
+  616: fx("heavy", [p("rain", 0.7), p("snow", 0.7)]),
+  620: fx("medium", [p("showerSnow", 0.6)]),
+  621: fx("medium", [p("showerSnow")]),
+  622: fx("heavy", [p("showerSnow", 1.4)]),
   // 7xx Atmosphere
   701: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.mist }),
   711: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.smoke }),
@@ -326,6 +324,95 @@ function getSkyDarkenOpacity(config: WeatherEffectConfig): number {
   }
 
   return Math.min(opacity, 0.55);
+}
+
+/** Day and night cloud colors per density: [day, night]. */
+const CLOUD_COLORS: Record<string, [string, string]> = {
+  light: ["#ffffff", "#6a7292"],
+  medium: ["#ffffff", "#6a7292"],
+  heavy: ["#c5c9d6", "#404862"],
+  storm: ["#585e78", "#252b48"],
+};
+
+/** How much sky tint to apply per density when the sun is near the horizon. Thinner clouds catch more light. */
+const SKY_TINT_STRENGTH: Record<string, number> = {
+  light: 0.55,
+  medium: 0.45,
+  heavy: 0.35,
+  storm: 0.2,
+};
+
+/**
+ * Returns 0 (full night) → 1 (full day) based on sun altitude.
+ * Clouds stay light well past sunset since real clouds are illuminated
+ * from below even after the sun dips below the horizon.
+ */
+export function getDaylightFactor(sunAltitude: number): number {
+  if (sunAltitude >= 6) return 1;
+  if (sunAltitude <= -10) return 0;
+  const t = (sunAltitude + 10) / 16;
+  return t * t * (3 - 2 * t); // smoothstep
+}
+
+/**
+ * Returns 0–1 factor for sky-color tinting of clouds.
+ * Active whenever the sun is near the horizon (sunrise or sunset).
+ * Peaks at ~1–2° altitude, fades above 10° and below -4°.
+ */
+export function getHorizonGlowFactor(sunAltitude: number): number {
+  if (sunAltitude < -4 || sunAltitude > 10) return 0;
+  if (sunAltitude <= 2) {
+    const t = (sunAltitude + 4) / 6;
+    return t * t * (3 - 2 * t);
+  }
+  const t = (10 - sunAltitude) / 8;
+  return t * t * (3 - 2 * t);
+}
+
+function rgbToHex(c: RGB): string {
+  return `#${c.r.toString(16).padStart(2, "0")}${c.g.toString(16).padStart(2, "0")}${c.b.toString(16).padStart(2, "0")}`;
+}
+
+/** Linearly interpolate two hex colors by factor t (0→a, 1→b). */
+function lerpHex(a: string, b: string, t: number): string {
+  const ar = parseInt(a.slice(1, 3), 16),
+    ag = parseInt(a.slice(3, 5), 16),
+    ab = parseInt(a.slice(5, 7), 16);
+  const br = parseInt(b.slice(1, 3), 16),
+    bg = parseInt(b.slice(3, 5), 16),
+    bb = parseInt(b.slice(5, 7), 16);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${bl.toString(16).padStart(2, "0")}`;
+}
+
+/** Compute the cloud color for a given density, sun altitude, and optional sky gradient. */
+export function getCloudColor(
+  density: Exclude<CloudDensity, "none">,
+  sunAltitude: number,
+  skyGradient?: SkyGradient,
+): string {
+  const [day, night] = CLOUD_COLORS[density];
+  const dayFactor = getDaylightFactor(sunAltitude);
+  let color = lerpHex(night, day, dayFactor);
+
+  // Near the horizon (sunrise/sunset), tint clouds with the sky gradient colors
+  if (skyGradient) {
+    const glowFactor = getHorizonGlowFactor(sunAltitude);
+    if (glowFactor > 0) {
+      // Average the upper and lower sky bands — gives the dominant sky color at cloud altitude
+      const warmColor = rgbToHex({
+        r: Math.round((skyGradient.upper.r + skyGradient.lower.r) / 2),
+        g: Math.round((skyGradient.upper.g + skyGradient.lower.g) / 2),
+        b: Math.round((skyGradient.upper.b + skyGradient.lower.b) / 2),
+      });
+      const tintStrength = glowFactor * SKY_TINT_STRENGTH[density];
+      color = lerpHex(color, warmColor, tintStrength);
+    }
+  }
+
+  return color;
 }
 
 export class WeatherLayer implements SceneComponent {
@@ -416,14 +503,15 @@ export class WeatherLayer implements SceneComponent {
     }
 
     const config = WEATHER_EFFECTS[weatherId];
-    const icon = state.computed.phase.weather.icon;
     let cls = "sky-layer weather";
-    if (icon) {
-      cls += ` weather-${icon}`;
-      if (icon.endsWith("n")) cls += " weather-night";
-    }
     if (config.clouds !== "none") cls += ` weather-clouds-${config.clouds}`;
     this.el.className = cls;
+
+    // Smooth cloud color based on sun altitude, density, and sky gradient
+    if (config.clouds !== "none") {
+      const color = getCloudColor(config.clouds, state.computed.phase.sun.altitude, state.ref.currentGradient);
+      this.el.style.setProperty("--cloud-color", color);
+    }
 
     let html = "";
 
@@ -462,15 +550,6 @@ export class WeatherLayer implements SceneComponent {
       html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed}">`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += `<div class="droplets-half">${particles}</div>`;
-      html += "</div>";
-    }
-
-    // Snow accumulation
-    if (config.snowAccumulation) {
-      html += '<div class="snow-sill">';
-      for (let i = 1; i <= 6; i++) {
-        html += `<div class="snow-mound snow-mound-${i}"></div>`;
-      }
       html += "</div>";
     }
 
