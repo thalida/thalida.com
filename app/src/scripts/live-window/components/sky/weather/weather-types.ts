@@ -66,8 +66,27 @@ export interface WeatherEffectConfig {
   atmosphereParticles: AtmosphereParticleConfig | null;
 }
 
+/** Valid precipitation config keys — must match PRECIP_CONFIG object keys. */
+export type PrecipType =
+  | "lightRain"
+  | "rain"
+  | "snow"
+  | "sleet"
+  | "drizzle"
+  | "showerRain"
+  | "freezingRain"
+  | "lightSnow"
+  | "heavySnow"
+  | "showerSnow"
+  | "drizzleLight"
+  | "drizzleHeavy"
+  | "showerDrizzle"
+  | "heavyRain"
+  | "extremeRain"
+  | "showerSleet";
+
 export interface PrecipLayer {
-  type: string;
+  type: PrecipType;
   intensityScale: number;
 }
 

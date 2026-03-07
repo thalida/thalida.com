@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
+import type { PrecipType } from "../../components/sky/WeatherLayer";
 import {
   WeatherLayer,
   WEATHER_EFFECTS,
@@ -186,7 +187,7 @@ describe("WEATHER_EFFECTS", () => {
 
 describe("PRECIP_CONFIG", () => {
   it("defines configs for all precipitation types", () => {
-    const expected = [
+    const expected: PrecipType[] = [
       "lightRain",
       "rain",
       "snow",

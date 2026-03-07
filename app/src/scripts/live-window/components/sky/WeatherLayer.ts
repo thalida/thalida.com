@@ -7,6 +7,7 @@ import { cloudHTML, particleHTML, atmosphereParticleHTML, lightningHTML } from "
 // Re-export types and configs so existing imports from WeatherLayer still work
 export type {
   PrecipConfig,
+  PrecipType,
   AtmosphereConfig,
   WindLevel,
   AtmosphereParticleConfig,

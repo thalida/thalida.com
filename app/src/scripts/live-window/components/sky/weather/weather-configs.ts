@@ -1,5 +1,6 @@
 import type {
   PrecipConfig,
+  PrecipType,
   AtmosphereConfig,
   AtmosphereParticleConfig,
   WindLevel,
@@ -13,7 +14,7 @@ import type {
 
 export const SWAY_NAMES = ["sway-sm", "sway", "sway-lg"] as const;
 
-export const PRECIP_CONFIG: Record<string, PrecipConfig> = {
+export const PRECIP_CONFIG: Record<PrecipType, PrecipConfig> = {
   lightRain: {
     count: 28,
     fallSpeed: "6s",
@@ -295,7 +296,7 @@ export const CLOUD_SHAPES: CloudShape[] = [
 ];
 
 /** Day and night cloud colors per density: [day, night]. */
-export const CLOUD_COLORS: Record<string, [string, string]> = {
+export const CLOUD_COLORS: Record<Exclude<CloudDensity, "none">, [string, string]> = {
   light: ["#ffffff", "#6a7292"],
   medium: ["#ffffff", "#6a7292"],
   heavy: ["#c5c9d6", "#404862"],
@@ -303,14 +304,15 @@ export const CLOUD_COLORS: Record<string, [string, string]> = {
 };
 
 /** How much sky tint to apply per density when the sun is near the horizon. Thinner clouds catch more light. */
-export const SKY_TINT_STRENGTH: Record<string, number> = {
+export const SKY_TINT_STRENGTH: Record<Exclude<CloudDensity, "none">, number> = {
   light: 0.55,
   medium: 0.45,
   heavy: 0.35,
   storm: 0.2,
 };
 
-function fx(
+/** Helper to construct a WeatherEffectConfig with sensible defaults. */
+function createWeatherEffect(
   clouds: WeatherEffectConfig["clouds"],
   precip: PrecipLayer[],
   opts?: {
@@ -330,90 +332,119 @@ function fx(
   };
 }
 
-function p(type: string, intensityScale = 1.0): PrecipLayer {
+/** Helper to construct a PrecipLayer entry. */
+function precipLayer(type: PrecipType, intensityScale = 1.0): PrecipLayer {
   return { type, intensityScale };
 }
 
 export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   // 2xx Thunderstorm
-  200: fx("heavy", [p("lightRain", 0.6)], { lightning: "distant" }),
-  201: fx("storm", [p("rain")], { lightning: "standard" }),
-  202: fx("storm", [p("heavyRain")], {
+  200: createWeatherEffect("heavy", [precipLayer("lightRain", 0.6)], { lightning: "distant" }),
+  201: createWeatherEffect("storm", [precipLayer("rain")], { lightning: "standard" }),
+  202: createWeatherEffect("storm", [precipLayer("heavyRain")], {
     lightning: "intense",
     atmosphere: ATMOSPHERE_CONFIG.stormDark,
     wind: "moderate",
   }),
-  210: fx("heavy", [], { lightning: "distant" }),
-  211: fx("storm", [], { lightning: "standard" }),
-  212: fx("storm", [], { lightning: "intense", atmosphere: ATMOSPHERE_CONFIG.stormDark }),
-  221: fx("storm", [p("lightRain", 0.4)], { lightning: "standard" }),
-  230: fx("heavy", [p("drizzle")], { lightning: "standard" }),
-  231: fx("storm", [p("drizzle", 1.4)], { lightning: "standard" }),
-  232: fx("storm", [p("drizzle", 1.8)], {
+  210: createWeatherEffect("heavy", [], { lightning: "distant" }),
+  211: createWeatherEffect("storm", [], { lightning: "standard" }),
+  212: createWeatherEffect("storm", [], { lightning: "intense", atmosphere: ATMOSPHERE_CONFIG.stormDark }),
+  221: createWeatherEffect("storm", [precipLayer("lightRain", 0.4)], { lightning: "standard" }),
+  230: createWeatherEffect("heavy", [precipLayer("drizzle")], { lightning: "standard" }),
+  231: createWeatherEffect("storm", [precipLayer("drizzle", 1.4)], { lightning: "standard" }),
+  232: createWeatherEffect("storm", [precipLayer("drizzle", 1.8)], {
     lightning: "intense",
     atmosphere: ATMOSPHERE_CONFIG.stormDark,
     wind: "moderate",
   }),
 
   // 3xx Drizzle
-  300: fx("light", [p("drizzleLight")]),
-  301: fx("medium", [p("drizzle")]),
-  302: fx("medium", [p("drizzleHeavy")]),
-  310: fx("medium", [p("drizzle", 0.6), p("lightRain", 0.4)]),
-  311: fx("medium", [p("drizzle", 0.7), p("lightRain", 0.7)]),
-  312: fx("medium", [p("drizzleHeavy", 0.8), p("rain", 0.7)]),
-  313: fx("medium", [p("showerRain", 0.7), p("drizzle", 0.5)], { wind: "light" }),
-  314: fx("heavy", [p("showerRain", 1.2), p("drizzleHeavy", 0.6)], { wind: "moderate" }),
-  321: fx("medium", [p("showerDrizzle")], { wind: "light" }),
+  300: createWeatherEffect("light", [precipLayer("drizzleLight")]),
+  301: createWeatherEffect("medium", [precipLayer("drizzle")]),
+  302: createWeatherEffect("medium", [precipLayer("drizzleHeavy")]),
+  310: createWeatherEffect("medium", [precipLayer("drizzle", 0.6), precipLayer("lightRain", 0.4)]),
+  311: createWeatherEffect("medium", [precipLayer("drizzle", 0.7), precipLayer("lightRain", 0.7)]),
+  312: createWeatherEffect("medium", [precipLayer("drizzleHeavy", 0.8), precipLayer("rain", 0.7)]),
+  313: createWeatherEffect("medium", [precipLayer("showerRain", 0.7), precipLayer("drizzle", 0.5)], { wind: "light" }),
+  314: createWeatherEffect("heavy", [precipLayer("showerRain", 1.2), precipLayer("drizzleHeavy", 0.6)], {
+    wind: "moderate",
+  }),
+  321: createWeatherEffect("medium", [precipLayer("showerDrizzle")], { wind: "light" }),
 
   // 5xx Rain
-  500: fx("medium", [p("lightRain", 0.6)]),
-  501: fx("medium", [p("rain")]),
-  502: fx("heavy", [p("heavyRain")]),
-  503: fx("heavy", [p("heavyRain", 1.3)], { wind: "light" }),
-  504: fx("storm", [p("extremeRain")], { wind: "moderate", atmosphere: ATMOSPHERE_CONFIG.stormDark }),
-  511: fx("heavy", [p("freezingRain")], { atmosphereParticles: ATMO_PARTICLE_CONFIG.iceGlint }),
-  520: fx("medium", [p("showerRain", 0.6)], { wind: "light" }),
-  521: fx("medium", [p("showerRain")], { wind: "light" }),
-  522: fx("heavy", [p("showerRain", 1.4)], { wind: "moderate" }),
-  531: fx("medium", [p("showerRain", 0.5), p("lightRain", 0.3)]),
+  500: createWeatherEffect("medium", [precipLayer("lightRain", 0.6)]),
+  501: createWeatherEffect("medium", [precipLayer("rain")]),
+  502: createWeatherEffect("heavy", [precipLayer("heavyRain")]),
+  503: createWeatherEffect("heavy", [precipLayer("heavyRain", 1.3)], { wind: "light" }),
+  504: createWeatherEffect("storm", [precipLayer("extremeRain")], {
+    wind: "moderate",
+    atmosphere: ATMOSPHERE_CONFIG.stormDark,
+  }),
+  511: createWeatherEffect("heavy", [precipLayer("freezingRain")], {
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.iceGlint,
+  }),
+  520: createWeatherEffect("medium", [precipLayer("showerRain", 0.6)], { wind: "light" }),
+  521: createWeatherEffect("medium", [precipLayer("showerRain")], { wind: "light" }),
+  522: createWeatherEffect("heavy", [precipLayer("showerRain", 1.4)], { wind: "moderate" }),
+  531: createWeatherEffect("medium", [precipLayer("showerRain", 0.5), precipLayer("lightRain", 0.3)]),
 
   // 6xx Snow
-  600: fx("medium", [p("lightSnow", 0.6)]),
-  601: fx("medium", [p("snow")]),
-  602: fx("heavy", [p("heavySnow", 1.4)]),
-  611: fx("medium", [p("sleet")]),
-  612: fx("medium", [p("showerSleet", 0.6)], { wind: "light" }),
-  613: fx("medium", [p("showerSleet")], { wind: "light" }),
-  615: fx("medium", [p("lightRain", 0.5), p("lightSnow", 0.5)]),
-  616: fx("heavy", [p("rain", 0.7), p("snow", 0.7)]),
-  620: fx("medium", [p("showerSnow", 0.6)], { wind: "light" }),
-  621: fx("medium", [p("showerSnow")], { wind: "light" }),
-  622: fx("heavy", [p("showerSnow", 1.4)], { wind: "moderate" }),
+  600: createWeatherEffect("medium", [precipLayer("lightSnow", 0.6)]),
+  601: createWeatherEffect("medium", [precipLayer("snow")]),
+  602: createWeatherEffect("heavy", [precipLayer("heavySnow", 1.4)]),
+  611: createWeatherEffect("medium", [precipLayer("sleet")]),
+  612: createWeatherEffect("medium", [precipLayer("showerSleet", 0.6)], { wind: "light" }),
+  613: createWeatherEffect("medium", [precipLayer("showerSleet")], { wind: "light" }),
+  615: createWeatherEffect("medium", [precipLayer("lightRain", 0.5), precipLayer("lightSnow", 0.5)]),
+  616: createWeatherEffect("heavy", [precipLayer("rain", 0.7), precipLayer("snow", 0.7)]),
+  620: createWeatherEffect("medium", [precipLayer("showerSnow", 0.6)], { wind: "light" }),
+  621: createWeatherEffect("medium", [precipLayer("showerSnow")], { wind: "light" }),
+  622: createWeatherEffect("heavy", [precipLayer("showerSnow", 1.4)], { wind: "moderate" }),
 
   // 7xx Atmosphere
-  701: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.mist, atmosphereParticles: ATMO_PARTICLE_CONFIG.mistWisps }),
-  711: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.smoke, atmosphereParticles: ATMO_PARTICLE_CONFIG.smokeWisps }),
-  721: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.haze }),
-  731: fx("none", [], {
+  701: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.mist,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.mistWisps,
+  }),
+  711: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.smoke,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.smokeWisps,
+  }),
+  721: createWeatherEffect("none", [], { atmosphere: ATMOSPHERE_CONFIG.haze }),
+  731: createWeatherEffect("none", [], {
     atmosphere: ATMOSPHERE_CONFIG.dustWhirls,
     atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl,
   }),
-  741: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.fog, atmosphereParticles: ATMO_PARTICLE_CONFIG.fogBanks }),
-  751: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.sand, atmosphereParticles: ATMO_PARTICLE_CONFIG.sandSwirl }),
-  761: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust, atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl }),
-  762: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.volcanicAsh, atmosphereParticles: ATMO_PARTICLE_CONFIG.ashFall }),
-  771: fx("heavy", [p("heavyRain")], { atmosphere: ATMOSPHERE_CONFIG.squalls, wind: "strong" }),
-  781: fx("storm", [p("heavyRain")], {
+  741: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.fog,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.fogBanks,
+  }),
+  751: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.sand,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.sandSwirl,
+  }),
+  761: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.dust,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.dustSwirl,
+  }),
+  762: createWeatherEffect("none", [], {
+    atmosphere: ATMOSPHERE_CONFIG.volcanicAsh,
+    atmosphereParticles: ATMO_PARTICLE_CONFIG.ashFall,
+  }),
+  771: createWeatherEffect("heavy", [precipLayer("heavyRain")], {
+    atmosphere: ATMOSPHERE_CONFIG.squalls,
+    wind: "strong",
+  }),
+  781: createWeatherEffect("storm", [precipLayer("heavyRain")], {
     atmosphere: ATMOSPHERE_CONFIG.tornado,
     wind: "strong",
     atmosphereParticles: ATMO_PARTICLE_CONFIG.debrisSwirl,
   }),
 
   // 800+ Clear/Clouds
-  800: fx("none", []),
-  801: fx("light", []),
-  802: fx("medium", []),
-  803: fx("heavy", []),
-  804: fx("heavy", []),
+  800: createWeatherEffect("none", []),
+  801: createWeatherEffect("light", []),
+  802: createWeatherEffect("medium", []),
+  803: createWeatherEffect("heavy", []),
+  804: createWeatherEffect("heavy", []),
 };
