@@ -24,6 +24,9 @@ const siteAge = new Date().getFullYear() - 2007;
   <section class="flex flex-col items-center text-center gap-8" aria-label="Introduction">
     {/* bg-color must be a hex literal (HTML attribute); matches --color-midnight */}
     <live-window api-url={apiBaseUrl} theme="dark" bg-color="#030a12"></live-window>
+    <a href="/playground/live-window" class="-mt-6 font-body text-2xs text-muted hover:text-teal no-underline">
+      Experiment with Live Window &rarr;
+    </a>
     <div class="max-w-xl">
       <h1 class="m-0 font-display font-bold text-neon text-display-lg tracking-tighter leading-none">
         <span data-home="greeting">Hey</span>, I'm&nbsp;Thalida
