@@ -140,8 +140,63 @@ export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
   tornado: { color: "#666666", opacity: 0.45, layers: 3 },
 };
 
+export type CloudDensity = "none" | "light" | "medium" | "heavy" | "storm";
+
+export interface CloudConfig {
+  count: number;
+  /** Diameter range as % of container width */
+  sizeRange: [number, number];
+  opacityRange: [number, number];
+  /** Vertical zone: clouds appear between yMin% and yMax% from top */
+  yRange: [number, number];
+}
+
+export const CLOUD_CONFIGS: Record<Exclude<CloudDensity, "none">, CloudConfig> = {
+  light: { count: 2, sizeRange: [15, 22], opacityRange: [60, 80], yRange: [20, 60] },
+  medium: { count: 4, sizeRange: [15, 25], opacityRange: [65, 90], yRange: [10, 65] },
+  heavy: { count: 6, sizeRange: [18, 30], opacityRange: [70, 95], yRange: [5, 70] },
+  storm: { count: 9, sizeRange: [20, 35], opacityRange: [80, 100], yRange: [0, 75] },
+};
+
+const FLOAT_NAMES = ["cloud-float-1", "cloud-float-2", "cloud-float-3"] as const;
+
+interface CloudShapeExt {
+  side: "left" | "right";
+  width: number;
+  height: number;
+  offset: number;
+  radius: string;
+}
+
+interface CloudShape {
+  bodyRadius: string;
+  extensions: CloudShapeExt[];
+}
+
+/** Curated cloud shapes based on the original hand-crafted clouds. */
+const CLOUD_SHAPES: CloudShape[] = [
+  {
+    // Based on cloud-sm: rounded body with one right bump
+    bodyRadius: "50% 50% 0 50%",
+    extensions: [{ side: "right", width: 50, height: 55, offset: -45, radius: "50% 50% 50% 0" }],
+  },
+  {
+    // Based on cloud-md: flat-bottom body with bumps on both sides
+    bodyRadius: "40% 50% 0 0",
+    extensions: [
+      { side: "left", width: 60, height: 70, offset: -50, radius: "40% 50% 0 50%" },
+      { side: "right", width: 50, height: 55, offset: -45, radius: "30% 50% 50% 0" },
+    ],
+  },
+  {
+    // Based on cloud-lg: rounded body with one tall right bump
+    bodyRadius: "30% 50% 0 50%",
+    extensions: [{ side: "right", width: 50, height: 75, offset: -45, radius: "30% 50% 50% 0" }],
+  },
+];
+
 export interface WeatherEffectConfig {
-  clouds: "none" | "light" | "medium" | "heavy";
+  clouds: CloudDensity;
   precip: PrecipLayer[];
   lightning: boolean;
   atmosphere: AtmosphereConfig | null;
@@ -173,16 +228,16 @@ function p(type: string, intensityScale = 1.0): PrecipLayer {
 
 export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   // 2xx Thunderstorm
-  200: fx("heavy", [p("lightRain", 0.6)], { lightning: true }),
-  201: fx("heavy", [p("rain")], { lightning: true }),
-  202: fx("heavy", [p("rain", 1.4)], { lightning: true }),
-  210: fx("heavy", [], { lightning: true }),
-  211: fx("heavy", [], { lightning: true }),
-  212: fx("heavy", [], { lightning: true }),
-  221: fx("heavy", [], { lightning: true }),
-  230: fx("heavy", [p("drizzle", 0.6)], { lightning: true }),
-  231: fx("heavy", [p("drizzle")], { lightning: true }),
-  232: fx("heavy", [p("drizzle", 1.4)], { lightning: true }),
+  200: fx("storm", [p("lightRain", 0.6)], { lightning: true }),
+  201: fx("storm", [p("rain")], { lightning: true }),
+  202: fx("storm", [p("rain", 1.4)], { lightning: true }),
+  210: fx("storm", [], { lightning: true }),
+  211: fx("storm", [], { lightning: true }),
+  212: fx("storm", [], { lightning: true }),
+  221: fx("storm", [], { lightning: true }),
+  230: fx("storm", [p("drizzle", 0.6)], { lightning: true }),
+  231: fx("storm", [p("drizzle")], { lightning: true }),
+  232: fx("storm", [p("drizzle", 1.4)], { lightning: true }),
   // 3xx Drizzle
   300: fx("medium", [p("drizzle", 0.6)]),
   301: fx("medium", [p("drizzle")]),
@@ -235,8 +290,83 @@ export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
   804: fx("heavy", []),
 };
 
+/**
+ * Computes how much to darken the sky based on weather conditions.
+ * Returns opacity 0–0.55: heavier weather = darker sky.
+ */
+function getSkyDarkenOpacity(config: WeatherEffectConfig): number {
+  let opacity = 0;
+
+  switch (config.clouds) {
+    case "light":
+      opacity += 0.05;
+      break;
+    case "medium":
+      opacity += 0.12;
+      break;
+    case "heavy":
+      opacity += 0.22;
+      break;
+    case "storm":
+      opacity += 0.28;
+      break;
+  }
+
+  for (const layer of config.precip) {
+    opacity += 0.05 * layer.intensityScale;
+  }
+
+  if (config.lightning) {
+    opacity += 0.12;
+  }
+
+  if (config.atmosphere) {
+    opacity += config.atmosphere.opacity * 0.3;
+  }
+
+  return Math.min(opacity, 0.55);
+}
+
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
+
+  /**
+   * Generate procedural clouds with deterministic pseudo-random placement.
+   * Each cloud is a compound shape: a square body with flat-bottom border-radius
+   * + 1-2 side extensions (like the old pseudo-elements), all bottom-aligned.
+   */
+  static cloudHTML(density: Exclude<CloudDensity, "none">): string {
+    const config = CLOUD_CONFIGS[density];
+    const sizeRange = config.sizeRange[1] - config.sizeRange[0];
+    const opRange = config.opacityRange[1] - config.opacityRange[0];
+    const ySpan = config.yRange[1] - config.yRange[0];
+
+    let out = "";
+    for (let i = 0; i < config.count; i++) {
+      const h = ((i + 1) * 2654435761) >>> 0;
+      const left = (h % 110) - 5;
+      const top = config.yRange[0] + (((h >>> 8) ^ (i * 37)) % (ySpan + 1));
+      const size = config.sizeRange[0] + (h % (sizeRange + 1));
+      const opacity = (config.opacityRange[0] + ((h >>> 4) % (opRange + 1))) / 100;
+
+      const floatName = FLOAT_NAMES[i % 3];
+      const dur = (4 + ((h >>> 12) % 60) / 10).toFixed(1);
+      const delay = (-((h >>> 16) % 80) / 10).toFixed(1);
+
+      // Pick a curated cloud shape, cycling through the presets
+      const shape = CLOUD_SHAPES[i % CLOUD_SHAPES.length];
+
+      out += `<div class="cloud" style="left:${left}%;top:${top}%;width:${size}%;opacity:${opacity};border-radius:${shape.bodyRadius};animation:${dur}s ease-in-out ${delay}s infinite alternate ${floatName}">`;
+
+      for (const ext of shape.extensions) {
+        const pos = ext.side === "left" ? `left:${ext.offset}%` : `right:${ext.offset}%`;
+        out += `<div class="cloud-ext" style="${pos};width:${ext.width}%;height:${ext.height}%;border-radius:${ext.radius}"></div>`;
+      }
+
+      out += `</div>`;
+    }
+    return out;
+  }
 
   /** Generate scattered particles with deterministic pseudo-random placement. */
   static particleHTML(config: PrecipConfig, count?: number): string {
@@ -291,16 +421,15 @@ export class WeatherLayer implements SceneComponent {
 
     let html = "";
 
+    // Sky darkening overlay
+    const darken = getSkyDarkenOpacity(config);
+    if (darken > 0) {
+      html += `<div class="sky-darken" style="opacity:${darken.toFixed(2)}"></div>`;
+    }
+
     // Clouds
-    if (config.clouds === "heavy") {
-      html += '<div class="cloud cloud-lg"></div>';
-      html += '<div class="cloud cloud-md"></div>';
-      html += '<div class="cloud cloud-sm"></div>';
-    } else if (config.clouds === "medium") {
-      html += '<div class="cloud cloud-md"></div>';
-      html += '<div class="cloud cloud-sm"></div>';
-    } else if (config.clouds === "light") {
-      html += '<div class="cloud cloud-sm"></div>';
+    if (config.clouds !== "none") {
+      html += WeatherLayer.cloudHTML(config.clouds);
     }
 
     // Lightning

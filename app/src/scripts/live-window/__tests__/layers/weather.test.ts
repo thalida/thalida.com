@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { WeatherLayer, WEATHER_EFFECTS, PRECIP_CONFIG, ATMOSPHERE_CONFIG } from "../../components/sky/WeatherLayer";
+import {
+  WeatherLayer,
+  WEATHER_EFFECTS,
+  PRECIP_CONFIG,
+  ATMOSPHERE_CONFIG,
+  CLOUD_CONFIGS,
+} from "../../components/sky/WeatherLayer";
 import { makeTestState } from "../helpers";
 
 function makeState(weatherId: number | null) {
@@ -185,6 +191,28 @@ describe("ATMOSPHERE_CONFIG", () => {
   });
 });
 
+describe("WeatherLayer.cloudHTML", () => {
+  it("generates the configured number of clouds for each density", () => {
+    for (const [density, config] of Object.entries(CLOUD_CONFIGS)) {
+      const html = WeatherLayer.cloudHTML(density as "light" | "medium" | "heavy" | "storm");
+      const matches = html.match(/class="cloud"/g);
+      expect(matches?.length).toBe(config.count);
+    }
+  });
+
+  it("produces deterministic output", () => {
+    const a = WeatherLayer.cloudHTML("heavy");
+    const b = WeatherLayer.cloudHTML("heavy");
+    expect(a).toBe(b);
+  });
+
+  it("storm has more clouds than heavy", () => {
+    const storm = WeatherLayer.cloudHTML("storm").match(/class="cloud"/g)?.length ?? 0;
+    const heavy = WeatherLayer.cloudHTML("heavy").match(/class="cloud"/g)?.length ?? 0;
+    expect(storm).toBeGreaterThan(heavy);
+  });
+});
+
 describe("WeatherLayer.particleHTML", () => {
   it("generates the configured number of particles", () => {
     const html = WeatherLayer.particleHTML(PRECIP_CONFIG.rain);
@@ -240,34 +268,32 @@ describe("WeatherLayer", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("renders only small cloud for 801 (few clouds)", () => {
+  it("renders procedural clouds for 801 (few clouds)", () => {
     layer.update(makeState(801));
-    expect(container.querySelector(".cloud-sm")).toBeTruthy();
-    expect(container.querySelector(".cloud-md")).toBeFalsy();
-    expect(container.querySelector(".cloud-lg")).toBeFalsy();
+    const clouds = container.querySelectorAll(".cloud");
+    expect(clouds.length).toBe(CLOUD_CONFIGS.light.count);
     expect(container.querySelector(".droplets")).toBeFalsy();
   });
 
-  it("renders sm+md clouds for 802 (scattered)", () => {
+  it("renders more clouds for 802 (scattered) than 801 (few)", () => {
     layer.update(makeState(802));
-    expect(container.querySelector(".cloud-sm")).toBeTruthy();
-    expect(container.querySelector(".cloud-md")).toBeTruthy();
-    expect(container.querySelector(".cloud-lg")).toBeFalsy();
+    const clouds = container.querySelectorAll(".cloud");
+    expect(clouds.length).toBe(CLOUD_CONFIGS.medium.count);
+    expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.light.count);
   });
 
-  it("renders all clouds for 803 (broken)", () => {
+  it("renders more clouds for 803 (broken) than 802 (scattered)", () => {
     layer.update(makeState(803));
-    expect(container.querySelector(".cloud-sm")).toBeTruthy();
-    expect(container.querySelector(".cloud-md")).toBeTruthy();
-    expect(container.querySelector(".cloud-lg")).toBeTruthy();
+    const clouds = container.querySelectorAll(".cloud");
+    expect(clouds.length).toBe(CLOUD_CONFIGS.heavy.count);
+    expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.medium.count);
   });
 
   it("renders rain particles for 501 (moderate rain)", () => {
     layer.update(makeState(501));
     expect(container.querySelector(".droplets")).toBeTruthy();
     expect(container.querySelector(".particle")).toBeTruthy();
-    expect(container.querySelector(".cloud-sm")).toBeTruthy();
-    expect(container.querySelector(".cloud-md")).toBeTruthy();
+    expect(container.querySelectorAll(".cloud").length).toBe(CLOUD_CONFIGS.medium.count);
   });
 
   it("renders lightning for thunderstorm (201)", () => {
@@ -276,11 +302,13 @@ describe("WeatherLayer", () => {
     expect(container.querySelector(".droplets")).toBeTruthy();
   });
 
-  it("renders dry thunderstorm without precipitation (210)", () => {
+  it("renders storm-density clouds for thunderstorm (210)", () => {
     layer.update(makeState(210));
     expect(container.querySelector(".lightning")).toBeTruthy();
     expect(container.querySelector(".droplets")).toBeFalsy();
-    expect(container.querySelector(".cloud-lg")).toBeTruthy();
+    const clouds = container.querySelectorAll(".cloud");
+    expect(clouds.length).toBe(CLOUD_CONFIGS.storm.count);
+    expect(clouds.length).toBeGreaterThan(CLOUD_CONFIGS.heavy.count);
   });
 
   it("renders atmosphere layers for mist (701)", () => {
