@@ -4,13 +4,13 @@ description: A collection of images showcasing the beauty of the Hudson Valley r
 publishedOn: 2020-10-01
 updatedOn: 2025-07-02
 category: photography
-coverImage: hudsonvalley/IMAG1094.jpg
-coverImageAlt: A scenic view of the Hudson Valley with mountains and a river.
+coverImage: hudsonvalley/mountain-lake-overlook.jpg
+coverImageAlt: Panoramic view from a hilltop of a lake surrounded by forested mountains under a clear blue sky in the Hudson Valley
 ---
 
-![hudsonvalley/IMAG1094.jpg](hudsonvalley/IMAG1094.jpg)
-![hudsonvalley/1020181159_HDR~2.jpg](hudsonvalley/1020181159_HDR~2.jpg)
-![hudsonvalley/PXL_20250624_003031438.jpg](hudsonvalley/PXL_20250624_003031438.jpg)
+![Panoramic view from a hilltop of a lake surrounded by forested mountains under a clear blue sky in the Hudson Valley](hudsonvalley/mountain-lake-overlook.jpg)
+![View through a wooden covered bridge looking out at three people walking down an autumn leaf-covered path lined with trees](hudsonvalley/covered-bridge-autumn-path.jpg)
+![Silhouette of a kayaker on a calm lake at sunset, framed by tree trunks and a wooden dock in the foreground](hudsonvalley/lakeside-kayaker-sunset.jpg)
 
 <div class="flex flex-col items-center justify-center">
   <video width="320" height="240" controls>

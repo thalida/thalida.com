@@ -4,7 +4,7 @@ description: My photos from the WOC in Tech Chat Stockphoto shoot.
 publishedOn: 2015-10-27
 updatedOn: 2016-03-13
 category: photography
-coverImage: stockphotos/25677324952_36b5b13289_o.jpg
+coverImage: stockphotos/woman-reading-programming-book.jpg
 coverImageAlt: Thalida sitting reading a python book
 ---
 
@@ -19,17 +19,17 @@ As a result of this photoshoot, I have been featured in various articles, blog p
 
 |   |   |
 | - | - |
-| ![Stock Photo](./stockphotos/21909358844_18da9ec8e6_o.jpg) | ![Stock Photo](./stockphotos/21910900553_e8984858c2_o.jpg) |
-| ![Stock Photo](./stockphotos/22344392878_53a0d70eb7_o.jpg) | ![Stock Photo](./stockphotos/22543493511_0ba6a83b35_o.jpg) |
-| ![Stock Photo](./stockphotos/25167658624_116b21f635_o.jpg) | ![Stock Photo](./stockphotos/25171523343_4073eed049_o.jpg) |
-| ![Stock Photo](./stockphotos/25171528213_7e7a934143_o.jpg) | ![Stock Photo](./stockphotos/25171529953_4cc1e9b925_o.jpg) |
-| ![Stock Photo](./stockphotos/25171638873_745525f2ab_o.jpg) | ![Stock Photo](./stockphotos/25171639623_7365856f67_o.jpg) |
-| ![Stock Photo](./stockphotos/25497468270_fb35c2e4d7_o.jpg) | ![Stock Photo](./stockphotos/25497470490_f31479ebd5_o.jpg) |
-| ![Stock Photo](./stockphotos/25497471900_e6aa98ac38_o.jpg) | ![Stock Photo](./stockphotos/25497616040_c378f96cfb_o.jpg) |
-| ![Stock Photo](./stockphotos/25497617890_a08c1a06da_o.jpg) | ![Stock Photo](./stockphotos/25677176162_c54b9effec_o.jpg) |
-| ![Stock Photo](./stockphotos/25677285572_44e7825d02_o.jpg) | ![Stock Photo](./stockphotos/25677319932_d0ab929b52_o.jpg) |
-| ![Stock Photo](./stockphotos/25677321672_4c89cdf124_o.jpg) | ![Stock Photo](./stockphotos/25677324952_36b5b13289_o.jpg) |
-| ![Stock Photo](./stockphotos/25703055851_2a3d6c2481_o.jpg) | ![Stock Photo](./stockphotos/25703056681_bc93293096_o.jpg) |
-| ![Stock Photo](./stockphotos/25703211181_b55d432ef1_o.jpg) | ![Stock Photo](./stockphotos/25772082016_bc3e30e38a_o.jpg) |
-| ![Stock Photo](./stockphotos/25772082596_8f1eef34d2_o.jpg) | ![Stock Photo](./stockphotos/25772186816_7ffd403874_o.jpg) |
-| ![Stock Photo](./stockphotos/25798309375_c1e9268793_o.jpg) |                                                            |
+| ![Group of diverse women of color sitting at a conference table in a modern office with glass walls and pendant lighting](./stockphotos/diverse-women-in-office-meeting.jpg) | ![Diverse group of professional women of color seated at a table during an office meeting or discussion](./stockphotos/women-team-in-meeting-discussion.jpg) |
+| ![Five professional women of color seated at a long conference table in a bright office space with modern ceiling lighting](./stockphotos/professional-women-at-conference-table.jpg) | ![Portrait of a Black woman wearing glasses, leather jacket, and burgundy top, smiling at the camera](./stockphotos/woman-tech-professional-portrait.jpg) |
+| ![Two women of color reviewing code on a laptop with an external monitor, displaying colorful code on screen](./stockphotos/developers-pair-programming-together.jpg) | ![Close-up of hands on a laptop keyboard with a colorful patterned sweater, working in bright sunlight](./stockphotos/woman-working-on-laptop-outdoor.jpg) |
+| ![Two women of color working together at a desktop computer, one smiling while the other types, in a bright office setting](./stockphotos/women-collaborating-at-computer.jpg) | ![Two women of color collaborating at a desktop workstation with monitors, one in a checkered red shirt actively typing](./stockphotos/woman-pair-programming-at-desk.jpg) |
+| ![Three professional women of color in an office interview or panel setting with city skyline visible through windows](./stockphotos/women-in-interview-panel-discussion.jpg) | ![A diverse group of women of color collaborating around a conference table during a brainstorming session with sticky notes visible on whiteboards in the background](./stockphotos/women-leading-team-brainstorm-meeting.jpg) |
+| ![Two women of color working together at a large display monitor in a bright office space with city views visible through windows](./stockphotos/women-collaborating-at-tech-display.jpg) | ![Close-up of hands typing on a laptop keyboard with code displayed on the screen in a minimalist workspace](./stockphotos/developer-writing-code-on-laptop.jpg) |
+| ![Two women of color smiling while collaborating at a desktop computer in a modern office setting](./stockphotos/two-women-working-together-at-desktop.jpg) | ![A woman of color with glasses wearing a patterned shirt, focused on laptop work with a city skyline visible through the window behind her](./stockphotos/woman-focused-on-laptop-work.jpg) |
+| ![A woman of color with glasses and patterned clothing working on a laptop in a high-rise office with floor-to-ceiling windows](./stockphotos/woman-at-laptop-in-office.jpg) | ![Two women of color in casual clothing collaborating at a desktop computer in a bright, modern workspace](./stockphotos/two-women-coding-together-at-desk.jpg) |
+| ![A diverse group of women of color gathered around a conference table with a TV monitor and collaborative design work visible on whiteboards](./stockphotos/diverse-team-meeting-with-whiteboard.jpg) | ![A woman of color with braided hair viewing a computer monitor displaying a design project in a minimalist office workspace](./stockphotos/woman-at-computer-working-on-project.jpg) |
+| ![Black woman with glasses and braids wearing a geometric patterned shirt, focused on her laptop by a high-rise window](./stockphotos/woman-coding-by-window.jpg) | ![Black woman with glasses and braids wearing a geometric patterned shirt reading a Python programming book in front of a bookshelf](./stockphotos/woman-reading-programming-book.jpg) |
+| ![Woman in geometric patterned shirt working at a desk with multiple monitors displaying code, colleague in red plaid shirt visible in background](./stockphotos/two-developers-at-dual-monitors.jpg) | ![Hands of a Black woman wearing a geometric patterned shirt, focused on typing on a silver laptop](./stockphotos/woman-typing-on-laptop.jpg) |
+| ![Black woman with glasses and braids wearing a geometric patterned sweater, smiling while looking at her computer screen](./stockphotos/woman-smiling-at-computer.jpg) | ![Black woman with glasses and braids wearing a geometric patterned shirt, smiling with a whiteboard visible in the blurred background](./stockphotos/woman-presenting-at-whiteboard.jpg) |
+| ![Black woman with braids wearing a geometric patterned shirt, standing confidently with arms crossed and smiling in an office setting](./stockphotos/woman-standing-arms-crossed.jpg) | ![Group of five professionals of diverse backgrounds in a modern office meeting room with city views, seated around a white table with laptops and materials](./stockphotos/diverse-team-meeting.jpg) |
+| ![Black woman with braids and glasses wearing a geometric patterned cardigan, working intently on her laptop by a high-rise window](./stockphotos/woman-working-at-laptop-window.jpg) |                                                            |
