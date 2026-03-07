@@ -1,0 +1,515 @@
+---
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+
+if (import.meta.env.PROD) {
+  return Astro.redirect("/404");
+}
+---
+
+<BaseLayout>
+  <div class="playground">
+    <div class="playground-window">
+      <live-window id="preview-window" theme="dark" bg-color="#030a12" override-sunrise="06:00" override-sunset="18:00"
+      ></live-window>
+    </div>
+    <div class="playground-controls" id="controls">
+      <h2 class="controls-title">Live Window Playground</h2>
+
+      <fieldset class="control-group">
+        <legend>Time</legend>
+        <div class="control-row">
+          <label for="time-slider">Time of day</label>
+          <output id="time-display">12:00</output>
+        </div>
+        <input type="range" id="time-slider" min="0" max="1439" value="720" step="1" />
+        <div class="phase-buttons">
+          <button data-phase-hour="0" data-phase-min="0">Night</button>
+          <button data-phase-hour="4" data-phase-min="30">Astro Dawn</button>
+          <button data-phase-hour="5" data-phase-min="0">Nautical Dawn</button>
+          <button data-phase-hour="5" data-phase-min="30">Civil Dawn</button>
+          <button data-phase-hour="6" data-phase-min="0">Sunrise</button>
+          <button data-phase-hour="6" data-phase-min="30">Golden AM</button>
+          <button data-phase-hour="7" data-phase-min="0">Early Morning</button>
+          <button data-phase-hour="9" data-phase-min="0">Late Morning</button>
+          <button data-phase-hour="12" data-phase-min="0">Midday</button>
+          <button data-phase-hour="15" data-phase-min="0">Early Afternoon</button>
+          <button data-phase-hour="17" data-phase-min="0">Late Afternoon</button>
+          <button data-phase-hour="17" data-phase-min="30">Golden PM</button>
+          <button data-phase-hour="18" data-phase-min="0">Sunset</button>
+          <button data-phase-hour="18" data-phase-min="30">Civil Dusk</button>
+          <button data-phase-hour="19" data-phase-min="0">Nautical Dusk</button>
+          <button data-phase-hour="19" data-phase-min="30">Astro Dusk</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Tick Speed</legend>
+        <div class="control-row">
+          <label for="speed-slider">Multiplier</label>
+          <output id="speed-display">1x</output>
+        </div>
+        <input type="range" id="speed-slider" min="1" max="1000" value="1" step="1" />
+        <div class="speed-presets">
+          <button data-speed="1">1x</button>
+          <button data-speed="10">10x</button>
+          <button data-speed="100">100x</button>
+          <button data-speed="720">720x</button>
+        </div>
+        <div class="playback-controls">
+          <button id="play-btn">Play</button>
+          <button id="pause-btn">Pause</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Weather</legend>
+        <div class="control-row">
+          <label for="weather-select">Condition</label>
+        </div>
+        <select id="weather-select">
+          <option value="">None (clear sky)</option>
+          <option value="02">Few Clouds</option>
+          <option value="03">Scattered Clouds</option>
+          <option value="04">Broken/Overcast Clouds</option>
+          <option value="09">Drizzle</option>
+          <option value="10">Rain</option>
+          <option value="11">Thunderstorm</option>
+          <option value="13">Snow</option>
+          <option value="50">Mist</option>
+        </select>
+        <div class="control-row" style="margin-top: 0.75rem">
+          <label for="intensity-select">Intensity</label>
+        </div>
+        <select id="intensity-select">
+          <option value="light">Light</option>
+          <option value="" selected>Default</option>
+          <option value="heavy">Heavy</option>
+          <option value="very heavy">Very Heavy</option>
+          <option value="extreme">Extreme</option>
+        </select>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Sun / Moon</legend>
+        <div class="control-row">
+          <label for="sunrise-input">Sunrise</label>
+          <input type="time" id="sunrise-input" value="06:00" />
+        </div>
+        <div class="control-row">
+          <label for="sunset-input">Sunset</label>
+          <input type="time" id="sunset-input" value="18:00" />
+        </div>
+      </fieldset>
+
+      <fieldset class="control-group">
+        <legend>Display</legend>
+        <div class="control-row">
+          <label for="theme-toggle">Theme</label>
+          <select id="theme-toggle">
+            <option value="dark" selected>Dark</option>
+            <option value="">Light</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label for="clock-toggle">Clock</label>
+          <select id="clock-toggle">
+            <option value="show" selected>Show</option>
+            <option value="hide">Hide</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label for="format-toggle">Time format</label>
+          <select id="format-toggle">
+            <option value="24" selected>24h</option>
+            <option value="12">12h</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label for="weather-text-toggle">Weather text</label>
+          <select id="weather-text-toggle">
+            <option value="show" selected>Show</option>
+            <option value="hide">Hide</option>
+          </select>
+        </div>
+        <div class="control-row">
+          <label for="temp-toggle">Temp unit</label>
+          <select id="temp-toggle">
+            <option value="C" selected>°C</option>
+            <option value="F">°F</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <button id="reset-btn" class="reset-btn">Reset All</button>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/live-window/LiveWindow.ts"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const win = document.getElementById("preview-window")!;
+    const timeSlider = document.getElementById("time-slider") as HTMLInputElement;
+    const timeDisplay = document.getElementById("time-display") as HTMLOutputElement;
+    const speedSlider = document.getElementById("speed-slider") as HTMLInputElement;
+    const speedDisplay = document.getElementById("speed-display") as HTMLOutputElement;
+    const playBtn = document.getElementById("play-btn") as HTMLButtonElement;
+    const pauseBtn = document.getElementById("pause-btn") as HTMLButtonElement;
+    const weatherSelect = document.getElementById("weather-select") as HTMLSelectElement;
+    const intensitySelect = document.getElementById("intensity-select") as HTMLSelectElement;
+    const sunriseInput = document.getElementById("sunrise-input") as HTMLInputElement;
+    const sunsetInput = document.getElementById("sunset-input") as HTMLInputElement;
+    const themeToggle = document.getElementById("theme-toggle") as HTMLSelectElement;
+    const clockToggle = document.getElementById("clock-toggle") as HTMLSelectElement;
+    const formatToggle = document.getElementById("format-toggle") as HTMLSelectElement;
+    const weatherTextToggle = document.getElementById("weather-text-toggle") as HTMLSelectElement;
+    const tempToggle = document.getElementById("temp-toggle") as HTMLSelectElement;
+    const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
+
+    // -- Time controls --
+
+    function minutesToHHMM(minutes: number): string {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    }
+
+    function setTime(minutes: number) {
+      const hhmm = minutesToHHMM(minutes);
+      timeSlider.value = String(minutes);
+      timeDisplay.textContent = hhmm;
+      win.setAttribute("override-time", hhmm);
+    }
+
+    timeSlider.addEventListener("input", () => {
+      setTime(parseInt(timeSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-phase-hour]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const h = parseInt((btn as HTMLElement).dataset.phaseHour!, 10);
+        const m = parseInt((btn as HTMLElement).dataset.phaseMin!, 10);
+        setTime(h * 60 + m);
+      });
+    });
+
+    // -- Tick speed controls --
+
+    function setSpeed(speed: number) {
+      speedSlider.value = String(speed);
+      speedDisplay.textContent = `${speed}x`;
+      win.setAttribute("tick-speed", String(speed));
+    }
+
+    speedSlider.addEventListener("input", () => {
+      setSpeed(parseInt(speedSlider.value, 10));
+    });
+
+    document.querySelectorAll("[data-speed]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setSpeed(parseInt((btn as HTMLElement).dataset.speed!, 10));
+      });
+    });
+
+    playBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).playVirtualClock();
+      playBtn.classList.add("active");
+      pauseBtn.classList.remove("active");
+    });
+
+    pauseBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).pauseVirtualClock();
+      pauseBtn.classList.add("active");
+      playBtn.classList.remove("active");
+
+      // Sync the time slider to where virtual clock stopped
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const phase = (win as any).state?.computed?.phase;
+      if (phase?.now) {
+        const d = new Date(phase.now);
+        const mins = d.getHours() * 60 + d.getMinutes();
+        timeSlider.value = String(mins);
+        timeDisplay.textContent = minutesToHHMM(mins);
+      }
+    });
+
+    // -- Weather controls --
+
+    function updateWeather() {
+      const code = weatherSelect.value;
+      const intensity = intensitySelect.value;
+
+      if (!code) {
+        win.removeAttribute("override-weather");
+        win.removeAttribute("override-weather-description");
+        return;
+      }
+
+      win.setAttribute("override-weather", code + "d");
+
+      const conditionName = weatherSelect.options[weatherSelect.selectedIndex].text.toLowerCase();
+      const desc = intensity ? `${intensity} ${conditionName}` : conditionName;
+      win.setAttribute("override-weather-description", desc);
+    }
+
+    weatherSelect.addEventListener("change", updateWeather);
+    intensitySelect.addEventListener("change", updateWeather);
+
+    // -- Sun/Moon controls --
+
+    sunriseInput.addEventListener("change", () => {
+      win.setAttribute("override-sunrise", sunriseInput.value);
+    });
+
+    sunsetInput.addEventListener("change", () => {
+      win.setAttribute("override-sunset", sunsetInput.value);
+    });
+
+    // -- Display controls --
+
+    themeToggle.addEventListener("change", () => {
+      if (themeToggle.value) {
+        win.setAttribute("theme", themeToggle.value);
+      } else {
+        win.removeAttribute("theme");
+      }
+    });
+
+    clockToggle.addEventListener("change", () => {
+      if (clockToggle.value === "hide") {
+        win.setAttribute("hide-clock", "");
+      } else {
+        win.removeAttribute("hide-clock");
+      }
+    });
+
+    formatToggle.addEventListener("change", () => {
+      if (formatToggle.value === "12") {
+        win.setAttribute("time-format", "12");
+      } else {
+        win.removeAttribute("time-format");
+      }
+    });
+
+    weatherTextToggle.addEventListener("change", () => {
+      if (weatherTextToggle.value === "hide") {
+        win.setAttribute("hide-weather-text", "");
+      } else {
+        win.removeAttribute("hide-weather-text");
+      }
+    });
+
+    tempToggle.addEventListener("change", () => {
+      win.setAttribute("temp-unit", tempToggle.value);
+    });
+
+    // -- Reset --
+
+    resetBtn.addEventListener("click", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (win as any).pauseVirtualClock();
+      playBtn.classList.remove("active");
+      pauseBtn.classList.remove("active");
+
+      setTime(720);
+      setSpeed(1);
+
+      weatherSelect.value = "";
+      intensitySelect.value = "";
+      win.removeAttribute("override-weather");
+      win.removeAttribute("override-weather-description");
+
+      sunriseInput.value = "06:00";
+      sunsetInput.value = "18:00";
+      win.setAttribute("override-sunrise", "06:00");
+      win.setAttribute("override-sunset", "18:00");
+
+      themeToggle.value = "dark";
+      win.setAttribute("theme", "dark");
+      clockToggle.value = "show";
+      win.removeAttribute("hide-clock");
+      formatToggle.value = "24";
+      win.removeAttribute("time-format");
+      weatherTextToggle.value = "show";
+      win.removeAttribute("hide-weather-text");
+      tempToggle.value = "C";
+      win.setAttribute("temp-unit", "C");
+    });
+
+    // Initialize at noon
+    setTime(720);
+  });
+</script>
+
+<style>
+  @reference "../../layouts/BaseLayout/BaseLayout.css";
+
+  .playground {
+    display: flex;
+    gap: 2rem;
+    min-height: calc(100vh - 4rem);
+    padding: 1rem;
+  }
+
+  .playground-window {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .playground-controls {
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 4rem);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .controls-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-neon);
+    margin: 0;
+  }
+
+  live-window {
+    --window-color: var(--color-midnight);
+    --blinds-color: var(--color-midnight);
+    --clock-text-color: #e74c3c;
+  }
+
+  .control-group {
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .control-group legend {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-neon);
+    padding: 0 0.5rem;
+  }
+
+  .control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .control-row label {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .control-row output {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+
+  .phase-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .phase-buttons button {
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .phase-buttons button:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+    color: var(--color-text);
+  }
+
+  .speed-presets,
+  .playback-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .playback-controls button,
+  .speed-presets button {
+    flex: 1;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .playback-controls button:hover,
+  .speed-presets button:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+    color: var(--color-text);
+  }
+
+  .playback-controls button.active {
+    background: var(--color-neon);
+    color: var(--color-background);
+    border-color: var(--color-neon);
+  }
+
+  select {
+    width: 100%;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  input[type="time"] {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-radius: 0.25rem;
+    background: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .reset-btn {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid #e74c3c;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: #e74c3c;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .reset-btn:hover {
+    background: #e74c3c;
+    color: white;
+  }
+</style>
