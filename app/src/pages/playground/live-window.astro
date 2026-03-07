@@ -35,19 +35,33 @@ const apiBaseUrl = API_BASE_URL;
             <option value="custom">Custom...</option>
           </select>
         </div>
-        <div id="custom-coords" class="custom-coords" hidden>
+        <div id="city-search-section" class="city-search-section" hidden>
           <div class="control-row">
-            <label for="lat-input">Latitude</label>
-            <input type="number" id="lat-input" step="0.0001" min="-90" max="90" placeholder="40.7128" />
+            <label for="city-search-input">Search city</label>
+            <div class="search-wrapper">
+              <input type="text" id="city-search-input" placeholder="Type a city name..." autocomplete="off" />
+              <ul id="city-search-results" class="search-results" hidden></ul>
+            </div>
           </div>
           <div class="control-row">
-            <label for="lng-input">Longitude</label>
-            <input type="number" id="lng-input" step="0.0001" min="-180" max="180" placeholder="-74.0060" />
+            <label>Coordinates</label>
+            <span id="custom-coords-display" class="coords-display">—</span>
           </div>
-          <div class="control-row">
-            <label for="tz-input">Timezone (IANA)</label>
-            <input type="text" id="tz-input" placeholder="America/New_York" />
-          </div>
+          <details class="manual-coords-details">
+            <summary>Enter coordinates manually</summary>
+            <div class="control-row">
+              <label for="lat-input">Latitude</label>
+              <input type="number" id="lat-input" step="0.0001" min="-90" max="90" placeholder="40.7128" />
+            </div>
+            <div class="control-row">
+              <label for="lng-input">Longitude</label>
+              <input type="number" id="lng-input" step="0.0001" min="-180" max="180" placeholder="-74.0060" />
+            </div>
+            <div class="control-row">
+              <label for="tz-input">Timezone (IANA)</label>
+              <input type="text" id="tz-input" placeholder="America/New_York" />
+            </div>
+          </details>
         </div>
       </fieldset>
 
@@ -252,7 +266,10 @@ const apiBaseUrl = API_BASE_URL;
     const formatToggle = document.getElementById("format-toggle") as HTMLSelectElement;
     const resetBtn = document.getElementById("reset-btn") as HTMLButtonElement;
     const locationSelect = document.getElementById("location-select") as HTMLSelectElement;
-    const customCoords = document.getElementById("custom-coords") as HTMLDivElement;
+    const citySearchSection = document.getElementById("city-search-section") as HTMLDivElement;
+    const citySearchInput = document.getElementById("city-search-input") as HTMLInputElement;
+    const citySearchResults = document.getElementById("city-search-results") as HTMLUListElement;
+    const coordsDisplay = document.getElementById("custom-coords-display") as HTMLSpanElement;
     const latInput = document.getElementById("lat-input") as HTMLInputElement;
     const lngInput = document.getElementById("lng-input") as HTMLInputElement;
     const tzInput = document.getElementById("tz-input") as HTMLInputElement;
@@ -393,13 +410,13 @@ const apiBaseUrl = API_BASE_URL;
         win.removeAttribute("longitude");
         win.removeAttribute("timezone");
         win.removeAttribute("label");
-        customCoords.hidden = true;
+        citySearchSection.hidden = true;
       } else if (value === "custom") {
-        customCoords.hidden = false;
+        citySearchSection.hidden = false;
         win.removeAttribute("label");
         applyCustomCoords();
       } else {
-        customCoords.hidden = true;
+        citySearchSection.hidden = true;
         const [lat, lng] = value.split(",");
         const tz = option?.dataset.tz ?? null;
         const label = option?.textContent?.trim() ?? null;
@@ -428,6 +445,103 @@ const apiBaseUrl = API_BASE_URL;
     latInput.addEventListener("change", applyCustomCoords);
     lngInput.addEventListener("change", applyCustomCoords);
     tzInput.addEventListener("change", applyCustomCoords);
+
+    // -- City search (Nominatim) --
+
+    interface NominatimResult {
+      lat: string;
+      lon: string;
+      display_name: string;
+      address?: {
+        city?: string;
+        town?: string;
+        village?: string;
+        state?: string;
+        country?: string;
+      };
+    }
+
+    let searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
+    citySearchInput.addEventListener("input", () => {
+      if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+      const query = citySearchInput.value.trim();
+      if (query.length < 2) {
+        citySearchResults.hidden = true;
+        return;
+      }
+      searchDebounceTimer = setTimeout(() => searchCity(query), 300);
+    });
+
+    async function searchCity(query: string) {
+      citySearchResults.innerHTML = "";
+      citySearchResults.hidden = false;
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&addressdetails=1`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const results: NominatimResult[] = await res.json();
+
+        if (results.length === 0) {
+          const li = document.createElement("li");
+          li.className = "search-result-item search-result-empty";
+          li.textContent = "No results found";
+          citySearchResults.appendChild(li);
+          return;
+        }
+
+        for (const result of results) {
+          const cityName = result.address?.city ?? result.address?.town ?? result.address?.village ?? null;
+          const country = result.address?.country ?? "";
+          const label = cityName ? `${cityName}, ${country}` : result.display_name;
+
+          const li = document.createElement("li");
+          li.className = "search-result-item";
+
+          const nameSpan = document.createElement("span");
+          nameSpan.textContent = label;
+
+          const coordsSpan = document.createElement("span");
+          coordsSpan.className = "search-result-coords";
+          coordsSpan.textContent = `${parseFloat(result.lat).toFixed(4)}, ${parseFloat(result.lon).toFixed(4)}`;
+
+          li.appendChild(nameSpan);
+          li.appendChild(coordsSpan);
+
+          li.addEventListener("click", () => {
+            win.setAttribute("latitude", result.lat);
+            win.setAttribute("longitude", result.lon);
+            win.setAttribute("label", label);
+            win.removeAttribute("timezone"); // let API resolve it
+
+            coordsDisplay.textContent = `${parseFloat(result.lat).toFixed(4)}, ${parseFloat(result.lon).toFixed(4)}`;
+            citySearchInput.value = label;
+            citySearchResults.hidden = true;
+
+            // Sync manual fields for consistency
+            latInput.value = result.lat;
+            lngInput.value = result.lon;
+            tzInput.value = "";
+          });
+
+          citySearchResults.appendChild(li);
+        }
+      } catch {
+        const li = document.createElement("li");
+        li.className = "search-result-item search-result-error";
+        li.textContent = "Search failed — try again";
+        citySearchResults.appendChild(li);
+      }
+    }
+
+    // Close search dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+      const wrapper = document.querySelector(".search-wrapper");
+      if (wrapper && !wrapper.contains(e.target as Node)) {
+        citySearchResults.hidden = true;
+      }
+    });
 
     // -- Sun/Moon controls --
 
@@ -503,6 +617,9 @@ const apiBaseUrl = API_BASE_URL;
       latInput.value = "";
       lngInput.value = "";
       tzInput.value = "";
+      citySearchInput.value = "";
+      citySearchResults.hidden = true;
+      coordsDisplay.textContent = "—";
 
       // Reset to live time mode
       setTimeMode("live");
@@ -680,11 +797,85 @@ const apiBaseUrl = API_BASE_URL;
     min-width: 0;
   }
 
-  .custom-coords {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  .city-search-section {
     margin-top: 0.75rem;
+  }
+
+  .search-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .search-wrapper input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--color-surface, #0d1b2a);
+    border: 1px solid var(--color-midnight-light, #1a2a3a);
+    border-top: none;
+    border-radius: 0 0 0.25rem 0.25rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .search-result-item {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .search-result-item:hover {
+    background: var(--color-midnight-light, #1a2a3a);
+  }
+
+  .search-result-empty,
+  .search-result-error {
+    cursor: default;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+
+  .search-result-coords {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.625rem;
+    color: var(--color-muted);
+  }
+
+  .coords-display {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  .manual-coords-details {
+    margin-top: 0.75rem;
+  }
+
+  .manual-coords-details summary {
+    font-size: 0.625rem;
+    color: var(--color-muted);
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+  }
+
+  .manual-coords-details summary:hover {
+    color: var(--color-text);
   }
 
   input[type="number"],
