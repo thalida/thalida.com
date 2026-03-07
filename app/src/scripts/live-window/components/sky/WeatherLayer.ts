@@ -1,29 +1,5 @@
 import type { SceneComponent, LiveWindowState } from "../../types";
 
-/**
- * Maps OpenWeatherMap icon codes to visual effects.
- * Icon format: two-digit condition code + "d" (day) or "n" (night).
- * See https://openweathermap.org/weather-conditions for full reference.
- */
-export const ICON_WEATHER_MAP: Record<string, string[]> = {
-  "02d": ["cloudSm"], // few clouds
-  "02n": ["cloudSm"],
-  "03d": ["cloudSm", "cloudMd"], // scattered clouds
-  "03n": ["cloudSm", "cloudMd"],
-  "04d": ["cloudSm", "cloudMd", "cloudLg"], // overcast
-  "04n": ["cloudSm", "cloudMd", "cloudLg"],
-  "09d": ["cloudMd", "lightRain"], // drizzle
-  "09n": ["cloudMd", "lightRain"],
-  "10d": ["cloudMd", "cloudLg", "rain"], // rain
-  "10n": ["cloudMd", "cloudLg", "rain"],
-  "11d": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"], // thunderstorm
-  "11n": ["cloudSm", "cloudMd", "cloudLg", "thunderstorm"],
-  "13d": ["snow"], // snow
-  "13n": ["snow"],
-  "50d": ["mist"], // mist/fog
-  "50n": ["mist"],
-};
-
 const SWAY_NAMES = ["sway-sm", "sway", "sway-lg"] as const;
 
 export interface PrecipConfig {
@@ -174,19 +150,100 @@ export const ATMOSPHERE_CONFIG: Record<string, AtmosphereConfig> = {
   tornado: { color: "#666666", opacity: 0.45, layers: 3 },
 };
 
-/**
- * Derive a particle-count multiplier from the OWM description.
- * Descriptions include intensity words like "light rain", "heavy snow",
- * "very heavy rain", "extreme rain" — we scale particle density accordingly.
- */
-export function intensityMultiplier(description: string): number {
-  const d = description.toLowerCase();
-  if (d.includes("extreme")) return 1.8;
-  if (d.includes("very heavy")) return 1.6;
-  if (d.includes("heavy")) return 1.4;
-  if (d.includes("light")) return 0.6;
-  return 1.0;
+export interface WeatherEffectConfig {
+  clouds: "none" | "light" | "medium" | "heavy";
+  precip: PrecipLayer[];
+  lightning: boolean;
+  atmosphere: AtmosphereConfig | null;
+  snowAccumulation: boolean;
 }
+
+export interface PrecipLayer {
+  type: string;
+  intensityScale: number;
+}
+
+function fx(
+  clouds: WeatherEffectConfig["clouds"],
+  precip: PrecipLayer[],
+  opts?: { lightning?: boolean; atmosphere?: AtmosphereConfig; snowAccumulation?: boolean },
+): WeatherEffectConfig {
+  return {
+    clouds,
+    precip,
+    lightning: opts?.lightning ?? false,
+    atmosphere: opts?.atmosphere ?? null,
+    snowAccumulation: opts?.snowAccumulation ?? false,
+  };
+}
+
+function p(type: string, intensityScale = 1.0): PrecipLayer {
+  return { type, intensityScale };
+}
+
+export const WEATHER_EFFECTS: Record<number, WeatherEffectConfig> = {
+  // 2xx Thunderstorm
+  200: fx("heavy", [p("lightRain", 0.6)], { lightning: true }),
+  201: fx("heavy", [p("rain")], { lightning: true }),
+  202: fx("heavy", [p("rain", 1.4)], { lightning: true }),
+  210: fx("heavy", [], { lightning: true }),
+  211: fx("heavy", [], { lightning: true }),
+  212: fx("heavy", [], { lightning: true }),
+  221: fx("heavy", [], { lightning: true }),
+  230: fx("heavy", [p("drizzle", 0.6)], { lightning: true }),
+  231: fx("heavy", [p("drizzle")], { lightning: true }),
+  232: fx("heavy", [p("drizzle", 1.4)], { lightning: true }),
+  // 3xx Drizzle
+  300: fx("medium", [p("drizzle", 0.6)]),
+  301: fx("medium", [p("drizzle")]),
+  302: fx("medium", [p("drizzle", 1.4)]),
+  310: fx("medium", [p("drizzle", 0.6), p("lightRain", 0.4)]),
+  311: fx("medium", [p("drizzle", 0.7), p("lightRain", 0.7)]),
+  312: fx("medium", [p("drizzle"), p("rain", 0.7)]),
+  313: fx("medium", [p("showerRain", 0.7), p("drizzle", 0.5)]),
+  314: fx("heavy", [p("showerRain", 1.2), p("drizzle", 0.6)]),
+  321: fx("medium", [p("drizzle", 1.2)]),
+  // 5xx Rain
+  500: fx("medium", [p("lightRain", 0.6)]),
+  501: fx("medium", [p("rain")]),
+  502: fx("heavy", [p("rain", 1.4)]),
+  503: fx("heavy", [p("rain", 1.6)]),
+  504: fx("heavy", [p("rain", 1.8)]),
+  511: fx("heavy", [p("freezingRain")], { snowAccumulation: true }),
+  520: fx("medium", [p("showerRain", 0.6)]),
+  521: fx("medium", [p("showerRain")]),
+  522: fx("heavy", [p("showerRain", 1.4)]),
+  531: fx("medium", [p("showerRain")]),
+  // 6xx Snow
+  600: fx("medium", [p("lightSnow", 0.6)], { snowAccumulation: true }),
+  601: fx("medium", [p("snow")], { snowAccumulation: true }),
+  602: fx("heavy", [p("heavySnow", 1.4)], { snowAccumulation: true }),
+  611: fx("medium", [p("sleet")]),
+  612: fx("medium", [p("sleet", 0.6)]),
+  613: fx("medium", [p("sleet", 1.2)]),
+  615: fx("medium", [p("lightRain", 0.5), p("lightSnow", 0.5)], { snowAccumulation: true }),
+  616: fx("heavy", [p("rain", 0.7), p("snow", 0.7)], { snowAccumulation: true }),
+  620: fx("medium", [p("showerSnow", 0.6)], { snowAccumulation: true }),
+  621: fx("medium", [p("showerSnow")], { snowAccumulation: true }),
+  622: fx("heavy", [p("showerSnow", 1.4)], { snowAccumulation: true }),
+  // 7xx Atmosphere
+  701: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.mist }),
+  711: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.smoke }),
+  721: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.haze }),
+  731: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dustWhirls }),
+  741: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.fog }),
+  751: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust }),
+  761: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.dust }),
+  762: fx("none", [], { atmosphere: ATMOSPHERE_CONFIG.volcanicAsh }),
+  771: fx("heavy", [], { atmosphere: ATMOSPHERE_CONFIG.squalls }),
+  781: fx("heavy", [], { atmosphere: ATMOSPHERE_CONFIG.tornado }),
+  // 800+ Clear/Clouds
+  800: fx("none", []),
+  801: fx("light", []),
+  802: fx("medium", []),
+  803: fx("heavy", []),
+  804: fx("heavy", []),
+};
 
 export class WeatherLayer implements SceneComponent {
   private el: HTMLElement | null = null;
@@ -228,53 +285,70 @@ export class WeatherLayer implements SceneComponent {
 
   update(state: LiveWindowState): void {
     if (!this.el) return;
-    const icon = state.computed.phase.weather.icon;
-    const desc = (state.computed.phase.weather.description ?? "").toLowerCase();
-    const isSleet = icon?.startsWith("13") && (desc.includes("sleet") || desc.includes("rain and snow"));
+    const weatherId = state.computed.phase.weather.id;
 
-    let cls = "sky-layer weather";
-    if (icon) cls += ` weather-${icon}`;
-    this.el.className = cls;
-
-    if (!icon) {
+    if (!weatherId || !WEATHER_EFFECTS[weatherId]) {
+      this.el.className = "sky-layer weather";
       this.el.innerHTML = "";
       return;
     }
 
-    const effects = ICON_WEATHER_MAP[icon] ?? [];
-    const has = (k: string) => effects.includes(k);
-
-    // Determine precipitation type from effects + weather description
-    let precipToken: string | null = null;
-    if (has("lightRain")) precipToken = "lightRain";
-    else if (has("rain")) precipToken = "rain";
-    else if (has("thunderstorm")) precipToken = "thunderstorm";
-    else if (has("snow")) precipToken = isSleet ? "sleet" : "snow";
+    const config = WEATHER_EFFECTS[weatherId];
+    const icon = state.computed.phase.weather.icon;
+    let cls = "sky-layer weather";
+    if (icon) cls += ` weather-${icon}`;
+    this.el.className = cls;
 
     let html = "";
-    if (has("cloudLg")) html += '<div class="cloud cloud-lg"></div>';
-    if (has("cloudMd")) html += '<div class="cloud cloud-md"></div>';
-    if (has("thunderstorm")) html += '<div class="lightning"></div>';
-    if (has("cloudSm")) html += '<div class="cloud cloud-sm"></div>';
-    if (has("mist")) {
-      html += '<div class="mist mist-lg"></div><div class="mist mist-md"></div><div class="mist mist-sm"></div>';
+
+    // Clouds
+    if (config.clouds === "heavy") {
+      html += '<div class="cloud cloud-lg"></div>';
+      html += '<div class="cloud cloud-md"></div>';
+      html += '<div class="cloud cloud-sm"></div>';
+    } else if (config.clouds === "medium") {
+      html += '<div class="cloud cloud-md"></div>';
+      html += '<div class="cloud cloud-sm"></div>';
+    } else if (config.clouds === "light") {
+      html += '<div class="cloud cloud-sm"></div>';
     }
-    if (precipToken) {
-      const config = PRECIP_CONFIG[precipToken];
-      const count = Math.round(config.count * intensityMultiplier(desc));
-      const particles = WeatherLayer.particleHTML(config, count);
-      html += `<div class="droplets" style="animation-duration:${config.fallSpeed}">`;
+
+    // Lightning
+    if (config.lightning) {
+      html += '<div class="lightning"></div>';
+    }
+
+    // Atmosphere
+    if (config.atmosphere) {
+      const { color, opacity, layers } = config.atmosphere;
+      const sizes = ["lg", "md", "sm"];
+      for (let i = 0; i < layers; i++) {
+        const size = sizes[i] ?? "sm";
+        html += `<div class="atmosphere-layer atmosphere-${size}" style="background:${color};opacity:${opacity}"></div>`;
+      }
+    }
+
+    // Precipitation layers
+    for (const precipLayer of config.precip) {
+      const precipConfig = PRECIP_CONFIG[precipLayer.type];
+      if (!precipConfig) continue;
+      const count = Math.round(precipConfig.count * precipLayer.intensityScale);
+      const particles = WeatherLayer.particleHTML(precipConfig, count);
+      html += `<div class="droplets" style="animation-duration:${precipConfig.fallSpeed}">`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += `<div class="droplets-half">${particles}</div>`;
       html += "</div>";
     }
-    if (has("snow")) {
+
+    // Snow accumulation
+    if (config.snowAccumulation) {
       html += '<div class="snow-sill">';
       for (let i = 1; i <= 6; i++) {
         html += `<div class="snow-mound snow-mound-${i}"></div>`;
       }
       html += "</div>";
     }
+
     this.el.innerHTML = html;
   }
 
