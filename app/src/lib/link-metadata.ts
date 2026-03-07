@@ -78,9 +78,9 @@ async function fetchMetadata(url: string): Promise<LinkMetadata> {
           headers: { "User-Agent": "Mozilla/5.0 (compatible; thalida.com-bot/1.0)" },
         });
         clearTimeout(timer);
-        if (!res.ok) return { dead: true as const };
+        if (!res.ok) return { dead: true };
         const html = await res.text();
-        return { ...parseMetadata(html), dead: false as const };
+        return { ...parseMetadata(html), dead: false };
       })(),
       validateFavicon(url),
     ]);
@@ -101,8 +101,11 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
 
   const now = Date.now();
   const toFetch = urls.filter((url) => !cache[url]);
-  const toRevalidateFavicon = urls.filter((url) => cache[url] && !("faviconUrl" in cache[url]));
   const toRevalidate = urls.filter((url) => cache[url] && cache[url].fetchedAt + REVALIDATE_AFTER_MS < now);
+  const toRevalidateSet = new Set(toRevalidate);
+  const toRevalidateFavicon = urls.filter(
+    (url) => cache[url] && !("faviconUrl" in cache[url]) && !toRevalidateSet.has(url),
+  );
 
   for (let i = 0; i < toFetch.length; i += CONCURRENCY) {
     const batch = toFetch.slice(i, i + CONCURRENCY);

@@ -74,4 +74,83 @@ describe("link-metadata", () => {
       expect(result["https://unreachable.example.com"].dead).toBe(true);
     });
   });
+
+  describe("revalidation (toRevalidate)", () => {
+    it("re-fetches and updates a cached entry older than 7 days", async () => {
+      const { getLinkMetadataMap } = await import("../link-metadata");
+      const mockFs = await import("node:fs");
+
+      const now = new Date("2026-03-07T12:00:00Z").getTime();
+      const eightDaysAgo = now - 8 * 24 * 60 * 60 * 1000;
+
+      const staleCache = {
+        "https://stale.example.com": {
+          metaTitle: "Old Title",
+          metaDescription: "Old description",
+          faviconUrl: "https://www.google.com/s2/favicons?domain=stale.example.com&sz=32",
+          dead: false,
+          fetchedAt: eightDaysAgo,
+        },
+      };
+
+      vi.spyOn(mockFs.promises, "readFile").mockResolvedValue(JSON.stringify(staleCache));
+      vi.spyOn(mockFs.promises, "mkdir").mockResolvedValue(undefined);
+      vi.spyOn(mockFs.promises, "writeFile").mockResolvedValue(undefined);
+
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (typeof url === "string" && url.includes("favicons")) {
+          return Promise.resolve({ ok: true });
+        }
+        return Promise.resolve({
+          ok: true,
+          text: async () => "<html><title>New Title</title></html>",
+        });
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await getLinkMetadataMap(["https://stale.example.com"]);
+
+      expect(result["https://stale.example.com"].metaTitle).toBe("New Title");
+      expect(result["https://stale.example.com"].dead).toBe(false);
+      expect(result["https://stale.example.com"].fetchedAt).toBe(now);
+
+      // Verify fetch was actually called (page fetch + favicon fetch)
+      const pageFetchCalls = fetchMock.mock.calls.filter((call) => call[0] === "https://stale.example.com");
+      expect(pageFetchCalls.length).toBe(1);
+    });
+
+    it("serves a cached entry within 7 days without making a network call", async () => {
+      const { getLinkMetadataMap } = await import("../link-metadata");
+      const mockFs = await import("node:fs");
+
+      const now = new Date("2026-03-07T12:00:00Z").getTime();
+      const oneDayAgo = now - 1 * 24 * 60 * 60 * 1000;
+
+      const freshCache = {
+        "https://fresh.example.com": {
+          metaTitle: "Cached Title",
+          metaDescription: "Cached description",
+          faviconUrl: "https://www.google.com/s2/favicons?domain=fresh.example.com&sz=32",
+          dead: false,
+          fetchedAt: oneDayAgo,
+        },
+      };
+
+      vi.spyOn(mockFs.promises, "readFile").mockResolvedValue(JSON.stringify(freshCache));
+      vi.spyOn(mockFs.promises, "mkdir").mockResolvedValue(undefined);
+      vi.spyOn(mockFs.promises, "writeFile").mockResolvedValue(undefined);
+
+      const fetchMock = vi.fn();
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await getLinkMetadataMap(["https://fresh.example.com"]);
+
+      expect(result["https://fresh.example.com"].metaTitle).toBe("Cached Title");
+      expect(result["https://fresh.example.com"].dead).toBe(false);
+      expect(result["https://fresh.example.com"].fetchedAt).toBe(oneDayAgo);
+
+      // Verify fetch was NOT called at all
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+  });
 });
