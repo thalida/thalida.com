@@ -145,6 +145,7 @@ class LiveWindowElement extends HTMLElement {
   private clockInterval: number | null = null;
   private skyInterval: number | null = null;
   private weatherInterval: number | null = null;
+  private visibilityAC: AbortController | null = null;
 
   private virtualTime: number | null = null;
   private virtualTimeAnchorReal: number | null = null;
@@ -352,6 +353,22 @@ class LiveWindowElement extends HTMLElement {
     } else {
       this.markCelestialReady();
     }
+
+    // Refresh weather + sky immediately when the tab regains focus.
+    // Browsers throttle/suspend setInterval in background tabs, so the
+    // regular 30-min polling may never fire while hidden.
+    this.visibilityAC = new AbortController();
+    document.addEventListener(
+      "visibilitychange",
+      () => {
+        if (document.hidden) return;
+        this.updateAll();
+        if (this.getAttribute("api-url")) {
+          this.doFetchWeather();
+        }
+      },
+      { signal: this.visibilityAC.signal },
+    );
   }
 
   private startWeatherPolling() {
@@ -375,9 +392,11 @@ class LiveWindowElement extends HTMLElement {
     if (this.clockInterval != null) clearInterval(this.clockInterval);
     if (this.skyInterval != null) clearInterval(this.skyInterval);
     if (this.weatherInterval != null) clearInterval(this.weatherInterval);
+    this.visibilityAC?.abort();
     this.clockInterval = null;
     this.skyInterval = null;
     this.weatherInterval = null;
+    this.visibilityAC = null;
   }
 
   private markCelestialReady() {
