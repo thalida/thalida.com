@@ -21,9 +21,7 @@
   --font-body: "IBM Plex Mono", monospace;
 
   --text-2xs: 0.65rem;
-  --text-display: clamp(2.5rem, 6vw, 4rem);
-  --text-display-lg: clamp(2.5rem, 6vw, 4.8rem);
-  --text-display-sm: clamp(2rem, 5vw, 3rem);
+  --text-display: clamp(2.5rem, 6vw, 4.8rem);
   --text-subtitle: clamp(1rem, 2vw, 1.4rem);
 
   --leading-display: 0.95;
