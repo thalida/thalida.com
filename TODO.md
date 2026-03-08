@@ -36,4 +36,4 @@
 - [x] Update site urls for older versions
 - [ ] show plan docs on site
 - [ ] add site footer
-- [ ] add vscode tasks to run app / api
+- [x] add vscode tasks to run app / api
