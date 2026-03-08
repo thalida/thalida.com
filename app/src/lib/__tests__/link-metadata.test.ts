@@ -119,6 +119,40 @@ describe("link-metadata", () => {
       expect(pageFetchCalls.length).toBe(1);
     });
 
+    it("re-validates a cached entry missing the dead field (legacy cache)", async () => {
+      const { getLinkMetadataMap } = await import("../link-metadata");
+      const mockFs = await import("node:fs");
+
+      const now = new Date("2026-03-07T12:00:00Z").getTime();
+      const oneDayAgo = now - 1 * 24 * 60 * 60 * 1000;
+
+      // Legacy cache entry: has fetchedAt within 7 days but no dead field
+      const legacyCache = {
+        "https://legacy.example.com": {
+          metaTitle: "Legacy Title",
+          faviconUrl: "https://www.google.com/s2/favicons?domain=legacy.example.com&sz=32",
+          fetchedAt: oneDayAgo,
+        },
+      };
+
+      vi.spyOn(mockFs.promises, "readFile").mockResolvedValue(JSON.stringify(legacyCache));
+      vi.spyOn(mockFs.promises, "mkdir").mockResolvedValue(undefined);
+      vi.spyOn(mockFs.promises, "writeFile").mockResolvedValue(undefined);
+
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (typeof url === "string" && url.includes("favicons")) {
+          return Promise.resolve({ ok: true });
+        }
+        return Promise.resolve({ ok: false, status: 404 });
+      });
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await getLinkMetadataMap(["https://legacy.example.com"]);
+
+      expect(result["https://legacy.example.com"].dead).toBe(true);
+      expect(result["https://legacy.example.com"].fetchedAt).toBe(now);
+    });
+
     it("serves a cached entry within 7 days without making a network call", async () => {
       const { getLinkMetadataMap } = await import("../link-metadata");
       const mockFs = await import("node:fs");

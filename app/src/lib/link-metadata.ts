@@ -101,7 +101,9 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
 
   const now = Date.now();
   const toFetch = urls.filter((url) => !cache[url]);
-  const toRevalidate = urls.filter((url) => cache[url] && cache[url].fetchedAt + REVALIDATE_AFTER_MS < now);
+  const toRevalidate = urls.filter(
+    (url) => cache[url] && (cache[url].fetchedAt + REVALIDATE_AFTER_MS < now || !("dead" in cache[url])),
+  );
   const toRevalidateSet = new Set(toRevalidate);
   const toRevalidateFavicon = urls.filter(
     (url) => cache[url] && !("faviconUrl" in cache[url]) && !toRevalidateSet.has(url),
