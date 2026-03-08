@@ -98,7 +98,9 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       name,
       title: collectionMeta[name].title,
       items,
-      allCategories: [...categoriesSet].sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b))),
+      allCategories: [...categoriesSet]
+        .sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b)))
+        .sort((a, b) => (a === "dead-links" ? 1 : b === "dead-links" ? -1 : 0)),
     };
   }
 

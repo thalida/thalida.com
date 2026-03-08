@@ -30,9 +30,13 @@ const { collection, categories, activeCategory } = Astro.props;
             href={`/${collection}/${encodeURIComponent(cat)}`}
             class:list={[
               "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
-              activeCategory === cat
-                ? "bg-white/15 text-white! border-white"
-                : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
+              cat === "dead-links"
+                ? activeCategory === cat
+                  ? "bg-error/20 text-error! border-error"
+                  : "bg-transparent border-error/50 text-error/70 hover:bg-error/10 hover:text-error"
+                : activeCategory === cat
+                  ? "bg-white/15 text-white! border-white"
+                  : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
             ]}
           >
             {categoryDisplay(cat)}

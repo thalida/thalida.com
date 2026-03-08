@@ -60,7 +60,9 @@ const navData = await getNavData();
               >
                 <span class="flex-1">{navData[entry.collection].title}</span>
                 <span class="text-xs font-normal bg-midnight py-0.5 px-2 rounded-full text-muted group-data-active:bg-white/15 group-data-active:text-white">
-                  {navData[entry.collection].items.length}
+                  {entry.collection === "links"
+                    ? navData[entry.collection].items.filter((i) => i.category !== "dead-links").length
+                    : navData[entry.collection].items.length}
                 </span>
               </a>
             </li>
