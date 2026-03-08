@@ -1,0 +1,18 @@
+---
+import { execSync } from "node:child_process";
+import { formatDateFull } from "@lib/format-utils";
+
+let lastUpdated: string;
+try {
+  const commitDate = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
+  lastUpdated = formatDateFull(commitDate);
+} catch {
+  lastUpdated = formatDateFull(new Date().toISOString());
+}
+---
+
+<footer class="mt-auto pt-4 pb-2 border-t border-border text-center">
+  <p class="font-body text-xs text-muted">
+    created by thalida · last updated {lastUpdated}
+  </p>
+</footer>
