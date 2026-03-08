@@ -2,23 +2,39 @@
 import { execSync } from "node:child_process";
 import { formatDateFull } from "@lib/format-utils";
 
-let lastUpdated: string;
+interface Props {
+  narrow?: boolean;
+  postPublishedOn?: Date;
+  postUpdatedOn?: Date;
+}
+
+const { narrow = false, postPublishedOn, postUpdatedOn } = Astro.props;
+
+let siteUpdated: string;
 try {
   const commitDate = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
-  lastUpdated = formatDateFull(commitDate);
+  siteUpdated = formatDateFull(commitDate);
 } catch {
-  lastUpdated = formatDateFull(new Date().toISOString());
+  siteUpdated = formatDateFull(new Date().toISOString());
 }
+
+const postPublished = postPublishedOn ? formatDateFull(postPublishedOn.toISOString()) : null;
+const postUpdated = postUpdatedOn ? formatDateFull(postUpdatedOn.toISOString()) : null;
 ---
 
-<footer class="mt-16 py-8 text-center">
-  <hr class="mx-auto w-32 border-t border-border" />
-  <p class="font-body text-xs text-muted">
-    created by thalida · <a
-      href="https://github.com/thalida/thalida.com"
-      class="text-teal no-underline hover:text-neon transition-colors"
-    >
-      last updated {lastUpdated}
+<footer class:list={["mt-16 py-8 font-body text-xs text-muted", { "w-full max-w-3xl mx-auto": narrow }]}>
+  {
+    postPublished && (
+      <p class="mb-2">
+        {"//"} post created on {postPublished}
+        {postUpdated && <span> · updated on {postUpdated}</span>}
+      </p>
+    )
+  }
+  <p>
+    {"//"} made by thalida ·
+    <a href="https://github.com/thalida/thalida.com" class="text-teal no-underline hover:text-neon transition-colors">
+      site updated on {siteUpdated}
     </a>
   </p>
 </footer>

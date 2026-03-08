@@ -137,7 +137,11 @@ const navData = await getNavData();
         <div class="grow">
           <slot />
         </div>
-        <Footer />
+        <Footer
+          narrow={!!publishedOn || activePage === "about"}
+          postPublishedOn={publishedOn}
+          postUpdatedOn={updatedOn}
+        />
       </div>
       <Chat />
     </div>
