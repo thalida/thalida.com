@@ -3,7 +3,7 @@ title: Custom Django Unfold Admin Dashboard
 description: Setup a custom admin dashboard in an existing repo, exactly like the one shown on Unfold Formula Demo project.
 publishedOn: 2023-11-11T23:18:00Z
 updatedOn: 2023-11-14T02:29:00Z
-coverImage: custom-django-unfold-admin-dashboard/Screenshot_2023-11-12_at_00.13.08.png
+coverImage: custom-django-unfold-admin-dashboard/django-unfold-admin-dashboard.png
 coverImageAlt: Screenshot of the custom Django admin dashboard using Unfold theme, showing a modern and clean interface with various statistics and charts.
 category: django
 tags:
@@ -15,15 +15,18 @@ tags:
 
 Setup a custom admin dashboard in an existing repo, using the templates provided by the Unfold Formula Demo project. [https://demo.unfoldadmin.com/admin/](https://demo.unfoldadmin.com/admin/)
 
-![Screenshot 2023-11-12 at 00.13.08.png](custom-django-unfold-admin-dashboard/Screenshot_2023-11-12_at_00.13.08.png)
+![Django Unfold admin dashboard with purple theme showing product performance metrics and analytics with charts](custom-django-unfold-admin-dashboard/django-unfold-admin-dashboard.png)
 
 ---
 
+
 ## Prerequisites
 
-**Install and Setup Django Unfold Admin**
+
+### Install and Setup Django Unfold Admin
 
 [Unfold - Admin theme for Django](https://unfoldadmin.com/)
+
 
 ## Create Admin Dashboard App
 
@@ -45,11 +48,14 @@ INSTALLED_APPS = [
 ]
 ```
 
+
 ## Setup Admin Index Template
+
 
 ### Create File
 
 In your Django project folder, create a new file at this path: `templates/admin/index.html`
+
 
 ### Update Template Settings
 
@@ -65,6 +71,7 @@ TEMPLATES = [
   },
 ]
 ```
+
 
 ### Fill in Template
 
@@ -166,9 +173,11 @@ Paste the following into your newly created templates/admin/index.html file :
 {% endblock %}
 ```
 
+
 ## Tailwind CSS
 
 Unfold uses Tailwind under the hood, since we’re creating a custom template, we need to compile the tailwind styles our self.
+
 
 ### **Setup Tailwind Config**
 
@@ -231,6 +240,7 @@ module.exports = {
 };
 ```
 
+
 ### **Run tailwind**
 
 Again, replace `<django_project_dir>` with your project directory.
@@ -238,6 +248,7 @@ Again, replace `<django_project_dir>` with your project directory.
 ```bash
 npx tailwindcss -o <django_project_dir>/admin_dashboard/static/admin_dashboard/css/styles.css --watch --minify
 ```
+
 
 ## Dashboard Context
 
@@ -367,6 +378,7 @@ def dashboard_callback(request, context):
 
     return context
 ```
+
 
 ## Update Unfold Settings
 

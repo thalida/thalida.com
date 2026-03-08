@@ -92,6 +92,13 @@ const collections = Object.entries(navData).map(([key, col]) => ({
   .cp-results .cp-row__initial {
     @apply gradient-text;
   }
+  .cp-results .cp-row--dead {
+    @apply opacity-50;
+  }
+  .cp-results .cp-row--dead .cp-row__title::after {
+    content: " (dead link)";
+    @apply text-error text-2xs font-normal;
+  }
 </style>
 
 <template data-cp="row-tpl">

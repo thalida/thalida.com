@@ -2,12 +2,14 @@
 title: Homer Bathroom
 description: Poor Homer is stuck in the bathroom with you.
 publishedOn: 2024-06-20
-coverImage: homer-bathroom/IMG_2806~2.jpg
-coverImageAlt: Homer Simpson bathroom art
+coverImage: homer-bathroom/homer-wall-art-closeup.jpg
+coverImageAlt: Close-up of a 3D-printed Homer Simpson bushes meme mounted on a dark green bathroom wall
 category: craft
 ---
 
-![homer-bathroom/IMG_2806.jpeg](homer-bathroom/IMG_2806.jpeg)
+![3D-printed Homer Simpson bushes meme on a dark green bathroom wall above a light switch plate](homer-bathroom/homer-wall-art-with-light-switch.jpeg)
+
+![Homer Simpson wall art visible from the hallway on a dark green bathroom wall with cream trim](homer-bathroom/homer-wall-art-from-hallway.jpeg)
 
 After painting my bathroom, I wanted to add some fun art to the walls. I realized the Homer Simpson bushes gif
 was perfect for the space, since it'd feel like Homer was trying to escape being stuck with you in the bathroom.
@@ -17,8 +19,8 @@ This was my first time using the multicolor 3D printer, and I was really happy w
 
 <div class="flex flex-col items-center justify-center">
   <video width="320" height="240" controls>
-    <source src="/content/projects/homer-bathroom/IMG_2810.MOV" type="video/mp4">
+    <source src="/content/projects/homer-bathroom/bathroom-reveal.mov" type="video/mp4">
   </video>
 </div>
 
-![homer-bathroom/IMG_2813.GIF](homer-bathroom/IMG_2813.GIF)
+![Animated GIF of Homer Simpson slowly backing into a hedge, the original meme that inspired the wall art](homer-bathroom/homer-bushes-meme.gif)

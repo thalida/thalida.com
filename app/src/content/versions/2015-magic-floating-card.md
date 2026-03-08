@@ -4,11 +4,11 @@ description: A floating card (that flips over) with live time data.
 publishedOn: 2015-01-01
 category: "2015"
 tags: [coffeescript, gulp]
-coverImage: 2015-magic-floating-card/Untitled.png
-coverImageAlt: A floating card that flips over, displaying live time data based on the current time of day.
+coverImage: 2015-magic-floating-card/floating-card-evening-state.png
+coverImageAlt: "Purple floating card with Good Evening greeting and welcome back message on light gray background"
 ---
 
-![Untitled](2015-magic-floating-card/Untitled.png)
+![Purple floating card with Good Evening greeting and welcome back message on light gray background](2015-magic-floating-card/floating-card-evening-state.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -27,7 +27,7 @@ I had two goals for this site:
 
 ## Design
 
-![Floating card mockup](2015-magic-floating-card/mock.1.png)
+![Periwinkle background with floating dark card displaying Woah, Nightowl greeting](2015-magic-floating-card/mockup-1.png)
 
 
 ## How it Works

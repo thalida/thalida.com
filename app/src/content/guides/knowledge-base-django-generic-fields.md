@@ -3,8 +3,8 @@ title: "Knowledge Base: Django Generic Fields"
 description: Guidelines and Answers to all things Django Generic Fields
 publishedOn: 2023-11-13T21:47:00Z
 updatedOn: 2023-11-14T02:33:00Z
-coverImage: knowledge-base-django-generic-fields/Screenshot 2025-07-02 at 17.43.24.png
-coverImageAlt: "Django Generic Fields"
+coverImage: knowledge-base-django-generic-fields/django-generic-foreign-key-model.png
+coverImageAlt: "Django code snippet showing Message model with GenericForeignKey and ContentType fields implementation"
 tags:
   - Knowledge Base
   - Django
@@ -13,6 +13,7 @@ category: django
 ---
 
 ## How To…
+
 
 ### Create a Generic Field
 
@@ -34,6 +35,7 @@ class Message(models.Model):
     )
    ...
 ```
+
 
 ### Limit a Generic Field to specific models
 
@@ -65,6 +67,7 @@ class Message(models.Model):
             models.Index(fields=["author_content_type", "author_object_id"]),
         ]
 ```
+
 
 ### DRF ModelViewSet Create with Generic Field
 

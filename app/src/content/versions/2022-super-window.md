@@ -4,11 +4,11 @@ description: A Notion-backed site
 publishedOn: 2022-01-01
 category: "2022"
 tags: [notion, super, svelte, vercel]
-coverImage: 2022-super-window/Screen_Shot_2022-07-31_at_15.28.17.png
-coverImageAlt: A screenshot of the thalida.com homepage, showcasing a Notion-backed site
+coverImage: 2022-super-window/screenshot-live-dark.png
+coverImageAlt: "Live screenshot of the Super Window portfolio in dark mode showing illustrated window with venetian blinds and digital clock"
 ---
 
-![Screen Shot 2022-07-31 at 15.28.17.png](2022-super-window/Screen_Shot_2022-07-31_at_15.28.17.png)
+![Live screenshot of the Super Window portfolio in dark mode showing illustrated window with venetian blinds and digital clock](2022-super-window/screenshot-live-dark.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -71,7 +71,7 @@ For the first time, I've added a day/night mode switcher to my site. Finally in 
 It's not finalized yet (I still don't account for user preferences) but otherwise it's fully
 functional.
 
-![theme-toggle.gif](2022-super-window/theme-toggle.gif)
+![Animated GIF showing the Super Window site dark/light theme toggle transition](2022-super-window/theme-toggle.gif)
 
 You can checkout the code and fork this theme switcher on codpen!
 [https://codepen.io/thalida/pen/XWEVVaj](https://codepen.io/thalida/pen/XWEVVaj)
@@ -94,16 +94,16 @@ _This theme switcher is a fork of
 
 ### Paper Sketches
 
-![Paper.2020.me.74.png](2022-super-window/Paper.2020.me.74.png)
+![Hand-drawn sketch showing early thalida.me site structure concepts including list-based layout and fullpage HTML concept](2022-super-window/sketch-site-structure.png)
 
-![Paper.2020.me.79.png](2022-super-window/Paper.2020.me.79.png)
+![Hand-drawn sketch showing window layout variations in blue ink, feature notes, and window frame experiments](2022-super-window/sketch-window-and-layout-concepts.png)
 
-![Paper.2020.me.80.png](2022-super-window/Paper.2020.me.80.png)
+![Hand-drawn sketch with wireframes for Home and About pages, post layouts, and gallery grid](2022-super-window/sketch-page-wireframes.png)
 
-![Paper.2020.me.81.png](2022-super-window/Paper.2020.me.81.png)
+![Hand-drawn sketch showing five window design variations side by side including illustrated, minimal, and venetian blind styles](2022-super-window/sketch-window-style-explorations.png)
 
-![Paper.2020.me.82.png](2022-super-window/Paper.2020.me.82.png)
+![Hand-drawn sketch with notes about art, code snippets, weather, and interactive art features](2022-super-window/sketch-app-and-content-concepts.png)
 
-![Paper.2020.me.83.png](2022-super-window/Paper.2020.me.83.png)
+![Hand-drawn sketch exploring portfolio grid layout with year/story aggregator and timeline from 2010 to 2021](2022-super-window/sketch-portfolio-grid-and-timeline.png)
 
-![Paper.2020.me.84.png](2022-super-window/Paper.2020.me.84.png)
+![Hand-drawn sketch showing journal and gallery page layout concepts with chronological content grid](2022-super-window/sketch-journal-and-gallery-layouts.png)

@@ -2,12 +2,13 @@
 title: "Knowledge Base: Brain Dump"
 description: A catch-all of my self-rubberducky resources and guides
 publishedOn: 2025-07-01
-coverImage: knowledge-base-brain-dump/pexels-eye4dtail-122308.jpg
+coverImage: knowledge-base-brain-dump/colorful-rubber-ducks-collection.jpg
 coverImageAlt: "Assorted rubber ducks"
 category: misc
 ---
 
-![Assorted rubber ducks](knowledge-base-brain-dump/pexels-eye4dtail-122308.jpg)
+![Collection of colorful decorative rubber ducks with painted designs on white shelf](knowledge-base-brain-dump/colorful-rubber-ducks-collection.jpg)
+
 
 ## Help! PWA Cache Issues
 
@@ -15,11 +16,13 @@ category: misc
 
 [How to clear cache of service worker?](https://stackoverflow.com/questions/45467842/how-to-clear-cache-of-service-worker)
 
+
 ## How to Flexbox
 
 [A Complete Guide to Flexbox | CSS-Tricks](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
 
 [Flexbox Froggy](https://flexboxfroggy.com/)
+
 
 ## Help! Other Stack Overflow Memories
 

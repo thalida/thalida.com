@@ -4,11 +4,13 @@ import he from "he";
 const CACHE_PATH = ".generated/link-metadata.json";
 const FETCH_TIMEOUT_MS = 3000;
 const CONCURRENCY = 10;
+const REVALIDATE_AFTER_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export type LinkMetadata = {
   metaTitle?: string;
   metaDescription?: string;
   faviconUrl?: string;
+  dead?: boolean;
   fetchedAt: number;
 };
 
@@ -76,15 +78,15 @@ async function fetchMetadata(url: string): Promise<LinkMetadata> {
           headers: { "User-Agent": "Mozilla/5.0 (compatible; thalida.com-bot/1.0)" },
         });
         clearTimeout(timer);
-        if (!res.ok) return {};
+        if (!res.ok) return { dead: true };
         const html = await res.text();
-        return parseMetadata(html);
+        return { ...parseMetadata(html), dead: false };
       })(),
       validateFavicon(url),
     ]);
     return { ...pageResult, faviconUrl, fetchedAt: Date.now() };
   } catch {
-    return { fetchedAt: Date.now() };
+    return { dead: true, fetchedAt: Date.now() };
   }
 }
 
@@ -97,11 +99,26 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
     // cache missing or corrupt — start fresh
   }
 
+  const now = Date.now();
   const toFetch = urls.filter((url) => !cache[url]);
-  const toRevalidateFavicon = urls.filter((url) => cache[url] && !("faviconUrl" in cache[url]));
+  const toRevalidate = urls.filter(
+    (url) => cache[url] && (cache[url].fetchedAt + REVALIDATE_AFTER_MS < now || !("dead" in cache[url])),
+  );
+  const toRevalidateSet = new Set(toRevalidate);
+  const toRevalidateFavicon = urls.filter(
+    (url) => cache[url] && !("faviconUrl" in cache[url]) && !toRevalidateSet.has(url),
+  );
 
   for (let i = 0; i < toFetch.length; i += CONCURRENCY) {
     const batch = toFetch.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(batch.map(async (url) => ({ url, meta: await fetchMetadata(url) })));
+    for (const { url, meta } of results) {
+      cache[url] = meta;
+    }
+  }
+
+  for (let i = 0; i < toRevalidate.length; i += CONCURRENCY) {
+    const batch = toRevalidate.slice(i, i + CONCURRENCY);
     const results = await Promise.all(batch.map(async (url) => ({ url, meta: await fetchMetadata(url) })));
     for (const { url, meta } of results) {
       cache[url] = meta;
@@ -116,7 +133,7 @@ export async function getLinkMetadataMap(urls: string[]): Promise<MetadataCache>
     }
   }
 
-  if (toFetch.length > 0 || toRevalidateFavicon.length > 0) {
+  if (toFetch.length > 0 || toRevalidate.length > 0 || toRevalidateFavicon.length > 0) {
     await fs.mkdir(".generated", { recursive: true });
     await fs.writeFile(CACHE_PATH, JSON.stringify(cache, null, 2));
   }

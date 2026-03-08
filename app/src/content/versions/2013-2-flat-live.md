@@ -4,11 +4,11 @@ description: The original live weather and time version built on PHP
 publishedOn: 2013-03-01
 category: "2013"
 tags: [php]
-coverImage: 2013-2-flat-live/Untitled.png
-coverImageAlt: The original live weather and time version built on PHP
+coverImage: 2013-2-flat-live/home-dark-evening-greeting.png
+coverImageAlt: "Portfolio homepage with dark background, greeting with weather widget showing time, temperature, and date"
 ---
 
-![Untitled](2013-2-flat-live/Untitled.png)
+![Portfolio homepage with dark background, greeting with weather widget showing time, temperature, and date](2013-2-flat-live/home-dark-evening-greeting.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -26,15 +26,25 @@ really blink if I showed these concepts around as ideas for the next version of 
 
 ## Concepts
 
-![Untitled](2013-2-flat-live/Untitled%201.png)
+![About page with greeting to visitor, introductory text about building things for the internet](2013-2-flat-live/about-page-intro.png)
 
-![Untitled](2013-2-flat-live/Untitled%202.png)
+![Blue full-screen greeting page for late-night visitors with Night Owl heading and navigation buttons](2013-2-flat-live/night-owl-greeting-screen.png)
 
-![Untitled](2013-2-flat-live/Untitled%203.png)
+![Blue full-screen morning greeting with cursive Good morning, Early Bird text and wave animation](2013-2-flat-live/early-bird-morning-greeting.png)
 
-![Untitled](2013-2-flat-live/Untitled%204.png)
+![Compact blue greeting screen for afternoon visitors titled Good afternoon, Hungry Hippo](2013-2-flat-live/hungry-hippo-afternoon-greeting.png)
 
-![Untitled](2013-2-flat-live/Untitled%205.png)
+![Dark portfolio section for night visitors showing Greetings, Night Owl heading with project thumbnails](2013-2-flat-live/night-owl-projects-portfolio.png)
+
+
+## Alternative Direction
+
+Before switching to the card-based design, I explored an illustration-based direction
+with a window scene — a concept that would resurface years later in the 2018 version.
+
+![Design mockup showing an illustrated window scene with city skyline, potted plant, and warm coral and mint color palette](2013-2-flat-live/mockup-illustrated-window-warm.png)
+
+![Same illustrated window mockup with blue interactive markers overlaid showing responsive design breakpoints](2013-2-flat-live/mockup-illustrated-window-interactive.png)
 
 
 ## “Final” Designs
@@ -42,10 +52,10 @@ really blink if I showed these concepts around as ideas for the next version of 
 Somewhere between these concepts and the final designs below I made a very drastic switch back to
 something very card based. I probably lost some designs along the way sadly.
 
-![Untitled](2013-2-flat-live/Untitled%206.png)
+![Light-themed homepage with Good evening, Honored Guest greeting, weather widget with color-coded blocks, and project grid](2013-2-flat-live/home-light-early-bird.png)
 
-![Untitled](2013-2-flat-live/Untitled%207.png)
+![Project detail page for Minecraft Calculator showing green header, description text, and item breakdown grid](2013-2-flat-live/minecraft-calculator-project-detail.png)
 
-![Untitled](2013-2-flat-live/Untitled%208.png)
+![Dark-themed homepage with Good morning, Early Bird greeting, weather information, and grid of featured projects](2013-2-flat-live/home-dark-early-bird.png)
 
-![Untitled](2013-2-flat-live/Untitled%209.png)
+![Article detail page for Dear Early Bird with coral header image, article text, and action buttons](2013-2-flat-live/early-bird-article-detail.png)

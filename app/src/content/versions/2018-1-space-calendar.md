@@ -4,11 +4,11 @@ description: Split-screen v3.1 this time featuring a space scene calendar
 publishedOn: 2018-01-01
 category: "2018"
 tags: [vue]
-coverImage: 2018-1-space-calendar/Untitled.png
-coverImageAlt: "Split-screen v3.1 this time featuring a space scene calendar"
+coverImage: 2018-1-space-calendar/screenshot-live.png
+coverImageAlt: "Live screenshot of the Space Calendar portfolio homepage showing a dark navy starfield with floating planets and greeting"
 ---
 
-![Untitled](2018-1-space-calendar/Untitled.png)
+![Live screenshot of the Space Calendar portfolio homepage showing a dark navy starfield with floating planets and greeting](2018-1-space-calendar/screenshot-live.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -25,9 +25,9 @@ towards this version: a lowpoly space calendar _and_ clock.
 
 ## Design
 
-![Space calendar mockup 1](2018-1-space-calendar/mock.3.png)
+![Split-view mockup with dark starfield left panel alongside white right panel listing projects](2018-1-space-calendar/mockup-3.png)
 
-![Space calendar mockup 2](2018-1-space-calendar/mock.2.png)
+![Close-up mockup of the left panel showing the dark starfield, Earth and Moon illustration, and weather-aware greeting](2018-1-space-calendar/mockup-2.png)
 
 
 ## How it works

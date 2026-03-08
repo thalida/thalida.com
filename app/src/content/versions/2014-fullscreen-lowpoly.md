@@ -4,11 +4,11 @@ description: A fullscreen lowpoly live space scene
 publishedOn: 2014-01-01
 category: "2014"
 tags: [php]
-coverImage: 2014-fullscreen-lowpoly/Untitled.png
-coverImageAlt: A fullscreen lowpoly live space scene, featuring a starry background and lowpoly planets and asteroids.
+coverImage: 2014-fullscreen-lowpoly/lowpoly-hero-loading.png
+coverImageAlt: "Lowpoly earth animation with loading weather data message and floating geometric shapes against dark blue space background"
 ---
 
-![Untitled](2014-fullscreen-lowpoly/Untitled.png)
+![Lowpoly earth animation with loading weather data message and floating geometric shapes against dark blue space background](2014-fullscreen-lowpoly/lowpoly-hero-loading.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -27,8 +27,8 @@ a site of this kind: I didn’t have that many completed projects.
 
 ## Designs
 
-![Untitled](2014-fullscreen-lowpoly/Untitled%201.png)
+![Portfolio website layout showing lowpoly earth hero, tictactoe project card, and design specifications section](2014-fullscreen-lowpoly/lowpoly-portfolio-preview.png)
 
-![Untitled](2014-fullscreen-lowpoly/Untitled%202.png)
+![Close-up of lowpoly earth hero section with tictactoe project card and call-to-action button](2014-fullscreen-lowpoly/lowpoly-hero-close-up.png)
 
-![Untitled](2014-fullscreen-lowpoly/Untitled%203.png)
+![Full-page portfolio layout with hero, project sections, color palette, typography guide, and featured projects list](2014-fullscreen-lowpoly/lowpoly-full-page.png)

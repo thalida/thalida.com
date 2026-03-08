@@ -3,12 +3,13 @@ title: "How to: Glob Files using Astro"
 description: Add support for globbing files in Astro projects.
 tags: ["astro"]
 publishedOn: 2025-07-03
-coverImage: how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png
-coverImageAlt: Screenshot of links section of thalida.com
+coverImage: how-to-astro-glob-file/astro-curated-links-collection.png
+coverImageAlt: Astro curated links website showing categorized resources with filterable categories and resource cards
 category: astro
 ---
 
-![how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png](<how-to-astro-glob-file/Screenshot 2025-07-03 at 18.10.16.png>)
+![Astro curated links website showing categorized resources with filterable categories and resource cards](how-to-astro-glob-file/astro-curated-links-collection.png)
+
 
 ## Goal
 
@@ -17,6 +18,7 @@ This guide provides a workaround to glob files in Astro projects, allowing you t
 in a single collection.
 
 I use this function to generate my [Links](/links) page, which includes multiple YAML files in a single collection.
+
 
 ## Solution
 
@@ -41,7 +43,9 @@ async function fileGlob({ filename, pattern, base }: { filename: string; pattern
 
 This function uses the `fs.glob` method to find files matching the specified pattern in the given base directory.
 It then reads each file and appends its content to a single output file, which is then returned as a `file` collection type.
-The output file is created in a `dist` directory relative to the content base directory, and the function ensures that the directory exists before writing to it.
+The output file is created in a `dist` directory relative to the content base directory,
+and the function ensures that the directory exists before writing to it.
+
 
 ## Usage
 

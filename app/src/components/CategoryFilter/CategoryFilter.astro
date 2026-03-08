@@ -20,7 +20,7 @@ const { collection, categories, activeCategory } = Astro.props;
             "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
             !activeCategory
               ? "bg-white/15 text-white! border-white"
-              : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
+              : "bg-transparent border-teal text-teal hover:bg-teal/20 hover:text-white hover:border-white/60",
           ]}
         >
           All
@@ -30,9 +30,13 @@ const { collection, categories, activeCategory } = Astro.props;
             href={`/${collection}/${encodeURIComponent(cat)}`}
             class:list={[
               "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
-              activeCategory === cat
-                ? "bg-white/15 text-white! border-white"
-                : "bg-transparent border-teal text-teal hover:bg-teal/10 hover:text-teal",
+              cat === "dead-links"
+                ? activeCategory === cat
+                  ? "bg-white/15 text-white! border-white"
+                  : "bg-error/15 border-error text-error hover:bg-error/30 hover:text-white hover:border-white/60"
+                : activeCategory === cat
+                  ? "bg-white/15 text-white! border-white"
+                  : "bg-transparent border-teal text-teal hover:bg-teal/20 hover:text-white hover:border-white/60",
             ]}
           >
             {categoryDisplay(cat)}

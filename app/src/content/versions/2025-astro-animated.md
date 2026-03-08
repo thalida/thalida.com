@@ -4,11 +4,11 @@ description: thalida.com built with Astro, featuring an animated window effect.
 publishedOn: 2025-07-02
 category: "2025"
 tags: [astro, animated-window, thalida.com]
-coverImage: 2025-astro-animated/Screenshot 2025-07-02 at 11.44.06.png
-coverImageAlt: "Animated window effect showing weather and time"
+coverImage: 2025-astro-animated/screenshot-analog-clock-day.png
+coverImageAlt: "Screenshot of the Astro Animated portfolio in light mode showing profile card, animated analog clock, and Scene Controls panel"
 ---
 
-![Screenshot of the 2025 site](<2025-astro-animated/Screenshot 2025-07-03 at 16.48.24.png>)
+![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](2025-astro-animated/screenshot-analog-clock-dark.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -36,9 +36,9 @@ and scalability.
 
 ### Implementation
 
-![Day view screenshot](<2025-astro-animated/Screenshot 2025-07-03 at 16.48.24.png>)
+![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](2025-astro-animated/screenshot-analog-clock-dark.png)
 
-![Evening view screenshot](<2025-astro-animated/Screenshot 2025-07-03 at 16.53.46.png>)
+![Screenshot of the Astro Animated portfolio in light mode with digital clock style showing glowing LED-style clock](2025-astro-animated/screenshot-digital-clock-day.png)
 
 The live weather and time functionality is implemented using the
 [Open Weather API](https://openweathermap.org/api). I get the users current location using
@@ -53,7 +53,11 @@ with [Matter JS](https://brm.io/matter-js/).
 
 <img
 src="/content/versions/2025-astro-animated/weather-digital.gif"
-alt="Animated weather and time window in digital format" />
+alt="Animated GIF of the Astro Animated live weather scene with glowing segmented digital clock and rain particles" />
+
+<img
+src="/content/versions/2025-astro-animated/weather-analog.gif"
+alt="Animated GIF of the Astro Animated analog clock with weather effects including snow, fog, and wind" />
 
 The window effect is customizable, users can switch between analog and digital clocks,
 change the time, and choose between different weather effects
@@ -64,13 +68,13 @@ change the time, and choose between different weather effects
 
 ### Colors, Vibe, Layout
 
-![Inspiration 1](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.16.38.png>)
+![Inspiration screenshot of minimal white website hero section with bold headline and 3D rendered green textured blob](2025-astro-animated/inspo/inspo-minimal-hero-3d.png)
 
-![Inspiration 2](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.16.48.png>)
+![Inspiration screenshot of bold editorial blog layout with large headline text, fitness photography, and article grid](2025-astro-animated/inspo/inspo-editorial-blog-layout.png)
 
-![Inspiration 3](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.16.59.png>)
+![Inspiration screenshot of creative studio website hero with 3D rendered desk scene](2025-astro-animated/inspo/inspo-3d-studio-hero.png)
 
-![Inspiration 4](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.17.15.png>)
+![Inspiration screenshot of dark-themed split-screen login page with green gradient promotional panel](2025-astro-animated/inspo/inspo-dark-split-login.png)
 
 - <https://piqo.studio/>
 - <https://dribbble.com/shots/21289412-Blog-Page-for-Fitness-Website>
@@ -83,9 +87,9 @@ change the time, and choose between different weather effects
 
 ### Cards
 
-![Card inspiration 1](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.11.17.png>)
+![Inspiration screenshot showing stacked job listing cards from companies on lavender background](2025-astro-animated/inspo/inspo-job-listing-cards.png)
 
-![Card inspiration 2](<2025-astro-animated/inspo/Screenshot 2025-07-03 at 17.12.47.png>)
+![Inspiration screenshot showing pastel-colored service category cards for Web Design, Graphic Design, Developers, and Copywriting](2025-astro-animated/inspo/inspo-service-category-cards.png)
 
 - <https://dribbble.com/shots/26039541-City-flight-ticket-booking-cards>
 - <https://dribbble.com/shots/24317197--talently-brand-identity-cards>

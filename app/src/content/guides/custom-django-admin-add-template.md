@@ -3,8 +3,8 @@ title: "Custom Django Admin: Model Add Template"
 description: How to customize Django Admin model templates to add custom content.
 publishedOn: 2023-11-11T23:45:00Z
 updatedOn: 2023-11-14T02:29:00Z
-coverImage: custom-django-admin-add-template/Screenshot 2025-07-02 at 17.42.10.png
-coverImageAlt: "Custom Django Admin Add Template"
+coverImage: custom-django-admin-add-template/django-admin-custom-add-template.png
+coverImageAlt: "Django admin custom add template showing code for registering a model with custom add form template"
 category: django
 tags:
   - Django
@@ -20,11 +20,13 @@ See list of all templates which can be overridden:
 
 ---
 
+
 ## Create Template File
 
 In your project directory, create a file at this path: `templates/admin/<app_name>/<model>/add_form.html`
 
 For example, if you have an app named `books` and a model named `author`, the path would be: `templates/admin/books/author/add_form.html`
+
 
 ## Extend Template
 
@@ -43,6 +45,7 @@ Next modify specific blocks in the template, for example:
 <p>Hello World!</p>
 ** {{ block.super }} {% endblock %}
 ```
+
 
 ## Update Admin Model Class
 

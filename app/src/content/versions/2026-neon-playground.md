@@ -5,10 +5,10 @@ publishedOn: 2026-03-04
 category: "2026"
 tags: [astro, cloudflare, chat, live-window, claude, thalida.com]
 coverImage: 2026-neon-playground/cover.png
-coverImageAlt: "Screenshot of thalida.com v2026 at night, showing the live sky window with moon and stars, chat panel, and neon green greeting"
+coverImageAlt: "Cover screenshot of the Neon Playground portfolio showing dark background with illustrated window, full moon, digital clock, and neon green heading"
 ---
 
-![Screenshot of thalida.com v2026](2026-neon-playground/cover.png)
+![Cover screenshot of the Neon Playground portfolio showing dark background with illustrated window, full moon, digital clock, and neon green heading](2026-neon-playground/cover.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -54,7 +54,7 @@ when it clicks, mildly infuriating when it doesn't. But now it clicks.
 
 <img
 src="/content/versions/2026-neon-playground/chat.png"
-alt="Chat panel showing multiple users with color-animal usernames"
+alt="Screenshot of the Neon Playground live chat sidebar showing anonymous user messages"
 style="float: right; max-height: 500px; margin: 0 0 1rem 1.5rem;" />
 
 The headline feature of v2026 is the chat. Not a contact form. Not a
@@ -84,7 +84,7 @@ to talk to each other. The circle of life.
 
 ## Stargazing
 
-![Live window showing London at night and Tokyo during the day](2026-neon-playground/live-window.png)
+![Screenshot of the Neon Playground live window component showing side-by-side illustrated windows for London and Tokyo](2026-neon-playground/live-window.png)
 
 The live window has been a signature feature of thalida.com since
 2018 — a little animated scene that shows the actual weather and time at
