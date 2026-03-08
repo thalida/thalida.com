@@ -35,5 +35,5 @@
 - [x] Add moon and sun layers to sky component
 - [x] Update site urls for older versions
 - [ ] show plan docs on site
-- [ ] add site footer
+- [x] add site footer
 - [x] add vscode tasks to run app / api
