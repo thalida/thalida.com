@@ -4,6 +4,7 @@ import Chat from "@components/Chat/Chat.astro";
 import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
 import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
 import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
+import Footer from "@components/Footer/Footer.astro";
 import SEO from "@components/SEO/SEO.astro";
 import { TOOLBAR_NAV_ORDER, getNavData } from "@lib/nav-data";
 import "./BaseLayout.css";
@@ -131,9 +132,12 @@ const navData = await getNavData();
     <div class="flex flex-col lg:flex-row w-screen h-svh">
       <ProjectTree activePage={activePage} activeCollection={activeCollection} />
       <div
-        class="grow shrink basis-0 min-w-0 pt-16 pb-4 px-4 sm:px-6 sm:pb-6 xl:pt-6 xl:pb-6 overflow-y-auto overflow-x-hidden"
+        class="grow shrink basis-0 min-w-0 pt-16 pb-4 px-4 sm:px-6 sm:pb-6 xl:pt-6 xl:pb-6 overflow-y-auto overflow-x-hidden flex flex-col"
       >
-        <slot />
+        <div class="grow">
+          <slot />
+        </div>
+        <Footer />
       </div>
       <Chat />
     </div>
