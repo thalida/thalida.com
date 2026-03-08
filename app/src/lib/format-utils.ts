@@ -7,6 +7,15 @@ export function formatDate(isoString: string): string {
   return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short" });
 }
 
+export function formatDateFull(isoString: string): string {
+  return new Date(isoString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
 export function categoryDisplay(categoryName: string): string {
   const parts = categoryName.split("-");
   return parts.map((part) => (part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part)).join(" ");

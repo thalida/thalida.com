@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isValidDate, formatDate, categoryDisplay } from "../format-utils";
+import { isValidDate, formatDate, formatDateFull, categoryDisplay } from "../format-utils";
 
 describe("isValidDate", () => {
   it("returns true for valid ISO date strings", () => {
@@ -23,6 +23,15 @@ describe("formatDate", () => {
   it("formats date as short month and year", () => {
     const result = formatDate("2024-06-15T00:00:00Z");
     expect(result).toContain("Jun");
+    expect(result).toContain("2024");
+  });
+});
+
+describe("formatDateFull", () => {
+  it("formats date as full month day and year", () => {
+    const result = formatDateFull("2024-06-15T00:00:00Z");
+    expect(result).toContain("Jun");
+    expect(result).toContain("15");
     expect(result).toContain("2024");
   });
 });
