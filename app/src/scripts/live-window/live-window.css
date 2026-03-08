@@ -165,7 +165,7 @@
 
 .moon-shadow {
   position: absolute;
-  inset: -1px;
+  inset: -4px;
   border-radius: 50%;
 }
 
