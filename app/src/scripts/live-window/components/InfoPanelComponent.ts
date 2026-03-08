@@ -7,6 +7,7 @@ export class InfoPanelComponent implements SceneComponent {
   private locationEl: HTMLParagraphElement | null = null;
   private coordsEl: HTMLParagraphElement | null = null;
   private weatherEl: HTMLParagraphElement | null = null;
+  private lastFetchedEl: HTMLParagraphElement | null = null;
 
   mount(container: HTMLElement): void {
     this.containerEl = container;
@@ -32,6 +33,12 @@ export class InfoPanelComponent implements SceneComponent {
     wrapper.appendChild(coords);
     this.coordsEl = coords;
 
+    const lastFetched = document.createElement("p");
+    lastFetched.className = "info-panel-last-fetched";
+    lastFetched.hidden = true;
+    wrapper.appendChild(lastFetched);
+    this.lastFetchedEl = lastFetched;
+
     container.appendChild(wrapper);
   }
 
@@ -39,6 +46,7 @@ export class InfoPanelComponent implements SceneComponent {
     this.updateLocation(state);
     this.updateCoords(state);
     this.updateWeather(state);
+    this.updateLastFetched(state);
   }
 
   private updateLocation(state: LiveWindowState): void {
@@ -81,11 +89,25 @@ export class InfoPanelComponent implements SceneComponent {
     }
   }
 
+  private updateLastFetched(state: LiveWindowState): void {
+    if (!this.lastFetchedEl) return;
+    const lastFetched = state.store.weather.lastFetched;
+    if (lastFetched) {
+      const date = new Date(lastFetched);
+      const time = date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      this.lastFetchedEl.textContent = `[updated ${time}]`;
+      this.lastFetchedEl.hidden = false;
+    } else {
+      this.lastFetchedEl.hidden = true;
+    }
+  }
+
   destroy(): void {
     if (this.containerEl) this.containerEl.innerHTML = "";
     this.containerEl = null;
     this.locationEl = null;
     this.coordsEl = null;
     this.weatherEl = null;
+    this.lastFetchedEl = null;
   }
 }

@@ -751,8 +751,17 @@
   letter-spacing: 0.04em;
 }
 
+.info-panel-last-fetched {
+  font-size: var(--info-panel-last-fetched-size, 0.6rem);
+  margin: 0;
+  opacity: 0.7;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .info-panel-location[hidden],
 .info-panel-coords[hidden],
-.info-panel-weather[hidden] {
+.info-panel-weather[hidden],
+.info-panel-last-fetched[hidden] {
   display: none;
 }

@@ -4,7 +4,7 @@ import { resolveUnits, shouldFetchWeather, fetchLocation, fetchWeather, location
 import { parseHexColor, parseComputedColor } from "./utils/color";
 import {
   ONE_DAY_MS,
-  ONE_HOUR_MS,
+  THIRTY_MINUTES_MS,
   CLOCK_INTERVAL_MS,
   SKY_UPDATE_INTERVAL_MS,
   MIN_TICK_SPEED,
@@ -356,7 +356,19 @@ class LiveWindowElement extends HTMLElement {
 
   private startWeatherPolling() {
     this.doFetchWeather();
-    this.weatherInterval = window.setInterval(() => this.doFetchWeather(), ONE_HOUR_MS);
+
+    // Schedule next poll for when the rate limit actually expires, not
+    // blindly 30 min from now.  If lastFetched is recent the immediate
+    // doFetchWeather above was a no-op, so we wait only the remaining
+    // time before the window opens, then switch to a steady 30-min cadence.
+    const lastFetched = this.state.store.weather.lastFetched;
+    const elapsed = lastFetched ? Date.now() - lastFetched : THIRTY_MINUTES_MS;
+    const firstDelay = Math.max(0, THIRTY_MINUTES_MS - elapsed);
+
+    window.setTimeout(() => {
+      this.doFetchWeather();
+      this.weatherInterval = window.setInterval(() => this.doFetchWeather(), THIRTY_MINUTES_MS);
+    }, firstDelay);
   }
 
   private stopUpdates() {
