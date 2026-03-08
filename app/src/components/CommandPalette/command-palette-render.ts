@@ -29,8 +29,16 @@ export function renderItem(
   root.href = href;
   root.dataset.index = String(idx);
 
+  if (item.category === "dead-links") {
+    root.classList.add("cp-row--dead");
+  }
+
   const collectionLabel = showCollection ? item.collectionTitle : "";
-  const catDisplay = item.category ? categoryDisplay(item.category) : "";
+  const catDisplay = item.originalCategory
+    ? categoryDisplay(item.originalCategory)
+    : item.category
+      ? categoryDisplay(item.category)
+      : "";
   populateMeta(slot, collectionLabel, catDisplay);
 
   slot("title").textContent = item.title;
