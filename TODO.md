@@ -28,7 +28,7 @@
 - [x] change # of viewers into # of users (?) # of
 - [x] fix link card styling
 - [x] chatting as is misaligned from input by 2 px
-- [ ] audit all links
+- [x] audit all links
 - [x] audit all image names and alt tags
 - [x] audit all tests - mock [moderation] skipped: OPENAI_API_KEY not set
 - [x] Fix top-[35px]
