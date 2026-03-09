@@ -7,7 +7,7 @@ export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "ve
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 
-export type CardVariant = "stacked" | "link" | "compact" | "gallery" | "plan";
+export type CardVariant = "stacked" | "link" | "compact" | "gallery";
 
 export const collectionMeta: Record<CollectionName, { title: string; description: string; cardVariant: CardVariant }> =
   {
@@ -44,7 +44,7 @@ export const collectionMeta: Record<CollectionName, { title: string; description
     plans: {
       title: "Plans",
       description: "Claude's design docs and implementation plans for thalida.com.",
-      cardVariant: "plan",
+      cardVariant: "compact",
     },
   };
 
@@ -110,9 +110,7 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        // Plan-specific optional fields
-        planType: z.enum(["design", "implementation"]).optional(),
-        topic: z.string().optional(),
+        subcategory: z.string().optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),
