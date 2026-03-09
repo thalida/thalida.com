@@ -8,4 +8,10 @@ interface Props {
 const { subcategory } = Astro.props;
 ---
 
-{subcategory && <p class="m-0 font-body text-muted text-2xs tracking-wide">{prettifySlug(subcategory)}</p>}
+{
+  subcategory && (
+    <p class="m-0 font-body uppercase text-muted text-2xs tracking-widest">
+      <span class="text-dim">/</span> {prettifySlug(subcategory)}
+    </p>
+  )
+}
