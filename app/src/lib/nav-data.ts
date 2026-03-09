@@ -19,6 +19,10 @@ export type NavItem = {
   coverImageAlt?: string;
   faviconUrl?: string;
   metaDescription?: string;
+  // Plan-specific fields
+  planType?: string;
+  topic?: string;
+  status?: string;
 };
 
 export type NavCollection = {
@@ -91,6 +95,9 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageAlt: entry.data.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
         metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
+        planType: name === "plans" ? entry.data.planType : undefined,
+        topic: name === "plans" ? entry.data.topic : undefined,
+        status: name === "plans" ? entry.data.status : undefined,
       });
     }
 
