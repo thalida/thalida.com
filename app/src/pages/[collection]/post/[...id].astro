@@ -33,16 +33,16 @@ export async function getStaticPaths() {
 const { collection, id } = Astro.params;
 const { entry } = Astro.props;
 
-// Fetch related plans (same topic) for plan posts
-let relatedPlans: Array<{ id: string; title: string; planType?: string }> = [];
-if (collection === "plans" && entry.data.topic) {
+// Fetch related plans (same subcategory) for plan posts
+let relatedPlans: Array<{ id: string; title: string; tags?: string[] }> = [];
+if (collection === "plans" && entry.data.subcategory) {
   const allPlans = await getCollection("plans", ({ data }) => !data.draft);
   relatedPlans = allPlans
-    .filter((p) => p.data.topic === entry.data.topic && p.id !== entry.id)
+    .filter((p) => p.data.subcategory === entry.data.subcategory && p.id !== entry.id)
     .map((p) => ({
       id: p.id,
       title: p.data.title,
-      planType: p.data.planType,
+      tags: p.data.tags,
     }));
 }
 
@@ -195,10 +195,10 @@ const recipeMeta =
             )
           }
           {
-            collection === "plans" && entry.data.topic && (
+            entry.data.subcategory && (
               <span>
                 {" "}
-                / <span class="text-muted">{prettifySlug(entry.data.topic)}</span>
+                / <span class="text-muted">{prettifySlug(entry.data.subcategory)}</span>
               </span>
             )
           }
@@ -230,17 +230,6 @@ const recipeMeta =
       }
       <CardTags tags={entry.data.tags} max={Infinity} />
       {
-        collection === "plans" && (
-          <div class="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs font-body text-muted">
-            {entry.data.planType && (
-              <span>
-                <span class="font-semibold text-text">Type</span> <span class="capitalize">{entry.data.planType}</span>
-              </span>
-            )}
-          </div>
-        )
-      }
-      {
         relatedPlans.length > 0 && (
           <div class="mt-4 pt-3 border-t border-border">
             <p class="m-0 mb-2 text-xs font-body font-semibold text-muted uppercase tracking-widest">Related plans</p>
@@ -250,7 +239,6 @@ const recipeMeta =
                   href={`/plans/post/${rp.id}`}
                   class="flex items-center gap-2 text-sm text-teal no-underline hover:text-neon font-body"
                 >
-                  <span>{rp.planType === "design" ? "\u{1F4D0}" : "\u{1F527}"}</span>
                   <span>{rp.title}</span>
                 </a>
               ))}
