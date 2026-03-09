@@ -101,9 +101,13 @@ One-time script to move existing files:
 2. Parse filename → `publishedOn` (date prefix), `topic` (stem minus date and `-design`/`-implementation` suffix), `planType`
 3. Extract `title` from first `# heading` in the file
 4. Extract `description` from first paragraph after the heading
-5. Set `status: "completed"` for all existing plans
-6. Inject frontmatter and write to `src/content/plans/`
-7. Remove `docs/plans/` after migration
+5. **Scan for sensitive content** — flag files containing potential secrets
+   (API keys, tokens, internal URLs, credentials, `.env` references).
+   Flagged files are skipped and listed for manual review rather than
+   auto-migrated
+6. Set `status: "completed"` for all existing plans
+7. Inject frontmatter and write to `src/content/plans/`
+8. Remove `docs/plans/` after migration (flagged files stay in `docs/plans/` until manually reviewed)
 
 ## Content Config Changes
 
@@ -129,6 +133,15 @@ One-time script to move existing files:
 The brainstorming skill (`superpowers:brainstorming`) currently writes plan files to `docs/plans/`. After this change:
 
 1. **Output path** changes from `docs/plans/` to `src/content/plans/`
-2. **New frontmatter fields** must be included when writing plan files: `title`, `description`, `publishedOn`, `planType`, `topic`, `status`, and `tags`
+2. **New frontmatter fields** must be included when writing plan files:
+   `title`, `description`, `publishedOn`, `planType`, `topic`, `status`,
+   and `tags`
+3. **Scrub sensitive content before writing** — the skill must not include
+   API keys, tokens, credentials, internal URLs, or `.env` values in plan
+   files. Before writing a plan, the skill should ask the user to confirm
+   the content is safe to publish, since plans are now public site content
 
-The skill already uses the `YYYY-MM-DD-<topic>-design.md` naming convention, so `topic` and `planType` are naturally derivable. The skill just needs to write the frontmatter block at the top of each file.
+The skill already uses the `YYYY-MM-DD-<topic>-design.md` naming
+convention, so `topic` and `planType` are naturally derivable. The skill
+just needs to write the frontmatter block at the top of each file and
+confirm with the user before committing.
