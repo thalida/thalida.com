@@ -10,7 +10,7 @@
  */
 
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
-import { join, basename } from "node:path";
+import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
 const SRC_DIR = join(ROOT, "docs", "plans");
@@ -44,6 +44,9 @@ function parseFilename(filename) {
   } else if (stem.endsWith("-implementation")) {
     // Strip -implementation suffix so topic is clean
     stem = stem.slice(0, -"-implementation".length);
+  } else if (stem.endsWith("-plan")) {
+    // Treat -plan as equivalent to -implementation
+    stem = stem.slice(0, -"-plan".length);
   }
 
   return { publishedOn, topic: stem, planType };

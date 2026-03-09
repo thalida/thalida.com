@@ -3,7 +3,7 @@ title: "Weather ID System Implementation Plan"
 description: "Replace icon-based weather mapping with OpenWeatherMap condition ID-based system for granular visual control of all 50+ weather conditions."
 publishedOn: 2026-03-06
 planType: "implementation"
-topic: "weather-id-system-plan"
+topic: "weather-id-system"
 status: "completed"
 ---
 
