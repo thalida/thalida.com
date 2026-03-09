@@ -1,0 +1,71 @@
+---
+import type { NavItem } from "@lib/nav-data";
+import PlanCard from "@components/Card/PlanCard.astro";
+import CategoryFilter from "@components/CategoryFilter/CategoryFilter.astro";
+import Pagination from "@components/Pagination/Pagination.astro";
+
+interface Props {
+  collection: string;
+  title: string;
+  subtitle: string;
+  itemCount: number;
+  items: NavItem[];
+  allCategories: string[];
+  activeCategory?: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  currentPage?: number;
+  lastPage?: number;
+}
+
+const {
+  collection,
+  title,
+  subtitle,
+  itemCount,
+  items,
+  allCategories,
+  activeCategory,
+  prevUrl,
+  nextUrl,
+  currentPage,
+  lastPage,
+} = Astro.props;
+
+// Group items by topic
+const topicMap = new Map<string, NavItem[]>();
+for (const item of items) {
+  const topic = item.topic ?? item.id;
+  if (!topicMap.has(topic)) topicMap.set(topic, []);
+  topicMap.get(topic)!.push(item);
+}
+
+// Sort topics by most recent plan date
+const topics = [...topicMap.entries()].sort((a, b) => {
+  const latestA = Math.max(...a[1].map((p) => new Date(p.publishedOn).getTime()));
+  const latestB = Math.max(...b[1].map((p) => new Date(p.publishedOn).getTime()));
+  return latestB - latestA;
+});
+
+const topicCount = topics.length;
+---
+
+<div class="font-body">
+  <header class="mb-6">
+    <h1 class="page-title mb-1">{title}</h1>
+    <p class="m-0 mb-1 font-heading font-semibold text-text text-subtitle tracking-tight">
+      {subtitle}
+    </p>
+    <p class="m-0 font-body text-muted text-sm">
+      {itemCount} items &middot; {topicCount} topics
+    </p>
+  </header>
+
+  <CategoryFilter collection={collection} categories={allCategories} activeCategory={activeCategory} />
+
+  <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
+    {topics.map(([topic, plans]) => <PlanCard topic={topic} plans={plans} />)}
+  </div>
+
+  <Pagination prevUrl={prevUrl} nextUrl={nextUrl} currentPage={currentPage ?? 1} lastPage={lastPage ?? 1} />
+</div>
