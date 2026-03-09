@@ -2,6 +2,7 @@
 import type { NavItem } from "@lib/nav-data";
 import { formatDate, isValidDate } from "@lib/format-utils";
 import CardCategory from "./CardCategory.astro";
+import CardSubcategory from "./CardSubcategory.astro";
 import CardTags from "./CardTags.astro";
 
 interface Props {
@@ -16,6 +17,7 @@ const href = `/${item.collection}/post/${item.id}`;
 <a href={href} class="group item-card flex flex-col p-3 gap-1">
   <div class="flex items-center gap-2">
     <CardCategory category={item.category} />
+    <CardSubcategory subcategory={item.subcategory} />
     {
       isValidDate(item.publishedOn) && (
         <span class="text-dim text-2xs ml-auto" data-ts={item.publishedOn}>
