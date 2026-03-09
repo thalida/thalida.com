@@ -3,11 +3,11 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { defineCollection, z } from "astro:content";
 import { glob, file } from "astro/loaders";
 
-export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links"] as const;
+export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links", "plans"] as const;
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 
-export type CardVariant = "stacked" | "link" | "compact" | "gallery";
+export type CardVariant = "stacked" | "link" | "compact" | "gallery" | "plan";
 
 export const collectionMeta: Record<CollectionName, { title: string; description: string; cardVariant: CardVariant }> =
   {
@@ -40,6 +40,11 @@ export const collectionMeta: Record<CollectionName, { title: string; description
       title: "Site Versions",
       description: "The evolution of thalida.com.",
       cardVariant: "stacked",
+    },
+    plans: {
+      title: "Plans",
+      description: "Claude's design docs and implementation plans for thalida.com.",
+      cardVariant: "plan",
     },
   };
 
@@ -105,6 +110,10 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
+        // Plan-specific optional fields
+        planType: z.enum(["design", "implementation"]).optional(),
+        topic: z.string().optional(),
+        status: z.enum(["planned", "in-progress", "completed"]).optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),
