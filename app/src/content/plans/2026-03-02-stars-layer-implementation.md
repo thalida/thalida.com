@@ -4,9 +4,9 @@ description: >-
   Add a stars layer to the live window that displays varied, realistic stars at
   night, fading in/out with the sky phase system.
 publishedOn: 2026-03-02T05:22:11.000Z
-planType: implementation
-topic: stars-layer
+subcategory: stars-layer
 category: live-window
+tags: [implementation]
 ---
 
 # Stars Layer Implementation Plan

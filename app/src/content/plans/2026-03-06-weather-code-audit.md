@@ -4,9 +4,9 @@ description: >-
   Make all 50 OpenWeatherMap weather codes visually distinct in the live window,
   with accurate real-world character.
 publishedOn: 2026-03-07T05:28:23.000Z
-planType: implementation
-topic: weather-code-audit
+subcategory: weather-code-audit
 category: live-window
+tags: [implementation]
 ---
 
 # Weather Code Audit — Distinct Rendering Implementation Plan

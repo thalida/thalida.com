@@ -4,9 +4,9 @@ description: >-
   Enrich link cards with build-time-fetched metadata (favicon, meta title,
   description) and
 publishedOn: 2026-02-21T04:44:02.000Z
-planType: implementation
-topic: link-metadata
+subcategory: link-metadata
 category: content
+tags: [implementation]
 ---
 
 # Link Metadata Enhancement — Implementation Plan

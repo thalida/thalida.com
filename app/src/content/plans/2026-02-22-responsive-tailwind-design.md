@@ -5,9 +5,9 @@ description: >-
   Add proper mobile and tablet layouts using a mobile-first approach. Ignore
   existing mobile drawer patterns and build fresh.
 publishedOn: 2026-02-23T04:30:39.000Z
-planType: design
-topic: responsive-tailwind
+subcategory: responsive-tailwind
 category: styling
+tags: [design]
 ---
 
 # Responsive Tailwind Redesign — Design

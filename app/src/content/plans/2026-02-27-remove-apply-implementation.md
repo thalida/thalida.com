@@ -5,9 +5,9 @@ description: >-
   elements, delete separate CSS files, and keep only minimal `<style>` blocks
   for non-inlineable CSS.
 publishedOn: 2026-02-28T03:51:29.000Z
-planType: implementation
-topic: remove-apply
+subcategory: remove-apply
 category: code-quality
+tags: [implementation]
 ---
 
 # Remove @apply — Implementation Plan

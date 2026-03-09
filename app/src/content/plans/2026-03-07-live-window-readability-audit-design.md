@@ -5,9 +5,9 @@ description: >-
   for a junior engineer. Fix all magic numbers, unclear names, missing comments,
   type safety gaps, duplicated logic, and stale docs.
 publishedOn: 2026-03-07T16:47:50.000Z
-planType: design
-topic: live-window-readability-audit
+subcategory: live-window-readability-audit
 category: live-window
+tags: [design]
 ---
 
 # Live Window Readability Audit — Design

@@ -6,9 +6,9 @@ description: >-
   complexity. The right behavior is to silently attach the current page path to
   every message automatically.
 publishedOn: 2026-02-28T19:35:08.000Z
-planType: design
-topic: chat-auto-page-context
+subcategory: chat-auto-page-context
 category: chat
+tags: [design]
 ---
 
 # Chat: Auto Page Context Design

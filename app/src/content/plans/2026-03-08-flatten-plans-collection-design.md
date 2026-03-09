@@ -2,9 +2,9 @@
 title: "Flatten Plans Collection Design"
 description: "Remove topic grouping from plans, convert topic to subcategory, convert planType to a tag, and make plans display like every other collection."
 publishedOn: 2026-03-08T00:00:00.000Z
-planType: design
-topic: flatten-plans
+subcategory: flatten-plans
 category: layout
+tags: [design]
 ---
 
 ## Problem

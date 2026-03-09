@@ -4,9 +4,9 @@ description: >-
   Extract all card variants from CollectionGrid and the home page into a shared
   Card component system.
 publishedOn: 2026-02-28T04:25:48.000Z
-planType: implementation
-topic: card-component
+subcategory: card-component
 category: styling
+tags: [implementation]
 ---
 
 # Card Component System Implementation Plan

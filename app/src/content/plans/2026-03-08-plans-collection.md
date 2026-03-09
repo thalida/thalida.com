@@ -4,9 +4,9 @@ description: >-
   Add a "plans" content collection that surfaces Claude's design docs and
   implementation plans as browsable, topic-grouped content on the site.
 publishedOn: 2026-03-09T00:19:53.000Z
-planType: implementation
-topic: plans-collection
+subcategory: plans-collection
 category: content
+tags: [implementation]
 ---
 
 # Plans Collection Implementation Plan

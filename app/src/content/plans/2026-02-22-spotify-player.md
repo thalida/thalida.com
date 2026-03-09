@@ -4,9 +4,9 @@ description: >-
   Add a compact Spotify playlist player to the left sidebar that persists across
   page transitions.
 publishedOn: 2026-02-23T01:57:46.000Z
-planType: implementation
-topic: spotify-player
+subcategory: spotify-player
 category: layout
+tags: [implementation]
 ---
 
 # Spotify Player Implementation Plan

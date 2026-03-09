@@ -4,9 +4,9 @@ description: >-
   Fix the top 5 priority findings from the app code and security audit
   (docs/plans/2026-03-05-app-code-audit.md).
 publishedOn: 2026-03-05T21:32:53.000Z
-planType: implementation
-topic: app-code-audit
+subcategory: app-code-audit
 category: code-quality
+tags: [implementation]
 ---
 
 # App Audit Fixes Implementation Plan

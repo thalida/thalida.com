@@ -5,9 +5,9 @@ description: >-
   can be manually controlled: time of day, weather, sunrise/sunset, tick speed,
   and display settings.
 publishedOn: 2026-03-07T00:47:44.000Z
-planType: design
-topic: live-window-playground
+subcategory: live-window-playground
 category: live-window
+tags: [design]
 ---
 
 # Live Window Playground — Design

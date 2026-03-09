@@ -5,9 +5,9 @@ description: >-
   creating collision risk. Posts also don't display tags on their individual
   pages.
 publishedOn: 2026-02-28T08:06:34.000Z
-planType: design
-topic: post-url-nesting
+subcategory: post-url-nesting
 category: content
+tags: [design]
 ---
 
 # Post URL Nesting + Tags on Post Pages

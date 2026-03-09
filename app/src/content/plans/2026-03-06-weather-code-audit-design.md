@@ -4,9 +4,9 @@ description: >-
   The live window has 50 weather codes (OpenWeatherMap IDs) but many render
   identically or near-identically:
 publishedOn: 2026-03-07T05:28:23.000Z
-planType: design
-topic: weather-code-audit
+subcategory: weather-code-audit
 category: live-window
+tags: [design]
 ---
 
 # Weather Code Audit & Distinct Rendering Design

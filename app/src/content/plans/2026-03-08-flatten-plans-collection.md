@@ -2,9 +2,9 @@
 title: "Flatten Plans Collection Implementation Plan"
 description: "Remove topic grouping from plans, convert topic to subcategory, convert planType to tags, make plans display identically to other collections."
 publishedOn: 2026-03-08T00:00:00.000Z
-planType: implementation
-topic: flatten-plans
+subcategory: flatten-plans
 category: layout
+tags: [implementation]
 ---
 
 # Flatten Plans Collection Implementation Plan

@@ -4,9 +4,9 @@ description: >-
   Add sun and moon celestial bodies to the live window sky using the celestial
   circle model.
 publishedOn: 2026-03-03T03:11:37.000Z
-planType: implementation
-topic: sun-moon-layers
+subcategory: sun-moon-layers
 category: live-window
+tags: [implementation]
 ---
 
 # Sun & Moon Layers Implementation Plan

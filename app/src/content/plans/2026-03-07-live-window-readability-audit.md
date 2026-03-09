@@ -5,9 +5,9 @@ description: >-
   type safety gaps, duplicated logic, stale docs) to make the live-window
   codebase approachable for a junior engineer.
 publishedOn: 2026-03-07T16:47:50.000Z
-planType: implementation
-topic: live-window-readability-audit
+subcategory: live-window-readability-audit
 category: live-window
+tags: [implementation]
 ---
 
 # Live Window Readability Audit — Implementation Plan

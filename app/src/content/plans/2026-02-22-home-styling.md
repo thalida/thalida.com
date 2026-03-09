@@ -5,9 +5,9 @@ description: >-
   with View Transitions, expose clock text color as a customizable property,
   center home content, and update the weather font.
 publishedOn: 2026-02-22T23:48:51.000Z
-planType: implementation
-topic: home-page-redesign
+subcategory: home-page-redesign
 category: layout
+tags: [implementation]
 ---
 
 # Home Page Styling & Bug Fixes Implementation Plan

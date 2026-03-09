@@ -4,9 +4,9 @@ description: >-
   Refactor live-window to use OpenWeatherMap weather condition IDs (200-804)
   instead of icon codes for granular visual control.
 publishedOn: 2026-03-07T01:38:13.000Z
-planType: design
-topic: weather-id-system
+subcategory: weather-id-system
 category: live-window
+tags: [design]
 ---
 
 # Weather ID System Design

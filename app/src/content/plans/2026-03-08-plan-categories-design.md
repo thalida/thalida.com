@@ -5,9 +5,9 @@ description: >-
   into cohesive groups. Reduces 55 topics to ~47 and adds 6 filterable
   categories.
 publishedOn: 2026-03-09T01:18:19.000Z
-planType: design
-topic: plan-categories
+subcategory: plan-categories
 category: content
+tags: [design]
 ---
 
 # Plan Collection Categories & Topic Cleanup

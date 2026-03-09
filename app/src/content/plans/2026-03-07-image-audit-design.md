@@ -5,9 +5,9 @@ description: >-
   naming (kebab-case), add/update alt text on all images, organize meta images
   into a clear subfolder, and ensure all folder paths make sense.
 publishedOn: 2026-03-07T23:08:46.000Z
-planType: design
-topic: image-audit
+subcategory: image-audit
 category: content
+tags: [design]
 ---
 
 # Image Audit Design

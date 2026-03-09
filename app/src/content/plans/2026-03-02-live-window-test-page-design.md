@@ -6,9 +6,9 @@ description: >-
   displaying 8 world cities side-by-side with real weather data and local
   clocks.
 publishedOn: 2026-03-03T04:03:02.000Z
-planType: design
-topic: live-window-test-page
+subcategory: live-window-test-page
 category: live-window
+tags: [design]
 ---
 
 # Live Window Test Page — Design

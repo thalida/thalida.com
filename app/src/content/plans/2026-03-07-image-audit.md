@@ -5,9 +5,9 @@ description: >-
   image (by viewing each one), reorganize meta images into a subfolder, and
   clean up gallery folder structure.
 publishedOn: 2026-03-07T23:08:46.000Z
-planType: implementation
-topic: image-audit
+subcategory: image-audit
 category: content
+tags: [implementation]
 ---
 
 # Image Audit Implementation Plan

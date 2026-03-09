@@ -6,9 +6,9 @@ description: >-
   matches the site's design, which uses a dark midnight theme with neon/teal
   accents and monospace typography.
 publishedOn: 2026-03-01T23:49:04.000Z
-planType: design
-topic: meta-seo
+subcategory: meta-seo
 category: content
+tags: [design]
 ---
 
 # Meta Card Image Redesign

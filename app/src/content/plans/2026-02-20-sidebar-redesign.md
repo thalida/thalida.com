@@ -4,9 +4,9 @@ description: >-
   Replace the current file-tree sidebar with a two-level navigation and command
   palette search.
 publishedOn: 2026-02-20T23:54:42.000Z
-planType: implementation
-topic: sidebar-redesign
+subcategory: sidebar-redesign
 category: layout
+tags: [implementation]
 ---
 
 # Sidebar Redesign Implementation Plan

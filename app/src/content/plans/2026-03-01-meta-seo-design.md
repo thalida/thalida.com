@@ -5,9 +5,9 @@ description: >-
   SEO infrastructure so thalida.com shows up well in search results and looks
   great when links are shared on social media.
 publishedOn: 2026-03-01T22:54:11.000Z
-planType: design
-topic: meta-seo
+subcategory: meta-seo
 category: content
+tags: [design]
 ---
 
 # Meta Tags, SEO & Social Sharing Design

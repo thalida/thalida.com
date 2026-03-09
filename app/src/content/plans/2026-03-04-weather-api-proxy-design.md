@@ -5,9 +5,9 @@ description: >-
   Move the call behind the Cloudflare Worker, matching the pattern used for IP
   Registry geolocation.
 publishedOn: 2026-03-05T02:58:48.000Z
-planType: design
-topic: weather-api-proxy
+subcategory: weather-api-proxy
 category: live-window
+tags: [design]
 ---
 
 # Design: Proxy OpenWeather API through Cloudflare Worker

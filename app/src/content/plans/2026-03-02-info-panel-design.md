@@ -6,9 +6,9 @@ description: >-
   live-window shadow DOM. Use static white text instead of the current dynamic
   WCAG-contrast color.
 publishedOn: 2026-03-03T05:02:48.000Z
-planType: design
-topic: info-panel
+subcategory: info-panel
 category: layout
+tags: [design]
 ---
 
 # Info Panel Design

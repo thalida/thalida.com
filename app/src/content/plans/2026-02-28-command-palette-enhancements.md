@@ -5,9 +5,9 @@ description: >-
   replace tags with categories, show per-row collection + category labels, and
   give links a unique visual style.
 publishedOn: 2026-02-28T07:36:35.000Z
-planType: implementation
-topic: command-palette-enhancements
+subcategory: command-palette-enhancements
 category: layout
+tags: [implementation]
 ---
 
 # Command Palette Enhancements Implementation Plan

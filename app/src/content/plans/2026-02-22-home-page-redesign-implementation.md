@@ -5,9 +5,9 @@ description: >-
   Portfolio" layout: conversational hero, featured projects strip, and site
   evolution timeline.
 publishedOn: 2026-02-23T00:00:14.000Z
-planType: implementation
-topic: home-page-redesign
+subcategory: home-page-redesign
 category: layout
+tags: [implementation]
 ---
 
 # Home Page Redesign Implementation Plan

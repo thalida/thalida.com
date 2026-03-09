@@ -5,9 +5,9 @@ description: >-
   failure, etc.), they continue to appear across the site. There's no way to
   detect or surface broken links.
 publishedOn: 2026-03-07T23:22:48.000Z
-planType: design
-topic: dead-link-detection
+subcategory: dead-link-detection
 category: content
+tags: [design]
 ---
 
 # Dead Link Detection — Design

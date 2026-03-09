@@ -5,9 +5,9 @@ description: >-
   site. Replace inline card markup in CollectionGrid and the home page with a
   single shared component.
 publishedOn: 2026-02-28T04:25:48.000Z
-planType: design
-topic: card-component
+subcategory: card-component
 category: styling
+tags: [design]
 ---
 
 # Card Component System Design

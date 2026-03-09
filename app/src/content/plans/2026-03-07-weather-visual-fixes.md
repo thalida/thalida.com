@@ -5,9 +5,9 @@ description: >-
   atmosphere particle appearance, atmosphere layer positioning, cloud/rain
   animation stuttering, tilted rain loop stutter, and cloud left-bias.
 publishedOn: 2026-03-07T05:41:41.000Z
-planType: implementation
-topic: weather-visual-fixes
+subcategory: weather-visual-fixes
 category: live-window
+tags: [implementation]
 ---
 
 # Weather Visual Fixes Implementation Plan

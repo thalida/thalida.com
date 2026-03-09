@@ -5,9 +5,9 @@ description: >-
   replaces the default browser cursor everywhere, shifting color on interactive
   elements, and is disabled on touch devices.
 publishedOn: 2026-02-22T22:49:25.000Z
-planType: design
-topic: neon-cursor
+subcategory: neon-cursor
 category: styling
+tags: [design]
 ---
 
 # Neon Glow Cursor Design

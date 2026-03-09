@@ -5,9 +5,9 @@ description: >-
   implement mobile-first responsive layouts (single-column mobile, two-column
   tablet, three-column desktop).
 publishedOn: 2026-02-23T04:32:46.000Z
-planType: implementation
-topic: responsive-tailwind
+subcategory: responsive-tailwind
 category: styling
+tags: [implementation]
 ---
 
 # Responsive Tailwind Redesign — Implementation Plan

@@ -5,9 +5,9 @@ description: >-
   with a real-time chat feature and an interactive live-window web component.
   The codebase demonstrates strong engineering in several areas:
 publishedOn: 2026-03-05T21:22:33.000Z
-planType: implementation
-topic: app-code-audit
+subcategory: app-code-audit
 category: code-quality
+tags: [implementation]
 ---
 
 # App Code & Security Audit

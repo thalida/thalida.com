@@ -6,9 +6,9 @@ description: >-
   neon/teal cyberpunk aesthetic (midnight `#030a12`, neon `#39ff14`, teal
   `#00e5a0`).
 publishedOn: 2026-02-22T22:44:28.000Z
-planType: design
-topic: syntax-highlighting
+subcategory: syntax-highlighting
 category: styling
+tags: [design]
 ---
 
 # Syntax Highlighting Redesign

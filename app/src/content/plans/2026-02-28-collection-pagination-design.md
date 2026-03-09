@@ -4,9 +4,9 @@ description: >-
   Add pagination to collection index pages, displaying 50 items at a time using
   Astro's built-in `paginate()` function.
 publishedOn: 2026-02-28T08:28:57.000Z
-planType: design
-topic: collection-pagination
+subcategory: collection-pagination
 category: layout
+tags: [design]
 ---
 
 # Collection Pagination Design

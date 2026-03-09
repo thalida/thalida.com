@@ -4,9 +4,9 @@ description: >-
   Standardize color usage so neon = emphasis, teal = interactive, ice =
   active/selected, and subheadings use text color with font hierarchy.
 publishedOn: 2026-02-28T05:06:50.000Z
-planType: implementation
-topic: color-standardization
+subcategory: color-standardization
 category: styling
+tags: [implementation]
 ---
 
 # Color Standardization Implementation Plan

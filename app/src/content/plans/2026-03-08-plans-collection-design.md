@@ -7,9 +7,9 @@ description: >-
   content collection system makes them a browsable archive of how the site was
   built.
 publishedOn: 2026-03-09T00:15:29.000Z
-planType: design
-topic: plans-collection
+subcategory: plans-collection
 category: content
+tags: [design]
 ---
 
 # Plans Collection: Surface Claude Plans as Site Content

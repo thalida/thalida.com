@@ -4,9 +4,9 @@ description: >-
   Make the live window playground public at `/playground/live-window`, merge dev
   test cities into it, add Nominatim city search, and link from the home page.
 publishedOn: 2026-03-07T17:42:57.000Z
-planType: implementation
-topic: live-window-playground
+subcategory: live-window-playground
 category: live-window
+tags: [implementation]
 ---
 
 # Public Live Window Playground Implementation Plan

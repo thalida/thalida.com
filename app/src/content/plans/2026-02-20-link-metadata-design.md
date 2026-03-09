@@ -4,9 +4,9 @@ description: >-
   Enrich the links collection cards with build-time-fetched metadata (favicon,
   meta title, meta
 publishedOn: 2026-02-21T04:44:02.000Z
-planType: design
-topic: link-metadata
+subcategory: link-metadata
 category: content
+tags: [design]
 ---
 
 # Link Metadata Enhancement — Design

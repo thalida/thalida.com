@@ -5,9 +5,9 @@ description: >-
   flag, block, delete-by-user, and rename all operate per-browser rather than
   per-IP, so users on the same network are independent.
 publishedOn: 2026-03-01T05:23:15.000Z
-planType: design
-topic: client-identity
+subcategory: client-identity
 category: chat
+tags: [design]
 ---
 
 # Chat: clientId-Based Identity

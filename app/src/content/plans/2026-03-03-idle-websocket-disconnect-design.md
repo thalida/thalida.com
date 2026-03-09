@@ -5,9 +5,9 @@ description: >-
   WebSocket is connected. Idle browser tabs keep connections open indefinitely,
   which exceeded the Cloudflare free tier limit (2,147,483,647 ms/day).
 publishedOn: 2026-03-04T03:18:40.000Z
-planType: design
-topic: idle-websocket-disconnect
+subcategory: idle-websocket-disconnect
 category: chat
+tags: [design]
 ---
 
 # Idle WebSocket Disconnect Design

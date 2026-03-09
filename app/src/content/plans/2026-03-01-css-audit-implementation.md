@@ -5,9 +5,9 @@ description: >-
   with data attributes (JS targeting), CSS classes (styling), and Tailwind
   utilities.
 publishedOn: 2026-03-01T18:48:40.000Z
-planType: implementation
-topic: css-audit
+subcategory: css-audit
 category: code-quality
+tags: [implementation]
 ---
 
 # CSS Audit Implementation Plan

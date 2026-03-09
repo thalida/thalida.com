@@ -5,9 +5,9 @@ description: >-
   block, delete-by-user, and rename operate per-browser, and users on the same
   network are independent.
 publishedOn: 2026-03-01T05:26:02.000Z
-planType: implementation
-topic: client-identity
+subcategory: client-identity
 category: chat
+tags: [implementation]
 ---
 
 # clientId-Based Identity Implementation Plan

@@ -4,9 +4,9 @@ description: >-
   Make the live window playground public, merge it with the dev test page, add a
   city search via Nominatim geocoding, and link to it from the home page.
 publishedOn: 2026-03-07T17:42:57.000Z
-planType: design
-topic: live-window-playground
+subcategory: live-window-playground
 category: live-window
+tags: [design]
 ---
 
 # Public Live Window Playground

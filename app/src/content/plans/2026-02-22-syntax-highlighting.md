@@ -5,9 +5,9 @@ description: >-
   using the `houston` theme, copy buttons, and language labels — styled to match
   the site's neon/midnight aesthetic.
 publishedOn: 2026-02-22T22:44:28.000Z
-planType: implementation
-topic: syntax-highlighting
+subcategory: syntax-highlighting
 category: styling
+tags: [implementation]
 ---
 
 # Syntax Highlighting Implementation Plan

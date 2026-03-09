@@ -6,9 +6,9 @@ description: >-
   existing 16-phase sky system. Star positions are seeded-random (consistent
   within a day, fresh each day).
 publishedOn: 2026-03-02T05:20:22.000Z
-planType: design
-topic: stars-layer
+subcategory: stars-layer
 category: live-window
+tags: [design]
 ---
 
 # Stars Layer Design

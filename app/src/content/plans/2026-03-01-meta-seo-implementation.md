@@ -5,9 +5,9 @@ description: >-
   favicons, sitemap, and robots.txt so thalida.com shows up well in search and
   looks great when shared.
 publishedOn: 2026-03-01T22:56:29.000Z
-planType: implementation
-topic: meta-seo
+subcategory: meta-seo
 category: content
+tags: [implementation]
 ---
 
 # Meta Tags & SEO Implementation Plan

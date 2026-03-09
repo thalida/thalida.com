@@ -4,9 +4,9 @@ description: >-
   Refactor the monolithic `<live-window>` web component into focused modules
   with a `SkyLayer` interface for extensibility.
 publishedOn: 2026-03-02T02:56:37.000Z
-planType: implementation
-topic: live-window-refactor
+subcategory: live-window-refactor
 category: live-window
+tags: [implementation]
 ---
 
 # Live Window Refactor Implementation Plan

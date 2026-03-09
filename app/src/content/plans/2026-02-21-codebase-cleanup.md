@@ -6,9 +6,9 @@ description: >-
   where names reflect current reality and each piece of logic lives in exactly
   one place.
 publishedOn: 2026-02-21T06:35:15.000Z
-planType: implementation
-topic: codebase-cleanup
+subcategory: codebase-cleanup
 category: code-quality
+tags: [implementation]
 ---
 
 # Codebase Cleanup Implementation Plan

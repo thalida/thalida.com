@@ -5,9 +5,9 @@ description: >-
   vertical gradient that matches real-world sky appearance based on sunrise,
   sunset, and twilight phases.
 publishedOn: 2026-03-02T02:17:02.000Z
-planType: implementation
-topic: sky-gradient
+subcategory: sky-gradient
 category: live-window
+tags: [implementation]
 ---
 
 # Sky Gradient Revamp Implementation Plan

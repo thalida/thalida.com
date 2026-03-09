@@ -5,9 +5,9 @@ description: >-
   collaborator who helped build the site. Fun, friendly, witty — a highlight
   reel of the major features.
 publishedOn: 2026-03-05T04:29:59.000Z
-planType: design
-topic: version-post
+subcategory: version-post
 category: content
+tags: [design]
 ---
 
 # Design: v2026 Version Post — "2026: Neon Playground"

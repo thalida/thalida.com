@@ -4,9 +4,9 @@ description: >-
   Add a minimal sitewide footer inside the center content area showing "created
   by thalida" and the last git commit date.
 publishedOn: 2026-03-08T23:48:44.000Z
-planType: implementation
-topic: site-footer
+subcategory: site-footer
 category: layout
+tags: [implementation]
 ---
 
 # Site Footer Implementation Plan

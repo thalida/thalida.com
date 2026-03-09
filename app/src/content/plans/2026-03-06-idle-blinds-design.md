@@ -5,9 +5,9 @@ description: >-
   becomes active again. On initial load, the blinds open via the same
   `openBlinds()` path (replacing the current one-shot `runAnimation` logic).
 publishedOn: 2026-03-06T18:45:07.000Z
-planType: design
-topic: idle-blinds
+subcategory: idle-blinds
 category: live-window
+tags: [design]
 ---
 
 # Idle Blinds Design

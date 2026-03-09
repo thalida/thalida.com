@@ -4,9 +4,9 @@ description: >-
   The codebase uses `@apply` extensively (204 usages across 9 files) to compose
   Tailwind utilities inside CSS classes. This creates issues:
 publishedOn: 2026-02-28T03:51:29.000Z
-planType: design
-topic: remove-apply
+subcategory: remove-apply
 category: code-quality
+tags: [design]
 ---
 
 # Remove @apply — Move to Inline Tailwind Classes

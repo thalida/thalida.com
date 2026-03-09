@@ -2,9 +2,9 @@
 title: Command Palette Enhancements Design
 description: 'Four enhancements to the command palette (Cmd+K):'
 publishedOn: 2026-02-28T07:36:35.000Z
-planType: design
-topic: command-palette-enhancements
+subcategory: command-palette-enhancements
 category: layout
+tags: [design]
 ---
 
 # Command Palette Enhancements Design

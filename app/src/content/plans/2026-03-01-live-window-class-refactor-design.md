@@ -7,9 +7,9 @@ description: >-
   phase calculations, sky gradient math) into a `utils/` folder. Merge state
   into a single `LiveWindowState` with clearly separated sections.
 publishedOn: 2026-03-02T03:55:26.000Z
-planType: design
-topic: live-window-refactor
+subcategory: live-window-refactor
 category: live-window
+tags: [design]
 ---
 
 # Live Window Class-Based Refactor Design

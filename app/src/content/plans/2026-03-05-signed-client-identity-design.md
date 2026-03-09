@@ -5,9 +5,9 @@ description: >-
   blindly by the API. A malicious user can send any clientId to impersonate
   another user.
 publishedOn: 2026-03-06T02:00:45.000Z
-planType: design
-topic: client-identity
+subcategory: client-identity
 category: chat
+tags: [design]
 ---
 
 # Signed Client Identity

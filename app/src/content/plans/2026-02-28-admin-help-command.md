@@ -4,9 +4,9 @@ description: >-
   Add an admin-only `/help` command and a command registry that auto-generates
   the help output.
 publishedOn: 2026-03-01T05:06:54.000Z
-planType: implementation
-topic: admin-help-command
+subcategory: admin-help-command
 category: chat
+tags: [implementation]
 ---
 
 # Admin /help Command Implementation Plan

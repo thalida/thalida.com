@@ -5,9 +5,9 @@ description: >-
   commands as a system notice. Build a command registry so `/help`
   auto-generates from registered commands.
 publishedOn: 2026-03-01T05:06:54.000Z
-planType: design
-topic: admin-help-command
+subcategory: admin-help-command
 category: chat
+tags: [design]
 ---
 
 # Admin /help Command — Design

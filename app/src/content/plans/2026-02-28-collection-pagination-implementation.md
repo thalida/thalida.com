@@ -4,9 +4,9 @@ description: >-
   Add static pagination (50 items/page) to all collection index and category
   pages using Astro's built-in `paginate()`.
 publishedOn: 2026-02-28T08:28:57.000Z
-planType: implementation
-topic: collection-pagination
+subcategory: collection-pagination
 category: layout
+tags: [implementation]
 ---
 
 # Collection Pagination Implementation Plan

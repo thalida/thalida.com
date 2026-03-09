@@ -5,9 +5,9 @@ description: >-
   category, exclude them from all views except the `/links/dead-links` category
   page, and mark them in global search results.
 publishedOn: 2026-03-07T23:24:34.000Z
-planType: implementation
-topic: dead-link-detection
+subcategory: dead-link-detection
 category: content
+tags: [implementation]
 ---
 
 # Dead Link Detection Implementation Plan

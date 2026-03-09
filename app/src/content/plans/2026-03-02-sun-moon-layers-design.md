@@ -5,9 +5,9 @@ description: >-
   geometric CSS shapes that move realistically across the sky based on time of
   day and lunar phase.
 publishedOn: 2026-03-03T03:08:52.000Z
-planType: design
-topic: sun-moon-layers
+subcategory: sun-moon-layers
 category: live-window
+tags: [design]
 ---
 
 # Sun & Moon Layers — Design

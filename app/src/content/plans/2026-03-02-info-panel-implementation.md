@@ -5,9 +5,9 @@ description: >-
   displays location name, coordinates/timezone, and weather info inside the
   live-window shadow DOM with static white text.
 publishedOn: 2026-03-03T05:02:48.000Z
-planType: implementation
-topic: info-panel
+subcategory: info-panel
 category: layout
+tags: [implementation]
 ---
 
 # Info Panel Implementation Plan

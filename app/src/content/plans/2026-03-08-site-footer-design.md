@@ -5,9 +5,9 @@ description: >-
   The footer displays "created by thalida" and a last-updated date sourced from
   the latest git commit at build time.
 publishedOn: 2026-03-08T23:48:44.000Z
-planType: design
-topic: site-footer
+subcategory: site-footer
 category: layout
+tags: [design]
 ---
 
 # Site Footer Design

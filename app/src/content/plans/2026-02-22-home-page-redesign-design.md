@@ -6,9 +6,9 @@ description: >-
   creative's catalog") with three sections: a conversational hero, a featured
   projects strip, and a visual site evolution timeline.
 publishedOn: 2026-02-22T23:58:23.000Z
-planType: design
-topic: home-page-redesign
+subcategory: home-page-redesign
 category: layout
+tags: [design]
 ---
 
 # Home Page Redesign — "The Terminal Portfolio"

@@ -4,9 +4,9 @@ description: >-
   Replace blind-trust client IDs with HMAC-signed client tokens so the API is
   the source of truth for identity.
 publishedOn: 2026-03-06T02:03:16.000Z
-planType: implementation
-topic: client-identity
+subcategory: client-identity
 category: chat
+tags: [implementation]
 ---
 
 # Signed Client Identity Implementation Plan

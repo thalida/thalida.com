@@ -5,9 +5,9 @@ description: >-
   content pushed rightward, iOS viewport height, missing body scroll lock, and
   unresponsive about-page grid.
 publishedOn: 2026-02-21T07:14:27.000Z
-planType: implementation
-topic: mobile-styles
+subcategory: mobile-styles
 category: styling
+tags: [implementation]
 ---
 
 # Mobile Styles Fix Implementation Plan

@@ -5,9 +5,9 @@ description: >-
   chat, serving ~1,400 lines of TypeScript across 6 source files. It handles
   WebSocket chat, authentication, geolocation, and weather endpoints.
 publishedOn: 2026-03-06T01:18:46.000Z
-planType: implementation
-topic: api-code-audit
+subcategory: api-code-audit
 category: code-quality
+tags: [implementation]
 ---
 
 # API Code & Security Audit

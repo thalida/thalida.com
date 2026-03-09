@@ -4,9 +4,9 @@ description: >-
   Move the OpenWeather API call from the client-side app to the Cloudflare
   Worker backend, removing the exposed API key.
 publishedOn: 2026-03-05T03:00:27.000Z
-planType: implementation
-topic: weather-api-proxy
+subcategory: weather-api-proxy
 category: live-window
+tags: [implementation]
 ---
 
 # Weather API Proxy Implementation Plan

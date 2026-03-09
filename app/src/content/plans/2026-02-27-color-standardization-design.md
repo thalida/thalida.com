@@ -6,9 +6,9 @@ description: >-
   for both links and active nav items, and ice is underutilized. Users can't
   reliably tell what's clickable vs what's decorative.
 publishedOn: 2026-02-28T05:06:50.000Z
-planType: design
-topic: color-standardization
+subcategory: color-standardization
 category: styling
+tags: [design]
 ---
 
 # Color Standardization Design
