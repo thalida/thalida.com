@@ -2,6 +2,7 @@
 import type { GetStaticPathsOptions } from "astro";
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
+import PlanGrid from "@components/CollectionGrid/PlanGrid.astro";
 import { getNavData } from "@lib/nav-data";
 import { categoryDisplay } from "@lib/format-utils";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
@@ -39,17 +40,35 @@ const { title, allCategories } = Astro.props as CollectionPageProps;
   activeCollection={collection}
   description={`${categoryDisplay(category)} ${collectionMeta[collection].description.toLowerCase()}`}
 >
-  <CollectionGrid
-    collection={collection}
-    title={title}
-    subtitle={collectionMeta[collection].description}
-    itemCount={page.total}
-    items={page.data}
-    allCategories={allCategories}
-    activeCategory={category}
-    prevUrl={page.url.prev}
-    nextUrl={page.url.next}
-    currentPage={page.currentPage}
-    lastPage={page.lastPage}
-  />
+  {
+    collection === "plans" ? (
+      <PlanGrid
+        collection={collection}
+        title={title}
+        subtitle={collectionMeta[collection].description}
+        itemCount={page.total}
+        items={page.data}
+        allCategories={allCategories}
+        activeCategory={category}
+        prevUrl={page.url.prev}
+        nextUrl={page.url.next}
+        currentPage={page.currentPage}
+        lastPage={page.lastPage}
+      />
+    ) : (
+      <CollectionGrid
+        collection={collection}
+        title={title}
+        subtitle={collectionMeta[collection].description}
+        itemCount={page.total}
+        items={page.data}
+        allCategories={allCategories}
+        activeCategory={category}
+        prevUrl={page.url.prev}
+        nextUrl={page.url.next}
+        currentPage={page.currentPage}
+        lastPage={page.lastPage}
+      />
+    )
+  }
 </BaseLayout>
