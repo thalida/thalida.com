@@ -11,6 +11,7 @@ import { remarkAlert } from "remark-github-blockquote-alert";
 import remarkToc from "remark-toc";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExternalLinks from "rehype-external-links";
 import rehypeWrap from "rehype-wrap";
 
 const env = loadEnv(process.env.NODE_ENV || "", process.cwd(), "PUBLIC_");
@@ -63,6 +64,7 @@ export default defineConfig({
           content: { type: "text", value: "#" },
         },
       ],
+      [rehypeExternalLinks, { target: "_blank", rel: ["noopener"] }],
       [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto", fallback: false }],
       [rehypeR2Media, { baseUrl: mediaBaseUrl }],
     ],

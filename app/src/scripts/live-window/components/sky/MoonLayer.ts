@@ -10,6 +10,9 @@ const MOON_GLOW_OPACITY = 0.3;
 const MOON_GLOW_SPREAD_MIN = 5;
 const MOON_GLOW_SPREAD_RANGE = 5;
 
+/** Blur radius applied to the shadow for a soft terminator edge (px). */
+const SHADOW_BLUR_PX = 3;
+
 // Sky gradient sampling positions for moon shadow color
 const GRADIENT_STOP_UPPER = 0.35;
 const GRADIENT_STOP_LOWER = 0.65;
@@ -77,6 +80,7 @@ export class MoonLayer implements SceneComponent {
       }
 
       this.shadow.style.background = skyColor;
+      this.shadow.style.filter = `blur(${SHADOW_BLUR_PX}px)`;
       this.shadow.style.transform = `translateX(${dx.toFixed(1)}px)`;
     }
 

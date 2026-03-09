@@ -4,6 +4,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
+import { prettifySlug } from "@lib/format-utils";
 
 type AnyEntry = CollectionEntry<CollectionName>;
 
@@ -31,6 +32,19 @@ export async function getStaticPaths() {
 
 const { collection, id } = Astro.params;
 const { entry } = Astro.props;
+
+// Fetch related plans (same subcategory) for plan posts
+let relatedPlans: Array<{ id: string; title: string; tags?: string[] }> = [];
+if (collection === "plans" && entry.data.subcategory) {
+  const allPlans = await getCollection("plans", ({ data }) => !data.draft);
+  relatedPlans = allPlans
+    .filter((p) => p.data.subcategory === entry.data.subcategory && p.id !== entry.id)
+    .map((p) => ({
+      id: p.id,
+      title: p.data.title,
+      tags: p.data.tags,
+    }));
+}
 
 let Content: AstroComponentFactory | null = null;
 let recipeJsonLd: string | null = null;
@@ -175,8 +189,16 @@ const recipeMeta =
                 {" "}
                 /{" "}
                 <a class="text-teal no-underline hover:text-neon" href={`/${collection}/${entry.data.category}`}>
-                  {entry.data.category}
+                  {prettifySlug(entry.data.category)}
                 </a>
+              </span>
+            )
+          }
+          {
+            entry.data.subcategory && (
+              <span>
+                {" "}
+                / <span class="text-muted">{prettifySlug(entry.data.subcategory)}</span>
               </span>
             )
           }
@@ -185,7 +207,7 @@ const recipeMeta =
           entry.data.publishedOn && (
             <>
               <span class="text-dim">·</span>
-              <time class="text-dim">
+              <time class="text-dim" data-ts={entry.data.publishedOn.toISOString()}>
                 {new Date(entry.data.publishedOn).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
@@ -207,6 +229,23 @@ const recipeMeta =
         )
       }
       <CardTags tags={entry.data.tags} max={Infinity} />
+      {
+        relatedPlans.length > 0 && (
+          <div class="mt-4 pt-3 border-t border-border">
+            <p class="m-0 mb-2 text-xs font-body font-semibold text-muted uppercase tracking-widest">Related plans</p>
+            <div class="flex flex-col gap-1">
+              {relatedPlans.map((rp) => (
+                <a
+                  href={`/plans/post/${rp.id}`}
+                  class="flex items-center gap-2 text-sm text-teal no-underline hover:text-neon font-body"
+                >
+                  <span>{rp.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
       {
         recipeMeta.length > 0 && (
           <div class="recipe-meta flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs font-body text-muted">
@@ -260,6 +299,6 @@ const recipeMeta =
   }
   .post-content :global(img),
   .post-content :global(video) {
-    @apply max-w-full h-auto rounded-lg;
+    @apply max-w-full h-auto rounded-lg block mx-auto;
   }
 </style>

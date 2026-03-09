@@ -7,5 +7,4 @@ node_modules/
 .venv/
 package-lock.json
 styleguide.html
-docs/plans/
 *.md

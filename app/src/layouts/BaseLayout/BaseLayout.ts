@@ -126,7 +126,32 @@ function initResponsiveUI() {
   }
 }
 
+/** Localize all `[data-ts]` elements to the visitor's timezone.
+ *  - Sets `title` to the full local timestamp (hover tooltip).
+ *  - If `data-ts-text` is present, replaces the text content too. */
+function localizeTimestamps() {
+  const fmt = new Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-ts]").forEach((el) => {
+    const iso = el.dataset.ts;
+    if (!iso) return;
+    const localized = fmt.format(new Date(iso));
+    el.title = localized;
+    if (el.hasAttribute("data-ts-text")) {
+      el.textContent = localized;
+    }
+  });
+}
+
 document.addEventListener("astro:page-load", initResponsiveUI);
+document.addEventListener("astro:page-load", localizeTimestamps);
 
 // Preserve nav scroll across View Transitions
 let savedNavScroll = 0;

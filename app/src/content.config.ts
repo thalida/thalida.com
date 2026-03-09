@@ -3,7 +3,7 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { defineCollection, z } from "astro:content";
 import { glob, file } from "astro/loaders";
 
-export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links"] as const;
+export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links", "plans"] as const;
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
 
@@ -40,6 +40,11 @@ export const collectionMeta: Record<CollectionName, { title: string; description
       title: "Site Versions",
       description: "The evolution of thalida.com.",
       cardVariant: "stacked",
+    },
+    plans: {
+      title: "Plans",
+      description: "Claude's design docs and implementation plans for thalida.com.",
+      cardVariant: "compact",
     },
   };
 
@@ -105,6 +110,7 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
+        subcategory: z.string().optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),

@@ -1,0 +1,58 @@
+---
+import { execSync } from "node:child_process";
+import { formatDateFull } from "@lib/format-utils";
+
+interface Props {
+  narrow?: boolean;
+  postPublishedOn?: Date;
+  postUpdatedOn?: Date;
+}
+
+const { narrow = false, postPublishedOn, postUpdatedOn } = Astro.props;
+
+let siteUpdatedIso: string;
+try {
+  siteUpdatedIso = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
+} catch {
+  siteUpdatedIso = new Date().toISOString();
+}
+const siteUpdated = formatDateFull(siteUpdatedIso);
+
+const postPublishedIso = postPublishedOn?.toISOString() ?? null;
+const postUpdatedIso = postUpdatedOn?.toISOString() ?? null;
+const postPublished = postPublishedIso ? formatDateFull(postPublishedIso) : null;
+const postUpdated = postUpdatedIso ? formatDateFull(postUpdatedIso) : null;
+---
+
+<footer class:list={["mt-16 py-8 font-body text-xs text-muted", { "w-full max-w-3xl mx-auto": narrow }]}>
+  {
+    postPublished && (
+      <p class="mb-2">
+        {"//"} post created on{" "}
+        <span data-ts={postPublishedIso} data-ts-text>
+          {postPublished}
+        </span>
+        {postUpdated && (
+          <span>
+            {" "}
+            · updated on{" "}
+            <span data-ts={postUpdatedIso} data-ts-text>
+              {postUpdated}
+            </span>
+          </span>
+        )}
+      </p>
+    )
+  }
+  <p>
+    {"//"} made by thalida ·
+    <a
+      href="https://github.com/thalida/thalida.com"
+      target="_blank"
+      rel="noopener"
+      class="text-teal no-underline hover:text-neon transition-colors"
+    >
+      site updated on <span data-ts={siteUpdatedIso} data-ts-text>{siteUpdated}</span>
+    </a>
+  </p>
+</footer>
