@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-02-28T19:36:27.000Z
 planType: implementation
 topic: chat-auto-page-context
-status: completed
 category: chat
 ---
 

@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-02-22T23:58:23.000Z
 planType: design
 topic: home-page-redesign
-status: completed
 category: layout
 ---
 

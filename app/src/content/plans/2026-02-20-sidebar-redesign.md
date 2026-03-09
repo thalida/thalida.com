@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-02-20T23:54:42.000Z
 planType: implementation
 topic: sidebar-redesign
-status: completed
 category: layout
 ---
 

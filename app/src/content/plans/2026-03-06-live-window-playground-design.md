@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-07T00:47:44.000Z
 planType: design
 topic: live-window-playground
-status: completed
 category: live-window
 ---
 

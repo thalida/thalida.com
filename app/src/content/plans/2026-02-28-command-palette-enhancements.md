@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-28T07:36:35.000Z
 planType: implementation
 topic: command-palette-enhancements
-status: completed
 category: layout
 ---
 

@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-08T23:48:44.000Z
 planType: design
 topic: site-footer
-status: completed
 category: layout
 ---
 

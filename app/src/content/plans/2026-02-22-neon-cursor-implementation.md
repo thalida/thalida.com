@@ -4,7 +4,6 @@ description: Add a custom neon glow cursor with a soft fading trail across the e
 publishedOn: 2026-02-22T22:50:41.000Z
 planType: implementation
 topic: neon-cursor
-status: completed
 category: styling
 ---
 

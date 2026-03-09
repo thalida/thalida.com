@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-03-02T05:20:22.000Z
 planType: design
 topic: stars-layer
-status: completed
 category: live-window
 ---
 

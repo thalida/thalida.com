@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-28T04:25:48.000Z
 planType: design
 topic: card-component
-status: completed
 category: styling
 ---
 

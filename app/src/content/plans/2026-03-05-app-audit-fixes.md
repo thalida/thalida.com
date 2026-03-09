@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-05T21:32:53.000Z
 planType: implementation
 topic: app-code-audit
-status: completed
 category: code-quality
 ---
 

@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-03-03T04:03:02.000Z
 planType: design
 topic: live-window-test-page
-status: completed
 category: live-window
 ---
 

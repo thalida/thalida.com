@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-02-28T04:49:39.000Z
 planType: design
 topic: color-standardization
-status: completed
 category: styling
 ---
 

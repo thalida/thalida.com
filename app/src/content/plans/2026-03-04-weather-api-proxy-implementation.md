@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-05T03:00:27.000Z
 planType: implementation
 topic: weather-api-proxy
-status: completed
 category: live-window
 ---
 

@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-22T22:44:28.000Z
 planType: implementation
 topic: syntax-highlighting
-status: completed
 category: styling
 ---
 

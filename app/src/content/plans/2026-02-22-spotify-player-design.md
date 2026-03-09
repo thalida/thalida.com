@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-02-23T01:57:13.000Z
 planType: design
 topic: spotify-player
-status: completed
 category: layout
 ---
 

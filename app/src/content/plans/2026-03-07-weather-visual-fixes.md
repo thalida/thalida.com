@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-07T05:41:41.000Z
 planType: implementation
 topic: weather-visual-fixes
-status: completed
 category: live-window
 ---
 

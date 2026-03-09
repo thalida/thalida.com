@@ -4,7 +4,6 @@ description: 'The current IDE-style file-tree sidebar has several usability issu
 publishedOn: 2026-02-20T23:51:50.000Z
 planType: design
 topic: sidebar-redesign
-status: completed
 category: layout
 ---
 

@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-05T02:58:48.000Z
 planType: design
 topic: weather-api-proxy
-status: completed
 category: live-window
 ---
 

@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-06T18:45:07.000Z
 planType: design
 topic: idle-blinds
-status: completed
 category: live-window
 ---
 

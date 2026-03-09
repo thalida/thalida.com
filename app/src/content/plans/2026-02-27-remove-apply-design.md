@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-02-28T03:51:29.000Z
 planType: design
 topic: remove-apply
-status: completed
 category: code-quality
 ---
 

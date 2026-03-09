@@ -9,7 +9,6 @@ description: >-
 publishedOn: 2026-03-09T00:15:29.000Z
 planType: design
 topic: plans-collection
-status: completed
 category: content
 ---
 
@@ -34,7 +33,6 @@ description: "Two-level navigation sidebar with command palette"
 publishedOn: 2026-02-20
 planType: "design"        # "design" | "implementation"
 topic: "sidebar-redesign" # shared slug — all plans with same topic are related
-status: "completed"       # "planned" | "in-progress" | "completed"
 tags: ["navigation", "ui"]
 ---
 ```

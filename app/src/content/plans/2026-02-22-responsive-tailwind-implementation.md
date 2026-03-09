@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-23T04:32:46.000Z
 planType: implementation
 topic: responsive-tailwind
-status: completed
 category: styling
 ---
 

@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-03T03:11:37.000Z
 planType: implementation
 topic: sun-moon-layers
-status: completed
 category: live-window
 ---
 

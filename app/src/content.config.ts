@@ -113,7 +113,6 @@ async function makeCollection(collectionName: CollectionName) {
         // Plan-specific optional fields
         planType: z.enum(["design", "implementation"]).optional(),
         topic: z.string().optional(),
-        status: z.enum(["planned", "in-progress", "completed"]).optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),

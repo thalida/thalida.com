@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-07T01:38:13.000Z
 planType: design
 topic: weather-id-system
-status: completed
 category: live-window
 ---
 

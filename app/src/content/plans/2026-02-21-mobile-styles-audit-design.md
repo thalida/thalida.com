@@ -4,7 +4,6 @@ description: 'The mobile layout has two user-visible symptoms:'
 publishedOn: 2026-02-21T07:13:14.000Z
 planType: design
 topic: mobile-styles
-status: completed
 category: styling
 ---
 

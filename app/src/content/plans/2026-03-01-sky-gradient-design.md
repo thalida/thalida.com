@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-02T02:13:53.000Z
 planType: design
 topic: sky-gradient
-status: completed
 category: live-window
 ---
 

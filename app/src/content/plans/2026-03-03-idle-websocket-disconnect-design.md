@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-04T03:18:40.000Z
 planType: design
 topic: idle-websocket-disconnect
-status: completed
 category: chat
 ---
 

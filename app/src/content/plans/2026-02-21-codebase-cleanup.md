@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-02-21T06:35:15.000Z
 planType: implementation
 topic: codebase-cleanup
-status: completed
 category: code-quality
 ---
 

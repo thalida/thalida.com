@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-21T07:14:27.000Z
 planType: implementation
 topic: mobile-styles
-status: completed
 category: styling
 ---
 

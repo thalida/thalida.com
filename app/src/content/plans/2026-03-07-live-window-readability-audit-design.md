@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-07T16:47:50.000Z
 planType: design
 topic: live-window-readability-audit
-status: completed
 category: live-window
 ---
 

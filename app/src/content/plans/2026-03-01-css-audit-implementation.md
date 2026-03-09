@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-01T18:48:40.000Z
 planType: implementation
 topic: css-audit
-status: completed
 category: code-quality
 ---
 

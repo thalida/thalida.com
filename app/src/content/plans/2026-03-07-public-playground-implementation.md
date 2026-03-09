@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-07T17:42:57.000Z
 planType: implementation
 topic: live-window-playground
-status: completed
 category: live-window
 ---
 

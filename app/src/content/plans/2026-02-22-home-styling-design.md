@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-22T23:48:51.000Z
 planType: design
 topic: home-page-redesign
-status: completed
 category: layout
 ---
 

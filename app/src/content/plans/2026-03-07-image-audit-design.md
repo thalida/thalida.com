@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-07T23:08:46.000Z
 planType: design
 topic: image-audit
-status: completed
 category: content
 ---
 

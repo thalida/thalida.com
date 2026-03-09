@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-01T05:06:54.000Z
 planType: implementation
 topic: admin-help-command
-status: completed
 category: chat
 ---
 

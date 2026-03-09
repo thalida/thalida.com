@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-03-03T05:02:48.000Z
 planType: design
 topic: info-panel
-status: completed
 category: layout
 ---
 

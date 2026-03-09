@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-02T04:01:12.000Z
 planType: implementation
 topic: live-window-refactor
-status: completed
 category: live-window
 ---
 

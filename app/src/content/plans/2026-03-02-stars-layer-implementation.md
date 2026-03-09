@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-02T05:22:11.000Z
 planType: implementation
 topic: stars-layer
-status: completed
 category: live-window
 ---
 

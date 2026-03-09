@@ -8,7 +8,6 @@ description: >-
 publishedOn: 2026-02-28T19:35:08.000Z
 planType: design
 topic: chat-auto-page-context
-status: completed
 category: chat
 ---
 

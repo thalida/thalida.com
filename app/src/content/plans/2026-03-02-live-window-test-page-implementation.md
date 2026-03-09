@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-03-03T04:06:00.000Z
 planType: implementation
 topic: live-window-test-page
-status: completed
 category: live-window
 ---
 

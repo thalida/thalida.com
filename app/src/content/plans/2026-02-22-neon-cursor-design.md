@@ -7,7 +7,6 @@ description: >-
 publishedOn: 2026-02-22T22:49:25.000Z
 planType: design
 topic: neon-cursor
-status: completed
 category: styling
 ---
 

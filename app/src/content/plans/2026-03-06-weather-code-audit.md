@@ -6,7 +6,6 @@ description: >-
 publishedOn: 2026-03-07T05:28:23.000Z
 planType: implementation
 topic: weather-code-audit
-status: completed
 category: live-window
 ---
 
