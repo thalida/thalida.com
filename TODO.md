@@ -37,4 +37,4 @@
 - [x] show plan docs on site
 - [x] add site footer
 - [x] add vscode tasks to run app / api
-- [ ] page size in 3, 2, 1 columns
+- [x] page size in 3, 2, 1 columns
