@@ -124,13 +124,27 @@ const TOPIC_MERGES = {
 };
 
 function getGitTimestamp(filePath) {
+  const filename = filePath.split("/").pop();
+
+  // Try the original docs/plans/ path first (files were migrated from there)
+  const originalPath = `docs/plans/${filename}`;
   try {
-    // Get the author date of the first commit that added this file
+    const result = execSync(
+      `git log --all --format=%aI -- "${originalPath}"`,
+      { encoding: "utf-8" }
+    ).trim();
+    if (result) return result.split("\n").pop(); // earliest commit
+  } catch {
+    // ignore
+  }
+
+  // Fall back to current path (for files created directly in content/plans/)
+  try {
     const result = execSync(
       `git log --diff-filter=A --format=%aI -- "${filePath}"`,
       { encoding: "utf-8" }
     ).trim();
-    if (result) return result.split("\n").pop(); // earliest commit
+    if (result) return result.split("\n").pop();
   } catch {
     // ignore
   }
