@@ -1,5 +1,5 @@
 ---
-import { categoryDisplay } from "@lib/format-utils";
+import { prettifySlug } from "@lib/format-utils";
 
 interface Props {
   collection: string;
@@ -39,7 +39,7 @@ const { collection, categories, activeCategory } = Astro.props;
                   : "bg-transparent border-teal text-teal hover:bg-teal/20 hover:text-white hover:border-white/60",
             ]}
           >
-            {categoryDisplay(cat)}
+            {prettifySlug(cat)}
           </a>
         ))}
       </div>

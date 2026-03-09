@@ -4,6 +4,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
+import { prettifySlug } from "@lib/format-utils";
 
 type AnyEntry = CollectionEntry<CollectionName>;
 
@@ -188,7 +189,7 @@ const recipeMeta =
                 {" "}
                 /{" "}
                 <a class="text-teal no-underline hover:text-neon" href={`/${collection}/${entry.data.category}`}>
-                  {entry.data.category}
+                  {prettifySlug(entry.data.category)}
                 </a>
               </span>
             )
@@ -197,7 +198,7 @@ const recipeMeta =
             collection === "plans" && entry.data.topic && (
               <span>
                 {" "}
-                / <span class="text-muted">{entry.data.topic}</span>
+                / <span class="text-muted">{prettifySlug(entry.data.topic)}</span>
               </span>
             )
           }

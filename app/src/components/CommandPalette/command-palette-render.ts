@@ -1,4 +1,4 @@
-import { categoryDisplay, formatDate } from "@lib/format-utils";
+import { prettifySlug, formatDate } from "@lib/format-utils";
 import type { SearchItem } from "./command-palette-search";
 
 type SlotFn = (name: string) => HTMLElement;
@@ -35,9 +35,9 @@ export function renderItem(
 
   const collectionLabel = showCollection ? item.collectionTitle : "";
   const catDisplay = item.originalCategory
-    ? categoryDisplay(item.originalCategory)
+    ? prettifySlug(item.originalCategory)
     : item.category
-      ? categoryDisplay(item.category)
+      ? prettifySlug(item.category)
       : "";
   populateMeta(slot, collectionLabel, catDisplay);
 

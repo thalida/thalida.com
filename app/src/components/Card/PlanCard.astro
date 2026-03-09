@@ -1,6 +1,6 @@
 ---
 import type { NavItem } from "@lib/nav-data";
-import { formatDate, isValidDate } from "@lib/format-utils";
+import { formatDate, isValidDate, prettifySlug } from "@lib/format-utils";
 
 interface Props {
   topic: string;
@@ -23,7 +23,7 @@ const latestDate = plans
 <div class="item-card flex flex-col p-4 gap-3">
   <div class="flex items-center justify-between gap-2">
     <h3 class="m-0 font-heading font-bold text-text text-base leading-snug">
-      {topic}
+      {prettifySlug(topic)}
     </h3>
     {
       isValidDate(latestDate) && (

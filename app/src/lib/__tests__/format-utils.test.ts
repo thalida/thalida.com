@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isValidDate, formatDate, formatDateFull, categoryDisplay } from "../format-utils";
+import { isValidDate, formatDate, formatDateFull, prettifySlug } from "../format-utils";
 
 describe("isValidDate", () => {
   it("returns true for valid ISO date strings", () => {
@@ -38,20 +38,20 @@ describe("formatDateFull", () => {
   });
 });
 
-describe("categoryDisplay", () => {
+describe("prettifySlug", () => {
   it("capitalizes single word", () => {
-    expect(categoryDisplay("design")).toBe("Design");
+    expect(prettifySlug("design")).toBe("Design");
   });
 
   it("capitalizes hyphenated words", () => {
-    expect(categoryDisplay("web-development")).toBe("Web Development");
+    expect(prettifySlug("web-development")).toBe("Web Development");
   });
 
   it("keeps 'and' lowercase", () => {
-    expect(categoryDisplay("arts-and-crafts")).toBe("Arts and Crafts");
+    expect(prettifySlug("arts-and-crafts")).toBe("Arts and Crafts");
   });
 
   it("handles single character category", () => {
-    expect(categoryDisplay("a")).toBe("A");
+    expect(prettifySlug("a")).toBe("A");
   });
 });

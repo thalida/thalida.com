@@ -19,7 +19,7 @@ export function formatDateFull(isoString: string): string {
   });
 }
 
-export function categoryDisplay(categoryName: string): string {
+export function prettifySlug(categoryName: string): string {
   const parts = categoryName.split("-");
   return parts.map((part) => (part !== "and" ? part.charAt(0).toUpperCase() + part.slice(1) : part)).join(" ");
 }

@@ -46,8 +46,6 @@ const topics = [...topicMap.entries()].sort((a, b) => {
   const latestB = Math.max(...b[1].map((p) => new Date(p.publishedOn).getTime()));
   return latestB - latestA;
 });
-
-const topicCount = topics.length;
 ---
 
 <div class="font-body">
@@ -57,7 +55,7 @@ const topicCount = topics.length;
       {subtitle}
     </p>
     <p class="m-0 font-body text-muted text-sm">
-      {itemCount} items &middot; {topicCount} topics
+      {itemCount} items
     </p>
   </header>
 

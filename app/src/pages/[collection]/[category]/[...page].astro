@@ -4,7 +4,7 @@ import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
 import PlanGrid from "@components/CollectionGrid/PlanGrid.astro";
 import { getNavData } from "@lib/nav-data";
-import { categoryDisplay } from "@lib/format-utils";
+import { prettifySlug } from "@lib/format-utils";
 import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
 import { PAGE_SIZE } from "@lib/constants";
 import type { CollectionPage, CollectionPageProps } from "@lib/collection-types";
@@ -36,9 +36,9 @@ const { title, allCategories } = Astro.props as CollectionPageProps;
 ---
 
 <BaseLayout
-  title={`${categoryDisplay(category)} · ${title} · thalida`}
+  title={`${prettifySlug(category)} · ${title} · thalida`}
   activeCollection={collection}
-  description={`${categoryDisplay(category)} ${collectionMeta[collection].description.toLowerCase()}`}
+  description={`${prettifySlug(category)} ${collectionMeta[collection].description.toLowerCase()}`}
 >
   {
     collection === "plans" ? (
