@@ -1,10 +1,13 @@
 ---
-title: "Link Metadata Enhancement — Design"
-description: "Enrich the links collection cards with build-time-fetched metadata (favicon, meta title, meta"
-publishedOn: 2026-02-20
-planType: "design"
-topic: "link-metadata"
-status: "completed"
+title: Link Metadata Enhancement — Design
+description: >-
+  Enrich the links collection cards with build-time-fetched metadata (favicon,
+  meta title, meta
+publishedOn: 2026-02-21T04:44:02.000Z
+planType: design
+topic: link-metadata
+status: completed
+category: content
 ---
 
 # Link Metadata Enhancement — Design

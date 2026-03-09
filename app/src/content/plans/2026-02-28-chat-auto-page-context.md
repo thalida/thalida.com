@@ -1,10 +1,13 @@
 ---
-title: "Chat Auto Page Context Implementation Plan"
-description: "Silently attach the current page path to every chat message automatically, removing the user-facing page/general context selector entirely."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "chat-auto-page-context"
-status: "completed"
+title: Chat Auto Page Context Implementation Plan
+description: >-
+  Silently attach the current page path to every chat message automatically,
+  removing the user-facing page/general context selector entirely.
+publishedOn: 2026-02-28T19:36:27.000Z
+planType: implementation
+topic: chat-auto-page-context
+status: completed
+category: chat
 ---
 
 # Chat Auto Page Context Implementation Plan

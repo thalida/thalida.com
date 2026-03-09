@@ -1,10 +1,13 @@
 ---
-title: "Signed Client Identity Implementation Plan"
-description: "Replace blind-trust client IDs with HMAC-signed client tokens so the API is the source of truth for identity."
-publishedOn: 2026-03-05
-planType: "implementation"
-topic: "signed-client-identity"
-status: "completed"
+title: Signed Client Identity Implementation Plan
+description: >-
+  Replace blind-trust client IDs with HMAC-signed client tokens so the API is
+  the source of truth for identity.
+publishedOn: 2026-03-06T02:03:16.000Z
+planType: implementation
+topic: client-identity
+status: completed
+category: chat
 ---
 
 # Signed Client Identity Implementation Plan

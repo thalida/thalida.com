@@ -1,10 +1,14 @@
 ---
-title: "Sun & Moon Layers — Design"
-description: "Add sun and moon celestial bodies to the live window sky, using simple geometric CSS shapes that move realistically across the sky based on time of day and lunar phase."
-publishedOn: 2026-03-02
-planType: "design"
-topic: "sun-moon-layers"
-status: "completed"
+title: Sun & Moon Layers — Design
+description: >-
+  Add sun and moon celestial bodies to the live window sky, using simple
+  geometric CSS shapes that move realistically across the sky based on time of
+  day and lunar phase.
+publishedOn: 2026-03-03T03:08:52.000Z
+planType: design
+topic: sun-moon-layers
+status: completed
+category: live-window
 ---
 
 # Sun & Moon Layers — Design

@@ -1,10 +1,13 @@
 ---
-title: "Idle Blinds Implementation Plan"
-description: "Lower the LiveWindow blinds when chat goes idle and raise them when the user becomes active again. On initial load, use the same `openBlinds()` path."
-publishedOn: 2026-03-06
-planType: "implementation"
-topic: "idle-blinds"
-status: "completed"
+title: Idle Blinds Implementation Plan
+description: >-
+  Lower the LiveWindow blinds when chat goes idle and raise them when the user
+  becomes active again. On initial load, use the same `openBlinds()` path.
+publishedOn: 2026-03-06T18:47:00.000Z
+planType: implementation
+topic: idle-blinds
+status: completed
+category: live-window
 ---
 
 # Idle Blinds Implementation Plan

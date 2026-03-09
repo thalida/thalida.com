@@ -1,10 +1,14 @@
 ---
-title: "Responsive Tailwind Redesign — Implementation Plan"
-description: "Replace all raw CSS `@media` queries with Tailwind responsive utilities and implement mobile-first responsive layouts (single-column mobile, two-column tablet, three-column desktop)."
-publishedOn: 2026-02-22
-planType: "implementation"
-topic: "responsive-tailwind"
-status: "completed"
+title: Responsive Tailwind Redesign — Implementation Plan
+description: >-
+  Replace all raw CSS `@media` queries with Tailwind responsive utilities and
+  implement mobile-first responsive layouts (single-column mobile, two-column
+  tablet, three-column desktop).
+publishedOn: 2026-02-23T04:32:46.000Z
+planType: implementation
+topic: responsive-tailwind
+status: completed
+category: styling
 ---
 
 # Responsive Tailwind Redesign — Implementation Plan

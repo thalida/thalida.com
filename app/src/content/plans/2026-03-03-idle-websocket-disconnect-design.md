@@ -1,10 +1,14 @@
 ---
-title: "Idle WebSocket Disconnect Design"
-description: "The ChatRoom Durable Object accumulates wall-clock duration as long as any WebSocket is connected. Idle browser tabs keep connections open indefinitely, which exceeded the Cloudflare free tier limit (2,147,483,647 ms/day)."
-publishedOn: 2026-03-03
-planType: "design"
-topic: "idle-websocket-disconnect"
-status: "completed"
+title: Idle WebSocket Disconnect Design
+description: >-
+  The ChatRoom Durable Object accumulates wall-clock duration as long as any
+  WebSocket is connected. Idle browser tabs keep connections open indefinitely,
+  which exceeded the Cloudflare free tier limit (2,147,483,647 ms/day).
+publishedOn: 2026-03-04T03:18:40.000Z
+planType: design
+topic: idle-websocket-disconnect
+status: completed
+category: chat
 ---
 
 # Idle WebSocket Disconnect Design

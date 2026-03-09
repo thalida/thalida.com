@@ -1,10 +1,14 @@
 ---
-title: "Signed Client Identity"
-description: "Client identity (clientId) is currently generated on the frontend and trusted blindly by the API. A malicious user can send any clientId to impersonate another user."
-publishedOn: 2026-03-05
-planType: "design"
-topic: "signed-client-identity"
-status: "completed"
+title: Signed Client Identity
+description: >-
+  Client identity (clientId) is currently generated on the frontend and trusted
+  blindly by the API. A malicious user can send any clientId to impersonate
+  another user.
+publishedOn: 2026-03-06T02:00:45.000Z
+planType: design
+topic: client-identity
+status: completed
+category: chat
 ---
 
 # Signed Client Identity

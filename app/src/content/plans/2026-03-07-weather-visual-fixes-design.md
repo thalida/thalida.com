@@ -1,10 +1,11 @@
 ---
-title: "Weather Visual Fixes Design"
-description: "Six visual bugs/improvements for the live-window weather effects."
-publishedOn: 2026-03-07
-planType: "design"
-topic: "weather-visual-fixes"
-status: "completed"
+title: Weather Visual Fixes Design
+description: Six visual bugs/improvements for the live-window weather effects.
+publishedOn: 2026-03-07T05:39:02.000Z
+planType: design
+topic: weather-visual-fixes
+status: completed
+category: live-window
 ---
 
 # Weather Visual Fixes Design

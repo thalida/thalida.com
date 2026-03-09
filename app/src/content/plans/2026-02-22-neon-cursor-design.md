@@ -1,10 +1,14 @@
 ---
-title: "Neon Glow Cursor Design"
-description: "Add a custom neon glow cursor with a soft fading trail to the site. The cursor replaces the default browser cursor everywhere, shifting color on interactive elements, and is disabled on touch devices."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "neon-cursor"
-status: "completed"
+title: Neon Glow Cursor Design
+description: >-
+  Add a custom neon glow cursor with a soft fading trail to the site. The cursor
+  replaces the default browser cursor everywhere, shifting color on interactive
+  elements, and is disabled on touch devices.
+publishedOn: 2026-02-22T22:49:25.000Z
+planType: design
+topic: neon-cursor
+status: completed
+category: styling
 ---
 
 # Neon Glow Cursor Design

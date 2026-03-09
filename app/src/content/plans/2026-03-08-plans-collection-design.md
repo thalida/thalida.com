@@ -1,10 +1,16 @@
 ---
-title: "Plans Collection: Surface Claude Plans as Site Content"
-description: "93 planning documents live in `docs/plans/` — design docs and implementation plans for features built on thalida.com. They're invisible to site visitors and can't be browsed, searched, or linked to. Moving them into the site's content collection system makes them a browsable archive of how the site was built."
-publishedOn: 2026-03-08
-planType: "design"
-topic: "plans-collection"
-status: "completed"
+title: 'Plans Collection: Surface Claude Plans as Site Content'
+description: >-
+  93 planning documents live in `docs/plans/` — design docs and implementation
+  plans for features built on thalida.com. They're invisible to site visitors
+  and can't be browsed, searched, or linked to. Moving them into the site's
+  content collection system makes them a browsable archive of how the site was
+  built.
+publishedOn: 2026-03-09T00:15:29.000Z
+planType: design
+topic: plans-collection
+status: completed
+category: content
 ---
 
 # Plans Collection: Surface Claude Plans as Site Content

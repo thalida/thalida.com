@@ -1,10 +1,15 @@
 ---
-title: "Color Standardization Design"
-description: "The site uses three accent colors (neon, teal, ice) without consistent semantic rules. Neon appears on both headings and hover states, teal is used for both links and active nav items, and ice is underutilized. Users can't reliably tell what's clickable vs what's decorative."
-publishedOn: 2026-02-27
-planType: "design"
-topic: "color-standardization"
-status: "completed"
+title: Color Standardization Design
+description: >-
+  The site uses three accent colors (neon, teal, ice) without consistent
+  semantic rules. Neon appears on both headings and hover states, teal is used
+  for both links and active nav items, and ice is underutilized. Users can't
+  reliably tell what's clickable vs what's decorative.
+publishedOn: 2026-02-28T05:06:50.000Z
+planType: design
+topic: color-standardization
+status: completed
+category: styling
 ---
 
 # Color Standardization Design

@@ -1,10 +1,14 @@
 ---
-title: "Site Footer Design"
-description: "Add a minimal sitewide footer inside the center content area of BaseLayout. The footer displays \"created by thalida\" and a last-updated date sourced from the latest git commit at build time."
-publishedOn: 2026-03-08
-planType: "design"
-topic: "site-footer"
-status: "completed"
+title: Site Footer Design
+description: >-
+  Add a minimal sitewide footer inside the center content area of BaseLayout.
+  The footer displays "created by thalida" and a last-updated date sourced from
+  the latest git commit at build time.
+publishedOn: 2026-03-08T23:48:44.000Z
+planType: design
+topic: site-footer
+status: completed
+category: layout
 ---
 
 # Site Footer Design

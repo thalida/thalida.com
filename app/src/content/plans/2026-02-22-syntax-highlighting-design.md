@@ -1,10 +1,15 @@
 ---
-title: "Syntax Highlighting Redesign"
-description: "Code blocks use Astro's default Shiki `github-dark` theme, which has a gray `#24292e` background and GitHub's color palette. This clashes with the site's neon/teal cyberpunk aesthetic (midnight `#030a12`, neon `#39ff14`, teal `#00e5a0`)."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "syntax-highlighting"
-status: "completed"
+title: Syntax Highlighting Redesign
+description: >-
+  Code blocks use Astro's default Shiki `github-dark` theme, which has a gray
+  `#24292e` background and GitHub's color palette. This clashes with the site's
+  neon/teal cyberpunk aesthetic (midnight `#030a12`, neon `#39ff14`, teal
+  `#00e5a0`).
+publishedOn: 2026-02-22T22:44:28.000Z
+planType: design
+topic: syntax-highlighting
+status: completed
+category: styling
 ---
 
 # Syntax Highlighting Redesign

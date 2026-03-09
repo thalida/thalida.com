@@ -1,10 +1,13 @@
 ---
-title: "Admin Moderation Tools — Design"
-description: "Add three admin moderation features to the chat: a delete message button, a flag/ban button, and a `/blocked` command to list all blocked users."
-publishedOn: 2026-02-28
-planType: "design"
-topic: "admin-moderation-tools"
-status: "completed"
+title: Admin Moderation Tools — Design
+description: >-
+  Add three admin moderation features to the chat: a delete message button, a
+  flag/ban button, and a `/blocked` command to list all blocked users.
+publishedOn: 2026-03-01T05:06:54.000Z
+planType: design
+topic: admin-moderation-tools
+status: completed
+category: chat
 ---
 
 # Admin Moderation Tools — Design

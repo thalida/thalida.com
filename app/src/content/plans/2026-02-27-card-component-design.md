@@ -1,10 +1,14 @@
 ---
-title: "Card Component System Design"
-description: "Create a generic Card component that exposes all card variants used across the site. Replace inline card markup in CollectionGrid and the home page with a single shared component."
-publishedOn: 2026-02-27
-planType: "design"
-topic: "card-component"
-status: "completed"
+title: Card Component System Design
+description: >-
+  Create a generic Card component that exposes all card variants used across the
+  site. Replace inline card markup in CollectionGrid and the home page with a
+  single shared component.
+publishedOn: 2026-02-28T04:25:48.000Z
+planType: design
+topic: card-component
+status: completed
+category: styling
 ---
 
 # Card Component System Design

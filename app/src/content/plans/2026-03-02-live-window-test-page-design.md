@@ -1,10 +1,15 @@
 ---
-title: "Live Window Test Page — Design"
-description: "Add optional `latitude`/`longitude`/`timezone` attributes to `<live-window>` so it can render any location without IP geolocation. Create a test page displaying 8 world cities side-by-side with real weather data and local clocks."
-publishedOn: 2026-03-02
-planType: "design"
-topic: "live-window-test-page"
-status: "completed"
+title: Live Window Test Page — Design
+description: >-
+  Add optional `latitude`/`longitude`/`timezone` attributes to `<live-window>`
+  so it can render any location without IP geolocation. Create a test page
+  displaying 8 world cities side-by-side with real weather data and local
+  clocks.
+publishedOn: 2026-03-03T04:03:02.000Z
+planType: design
+topic: live-window-test-page
+status: completed
+category: live-window
 ---
 
 # Live Window Test Page — Design

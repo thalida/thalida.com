@@ -1,10 +1,13 @@
 ---
-title: "Public Live Window Playground Implementation Plan"
-description: "Make the live window playground public at `/playground/live-window`, merge dev test cities into it, add Nominatim city search, and link from the home page."
-publishedOn: 2026-03-07
-planType: "implementation"
-topic: "public-playground"
-status: "completed"
+title: Public Live Window Playground Implementation Plan
+description: >-
+  Make the live window playground public at `/playground/live-window`, merge dev
+  test cities into it, add Nominatim city search, and link from the home page.
+publishedOn: 2026-03-07T17:42:57.000Z
+planType: implementation
+topic: live-window-playground
+status: completed
+category: live-window
 ---
 
 # Public Live Window Playground Implementation Plan

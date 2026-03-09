@@ -1,10 +1,13 @@
 ---
-title: "Admin Moderation Tools Implementation Plan"
-description: "Add admin-only delete message button, flag/ban button, and `/blocked` command to the chat system."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "admin-moderation-tools"
-status: "completed"
+title: Admin Moderation Tools Implementation Plan
+description: >-
+  Add admin-only delete message button, flag/ban button, and `/blocked` command
+  to the chat system.
+publishedOn: 2026-03-01T05:06:54.000Z
+planType: implementation
+topic: admin-moderation-tools
+status: completed
+category: chat
 ---
 
 # Admin Moderation Tools Implementation Plan

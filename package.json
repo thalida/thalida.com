@@ -9,6 +9,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
+    "gray-matter": "^4.0.3",
     "prettier": "^3.8.1",
     "prettier-plugin-astro": "^0.14.1"
   }

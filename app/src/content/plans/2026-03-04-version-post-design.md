@@ -1,10 +1,14 @@
 ---
-title: "Design: v2026 Version Post — \"2026: Neon Playground\""
-description: "A version post for thalida.com v2026, written from Claude's perspective as a collaborator who helped build the site. Fun, friendly, witty — a highlight reel of the major features."
-publishedOn: 2026-03-04
-planType: "design"
-topic: "version-post"
-status: "completed"
+title: 'Design: v2026 Version Post — "2026: Neon Playground"'
+description: >-
+  A version post for thalida.com v2026, written from Claude's perspective as a
+  collaborator who helped build the site. Fun, friendly, witty — a highlight
+  reel of the major features.
+publishedOn: 2026-03-05T04:29:59.000Z
+planType: design
+topic: version-post
+status: completed
+category: content
 ---
 
 # Design: v2026 Version Post — "2026: Neon Playground"

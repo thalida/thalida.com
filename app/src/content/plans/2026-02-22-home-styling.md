@@ -1,10 +1,14 @@
 ---
-title: "Home Page Styling & Bug Fixes Implementation Plan"
-description: "Theme-match the live-window component on the home page, fix a font-loading bug with View Transitions, expose clock text color as a customizable property, center home content, and update the weather font."
-publishedOn: 2026-02-22
-planType: "implementation"
-topic: "home-styling"
-status: "completed"
+title: Home Page Styling & Bug Fixes Implementation Plan
+description: >-
+  Theme-match the live-window component on the home page, fix a font-loading bug
+  with View Transitions, expose clock text color as a customizable property,
+  center home content, and update the weather font.
+publishedOn: 2026-02-22T23:48:51.000Z
+planType: implementation
+topic: home-page-redesign
+status: completed
+category: layout
 ---
 
 # Home Page Styling & Bug Fixes Implementation Plan

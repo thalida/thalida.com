@@ -1,10 +1,14 @@
 ---
-title: "Info Panel Implementation Plan"
-description: "Replace `WeatherTextComponent` with a combined `InfoPanelComponent` that displays location name, coordinates/timezone, and weather info inside the live-window shadow DOM with static white text."
-publishedOn: 2026-03-02
-planType: "implementation"
-topic: "info-panel"
-status: "completed"
+title: Info Panel Implementation Plan
+description: >-
+  Replace `WeatherTextComponent` with a combined `InfoPanelComponent` that
+  displays location name, coordinates/timezone, and weather info inside the
+  live-window shadow DOM with static white text.
+publishedOn: 2026-03-03T05:02:48.000Z
+planType: implementation
+topic: info-panel
+status: completed
+category: layout
 ---
 
 # Info Panel Implementation Plan

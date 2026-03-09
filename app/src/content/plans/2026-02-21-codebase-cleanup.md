@@ -1,10 +1,15 @@
 ---
-title: "Codebase Cleanup Implementation Plan"
-description: "Fix all naming inconsistencies, dead code, duplicate logic, bugs, and type safety issues identified in the February 2026 audit, resulting in a codebase where names reflect current reality and each piece of logic lives in exactly one place."
-publishedOn: 2026-02-21
-planType: "implementation"
-topic: "codebase-cleanup"
-status: "completed"
+title: Codebase Cleanup Implementation Plan
+description: >-
+  Fix all naming inconsistencies, dead code, duplicate logic, bugs, and type
+  safety issues identified in the February 2026 audit, resulting in a codebase
+  where names reflect current reality and each piece of logic lives in exactly
+  one place.
+publishedOn: 2026-02-21T06:35:15.000Z
+planType: implementation
+topic: codebase-cleanup
+status: completed
+category: code-quality
 ---
 
 # Codebase Cleanup Implementation Plan

@@ -1,10 +1,14 @@
 ---
-title: "Home Page Styling & Bug Fixes Design"
-description: "Five changes to the home page: theme-match the live-window component, fix a font-loading bug, expose a new CSS custom property, center content, and update the weather font."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "home-styling"
-status: "completed"
+title: Home Page Styling & Bug Fixes Design
+description: >-
+  Five changes to the home page: theme-match the live-window component, fix a
+  font-loading bug, expose a new CSS custom property, center content, and update
+  the weather font.
+publishedOn: 2026-02-22T23:48:51.000Z
+planType: design
+topic: home-page-redesign
+status: completed
+category: layout
 ---
 
 # Home Page Styling & Bug Fixes Design

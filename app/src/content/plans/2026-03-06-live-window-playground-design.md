@@ -1,10 +1,14 @@
 ---
-title: "Live Window Playground — Design"
-description: "Create a dev-only interactive test page where all live-window visual states can be manually controlled: time of day, weather, sunrise/sunset, tick speed, and display settings."
-publishedOn: 2026-03-06
-planType: "design"
-topic: "live-window-playground"
-status: "completed"
+title: Live Window Playground — Design
+description: >-
+  Create a dev-only interactive test page where all live-window visual states
+  can be manually controlled: time of day, weather, sunrise/sunset, tick speed,
+  and display settings.
+publishedOn: 2026-03-07T00:47:44.000Z
+planType: design
+topic: live-window-playground
+status: completed
+category: live-window
 ---
 
 # Live Window Playground — Design

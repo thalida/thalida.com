@@ -1,10 +1,14 @@
 ---
-title: "Live Window Test Page — Implementation Plan"
-description: "Add optional `latitude`/`longitude`/`timezone` attributes to `<live-window>` so it can render any location, then create a test page displaying 8 world cities side-by-side."
-publishedOn: 2026-03-02
-planType: "implementation"
-topic: "live-window-test-page"
-status: "completed"
+title: Live Window Test Page — Implementation Plan
+description: >-
+  Add optional `latitude`/`longitude`/`timezone` attributes to `<live-window>`
+  so it can render any location, then create a test page displaying 8 world
+  cities side-by-side.
+publishedOn: 2026-03-03T04:06:00.000Z
+planType: implementation
+topic: live-window-test-page
+status: completed
+category: live-window
 ---
 
 # Live Window Test Page — Implementation Plan

@@ -1,10 +1,15 @@
 ---
-title: "Stars Layer Design"
-description: "Add a stars layer to the live window that displays varied, realistic stars at night. Stars gradually appear during dusk and fade during dawn, synced to the existing 16-phase sky system. Star positions are seeded-random (consistent within a day, fresh each day)."
-publishedOn: 2026-03-02
-planType: "design"
-topic: "stars-layer"
-status: "completed"
+title: Stars Layer Design
+description: >-
+  Add a stars layer to the live window that displays varied, realistic stars at
+  night. Stars gradually appear during dusk and fade during dawn, synced to the
+  existing 16-phase sky system. Star positions are seeded-random (consistent
+  within a day, fresh each day).
+publishedOn: 2026-03-02T05:20:22.000Z
+planType: design
+topic: stars-layer
+status: completed
+category: live-window
 ---
 
 # Stars Layer Design

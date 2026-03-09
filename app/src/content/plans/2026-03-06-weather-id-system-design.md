@@ -1,10 +1,13 @@
 ---
-title: "Weather ID System Design"
-description: "Refactor live-window to use OpenWeatherMap weather condition IDs (200-804) instead of icon codes for granular visual control."
-publishedOn: 2026-03-06
-planType: "design"
-topic: "weather-id-system"
-status: "completed"
+title: Weather ID System Design
+description: >-
+  Refactor live-window to use OpenWeatherMap weather condition IDs (200-804)
+  instead of icon codes for granular visual control.
+publishedOn: 2026-03-07T01:38:13.000Z
+planType: design
+topic: weather-id-system
+status: completed
+category: live-window
 ---
 
 # Weather ID System Design

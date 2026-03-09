@@ -1,10 +1,14 @@
 ---
-title: "Plan Collection Categories & Topic Cleanup"
-description: "Add category-based filtering to the plans page and merge fragmented topics into cohesive groups. Reduces 55 topics to ~47 and adds 6 filterable categories."
-publishedOn: 2026-03-08
-planType: "design"
-topic: "plan-categories"
-status: "planned"
+title: Plan Collection Categories & Topic Cleanup
+description: >-
+  Add category-based filtering to the plans page and merge fragmented topics
+  into cohesive groups. Reduces 55 topics to ~47 and adds 6 filterable
+  categories.
+publishedOn: 2026-03-09T01:18:19.000Z
+planType: design
+topic: plan-categories
+status: planned
+category: content
 ---
 
 # Plan Collection Categories & Topic Cleanup

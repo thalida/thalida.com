@@ -1,10 +1,14 @@
 ---
-title: "Mobile Styles Fix Implementation Plan"
-description: "Fix five mobile layout bugs: the ~48px gap between toolbar and nav drawer, content pushed rightward, iOS viewport height, missing body scroll lock, and unresponsive about-page grid."
-publishedOn: 2026-02-21
-planType: "implementation"
-topic: "mobile-styles-fix"
-status: "completed"
+title: Mobile Styles Fix Implementation Plan
+description: >-
+  Fix five mobile layout bugs: the ~48px gap between toolbar and nav drawer,
+  content pushed rightward, iOS viewport height, missing body scroll lock, and
+  unresponsive about-page grid.
+publishedOn: 2026-02-21T07:14:27.000Z
+planType: implementation
+topic: mobile-styles
+status: completed
+category: styling
 ---
 
 # Mobile Styles Fix Implementation Plan

@@ -1,10 +1,13 @@
 ---
-title: "Color Standardization Implementation Plan"
-description: "Standardize color usage so neon = emphasis, teal = interactive, ice = active/selected, and subheadings use text color with font hierarchy."
-publishedOn: 2026-02-27
-planType: "implementation"
-topic: "color-standardization"
-status: "completed"
+title: Color Standardization Implementation Plan
+description: >-
+  Standardize color usage so neon = emphasis, teal = interactive, ice =
+  active/selected, and subheadings use text color with font hierarchy.
+publishedOn: 2026-02-28T05:06:50.000Z
+planType: implementation
+topic: color-standardization
+status: completed
+category: styling
 ---
 
 # Color Standardization Implementation Plan

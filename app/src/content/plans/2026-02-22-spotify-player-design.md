@@ -1,10 +1,13 @@
 ---
-title: "Spotify Player in Sidebar — Design"
-description: "Embed a compact Spotify playlist player in the left sidebar so visitors can listen to music while browsing the site. No autoplay."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "spotify-player"
-status: "completed"
+title: Spotify Player in Sidebar — Design
+description: >-
+  Embed a compact Spotify playlist player in the left sidebar so visitors can
+  listen to music while browsing the site. No autoplay.
+publishedOn: 2026-02-23T01:57:13.000Z
+planType: design
+topic: spotify-player
+status: completed
+category: layout
 ---
 
 # Spotify Player in Sidebar — Design

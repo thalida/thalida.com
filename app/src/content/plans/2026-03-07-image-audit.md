@@ -1,10 +1,14 @@
 ---
-title: "Image Audit Implementation Plan"
-description: "Rename all image files to kebab-case, write descriptive alt text for every image (by viewing each one), reorganize meta images into a subfolder, and clean up gallery folder structure."
-publishedOn: 2026-03-07
-planType: "implementation"
-topic: "image-audit"
-status: "completed"
+title: Image Audit Implementation Plan
+description: >-
+  Rename all image files to kebab-case, write descriptive alt text for every
+  image (by viewing each one), reorganize meta images into a subfolder, and
+  clean up gallery folder structure.
+publishedOn: 2026-03-07T23:08:46.000Z
+planType: implementation
+topic: image-audit
+status: completed
+category: content
 ---
 
 # Image Audit Implementation Plan

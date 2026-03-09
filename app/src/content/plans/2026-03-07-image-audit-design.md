@@ -1,10 +1,14 @@
 ---
-title: "Image Audit Design"
-description: "Audit all image file names and alt text across the site. Fix bad/unclear file naming (kebab-case), add/update alt text on all images, organize meta images into a clear subfolder, and ensure all folder paths make sense."
-publishedOn: 2026-03-07
-planType: "design"
-topic: "image-audit"
-status: "completed"
+title: Image Audit Design
+description: >-
+  Audit all image file names and alt text across the site. Fix bad/unclear file
+  naming (kebab-case), add/update alt text on all images, organize meta images
+  into a clear subfolder, and ensure all folder paths make sense.
+publishedOn: 2026-03-07T23:08:46.000Z
+planType: design
+topic: image-audit
+status: completed
+category: content
 ---
 
 # Image Audit Design

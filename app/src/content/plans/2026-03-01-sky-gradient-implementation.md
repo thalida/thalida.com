@@ -1,10 +1,14 @@
 ---
-title: "Sky Gradient Revamp Implementation Plan"
-description: "Replace the live window's 8-color flat gradient with a 16-phase, 4-stop vertical gradient that matches real-world sky appearance based on sunrise, sunset, and twilight phases."
-publishedOn: 2026-03-01
-planType: "implementation"
-topic: "sky-gradient"
-status: "completed"
+title: Sky Gradient Revamp Implementation Plan
+description: >-
+  Replace the live window's 8-color flat gradient with a 16-phase, 4-stop
+  vertical gradient that matches real-world sky appearance based on sunrise,
+  sunset, and twilight phases.
+publishedOn: 2026-03-02T02:17:02.000Z
+planType: implementation
+topic: sky-gradient
+status: completed
+category: live-window
 ---
 
 # Sky Gradient Revamp Implementation Plan

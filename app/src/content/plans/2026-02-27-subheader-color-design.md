@@ -1,10 +1,13 @@
 ---
-title: "Separate subheader color from link color"
-description: "Teal (#00e5a0) is used for both links and subheaders, making it unclear what is clickable vs decorative."
-publishedOn: 2026-02-27
-planType: "design"
-topic: "subheader-color"
-status: "completed"
+title: Separate subheader color from link color
+description: >-
+  Teal (#00e5a0) is used for both links and subheaders, making it unclear what
+  is clickable vs decorative.
+publishedOn: 2026-02-28T04:49:39.000Z
+planType: design
+topic: color-standardization
+status: completed
+category: styling
 ---
 
 # Separate subheader color from link color

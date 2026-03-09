@@ -1,10 +1,13 @@
 ---
-title: "Markdown Plugins Restoration — Implementation Plan"
-description: "Restore `[!TIP]`/`[!NOTE]`/etc. callouts, heading anchors, TOC generation, and scrollable tables to the v-2026 branch."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "markdown-plugins"
-status: "completed"
+title: Markdown Plugins Restoration — Implementation Plan
+description: >-
+  Restore `[!TIP]`/`[!NOTE]`/etc. callouts, heading anchors, TOC generation, and
+  scrollable tables to the v-2026 branch.
+publishedOn: 2026-02-28T18:23:11.000Z
+planType: implementation
+topic: markdown-plugins
+status: completed
+category: content
 ---
 
 # Markdown Plugins Restoration — Implementation Plan

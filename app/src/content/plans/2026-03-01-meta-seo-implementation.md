@@ -1,10 +1,14 @@
 ---
-title: "Meta Tags & SEO Implementation Plan"
-description: "Add comprehensive meta tags, OpenGraph, Twitter Cards, structured data, favicons, sitemap, and robots.txt so thalida.com shows up well in search and looks great when shared."
-publishedOn: 2026-03-01
-planType: "implementation"
-topic: "meta-seo"
-status: "completed"
+title: Meta Tags & SEO Implementation Plan
+description: >-
+  Add comprehensive meta tags, OpenGraph, Twitter Cards, structured data,
+  favicons, sitemap, and robots.txt so thalida.com shows up well in search and
+  looks great when shared.
+publishedOn: 2026-03-01T22:56:29.000Z
+planType: implementation
+topic: meta-seo
+status: completed
+category: content
 ---
 
 # Meta Tags & SEO Implementation Plan

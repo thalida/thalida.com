@@ -1,10 +1,15 @@
 ---
-title: "Meta Card Image Redesign"
-description: "The current OG/social card image (`card-512x512.png`) features a lime-to-teal gradient background with purple text and a Memoji avatar. This no longer matches the site's design, which uses a dark midnight theme with neon/teal accents and monospace typography."
-publishedOn: 2026-03-01
-planType: "design"
-topic: "meta-card-image"
-status: "completed"
+title: Meta Card Image Redesign
+description: >-
+  The current OG/social card image (`card-512x512.png`) features a lime-to-teal
+  gradient background with purple text and a Memoji avatar. This no longer
+  matches the site's design, which uses a dark midnight theme with neon/teal
+  accents and monospace typography.
+publishedOn: 2026-03-01T23:49:04.000Z
+planType: design
+topic: meta-seo
+status: completed
+category: content
 ---
 
 # Meta Card Image Redesign

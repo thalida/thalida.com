@@ -1,10 +1,14 @@
 ---
-title: "Dead Link Detection Implementation Plan"
-description: "Detect dead links during build, mark them with a `dead-links` virtual category, exclude them from all views except the `/links/dead-links` category page, and mark them in global search results."
-publishedOn: 2026-03-07
-planType: "implementation"
-topic: "dead-link-detection"
-status: "completed"
+title: Dead Link Detection Implementation Plan
+description: >-
+  Detect dead links during build, mark them with a `dead-links` virtual
+  category, exclude them from all views except the `/links/dead-links` category
+  page, and mark them in global search results.
+publishedOn: 2026-03-07T23:24:34.000Z
+planType: implementation
+topic: dead-link-detection
+status: completed
+category: content
 ---
 
 # Dead Link Detection Implementation Plan

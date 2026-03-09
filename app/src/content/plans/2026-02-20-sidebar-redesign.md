@@ -1,10 +1,13 @@
 ---
-title: "Sidebar Redesign Implementation Plan"
-description: "Replace the current file-tree sidebar with a two-level navigation and command palette search."
-publishedOn: 2026-02-20
-planType: "implementation"
-topic: "sidebar-redesign"
-status: "completed"
+title: Sidebar Redesign Implementation Plan
+description: >-
+  Replace the current file-tree sidebar with a two-level navigation and command
+  palette search.
+publishedOn: 2026-02-20T23:54:42.000Z
+planType: implementation
+topic: sidebar-redesign
+status: completed
+category: layout
 ---
 
 # Sidebar Redesign Implementation Plan

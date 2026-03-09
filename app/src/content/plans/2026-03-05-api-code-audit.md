@@ -1,10 +1,14 @@
 ---
-title: "API Code & Security Audit"
-description: "The API is a Cloudflare Workers application with Durable Objects for real-time chat, serving ~1,400 lines of TypeScript across 6 source files. It handles WebSocket chat, authentication, geolocation, and weather endpoints."
-publishedOn: 2026-03-05
-planType: "implementation"
-topic: "api-code-audit"
-status: "completed"
+title: API Code & Security Audit
+description: >-
+  The API is a Cloudflare Workers application with Durable Objects for real-time
+  chat, serving ~1,400 lines of TypeScript across 6 source files. It handles
+  WebSocket chat, authentication, geolocation, and weather endpoints.
+publishedOn: 2026-03-06T01:18:46.000Z
+planType: implementation
+topic: api-code-audit
+status: completed
+category: code-quality
 ---
 
 # API Code & Security Audit

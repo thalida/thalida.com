@@ -1,10 +1,13 @@
 ---
-title: "Weather API Proxy Implementation Plan"
-description: "Move the OpenWeather API call from the client-side app to the Cloudflare Worker backend, removing the exposed API key."
-publishedOn: 2026-03-04
-planType: "implementation"
-topic: "weather-api-proxy"
-status: "completed"
+title: Weather API Proxy Implementation Plan
+description: >-
+  Move the OpenWeather API call from the client-side app to the Cloudflare
+  Worker backend, removing the exposed API key.
+publishedOn: 2026-03-05T03:00:27.000Z
+planType: implementation
+topic: weather-api-proxy
+status: completed
+category: live-window
 ---
 
 # Weather API Proxy Implementation Plan

@@ -1,10 +1,13 @@
 ---
-title: "Live Window Class-Based Refactor Implementation Plan"
-description: "Refactor `<live-window>` into self-contained SceneComponent classes (sky, blinds, clock, weather text) with a unified LiveWindowState and utils/ folder."
-publishedOn: 2026-03-01
-planType: "implementation"
-topic: "live-window-class-refactor"
-status: "completed"
+title: Live Window Class-Based Refactor Implementation Plan
+description: >-
+  Refactor `<live-window>` into self-contained SceneComponent classes (sky,
+  blinds, clock, weather text) with a unified LiveWindowState and utils/ folder.
+publishedOn: 2026-03-02T04:01:12.000Z
+planType: implementation
+topic: live-window-refactor
+status: completed
+category: live-window
 ---
 
 # Live Window Class-Based Refactor Implementation Plan

@@ -1,10 +1,13 @@
 ---
-title: "Admin /help Command Implementation Plan"
-description: "Add an admin-only `/help` command and a command registry that auto-generates the help output."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "admin-help-command"
-status: "completed"
+title: Admin /help Command Implementation Plan
+description: >-
+  Add an admin-only `/help` command and a command registry that auto-generates
+  the help output.
+publishedOn: 2026-03-01T05:06:54.000Z
+planType: implementation
+topic: admin-help-command
+status: completed
+category: chat
 ---
 
 # Admin /help Command Implementation Plan

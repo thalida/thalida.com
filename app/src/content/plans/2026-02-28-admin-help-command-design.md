@@ -1,10 +1,14 @@
 ---
-title: "Admin /help Command — Design"
-description: "Add an admin-only `/help` slash command to the chat that shows available commands as a system notice. Build a command registry so `/help` auto-generates from registered commands."
-publishedOn: 2026-02-28
-planType: "design"
-topic: "admin-help-command"
-status: "completed"
+title: Admin /help Command — Design
+description: >-
+  Add an admin-only `/help` slash command to the chat that shows available
+  commands as a system notice. Build a command registry so `/help`
+  auto-generates from registered commands.
+publishedOn: 2026-03-01T05:06:54.000Z
+planType: design
+topic: admin-help-command
+status: completed
+category: chat
 ---
 
 # Admin /help Command — Design

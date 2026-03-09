@@ -1,10 +1,14 @@
 ---
-title: "Live Window Readability Audit — Implementation Plan"
-description: "Fix all 85 readability issues (magic numbers, unclear names, missing comments, type safety gaps, duplicated logic, stale docs) to make the live-window codebase approachable for a junior engineer."
-publishedOn: 2026-03-07
-planType: "implementation"
-topic: "live-window-readability-audit"
-status: "completed"
+title: Live Window Readability Audit — Implementation Plan
+description: >-
+  Fix all 85 readability issues (magic numbers, unclear names, missing comments,
+  type safety gaps, duplicated logic, stale docs) to make the live-window
+  codebase approachable for a junior engineer.
+publishedOn: 2026-03-07T16:47:50.000Z
+planType: implementation
+topic: live-window-readability-audit
+status: completed
+category: live-window
 ---
 
 # Live Window Readability Audit — Implementation Plan

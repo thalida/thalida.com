@@ -1,10 +1,13 @@
 ---
-title: "Link Metadata Enhancement — Implementation Plan"
-description: "Enrich link cards with build-time-fetched metadata (favicon, meta title, description) and"
-publishedOn: 2026-02-20
-planType: "implementation"
-topic: "link-metadata"
-status: "completed"
+title: Link Metadata Enhancement — Implementation Plan
+description: >-
+  Enrich link cards with build-time-fetched metadata (favicon, meta title,
+  description) and
+publishedOn: 2026-02-21T04:44:02.000Z
+planType: implementation
+topic: link-metadata
+status: completed
+category: content
 ---
 
 # Link Metadata Enhancement — Implementation Plan

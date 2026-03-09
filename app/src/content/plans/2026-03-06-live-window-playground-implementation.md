@@ -1,10 +1,13 @@
 ---
-title: "Live Window Playground — Implementation Plan"
-description: "Create a dev-only interactive playground page with manual controls for time, weather, tick speed, and display settings on a single live-window component."
-publishedOn: 2026-03-06
-planType: "implementation"
-topic: "live-window-playground"
-status: "completed"
+title: Live Window Playground — Implementation Plan
+description: >-
+  Create a dev-only interactive playground page with manual controls for time,
+  weather, tick speed, and display settings on a single live-window component.
+publishedOn: 2026-03-07T00:51:55.000Z
+planType: implementation
+topic: live-window-playground
+status: completed
+category: live-window
 ---
 
 # Live Window Playground — Implementation Plan

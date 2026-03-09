@@ -1,10 +1,13 @@
 ---
-title: "Weather Code Audit — Distinct Rendering Implementation Plan"
-description: "Make all 50 OpenWeatherMap weather codes visually distinct in the live window, with accurate real-world character."
-publishedOn: 2026-03-06
-planType: "implementation"
-topic: "weather-code-audit"
-status: "completed"
+title: Weather Code Audit — Distinct Rendering Implementation Plan
+description: >-
+  Make all 50 OpenWeatherMap weather codes visually distinct in the live window,
+  with accurate real-world character.
+publishedOn: 2026-03-07T05:28:23.000Z
+planType: implementation
+topic: weather-code-audit
+status: completed
+category: live-window
 ---
 
 # Weather Code Audit — Distinct Rendering Implementation Plan

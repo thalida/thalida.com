@@ -1,10 +1,13 @@
 ---
-title: "Site Footer Implementation Plan"
-description: "Add a minimal sitewide footer inside the center content area showing \"created by thalida\" and the last git commit date."
-publishedOn: 2026-03-08
-planType: "implementation"
-topic: "site-footer"
-status: "completed"
+title: Site Footer Implementation Plan
+description: >-
+  Add a minimal sitewide footer inside the center content area showing "created
+  by thalida" and the last git commit date.
+publishedOn: 2026-03-08T23:48:44.000Z
+planType: implementation
+topic: site-footer
+status: completed
+category: layout
 ---
 
 # Site Footer Implementation Plan

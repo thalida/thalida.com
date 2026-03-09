@@ -1,10 +1,14 @@
 ---
-title: "Idle Blinds Design"
-description: "Lower the LiveWindow blinds when chat goes idle; raise them when the user becomes active again. On initial load, the blinds open via the same `openBlinds()` path (replacing the current one-shot `runAnimation` logic)."
-publishedOn: 2026-03-06
-planType: "design"
-topic: "idle-blinds"
-status: "completed"
+title: Idle Blinds Design
+description: >-
+  Lower the LiveWindow blinds when chat goes idle; raise them when the user
+  becomes active again. On initial load, the blinds open via the same
+  `openBlinds()` path (replacing the current one-shot `runAnimation` logic).
+publishedOn: 2026-03-06T18:45:07.000Z
+planType: design
+topic: idle-blinds
+status: completed
+category: live-window
 ---
 
 # Idle Blinds Design

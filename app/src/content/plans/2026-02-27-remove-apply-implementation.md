@@ -1,10 +1,14 @@
 ---
-title: "Remove @apply — Implementation Plan"
-description: "Replace all `@apply` directives with inline Tailwind utility classes on elements, delete separate CSS files, and keep only minimal `<style>` blocks for non-inlineable CSS."
-publishedOn: 2026-02-27
-planType: "implementation"
-topic: "remove-apply"
-status: "completed"
+title: Remove @apply — Implementation Plan
+description: >-
+  Replace all `@apply` directives with inline Tailwind utility classes on
+  elements, delete separate CSS files, and keep only minimal `<style>` blocks
+  for non-inlineable CSS.
+publishedOn: 2026-02-28T03:51:29.000Z
+planType: implementation
+topic: remove-apply
+status: completed
+category: code-quality
 ---
 
 # Remove @apply — Implementation Plan

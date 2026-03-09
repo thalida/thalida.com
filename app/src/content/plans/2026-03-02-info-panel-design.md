@@ -1,10 +1,15 @@
 ---
-title: "Info Panel Design"
-description: "Replace `WeatherTextComponent` with a combined `InfoPanelComponent` that displays location, coordinates/timezone, and weather info inside the live-window shadow DOM. Use static white text instead of the current dynamic WCAG-contrast color."
-publishedOn: 2026-03-02
-planType: "design"
-topic: "info-panel"
-status: "completed"
+title: Info Panel Design
+description: >-
+  Replace `WeatherTextComponent` with a combined `InfoPanelComponent` that
+  displays location, coordinates/timezone, and weather info inside the
+  live-window shadow DOM. Use static white text instead of the current dynamic
+  WCAG-contrast color.
+publishedOn: 2026-03-03T05:02:48.000Z
+planType: design
+topic: info-panel
+status: completed
+category: layout
 ---
 
 # Info Panel Design

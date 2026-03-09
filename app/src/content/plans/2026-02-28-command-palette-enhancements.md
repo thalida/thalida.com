@@ -1,10 +1,14 @@
 ---
-title: "Command Palette Enhancements Implementation Plan"
-description: "Enhance the command palette with full-text content search via Pagefind, replace tags with categories, show per-row collection + category labels, and give links a unique visual style."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "command-palette-enhancements"
-status: "completed"
+title: Command Palette Enhancements Implementation Plan
+description: >-
+  Enhance the command palette with full-text content search via Pagefind,
+  replace tags with categories, show per-row collection + category labels, and
+  give links a unique visual style.
+publishedOn: 2026-02-28T07:36:35.000Z
+planType: implementation
+topic: command-palette-enhancements
+status: completed
+category: layout
 ---
 
 # Command Palette Enhancements Implementation Plan

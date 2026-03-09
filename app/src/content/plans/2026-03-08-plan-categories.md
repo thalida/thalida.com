@@ -1,10 +1,13 @@
 ---
-title: "Plan Categories & Topic Cleanup Implementation Plan"
-description: "Add category-based filtering to the plans page, merge fragmented topics, migrate publishedOn to full timestamps, and delete orphaned docs/plans/."
-publishedOn: 2026-03-08
-planType: "implementation"
-topic: "plan-categories"
-status: "planned"
+title: Plan Categories & Topic Cleanup Implementation Plan
+description: >-
+  Add category-based filtering to the plans page, merge fragmented topics,
+  migrate publishedOn to full timestamps, and delete orphaned docs/plans/.
+publishedOn: 2026-03-09T01:23:35.000Z
+planType: implementation
+topic: plan-categories
+status: planned
+category: content
 ---
 
 # Plan Categories & Topic Cleanup Implementation Plan

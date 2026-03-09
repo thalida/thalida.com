@@ -1,10 +1,11 @@
 ---
-title: "Neon Glow Cursor Implementation Plan"
-description: "Add a custom neon glow cursor with a soft fading trail across the entire site."
-publishedOn: 2026-02-22
-planType: "implementation"
-topic: "neon-cursor"
-status: "completed"
+title: Neon Glow Cursor Implementation Plan
+description: Add a custom neon glow cursor with a soft fading trail across the entire site.
+publishedOn: 2026-02-22T22:50:41.000Z
+planType: implementation
+topic: neon-cursor
+status: completed
+category: styling
 ---
 
 # Neon Glow Cursor Implementation Plan

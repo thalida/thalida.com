@@ -1,10 +1,11 @@
 ---
-title: "Mobile Styles Audit — Design Doc"
-description: "The mobile layout has two user-visible symptoms:"
-publishedOn: 2026-02-21
-planType: "design"
-topic: "mobile-styles-audit"
-status: "completed"
+title: Mobile Styles Audit — Design Doc
+description: 'The mobile layout has two user-visible symptoms:'
+publishedOn: 2026-02-21T07:13:14.000Z
+planType: design
+topic: mobile-styles
+status: completed
+category: styling
 ---
 
 # Mobile Styles Audit — Design Doc

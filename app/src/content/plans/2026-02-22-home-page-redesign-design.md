@@ -1,10 +1,15 @@
 ---
-title: "Home Page Redesign — \"The Terminal Portfolio\""
-description: "Redesign the home page content to be compelling and engaging while keeping the live-window component. Replace the current minimal hero (\"Work & Play\" / \"A creative's catalog\") with three sections: a conversational hero, a featured projects strip, and a visual site evolution timeline."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "home-page-redesign"
-status: "completed"
+title: Home Page Redesign — "The Terminal Portfolio"
+description: >-
+  Redesign the home page content to be compelling and engaging while keeping the
+  live-window component. Replace the current minimal hero ("Work & Play" / "A
+  creative's catalog") with three sections: a conversational hero, a featured
+  projects strip, and a visual site evolution timeline.
+publishedOn: 2026-02-22T23:58:23.000Z
+planType: design
+topic: home-page-redesign
+status: completed
+category: layout
 ---
 
 # Home Page Redesign — "The Terminal Portfolio"

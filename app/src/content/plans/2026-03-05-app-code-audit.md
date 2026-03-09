@@ -1,10 +1,14 @@
 ---
-title: "App Code & Security Audit"
-description: "The app is well-architected for its purpose — an Astro 5 SSG personal site with a real-time chat feature and an interactive live-window web component. The codebase demonstrates strong engineering in several areas:"
-publishedOn: 2026-03-05
-planType: "implementation"
-topic: "app-code-audit"
-status: "completed"
+title: App Code & Security Audit
+description: >-
+  The app is well-architected for its purpose — an Astro 5 SSG personal site
+  with a real-time chat feature and an interactive live-window web component.
+  The codebase demonstrates strong engineering in several areas:
+publishedOn: 2026-03-05T21:22:33.000Z
+planType: implementation
+topic: app-code-audit
+status: completed
+category: code-quality
 ---
 
 # App Code & Security Audit

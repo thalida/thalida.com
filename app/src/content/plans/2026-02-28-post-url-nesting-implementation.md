@@ -1,10 +1,13 @@
 ---
-title: "Post URL Nesting + Tags on Post Pages — Implementation Plan"
-description: "Nest post pages under `/{collection}/post/{id}` to avoid collision with category routes, and display tags on post pages."
-publishedOn: 2026-02-28
-planType: "implementation"
-topic: "post-url-nesting"
-status: "completed"
+title: Post URL Nesting + Tags on Post Pages — Implementation Plan
+description: >-
+  Nest post pages under `/{collection}/post/{id}` to avoid collision with
+  category routes, and display tags on post pages.
+publishedOn: 2026-02-28T08:06:34.000Z
+planType: implementation
+topic: post-url-nesting
+status: completed
+category: content
 ---
 
 # Post URL Nesting + Tags on Post Pages — Implementation Plan

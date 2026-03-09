@@ -1,10 +1,14 @@
 ---
-title: "Live Window Readability Audit — Design"
-description: "Make the live-window codebase easily readable, maintainable, and approachable for a junior engineer. Fix all magic numbers, unclear names, missing comments, type safety gaps, duplicated logic, and stale docs."
-publishedOn: 2026-03-07
-planType: "design"
-topic: "live-window-readability-audit"
-status: "completed"
+title: Live Window Readability Audit — Design
+description: >-
+  Make the live-window codebase easily readable, maintainable, and approachable
+  for a junior engineer. Fix all magic numbers, unclear names, missing comments,
+  type safety gaps, duplicated logic, and stale docs.
+publishedOn: 2026-03-07T16:47:50.000Z
+planType: design
+topic: live-window-readability-audit
+status: completed
+category: live-window
 ---
 
 # Live Window Readability Audit — Design

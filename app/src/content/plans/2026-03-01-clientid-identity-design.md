@@ -1,10 +1,14 @@
 ---
-title: "Chat: clientId-Based Identity"
-description: "Replace IP-based identity with clientId throughout the chat system. This makes flag, block, delete-by-user, and rename all operate per-browser rather than per-IP, so users on the same network are independent."
-publishedOn: 2026-03-01
-planType: "design"
-topic: "clientid-identity"
-status: "completed"
+title: 'Chat: clientId-Based Identity'
+description: >-
+  Replace IP-based identity with clientId throughout the chat system. This makes
+  flag, block, delete-by-user, and rename all operate per-browser rather than
+  per-IP, so users on the same network are independent.
+publishedOn: 2026-03-01T05:23:15.000Z
+planType: design
+topic: client-identity
+status: completed
+category: chat
 ---
 
 # Chat: clientId-Based Identity

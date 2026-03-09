@@ -1,10 +1,16 @@
 ---
-title: "Live Window Class-Based Refactor Design"
-description: "Refactor the `<live-window>` web component into a class-based architecture where each scene part (sky, blinds, clock, weather text) is a self-contained class implementing a shared `SceneComponent` interface. Move utilities (color, phase calculations, sky gradient math) into a `utils/` folder. Merge state into a single `LiveWindowState` with clearly separated sections."
-publishedOn: 2026-03-01
-planType: "design"
-topic: "live-window-class-refactor"
-status: "completed"
+title: Live Window Class-Based Refactor Design
+description: >-
+  Refactor the `<live-window>` web component into a class-based architecture
+  where each scene part (sky, blinds, clock, weather text) is a self-contained
+  class implementing a shared `SceneComponent` interface. Move utilities (color,
+  phase calculations, sky gradient math) into a `utils/` folder. Merge state
+  into a single `LiveWindowState` with clearly separated sections.
+publishedOn: 2026-03-02T03:55:26.000Z
+planType: design
+topic: live-window-refactor
+status: completed
+category: live-window
 ---
 
 # Live Window Class-Based Refactor Design

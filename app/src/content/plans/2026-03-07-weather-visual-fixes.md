@@ -1,10 +1,14 @@
 ---
-title: "Weather Visual Fixes Implementation Plan"
-description: "Fix 6 visual bugs in the live-window weather effects: tornado rain intensity, atmosphere particle appearance, atmosphere layer positioning, cloud/rain animation stuttering, tilted rain loop stutter, and cloud left-bias."
-publishedOn: 2026-03-07
-planType: "implementation"
-topic: "weather-visual-fixes"
-status: "completed"
+title: Weather Visual Fixes Implementation Plan
+description: >-
+  Fix 6 visual bugs in the live-window weather effects: tornado rain intensity,
+  atmosphere particle appearance, atmosphere layer positioning, cloud/rain
+  animation stuttering, tilted rain loop stutter, and cloud left-bias.
+publishedOn: 2026-03-07T05:41:41.000Z
+planType: implementation
+topic: weather-visual-fixes
+status: completed
+category: live-window
 ---
 
 # Weather Visual Fixes Implementation Plan

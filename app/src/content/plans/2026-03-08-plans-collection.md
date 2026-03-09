@@ -1,10 +1,13 @@
 ---
-title: "Plans Collection Implementation Plan"
-description: "Add a \"plans\" content collection that surfaces Claude's design docs and implementation plans as browsable, topic-grouped content on the site."
-publishedOn: 2026-03-08
-planType: "implementation"
-topic: "plans-collection"
-status: "completed"
+title: Plans Collection Implementation Plan
+description: >-
+  Add a "plans" content collection that surfaces Claude's design docs and
+  implementation plans as browsable, topic-grouped content on the site.
+publishedOn: 2026-03-09T00:19:53.000Z
+planType: implementation
+topic: plans-collection
+status: completed
+category: content
 ---
 
 # Plans Collection Implementation Plan

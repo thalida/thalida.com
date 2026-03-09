@@ -1,10 +1,14 @@
 ---
-title: "Syntax Highlighting Implementation Plan"
-description: "Replace default Shiki `github-dark` code blocks with `astro-expressive-code` using the `houston` theme, copy buttons, and language labels — styled to match the site's neon/midnight aesthetic."
-publishedOn: 2026-02-22
-planType: "implementation"
-topic: "syntax-highlighting"
-status: "completed"
+title: Syntax Highlighting Implementation Plan
+description: >-
+  Replace default Shiki `github-dark` code blocks with `astro-expressive-code`
+  using the `houston` theme, copy buttons, and language labels — styled to match
+  the site's neon/midnight aesthetic.
+publishedOn: 2026-02-22T22:44:28.000Z
+planType: implementation
+topic: syntax-highlighting
+status: completed
+category: styling
 ---
 
 # Syntax Highlighting Implementation Plan

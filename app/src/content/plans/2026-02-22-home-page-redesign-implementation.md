@@ -1,10 +1,14 @@
 ---
-title: "Home Page Redesign Implementation Plan"
-description: "Replace the current minimal home page with a three-section \"Terminal Portfolio\" layout: conversational hero, featured projects strip, and site evolution timeline."
-publishedOn: 2026-02-22
-planType: "implementation"
-topic: "home-page-redesign"
-status: "completed"
+title: Home Page Redesign Implementation Plan
+description: >-
+  Replace the current minimal home page with a three-section "Terminal
+  Portfolio" layout: conversational hero, featured projects strip, and site
+  evolution timeline.
+publishedOn: 2026-02-23T00:00:14.000Z
+planType: implementation
+topic: home-page-redesign
+status: completed
+category: layout
 ---
 
 # Home Page Redesign Implementation Plan

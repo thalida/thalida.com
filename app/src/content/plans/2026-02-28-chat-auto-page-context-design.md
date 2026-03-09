@@ -1,10 +1,15 @@
 ---
-title: "Chat: Auto Page Context Design"
-description: "The chat currently has a user-facing dropdown letting visitors choose between \"page\" and \"general\" context when sending a message. This is unnecessary UI complexity. The right behavior is to silently attach the current page path to every message automatically."
-publishedOn: 2026-02-28
-planType: "design"
-topic: "chat-auto-page-context"
-status: "completed"
+title: 'Chat: Auto Page Context Design'
+description: >-
+  The chat currently has a user-facing dropdown letting visitors choose between
+  "page" and "general" context when sending a message. This is unnecessary UI
+  complexity. The right behavior is to silently attach the current page path to
+  every message automatically.
+publishedOn: 2026-02-28T19:35:08.000Z
+planType: design
+topic: chat-auto-page-context
+status: completed
+category: chat
 ---
 
 # Chat: Auto Page Context Design

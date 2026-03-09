@@ -1,10 +1,11 @@
 ---
-title: "CSS Audit Design"
-description: "Establish clear separation of concerns across HTML, CSS, and JS:"
-publishedOn: 2026-03-01
-planType: "design"
-topic: "css-audit"
-status: "completed"
+title: CSS Audit Design
+description: 'Establish clear separation of concerns across HTML, CSS, and JS:'
+publishedOn: 2026-03-01T18:32:53.000Z
+planType: design
+topic: css-audit
+status: completed
+category: code-quality
 ---
 
 # CSS Audit Design

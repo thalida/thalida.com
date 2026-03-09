@@ -1,10 +1,13 @@
 ---
-title: "Meta Card Image Implementation Plan"
-description: "Replace the outdated OG/social card image with a neon-glow `<3` mark on midnight background, matching the site's current design."
-publishedOn: 2026-03-01
-planType: "implementation"
-topic: "meta-card-image"
-status: "completed"
+title: Meta Card Image Implementation Plan
+description: >-
+  Replace the outdated OG/social card image with a neon-glow `<3` mark on
+  midnight background, matching the site's current design.
+publishedOn: 2026-03-01T23:51:14.000Z
+planType: implementation
+topic: meta-seo
+status: completed
+category: content
 ---
 
 # Meta Card Image Implementation Plan

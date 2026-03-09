@@ -1,10 +1,14 @@
 ---
-title: "Design: Proxy OpenWeather API through Cloudflare Worker"
-description: "The OpenWeather API key is exposed client-side via `PUBLIC_OPENWEATHER_KEY`. Move the call behind the Cloudflare Worker, matching the pattern used for IP Registry geolocation."
-publishedOn: 2026-03-04
-planType: "design"
-topic: "weather-api-proxy"
-status: "completed"
+title: 'Design: Proxy OpenWeather API through Cloudflare Worker'
+description: >-
+  The OpenWeather API key is exposed client-side via `PUBLIC_OPENWEATHER_KEY`.
+  Move the call behind the Cloudflare Worker, matching the pattern used for IP
+  Registry geolocation.
+publishedOn: 2026-03-05T02:58:48.000Z
+planType: design
+topic: weather-api-proxy
+status: completed
+category: live-window
 ---
 
 # Design: Proxy OpenWeather API through Cloudflare Worker

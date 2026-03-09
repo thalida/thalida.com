@@ -1,10 +1,13 @@
 ---
-title: "Stars Layer Implementation Plan"
-description: "Add a stars layer to the live window that displays varied, realistic stars at night, fading in/out with the sky phase system."
-publishedOn: 2026-03-02
-planType: "implementation"
-topic: "stars-layer"
-status: "completed"
+title: Stars Layer Implementation Plan
+description: >-
+  Add a stars layer to the live window that displays varied, realistic stars at
+  night, fading in/out with the sky phase system.
+publishedOn: 2026-03-02T05:22:11.000Z
+planType: implementation
+topic: stars-layer
+status: completed
+category: live-window
 ---
 
 # Stars Layer Implementation Plan

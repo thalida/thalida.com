@@ -1,10 +1,14 @@
 ---
-title: "Post URL Nesting + Tags on Post Pages"
-description: "Posts and categories share the same URL segment under `/{collection}/`, creating collision risk. Posts also don't display tags on their individual pages."
-publishedOn: 2026-02-28
-planType: "design"
-topic: "post-url-nesting"
-status: "completed"
+title: Post URL Nesting + Tags on Post Pages
+description: >-
+  Posts and categories share the same URL segment under `/{collection}/`,
+  creating collision risk. Posts also don't display tags on their individual
+  pages.
+publishedOn: 2026-02-28T08:06:34.000Z
+planType: design
+topic: post-url-nesting
+status: completed
+category: content
 ---
 
 # Post URL Nesting + Tags on Post Pages

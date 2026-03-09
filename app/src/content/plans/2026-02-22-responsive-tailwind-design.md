@@ -1,10 +1,14 @@
 ---
-title: "Responsive Tailwind Redesign — Design"
-description: "Replace all raw CSS `@media` queries with Tailwind responsive utility classes. Add proper mobile and tablet layouts using a mobile-first approach. Ignore existing mobile drawer patterns and build fresh."
-publishedOn: 2026-02-22
-planType: "design"
-topic: "responsive-tailwind"
-status: "completed"
+title: Responsive Tailwind Redesign — Design
+description: >-
+  Replace all raw CSS `@media` queries with Tailwind responsive utility classes.
+  Add proper mobile and tablet layouts using a mobile-first approach. Ignore
+  existing mobile drawer patterns and build fresh.
+publishedOn: 2026-02-23T04:30:39.000Z
+planType: design
+topic: responsive-tailwind
+status: completed
+category: styling
 ---
 
 # Responsive Tailwind Redesign — Design

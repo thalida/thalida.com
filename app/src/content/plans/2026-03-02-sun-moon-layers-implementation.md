@@ -1,10 +1,13 @@
 ---
-title: "Sun & Moon Layers Implementation Plan"
-description: "Add sun and moon celestial bodies to the live window sky using the celestial circle model."
-publishedOn: 2026-03-02
-planType: "implementation"
-topic: "sun-moon-layers"
-status: "completed"
+title: Sun & Moon Layers Implementation Plan
+description: >-
+  Add sun and moon celestial bodies to the live window sky using the celestial
+  circle model.
+publishedOn: 2026-03-03T03:11:37.000Z
+planType: implementation
+topic: sun-moon-layers
+status: completed
+category: live-window
 ---
 
 # Sun & Moon Layers Implementation Plan

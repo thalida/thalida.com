@@ -1,10 +1,14 @@
 ---
-title: "Meta Tags, SEO & Social Sharing Design"
-description: "Add comprehensive meta tags, OpenGraph, Twitter Cards, structured data, and SEO infrastructure so thalida.com shows up well in search results and looks great when links are shared on social media."
-publishedOn: 2026-03-01
-planType: "design"
-topic: "meta-seo"
-status: "completed"
+title: 'Meta Tags, SEO & Social Sharing Design'
+description: >-
+  Add comprehensive meta tags, OpenGraph, Twitter Cards, structured data, and
+  SEO infrastructure so thalida.com shows up well in search results and looks
+  great when links are shared on social media.
+publishedOn: 2026-03-01T22:54:11.000Z
+planType: design
+topic: meta-seo
+status: completed
+category: content
 ---
 
 # Meta Tags, SEO & Social Sharing Design

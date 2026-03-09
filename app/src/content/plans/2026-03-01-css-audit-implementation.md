@@ -1,10 +1,14 @@
 ---
-title: "CSS Audit Implementation Plan"
-description: "Remove all HTML IDs, inline styles, and hardcoded JS styles — replacing them with data attributes (JS targeting), CSS classes (styling), and Tailwind utilities."
-publishedOn: 2026-03-01
-planType: "implementation"
-topic: "css-audit"
-status: "completed"
+title: CSS Audit Implementation Plan
+description: >-
+  Remove all HTML IDs, inline styles, and hardcoded JS styles — replacing them
+  with data attributes (JS targeting), CSS classes (styling), and Tailwind
+  utilities.
+publishedOn: 2026-03-01T18:48:40.000Z
+planType: implementation
+topic: css-audit
+status: completed
+category: code-quality
 ---
 
 # CSS Audit Implementation Plan

@@ -1,10 +1,14 @@
 ---
-title: "Live Window Refactor Design"
-description: "Refactor the `<live-window>` web component from a monolithic 700-line class into focused modules with a `SkyLayer` interface, making it easy to add time-aware celestial features (stars, moon, sun) in the future."
-publishedOn: 2026-03-01
-planType: "design"
-topic: "live-window-refactor"
-status: "completed"
+title: Live Window Refactor Design
+description: >-
+  Refactor the `<live-window>` web component from a monolithic 700-line class
+  into focused modules with a `SkyLayer` interface, making it easy to add
+  time-aware celestial features (stars, moon, sun) in the future.
+publishedOn: 2026-03-02T02:53:15.000Z
+planType: design
+topic: live-window-refactor
+status: completed
+category: live-window
 ---
 
 # Live Window Refactor Design

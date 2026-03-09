@@ -1,10 +1,13 @@
 ---
-title: "Weather Code Audit & Distinct Rendering Design"
-description: "The live window has 50 weather codes (OpenWeatherMap IDs) but many render identically or near-identically:"
-publishedOn: 2026-03-06
-planType: "design"
-topic: "weather-code-audit"
-status: "completed"
+title: Weather Code Audit & Distinct Rendering Design
+description: >-
+  The live window has 50 weather codes (OpenWeatherMap IDs) but many render
+  identically or near-identically:
+publishedOn: 2026-03-07T05:28:23.000Z
+planType: design
+topic: weather-code-audit
+status: completed
+category: live-window
 ---
 
 # Weather Code Audit & Distinct Rendering Design

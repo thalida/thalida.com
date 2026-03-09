@@ -1,10 +1,13 @@
 ---
-title: "App Audit Fixes Implementation Plan"
-description: "Fix the top 5 priority findings from the app code and security audit (docs/plans/2026-03-05-app-code-audit.md)."
-publishedOn: 2026-03-05
-planType: "implementation"
-topic: "app-audit-fixes"
-status: "completed"
+title: App Audit Fixes Implementation Plan
+description: >-
+  Fix the top 5 priority findings from the app code and security audit
+  (docs/plans/2026-03-05-app-code-audit.md).
+publishedOn: 2026-03-05T21:32:53.000Z
+planType: implementation
+topic: app-code-audit
+status: completed
+category: code-quality
 ---
 
 # App Audit Fixes Implementation Plan

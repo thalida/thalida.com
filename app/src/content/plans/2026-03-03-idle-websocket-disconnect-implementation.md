@@ -1,10 +1,13 @@
 ---
-title: "Idle WebSocket Disconnect Implementation Plan"
-description: "Disconnect idle chat WebSockets after 5 minutes to reduce Cloudflare Durable Object duration usage on the free tier."
-publishedOn: 2026-03-03
-planType: "implementation"
-topic: "idle-websocket-disconnect"
-status: "completed"
+title: Idle WebSocket Disconnect Implementation Plan
+description: >-
+  Disconnect idle chat WebSockets after 5 minutes to reduce Cloudflare Durable
+  Object duration usage on the free tier.
+publishedOn: 2026-03-04T03:18:40.000Z
+planType: implementation
+topic: idle-websocket-disconnect
+status: completed
+category: chat
 ---
 
 # Idle WebSocket Disconnect Implementation Plan

@@ -1,10 +1,14 @@
 ---
-title: "Dead Link Detection — Design"
-description: "When external links in the links collection go dead (404, timeout, DNS failure, etc.), they continue to appear across the site. There's no way to detect or surface broken links."
-publishedOn: 2026-03-07
-planType: "design"
-topic: "dead-link-detection"
-status: "completed"
+title: Dead Link Detection — Design
+description: >-
+  When external links in the links collection go dead (404, timeout, DNS
+  failure, etc.), they continue to appear across the site. There's no way to
+  detect or surface broken links.
+publishedOn: 2026-03-07T23:22:48.000Z
+planType: design
+topic: dead-link-detection
+status: completed
+category: content
 ---
 
 # Dead Link Detection — Design

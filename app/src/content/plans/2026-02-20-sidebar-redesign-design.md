@@ -1,10 +1,11 @@
 ---
-title: "Sidebar Redesign: Two-Level Navigation with Command Palette"
-description: "The current IDE-style file-tree sidebar has several usability issues:"
-publishedOn: 2026-02-20
-planType: "design"
-topic: "sidebar-redesign"
-status: "completed"
+title: 'Sidebar Redesign: Two-Level Navigation with Command Palette'
+description: 'The current IDE-style file-tree sidebar has several usability issues:'
+publishedOn: 2026-02-20T23:51:50.000Z
+planType: design
+topic: sidebar-redesign
+status: completed
+category: layout
 ---
 
 # Sidebar Redesign: Two-Level Navigation with Command Palette

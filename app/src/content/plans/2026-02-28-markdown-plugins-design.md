@@ -1,10 +1,13 @@
 ---
-title: "Markdown Plugins Restoration — Design"
-description: "The `v-2026` branch dropped several markdown processing plugins that existed on `main`, resulting in:"
-publishedOn: 2026-02-28
-planType: "design"
-topic: "markdown-plugins"
-status: "completed"
+title: Markdown Plugins Restoration — Design
+description: >-
+  The `v-2026` branch dropped several markdown processing plugins that existed
+  on `main`, resulting in:
+publishedOn: 2026-02-28T18:21:45.000Z
+planType: design
+topic: markdown-plugins
+status: completed
+category: content
 ---
 
 # Markdown Plugins Restoration — Design
