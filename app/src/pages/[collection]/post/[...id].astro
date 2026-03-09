@@ -32,6 +32,19 @@ export async function getStaticPaths() {
 const { collection, id } = Astro.params;
 const { entry } = Astro.props;
 
+// Fetch related plans (same topic) for plan posts
+let relatedPlans: Array<{ id: string; title: string; planType?: string }> = [];
+if (collection === "plans" && entry.data.topic) {
+  const allPlans = await getCollection("plans", ({ data }) => !data.draft);
+  relatedPlans = allPlans
+    .filter((p) => p.data.topic === entry.data.topic && p.id !== entry.id)
+    .map((p) => ({
+      id: p.id,
+      title: p.data.title,
+      planType: p.data.planType,
+    }));
+}
+
 let Content: AstroComponentFactory | null = null;
 let recipeJsonLd: string | null = null;
 try {
@@ -180,6 +193,14 @@ const recipeMeta =
               </span>
             )
           }
+          {
+            collection === "plans" && entry.data.topic && (
+              <span>
+                {" "}
+                / <span class="text-teal">{entry.data.topic}</span>
+              </span>
+            )
+          }
         </p>
         {
           entry.data.publishedOn && (
@@ -207,6 +228,40 @@ const recipeMeta =
         )
       }
       <CardTags tags={entry.data.tags} max={Infinity} />
+      {
+        collection === "plans" && (
+          <div class="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs font-body text-muted">
+            {entry.data.planType && (
+              <span>
+                <span class="font-semibold text-text">Type</span> <span class="capitalize">{entry.data.planType}</span>
+              </span>
+            )}
+            {entry.data.status && (
+              <span>
+                <span class="font-semibold text-text">Status</span> <span class="capitalize">{entry.data.status}</span>
+              </span>
+            )}
+          </div>
+        )
+      }
+      {
+        relatedPlans.length > 0 && (
+          <div class="mt-4 pt-3 border-t border-border">
+            <p class="m-0 mb-2 text-xs font-body font-semibold text-muted uppercase tracking-widest">Related plans</p>
+            <div class="flex flex-col gap-1">
+              {relatedPlans.map((rp) => (
+                <a
+                  href={`/plans/post/${rp.id}`}
+                  class="flex items-center gap-2 text-sm text-teal no-underline hover:text-neon font-body"
+                >
+                  <span>{rp.planType === "design" ? "\u{1F4D0}" : "\u{1F527}"}</span>
+                  <span>{rp.title}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
       {
         recipeMeta.length > 0 && (
           <div class="recipe-meta flex flex-wrap gap-x-5 gap-y-1 mt-3 text-xs font-body text-muted">
