@@ -8,11 +8,14 @@ export function formatDate(isoString: string): string {
 }
 
 export function formatDateFull(isoString: string): string {
-  return new Date(isoString).toLocaleDateString("en-US", {
+  return new Date(isoString).toLocaleString("en-US", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
     timeZone: "UTC",
+    timeZoneName: "short",
   });
 }
 

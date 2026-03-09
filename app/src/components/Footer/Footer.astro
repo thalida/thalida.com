@@ -10,31 +10,44 @@ interface Props {
 
 const { narrow = false, postPublishedOn, postUpdatedOn } = Astro.props;
 
-let siteUpdated: string;
+let siteUpdatedIso: string;
 try {
-  const commitDate = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
-  siteUpdated = formatDateFull(commitDate);
+  siteUpdatedIso = execSync("git log -1 --format=%cI", { encoding: "utf-8" }).trim();
 } catch {
-  siteUpdated = formatDateFull(new Date().toISOString());
+  siteUpdatedIso = new Date().toISOString();
 }
+const siteUpdated = formatDateFull(siteUpdatedIso);
 
-const postPublished = postPublishedOn ? formatDateFull(postPublishedOn.toISOString()) : null;
-const postUpdated = postUpdatedOn ? formatDateFull(postUpdatedOn.toISOString()) : null;
+const postPublishedIso = postPublishedOn?.toISOString() ?? null;
+const postUpdatedIso = postUpdatedOn?.toISOString() ?? null;
+const postPublished = postPublishedIso ? formatDateFull(postPublishedIso) : null;
+const postUpdated = postUpdatedIso ? formatDateFull(postUpdatedIso) : null;
 ---
 
 <footer class:list={["mt-16 py-8 font-body text-xs text-muted", { "w-full max-w-3xl mx-auto": narrow }]}>
   {
     postPublished && (
       <p class="mb-2">
-        {"//"} post created on {postPublished}
-        {postUpdated && <span> · updated on {postUpdated}</span>}
+        {"//"} post created on{" "}
+        <span data-ts={postPublishedIso} data-ts-text>
+          {postPublished}
+        </span>
+        {postUpdated && (
+          <span>
+            {" "}
+            · updated on{" "}
+            <span data-ts={postUpdatedIso} data-ts-text>
+              {postUpdated}
+            </span>
+          </span>
+        )}
       </p>
     )
   }
   <p>
     {"//"} made by thalida ·
     <a href="https://github.com/thalida/thalida.com" class="text-teal no-underline hover:text-neon transition-colors">
-      site updated on {siteUpdated}
+      site updated on <span data-ts={siteUpdatedIso} data-ts-text>{siteUpdated}</span>
     </a>
   </p>
 </footer>

@@ -28,11 +28,13 @@ describe("formatDate", () => {
 });
 
 describe("formatDateFull", () => {
-  it("formats date as full month day and year", () => {
-    const result = formatDateFull("2024-06-15T00:00:00Z");
-    expect(result).toContain("Jun");
+  it("formats date as full month day, year, and time", () => {
+    const result = formatDateFull("2024-06-15T14:30:00Z");
+    expect(result).toContain("June");
     expect(result).toContain("15");
     expect(result).toContain("2024");
+    expect(result).toMatch(/2:30/);
+    expect(result).toContain("UTC");
   });
 });
 
