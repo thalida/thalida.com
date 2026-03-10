@@ -19,7 +19,7 @@ const href = `/${item.collection}/post/${item.id}`;
       {item.category && <span class="text-neon font-semibold shrink-0">{prettifySlug(item.category)}</span>}
       {
         item.subcategory && (
-          <span class="text-muted font-semibold truncate" title={prettifySlug(item.subcategory)}>
+          <span class="text-neon font-semibold truncate" title={prettifySlug(item.subcategory)}>
             &nbsp;/ {prettifySlug(item.subcategory)}
           </span>
         )

@@ -1,0 +1,45 @@
+---
+import { prettifySlug } from "@lib/format-utils";
+
+interface Props {
+  collection: string;
+  category: string;
+  subcategories: string[];
+  activeSubcategory?: string;
+}
+
+const { collection, category, subcategories, activeSubcategory } = Astro.props;
+---
+
+{
+  subcategories.length > 0 && (
+    <div class="mb-6 -mt-3">
+      <div class="flex flex-wrap gap-2">
+        <a
+          href={`/${collection}/${encodeURIComponent(category)}`}
+          class:list={[
+            "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+            !activeSubcategory
+              ? "bg-white/15 text-white! border-white"
+              : "bg-transparent border-muted text-muted hover:bg-teal/20 hover:text-white hover:border-white/60",
+          ]}
+        >
+          All
+        </a>
+        {subcategories.map((sub) => (
+          <a
+            href={`/${collection}/${encodeURIComponent(category)}/${encodeURIComponent(sub)}`}
+            class:list={[
+              "border font-body transition-colors no-underline capitalize text-xs rounded-sm py-1 px-3 tracking-wide",
+              activeSubcategory === sub
+                ? "bg-white/15 text-white! border-white"
+                : "bg-transparent border-muted text-muted hover:bg-teal/20 hover:text-white hover:border-white/60",
+            ]}
+          >
+            {prettifySlug(sub)}
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}

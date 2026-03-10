@@ -14,4 +14,5 @@ export interface CollectionPage {
 export interface CollectionPageProps {
   title: string;
   allCategories: string[];
+  allSubcategories: Record<string, string[]>;
 }

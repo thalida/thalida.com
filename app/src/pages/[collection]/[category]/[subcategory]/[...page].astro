@@ -1,0 +1,66 @@
+---
+import type { GetStaticPathsOptions } from "astro";
+import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
+import CollectionGrid from "@components/CollectionGrid/CollectionGrid.astro";
+import { getNavData } from "@lib/nav-data";
+import { prettifySlug } from "@lib/format-utils";
+import { COLLECTION_NAMES, collectionMeta, type CollectionName } from "@/content.config";
+import { PAGE_SIZE } from "@lib/constants";
+import type { CollectionPage, CollectionPageProps } from "@lib/collection-types";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const navData = await getNavData();
+  const pages = COLLECTION_NAMES.flatMap((collection) => {
+    const collectionData = navData[collection];
+    if (!collectionData) return [];
+    return Object.entries(collectionData.allSubcategories).flatMap(([category, subcategories]) =>
+      subcategories.flatMap((subcategory) => {
+        const filtered = collectionData.items.filter(
+          (item) => item.category === category && item.subcategory === subcategory,
+        );
+        if (filtered.length === 0) return [];
+        return paginate(filtered, {
+          pageSize: PAGE_SIZE,
+          params: { collection, category, subcategory },
+          props: {
+            title: collectionData.title,
+            allCategories: collectionData.allCategories,
+            allSubcategories: collectionData.allSubcategories,
+          },
+        });
+      }),
+    );
+  });
+  return pages;
+}
+
+const { collection, category, subcategory } = Astro.params as {
+  collection: CollectionName;
+  category: string;
+  subcategory: string;
+};
+const page = Astro.props.page as CollectionPage;
+const { title, allCategories, allSubcategories } = Astro.props as CollectionPageProps;
+---
+
+<BaseLayout
+  title={`${prettifySlug(subcategory)} · ${prettifySlug(category)} · ${title} · thalida`}
+  activeCollection={collection}
+  description={`${prettifySlug(subcategory)} ${prettifySlug(category)} ${collectionMeta[collection].description.toLowerCase()}`}
+>
+  <CollectionGrid
+    collection={collection}
+    title={title}
+    subtitle={collectionMeta[collection].description}
+    itemCount={page.total}
+    items={page.data}
+    allCategories={allCategories}
+    allSubcategories={allSubcategories}
+    activeCategory={category}
+    activeSubcategory={subcategory}
+    prevUrl={page.url.prev}
+    nextUrl={page.url.next}
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+  />
+</BaseLayout>

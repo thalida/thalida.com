@@ -65,10 +65,22 @@ async function combineYamlFiles({ filename, pattern, base }: { filename: string;
     const parsed = parseYaml(content) as Record<string, unknown>[];
     if (!Array.isArray(parsed)) continue;
 
+    // Derive category from parent directory, subcategory from filename
+    const segments = entry.split("/");
+    let dirCategory: string | undefined;
+    let dirSubcategory: string | undefined;
+    if (segments.length >= 2) {
+      dirCategory = segments[segments.length - 2];
+      const fileName = segments[segments.length - 1].replace(/\.yaml$/, "");
+      dirSubcategory = fileName === dirCategory ? undefined : fileName;
+    }
+
     for (const item of parsed) {
       const id = String(item.id ?? "");
       if (id && seenIds.has(id)) continue;
       if (id) seenIds.add(id);
+      if (dirCategory && !item.category) item.category = dirCategory;
+      if (dirSubcategory && !item.subcategory) item.subcategory = dirSubcategory;
       allEntries.push(item);
     }
   }
@@ -89,11 +101,15 @@ async function makeCollection(collectionName: CollectionName) {
   if (collectionName === "links") {
     loader = await combineYamlFiles({
       filename: "links.yaml",
-      pattern: "*.yaml",
+      pattern: "**/*.yaml",
       base,
     });
   } else {
-    loader = glob({ pattern: "**/*.{md,mdx}", base });
+    loader = glob({
+      pattern: "**/*.{md,mdx}",
+      base,
+      generateId: ({ entry }) => entry.replace(/\/index\.mdx?$/, ""),
+    });
   }
 
   return defineCollection({
@@ -110,7 +126,6 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        subcategory: z.string().optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),
