@@ -5,6 +5,7 @@ import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
 import { prettifySlug } from "@lib/format-utils";
+import { parseContentPath } from "@lib/content-path";
 
 type AnyEntry = CollectionEntry<CollectionName>;
 
@@ -32,13 +33,17 @@ export async function getStaticPaths() {
 
 const { collection, id } = Astro.params;
 const { entry } = Astro.props;
+const parsedPath = parseContentPath(entry.id);
 
-// Fetch related plans (same subcategory) for plan posts
-let relatedPlans: Array<{ id: string; title: string; tags?: string[] }> = [];
-if (collection === "plans" && entry.data.subcategory) {
-  const allPlans = await getCollection("plans", ({ data }) => !data.draft);
-  relatedPlans = allPlans
-    .filter((p) => p.data.subcategory === entry.data.subcategory && p.id !== entry.id)
+// Fetch related items (same subcategory within same collection)
+let relatedItems: Array<{ id: string; title: string; tags?: string[] }> = [];
+if (parsedPath.subcategory) {
+  const allInCollection = await getCollection(collection as CollectionName, ({ data }) => !data.draft);
+  relatedItems = allInCollection
+    .filter((p) => {
+      const pp = parseContentPath(p.id);
+      return pp.subcategory === parsedPath.subcategory && p.id !== entry.id;
+    })
     .map((p) => ({
       id: p.id,
       title: p.data.title,
@@ -56,8 +61,9 @@ try {
     const { ingredients, instructionSections } = rendered.remarkPluginFrontmatter?.recipeData ?? {};
 
     // Google says: don't repeat recipeCategory or recipeCuisine in keywords
+    const recipeCategory = parsedPath.category ?? entry.data.category;
     const excludeFromKeywords = new Set(
-      [entry.data.category, entry.data.recipeCuisine].filter(Boolean).map((s: string) => s.toLowerCase()),
+      [recipeCategory, entry.data.recipeCuisine].filter(Boolean).map((s: string) => s.toLowerCase()),
     );
     const keywords = entry.data.tags?.filter((t: string) => !excludeFromKeywords.has(t.toLowerCase())).join(", ");
 
@@ -80,7 +86,7 @@ try {
       description: entry.data.description,
       datePublished: entry.data.publishedOn?.toISOString().split("T")[0],
       dateModified: entry.data.updatedOn?.toISOString().split("T")[0],
-      recipeCategory: entry.data.category,
+      recipeCategory,
       recipeCuisine: entry.data.recipeCuisine,
       keywords,
       prepTime: entry.data.prepTime,
@@ -176,7 +182,8 @@ const recipeMeta =
   {articleJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={articleJsonLd} />}
   <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
     <meta data-pagefind-meta={`collection:${collection}`} />
-    <meta data-pagefind-meta={`category:${entry.data.category || ""}`} />
+    <meta data-pagefind-meta={`category:${parsedPath.category ?? entry.data.category ?? ""}`} />
+    <meta data-pagefind-meta={`subcategory:${parsedPath.subcategory ?? ""}`} />
     <meta data-pagefind-meta={`itemId:${id}`} />
     <meta data-pagefind-meta={`tags:${(entry.data.tags || []).join(",")}`} />
     <header class="mb-6">
@@ -184,21 +191,30 @@ const recipeMeta =
         <p class="m-0 font-semibold">
           <a class="text-teal no-underline hover:text-neon" href={`/${collection}`}>{collection}</a>
           {
-            entry.data.category && (
+            (parsedPath.category ?? entry.data.category) && (
               <span>
                 {" "}
                 /{" "}
-                <a class="text-teal no-underline hover:text-neon" href={`/${collection}/${entry.data.category}`}>
-                  {prettifySlug(entry.data.category)}
+                <a
+                  class="text-teal no-underline hover:text-neon"
+                  href={`/${collection}/${parsedPath.category ?? entry.data.category}`}
+                >
+                  {prettifySlug((parsedPath.category ?? entry.data.category)!)}
                 </a>
               </span>
             )
           }
           {
-            entry.data.subcategory && (
+            parsedPath.subcategory && (
               <span>
                 {" "}
-                / <span class="text-muted">{prettifySlug(entry.data.subcategory)}</span>
+                /{" "}
+                <a
+                  class="text-muted no-underline hover:text-neon"
+                  href={`/${collection}/${parsedPath.category}/${parsedPath.subcategory}`}
+                >
+                  {prettifySlug(parsedPath.subcategory)}
+                </a>
               </span>
             )
           }
@@ -230,16 +246,16 @@ const recipeMeta =
       }
       <CardTags tags={entry.data.tags} max={Infinity} />
       {
-        relatedPlans.length > 0 && (
+        relatedItems.length > 0 && (
           <div class="mt-4 pt-3 border-t border-border">
-            <p class="m-0 mb-2 text-xs font-body font-semibold text-muted uppercase tracking-widest">Related plans</p>
+            <p class="m-0 mb-2 text-xs font-body font-semibold text-muted uppercase tracking-widest">Related</p>
             <div class="flex flex-col gap-1">
-              {relatedPlans.map((rp) => (
+              {relatedItems.map((ri) => (
                 <a
-                  href={`/plans/post/${rp.id}`}
+                  href={`/${collection}/post/${ri.id}`}
                   class="flex items-center gap-2 text-sm text-teal no-underline hover:text-neon font-body"
                 >
-                  <span>{rp.title}</span>
+                  <span>{ri.title}</span>
                 </a>
               ))}
             </div>
