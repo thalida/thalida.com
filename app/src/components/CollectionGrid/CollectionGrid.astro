@@ -3,6 +3,7 @@ import { type NavItem } from "@lib/nav-data";
 import { collectionMeta, type CollectionName } from "../../content.config";
 import Card from "@components/Card/Card.astro";
 import CategoryFilter from "@components/CategoryFilter/CategoryFilter.astro";
+import SubcategoryFilter from "@components/SubcategoryFilter/SubcategoryFilter.astro";
 import Pagination from "@components/Pagination/Pagination.astro";
 
 interface Props {
@@ -12,7 +13,9 @@ interface Props {
   itemCount: number;
   items: NavItem[];
   allCategories: string[];
+  allSubcategories?: Record<string, string[]>;
   activeCategory?: string;
+  activeSubcategory?: string;
   prevUrl?: string;
   nextUrl?: string;
   currentPage?: number;
@@ -26,7 +29,9 @@ const {
   itemCount,
   items,
   allCategories,
+  allSubcategories,
   activeCategory,
+  activeSubcategory,
   prevUrl,
   nextUrl,
   currentPage,
@@ -45,6 +50,17 @@ const useGallery = variant === "gallery";
   </header>
 
   <CategoryFilter collection={collection} categories={allCategories} activeCategory={activeCategory} />
+
+  {
+    activeCategory && allSubcategories?.[activeCategory]?.length > 0 && (
+      <SubcategoryFilter
+        collection={collection}
+        category={activeCategory}
+        subcategories={allSubcategories[activeCategory]}
+        activeSubcategory={activeSubcategory}
+      />
+    )
+  }
 
   <div
     class:list={[
