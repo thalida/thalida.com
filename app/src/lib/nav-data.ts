@@ -2,6 +2,7 @@ import { getCollection } from "astro:content";
 import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
+import { parseContentPath } from "./content-path";
 
 const COVER_IMAGE_WIDTH = 400;
 
@@ -27,6 +28,7 @@ export type NavCollection = {
   title: string;
   items: NavItem[];
   allCategories: string[];
+  allSubcategories: Record<string, string[]>; // category -> subcategory[]
 };
 
 export type NavEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
@@ -75,7 +77,8 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       const linkMeta = isLink ? linkMetadataMap[entry.id] : undefined;
       const isDead = isLink && linkMeta?.dead === true;
 
-      const category = isDead ? "dead-links" : entry.data.category;
+      const parsed = parseContentPath(entry.id);
+      const category = isDead ? "dead-links" : (entry.data.category ?? parsed.category);
       if (category) categoriesSet.add(category);
 
       items.push({
@@ -92,8 +95,23 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageAlt: entry.data.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
         metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
-        subcategory: entry.data.subcategory,
+        subcategory: parsed.subcategory,
       });
+    }
+
+    const subcategoriesMap: Record<string, string[]> = {};
+    for (const item of items) {
+      if (item.category && item.subcategory) {
+        if (!subcategoriesMap[item.category]) {
+          subcategoriesMap[item.category] = [];
+        }
+        if (!subcategoriesMap[item.category].includes(item.subcategory)) {
+          subcategoriesMap[item.category].push(item.subcategory);
+        }
+      }
+    }
+    for (const cat of Object.keys(subcategoriesMap)) {
+      subcategoriesMap[cat].sort();
     }
 
     data[name] = {
@@ -103,6 +121,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
       allCategories: [...categoriesSet]
         .sort((a, b) => (name === "versions" ? b.localeCompare(a) : a.localeCompare(b)))
         .sort((a, b) => (a === "dead-links" ? 1 : b === "dead-links" ? -1 : 0)),
+      allSubcategories: subcategoriesMap,
     };
   }
 
