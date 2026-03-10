@@ -108,7 +108,7 @@ async function makeCollection(collectionName: CollectionName) {
     loader = glob({
       pattern: "**/*.{md,mdx}",
       base,
-      generateId: ({ entry }) => entry.replace(/\/index$/, ""),
+      generateId: ({ entry }) => entry.replace(/\/index\.mdx?$/, ""),
     });
   }
 
