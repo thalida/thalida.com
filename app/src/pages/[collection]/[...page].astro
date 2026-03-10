@@ -22,6 +22,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
       props: {
         title: collectionData.title,
         allCategories: collectionData.allCategories,
+        allSubcategories: collectionData.allSubcategories,
       },
     });
   });
@@ -30,7 +31,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
 const { collection } = Astro.params as { collection: CollectionName };
 const page = Astro.props.page as CollectionPage;
-const { title, allCategories } = Astro.props as CollectionPageProps;
+const { title, allCategories, allSubcategories } = Astro.props as CollectionPageProps;
 ---
 
 <BaseLayout
@@ -45,6 +46,7 @@ const { title, allCategories } = Astro.props as CollectionPageProps;
     itemCount={page.total}
     items={page.data}
     allCategories={allCategories}
+    allSubcategories={allSubcategories}
     prevUrl={page.url.prev}
     nextUrl={page.url.next}
     currentPage={page.currentPage}
