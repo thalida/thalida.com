@@ -6,13 +6,13 @@ publishedOn: 2018-04-04
 tags:
   - angular
   - game
-coverImage: shapeconnector/teaser-gameplay.png
+coverImage: ./teaser-gameplay.png
 coverImageAlt: ShapeConnector puzzle game showing a 5x5 grid of colorful shapes
   on a dark blue background with a move counter showing 3 moves and a dotted
   path between shapes
 ---
 
-![Animated gameplay demo of ShapeConnector showing a cursor connecting shapes on a grid with a 9-move counter](shapeconnector/gameplay.gif)
+![Animated gameplay demo of ShapeConnector showing a cursor connecting shapes on a grid with a 9-move counter](./gameplay.gif)
 
 | Links                                                 |                                                       |
 | ----------------------------------------------------- | ----------------------------------------------------- |
@@ -31,6 +31,6 @@ coverImageAlt: ShapeConnector puzzle game showing a 5x5 grid of colorful shapes
 
 |     |     |
 | --- | --- |
-| ![ShapeConnector teaser showing a 5x5 grid of colorful shapes with a dotted path and move counter on dark blue background](shapeconnector/teaser-gameplay.png) | ![Freeplay mode starting state with 5-move goal, colorful shape grid on dark blue background](shapeconnector/freeplay-start.png) |
-| ![Freeplay mode completed with trophy icon, muted grid colors, and a connected path between shapes](shapeconnector/freeplay-finished.png) | ![Freeplay mode showing -2 remaining moves in red, indicating too many moves were used to connect shapes](shapeconnector/freeplay-too-many-moves.png) |
-| ![Freeplay mode mid-game with 3 moves remaining and a dotted path showing progress between shapes](shapeconnector/freeplay-moved.png) |     |
+| ![ShapeConnector teaser showing a 5x5 grid of colorful shapes with a dotted path and move counter on dark blue background](./teaser-gameplay.png) | ![Freeplay mode starting state with 5-move goal, colorful shape grid on dark blue background](./freeplay-start.png) |
+| ![Freeplay mode completed with trophy icon, muted grid colors, and a connected path between shapes](./freeplay-finished.png) | ![Freeplay mode showing -2 remaining moves in red, indicating too many moves were used to connect shapes](./freeplay-too-many-moves.png) |
+| ![Freeplay mode mid-game with 3 moves remaining and a dotted path showing progress between shapes](./freeplay-moved.png) |     |

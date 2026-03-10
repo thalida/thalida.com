@@ -6,7 +6,7 @@ updatedOn: 2019-05-12
 tags:
   - project
   - design
-coverImage: revibed/mockup-playlist-dashboard.png
+coverImage: ./mockup-playlist-dashboard.png
 coverImageAlt: Revibed tablet mockup showing a playlist dashboard with recently
   updated playlists including album art, a manage button, and snapshot
   timestamps
@@ -29,11 +29,11 @@ Automated playlist archiving and backups for Spotify.
 
 |     |     |
 | --- | --- |
-| ![Hand-drawn wireframe sketches showing playlist grid layouts, detail views, and responsive breakpoints for mobile through extra-large screens](revibed/sketch-wireframes.png) | ![Sketch exploring revibed branding with logo concepts, Spotify login button, and colorful abstract shapes](revibed/sketch-branding.png) |
+| ![Hand-drawn wireframe sketches showing playlist grid layouts, detail views, and responsive breakpoints for mobile through extra-large screens](./sketch-wireframes.png) | ![Sketch exploring revibed branding with logo concepts, Spotify login button, and colorful abstract shapes](./sketch-branding.png) |
 
 
 ### Mockups
 
 |     |     |
 | --- | --- |
-| ![Revibed tablet mockup showing playlist dashboard with recently updated playlists, album art thumbnails, and snapshot timestamps](revibed/mockup-playlist-dashboard.png) |     |
+| ![Revibed tablet mockup showing playlist dashboard with recently updated playlists, album art thumbnails, and snapshot timestamps](./mockup-playlist-dashboard.png) |     |

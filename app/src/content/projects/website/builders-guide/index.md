@@ -7,13 +7,13 @@ tags:
   - minecraft
   - python
   - vue
-coverImage: builders-guide/splash-page-with-minecraft-items.png
+coverImage: ./splash-page-with-minecraft-items.png
 coverImageAlt: Builder's Guide splash page showing the title "builder's guide —
   A Minecraft Cookbook" with floating 3D Minecraft item blocks surrounding a
   green "Plan your build" button.
 ---
 
-![Builder's Guide splash page showing the title "builder's guide — A Minecraft Cookbook" with floating 3D Minecraft item blocks surrounding a green "Plan your build" button](builders-guide/splash-page-with-minecraft-items.png)
+![Builder's Guide splash page showing the title "builder's guide — A Minecraft Cookbook" with floating 3D Minecraft item blocks surrounding a green "Plan your build" button](./splash-page-with-minecraft-items.png)
 
 | Links                                                 |                                                |
 | ----------------------------------------------------- | ---------------------------------------------- |
@@ -27,14 +27,14 @@ coverImageAlt: Builder's Guide splash page showing the title "builder's guide �
 
 | | |
 | --- | --- |
-| ![Brainstorm of names like "minecraft cookbook," "crafting guide," and "shopping list"](builders-guide/sketch-name-brainstorm-cookbook.png) | ![More name ideas: "cookbook," "chef craft," "builder's guide," "game cook"](builders-guide/sketch-name-brainstorm-variations.png) |
-| ![Logo sketches for "builder's guide," "building block," and "bg"/"bb"](builders-guide/sketch-name-brainstorm-logo-and-type.png) | ![Brainstorm of "builder's guide/book," "building block" with cube logos](builders-guide/sketch-name-brainstorm-builders-guide.png) |
-| ![Final name lockup: "builder's guide" in various typographic styles](builders-guide/sketch-name-brainstorm-final-lockup.png) | |
+| ![Brainstorm of names like "minecraft cookbook," "crafting guide," and "shopping list"](./sketch-name-brainstorm-cookbook.png) | ![More name ideas: "cookbook," "chef craft," "builder's guide," "game cook"](./sketch-name-brainstorm-variations.png) |
+| ![Logo sketches for "builder's guide," "building block," and "bg"/"bb"](./sketch-name-brainstorm-logo-and-type.png) | ![Brainstorm of "builder's guide/book," "building block" with cube logos](./sketch-name-brainstorm-builders-guide.png) |
+| ![Final name lockup: "builder's guide" in various typographic styles](./sketch-name-brainstorm-final-lockup.png) | |
 
 
 ### Color Exploration
 
-![Color palette exploration with dots in greens, blues, pinks, and earth tones, plus logo icon variations](builders-guide/sketch-color-palette-exploration.png)
+![Color palette exploration with dots in greens, blues, pinks, and earth tones, plus logo icon variations](./sketch-color-palette-exploration.png)
 
 
 ## 🎨 Design
@@ -44,14 +44,14 @@ coverImageAlt: Builder's Guide splash page showing the title "builder's guide �
 
 | | |
 | --- | --- |
-| ![Six splash page concepts with colorful backgrounds and Minecraft item icons](builders-guide/sketch-splash-page-concepts.png) | ![User flow wireframes titled "Minecraft Calculator" with page navigation arrows](builders-guide/sketch-user-flow-wireframes.png) |
-| ![Item search and list UI with search bars, item grids, and remove buttons](builders-guide/sketch-item-search-and-list-ui.png) | ![Recipe tree structures showing ingredient breakdowns for a torch](builders-guide/sketch-recipe-tree-and-ingredients.png) |
-| ![Shopping list UI concepts with item counts and inventory tracking](builders-guide/sketch-shopping-list-item-counts.png) | |
+| ![Six splash page concepts with colorful backgrounds and Minecraft item icons](./sketch-splash-page-concepts.png) | ![User flow wireframes titled "Minecraft Calculator" with page navigation arrows](./sketch-user-flow-wireframes.png) |
+| ![Item search and list UI with search bars, item grids, and remove buttons](./sketch-item-search-and-list-ui.png) | ![Recipe tree structures showing ingredient breakdowns for a torch](./sketch-recipe-tree-and-ingredients.png) |
+| ![Shopping list UI concepts with item counts and inventory tracking](./sketch-shopping-list-item-counts.png) | |
 
 
 ### Mockups
 
 | | |
 | --- | --- |
-| ![Mockup of splash page with Minecraft blocks and "Plan your build" button](builders-guide/mockup-splash-page.png) | ![Mockup of Build Selection screen with search bar and random pick option](builders-guide/mockup-build-selection-empty.png) |
-| ![Mockup of Build Recipes screen with Dark Prismarine Slab recipe options](builders-guide/mockup-recipe-tree-collapsed.png) | ![Mockup of Shopping List with raw ingredients and build process steps](builders-guide/mockup-shopping-list.png) |
+| ![Mockup of splash page with Minecraft blocks and "Plan your build" button](./mockup-splash-page.png) | ![Mockup of Build Selection screen with search bar and random pick option](./mockup-build-selection-empty.png) |
+| ![Mockup of Build Recipes screen with Dark Prismarine Slab recipe options](./mockup-recipe-tree-collapsed.png) | ![Mockup of Shopping List with raw ingredients and build process steps](./mockup-shopping-list.png) |

@@ -4,13 +4,13 @@ description: A simple calendar and notes app for MacOS, designed to help users
   manage their schedules and jot down quick notes.
 publishedOn: 2025-03-26
 updatedOn: 2025-03-29
-coverImage: mynn/calendar-event-detail.png
+coverImage: ./calendar-event-detail.png
 coverImageAlt: Mynn macOS app in dark mode showing a weekly calendar view with
   events, an event detail panel for "Lindsay / Thalida" with Zoom link and
   participants list
 ---
 
-![Mynn macOS app showing a weekly calendar with events and an event detail panel with Zoom link and participants](mynn/calendar-event-detail.png)
+![Mynn macOS app showing a weekly calendar with events and an event detail panel with Zoom link and participants](./calendar-event-detail.png)
 
 | Links                                       |     |
 | ------------------------------------------- | --- |
@@ -40,5 +40,5 @@ and a note-taking section, allowing for easy access and organization of daily ta
 
 ## Screenshots
 
-![Mynn calendar view with General settings modal open showing time format, theme mode, theme color options, and event style previews](mynn/calendar-with-settings.png)
-![Mynn General settings panel showing calendar settings, appearance settings with theme color swatches, and event style previews](mynn/settings-general.png)
+![Mynn calendar view with General settings modal open showing time format, theme mode, theme color options, and event style previews](./calendar-with-settings.png)
+![Mynn General settings panel showing calendar settings, appearance settings with theme color swatches, and event style previews](./settings-general.png)

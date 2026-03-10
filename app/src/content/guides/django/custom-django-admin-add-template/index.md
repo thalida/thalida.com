@@ -3,7 +3,7 @@ title: "Custom Django Admin: Model Add Template"
 description: How to customize Django Admin model templates to add custom content.
 publishedOn: 2023-11-11T23:45:00Z
 updatedOn: 2023-11-14T02:29:00Z
-coverImage: custom-django-admin-add-template/django-admin-custom-add-template.png
+coverImage: ./django-admin-custom-add-template.png
 coverImageAlt: Django admin custom add template showing code for registering a
   model with custom add form template
 tags:

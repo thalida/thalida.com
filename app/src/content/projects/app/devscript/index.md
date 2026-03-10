@@ -3,13 +3,13 @@ title: Devscript
 description: An open source snippet manager for developers.
 publishedOn: 2024-12-30
 updatedOn: 2025-02-01
-coverImage: devscript/themes-split.png
+coverImage: ./themes-split.png
 coverImageAlt: Devscript snippet detail view showing a Python pytest parametrize
   example with syntax highlighting, tags, and Copy Snippet, Fork, and Copy URL
   action buttons
 ---
 
-![Devscript snippet detail view showing a Python pytest parametrize example with syntax highlighting, tags, and Copy Snippet, Fork, and Copy URL action buttons](devscript/themes-split.png)
+![Devscript snippet detail view showing a Python pytest parametrize example with syntax highlighting, tags, and Copy Snippet, Fork, and Copy URL action buttons](./themes-split.png)
 
 | Links                                               |                                     |
 | --------------------------------------------------- | ----------------------------------- |

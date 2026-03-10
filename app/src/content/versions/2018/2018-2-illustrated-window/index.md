@@ -5,12 +5,12 @@ publishedOn: 2018-08-01
 tags:
   - flask
   - python
-coverImage: 2018-2-illustrated-window/screenshot-hero.png
+coverImage: ./screenshot-hero.png
 coverImageAlt: Screenshot of the Illustrated Window portfolio homepage showing
   an illustrated window with a plant and Google Home device on a windowsill
 ---
 
-![Screenshot of the Illustrated Window portfolio homepage showing an illustrated window with a plant and Google Home device on a windowsill](2018-2-illustrated-window/screenshot-hero.png)
+![Screenshot of the Illustrated Window portfolio homepage showing an illustrated window with a plant and Google Home device on a windowsill](./screenshot-hero.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -64,11 +64,11 @@ benefits of scss and other compilers.
 
 ### Concept Sketches
 
-![Hand-drawn notebook sketch showing early site architecture wireframes and tech stack notes](2018-2-illustrated-window/sketch-1.jpg)
+![Hand-drawn notebook sketch showing early site architecture wireframes and tech stack notes](./sketch-1.jpg)
 
-![Hand-drawn notebook sketch exploring multiple page layout options including project cards and about page variations](2018-2-illustrated-window/sketch-2.jpg)
+![Hand-drawn notebook sketch exploring multiple page layout options including project cards and about page variations](./sketch-2.jpg)
 
-![Hand-drawn notebook sketch focused on the window illustration concept showing window frame studies and weather state labels](2018-2-illustrated-window/sketch-3.jpg)
+![Hand-drawn notebook sketch focused on the window illustration concept showing window frame studies and weather state labels](./sketch-3.jpg)
 
 
 ## Design
@@ -76,9 +76,9 @@ benefits of scss and other compilers.
 
 ### Iterations 1 and 2
 
-![Design mockup labeled Home Version 1 showing the full illustrated window portfolio page](2018-2-illustrated-window/mockup-1.png)
+![Design mockup labeled Home Version 1 showing the full illustrated window portfolio page](./mockup-1.png)
 
-![Design mockup labeled Home Version 2 showing a refined layout with larger bio text](2018-2-illustrated-window/mockup-2.png)
+![Design mockup labeled Home Version 2 showing a refined layout with larger bio text](./mockup-2.png)
 
 Version 1 of my initial design aligned the most with my favorite concept sketches.
 After creating this version I realized more space was needed for my about text,
@@ -90,9 +90,9 @@ and version 2 split the about section into two columns.
 
 ### Iterations 4 and 5
 
-![Design mockup labeled Home Version 4 showing the portfolio with a two-column project grid](2018-2-illustrated-window/mockup-3.png)
+![Design mockup labeled Home Version 4 showing the portfolio with a two-column project grid](./mockup-3.png)
 
-![Design mockup labeled Home Version 5 showing the portfolio with sections for shelf, things built, and journal](2018-2-illustrated-window/mockup-4.png)
+![Design mockup labeled Home Version 5 showing the portfolio with sections for shelf, things built, and journal](./mockup-4.png)
 
 Version 4 changed my list of posts into a grid, once again to provide more space for a growing
 list of posts, and I also added link and post hover styles. (The missing version 3 was very
@@ -137,15 +137,15 @@ a separate library with it's own soon.
 
 ### Window
 
-![Animated illustrated window showing partly cloudy sky with white clouds drifting past a city skyline](2018-2-illustrated-window/cloudy.gif)
+![Animated illustrated window showing partly cloudy sky with white clouds drifting past a city skyline](./cloudy.gif)
 
-![Animated illustrated window showing snowy dark blue night sky with white snowflakes](2018-2-illustrated-window/snow.gif)
+![Animated illustrated window showing snowy dark blue night sky with white snowflakes](./snow.gif)
 
-![Animated illustrated window showing foggy atmosphere with translucent bokeh circles and analog clock](2018-2-illustrated-window/fog.gif)
+![Animated illustrated window showing foggy atmosphere with translucent bokeh circles and analog clock](./fog.gif)
 
-![Animated illustrated window showing rain with water droplets accumulating below the analog clock](2018-2-illustrated-window/rain.gif)
+![Animated illustrated window showing rain with water droplets accumulating below the analog clock](./rain.gif)
 
-![Animated illustrated window showing wind with particles and debris floating around the analog clock](2018-2-illustrated-window/wind.gif)
+![Animated illustrated window showing wind with particles and debris floating around the analog clock](./wind.gif)
 
 The weather uses your current locations time and weather data in order to render a view of
 "outside". Even though the site is minimal elsewhere, I wanted to retain this live and

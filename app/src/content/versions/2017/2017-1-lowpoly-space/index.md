@@ -4,11 +4,11 @@ description: "Split-screen v2: Re-using the lowpoly space scene an earlier versi
 publishedOn: 2017-03-01
 tags:
   - vue
-coverImage: 2017-1-lowpoly-space/space-hero-geometric.png
+coverImage: ./space-hero-geometric.png
 coverImageAlt: Dark navy background with floating white geometric shapes and text OH HI
 ---
 
-![Dark navy background with floating white geometric shapes and text OH HI](2017-1-lowpoly-space/space-hero-geometric.png)
+![Dark navy background with floating white geometric shapes and text OH HI](./space-hero-geometric.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -25,7 +25,7 @@ and actually implement the lowpoly space scene with weather that I'd previously 
 
 ## Design
 
-![Full page design with geometric shapes hero, projects section, and featured project area](2017-1-lowpoly-space/mockup-2.png)
+![Full page design with geometric shapes hero, projects section, and featured project area](./mockup-2.png)
 
 This is one of those times where the final results almost perfectly match the mockup.
 

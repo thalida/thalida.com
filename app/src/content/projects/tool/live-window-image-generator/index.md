@@ -4,12 +4,12 @@ description: Generate a live window SVG with semi-accurate sky color and weather
   for any location
 publishedOn: 2024-03-15
 updatedOn: 2024-03-17
-coverImage: live-window-image-generator/generated-window-preview.png
+coverImage: ./generated-window-preview.png
 coverImageAlt: Generated live window SVG showing an arched window frame with a
   purple night sky, clouds, and text reading "New York, 76.05°F, Few Clouds"
 ---
 
-![Generated live window SVG showing an arched window with purple sky, clouds, and New York weather info](live-window-image-generator/generated-window-preview.png)
+![Generated live window SVG showing an arched window with purple sky, clouds, and New York weather info](./generated-window-preview.png)
 
 | Links                                              |                                                        |
 | -------------------------------------------------- | ------------------------------------------------------ |

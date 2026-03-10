@@ -2,11 +2,11 @@
 title: "Knowledge Base: Brain Dump"
 description: A catch-all of my self-rubberducky resources and guides
 publishedOn: 2025-07-01
-coverImage: knowledge-base-brain-dump/colorful-rubber-ducks-collection.jpg
+coverImage: ./colorful-rubber-ducks-collection.jpg
 coverImageAlt: Assorted rubber ducks
 ---
 
-![Collection of colorful decorative rubber ducks with painted designs on white shelf](knowledge-base-brain-dump/colorful-rubber-ducks-collection.jpg)
+![Collection of colorful decorative rubber ducks with painted designs on white shelf](./colorful-rubber-ducks-collection.jpg)
 
 
 ## Help! PWA Cache Issues

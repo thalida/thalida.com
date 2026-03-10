@@ -4,7 +4,7 @@ description: An encrypted, lightweight, note-taking app for quick math,
   short-term tasks, and temporary notes.
 publishedOn: 2024-03-23
 updatedOn: 2024-04-01
-coverImage: napkinnotes/app-demo.gif
+coverImage: ./app-demo.gif
 coverImageAlt: Napkin Notes app demo showing text formatting with bold, italics,
   and underline, interactive checkboxes, bulleted and numbered lists, and inline
   math calculations

@@ -121,9 +121,9 @@ SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
    4. **Authorized redirect URIs:**
       1. (_The same as Authorized Javascript origins_)
 
-![Azure API credentials and services page showing OAuth configuration options and API keys settings](django-react-native-auth/azure-ad-credentials-api-keys.png)
+![Azure API credentials and services page showing OAuth configuration options and API keys settings](./azure-ad-credentials-api-keys.png)
 
-![Azure AD OAuth 2.0 client configuration form showing authorized JavaScript origins and redirect URIs settings](django-react-native-auth/azure-ad-oauth-client-configuration.png)
+![Azure AD OAuth 2.0 client configuration form showing authorized JavaScript origins and redirect URIs settings](./azure-ad-oauth-client-configuration.png)
 
 
 #### 1.4.2 Update Django Settings
@@ -157,11 +157,11 @@ There may be a better method to do this, but this is what worked for me.
 
 [ms-entra]: https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade/quickStartType~/null/sourceType/Microsoft_AAD_IAM
 
-![Microsoft Entra admin center app registrations page with notification about Azure Active Directory feature changes](django-react-native-auth/azure-ad-app-registrations.png)
+![Microsoft Entra admin center app registrations page with notification about Azure Active Directory feature changes](./azure-ad-app-registrations.png)
 
 App Registration > New Application
 
-![Azure AD app platform configuration page showing web redirect URIs and authentication settings](django-react-native-auth/azure-ad-platform-configuration.png)
+![Azure AD app platform configuration page showing web redirect URIs and authentication settings](./azure-ad-platform-configuration.png)
 
 App Registration Page
 
@@ -175,7 +175,7 @@ App Registration Page
 3. Under **Advanced settings** enable `Allow public client flows`
 4. **Save**
 
-![Azure AD web redirect URI configuration page for authentication response handling and sign-out redirect settings](django-react-native-auth/azure-ad-redirect-uri-configuration.png)
+![Azure AD web redirect URI configuration page for authentication response handling and sign-out redirect settings](./azure-ad-redirect-uri-configuration.png)
 
 
 ##### Update Permissions
@@ -188,7 +188,7 @@ App Registration Page
    4. `profile`
    5. `User.Read`
 
-![Azure AD API permissions management showing Microsoft Graph permissions with delegated access types and status](django-react-native-auth/azure-ad-api-permissions.png)
+![Azure AD API permissions management showing Microsoft Graph permissions with delegated access types and status](./azure-ad-api-permissions.png)
 
 
 #### 1.5.2 Update **Django Settings**

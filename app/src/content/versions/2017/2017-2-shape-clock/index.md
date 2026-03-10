@@ -4,11 +4,11 @@ description: "Split-screen v3: Attempting to feature a very-odd-looking shape"
 tags:
   - vue
 publishedOn: 2017-12-01
-coverImage: 2017-2-shape-clock/shapes-hero-dynamic.png
+coverImage: ./shapes-hero-dynamic.png
 coverImageAlt: Dark navy hero with mint geometric shapes and OH HI heading
 ---
 
-![Dark navy hero with mint geometric shapes and OH HI heading](2017-2-shape-clock/shapes-hero-dynamic.png)
+![Dark navy hero with mint geometric shapes and OH HI heading](./shapes-hero-dynamic.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -27,4 +27,4 @@ would mimic the current weather.
 
 ## Mockup
 
-![Complete page showing geometric shapes hero with weather display and projects listing](2017-2-shape-clock/mockup-1.png)
+![Complete page showing geometric shapes hero with weather display and projects listing](./mockup-1.png)

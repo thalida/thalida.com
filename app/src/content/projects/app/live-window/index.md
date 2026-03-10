@@ -3,7 +3,7 @@ title: Live Window
 description: An interactive sky simulation showing real-time weather, sun, moon,
   and stars for any location on Earth.
 publishedOn: 2026-03-07
-coverImage: live-window/cover.png
+coverImage: ./cover.png
 coverImageAlt: Live window showing a sunset sky over Reykjavik, Iceland with
   clouds, a setting sun, and a digital clock reading 18:20
 tags:

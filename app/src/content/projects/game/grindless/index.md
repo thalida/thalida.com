@@ -8,12 +8,12 @@ tags:
   - minecraft datapack
   - python
   - sphinx
-coverImage: grindless/grindless-banner.png
+coverImage: ./grindless-banner.png
 coverImageAlt: Minecraft character standing in a village with trees and
   buildings under a bright sky
 ---
 
-![Minecraft character standing in a village with trees and buildings under a bright sky](grindless/grindless-banner.png)
+![Minecraft character standing in a village with trees and buildings under a bright sky](./grindless-banner.png)
 
 | Links                                            |                                           |
 | ------------------------------------------------ | ----------------------------------------- |
