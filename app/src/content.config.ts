@@ -93,7 +93,11 @@ async function makeCollection(collectionName: CollectionName) {
       base,
     });
   } else {
-    loader = glob({ pattern: "**/*.{md,mdx}", base });
+    loader = glob({
+      pattern: "**/*.{md,mdx}",
+      base,
+      generateId: ({ entry }) => entry.replace(/\/index$/, ""),
+    });
   }
 
   return defineCollection({
@@ -110,7 +114,6 @@ async function makeCollection(collectionName: CollectionName) {
         draft: z.boolean().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
-        subcategory: z.string().optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
         cookTime: z.string().optional(),
