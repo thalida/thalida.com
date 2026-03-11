@@ -1,7 +1,6 @@
 - id: https://baubleboba.com/
-  title: https://baubleboba.com/
-  publishedOn: 50
-
-- id: https://www.ivyleaffarms.com/green-houwse-shop?page=2
-  title: https://www.ivyleaffarms.com/green-houwse-shop?page=2
+  title: Bauble Boba
+  tags:
+    - boba
+    - drinks
   publishedOn: 50

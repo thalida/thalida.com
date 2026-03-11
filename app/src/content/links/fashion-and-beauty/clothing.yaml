@@ -1,5 +1,5 @@
 - id: https://www.shopuntitled.com/
-  title: Dollface Creations
+  title: Shop Untitled
   tags:
     - clothing
     - goth
@@ -7,71 +7,35 @@
   publishedOn: 100
 
 - id: https://orttu.com/
-  title: https://orttu.com/
+  title: ORTTU
   tags:
     - clothing
-    - accessories
   publishedOn: 50
 
 - id: https://shoptunnelvision.com/
-  title: https://shoptunnelvision.com/
+  title: Tunnel Vision
   tags:
     - clothing
-    - accessories
-  publishedOn: 50
-
-- id: https://www.afternoonfika.com/
-  title: https://www.afternoonfika.com/
-  tags:
-    - clothing
-    - accessories
-  publishedOn: 50
-
-- id: https://alythuh.com/
-  title: https://alythuh.com/
-  tags:
-    - clothing
-    - accessories
+    - vintage
   publishedOn: 50
 
 - id: https://www.sandqvist.us/
-  title: https://www.sandqvist.us/
+  title: Sandqvist
   tags:
-    - clothing
-    - accessories
-  publishedOn: 50
-
-- id: https://shop.bubblesort.io/
-  title: https://shop.bubblesort.io/
-  tags:
-    - clothing
-    - accessories
-  publishedOn: 50
-
-- id: https://www.shopuntitled.com/
-  title: https://www.shopuntitled.com/
-  tags:
-    - clothing
+    - bags
     - accessories
   publishedOn: 50
 
 - id: https://huckberry.com/
-  title: https://huckberry.com/
+  title: Huckberry
   tags:
     - clothing
-    - accessories
-  publishedOn: 50
-
-- id: https://www.ivyleaffarms.com/green-houwse-shop?page=2
-  title: https://www.ivyleaffarms.com/green-houwse-shop?page=2
-  tags:
-    - clothing
-    - accessories
+    - outdoor
   publishedOn: 50
 
 - id: https://www.lucrin.com/
-  title: https://www.lucrin.com/
+  title: LUCRIN
   tags:
-    - clothing
+    - leather-goods
     - accessories
   publishedOn: 50

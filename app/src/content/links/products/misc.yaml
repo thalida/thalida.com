@@ -1,19 +1,15 @@
 - id: https://us.hay.com/accessories/office/office-accessories/colour-crate---m/2516481.html?lang=en_US#q=crate&lang=en_US&start=1
-  title: Hay Creates
+  title: HAY Colour Crate
   tags:
     - favorites
-  publishedOn: 100
-
-- id: https://alythuh.com/
-  title: Alythuh
-  tags:
-    - favorites
+    - organization
   publishedOn: 100
 
 - id: https://shop.bubblesort.io/
   title: BubbleSort
   tags:
-    - misc
+    - zines
+    - merch
   publishedOn: 50
 
 - id: https://www.dollfacecreatiions.com/
@@ -25,5 +21,6 @@
 - id: https://impalarollerskates.com/
   title: Impala Rollerskates
   tags:
-    - misc
+    - sports
+    - rollerskates
   publishedOn: 50

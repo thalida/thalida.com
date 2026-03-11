@@ -18,3 +18,10 @@
     - home
     - furniture
   publishedOn: 80
+
+- id: https://www.ivyleaffarms.com/green-houwse-shop?page=2
+  title: Ivy Leaf Farms
+  tags:
+    - plants
+    - home
+  publishedOn: 50
