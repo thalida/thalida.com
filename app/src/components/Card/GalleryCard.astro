@@ -15,7 +15,7 @@ const href = `/${item.collection}/post/${item.id}`;
 ---
 
 <a href={href} class="group item-card overflow-hidden flex flex-col max-h-80">
-  <div class="overflow-hidden flex-1">
+  <div class="overflow-hidden flex-1 aspect-4/3">
     <CardCover
       src={item.coverImageSrc}
       alt={item.coverImageAlt ?? item.title}
