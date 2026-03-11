@@ -7,12 +7,12 @@ tags:
   - super
   - svelte
   - vercel
-coverImage: ./screenshot-live-dark.png
+coverImage: /content/versions/2022/2022-super-window/screenshot-live-dark.png
 coverImageAlt: Live screenshot of the Super Window portfolio in dark mode
   showing illustrated window with venetian blinds and digital clock
 ---
 
-![Live screenshot of the Super Window portfolio in dark mode showing illustrated window with venetian blinds and digital clock](./screenshot-live-dark.png)
+![Live screenshot of the Super Window portfolio in dark mode showing illustrated window with venetian blinds and digital clock](/content/versions/2022/2022-super-window/screenshot-live-dark.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -75,7 +75,7 @@ For the first time, I've added a day/night mode switcher to my site. Finally in 
 It's not finalized yet (I still don't account for user preferences) but otherwise it's fully
 functional.
 
-![Animated GIF showing the Super Window site dark/light theme toggle transition](./theme-toggle.gif)
+![Animated GIF showing the Super Window site dark/light theme toggle transition](/content/versions/2022/2022-super-window/theme-toggle.gif)
 
 You can checkout the code and fork this theme switcher on codpen!
 [https://codepen.io/thalida/pen/XWEVVaj](https://codepen.io/thalida/pen/XWEVVaj)
@@ -98,16 +98,16 @@ _This theme switcher is a fork of
 
 ### Paper Sketches
 
-![Hand-drawn sketch showing early thalida.me site structure concepts including list-based layout and fullpage HTML concept](./sketch-site-structure.png)
+![Hand-drawn sketch showing early thalida.me site structure concepts including list-based layout and fullpage HTML concept](/content/versions/2022/2022-super-window/sketch-site-structure.png)
 
-![Hand-drawn sketch showing window layout variations in blue ink, feature notes, and window frame experiments](./sketch-window-and-layout-concepts.png)
+![Hand-drawn sketch showing window layout variations in blue ink, feature notes, and window frame experiments](/content/versions/2022/2022-super-window/sketch-window-and-layout-concepts.png)
 
-![Hand-drawn sketch with wireframes for Home and About pages, post layouts, and gallery grid](./sketch-page-wireframes.png)
+![Hand-drawn sketch with wireframes for Home and About pages, post layouts, and gallery grid](/content/versions/2022/2022-super-window/sketch-page-wireframes.png)
 
-![Hand-drawn sketch showing five window design variations side by side including illustrated, minimal, and venetian blind styles](./sketch-window-style-explorations.png)
+![Hand-drawn sketch showing five window design variations side by side including illustrated, minimal, and venetian blind styles](/content/versions/2022/2022-super-window/sketch-window-style-explorations.png)
 
-![Hand-drawn sketch with notes about art, code snippets, weather, and interactive art features](./sketch-app-and-content-concepts.png)
+![Hand-drawn sketch with notes about art, code snippets, weather, and interactive art features](/content/versions/2022/2022-super-window/sketch-app-and-content-concepts.png)
 
-![Hand-drawn sketch exploring portfolio grid layout with year/story aggregator and timeline from 2010 to 2021](./sketch-portfolio-grid-and-timeline.png)
+![Hand-drawn sketch exploring portfolio grid layout with year/story aggregator and timeline from 2010 to 2021](/content/versions/2022/2022-super-window/sketch-portfolio-grid-and-timeline.png)
 
-![Hand-drawn sketch showing journal and gallery page layout concepts with chronological content grid](./sketch-journal-and-gallery-layouts.png)
+![Hand-drawn sketch showing journal and gallery page layout concepts with chronological content grid](/content/versions/2022/2022-super-window/sketch-journal-and-gallery-layouts.png)

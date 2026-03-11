@@ -1,0 +1,15 @@
+- id: https://hippypotter.bigcartel.com/
+  title: Hippy Potter
+  tags:
+    - art
+    - pottery
+  publishedOn: 60
+
+- id: https://arhoj.com/
+  title: Arhoj
+  tags:
+    - art
+    - pottery
+    - ceramics
+    - favorites
+  publishedOn: 100

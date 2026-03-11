@@ -114,17 +114,18 @@ async function makeCollection(collectionName: CollectionName) {
 
   return defineCollection({
     loader,
-    schema: ({ image }) =>
+    schema: () =>
       z.object({
         title: z.string(),
         link: z.string().optional(),
-        coverImage: image().optional(),
+        coverImage: z.string().optional(),
         coverImageAlt: z.string().optional(),
         description: z.string().optional(),
         publishedOn: z.coerce.date(),
         updatedOn: z.coerce.date().optional(),
         draft: z.boolean().optional(),
         category: z.string().optional(),
+        subcategory: z.string().optional(),
         tags: z.array(z.string()).optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),

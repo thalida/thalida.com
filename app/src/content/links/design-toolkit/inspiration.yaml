@@ -1,0 +1,26 @@
+- id: https://tympanus.net/codrops/
+  title: Codrops - Web Design & Development Inspiration
+  tags:
+    - inspiration
+    - web-design
+    - tutorials
+    - resources
+  publishedOn: 50
+
+- id: https://mobbin.design/browse/ios/apps
+  title: Mobbin - Mobile App Design Reference Library
+  tags:
+    - inspiration
+    - mobile-design
+    - ui-patterns
+    - reference
+  publishedOn: 50
+
+- id: https://www.figma.com/community
+  title: Figma Community
+  tags:
+    - figma
+    - design-kits
+    - community
+    - ui-kits
+  publishedOn: 50

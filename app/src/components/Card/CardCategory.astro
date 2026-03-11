@@ -3,13 +3,21 @@ import { prettifySlug } from "@lib/format-utils";
 
 interface Props {
   category?: string;
+  subcategory?: string;
 }
 
-const { category } = Astro.props;
+const { category, subcategory } = Astro.props;
 ---
 
 {
   category && (
-    <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest">{prettifySlug(category)}</p>
+    <p class="m-0 font-body uppercase text-neon font-semibold text-2xs tracking-widest flex min-w-0">
+      <span class="shrink-0">{prettifySlug(category)}</span>
+      {subcategory && (
+        <span class="truncate" title={prettifySlug(subcategory)}>
+          &nbsp;/ {prettifySlug(subcategory)}
+        </span>
+      )}
+    </p>
   )
 }

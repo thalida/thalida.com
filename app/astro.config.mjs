@@ -4,7 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import astroExpressiveCode from "astro-expressive-code";
 import pagefind from "astro-pagefind";
-import remarkR2Media from "./src/plugins/remark-r2-media.mjs";
 import rehypeR2Media from "./src/plugins/rehype-r2-media.mjs";
 import remarkExtractRecipe from "./src/plugins/remark-extract-recipe.mjs";
 import { remarkAlert } from "remark-github-blockquote-alert";
@@ -48,12 +47,7 @@ export default defineConfig({
     pagefind(),
   ],
   markdown: {
-    remarkPlugins: [
-      remarkAlert,
-      [remarkToc, { heading: "toc" }],
-      [remarkR2Media, { baseUrl: mediaBaseUrl }],
-      remarkExtractRecipe,
-    ],
+    remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }], remarkExtractRecipe],
     rehypePlugins: [
       rehypeSlug,
       [
@@ -71,5 +65,8 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    define: {
+      "import.meta.env.CF_PAGES_BRANCH": JSON.stringify(process.env.CF_PAGES_BRANCH || "main"),
+    },
   },
 });

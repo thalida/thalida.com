@@ -1,0 +1,40 @@
+- id: https://www.tatianapoblah.com/
+  title: Tatiana Poblah
+  tags:
+    - art
+    - favorites
+  publishedOn: 100
+
+- id: https://www.realweirdart.com/
+  title: Real Weird Art
+  tags:
+    - art
+    - favorites
+  publishedOn: 100
+
+- id: https://www.sharecestudios.com/
+  title: Sharece Studios
+  tags:
+    - art
+  publishedOn: 70
+
+- id: https://www.lgions.com/
+  title: LGIONS
+  tags:
+    - art
+    - design
+  publishedOn: 70
+
+- id: https://gldeng6rl.com/
+  title: Gldeng6rl
+  tags:
+    - art
+    - design
+  publishedOn: 60
+
+- id: https://popchart.co/
+  title: Pop Chart
+  tags:
+    - art
+    - design
+  publishedOn: 50

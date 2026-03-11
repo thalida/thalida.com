@@ -1,0 +1,23 @@
+- id: https://darknetdiaries.com/
+  title: Darknet Diaries - True stories from the dark side of the Internet.
+  tags:
+    - podcast
+    - cybersecurity
+    - stories
+  publishedOn: 80
+
+- id: https://www.alieward.com/ologies
+  title: Ologies Episodes - alie ward
+  tags:
+    - podcast
+    - science
+    - education
+  publishedOn: 75
+
+- id: https://www.nytimes.com/2020/07/23/podcasts/nice-white-parents-serial.html
+  title: Introducing - Nice White Parents (Published 2020)
+  tags:
+    - podcast
+    - education
+    - social-issues
+  publishedOn: 70

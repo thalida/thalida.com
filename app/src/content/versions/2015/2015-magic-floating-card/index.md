@@ -5,12 +5,12 @@ publishedOn: 2015-01-01
 tags:
   - coffeescript
   - gulp
-coverImage: ./floating-card-evening-state.png
+coverImage: /content/versions/2015/2015-magic-floating-card/floating-card-evening-state.png
 coverImageAlt: Purple floating card with Good Evening greeting and welcome back
   message on light gray background
 ---
 
-![Purple floating card with Good Evening greeting and welcome back message on light gray background](./floating-card-evening-state.png)
+![Purple floating card with Good Evening greeting and welcome back message on light gray background](/content/versions/2015/2015-magic-floating-card/floating-card-evening-state.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -29,7 +29,7 @@ I had two goals for this site:
 
 ## Design
 
-![Periwinkle background with floating dark card displaying Woah, Nightowl greeting](./mockup-1.png)
+![Periwinkle background with floating dark card displaying Woah, Nightowl greeting](/content/versions/2015/2015-magic-floating-card/mockup-1.png)
 
 
 ## How it Works

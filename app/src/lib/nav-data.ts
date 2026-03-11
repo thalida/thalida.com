@@ -1,10 +1,8 @@
 import { getCollection } from "astro:content";
-import { getImage } from "astro:assets";
 import { COLLECTION_NAMES, collectionMeta } from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
 import { parseContentPath } from "./content-path";
-
-const COVER_IMAGE_WIDTH = 400;
+import { resolveMediaUrl } from "./constants";
 
 export type NavItem = {
   id: string;
@@ -67,11 +65,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
     const items: NavItem[] = [];
 
     for (const entry of sorted) {
-      let coverImageSrc: string | undefined;
-      if (entry.data.coverImage) {
-        const optimized = await getImage({ src: entry.data.coverImage, width: COVER_IMAGE_WIDTH });
-        coverImageSrc = optimized.src;
-      }
+      const coverImageSrc = resolveMediaUrl(entry.data.coverImage);
 
       const isLink = name === "links";
       const linkMeta = isLink ? linkMetadataMap[entry.id] : undefined;
@@ -95,7 +89,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageAlt: entry.data.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
         metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
-        subcategory: parsed.subcategory,
+        subcategory: entry.data.subcategory ?? parsed.subcategory,
       });
     }
 

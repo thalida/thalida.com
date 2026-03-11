@@ -1,0 +1,41 @@
+- id: https://www.shopuntitled.com/
+  title: Shop Untitled
+  tags:
+    - clothing
+    - goth
+    - favorites
+  publishedOn: 100
+
+- id: https://orttu.com/
+  title: ORTTU
+  tags:
+    - clothing
+  publishedOn: 50
+
+- id: https://shoptunnelvision.com/
+  title: Tunnel Vision
+  tags:
+    - clothing
+    - vintage
+  publishedOn: 50
+
+- id: https://www.sandqvist.us/
+  title: Sandqvist
+  tags:
+    - bags
+    - accessories
+  publishedOn: 50
+
+- id: https://huckberry.com/
+  title: Huckberry
+  tags:
+    - clothing
+    - outdoor
+  publishedOn: 50
+
+- id: https://www.lucrin.com/
+  title: LUCRIN
+  tags:
+    - leather-goods
+    - accessories
+  publishedOn: 50

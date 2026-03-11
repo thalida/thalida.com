@@ -1,0 +1,23 @@
+- id: https://open.spotify.com/playlist/7JZcvu9Ngo3p1KiV57SQc7?si=38ac67316671434f
+  title: Coding Playlist 1
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1DXa8NOEUWPn9W?si=f77df8c53cf64fd1
+  title: Coding Playlist 2
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60
+
+- id: https://open.spotify.com/playlist/37i9dQZF1E8L1Oo6IF5ycG?si=cab23a6ec0ee4717
+  title: Coding Playlist 3
+  tags:
+    - music
+    - spotify
+    - coding-playlist
+  publishedOn: 60

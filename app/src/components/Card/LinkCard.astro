@@ -23,7 +23,7 @@ const displayUrl = (() => {
 
 <a href={href} class="item-card flex flex-col gap-1 p-3" target="_blank" rel="noopener">
   <div class="flex items-center gap-2">
-    <CardCategory category={item.originalCategory ?? item.category} />
+    <CardCategory category={item.originalCategory ?? item.category} subcategory={item.subcategory} />
     {
       isValidDate(item.publishedOn) && (
         <span class="text-dim text-2xs ml-auto" data-ts={item.publishedOn}>

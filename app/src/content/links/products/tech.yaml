@@ -1,0 +1,33 @@
+- id: https://paperlike.com/
+  title: Paperlike
+  tags:
+    - accessories
+    - tech
+  publishedOn: 80
+
+- id: https://www.yohann.com/
+  title: Yohann
+  tags:
+    - accessories
+    - tech
+  publishedOn: 80
+
+- id: https://oakywood.shop/
+  title: Oakywood
+  tags:
+    - accessories
+    - tech
+  publishedOn: 80
+
+- id: https://staycourant.com/
+  title: Courant
+  tags:
+    - accessories
+    - tech
+  publishedOn: 80
+
+- id: https://tivoliaudio.com/
+  title: Tivoli Audio
+  tags:
+    - audio
+  publishedOn: 100

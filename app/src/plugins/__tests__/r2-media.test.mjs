@@ -1,25 +1,8 @@
 // @vitest-environment node
 import { describe, it, expect } from "vitest";
-import remarkR2Media from "@plugins/remark-r2-media.mjs";
 import rehypeR2Media from "@plugins/rehype-r2-media.mjs";
 
 // ── Helpers ──────────────────────────────────────────────────────────
-
-function makeImageNode(url) {
-  return { type: "image", url };
-}
-
-function makeHtmlNode(value) {
-  return { type: "html", value };
-}
-
-function makeRemarkTree(nodes) {
-  return { type: "root", children: nodes };
-}
-
-function makeFile(filePath) {
-  return { history: [filePath], path: filePath };
-}
 
 function makeElementNode(tagName, src) {
   return {
@@ -29,114 +12,13 @@ function makeElementNode(tagName, src) {
   };
 }
 
+function makeRawNode(value) {
+  return { type: "raw", value };
+}
+
 function makeRehypeTree(nodes) {
   return { type: "root", children: nodes };
 }
-
-// ── Remark plugin tests ──────────────────────────────────────────────
-
-describe("remark-r2-media", () => {
-  const BASE_URL = "https://pub-xxx.r2.dev/main";
-
-  it("rewrites relative image URL to R2 path", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeImageNode("./photo.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe(`${BASE_URL}/content/gallery/trip/photo.jpg`);
-  });
-
-  it("rewrites image URL without ./ prefix", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeImageNode("photo.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe(`${BASE_URL}/content/gallery/trip/photo.jpg`);
-  });
-
-  it("does not rewrite absolute https URL", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeImageNode("https://example.com/img.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe("https://example.com/img.jpg");
-  });
-
-  it("does not rewrite protocol-relative URL", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeImageNode("//cdn.example.com/img.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe("//cdn.example.com/img.jpg");
-  });
-
-  it("rewrites double-quoted src in raw HTML blocks", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeHtmlNode('<video><source src="/content/gallery/video.mp4"></video>');
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/index.md");
-
-    plugin(tree, file);
-
-    expect(node.value).toBe(`<video><source src="${BASE_URL}/content/gallery/video.mp4"></video>`);
-  });
-
-  it("rewrites single-quoted src in raw HTML blocks", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeHtmlNode("<video><source src='/content/gallery/video.mp4'></video>");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/index.md");
-
-    plugin(tree, file);
-
-    expect(node.value).toBe(`<video><source src='${BASE_URL}/content/gallery/video.mp4'></video>`);
-  });
-
-  it("is a no-op when baseUrl is empty (local dev)", () => {
-    const plugin = remarkR2Media({ baseUrl: "" });
-    const node = makeImageNode("./photo.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe("./photo.jpg");
-  });
-
-  it("is a no-op when baseUrl is not provided", () => {
-    const plugin = remarkR2Media({});
-    const node = makeImageNode("./photo.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/content/gallery/trip/index.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe("./photo.jpg");
-  });
-
-  it("is a no-op for files outside src/content/", () => {
-    const plugin = remarkR2Media({ baseUrl: BASE_URL });
-    const node = makeImageNode("./photo.jpg");
-    const tree = makeRemarkTree([node]);
-    const file = makeFile("/project/src/pages/about.md");
-
-    plugin(tree, file);
-
-    expect(node.url).toBe("./photo.jpg");
-  });
-});
 
 // ── Rehype plugin tests ──────────────────────────────────────────────
 
@@ -231,5 +113,35 @@ describe("rehype-r2-media", () => {
     plugin(tree);
 
     expect(node.properties.src).toBe("/content/gallery/photo.jpg");
+  });
+
+  it("rewrites double-quoted src in raw HTML nodes", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode('<video><source src="/content/gallery/video.mp4"></video>');
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe(`<video><source src="${BASE_URL}/content/gallery/video.mp4"></video>`);
+  });
+
+  it("rewrites single-quoted src in raw HTML nodes", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode("<video><source src='/content/gallery/video.mp4'></video>");
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe(`<video><source src='${BASE_URL}/content/gallery/video.mp4'></video>`);
+  });
+
+  it("does not rewrite raw HTML without /content/ src", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode('<img src="/other/path.jpg">');
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe('<img src="/other/path.jpg">');
   });
 });

@@ -1,0 +1,118 @@
+- id: https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree
+  title: Todo Tree - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - productivity
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag
+  title: Auto Close Tag - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - html
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag
+  title: Auto Rename Tag - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - html
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
+  title: Better Comments - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - comments
+  publishedOn: 75
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker
+  title: Docker - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - docker
+    - containers
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=sleistner.vscode-fileutils
+  title: File Utils - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - file-management
+  publishedOn: 70
+
+- id: https://marketplace.visualstudio.com/items?itemName=GitHub.copilot
+  title: GitHub Copilot - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - ai
+    - github
+  publishedOn: 95
+
+- id: https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens
+  title: GitLens - Git supercharged - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - git
+    - github
+  publishedOn: 90
+
+- id: https://code.visualstudio.com/docs/remote/containers
+  title: Developing inside a Container using Visual Studio Code Remote Development
+  tags:
+    - vscode
+    - remote-development
+    - containers
+    - documentation
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+  title: Remote - Containers - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - remote-development
+    - containers
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh
+  title: Remote - SSH - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - remote-development
+    - ssh
+  publishedOn: 80
+
+- id: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack
+  title: Remote Development - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - remote-development
+  publishedOn: 85
+
+- id: https://marketplace.visualstudio.com/items?itemName=liviuschera.noctis
+  title: Noctis - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - theme
+  publishedOn: 70
+
+- id: https://marketplace.visualstudio.com/items?itemName=dariofuzinato.vue-peek
+  title: Vue Peek - Visual Studio Marketplace
+  tags:
+    - vscode
+    - extension
+    - vue
+    - javascript
+  publishedOn: 75

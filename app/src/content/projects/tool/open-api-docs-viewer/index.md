@@ -3,7 +3,7 @@ title: "VSCode Extension: OpenAPI Docs Viewer"
 description: Display interactive OpenAPI schema documentation in VSCode.
 publishedOn: 2024-04-19
 updatedOn: 2024-04-21
-coverImage: ./theme-elements-dark-large.png
+coverImage: /content/projects/tool/open-api-docs-viewer/theme-elements-dark-large.png
 coverImageAlt: OpenAPI Docs Viewer VSCode extension showing Swagger Petstore API
   documentation with Elements renderer in dark theme, displaying endpoints
   sidebar and API overview

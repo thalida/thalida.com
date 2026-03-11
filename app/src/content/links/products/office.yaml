@@ -1,0 +1,42 @@
+- id: https://fieldnotesbrand.com/
+  title: Field Notes
+  tags:
+    - office
+    - organization
+    - stationery
+  publishedOn: 80
+
+- id: https://shop.mochithings.com/
+  title: MochiThings
+  tags:
+    - office
+    - organization
+  publishedOn: 100
+
+- id: https://thekey.company/
+  title: The Key Company
+  tags:
+    - office
+    - organization
+  publishedOn: 50
+
+- id: https://www.orbitkey.com/
+  title: Orbitkey
+  tags:
+    - office
+    - organization
+  publishedOn: 50
+
+- id: http://grovemade.com/
+  title: Grovemade
+  tags:
+    - office
+    - organization
+  publishedOn: 50
+
+- id: https://fluidstance.com/
+  title: FluidStance
+  tags:
+    - office
+    - organization
+  publishedOn: 50

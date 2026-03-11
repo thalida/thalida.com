@@ -1,0 +1,27 @@
+- id: https://us.hay.com/
+  title: HAY
+  tags:
+    - home
+    - furniture
+  publishedOn: 80
+
+- id: https://organicmodernism.com/
+  title: Organic Modernism
+  tags:
+    - home
+    - furniture
+  publishedOn: 80
+
+- id: http://www.mvngmtns.com/
+  title: Moving Mountains
+  tags:
+    - home
+    - furniture
+  publishedOn: 80
+
+- id: https://www.ivyleaffarms.com/green-houwse-shop?page=2
+  title: Ivy Leaf Farms
+  tags:
+    - plants
+    - home
+  publishedOn: 50

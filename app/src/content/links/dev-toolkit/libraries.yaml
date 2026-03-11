@@ -1,0 +1,43 @@
+- id: https://editorjs.io/
+  title: Editor.js
+  tags:
+    - javascript
+    - editor
+    - wysiwyg
+    - libraries
+  publishedOn: 100
+
+- id: https://tiptap.dev/
+  title: Headless WYSIWYG Text Editor - Tiptap Editor
+  tags:
+    - javascript
+    - editor
+    - wysiwyg
+    - headless
+    - libraries
+  publishedOn: 95
+
+- id: https://tailwindcss.com/
+  title: Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.
+  tags:
+    - css
+    - framework
+    - utility-first
+    - libraries
+  publishedOn: 95
+
+- id: https://storybook.js.org/
+  title: Storybook - UI component explorer for frontend developers
+  tags:
+    - javascript
+    - ui-components
+    - development-tools
+  publishedOn: 90
+
+- id: https://flagsmith.com/
+  title: Flagsmith
+  tags:
+    - feature-flags
+    - configuration
+    - open-source
+  publishedOn: 80

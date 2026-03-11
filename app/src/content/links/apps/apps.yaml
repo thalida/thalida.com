@@ -1,0 +1,56 @@
+- id: https://numi.app/
+  title: Numi
+  tags:
+    - productivity
+    - calculator
+    - macOS
+    - favorites
+  publishedOn: 100
+
+- id: https://ticktick.com/
+  title: TickTick
+  tags:
+    - productivity
+    - task management
+    - mobile
+  publishedOn: 90
+
+- id: https://www.notion.so/
+  title: Notion
+  tags:
+    - productivity
+    - collaboration
+    - note-taking
+  publishedOn: 80
+
+- id: https://www.forestapp.cc/
+  title: Forest
+  tags:
+    - productivity
+    - focus
+    - mobile
+  publishedOn: 10
+
+- id: https://wetransfer.com/paper
+  title: WeTransfer Paper
+  tags:
+    - collaboration
+    - whiteboard
+    - brainstorming
+  publishedOn: 0
+
+- id: https://magnet.crowdcafe.com/
+  title: Magnet
+  tags:
+    - productivity
+    - macOS
+    - window management
+  publishedOn: 80
+
+- id: https://nektony.com/mac-app-cleaner
+  title: Mac App Cleaner
+  tags:
+    - macOS
+    - cleanup
+    - optimization
+  publishedOn: 1
