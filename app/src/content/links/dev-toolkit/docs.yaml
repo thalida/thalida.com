@@ -1,0 +1,47 @@
+- id: https://www.paulirish.com/2012/box-sizing-border-box-ftw/
+  title: Paul Irish
+  tags:
+    - css
+    - reference
+    - best-practices
+  publishedOn: 90
+
+- id: https://developer.mozilla.org/en-US/docs/Web
+  title: Web technology for developers | MDN
+  tags:
+    - reference
+    - documentation
+    - web-standards
+  publishedOn: 100
+
+- id: https://devhints.io/
+  title: Devhints - TL;DR for developer documentation
+  tags:
+    - reference
+    - cheatsheets
+    - documentation
+  publishedOn: 85
+
+- id: https://fordinteractive.com/tools/emchart/
+  title: EmChart
+  tags:
+    - css
+    - tools
+    - typography
+  publishedOn: 70
+
+- id: https://carbon.now.sh/
+  title: Carbon
+  tags:
+    - code-sharing
+    - screenshots
+    - documentation
+  publishedOn: 85
+
+- id: https://monodraw.helftone.com/
+  title: Monodraw for macOS - Helftone
+  tags:
+    - macOS
+    - ascii-art
+    - documentation
+  publishedOn: 60

@@ -1,0 +1,31 @@
+- id: https://abellehayford.com/
+  title: Abelle hayford
+  tags:
+    - personal-website
+    - portfolio
+    - design
+  publishedOn: 50
+
+- id: https://manuelmoreale.com/
+  title: Manu - I write
+  tags:
+    - blog
+    - writing
+    - personal
+  publishedOn: 50
+
+- id: https://www.legacy-bqpc.com/mobile-home
+  title: LEGACY
+  tags:
+    - cool-people
+    - website
+    - design
+  publishedOn: 50
+
+- id: https://alythuh.com/
+  title: ALYTHUH® Official Site
+  tags:
+    - cool-people
+    - personal-brand
+    - website
+  publishedOn: 50

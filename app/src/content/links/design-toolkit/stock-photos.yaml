@@ -1,0 +1,16 @@
+- id: https://www.flickr.com/photos/wocintechchat/albums
+  title: WOCinTech Chat - Free Stock Photos
+  tags:
+    - stock-photos
+    - diversity
+    - tech
+    - photography
+  publishedOn: 100
+
+- id: https://www.pexels.com/
+  title: Pexels - Free Stock Photos
+  tags:
+    - stock-photos
+    - free
+    - photography
+  publishedOn: 50

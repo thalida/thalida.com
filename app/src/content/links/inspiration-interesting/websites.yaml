@@ -1,0 +1,40 @@
+- id: https://ricostacruz.com/til/#articles
+  title: Today I Learned - web development musings semi-daily
+  tags:
+    - cool-websites
+    - learning
+    - web-development
+  publishedOn: 50
+
+- id: https://makelemonade.wtf/
+  title: Make Lemonade
+  tags:
+    - cool-websites
+    - creative
+    - design
+  publishedOn: 50
+
+- id: https://fuckiwishiknewth.at/
+  title: Fuck I Wish I Knew That
+  tags:
+    - cool-websites
+    - learning
+    - resources
+  publishedOn: 50
+
+- id: https://www.brucira.com/
+  title: Brucira | Strategy, Branding and UX UI Product Design Agency
+  tags:
+    - cool-websites
+    - design-agency
+    - branding
+    - ux-ui
+  publishedOn: 50
+
+- id: https://turnislefthome.com/projects
+  title: Turnislefthome.com | The Work of Timothy J. Reynolds
+  tags:
+    - cool-websites
+    - portfolio
+    - creative
+  publishedOn: 50

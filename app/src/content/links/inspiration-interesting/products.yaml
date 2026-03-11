@@ -1,0 +1,56 @@
+- id: https://www.mightynetworks.com/
+  title: Mighty Networks | Build Communities, Courses & Memberships
+  tags:
+    - cool-products
+    - community
+    - platform
+  publishedOn: 50
+
+- id: https://www.forem.com/
+  title: Forem - Community for Everyone
+  tags:
+    - cool-products
+    - community
+    - open-source
+  publishedOn: 50
+
+- id: https://www.qovery.com/
+  title: Qovery - The simplest way to deploy your applications on AWS
+  tags:
+    - cool-products
+    - deployment
+    - aws
+    - cloud
+  publishedOn: 50
+
+- id: https://codespace.app/
+  title: Codespace - The code snippet manager you've been waiting for
+  tags:
+    - cool-products
+    - code-management
+    - productivity
+  publishedOn: 50
+
+- id: https://heyday.xyz/
+  title: Heyday - your research helping hand
+  tags:
+    - cool-products
+    - research
+    - productivity
+  publishedOn: 50
+
+- id: https://siftnewstherapy.com/
+  title: Sift - Feel news differently
+  tags:
+    - cool-products
+    - news
+    - mental-health
+  publishedOn: 50
+
+- id: https://slides.com/
+  title: Slides - Create and Share Presentations for Free
+  tags:
+    - cool-products
+    - presentations
+    - tools
+  publishedOn: 50
