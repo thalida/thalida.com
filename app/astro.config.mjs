@@ -71,5 +71,8 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    define: {
+      "import.meta.env.CF_PAGES_BRANCH": JSON.stringify(process.env.CF_PAGES_BRANCH || "main"),
+    },
   },
 });
