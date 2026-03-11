@@ -8,12 +8,12 @@ tags:
   - experiment
   - python
   - quill.js
-coverImage: ./notes-dashboard.png
+coverImage: /content/projects/app/social/thisisalsome/notes-dashboard.png
 coverImageAlt: thisisalso.me dashboard showing a grid of colorful note cards for
   projects like Scroller, unpack, Drive Templates, Slack Logging, and revibed
 ---
 
-![thisisalso.me dashboard showing colorful note cards for various projects organized in a grid](./notes-dashboard.png)
+![thisisalso.me dashboard showing colorful note cards for various projects organized in a grid](/content/projects/app/social/thisisalsome/notes-dashboard.png)
 
 | Links                                                |                                     |
 | ---------------------------------------------------- | ----------------------------------- |
@@ -25,11 +25,11 @@ coverImageAlt: thisisalso.me dashboard showing a grid of colorful note cards for
 
 ## Screenshots
 
-![thisisalso.me dashboard with project note cards in a colorful grid layout](./notes-dashboard.png)
+![thisisalso.me dashboard with project note cards in a colorful grid layout](/content/projects/app/social/thisisalsome/notes-dashboard.png)
 
-![Write mode editor with empty text area, rich text toolbar, and color palette options](./write-editor-empty.png)
+![Write mode editor with empty text area, rich text toolbar, and color palette options](/content/projects/app/social/thisisalsome/write-editor-empty.png)
 
-![Rich text editor toolbar showing heading, formatting, media, list, alignment, and color options](./editor-toolbar.png)
+![Rich text editor toolbar showing heading, formatting, media, list, alignment, and color options](/content/projects/app/social/thisisalsome/editor-toolbar.png)
 
 
 ## Design

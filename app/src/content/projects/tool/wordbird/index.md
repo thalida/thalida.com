@@ -7,14 +7,14 @@ tags:
   - angular
   - chrome
   - chrome extension
-coverImage: ./extension-demo.png
+coverImage: /content/projects/tool/wordbird/extension-demo.png
 coverImageAlt: WordBird Chrome extension demo showing three panels, original
   Wikipedia page for "Word", WordBird settings replacing "word" with "bird" and
   "google" with "Our Benevolent Lord", and resulting page with replacements
   applied
 ---
 
-![WordBird demo showing original Wikipedia page, settings panel with word replacements, and resulting modified page](./extension-demo.png)
+![WordBird demo showing original Wikipedia page, settings panel with word replacements, and resulting modified page](/content/projects/tool/wordbird/extension-demo.png)
 
 | Links                                           |                                                                                                             |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |

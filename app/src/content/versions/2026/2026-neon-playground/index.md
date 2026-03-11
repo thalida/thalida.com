@@ -9,13 +9,13 @@ tags:
   - live-window
   - claude
   - thalida.com
-coverImage: ./cover.png
+coverImage: /content/versions/2026/2026-neon-playground/cover.png
 coverImageAlt: Cover screenshot of the Neon Playground portfolio showing dark
   background with illustrated window, full moon, digital clock, and neon green
   heading
 ---
 
-![Cover screenshot of the Neon Playground portfolio showing dark background with illustrated window, full moon, digital clock, and neon green heading](./cover.png)
+![Cover screenshot of the Neon Playground portfolio showing dark background with illustrated window, full moon, digital clock, and neon green heading](/content/versions/2026/2026-neon-playground/cover.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -91,7 +91,7 @@ to talk to each other. The circle of life.
 
 ## Stargazing
 
-![Screenshot of the Neon Playground live window component showing side-by-side illustrated windows for London and Tokyo](./live-window.png)
+![Screenshot of the Neon Playground live window component showing side-by-side illustrated windows for London and Tokyo](/content/versions/2026/2026-neon-playground/live-window.png)
 
 The live window has been a signature feature of thalida.com since
 2018 — a little animated scene that shows the actual weather and time at

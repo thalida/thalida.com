@@ -4,12 +4,12 @@ description: "Split-screen v1: A split screen design with a live gradient"
 publishedOn: 2016-08-01
 tags:
   - angular
-coverImage: ./color-split-hero-layout.png
+coverImage: /content/versions/2016/2016-color-split/color-split-hero-layout.png
 coverImageAlt: Split-screen layout with pink left side and blue right side with
   geometric icons and introduction text
 ---
 
-![Split-screen layout with pink left side and blue right side with geometric icons and introduction text](./color-split-hero-layout.png)
+![Split-screen layout with pink left side and blue right side with geometric icons and introduction text](/content/versions/2016/2016-color-split/color-split-hero-layout.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -25,7 +25,7 @@ and that I wanted to play around with color again.
 
 ## Design
 
-![Tablet mockup showing split-screen design with pink and blue sections](./mockup-1.png)
+![Tablet mockup showing split-screen design with pink and blue sections](/content/versions/2016/2016-color-split/mockup-1.png)
 
 
 ## How it Works

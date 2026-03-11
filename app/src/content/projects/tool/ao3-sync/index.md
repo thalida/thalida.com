@@ -4,13 +4,13 @@ description: AO3 Sync is a tool to downlaod your bookmarks from Archive of Our
   Own (AO3) and save them to your local machine.
 publishedOn: 2024-08-09
 updatedOn: 2024-12-04
-coverImage: ./ao3-homepage.png
+coverImage: /content/projects/tool/ao3-sync/ao3-homepage.png
 coverImageAlt: Archive of Our Own homepage showing the AO3 logo, navigation bar
   with Fandoms, Browse, Search, and About links, and site stats displaying over
   72,000 fandoms, 8.8 million users, and 15.3 million works.
 ---
 
-![Archive of Our Own homepage showing the AO3 logo, navigation bar with Fandoms, Browse, Search, and About links, and site stats displaying over 72,000 fandoms, 8.8 million users, and 15.3 million works](./ao3-homepage.png)
+![Archive of Our Own homepage showing the AO3 logo, navigation bar with Fandoms, Browse, Search, and About links, and site stats displaying over 72,000 fandoms, 8.8 million users, and 15.3 million works](/content/projects/tool/ao3-sync/ao3-homepage.png)
 
 | Links                                           |                                               |
 | ----------------------------------------------- | --------------------------------------------- |

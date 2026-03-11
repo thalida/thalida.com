@@ -2,13 +2,13 @@
 title: 3D printed divider wall
 description: A 3D printed divider wall using Honeycomb Storage System.
 publishedOn: 2023-10-01
-coverImage: ./honeycomb-wall-with-decorations.jpeg
+coverImage: /content/projects/craft/divider-wall/honeycomb-wall-with-decorations.jpeg
 coverImageAlt: Floor-to-ceiling 3D-printed gold honeycomb divider wall decorated
   with colorful flower and geometric panel inserts
 ---
 
-![Floor-to-ceiling 3D-printed gold honeycomb divider wall decorated with colorful flower and geometric panel inserts](./honeycomb-wall-with-decorations.jpeg)
-![3D-printed honeycomb divider wall with seasonal snowflake and autumn leaf decorations hanging from the hexagonal grid](./honeycomb-wall-seasonal-decor.jpeg)
+![Floor-to-ceiling 3D-printed gold honeycomb divider wall decorated with colorful flower and geometric panel inserts](/content/projects/craft/divider-wall/honeycomb-wall-with-decorations.jpeg)
+![3D-printed honeycomb divider wall with seasonal snowflake and autumn leaf decorations hanging from the hexagonal grid](/content/projects/craft/divider-wall/honeycomb-wall-seasonal-decor.jpeg)
 
 For this space I wanted to create a divider wall to separate the two spaces. I intially thought about using a bookshelf,
 but it didn't provide as much separation as I wanted.

@@ -3,7 +3,7 @@ title: "Knowledge Base: Django Generic Fields"
 description: Guidelines and Answers to all things Django Generic Fields
 publishedOn: 2023-11-13T21:47:00Z
 updatedOn: 2023-11-14T02:33:00Z
-coverImage: ./django-generic-foreign-key-model.png
+coverImage: /content/guides/django/knowledge-base-django-generic-fields/django-generic-foreign-key-model.png
 coverImageAlt: Django code snippet showing Message model with GenericForeignKey
   and ContentType fields implementation
 tags:

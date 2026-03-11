@@ -6,12 +6,12 @@ tags:
   - jquery
   - mootools
   - php
-coverImage: ./lost-era-centered-title-layout.png
+coverImage: /content/versions/2007/2007-the-lost-era/lost-era-centered-title-layout.png
 coverImageAlt: Dark centered layout with thalida.com title, abstract word cloud
   background, and red accent vertical bar
 ---
 
-![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](./lost-era-centered-title-layout.png)
+![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](/content/versions/2007/2007-the-lost-era/lost-era-centered-title-layout.png)
 
 | **Year(s)**                 |     |     |
 | --------------------------- | --- | --- |
@@ -34,4 +34,4 @@ The following history is all gathered from various designs I had saved on a flas
 I've pulled together some screenshots from the lost era of thalida.com, showcasing the designs and features that were
 part of this period.
 
-![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](./lost-era-centered-title-layout.png)
+![Dark centered layout with thalida.com title, abstract word cloud background, and red accent vertical bar](/content/versions/2007/2007-the-lost-era/lost-era-centered-title-layout.png)

@@ -4,12 +4,12 @@ description: Add support for globbing files in Astro projects.
 tags:
   - astro
 publishedOn: 2025-07-03
-coverImage: ./astro-curated-links-collection.png
+coverImage: /content/guides/astro/how-to-astro-glob-file/astro-curated-links-collection.png
 coverImageAlt: Astro curated links website showing categorized resources with
   filterable categories and resource cards
 ---
 
-![Astro curated links website showing categorized resources with filterable categories and resource cards](./astro-curated-links-collection.png)
+![Astro curated links website showing categorized resources with filterable categories and resource cards](/content/guides/astro/how-to-astro-glob-file/astro-curated-links-collection.png)
 
 
 ## Goal

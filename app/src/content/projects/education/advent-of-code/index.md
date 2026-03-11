@@ -7,7 +7,7 @@ tags:
   - challenge
   - julia
   - python
-coverImage: ./aoc-2020-ascii-art-calendar.png
+coverImage: /content/projects/education/advent-of-code/aoc-2020-ascii-art-calendar.png
 coverImageAlt: Advent of Code 2020 ASCII art depicting a snowy holiday scene
   with buildings, trees, and a reindeer, with 25 numbered days and gold stars
   indicating completed puzzles.
@@ -20,7 +20,7 @@ coverImageAlt: Advent of Code 2020 ASCII art depicting a snowy holiday scene
 
 ## 2020
 
-![Advent of Code 2020 ASCII art depicting a snowy holiday scene with buildings, trees, and a reindeer, with 25 numbered days and gold stars indicating completed puzzles](./aoc-2020-ascii-art-calendar.png)
+![Advent of Code 2020 ASCII art depicting a snowy holiday scene with buildings, trees, and a reindeer, with 25 numbered days and gold stars indicating completed puzzles](/content/projects/education/advent-of-code/aoc-2020-ascii-art-calendar.png)
 
 [Advent of Code](https://adventofcode.com/2020)
 
@@ -29,7 +29,7 @@ coverImageAlt: Advent of Code 2020 ASCII art depicting a snowy holiday scene
 
 ## 2019
 
-![Advent of Code 2019 ASCII art of a starry space scene with orbiting objects, 25 numbered days, and gold stars marking completed challenges](./aoc-2019-ascii-art-calendar.png)
+![Advent of Code 2019 ASCII art of a starry space scene with orbiting objects, 25 numbered days, and gold stars marking completed challenges](/content/projects/education/advent-of-code/aoc-2019-ascii-art-calendar.png)
 
 [Advent of Code](https://adventofcode.com/2019)
 
@@ -38,7 +38,7 @@ coverImageAlt: Advent of Code 2020 ASCII art depicting a snowy holiday scene
 
 ## 2018
 
-![Advent of Code 2018 ASCII art showing a red tree with a star on top and a sleigh, with 25 numbered days and gold stars for the first 8 completed days](./aoc-2018-ascii-art-calendar.png)
+![Advent of Code 2018 ASCII art showing a red tree with a star on top and a sleigh, with 25 numbered days and gold stars for the first 8 completed days](/content/projects/education/advent-of-code/aoc-2018-ascii-art-calendar.png)
 
 [Advent of Code](https://adventofcode.com/2018)
 

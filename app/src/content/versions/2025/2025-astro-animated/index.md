@@ -6,12 +6,12 @@ tags:
   - astro
   - animated-window
   - thalida.com
-coverImage: ./screenshot-analog-clock-day.png
+coverImage: /content/versions/2025/2025-astro-animated/screenshot-analog-clock-day.png
 coverImageAlt: Screenshot of the Astro Animated portfolio in light mode showing
   profile card, animated analog clock, and Scene Controls panel
 ---
 
-![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](./screenshot-analog-clock-dark.png)
+![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](/content/versions/2025/2025-astro-animated/screenshot-analog-clock-dark.png)
 
 | Year | GitHub | Link |
 | ---- | ------ | ---- |
@@ -39,9 +39,9 @@ and scalability.
 
 ### Implementation
 
-![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](./screenshot-analog-clock-dark.png)
+![Screenshot of the Astro Animated portfolio in dark mode with Scene Controls panel showing custom time field](/content/versions/2025/2025-astro-animated/screenshot-analog-clock-dark.png)
 
-![Screenshot of the Astro Animated portfolio in light mode with digital clock style showing glowing LED-style clock](./screenshot-digital-clock-day.png)
+![Screenshot of the Astro Animated portfolio in light mode with digital clock style showing glowing LED-style clock](/content/versions/2025/2025-astro-animated/screenshot-digital-clock-day.png)
 
 The live weather and time functionality is implemented using the
 [Open Weather API](https://openweathermap.org/api). I get the users current location using
@@ -71,13 +71,13 @@ change the time, and choose between different weather effects
 
 ### Colors, Vibe, Layout
 
-![Inspiration screenshot of minimal white website hero section with bold headline and 3D rendered green textured blob](./inspo/inspo-minimal-hero-3d.png)
+![Inspiration screenshot of minimal white website hero section with bold headline and 3D rendered green textured blob](/content/versions/2025/2025-astro-animated/inspo/inspo-minimal-hero-3d.png)
 
-![Inspiration screenshot of bold editorial blog layout with large headline text, fitness photography, and article grid](./inspo/inspo-editorial-blog-layout.png)
+![Inspiration screenshot of bold editorial blog layout with large headline text, fitness photography, and article grid](/content/versions/2025/2025-astro-animated/inspo/inspo-editorial-blog-layout.png)
 
-![Inspiration screenshot of creative studio website hero with 3D rendered desk scene](./inspo/inspo-3d-studio-hero.png)
+![Inspiration screenshot of creative studio website hero with 3D rendered desk scene](/content/versions/2025/2025-astro-animated/inspo/inspo-3d-studio-hero.png)
 
-![Inspiration screenshot of dark-themed split-screen login page with green gradient promotional panel](./inspo/inspo-dark-split-login.png)
+![Inspiration screenshot of dark-themed split-screen login page with green gradient promotional panel](/content/versions/2025/2025-astro-animated/inspo/inspo-dark-split-login.png)
 
 - <https://piqo.studio/>
 - <https://dribbble.com/shots/21289412-Blog-Page-for-Fitness-Website>
@@ -90,9 +90,9 @@ change the time, and choose between different weather effects
 
 ### Cards
 
-![Inspiration screenshot showing stacked job listing cards from companies on lavender background](./inspo/inspo-job-listing-cards.png)
+![Inspiration screenshot showing stacked job listing cards from companies on lavender background](/content/versions/2025/2025-astro-animated/inspo/inspo-job-listing-cards.png)
 
-![Inspiration screenshot showing pastel-colored service category cards for Web Design, Graphic Design, Developers, and Copywriting](./inspo/inspo-service-category-cards.png)
+![Inspiration screenshot showing pastel-colored service category cards for Web Design, Graphic Design, Developers, and Copywriting](/content/versions/2025/2025-astro-animated/inspo/inspo-service-category-cards.png)
 
 - <https://dribbble.com/shots/26039541-City-flight-ticket-booking-cards>
 - <https://dribbble.com/shots/24317197--talently-brand-identity-cards>

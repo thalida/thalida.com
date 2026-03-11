@@ -8,13 +8,13 @@ tags:
   - python
   - threejs
   - vue
-coverImage: ./sketch-isometric-city-island.png
+coverImage: /content/projects/tool/code-city/sketch-isometric-city-island.png
 coverImageAlt: Hand-drawn sketch of an isometric city on an island with
   buildings, trees, streets, and a "thalida.com" sign, with handwritten notes
   about street placement rules.
 ---
 
-![Hand-drawn sketch of an isometric city on an island with buildings, trees, streets, and a "thalida.com" sign, with handwritten notes about street placement rules](./sketch-isometric-city-island.png)
+![Hand-drawn sketch of an isometric city on an island with buildings, trees, streets, and a "thalida.com" sign, with handwritten notes about street placement rules](/content/projects/tool/code-city/sketch-isometric-city-island.png)
 
 | Links                                           |     |
 | ----------------------------------------------- | --- |
@@ -63,5 +63,5 @@ coverImageAlt: Hand-drawn sketch of an isometric city on an island with
 
 |                                                           |                                                           |
 | --------------------------------------------------------- | --------------------------------------------------------- |
-| ![Sketch of an isometric city on an island with buildings, trees, and handwritten notes about street edge gaps, alternating sides, and fit-to-grid rules](./sketch-isometric-city-with-notes.png) | ![Sketch exploring building types and people figures for the city, with notes about 3D buildings representing file types and people representing viewers](./sketch-building-types-and-people.png) |
-| ![Sketch of a directory-as-grid layout with nested rectangles representing folders, blue squares as files, and notes about directory thickness mapping to road width](./sketch-directory-grid-layout.png) |                                                           |
+| ![Sketch of an isometric city on an island with buildings, trees, and handwritten notes about street edge gaps, alternating sides, and fit-to-grid rules](/content/projects/tool/code-city/sketch-isometric-city-with-notes.png) | ![Sketch exploring building types and people figures for the city, with notes about 3D buildings representing file types and people representing viewers](/content/projects/tool/code-city/sketch-building-types-and-people.png) |
+| ![Sketch of a directory-as-grid layout with nested rectangles representing folders, blue squares as files, and notes about directory thickness mapping to road width](/content/projects/tool/code-city/sketch-directory-grid-layout.png) |                                                           |

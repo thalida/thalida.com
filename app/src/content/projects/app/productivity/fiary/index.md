@@ -6,12 +6,12 @@ tags:
   - product
   - python
   - vue
-coverImage: ./fiary-logo-gradient.png
+coverImage: /content/projects/app/productivity/fiary/fiary-logo-gradient.png
 coverImageAlt: Fiary logo in cursive script with a rainbow gradient from
   blue-green to pink on a black background
 ---
 
-![Fiary logo in cursive script with a rainbow gradient from blue-green to pink on a black background](./fiary-logo-gradient.png)
+![Fiary logo in cursive script with a rainbow gradient from blue-green to pink on a black background](/content/projects/app/productivity/fiary/fiary-logo-gradient.png)
 
 | Links                                        |     |
 | -------------------------------------------- | --- |
@@ -40,15 +40,15 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 
 ### Name Exploration
 
-![Hand-drawn brainstorm page exploring name options including fiary and maker fold in various lettering styles and colors](./sketch-name-exploration.png)
+![Hand-drawn brainstorm page exploring name options including fiary and maker fold in various lettering styles and colors](/content/projects/app/productivity/fiary/sketch-name-exploration.png)
 
 
 ### Colors & Icon Exploration
 
 |                                               |                                               |
 | --------------------------------------------- | --------------------------------------------- |
-| ![Hand-drawn fiary text on a black shape surrounded by colorful abstract blobs in red, blue, green, yellow, and purple](./sketch-logo-colorful-blobs.png) | ![Fiary logo sketch with cursive text over layered green, red, orange, and yellow organic shapes](./sketch-logo-warm-blobs.png) |
-| ![Fiary notes logo sketch with hand-drawn cursive text and a rainbow fan accent on the letter f](./sketch-logo-rainbow-fan.png) |                                               |
+| ![Hand-drawn fiary text on a black shape surrounded by colorful abstract blobs in red, blue, green, yellow, and purple](/content/projects/app/productivity/fiary/sketch-logo-colorful-blobs.png) | ![Fiary logo sketch with cursive text over layered green, red, orange, and yellow organic shapes](/content/projects/app/productivity/fiary/sketch-logo-warm-blobs.png) |
+| ![Fiary notes logo sketch with hand-drawn cursive text and a rainbow fan accent on the letter f](/content/projects/app/productivity/fiary/sketch-logo-rainbow-fan.png) |                                               |
 
 
 ## Design
@@ -64,4 +64,4 @@ A digital bullet journal. A tool that’s a hybrid of notion + paper.
 
 ### Paper Sketches
 
-![Hand-drawn wireframe sketches of app screens showing toolbar icons, color palette presets panel, and multi-page journal layouts](./sketch-ui-wireframes.png)
+![Hand-drawn wireframe sketches of app screens showing toolbar icons, color palette presets panel, and multi-page journal layouts](/content/projects/app/productivity/fiary/sketch-ui-wireframes.png)

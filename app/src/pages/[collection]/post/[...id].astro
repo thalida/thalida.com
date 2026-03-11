@@ -6,6 +6,7 @@ import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
 import { prettifySlug } from "@lib/format-utils";
 import { parseContentPath } from "@lib/content-path";
+import { resolveMediaUrl } from "@lib/constants";
 
 type AnyEntry = CollectionEntry<CollectionName>;
 
@@ -107,7 +108,8 @@ const siteUrl = Astro.site?.toString().replace(/\/$/, "") ?? "https://thalida.co
 // Resolve cover image to absolute URL for OG
 let ogImageUrl: string | undefined;
 if (entry.data.coverImage) {
-  ogImageUrl = new URL(entry.data.coverImage.src, siteUrl).toString();
+  const resolved = resolveMediaUrl(entry.data.coverImage) ?? entry.data.coverImage;
+  ogImageUrl = new URL(resolved, siteUrl).toString();
 }
 
 // Article JSON-LD for non-recipe posts

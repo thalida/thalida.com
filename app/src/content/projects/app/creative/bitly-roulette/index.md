@@ -2,7 +2,7 @@
 title: bit.ly roulette
 description: Generate a random http://bit.ly/ url, let the internet surprise you!
 publishedOn: 2017-12-23
-coverImage: ./random-bitly-url-interface.png
+coverImage: /content/projects/app/creative/bitly-roulette/random-bitly-url-interface.png
 coverImageAlt: The bit.ly roulette app displaying a randomly generated URL
   "bit.ly/SQJG" centered on a purple-to-pink gradient background, with "a random
   bit.ly" header text.
@@ -12,7 +12,7 @@ tags:
   - random
 ---
 
-![The bit.ly roulette app displaying a randomly generated URL "bit.ly/SQJG" centered on a purple-to-pink gradient background, with "a random bit.ly" header text](./random-bitly-url-interface.png)
+![The bit.ly roulette app displaying a randomly generated URL "bit.ly/SQJG" centered on a purple-to-pink gradient background, with "a random bit.ly" header text](/content/projects/app/creative/bitly-roulette/random-bitly-url-interface.png)
 
 | Links                                                 |                                                        |
 | ----------------------------------------------------- | ------------------------------------------------------ |

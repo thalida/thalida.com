@@ -114,11 +114,11 @@ async function makeCollection(collectionName: CollectionName) {
 
   return defineCollection({
     loader,
-    schema: ({ image }) =>
+    schema: () =>
       z.object({
         title: z.string(),
         link: z.string().optional(),
-        coverImage: image().optional(),
+        coverImage: z.string().optional(),
         coverImageAlt: z.string().optional(),
         description: z.string().optional(),
         publishedOn: z.coerce.date(),
