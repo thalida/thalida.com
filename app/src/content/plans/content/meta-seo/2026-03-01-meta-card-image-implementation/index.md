@@ -31,7 +31,7 @@ The SVG has three layers:
 2. The `<3` mark with neon glow filter
 3. "thalida.com" text
 
-```svg
+```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <!-- Neon glow filter: tight inner + wide outer bloom -->
@@ -139,7 +139,7 @@ Same elements as the 1200x630 but recomposed for square aspect ratio:
 - Text sits tighter below the mark
 - Glow filter stdDeviation values scaled down slightly for the smaller canvas
 
-```svg
+```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
   <defs>
     <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
