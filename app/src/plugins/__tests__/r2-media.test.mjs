@@ -12,6 +12,10 @@ function makeElementNode(tagName, src) {
   };
 }
 
+function makeRawNode(value) {
+  return { type: "raw", value };
+}
+
 function makeRehypeTree(nodes) {
   return { type: "root", children: nodes };
 }
@@ -109,5 +113,35 @@ describe("rehype-r2-media", () => {
     plugin(tree);
 
     expect(node.properties.src).toBe("/content/gallery/photo.jpg");
+  });
+
+  it("rewrites double-quoted src in raw HTML nodes", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode('<video><source src="/content/gallery/video.mp4"></video>');
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe(`<video><source src="${BASE_URL}/content/gallery/video.mp4"></video>`);
+  });
+
+  it("rewrites single-quoted src in raw HTML nodes", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode("<video><source src='/content/gallery/video.mp4'></video>");
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe(`<video><source src='${BASE_URL}/content/gallery/video.mp4'></video>`);
+  });
+
+  it("does not rewrite raw HTML without /content/ src", () => {
+    const plugin = rehypeR2Media({ baseUrl: BASE_URL });
+    const node = makeRawNode('<img src="/other/path.jpg">');
+    const tree = makeRehypeTree([node]);
+
+    plugin(tree);
+
+    expect(node.value).toBe('<img src="/other/path.jpg">');
   });
 });
