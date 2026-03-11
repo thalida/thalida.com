@@ -95,7 +95,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         coverImageAlt: entry.data.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
         metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
-        subcategory: parsed.subcategory,
+        subcategory: entry.data.subcategory ?? parsed.subcategory,
       });
     }
 

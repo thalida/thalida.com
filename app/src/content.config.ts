@@ -125,6 +125,7 @@ async function makeCollection(collectionName: CollectionName) {
         updatedOn: z.coerce.date().optional(),
         draft: z.boolean().optional(),
         category: z.string().optional(),
+        subcategory: z.string().optional(),
         tags: z.array(z.string()).optional(),
         // Recipe-specific optional fields
         prepTime: z.string().optional(),
