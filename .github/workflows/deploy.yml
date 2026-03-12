@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: 22
 
+      - uses: pnpm/action-setup@v4
+
       - uses: extractions/setup-just@v2
 
       - name: Install dependencies
@@ -94,12 +96,14 @@ jobs:
             echo "name=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
           fi
 
+      - uses: pnpm/action-setup@v4
+
       - name: Install dependencies
         working-directory: app
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install wrangler
-        run: npm install -g wrangler
+        run: pnpm add -g wrangler
 
       - name: Build frontend
         env:
@@ -147,10 +151,13 @@ jobs:
             echo "api=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - uses: pnpm/action-setup@v4
+        if: steps.changes.outputs.api == 'true'
+
       - name: Install dependencies
         if: steps.changes.outputs.api == 'true'
         working-directory: api
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Deploy Worker (preview)
         id: deploy
@@ -189,10 +196,13 @@ jobs:
             echo "api=false" >> "$GITHUB_OUTPUT"
           fi
 
+      - uses: pnpm/action-setup@v4
+        if: steps.changes.outputs.api == 'true'
+
       - name: Install dependencies
         if: steps.changes.outputs.api == 'true'
         working-directory: api
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Deploy Worker (production)
         if: steps.changes.outputs.api == 'true'

@@ -5,17 +5,17 @@ set working-directory := '../api'
 
 [doc("Run the API locally")]
 serve:
-    npm run dev
+    pnpm dev
 
 # ─── Test ─────────────────────────────────────────────────────────────
 
 [doc("Run API tests")]
 test:
-    npm test
+    pnpm test
 
 [doc("Type-check the API")]
 typecheck:
-    npm run typecheck
+    pnpm typecheck
 
 # ─── Data ────────────────────────────────────────────────────────────
 
@@ -28,10 +28,10 @@ reset-local:
 [doc("Deploy the API Worker")]
 [arg('env', long, help="target environment (prod or preview)", pattern="prod|preview")]
 deploy env:
-    npx wrangler deploy {{ if env == "prod" { '--env=""' } else { "--env " + env } }}
+    pnpm exec wrangler deploy {{ if env == "prod" { '--env=""' } else { "--env " + env } }}
 
 [doc("Set Worker secrets (ADMIN_SECRET, OPENAI_API_KEY)")]
 [arg('env', long, help="target environment (prod or preview)", pattern="prod|preview")]
 secrets env:
-    npx wrangler secret put ADMIN_SECRET {{ if env == "prod" { '--env=""' } else { "--env " + env } }}
-    npx wrangler secret put OPENAI_API_KEY {{ if env == "prod" { '--env=""' } else { "--env " + env } }}
+    pnpm exec wrangler secret put ADMIN_SECRET {{ if env == "prod" { '--env=""' } else { "--env " + env } }}
+    pnpm exec wrangler secret put OPENAI_API_KEY {{ if env == "prod" { '--env=""' } else { "--env " + env } }}

@@ -40,9 +40,9 @@ setup: install
 
 [doc("Install dependencies for root, app, and api")]
 install:
-    npm install
-    cd app && npm install
-    cd api && npm install
+    pnpm install
+    cd app && pnpm install
+    cd api && pnpm install
 
 # ─── Test ─────────────────────────────────────────────────────────────
 
@@ -56,12 +56,12 @@ test:
 [doc("Run ESLint across both packages")]
 [arg('fix', long="fix", value="true", help="auto-fix lint issues")]
 lint fix="false":
-    {{ if fix == "true" { "npm run lint:fix" } else { "npm run lint" } }}
+    {{ if fix == "true" { "pnpm lint:fix" } else { "pnpm lint" } }}
 
 [doc("Run Prettier across the repo")]
 [arg('check', long="check", value="true", help="check formatting without writing")]
 format check="false":
-    {{ if check == "true" { "npm run format:check" } else { "npm run format" } }}
+    {{ if check == "true" { "pnpm format:check" } else { "pnpm format" } }}
 
 # ─── Utilities ────────────────────────────────────────────────────────
 

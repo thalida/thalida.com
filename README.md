@@ -15,7 +15,7 @@ docs/   Design docs and plans
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+)
-- npm (comes with Node)
+- [pnpm](https://pnpm.io/installation)
 - [just](https://github.com/casey/just#installation) command runner
 
 
@@ -155,8 +155,8 @@ just media::cleanup --branch v-2026    # Delete a branch's R2 media
 
 ### Cloudflare Pages build command
 
-Use `npm run build:pages` as the build command (instead of
-`npm run build`). This removes large media files from the build
+Use `pnpm build:pages` as the build command (instead of
+`pnpm build`). This removes large media files from the build
 output after Astro finishes (avoiding the 25 MiB per-file Cloudflare
 Pages limit) while preserving the HTML content partials needed for
 the project tree viewer.
@@ -203,7 +203,7 @@ Connect the repo to Cloudflare Pages via the dashboard:
 2. Select the `thalida.com` repo, set production branch to `main`
 3. Configure the build:
    - **Root directory**: `app`
-   - **Build command**: `npm run build:pages`
+   - **Build command**: `pnpm build:pages`
    - **Build output directory**: `dist`
 4. Set environment variables (Settings > Environment Variables):
    - **Production**:

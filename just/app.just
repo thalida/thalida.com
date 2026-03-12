@@ -5,31 +5,31 @@ set working-directory := '../app'
 
 [doc("Run the frontend locally")]
 serve:
-    npm run dev
+    pnpm dev
 
 # ─── Test ─────────────────────────────────────────────────────────────
 
 [doc("Run app tests")]
 test:
-    npm test
+    pnpm test
 
 [doc("Type-check the app")]
 typecheck:
-    npm run typecheck
+    pnpm typecheck
 
 # ─── Build ────────────────────────────────────────────────────────────
 
 [doc("Convert card SVGs to PNGs")]
 convert-cards:
-    npm run convert-cards
+    pnpm convert-cards
 
 [doc("Build the frontend")]
 build:
-    npm run build
+    pnpm build
 
 [doc("Build frontend for Cloudflare Pages (strips large media from output)")]
 build-pages:
-    npm run build:pages
+    pnpm build:pages
 
 # ─── Deploy ──────────────────────────────────────────────────────────
 
@@ -37,4 +37,4 @@ build-pages:
 [arg('branch', long, help="git branch for the deployment")]
 [arg('project', long, help="Cloudflare Pages project name")]
 deploy branch project:
-    npx wrangler pages deploy dist --project-name="{{project}}" --branch="{{branch}}"
+    pnpm exec wrangler pages deploy dist --project-name="{{project}}" --branch="{{branch}}"

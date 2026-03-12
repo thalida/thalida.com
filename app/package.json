@@ -34,6 +34,12 @@
     "tailwindcss": "^4.2.0",
     "unist-util-visit": "^5.1.0"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
     "@types/he": "^1.2.3",
