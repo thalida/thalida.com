@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import { Font } from "astro:assets";
 import Chat from "@components/Chat/Chat.astro";
 import ProjectTree from "@components/ProjectTree/ProjectTree.astro";
 import CommandPalette from "@components/CommandPalette/CommandPalette.astro";
@@ -52,12 +53,9 @@ const navData = await getNavData();
       tags={tags}
       noindex={noindex}
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap"
-      rel="stylesheet"
-    />
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-heading" preload />
+    <Font cssVariable="--font-body" preload />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"

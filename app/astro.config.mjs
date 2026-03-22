@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
@@ -23,6 +23,29 @@ const site = mediaBranch === "main" || !process.env.CF_PAGES_URL ? "https://thal
 
 export default defineConfig({
   site,
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Bricolage Grotesque",
+      cssVariable: "--font-display",
+      weights: [400, 500, 700],
+      styles: ["normal"],
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Space Grotesk",
+      cssVariable: "--font-heading",
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
+    },
+    {
+      provider: fontProviders.google(),
+      name: "IBM Plex Mono",
+      cssVariable: "--font-body",
+      weights: [300, 400, 500],
+      styles: ["normal", "italic"],
+    },
+  ],
   integrations: [
     sitemap(),
     astroExpressiveCode({

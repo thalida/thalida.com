@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import { COLLECTION_NAMES, collectionMeta, type EntryData } from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
 import { parseContentPath } from "./content-path";
 import { resolveMediaUrl } from "./constants";
@@ -51,45 +51,47 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
 
   const data: Record<string, NavCollection> = {};
 
-  const linkEntries = await getCollection("links", ({ data }) => !data.draft);
+  const linkEntries = await getCollection("links", ({ data }) => !(data as EntryData).draft);
   const linkUrls = linkEntries.map((e) => e.id);
   const linkMetadataMap = await getLinkMetadataMap(linkUrls);
 
   for (const name of COLLECTION_NAMES) {
-    const entries = await getCollection(name, ({ data }) => !data.draft);
+    const entries = await getCollection(name, ({ data }) => !(data as EntryData).draft);
     const sorted = entries.sort(
-      (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
+      (a, b) =>
+        new Date((b.data as EntryData).publishedOn).getTime() - new Date((a.data as EntryData).publishedOn).getTime(),
     );
 
     const categoriesSet = new Set<string>();
     const items: NavItem[] = [];
 
     for (const entry of sorted) {
-      const coverImageSrc = resolveMediaUrl(entry.data.coverImage);
+      const d = entry.data as EntryData;
+      const coverImageSrc = resolveMediaUrl(d.coverImage);
 
       const isLink = name === "links";
       const linkMeta = isLink ? linkMetadataMap[entry.id] : undefined;
       const isDead = isLink && linkMeta?.dead === true;
 
       const parsed = parseContentPath(entry.id);
-      const category = isDead ? "dead-links" : (entry.data.category ?? parsed.category);
+      const category = isDead ? "dead-links" : (d.category ?? parsed.category);
       if (category) categoriesSet.add(category);
 
       items.push({
         id: entry.id,
         collection: name,
-        title: (isLink && linkMeta?.metaTitle) || entry.data.title,
-        href: entry.data.link,
-        description: entry.data.description,
-        tags: entry.data.tags,
+        title: (isLink && linkMeta?.metaTitle) || d.title,
+        href: d.link,
+        description: d.description,
+        tags: d.tags,
         category,
-        originalCategory: isDead ? entry.data.category : undefined,
-        publishedOn: entry.data.publishedOn.toISOString(),
+        originalCategory: isDead ? d.category : undefined,
+        publishedOn: d.publishedOn.toISOString(),
         coverImageSrc,
-        coverImageAlt: entry.data.coverImageAlt,
+        coverImageAlt: d.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,
-        metaDescription: (isLink && linkMeta?.metaDescription) || entry.data.description,
-        subcategory: entry.data.subcategory ?? parsed.subcategory,
+        metaDescription: (isLink && linkMeta?.metaDescription) || d.description,
+        subcategory: d.subcategory ?? parsed.subcategory,
       });
     }
 

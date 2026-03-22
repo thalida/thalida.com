@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob, file } from "astro/loaders";
 
 export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links", "plans"] as const;
@@ -94,6 +95,29 @@ async function combineYamlFiles({ filename, pattern, base }: { filename: string;
   return file(outputPath);
 }
 
+export const entrySchema = z.object({
+  title: z.string(),
+  link: z.string().optional(),
+  coverImage: z.string().optional(),
+  coverImageAlt: z.string().optional(),
+  description: z.string().optional(),
+  publishedOn: z.coerce.date(),
+  updatedOn: z.coerce.date().optional(),
+  draft: z.boolean().optional(),
+  category: z.string().optional(),
+  subcategory: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  // Recipe-specific optional fields
+  prepTime: z.string().optional(),
+  cookTime: z.string().optional(),
+  totalTime: z.string().optional(),
+  recipeYield: z.string().optional(),
+  recipeCuisine: z.string().optional(),
+  calories: z.string().optional(),
+});
+
+export type EntryData = z.infer<typeof entrySchema>;
+
 async function makeCollection(collectionName: CollectionName) {
   const base = `./src/content/${collectionName}`;
 
@@ -114,27 +138,7 @@ async function makeCollection(collectionName: CollectionName) {
 
   return defineCollection({
     loader,
-    schema: () =>
-      z.object({
-        title: z.string(),
-        link: z.string().optional(),
-        coverImage: z.string().optional(),
-        coverImageAlt: z.string().optional(),
-        description: z.string().optional(),
-        publishedOn: z.coerce.date(),
-        updatedOn: z.coerce.date().optional(),
-        draft: z.boolean().optional(),
-        category: z.string().optional(),
-        subcategory: z.string().optional(),
-        tags: z.array(z.string()).optional(),
-        // Recipe-specific optional fields
-        prepTime: z.string().optional(),
-        cookTime: z.string().optional(),
-        totalTime: z.string().optional(),
-        recipeYield: z.string().optional(),
-        recipeCuisine: z.string().optional(),
-        calories: z.string().optional(),
-      }),
+    schema: entrySchema,
   });
 }
 
