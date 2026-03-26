@@ -22,7 +22,7 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.0",
-    "astro": "^5.10.1",
+    "astro": "^5.18.1",
     "astro-expressive-code": "^0.41.6",
     "astro-pagefind": "^1.8.5",
     "rehype-autolink-headings": "^7.1.0",
