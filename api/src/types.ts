@@ -75,6 +75,7 @@ export const SERVER_MESSAGE_TYPE = {
   HELP: "help",
   FLAGGED: "flagged",
   BLOCKED_LIST: "blocked_list",
+  ONLINE_LIST: "online_list",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
@@ -190,6 +191,11 @@ export interface ServerBlockedListMessage {
   entries: BlockedEntry[];
 }
 
+export interface ServerOnlineListMessage {
+  type: "online_list";
+  users: Array<{ clientId: string; username: string }>;
+}
+
 // ── Combined Server Message ─────────────────────────────────────────
 
 export type ServerMessage =
@@ -201,6 +207,7 @@ export type ServerMessage =
   | ServerFlaggedMessage
   | ServerRenameMessage
   | ServerBlockedListMessage
+  | ServerOnlineListMessage
   | ChatMessage;
 
 // ── API Types ───────────────────────────────────────────────────────

@@ -36,6 +36,17 @@ register({
 });
 
 register({
+  name: "online",
+  description: "List all online users",
+  handler: (ws, _args, chatRoom) => {
+    chatRoom.sendToSocket(ws, {
+      type: SERVER_MESSAGE_TYPE.ONLINE_LIST,
+      users: chatRoom.getOnlineUsers(),
+    });
+  },
+});
+
+register({
   name: "clear",
   description: "Clear all chat messages (keeps users & blocked list)",
   handler: (_ws, _args, chatRoom) => {

@@ -319,6 +319,16 @@ export function createChatClient(els: ChatElements, wsUrl: string): void {
       ]);
     },
 
+    [SERVER_MESSAGE_TYPE.ONLINE_LIST](data) {
+      if (data.type !== "online_list") return;
+      if (data.users.length === 0) {
+        appendSystemMessage("No users online.");
+      } else {
+        const lines = data.users.map((u) => `  ${u.username} — ${u.clientId.slice(0, 8)}…`);
+        appendSystemMessage(`Online users (${data.users.length}):\n${lines.join("\n")}`);
+      }
+    },
+
     [SERVER_MESSAGE_TYPE.BLOCKED_LIST](data) {
       if (data.type !== "blocked_list") return;
       if (data.entries.length === 0) {

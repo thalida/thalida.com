@@ -482,6 +482,16 @@ export class ChatRoom implements DurableObject {
     return this.storage.getBlockedEntries();
   }
 
+  getOnlineUsers(): Array<{ clientId: string; username: string }> {
+    const seen = new Map<string, string>();
+    for (const info of this.connections.values()) {
+      if (!seen.has(info.clientId)) {
+        seen.set(info.clientId, info.username);
+      }
+    }
+    return [...seen].map(([clientId, username]) => ({ clientId, username }));
+  }
+
   clearMessages(): void {
     this.storage.clearAllMessages();
     this.broadcast({ type: SERVER_MESSAGE_TYPE.CLEAR });

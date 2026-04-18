@@ -38,7 +38,7 @@
 - [x] add site footer
 - [x] add vscode tasks to run app / api
 - [x] page size in 3, 2, 1 columns
-- [ ] improve card cover style
+- [x] improve card cover style
 - [x] subcategories
   - [x] add subcategories to all posts, subcategories are tied to categories
   - [x] add validation for supported/allowed subcategories?

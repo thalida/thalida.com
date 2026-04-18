@@ -16,6 +16,7 @@ export const SERVER_MESSAGE_TYPE = {
   HELP: "help",
   FLAGGED: "flagged",
   BLOCKED_LIST: "blocked_list",
+  ONLINE_LIST: "online_list",
   JOINED: "joined",
   STATUS: "status",
   HISTORY: "history",
@@ -52,6 +53,7 @@ export type ServerMessage =
   | { type: "help"; commands: Array<{ name: string; description: string }> }
   | { type: "flagged"; username: string; clientId: string; messageId: string }
   | { type: "blocked_list"; entries: Array<{ clientId: string; username: string; blockedAt: number }> }
+  | { type: "online_list"; users: Array<{ clientId: string; username: string }> }
   | { type: "rename"; oldUsername: string; newUsername: string };
 
 export interface ChatMessage {
