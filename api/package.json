@@ -15,13 +15,13 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.12.13",
+    "@cloudflare/vitest-pool-workers": "^0.16.11",
     "@cloudflare/workers-types": "^4.20250214.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.55.0",
-    "vitest": "3.2",
+    "vitest": "4.1",
     "wrangler": "^4.0.0"
   }
 }
