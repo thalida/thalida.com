@@ -1,0 +1,22 @@
+---
+import type { NavItem } from "@lib/nav-data";
+import { formatDate, isValidDate } from "@lib/format-utils";
+
+interface Props {
+  item: NavItem;
+  class?: string;
+}
+
+const { item, class: className } = Astro.props;
+
+// Every card shows one date in the same shape: the one the list is sorted by.
+const iso = item.updatedOn && isValidDate(item.updatedOn) ? item.updatedOn : item.publishedOn;
+---
+
+{
+  isValidDate(iso) && (
+    <span class:list={["text-dim text-2xs ml-auto shrink-0", className]} data-ts={iso}>
+      {formatDate(iso)}
+    </span>
+  )
+}

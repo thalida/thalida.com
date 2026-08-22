@@ -3,8 +3,29 @@ export function isValidDate(isoString: string): boolean {
   return !isNaN(d.getTime()) && d.getFullYear() > 1970;
 }
 
+/** Frontmatter dates are authored as bare UTC days, so render them in UTC —
+ *  otherwise a visitor west of UTC sees the day (and sometimes month) before. */
 export function formatDate(isoString: string): string {
-  return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+  return new Date(isoString).toLocaleDateString("en-US", { year: "numeric", month: "short", timeZone: "UTC" });
+}
+
+/** "Nov 6, 2021" — the compact form used where horizontal room is tight. */
+export function formatShortDate(isoString: string | Date): string {
+  return new Date(isoString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+export function formatLongDate(isoString: string | Date): string {
+  return new Date(isoString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export function formatDateFull(isoString: string): string {

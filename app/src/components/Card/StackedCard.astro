@@ -1,7 +1,7 @@
 ---
 import type { NavItem } from "@lib/nav-data";
-import { formatDate, isValidDate } from "@lib/format-utils";
 import CardCategory from "./CardCategory.astro";
+import CardDate from "./CardDate.astro";
 import CardCover from "./CardCover.astro";
 import CardTags from "./CardTags.astro";
 
@@ -27,13 +27,7 @@ const href = `/${item.collection}/post/${item.id}`;
   <div class="flex flex-col gap-1 p-3 flex-1">
     <div class="flex items-center gap-2">
       <CardCategory category={item.category} subcategory={item.subcategory} />
-      {
-        isValidDate(item.publishedOn) && (
-          <span class="text-dim text-2xs ml-auto" data-ts={item.publishedOn}>
-            {formatDate(item.publishedOn)}
-          </span>
-        )
-      }
+      <CardDate item={item} />
     </div>
     <h3 class="m-0 font-heading font-bold text-text leading-snug text-base">{item.title}</h3>
     {
