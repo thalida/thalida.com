@@ -105,6 +105,32 @@ async function combineYamlFiles({ filename, pattern, base }: { filename: string;
   return file(outputPath);
 }
 
+/** Every collection shares one schema. Named so its inferred type survives. */
+const entrySchema = z.object({
+  title: z.string(),
+  link: z.string().optional(),
+  coverImage: z.string().optional(),
+  coverImageAlt: z.string().optional(),
+  description: z.string().optional(),
+  publishedOn: z.coerce.date(),
+  updatedOn: z.coerce.date().optional(),
+  draft: z.boolean().optional(),
+  category: z.string().optional(),
+  subcategory: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  // Recipe-specific optional fields
+  prepTime: z.string().optional(),
+  cookTime: z.string().optional(),
+  totalTime: z.string().optional(),
+  recipeYield: z.string().optional(),
+  recipeCuisine: z.string().optional(),
+  calories: z.string().optional(),
+});
+
+// astro:content exports `z` as a value only, so `z.infer` is not addressable
+// as a namespace here; the parsed output type is the same thing.
+export type EntryData = ReturnType<typeof entrySchema.parse>;
+
 async function makeCollection(collectionName: CollectionName) {
   const base = `./src/content/${collectionName}`;
 
@@ -123,30 +149,7 @@ async function makeCollection(collectionName: CollectionName) {
     });
   }
 
-  return defineCollection({
-    loader,
-    schema: () =>
-      z.object({
-        title: z.string(),
-        link: z.string().optional(),
-        coverImage: z.string().optional(),
-        coverImageAlt: z.string().optional(),
-        description: z.string().optional(),
-        publishedOn: z.coerce.date(),
-        updatedOn: z.coerce.date().optional(),
-        draft: z.boolean().optional(),
-        category: z.string().optional(),
-        subcategory: z.string().optional(),
-        tags: z.array(z.string()).optional(),
-        // Recipe-specific optional fields
-        prepTime: z.string().optional(),
-        cookTime: z.string().optional(),
-        totalTime: z.string().optional(),
-        recipeYield: z.string().optional(),
-        recipeCuisine: z.string().optional(),
-        calories: z.string().optional(),
-      }),
-  });
+  return defineCollection({ loader, schema: () => entrySchema });
 }
 
 const collections = {} as Record<CollectionName, ReturnType<typeof defineCollection>>;

@@ -1,7 +1,9 @@
-import { SELF, fetchMock } from "cloudflare:test";
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { SELF } from "cloudflare:test";
+import { http, HttpResponse } from "msw";
+import { describe, it, expect } from "vitest";
 import { handleWeather, handleLocation } from "../proxy";
 import type { Env } from "../types";
+import { network } from "./server";
 
 describe("Worker routing", () => {
   // ── Key Flows ────────────────────────────────────────────────────
@@ -203,24 +205,16 @@ describe("Worker routing", () => {
     } as Env;
     const headers = {} as Record<string, string>;
 
-    beforeAll(() => {
-      fetchMock.activate();
-      fetchMock.disableNetConnect();
-    });
-
-    afterAll(() => {
-      fetchMock.deactivate();
-    });
-
     it("weather returns parsed data on success", async () => {
-      fetchMock
-        .get("https://api.openweathermap.org")
-        .intercept({ path: /\/data\/2\.5\/weather/ })
-        .reply(200, {
-          weather: [{ id: 800, main: "Clear", description: "clear sky", icon: "01d" }],
-          main: { temp: 22.5 },
-          sys: { sunrise: 1700000000, sunset: 1700040000 },
-        });
+      network.use(
+        http.get("https://api.openweathermap.org/data/2.5/weather", () =>
+          HttpResponse.json({
+            weather: [{ id: 800, main: "Clear", description: "clear sky", icon: "01d" }],
+            main: { temp: 22.5 },
+            sys: { sunrise: 1700000000, sunset: 1700040000 },
+          }),
+        ),
+      );
 
       const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"), headers);
       expect(resp.status).toBe(200);
@@ -237,23 +231,26 @@ describe("Worker routing", () => {
     });
 
     it("weather returns 502 on upstream error", async () => {
-      fetchMock
-        .get("https://api.openweathermap.org")
-        .intercept({ path: /\/data\/2\.5\/weather/ })
-        .reply(500, "Internal Error");
+      network.use(
+        http.get(
+          "https://api.openweathermap.org/data/2.5/weather",
+          () => new HttpResponse("Internal Error", { status: 500 }),
+        ),
+      );
 
       const resp = await handleWeather(env, new Request("https://fake/weather?lat=40&lon=-74"), headers);
       expect(resp.status).toBe(502);
     });
 
     it("location returns parsed data on success", async () => {
-      fetchMock
-        .get("https://api.ipregistry.co")
-        .intercept({ path: /\// })
-        .reply(200, {
-          location: { latitude: 40.71, longitude: -74.01, country: { code: "US" }, city: "New York" },
-          time_zone: { id: "America/New_York" },
-        });
+      network.use(
+        http.get("https://api.ipregistry.co/*", () =>
+          HttpResponse.json({
+            location: { latitude: 40.71, longitude: -74.01, country: { code: "US" }, city: "New York" },
+            time_zone: { id: "America/New_York" },
+          }),
+        ),
+      );
 
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "8.8.8.8" },
@@ -271,7 +268,7 @@ describe("Worker routing", () => {
     });
 
     it("location returns 502 on upstream error", async () => {
-      fetchMock.get("https://api.ipregistry.co").intercept({ path: /\// }).reply(500, "Internal Error");
+      network.use(http.get("https://api.ipregistry.co/*", () => new HttpResponse("Internal Error", { status: 500 })));
 
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "8.8.8.8" },
@@ -281,13 +278,14 @@ describe("Worker routing", () => {
     });
 
     it("location uses empty IP for private addresses", async () => {
-      fetchMock
-        .get("https://api.ipregistry.co")
-        .intercept({ path: /\// })
-        .reply(200, {
-          location: { latitude: 0, longitude: 0, country: { code: "XX" }, city: "Unknown" },
-          time_zone: { id: "UTC" },
-        });
+      network.use(
+        http.get("https://api.ipregistry.co/*", () =>
+          HttpResponse.json({
+            location: { latitude: 0, longitude: 0, country: { code: "XX" }, city: "Unknown" },
+            time_zone: { id: "UTC" },
+          }),
+        ),
+      );
 
       const req = new Request("https://fake/location", {
         headers: { "CF-Connecting-IP": "192.168.1.1" },
