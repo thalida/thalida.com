@@ -10,7 +10,7 @@ coverImageAlt: Napkin Notes app demo showing text formatting with bold, italics,
   math calculations
 ---
 
-![Napkin Notes app demo showing text formatting, interactive checkboxes, lists, and inline math calculations](https://github.com/thalida/napkinnotes/assets/3401715/7c94cbc2-1702-42b5-a7e1-b8e5fbdedb75)
+![Napkin Notes app demo showing text formatting, interactive checkboxes, lists, and inline math calculations](/content/projects/app/productivity/napkinnotes/app-demo.gif)
 
 | Links                                              |                                           |                                       |
 | -------------------------------------------------- | ----------------------------------------- | ------------------------------------- |

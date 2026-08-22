@@ -9,7 +9,7 @@ coverImageAlt: OpenAPI Docs Viewer VSCode extension showing Swagger Petstore API
   sidebar and API overview
 ---
 
-![Overview demo of OpenAPI Docs Viewer showing schema URL input, renderer switching, and theme toggling](https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/overview.gif)
+![Overview demo of OpenAPI Docs Viewer showing schema URL input, renderer switching, and theme toggling](/content/projects/tool/open-api-docs-viewer/overview.gif)
 
 | Links                                                      |                                                                                                  |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -40,13 +40,13 @@ Build beautiful, interactive API Docs with embeddable React or Web Components, p
     </tr>
     <tr>
       <td>Dark</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-elements-dark-small.png" alt="Elements Dark Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-elements-dark-large.png" alt="Elements Dark Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-elements-dark-small.png" alt="Elements Dark Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-elements-dark-large.png" alt="Elements Dark Theme: Large" width="600"/></td>
     </tr>
     <tr>
       <td>Light</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-elements-light-small.png" alt="Elements Light Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-elements-light-large.png" alt="Elements Light Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-elements-light-small.png" alt="Elements Light Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-elements-light-large.png" alt="Elements Light Theme: Large" width="600"/></td>
     </tr>
   </table>
 </details>
@@ -66,13 +66,13 @@ Custom Element for Open-API spec viewing
     </tr>
     <tr>
       <td>Dark</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-rapidoc-dark-small.png" alt="RapiDoc Dark Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-rapidoc-dark-large.png" alt="RapiDoc Dark Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-rapidoc-dark-small.png" alt="RapiDoc Dark Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-rapidoc-dark-large.png" alt="RapiDoc Dark Theme: Large" width="600"/></td>
     </tr>
     <tr>
       <td>Light</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-rapidoc-light-small.png" alt="RapiDoc Light Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-rapidoc-light-large.png" alt="RapiDoc Light Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-rapidoc-light-small.png" alt="RapiDoc Light Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-rapidoc-light-large.png" alt="RapiDoc Light Theme: Large" width="600"/></td>
     </tr>
   </table>
 </details>
@@ -92,13 +92,13 @@ OpenAPI/Swagger-generated API Reference Documentation
     </tr>
     <tr>
       <td>Dark</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-redoc-dark-small.png" alt="Redoc Dark Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-redoc-dark-large.png" alt="Redoc Dark Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-redoc-dark-small.png" alt="Redoc Dark Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-redoc-dark-large.png" alt="Redoc Dark Theme: Large" width="600"/></td>
     </tr>
     <tr>
       <td>Light</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-redoc-light-small.png" alt="Redoc Light Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-redoc-light-large.png" alt="Redoc Light Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-redoc-light-small.png" alt="Redoc Light Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-redoc-light-large.png" alt="Redoc Light Theme: Large" width="600"/></td>
     </tr>
   </table>
 </details>
@@ -119,13 +119,13 @@ documentation from a Swagger-compliant API.
     </tr>
     <tr>
       <td>Dark</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-swagger-dark-small.png" alt="Swagger Dark Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-swagger-dark-large.png" alt="Swagger Dark Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-swagger-dark-small.png" alt="Swagger Dark Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-swagger-dark-large.png" alt="Swagger Dark Theme: Large" width="600"/></td>
     </tr>
     <tr>
       <td>Light</td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-swagger-light-small.png" alt="Swagger Light Theme: Small" width="300"/></td>
-      <td><img src="https://raw.githubusercontent.com/thalida/openapi-docs-viewer/refs/heads/main/media/screenshots/theme-swagger-light-large.png" alt="Swagger Light Theme: Large" width="600"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-swagger-light-small.png" alt="Swagger Light Theme: Small" width="300"/></td>
+      <td><img src="/content/projects/tool/open-api-docs-viewer/theme-swagger-light-large.png" alt="Swagger Light Theme: Large" width="600"/></td>
     </tr>
   </table>
 </details>
