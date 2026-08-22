@@ -1,6 +1,5 @@
 ---
 import { NAV_ORDER, getNavData } from "@lib/nav-data";
-import SpotifyPlayer from "@components/SpotifyPlayer/SpotifyPlayer.astro";
 import SearchIcon from "@components/SearchIcon/SearchIcon.astro";
 
 interface Props {
@@ -79,8 +78,6 @@ const navData = await getNavData();
   >
     login
   </a>
-
-  <SpotifyPlayer />
 </nav>
 
 <script src="./ProjectTree.ts"></script>
