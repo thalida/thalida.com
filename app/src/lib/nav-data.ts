@@ -1,5 +1,11 @@
 import { getCollection } from "astro:content";
-import { COLLECTION_NAMES, collectionMeta, isHiddenCollection } from "../content.config";
+import {
+  COLLECTION_NAMES,
+  collectionMeta,
+  isHiddenCollection,
+  type CollectionName,
+  type EntryData,
+} from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
 import { parseContentPath } from "./content-path";
 import { resolveMediaUrl } from "./constants";
@@ -31,6 +37,8 @@ export type NavCollection = {
 
 export type NavEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
 
+type AnyEntry = { id: string; data: EntryData };
+
 export const NAV_ORDER: NavEntry[] = [
   { type: "page", page: "", label: "Home" },
   { type: "page", page: "about", label: "About" },
@@ -54,12 +62,17 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
 
   const data: Record<string, NavCollection> = {};
 
-  const linkEntries = await getCollection("links", ({ data }) => !data.draft);
+  const linkEntries = ((await getCollection("links")) as unknown as AnyEntry[]).filter((e) => !e.data.draft);
   const linkUrls = linkEntries.map((e) => e.id);
   const linkMetadataMap = await getLinkMetadataMap(linkUrls);
 
   for (const name of COLLECTION_NAMES) {
-    const entries = await getCollection(name, ({ data }) => !data.draft);
+    // Astro 7 types getCollection() over a union of names as a union of entry
+    // types, which collapses .data to unknown. Every collection shares one
+    // schema, so narrow to a single entry type here.
+    const entries = ((await getCollection(name as CollectionName)) as unknown as AnyEntry[]).filter(
+      (entry) => !entry.data.draft,
+    );
     const sorted = entries.sort(
       (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
     );

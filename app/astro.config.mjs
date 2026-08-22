@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
 import { loadEnv } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
@@ -47,21 +48,25 @@ export default defineConfig({
     pagefind(),
   ],
   markdown: {
-    remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }], remarkExtractRecipe],
-    rehypePlugins: [
-      rehypeSlug,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "append",
-          properties: { ariaHidden: "true", tabIndex: -1, class: "heading-anchor" },
-          content: { type: "text", value: "#" },
-        },
+    // Astro 7 defaults to Sätteri; keep the unified/remark/rehype pipeline so the
+    // custom plugins below (R2 media rewriting, recipe extraction) keep working.
+    processor: unified({
+      remarkPlugins: [remarkAlert, [remarkToc, { heading: "toc" }], remarkExtractRecipe],
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "append",
+            properties: { ariaHidden: "true", tabIndex: -1, class: "heading-anchor" },
+            content: { type: "text", value: "#" },
+          },
+        ],
+        [rehypeExternalLinks, { target: "_blank", rel: ["noopener"] }],
+        [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto", fallback: false }],
+        [rehypeR2Media, { baseUrl: mediaBaseUrl }],
       ],
-      [rehypeExternalLinks, { target: "_blank", rel: ["noopener"] }],
-      [rehypeWrap, { selector: "table", wrapper: "div.overflow-auto", fallback: false }],
-      [rehypeR2Media, { baseUrl: mediaBaseUrl }],
-    ],
+    }),
   },
   vite: {
     plugins: [tailwindcss()],

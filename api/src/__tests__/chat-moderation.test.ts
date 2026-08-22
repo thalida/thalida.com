@@ -1,24 +1,19 @@
-import { fetchMock } from "cloudflare:test";
-import { beforeAll, afterAll, describe, it, expect } from "vitest";
+import { http, HttpResponse } from "msw";
+import { describe, it, expect } from "vitest";
 import { callModerationAPI } from "../chat-moderation";
+import { network } from "./server";
+
+const MODERATIONS_URL = "https://api.openai.com/v1/moderations";
 
 describe("callModerationAPI", () => {
-  beforeAll(() => {
-    fetchMock.activate();
-    fetchMock.disableNetConnect();
-  });
-
-  afterAll(() => {
-    fetchMock.deactivate();
-  });
-
   it("returns flagged result when content is flagged", async () => {
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(200, {
-        results: [{ flagged: true, categories: { hate: true, violence: false } }],
-      });
+    network.use(
+      http.post(
+        MODERATIONS_URL,
+        () => HttpResponse.json({ results: [{ flagged: true, categories: { hate: true, violence: false } }] }),
+        { once: true },
+      ),
+    );
 
     const result = await callModerationAPI("test-key", "offensive text");
     expect(result).toMatchObject({
@@ -28,63 +23,53 @@ describe("callModerationAPI", () => {
   });
 
   it("returns not-flagged result for safe content", async () => {
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(200, {
-        results: [{ flagged: false, categories: {} }],
-      });
+    network.use(
+      http.post(MODERATIONS_URL, () => HttpResponse.json({ results: [{ flagged: false, categories: {} }] }), {
+        once: true,
+      }),
+    );
 
     const result = await callModerationAPI("test-key", "hello world");
     expect(result).toMatchObject({ flagged: false });
   });
 
   it("returns null on non-429 error (e.g. 500)", async () => {
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(500, "Internal Server Error");
+    network.use(
+      http.post(MODERATIONS_URL, () => new HttpResponse("Internal Server Error", { status: 500 }), { once: true }),
+    );
 
     const result = await callModerationAPI("test-key", "test", 1);
     expect(result).toBeNull();
   });
 
   it("retries on 429 and succeeds", async () => {
-    // First call: 429
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(429, "", { headers: { "retry-after": "0" } });
-
-    // Second call: success
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(200, {
-        results: [{ flagged: false, categories: {} }],
-      });
+    // Handlers are matched in order, and `once` retires each after one hit:
+    // first call gets the 429, the retry gets the success.
+    network.use(
+      http.post(MODERATIONS_URL, () => new HttpResponse("", { status: 429, headers: { "retry-after": "0" } }), {
+        once: true,
+      }),
+      http.post(MODERATIONS_URL, () => HttpResponse.json({ results: [{ flagged: false, categories: {} }] }), {
+        once: true,
+      }),
+    );
 
     const result = await callModerationAPI("test-key", "test", 2);
     expect(result).toMatchObject({ flagged: false });
   });
 
   it("returns null after exhausting retries on 429", async () => {
-    // All calls return 429
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(429, "", { headers: { "retry-after": "0" } })
-      .times(2);
+    // Persistent handler: every attempt gets a 429.
+    network.use(
+      http.post(MODERATIONS_URL, () => new HttpResponse("", { status: 429, headers: { "retry-after": "0" } })),
+    );
 
     const result = await callModerationAPI("test-key", "test", 2);
     expect(result).toBeNull();
   });
 
   it("returns null when results array is empty", async () => {
-    fetchMock
-      .get("https://api.openai.com")
-      .intercept({ path: "/v1/moderations", method: "POST" })
-      .reply(200, { results: [] });
+    network.use(http.post(MODERATIONS_URL, () => HttpResponse.json({ results: [] }), { once: true }));
 
     const result = await callModerationAPI("test-key", "test");
     expect(result).toBeNull();
