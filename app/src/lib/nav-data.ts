@@ -1,10 +1,12 @@
 import { getCollection } from "astro:content";
 import {
   COLLECTION_NAMES,
+  DEFAULT_SORT,
   collectionMeta,
   isHiddenCollection,
   type CollectionName,
   type EntryData,
+  type SortMode,
 } from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
 import { parseContentPath } from "./content-path";
@@ -20,6 +22,7 @@ export type NavItem = {
   category?: string;
   originalCategory?: string;
   publishedOn: string; // ISO string for JSON serialization
+  updatedOn?: string; // ISO string for JSON serialization
   coverImageSrc?: string;
   coverImageAlt?: string;
   faviconUrl?: string;
@@ -38,6 +41,22 @@ export type NavCollection = {
 export type NavEntry = { type: "page"; page: string; label: string } | { type: "collection"; collection: string };
 
 type AnyEntry = { id: string; data: EntryData };
+
+/** When an entry was last touched: its update date, else its publish date. */
+function lastUpdated(data: EntryData): number {
+  return new Date(data.updatedOn ?? data.publishedOn).getTime();
+}
+
+/** Newest first, by the collection's configured sort date. See `SortMode`. */
+function byDate(mode: SortMode) {
+  return (a: AnyEntry, b: AnyEntry) => {
+    if (mode === "updatedOn") {
+      const updated = lastUpdated(b.data) - lastUpdated(a.data);
+      if (updated !== 0) return updated;
+    }
+    return new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime();
+  };
+}
 
 export const NAV_ORDER: NavEntry[] = [
   { type: "page", page: "", label: "Home" },
@@ -73,9 +92,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
     const entries = ((await getCollection(name as CollectionName)) as unknown as AnyEntry[]).filter(
       (entry) => !entry.data.draft,
     );
-    const sorted = entries.sort(
-      (a, b) => new Date(b.data.publishedOn).getTime() - new Date(a.data.publishedOn).getTime(),
-    );
+    const sorted = entries.sort(byDate(collectionMeta[name].sort ?? DEFAULT_SORT));
 
     const categoriesSet = new Set<string>();
     const items: NavItem[] = [];
@@ -101,6 +118,7 @@ export async function getNavData(): Promise<Record<string, NavCollection>> {
         category,
         originalCategory: isDead ? entry.data.category : undefined,
         publishedOn: entry.data.publishedOn.toISOString(),
+        updatedOn: entry.data.updatedOn?.toISOString(),
         coverImageSrc,
         coverImageAlt: entry.data.coverImageAlt,
         faviconUrl: isLink ? linkMeta?.faviconUrl : undefined,

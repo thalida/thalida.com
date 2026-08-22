@@ -20,44 +20,64 @@ export function isHiddenCollection(name: string): boolean {
 
 export type CardVariant = "stacked" | "link" | "compact" | "gallery";
 
-export const collectionMeta: Record<CollectionName, { title: string; description: string; cardVariant: CardVariant }> =
-  {
-    projects: {
-      title: "Projects",
-      description: "Personal and professional projects, crafts, and experiments.",
-      cardVariant: "stacked",
-    },
-    guides: {
-      title: "Guides",
-      description: "Step-by-step guides and tutorials.",
-      cardVariant: "stacked",
-    },
-    gallery: {
-      title: "Gallery",
-      description: "Photography, art, and visual projects.",
-      cardVariant: "gallery",
-    },
-    links: {
-      title: "Links",
-      description: "Curated resources, tools, and websites.",
-      cardVariant: "link",
-    },
-    recipes: {
-      title: "Recipes",
-      description: "Favorite recipes.",
-      cardVariant: "compact",
-    },
-    versions: {
-      title: "Site Versions",
-      description: "The evolution of thalida.com.",
-      cardVariant: "stacked",
-    },
-    plans: {
-      title: "Plans",
-      description: "Claude's design docs and implementation plans for thalida.com.",
-      cardVariant: "compact",
-    },
-  };
+/**
+ * The frontmatter date a collection is ordered by, everywhere its entries are
+ * listed: the sidebar, collection pages, the homepage, and the command palette.
+ * Newest first either way.
+ *
+ * - `updatedOn` — last updated, falling back to `publishedOn` for entries that
+ *   have never been revised. The default: a recently revised entry is current.
+ * - `publishedOn` — publish date alone, for chronologies where a later edit
+ *   should not move an entry out of sequence.
+ *
+ * Both modes break ties on `publishedOn`.
+ */
+export type SortMode = "updatedOn" | "publishedOn";
+
+export const DEFAULT_SORT: SortMode = "updatedOn";
+
+export const collectionMeta: Record<
+  CollectionName,
+  { title: string; description: string; cardVariant: CardVariant; sort?: SortMode }
+> = {
+  projects: {
+    title: "Projects",
+    description: "Personal and professional projects, crafts, and experiments.",
+    cardVariant: "stacked",
+  },
+  guides: {
+    title: "Guides",
+    description: "Step-by-step guides and tutorials.",
+    cardVariant: "stacked",
+  },
+  gallery: {
+    title: "Gallery",
+    description: "Photography, art, and visual projects.",
+    cardVariant: "gallery",
+  },
+  links: {
+    title: "Links",
+    description: "Curated resources, tools, and websites.",
+    cardVariant: "link",
+  },
+  recipes: {
+    title: "Recipes",
+    description: "Favorite recipes.",
+    cardVariant: "compact",
+  },
+  versions: {
+    title: "Site Versions",
+    description: "The evolution of thalida.com.",
+    cardVariant: "stacked",
+    // A chronology of the site: each version stays where it shipped.
+    sort: "publishedOn",
+  },
+  plans: {
+    title: "Plans",
+    description: "Claude's design docs and implementation plans for thalida.com.",
+    cardVariant: "compact",
+  },
+};
 
 async function combineYamlFiles({ filename, pattern, base }: { filename: string; pattern: string; base: string }) {
   const yamlFiles = fs.glob(pattern, { cwd: base });

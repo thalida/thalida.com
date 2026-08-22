@@ -74,7 +74,8 @@ export function renderItem(
       slot("cover-placeholder").hidden = false;
       slot("initial").textContent = item.title.charAt(0);
     }
-    slot("date").textContent = formatDate(item.publishedOn);
+    // Mirror CardDate: one unlabeled date, the one the list is ordered by.
+    slot("date").textContent = formatDate(item.updatedOn ?? item.publishedOn);
   }
 
   return frag;

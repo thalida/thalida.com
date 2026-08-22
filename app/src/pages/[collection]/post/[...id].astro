@@ -4,7 +4,7 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
 import { COLLECTION_NAMES, isHiddenCollection, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
-import { prettifySlug } from "@lib/format-utils";
+import { formatLongDate, formatShortDate, prettifySlug } from "@lib/format-utils";
 import { parseContentPath } from "@lib/content-path";
 import { resolveMediaUrl } from "@lib/constants";
 
@@ -168,6 +168,15 @@ const recipeMeta =
         { label: "Total", value: formatDuration(entry.data.totalTime) },
       ].filter((item) => item.value)
     : [];
+
+// An updatedOn equal to publishedOn is noise, not an edit. When there is a real
+// one it leads, since that is the date the collection is ordered by.
+const showUpdatedOn = !!entry.data.updatedOn && entry.data.updatedOn.getTime() !== entry.data.publishedOn?.getTime();
+
+const headerDates = [
+  ...(showUpdatedOn ? [{ label: "Updated", value: entry.data.updatedOn! }] : []),
+  ...(entry.data.publishedOn ? [{ label: "Created", value: entry.data.publishedOn }] : []),
+];
 ---
 
 <BaseLayout
@@ -193,7 +202,9 @@ const recipeMeta =
     <meta data-pagefind-meta={`itemId:${id}`} />
     <meta data-pagefind-meta={`tags:${(entry.data.tags || []).join(",")}`} />
     <header class="mb-6">
-      <div class="flex items-center gap-2 mb-2 font-body uppercase text-2xs tracking-widest">
+      <div
+        class="flex flex-col sm:flex-row sm:flex-wrap sm:items-baseline gap-x-2 gap-y-1 mb-2 font-body uppercase text-2xs tracking-widest"
+      >
         <p class="m-0 font-semibold">
           <a class="text-teal no-underline hover:text-neon" href={`/${collection}`}>{collection}</a>
           {
@@ -226,17 +237,18 @@ const recipeMeta =
           }
         </p>
         {
-          entry.data.publishedOn && (
-            <>
-              <span class="text-dim">·</span>
-              <time class="text-dim" data-ts={entry.data.publishedOn.toISOString()}>
-                {new Date(entry.data.publishedOn).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-            </>
+          headerDates.length > 0 && (
+            <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-dim">
+              {headerDates.map(({ label, value }, i) => (
+                <span class="whitespace-nowrap">
+                  <span class:list={["mr-2", { "hidden sm:inline": i === 0 }]}>·</span>
+                  <time data-ts={value.toISOString()}>
+                    {label} <span class="sm:hidden">{formatShortDate(value)}</span>
+                    <span class="hidden sm:inline">{formatLongDate(value)}</span>
+                  </time>
+                </span>
+              ))}
+            </div>
           )
         }
       </div>
