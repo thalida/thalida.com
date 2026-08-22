@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import { getNavData } from "@lib/nav-data";
-import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import { COLLECTION_NAMES, collectionMeta, isHiddenCollection } from "../content.config";
 import Card from "@components/Card/Card.astro";
 import SectionHeader from "@components/SectionHeader/SectionHeader.astro";
 
@@ -12,7 +12,7 @@ const apiBaseUrl = API_BASE_URL;
 const navData = await getNavData();
 
 // Collections to feature on homepage (exclude versions - shown as timeline)
-const featuredCollections = COLLECTION_NAMES.filter((name) => name !== "versions");
+const featuredCollections = COLLECTION_NAMES.filter((name) => name !== "versions" && !isHiddenCollection(name));
 
 // Timeline: all versions sorted newest first
 const versions = [...navData.versions.items];

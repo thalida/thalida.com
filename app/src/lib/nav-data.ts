@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { COLLECTION_NAMES, collectionMeta } from "../content.config";
+import { COLLECTION_NAMES, collectionMeta, isHiddenCollection } from "../content.config";
 import { getLinkMetadataMap } from "./link-metadata";
 import { parseContentPath } from "./content-path";
 import { resolveMediaUrl } from "./constants";
@@ -34,7 +34,10 @@ export type NavEntry = { type: "page"; page: string; label: string } | { type: "
 export const NAV_ORDER: NavEntry[] = [
   { type: "page", page: "", label: "Home" },
   { type: "page", page: "about", label: "About" },
-  ...COLLECTION_NAMES.map((name) => ({ type: "collection" as const, collection: name })),
+  ...COLLECTION_NAMES.filter((name) => !isHiddenCollection(name)).map((name) => ({
+    type: "collection" as const,
+    collection: name,
+  })),
 ];
 
 export const TOOLBAR_NAV_ORDER: NavEntry[] = [

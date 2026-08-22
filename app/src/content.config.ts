@@ -3,9 +3,20 @@ import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { defineCollection, z } from "astro:content";
 import { glob, file } from "astro/loaders";
 
-export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "versions", "links", "plans"] as const;
+// Order here is the display order: sidebar, homepage sections, command palette.
+export const COLLECTION_NAMES = ["projects", "guides", "gallery", "recipes", "links", "versions", "plans"] as const;
 
 export type CollectionName = (typeof COLLECTION_NAMES)[number];
+
+/**
+ * Collections that stay routable — their URLs keep working — but are kept out
+ * of the sidebar, the command palette, and the full-text search index.
+ */
+export const HIDDEN_COLLECTIONS: readonly CollectionName[] = ["plans"];
+
+export function isHiddenCollection(name: string): boolean {
+  return HIDDEN_COLLECTIONS.includes(name as CollectionName);
+}
 
 export type CardVariant = "stacked" | "link" | "compact" | "gallery";
 

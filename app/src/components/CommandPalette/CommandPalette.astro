@@ -1,7 +1,10 @@
 ---
 import { getNavData } from "@lib/nav-data";
+import { isHiddenCollection } from "@/content.config";
 
-const navData = await getNavData();
+const allNavData = await getNavData();
+// Hidden collections stay routable, but must not be searchable from here.
+const navData = Object.fromEntries(Object.entries(allNavData).filter(([key]) => !isHiddenCollection(key)));
 
 const allItems = Object.values(navData).flatMap((col) =>
   col.items.map((item) => ({

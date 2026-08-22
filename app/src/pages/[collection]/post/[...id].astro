@@ -2,7 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout/BaseLayout.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import type { AstroComponentFactory } from "astro/runtime/server/index.js";
-import { COLLECTION_NAMES, type CollectionName } from "@/content.config";
+import { COLLECTION_NAMES, isHiddenCollection, type CollectionName } from "@/content.config";
 import CardTags from "@components/Card/CardTags.astro";
 import { prettifySlug } from "@lib/format-utils";
 import { parseContentPath } from "@lib/content-path";
@@ -182,7 +182,11 @@ const recipeMeta =
 >
   {recipeJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={recipeJsonLd} />}
   {articleJsonLd && <script is:inline slot="head" type="application/ld+json" set:html={articleJsonLd} />}
-  <article class="font-body max-w-3xl mx-auto" data-pagefind-body>
+  <article
+    class="font-body max-w-3xl mx-auto"
+    data-pagefind-body={isHiddenCollection(collection) ? undefined : true}
+    data-pagefind-ignore={isHiddenCollection(collection) ? true : undefined}
+  >
     <meta data-pagefind-meta={`collection:${collection}`} />
     <meta data-pagefind-meta={`category:${parsedPath.category ?? entry.data.category ?? ""}`} />
     <meta data-pagefind-meta={`subcategory:${parsedPath.subcategory ?? ""}`} />
